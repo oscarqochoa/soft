@@ -285,13 +285,13 @@ export default {
               
               // const { userData } = response.data
               
-              const userData = JSON.parse(response.data.user)
-              userData.ability = JSON.parse(userData.ability)
+              const userData = response.data.user
+              console.log(userData.ability);
               useJwt.setToken(response.data.access_token)
               // useJwt.setRefreshToken(response.data.refreshToken)  
               localStorage.setItem('userData', JSON.stringify(userData))
               this.$ability.update(userData.ability)
-
+              this.$store.dispatch('auth/updateCurrentUser', userData)
               // ? This is just for demo purpose as well.
               // ? Because we are showing eCommerce app's cart items count in navbar
               // this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)

@@ -39,4 +39,4 @@ import formAndTable from './forms-and-table'
 import crm from '../../views/crm/navigation/index'
 
 // Array of sections
-export default [...dashboard, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others, ...crm]
+export default [...crm, ...dashboard, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]

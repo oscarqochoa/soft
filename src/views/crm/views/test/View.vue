@@ -1,22 +1,27 @@
 <template>
+<div>
   <h1>{{message}}</h1>
+  <pre>{{currentUser}}</pre>
+</div>
+  
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   name: "Test",
   mounted(){
-      this.getPokemons();
+      console.log(this.currentUser);
   },
   data() {
     return {
-      message: "Hello World!",
+      message: "Hello World 2!",
     };
   },
-  methods:{
-      async getPokemons(){
-        const data = await amgApi.get('/pokemon/ditto');
-      }
+  computed:{
+    ...mapGetters({
+      currentUser: 'auth/currentUser'
+    })
   }
 };
 </script>
