@@ -1,15 +1,7 @@
 import axios from 'axios';
 
-
-// const apiKey = '';
-
-// /pokemon/ditto
-
-
-
-
 export const amgApi = axios.create({
-    baseURL: 'https://pokeapi.co/api/v2',
+    baseURL: process.env.VUE_APP_BASE_URL,
     params: {}
 });
 
