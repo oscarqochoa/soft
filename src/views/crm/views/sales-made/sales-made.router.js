@@ -3,15 +3,15 @@ import AddChangeComponent from '@/views/crm/views/sales-made/components/AddChang
 import AnnuledComponent from '@/views/crm/views/sales-made/components/AnnuledComponent.vue'
 
 export default {
-  path: '/crm/sales-made',
+  path: '/crm/sales-made/',
   name: 'sales-made-crm',
   component: () => import('./SalesMade.vue'),
   children: [
     // Note we provide the above parent route name on the default child tab
     // route to ensure this tab is rendered by default when using named routes
-    { path: '', component: NewClientComponent, name: 'some-route' },
-    { path: 'programs', component: AddChangeComponent },
-    { path: 'annul', component: AnnuledComponent },
+    { path: '', component: NewClientComponent, name: 'sales-made-crm-new-client' },
+    { path: 'programs', component: AddChangeComponent, name: 'sales-made-crm-add-change' },
+    { path: 'annul', component: AnnuledComponent, name: 'sales-made-crm-annulled' },
   ],
   meta: {
     pageTitle: 'Sales Made',
