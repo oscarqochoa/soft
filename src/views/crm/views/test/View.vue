@@ -11,8 +11,12 @@ import CrmService from '../../services/crm.service'
 import { mapGetters } from 'vuex';
 export default {
   name: "Test",
-  mounted(){
-      console.log(this.currentUser);
+  mounted() {
+    amgApi
+      .get("/welcome")
+      .then((response) => {
+        console.log(response);
+      });
   },
   data() {
     return {
@@ -23,11 +27,12 @@ export default {
   {
     await CrmService.getAlgo()
   },
-  computed:{
+  computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser'
-    })
-  }
+      currentUser: "auth/currentUser",
+      token: "auth/token"
+    }),
+  },
 };
 </script>
 

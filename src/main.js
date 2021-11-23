@@ -7,7 +7,7 @@ import router from './router'
 import store from './store'
 import App from './App.vue'
 import {amgApi} from './service/axios';
-
+import { initialize } from './service/general'
 // Global Components
 import './global-components'
 
@@ -45,7 +45,7 @@ require('@core/scss/core.scss')
 require('@/assets/scss/style.scss')
 
 Vue.config.productionTip = false
-
+initialize(router)
 new Vue({
   router,
   store,

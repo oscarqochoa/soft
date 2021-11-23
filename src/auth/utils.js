@@ -11,6 +11,7 @@ export const isUserLoggedIn = () => {
 }
 
 export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
+export const getUserToken = () => localStorage.getItem('accessToken')
 
 /**
  * This function is used for demo purpose route navigation
