@@ -8,7 +8,7 @@ import store from './store'
 import App from './App.vue'
 import {amgApi} from './service/axios';
 import { initialize } from './service/general'
-import { BootstrapVue } from "bootstrap-vue";
+import { BootstrapVue, BootstrapVueIcons  } from "bootstrap-vue";
 // Global Components
 import './global-components'
 
@@ -31,7 +31,8 @@ window.amgApi = amgApi
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
-Vue.use(BootstrapVue);
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
 // Composition API
 Vue.use(VueCompositionAPI)
 

@@ -12,15 +12,12 @@
 </template>
 
 <script>
-import { BTabs, BTab } from 'bootstrap-vue'
 import NewClientDoneComponent from '@/views/crm/views/sales-made/components/new-client/components/NewClientDoneComponent.vue'
 import NewClientPendingComponent from '@/views/crm/views/sales-made/components/new-client/components/NewClientPendingComponent.vue'
 
 export default {
   name: 'NewClientComponent',
   components: {
-    BTabs,
-    BTab,
     NewClientDoneComponent,
     NewClientPendingComponent,
   },

@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "AnnuledComponent"
+  name: 'AnnuledComponent',
 }
 </script>
 

@@ -10,14 +10,8 @@
 </template>
 
 <script>
-import { BNav, BNavItem } from 'bootstrap-vue'
-
 export default {
   name: 'SalesMade',
-  components: {
-    BNav,
-    BNavItem,
-  },
 }
 </script>
 

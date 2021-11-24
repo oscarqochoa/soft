@@ -5,13 +5,8 @@
 </template>
 
 <script>
-import { BTable } from 'bootstrap-vue'
-
 export default {
   name: 'AddChangeComponent',
-  components: {
-    BTable,
-  },
 }
 </script>
 
