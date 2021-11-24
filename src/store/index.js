@@ -3,10 +3,11 @@ import Vuex from 'vuex'
 
 // Modules
 import ecommerceStoreModule from '@/views/apps/e-commerce/eCommerceStoreModule'
-import app from './app'
-import appConfig from './app-config'
-import verticalMenu from './vertical-menu'
-import auth from './auth'
+import app from '@/store/app'
+import appConfig from '@/store/app-config'
+import verticalMenu from '@/store/vertical-menu'
+import auth from '@/store/auth'
+import CrmStore from '@/views/crm/store'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     appConfig,
     verticalMenu,
     'app-ecommerce': ecommerceStoreModule,
-    auth
+    auth,
+    'crm-store': CrmStore,
   },
   strict: process.env.DEV,
 })

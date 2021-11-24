@@ -5,9 +5,9 @@ class CrmService {
     return data
   }
 
-  async getSaleMade(body) {
+  async getSaleMade(body, page) {
     // eslint-disable-next-line no-undef
-    let data = await amgApi.post('/salemade', {
+    let data = await amgApi.post(`/salemade?page=${page}`, {
       text: body.text,
       status: body.status,
       program: body.program,
