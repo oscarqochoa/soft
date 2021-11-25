@@ -4,8 +4,8 @@ export default [
     },
     {
         title: 'Clients',
-        icon: 'UserCheckIcon',
-        route: 'crm-clients',
+        icon: 'UsersIcon',
+        route: 'crm-clients-list',
     },
     // {
     //     title: 'Test',

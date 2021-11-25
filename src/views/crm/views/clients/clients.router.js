@@ -11,5 +11,23 @@ export default [
                 }
             ],
         },
-    }
+        children: [
+            {
+                path: '',
+                name: 'crm-clients-list',
+                component: () => import('@/views/crm/views/clients/components/ClientsGrid.vue'),
+                meta:{
+                    isClientsTab: true
+                }
+            },
+            {
+                path: 'shares',
+                name: 'crm-clients-shared-list',
+                component: () => import('@/views/crm/views/clients/components/ClientsGrid.vue'),
+                meta:{
+                    isClientsTab: false
+                }
+            },
+        ],
+    },
 ]
