@@ -1,3 +1,5 @@
+import leadNav from "../views/Lead/lead.nav"
+
 export default [
     {
         header: 'CRM',
@@ -9,4 +11,5 @@ export default [
         //   tag: '3',
         //   tagVariant: 'light-danger'
     },
+    ...leadNav,
 ]

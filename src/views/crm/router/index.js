@@ -1,6 +1,8 @@
-import viewRoute from '../views/test/view.router'
+// import viewRoute from '../views/test/view.router'
+import leadRoute from '../views/Lead/lead.route'
 
 export default [
-    ...viewRoute
+    // ...viewRoute,
+    ...leadRoute
 ]
   
