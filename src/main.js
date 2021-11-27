@@ -9,6 +9,7 @@ import App from './App.vue'
 import {amgApi} from './service/axios';
 import { initialize } from './service/general'
 import { BootstrapVue } from "bootstrap-vue";
+import generalMixins from './mixins/general'
 // Global Components
 import './global-components'
 
@@ -25,6 +26,9 @@ import '@/libs/tour'
 // Axios Mock Adapter
 import '@/@fake-db/db'
 
+// Filters
+
+import './filters/dates.js'
 
 window.amgApi = amgApi
 // require('./service/axios');
@@ -44,6 +48,11 @@ require('@core/scss/core.scss')
 
 // import assets styles
 require('@/assets/scss/style.scss')
+
+
+// Global Mixins general.js
+
+Vue.mixin(generalMixins);
 
 Vue.config.productionTip = false
 initialize(router)

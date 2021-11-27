@@ -20,8 +20,11 @@ export default {
         type: $themeConfig.layout.footer.type,
       },
     },
+    baseUrl: process.env.VUE_APP_BASE_URL
   },
-  getters: {},
+  getters: {
+    baseUrl: state => state.baseUrl
+  },
   mutations: {
     TOGGLE_RTL(state) {
       state.layout.isRTL = !state.layout.isRTL
