@@ -1,14 +1,17 @@
 import Vue from 'vue'
-import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
+import {
+  ToastPlugin, ModalPlugin, BootstrapVue, BootstrapVueIcons,
+} from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
 
 import i18n from '@/libs/i18n'
 import router from './router'
 import store from './store'
 import App from './App.vue'
-import {amgApi} from './service/axios';
+import { amgApi } from './service/axios'
 import { initialize } from './service/general'
-import { BootstrapVue, BootstrapVueIcons  } from "bootstrap-vue";
+
+import generalMixins from './mixins/general'
 // Global Components
 import './global-components'
 
@@ -25,6 +28,9 @@ import '@/libs/tour'
 // Axios Mock Adapter
 import '@/@fake-db/db'
 
+// Filters
+
+import './filters/dates'
 
 window.amgApi = amgApi
 // require('./service/axios');
@@ -45,6 +51,10 @@ require('@core/scss/core.scss')
 
 // import assets styles
 require('@/assets/scss/style.scss')
+
+// Global Mixins general.js
+
+Vue.mixin(generalMixins)
 
 Vue.config.productionTip = false
 initialize(router)

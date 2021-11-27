@@ -12,4 +12,9 @@ export default [
     //   tagVariant: 'light-danger'
   },
   SalesMadeNavigation,
+  {
+    title: 'Clients',
+    icon: 'UsersIcon',
+    route: 'crm-clients-list',
+  },
 ]
