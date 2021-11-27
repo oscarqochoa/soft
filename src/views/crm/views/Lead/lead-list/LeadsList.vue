@@ -293,7 +293,6 @@ import { avatarText } from '@core/utils/filter'
 import BCardCode from '@core/components/b-card-code'
 import LeadsListFilters from './LeadsListFilters.vue'
 import useUsersList from './useLeadsList'
-import CrmService from '@/views/Crm/services/crm.service'
 import userStoreModule from '../leadStoreModule'
 
 // Notification

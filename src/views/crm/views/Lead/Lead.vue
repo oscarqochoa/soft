@@ -54,7 +54,7 @@ import LeadSnList from './lead-list/LeadsSnList.vue'
 import LeadWPotentialList from './lead-list/LeadsWPotentialList.vue'
 import useUsersList from './lead-list/useLeadsList'
 import UserListAddNew from './lead-list/LeadListAddNew.vue'
-import CrmService from '@/views/Crm/services/crm.service'
+import crmService from '@/views/crm/services/crm.service'
 import { ref, onUnmounted } from '@vue/composition-api'
 
 export default {
@@ -126,26 +126,26 @@ export default {
   },
   methods: {
     async getStatusLeads () {
-      const response = await CrmService.getStatusLeads()
+      const response = await crmService.getStatusLeads()
       this.statusLeadOptions = response.map(el => ({ label: el.value, value: el.id }))
     },
     async getOwners () {
-      const response = await CrmService.getOwners({
+      const response = await crmService.getOwners({
         roles: '[1,2,5]',
         type: '1',
       })
       this.ownerOptions = response.map(el => ({ label: el.user_name, value: el.id }))
     },
     async getSourceNames () {
-      const response = await CrmService.getSourceNames()
+      const response = await crmService.getSourceNames()
       this.sourceNameOptions = response.map(el => ({ label: el.name, value: el.id }))
     },
     async getPrograms () {
-      const response = await CrmService.getPrograms()
+      const response = await crmService.getPrograms()
       this.programOptions = response.map(el => ({ label: el.value, value: el.id }))
     },
     async getStates () {
-      const response = await CrmService.getStates({
+      const response = await crmService.getStates({
         type: 1,
       })
       this.stAdOptions = response.map(el => ({ label: el.slug, value: el.id }))

@@ -1,7 +1,7 @@
 import { ref, watch, computed } from '@vue/composition-api'
 import store from '@/store'
 import { title } from '@core/utils/filter'
-import CrmService from '@/views/Crm/services/crm.service'
+import crmService from '@/views/crm/services/crm.service'
 
 // Notification
 import { useToast } from 'vue-toastification/composition'
@@ -143,7 +143,7 @@ export default function useUsersList() {
 
   const fetchLeads = async (ctx, callback) => {
     try {
-      const response = await CrmService.getLeads({
+      const response = await crmService.getLeads({
         assign_to: assignToFilter.value,
         cr: crFilter.value,
         date_from: fromFilter.value,
@@ -179,7 +179,7 @@ export default function useUsersList() {
   }
   const fetchLeadsSn = async (ctx, callback) => {
     try {
-      const response = await CrmService.getLeadsSn({
+      const response = await crmService.getLeadsSn({
         cr: null,
         date_from: fromFilter.value,
         date_to: toFilter.value,

@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 // Routes
 import { canNavigate } from '@/libs/acl/routeProtection'
 import { isUserLoggedIn, getUserData, getHomeRouteForLoggedInUser } from '@/auth/utils'
-import crm from '@/views/Crm/router'
+import crm from '@/views/crm/router'
 import apps from './routes/apps'
 import dashboard from './routes/dashboard'
 import uiElements from './routes/ui-elements/index'
