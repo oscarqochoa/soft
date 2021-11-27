@@ -1,5 +1,17 @@
 <template>
-  <div>
+  <b-container fluid>
+    <b-row>
+      <b-col class="flexible">
+        <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            aria-controls="new-client-done-table"
+            first-number
+            last-number
+        />
+      </b-col>
+    </b-row>
     <b-row>
       <b-col>
         <b-button
@@ -40,16 +52,6 @@
           </div>
         </b-button>
       </b-col>
-      <b-col>
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          aria-controls="new-client-done-table"
-          first-number
-          last-number
-        />
-      </b-col>
       <b-col cols="1">
         <b-form-input
           v-model="perPage"
@@ -59,100 +61,104 @@
         />
       </b-col>
     </b-row>
-    <b-form-group v-if="!basicSearch">
-      <b-form-row>
-        <b-col>
-          <label>From:</label>
-          <b-form-datepicker
-            id="from-date-picker"
-            v-model="filter.from"
-            locale="en"
-            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-            placeholder="From"
-            size="sm"
-          />
-        </b-col>
-        <b-col>
-          <label>To:</label>
-          <b-form-datepicker
-            id="to-date-picker"
-            v-model="filter.to"
-            locale="en"
-            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-            placeholder="To"
-            size="sm"
-          />
-        </b-col>
-        <b-col>
-          <label>Captured By:</label>
-          <b-form-select
-            v-model="filter.captured"
-            :options="captured"
-            size="sm"
-          />
-        </b-col>
-        <b-col>
-          <label>Seller:</label>
-          <b-form-select
-            v-model="filter.seller"
-            :options="sellers"
-            size="sm"
-          />
-        </b-col>
-        <b-col>
-          <label>Source name:</label>
-          <b-form-select
-            v-model="filter.source"
-            :options="sources"
-            size="sm"
-          />
-        </b-col>
-        <b-col>
-          <label>Status:</label>
-          <b-form-select
-            v-model="filter.status"
-            :options="status"
-            size="sm"
-          />
-        </b-col>
-        <b-col>
-          <label>Services:</label>
-          <b-form-select
-            v-model="filter.program"
-            :options="programs"
-            size="sm"
-          />
-        </b-col>
-        <b-col>
-          <label>IP:</label>
-          <b-form-select
-            v-model="filter.stip"
-            :options="stip"
-            size="sm"
-          />
-        </b-col>
-        <b-col>
-          <label>ST/AD:</label>
-          <b-form-select
-            v-model="filter.state"
-            :options="sts"
-            size="sm"
-          />
-        </b-col>
-        <b-col
-          class="flexible"
-          cols="0"
-        >
-          <b-button
-            size="sm"
-            variant="warning"
-            @click="resetFilter"
-          >
-            <b-icon icon="x" />
-          </b-button>
-        </b-col>
-      </b-form-row>
-    </b-form-group>
+    <b-row>
+      <b-col>
+        <b-form-group v-if="!basicSearch">
+          <b-form-row>
+            <b-col>
+              <label>From:</label>
+              <b-form-datepicker
+                  id="from-date-picker"
+                  v-model="filter.from"
+                  locale="en"
+                  :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                  placeholder="From"
+                  size="sm"
+              />
+            </b-col>
+            <b-col>
+              <label>To:</label>
+              <b-form-datepicker
+                  id="to-date-picker"
+                  v-model="filter.to"
+                  locale="en"
+                  :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                  placeholder="To"
+                  size="sm"
+              />
+            </b-col>
+            <b-col>
+              <label>Captured By:</label>
+              <b-form-select
+                  v-model="filter.captured"
+                  :options="captured"
+                  size="sm"
+              />
+            </b-col>
+            <b-col>
+              <label>Seller:</label>
+              <b-form-select
+                  v-model="filter.seller"
+                  :options="sellers"
+                  size="sm"
+              />
+            </b-col>
+            <b-col>
+              <label>Source name:</label>
+              <b-form-select
+                  v-model="filter.source"
+                  :options="sources"
+                  size="sm"
+              />
+            </b-col>
+            <b-col>
+              <label>Status:</label>
+              <b-form-select
+                  v-model="filter.status"
+                  :options="status"
+                  size="sm"
+              />
+            </b-col>
+            <b-col>
+              <label>Services:</label>
+              <b-form-select
+                  v-model="filter.program"
+                  :options="programs"
+                  size="sm"
+              />
+            </b-col>
+            <b-col>
+              <label>IP:</label>
+              <b-form-select
+                  v-model="filter.stip"
+                  :options="stip"
+                  size="sm"
+              />
+            </b-col>
+            <b-col>
+              <label>ST/AD:</label>
+              <b-form-select
+                  v-model="filter.state"
+                  :options="sts"
+                  size="sm"
+              />
+            </b-col>
+            <b-col
+                class="flexible"
+                cols="0"
+            >
+              <b-button
+                  size="sm"
+                  variant="warning"
+                  @click="resetFilter"
+              >
+                <b-icon icon="x" />
+              </b-button>
+            </b-col>
+          </b-form-row>
+        </b-form-group>
+      </b-col>
+    </b-row>
     <b-table
       id="new-client-done-table"
       ref="new-client-done-table"
@@ -380,12 +386,14 @@
         />
       </b-col>
     </b-row>
-  </div>
+  </b-container>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import CrmService from '@/views/crm/services/crm.service'
+import dataFields from './fields.data'
+import dataFilters from './filters.data'
 
 export default {
   name: 'SalesMadeNewClientComponent',
@@ -402,110 +410,13 @@ export default {
   data() {
     return {
       isBusy: false,
-      fields: [
-        {
-          key: 'selected',
-          label: '',
-          sortable: false,
-        },
-        {
-          key: 'client',
-          sortable: true,
-          label: 'Client',
-        },
-        {
-          key: 'program',
-          sortable: false,
-          label: 'Program',
-        },
-        {
-          key: 'captured',
-          sortable: false,
-          label: 'Captured By',
-        },
-        {
-          key: 'seller',
-          sortable: false,
-          label: 'Seller',
-        },
-        {
-          key: 'fee',
-          sortable: false,
-          label: 'Fee ($)',
-        },
-        {
-          key: 'initial_amount',
-          sortable: false,
-          label: 'IP',
-        },
-        {
-          key: 'contract_fee_status',
-          sortable: false,
-          label: 'CF',
-        },
-        {
-          key: 'notes_status',
-          sortable: false,
-          label: 'NT',
-        },
-        {
-          key: 'trackings',
-          sortable: false,
-          label: 'TK',
-        },
-        {
-          key: 'files',
-          sortable: false,
-          label: 'FI',
-        },
-        {
-          key: 'status',
-          sortable: false,
-          label: 'ST',
-        },
-        {
-          key: 'creates',
-          sortable: true,
-          label: 'Created',
-        },
-        {
-          key: 'approved',
-          sortable: true,
-          label: 'Approved',
-        },
-        {
-          key: 'sms',
-          sortable: false,
-          label: 'SMS',
-        },
-        {
-          key: 'url',
-          sortable: false,
-          label: 'Url',
-        },
-        {
-          key: 'done',
-          sortable: false,
-          label: 'Done',
-        },
-      ],
+      fields: dataFields,
       totalRows: 0,
       currentPage: 1,
       perPage: 10,
       basicSearch: true,
       selected: null,
-      filter: {
-        from: null,
-        to: null,
-        text: '',
-        seller: null,
-        captured: null,
-        program: null,
-        source: '',
-        state: null,
-        stip: null,
-        status: null,
-      },
+      filter: dataFilters,
     }
   },
   async created() {
@@ -616,7 +527,7 @@ export default {
 <style scoped>
 .flexible{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-end;
   justify-content: space-around;
 }
