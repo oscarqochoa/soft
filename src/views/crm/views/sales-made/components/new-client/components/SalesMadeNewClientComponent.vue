@@ -154,27 +154,26 @@
       </b-form-row>
     </b-form-group>
     <b-table
-      :busy.sync="isBusy"
       id="new-client-done-table"
       ref="new-client-done-table"
+      :busy.sync="isBusy"
       small
       class="text-center"
       :items="myProvider"
-      :fields="fields"
+      :fields="filteredFields"
       :per-page="perPage"
       :current-page="currentPage"
       :filter="filter"
     >
       <template #table-busy>
         <div class="text-center text-primary my-2">
-          <b-spinner class="align-middle mr-1"></b-spinner>
+          <b-spinner class="align-middle mr-1" />
           <strong>Loading ...</strong>
         </div>
       </template>
       <template #head(selected)="data">
         <b-form-checkbox />
       </template>
-
       <template v-slot:cell(selected)="row">
         <b-form-group>
           <b-form-checkbox />
@@ -183,12 +182,19 @@
       <template v-slot:cell(client)="data">
         <h6>{{ data.item.client }}</h6>
         <p class="mb-0">
+          <small> {{ data.item.mobile }}</small>
+        </p>
+        <p class="mb-0">
           <small>{{ data.item.state }}</small>
         </p>
         <p> <small> {{ data.item.sourcesname }} </small></p>
       </template>
       <template v-slot:cell(program)="data">
         <b-button
+          :style="`color: ${data.item.program_color} !important; border-color: ${data.item.program_color} !important; background-color: transparent !important;`"
+          size="sm"
+        >
+          <!--
           :variant="
             (data.item.program === 'Boost Credit') ? 'outline-info' :
             (data.item.program === 'Business') ? 'outline-primary' :
@@ -199,55 +205,167 @@
             (data.item.program === 'General Support') ? 'outline-danger' :
             'outline-info'
           "
-          size="sm"
-        >
+          -->
           {{ data.item.program }}
+          <b-icon
+            v-if="data.item.haveRates !== 1"
+            icon="exclamation-triangle-fill"
+            variant="danger"
+          />
         </b-button>
       </template>
       <template v-slot:cell(captured)="data">
-        <p> {{ data.item.captured }}</p>
-        <p v-if="data.item.commission">
-          <small class="text-primary font-weight-bold"> $ {{ getComision(data.item.commission, 0) }} </small>
-        </p>
+        <b-row>
+          <b-col>
+            <p> {{ data.item.captured }}</p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <p v-if="data.item.commission">
+              <small class="text-primary font-weight-bold"> $ {{ getComision(data.item.commission, 0) }} </small>
+            </p>
+          </b-col>
+        </b-row>
+        <b-row v-if="data.item.status == 1 || data.item.status == 3">
+          <b-col>
+            <b-icon icon="pencil-fill" />
+          </b-col>
+          <b-col>
+            <b-icon icon="list-ul" />
+          </b-col>
+        </b-row>
       </template>
       <template v-slot:cell(seller)="data">
-        <p> {{ data.item.seller }}</p>
-        <p v-if="data.item.commission">
-          <small class="text-primary font-weight-bold"> $ {{ getComision(data.item.commission, 1) }} </small>
-        </p>
+        <b-row>
+          <b-col>
+            <p> {{ data.item.seller }}</p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <p v-if="data.item.commission">
+              <small class="text-primary font-weight-bold"> $ {{ getComision(data.item.commission, 1) }} </small>
+            </p>
+          </b-col>
+        </b-row>
+        <b-row v-if="data.item.status === 1 || data.item.status === 3">
+          <b-col>
+            <b-icon icon="pencil-fill" />
+          </b-col>
+          <b-col>
+            <b-icon icon="list-ul" />
+          </b-col>
+        </b-row>
       </template>
       <template v-slot:cell(fee)="data">
-        <span> $ {{ data.item.fee }} </span>
+        <b-row>
+          <b-col>
+            <p> $ {{ data.item.fee }} </p>
+          </b-col>
+        </b-row>
+        <b-row v-if="data.item.status === 1 || data.item.status === 3">
+          <b-col>
+            <b-icon icon="pencil-fill" />
+          </b-col>
+          <b-col>
+            <b-icon icon="list-ul" />
+          </b-col>
+        </b-row>
       </template>
       <template v-slot:cell(initial_amount)="data">
         <b-icon
-          v-if="data.item.initial_amount === '0.00'"
+          v-if="data.item.initial_payment_status === 1"
           icon="wallet2"
+          variant="muted"
         />
-        <h6
-          v-else
+        <b-icon
+          v-else-if="data.item.initial_payment_status === 3"
+          icon="wallet2"
+          variant="warning"
+        />
+        <p
+          v-else-if="data.item.initial_payment_status === 2"
           class="text-success font-weight-bold"
         >
           $ {{ data.item.initial_amount }}
-        </h6>
+        </p>
       </template>
       <template v-slot:cell(contract_fee_status)="data">
         <b-icon
           icon="file-text"
           :variant="
-            (data.item.contract_fee_status === 0) ? 'muted' :
-            (data.item.contract_fee_status === 1) ? 'success' :
-            'danger' "
+            ( data.item.contract_fee_status === 0 ||
+              (data.item.contract_fee_status === 1 && data.item.initial_payment_status === 3)
+            ) ? 'muted' :
+              (data.item.contract_fee_status === 1 && data.item.initial_payment_status === 2) ? 'success' :
+              (data.item.contract_fee_status === 2) ? 'danger' : '' "
         />
       </template>
       <template v-slot:cell(notes_status)="data">
         <b-icon
+          v-if="data.item.creates > '2021-05-16 00:00:00' "
           icon="chat-square-text-fill"
           :variant="
-            (data.item.notes_status === 0) ? 'muted':
-            (data.item.notes_status === 1) ? 'success' :
-            'danger' "
+            (data.item.notes_status_new == null) ? 'muted':
+            (data.item.notes_status_new == 0) ? 'success' :
+            'warning' "
         />
+        <b-icon
+          v-else
+          icon="chat-square-text-fill"
+          :variant="
+            (data.item.notes_status === 0) ? 'muted': 'success' "
+        />
+      </template>
+      <template v-slot:cell(trackings)="data">
+        <b-icon
+          icon="list-check"
+          :variant="
+            (data.item.trackings) ? 'success': 'muted' "
+        />
+      </template>
+      <template v-slot:cell(files)="data">
+        <b-icon
+          icon="folder-fill"
+          variant="warning"
+        />
+      </template>
+      <template v-slot:cell(status)="data">
+        <b-button
+          size="sm"
+          :variant="status[data.item.status].variant"
+        >
+          {{ status[data.item.status].text }}
+        </b-button>
+      </template>
+      <template v-slot:cell(creates)="data">
+        <span>{{ new Date(Date.parse(data.item.creates)).toLocaleDateString("en-US") }}</span>
+      </template>
+      <template v-slot:cell(approved)="data">
+        <span
+          v-if="data.item.approved"
+          class="bg-warning py-1 px-1 rounded-pill text-white"
+        > {{ new Date(Date.parse(data.item.approved)).toLocaleDateString("en-US") }}</span>
+        <span v-else>-</span>
+      </template>
+      <template v-slot:cell(sms)="data">
+        <b-icon
+          icon="chat-text-fill"
+          variant="primary"
+        />
+      </template>
+      <template v-slot:cell(url)="data">
+        <b-icon
+          v-if="data.item.initial_payment_status === 1"
+          icon="link"
+          variant="primary"
+        />
+      </template>
+      <template v-slot:cell(done)="data">
+        <b-btn v-if="data.item.initial_payment_status == 2">
+          <b-icon icon="arrow-left-square-fill" variant="primary"></b-icon>
+        </b-btn>
       </template>
     </b-table>
     <b-row>
@@ -270,7 +388,17 @@ import { mapState } from 'vuex'
 import CrmService from '@/views/crm/services/crm.service'
 
 export default {
-  name: 'NewClientDoneComponent',
+  name: 'SalesMadeNewClientComponent',
+  props: {
+    done: {
+      required: true,
+      type: Number,
+    },
+    inputFields: {
+      required: true,
+      type: Array,
+    },
+  },
   data() {
     return {
       isBusy: false,
@@ -320,18 +448,52 @@ export default {
           sortable: false,
           label: 'NT',
         },
+        {
+          key: 'trackings',
+          sortable: false,
+          label: 'TK',
+        },
+        {
+          key: 'files',
+          sortable: false,
+          label: 'FI',
+        },
+        {
+          key: 'status',
+          sortable: false,
+          label: 'ST',
+        },
+        {
+          key: 'creates',
+          sortable: true,
+          label: 'Created',
+        },
+        {
+          key: 'approved',
+          sortable: true,
+          label: 'Approved',
+        },
+        {
+          key: 'sms',
+          sortable: false,
+          label: 'SMS',
+        },
+        {
+          key: 'url',
+          sortable: false,
+          label: 'Url',
+        },
+        {
+          key: 'done',
+          sortable: false,
+          label: 'Done',
+        },
       ],
       totalRows: 0,
       currentPage: 1,
       perPage: 10,
       basicSearch: true,
       selected: null,
-      options: [
-        { value: null, text: 'Please select an option' },
-        { value: 'a', text: 'This is First option' },
-        { value: 'b', text: 'Selected Option' },
-        { value: { C: '3PO' }, text: 'This is an option with object value' },
-      ],
       filter: {
         from: null,
         to: null,
@@ -366,8 +528,11 @@ export default {
       sources: state => state['crm-store'].sources,
       sts: state => state['crm-store'].states,
       stip: state => state['crm-store'].statusip,
-      status: state => state['crm-store'].status
+      status: state => state['crm-store'].status,
     }),
+    filteredFields() {
+      return this.fields.filter(field => this.inputFields.includes(field.key))
+    },
   },
   methods: {
     async myProvider(ctx) {
@@ -378,6 +543,13 @@ export default {
         let sortDirection = 'desc'
         if (ctx.sortBy === 'client') {
           sortBy = 0
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+        } else if (ctx.sortBy === 'creates') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+        } else if (ctx.sortBy === 'approved') {
+          sortBy = 12
           if (ctx.sortDesc) sortDirection = 'desc'
           else sortDirection = 'asc'
         }
@@ -396,7 +568,7 @@ export default {
           rolsession: 1,
           statusip: ctx.filter.stip,
           sourcesname_id: ctx.filter.source,
-          done: 1,
+          done: this.done,
         },
         ctx.currentPage, ctx.perPage)
         this.isBusy = false

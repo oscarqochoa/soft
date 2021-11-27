@@ -10,17 +10,17 @@ export default {
     sources: {},
     states: {},
     statusip: [
-      { value: 0, text: 'ALL', },
-      { value: 1, text: 'NO', },
-      { value: 2, text: 'YES', }
+      { value: 0, text: 'ALL' },
+      { value: 1, text: 'NO' },
+      { value: 2, text: 'YES' },
     ],
     status: [
-      { value: 0, text: 'ALL', },
-      { value: 1, text: 'PENDING', },
-      { value: 2, text: 'REVISION', },
-      { value: 3, text: 'DESAPROVE', },
-      { value: 4, text: 'APPROVED', },
-      { value: 5, text: 'SUPERVISOR', }
+      { value: 0, text: 'ALL', variant: '' },
+      { value: 1, text: 'PENDING', variant: 'warning' },
+      { value: 2, text: 'REVISION', variant: 'primary' },
+      { value: 3, text: 'DESAPROVE', variant: 'danger' },
+      { value: 4, text: 'APPROVED', variant: 'success' },
+      { value: 5, text: 'SUPERVISOR', variant: 'warning' },
     ],
   },
   getters: {

@@ -2,24 +2,38 @@
   <div>
     <b-tabs>
       <b-tab title="Done">
-        <new-client-done-component/>
+        <sales-made-new-client-component
+          :input-fields="['selected', 'client', 'program',
+                          'captured', 'seller', 'fee',
+                          'initial_amount', 'contract_fee_status',
+                          'notes_status', 'trackings', 'files',
+                          'status', 'creates', 'approved', 'sms', 'url'
+          ]"
+          done="1"
+        />
       </b-tab>
       <b-tab title="Pending">
-        <new-client-pending-component/>
+        <sales-made-new-client-component
+          :input-fields="['selected', 'client', 'program',
+                          'captured', 'seller', 'fee',
+                          'initial_amount', 'contract_fee_status',
+                          'notes_status', 'trackings', 'files',
+                          'status', 'creates', 'approved', 'sms', 'url', 'done'
+          ]"
+          done="0"
+        />
       </b-tab>
     </b-tabs>
   </div>
 </template>
 
 <script>
-import NewClientDoneComponent from '@/views/crm/views/sales-made/components/new-client/components/NewClientDoneComponent.vue'
-import NewClientPendingComponent from '@/views/crm/views/sales-made/components/new-client/components/NewClientPendingComponent.vue'
+import SalesMadeNewClientComponent from './components/SalesMadeNewClientComponent.vue'
 
 export default {
   name: 'NewClientComponent',
   components: {
-    NewClientDoneComponent,
-    NewClientPendingComponent,
+    SalesMadeNewClientComponent,
   },
 }
 </script>
