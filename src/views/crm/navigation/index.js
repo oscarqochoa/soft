@@ -1,15 +1,20 @@
+import SalesMadeNavigation from '../views/sales-made/sales-made.nav'
+
 export default [
-    {
-        header: 'CRM',
-    },
-    {
-        title: 'Clients',
-        icon: 'UsersIcon',
-        route: 'crm-clients-list',
-    },
-    // {
-    //     title: 'Test',
-    //     icon: 'PieChartIcon',
-    //     route: 'test-crm',
-    // },
+  {
+    header: 'CRM',
+  },
+  {
+    title: 'Test',
+    icon: 'PieChartIcon',
+    route: 'test-crm',
+    //   tag: '3',
+    //   tagVariant: 'light-danger'
+  },
+  SalesMadeNavigation,
+  {
+    title: 'Clients',
+    icon: 'UsersIcon',
+    route: 'crm-clients-list',
+  },
 ]
