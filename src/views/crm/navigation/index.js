@@ -18,9 +18,7 @@ export default [
     },
     {
         title: 'Clients',
-        icon: 'PieChartIcon',
+        icon: 'UsersIcon',
         route: 'crm-clients-list',
-        //   tag: '3',
-        //   tagVariant: 'light-danger'
     },
 ]

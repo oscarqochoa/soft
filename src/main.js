@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
+import { ToastPlugin, ModalPlugin,BootstrapVue,BootstrapVueIcons } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
 
 import i18n from '@/libs/i18n'
@@ -28,8 +28,13 @@ import '@/@fake-db/db'
 window.amgApi = amgApi
 // require('./service/axios');
 // BSV Plugin Registration
+
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
+
+
 
 // Composition API
 Vue.use(VueCompositionAPI)
