@@ -24,6 +24,15 @@ export default {
                   case 6:
                     module = 10;
                     break;
+                  case 7:
+                    module = 11;
+                    break;
+                  case 8:
+                    module = 14;
+                    break;
+                  case 9:
+                    module = 12;
+                    break;
                 }
               }
               return module;
