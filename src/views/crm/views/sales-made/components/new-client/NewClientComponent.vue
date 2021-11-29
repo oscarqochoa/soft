@@ -9,7 +9,7 @@
                           'notes_status', 'trackings', 'files',
                           'status', 'creates', 'approved', 'sms', 'url'
           ]"
-          done="1"
+          :done="1"
         />
       </b-tab>
       <b-tab title="Pending">
@@ -20,7 +20,7 @@
                           'notes_status', 'trackings', 'files',
                           'status', 'creates', 'approved', 'sms', 'url', 'done'
           ]"
-          done="0"
+          :done="0"
         />
       </b-tab>
     </b-tabs>
