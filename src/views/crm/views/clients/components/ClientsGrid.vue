@@ -310,20 +310,7 @@ import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { mapGetters } from "vuex";
-import { BCard,BNav, BNavItem,BButton, BCardBody, BBadge,BRow ,BCol,BFormInput} from "bootstrap-vue";
 export default {
-   name: "clients-Grid",
-  components:{
-    BCard,
-    BButton,
-    BCardBody,
-    BBadge,
-    BNav,
-    BNavItem,
-    BRow,
-    BCol,
-    BFormInput
-  },
   directives: {
     Ripple,
   },

@@ -19,19 +19,7 @@
 </template>
 
 <script>
-import { BCard,BNav, BNavItem,BButton, BCardBody, BBadge } from "bootstrap-vue";
-export default {
-  name: "clients",
-  components: {
-    BCard,
-    BButton,
-    BCardBody,
-    BBadge,
-    BNav,
-    BNavItem
-
-  },
-};
+export default {};
 </script>
 
 <style>

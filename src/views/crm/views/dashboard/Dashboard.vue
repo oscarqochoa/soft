@@ -325,7 +325,7 @@ export default {
         user_id = 0;
       }
       amgApi
-        .post("/api/filtrouserdash",{
+        .post("/filtrouserdash",{
           created_id:user_id,
         })
         .then((response) => {
@@ -355,7 +355,7 @@ export default {
     filtrocont(){
       if(this.userfilter != null){
         amgApi
-        .post("/api/filtrouserdash", {
+        .post("/filtrouserdash", {
           created_id:this.userfilter.id,
           anio: this.year,
         }).then(response =>{
@@ -387,7 +387,7 @@ export default {
     },
     userCreator() {
       amgApi
-        .post("/api/sellerall/2", {
+        .post("/sellerall/2", {
           roles: "",
           type: "1",
         })
