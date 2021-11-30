@@ -147,7 +147,7 @@
             <span class="align-text-top text-capitalize">{{ data.item.date_even }}</span>
           </b-badge>
         </template>
-        
+
         <!-- Column: Name -->
         <template #cell(lead_name)="data">
           <a
@@ -357,7 +357,7 @@ export default {
   data() {
     return {
       advanceSearch: false,
-      baseUrl: process.env.VUE_APP_BASE_URL,
+      baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
       mainProps: { width: 75, height: 75, class: 'm1' }
     }
   },

@@ -1,7 +1,7 @@
 class CrmService {
   async getLeads (body) {
     try {
-      const { data } = await amgApi.post('/api/searchleads', body)
+      const { data } = await amgApi.post('/searchleads', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getLeads:', error)
@@ -10,7 +10,7 @@ class CrmService {
   }
   async getLeadsSn (body) {
     try {
-      const { data } = await amgApi.post('/api/search-leads-sn-recovery', body)
+      const { data } = await amgApi.post('/search-leads-sn-recovery', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getLeadsSn:', error)
@@ -19,7 +19,7 @@ class CrmService {
   }
   async getStatusLeads (params) {
     try {
-      const { data } = await amgApi.get('/api/leadstatus', { params })
+      const { data } = await amgApi.get('/leadstatus', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getStatusLeads:', error)
@@ -28,7 +28,7 @@ class CrmService {
   }
   async getOwners (body) {
     try {
-      const { data } = await amgApi.post('/api/usermodule/2', body)
+      const { data } = await amgApi.post('/usermodule/2', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getOwners:', error)
@@ -37,7 +37,7 @@ class CrmService {
   }
   async getSourceNames (params) {
     try {
-      const { data } = await amgApi.get('/api/sourcesnames', { params })
+      const { data } = await amgApi.get('/sourcesnames', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getSourceNames:', error)
@@ -46,7 +46,7 @@ class CrmService {
   }
   async getPrograms (params) {
     try {
-      const { data } = await amgApi.get('/api/programs', { params })
+      const { data } = await amgApi.get('/programs', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getPrograms:', error)
@@ -55,7 +55,7 @@ class CrmService {
   }
   async getStates (body) {
     try {
-      const { data } = await amgApi.post('/api/get-states', body)
+      const { data } = await amgApi.post('/get-states', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getStates:', error)

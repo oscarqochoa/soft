@@ -239,7 +239,7 @@ export default {
   },
   data() {
     return {
-      baseUrl: process.env.VUE_APP_BASE_URL,
+      baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
       mainProps: { width: 75, height: 75, class: 'm1' }
     }
   },
