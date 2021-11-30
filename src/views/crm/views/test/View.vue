@@ -1,12 +1,14 @@
 <template>
-  <div>
-    <h1>{{ message }}</h1>
-    <pre>{{ currentUser }}</pre>
-  </div>
+<div>
+  <h1>{{message}}</h1>
+  <pre>{{currentUser}}</pre>
+</div>
+
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import CrmService from '../../services/crm.service'
+import { mapGetters } from 'vuex';
 export default {
   name: "Test",
   mounted() {
@@ -20,6 +22,10 @@ export default {
     return {
       message: "Hello World 2!",
     };
+  },
+  async created()
+  {
+    await CrmService.getAlgo()
   },
   computed: {
     ...mapGetters({
