@@ -4,7 +4,7 @@ export default {
   namespaced: true,
   state: {
     sellersCrm: {},
-    capturedCrm: {},
+    capturedCrm: [],
     //TODO Hacerlo global
     programs: {},
     sources: {},

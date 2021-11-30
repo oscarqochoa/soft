@@ -1,5 +1,7 @@
 import SalesMadeNavigation from '../views/sales-made/sales-made.nav'
 import CommissionsNavigation from '../views/commissions/commissions.nav'
+import DashboardNavigation from '../views/dashboard/dashboard.nav'
+import ClientsNavigation from '../views/clients/clients.nav'
 
 export default [{
     header: 'CRM',
@@ -8,8 +10,6 @@ export default [{
     title: 'Test',
     icon: 'PieChartIcon',
     route: 'test-crm',
-    //   tag: '3',
-    //   tagVariant: 'light-danger'
   },
   SalesMadeNavigation,
   CommissionsNavigation,
@@ -18,4 +18,8 @@ export default [{
     icon: 'UsersIcon',
     route: 'crm-clients-list',
   },
+
+  DashboardNavigation,
+  ClientsNavigation,
+
 ]

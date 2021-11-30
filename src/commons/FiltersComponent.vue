@@ -71,7 +71,7 @@ export default {
       this.$emit("onChangeFilter", null);
     },
   },
-};
+}
 </script>
 <style >
 .b-calendar-grid-caption {

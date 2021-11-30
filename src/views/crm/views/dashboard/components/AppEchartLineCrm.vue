@@ -29,19 +29,21 @@ export default {
   },
   data() {
     return {
+        values:[2,4,5,6],
       line: {
         // Make gradient line here
         visualMap: [{
           show: true,
           type: 'continuous',
           min: 0,
+          
           max: 400,
         }],
         grid: {
-          width: '96%',
-          left: '30px',
-          top: '10px',
-          show: false,
+          width: '95%',
+          left: '40px',
+          right: '4%',
+          containLabel: false,
         },
         tooltip: {
           trigger: 'axis',
@@ -53,18 +55,21 @@ export default {
         yAxis: {
           type: 'value',
           splitLine: { show: false },
+          stepSize: 50,
+         
         },
         series: {
           type: 'line',
-          
+          name:this.optionData.series.name,
           showSymbol: false,
-          data: this.optionData.series,
+          data: this.optionData.series.data,
         },
       },
     }
   },
 }
 </script>
+
 
 <style>
 .echarts {

@@ -164,6 +164,7 @@
         </template>
         <template v-slot:cell(trackings)="data">
           <b-icon
+            class="cursor-pointer"
             icon="list-check"
             :variant="
               (data.item.trackings) ? 'success': 'muted' "
@@ -216,6 +217,7 @@
         </template>
       </b-table>
     </filter-slot>
+    <tracking-modal/>
   </div>
 </template>
 
@@ -226,10 +228,11 @@ from '@/views/crm/views/sales-made/components/new-client/components/FilterSlot.v
 import dataFields from '@/views/crm/views/sales-made/components/new-client/components/fields.data'
 import dataFilters from '@/views/crm/views/sales-made/components/new-client/components/filters.data'
 import CrmService from '@/views/crm/services/crm.service'
+import TrackingModal from "@/views/crm/views/sales-made/components/modals/TrackingModal";
 
 export default {
-  name: 'Lalalallala',
-  components: { FilterSlot },
+  name: 'SalesMadeNewComponent',
+  components: {TrackingModal, FilterSlot },
   props: {
     done: {
       required: true,
@@ -296,8 +299,9 @@ export default {
           statusip: ctx.filter.stip,
           sourcesname_id: ctx.filter.source,
           done: this.done,
+          per_page: ctx.perPage,
         },
-        ctx.currentPage, ctx.perPage)
+        ctx.currentPage)
         console.log(data)
         this.startPage = data.from
         this.toPage = data.to

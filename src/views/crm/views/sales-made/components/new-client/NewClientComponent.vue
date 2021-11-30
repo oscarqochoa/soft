@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-tabs>
+    <b-tabs lazy>
       <b-tab title="Done">
         <sales-made-new-client-component
           :input-fields="['selected', 'client', 'program',
