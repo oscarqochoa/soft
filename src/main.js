@@ -1,7 +1,11 @@
 import Vue from 'vue'
+<<<<<<< HEAD
 import {
   ToastPlugin, ModalPlugin, BootstrapVue, BootstrapVueIcons,
 } from 'bootstrap-vue'
+=======
+import { ToastPlugin, ModalPlugin,BootstrapVue,BootstrapVueIcons } from 'bootstrap-vue'
+>>>>>>> francoDev
 import VueCompositionAPI from '@vue/composition-api'
 
 import i18n from '@/libs/i18n'
@@ -35,10 +39,17 @@ import './filters/dates'
 window.amgApi = amgApi
 // require('./service/axios');
 // BSV Plugin Registration
+
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> francoDev
 // Composition API
 Vue.use(VueCompositionAPI)
 
