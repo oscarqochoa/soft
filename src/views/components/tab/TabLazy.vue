@@ -9,7 +9,7 @@
           class="mb-0"
         >
           <div class="alert-body">
-            I'm always mounted
+            I'm always mounted {{ codeLazy }}
           </div>
         </b-alert>
       </b-tab>
@@ -26,7 +26,7 @@
           class="mb-0"
         >
           <div class="alert-body">
-            I'm lazy mounted!
+            I'm lazy mounted! {{ codeLazy }}
           </div>
         </b-alert>
       </b-tab>
