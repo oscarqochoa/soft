@@ -1,9 +1,16 @@
 <template>
   <div>
-    <user-list-add-new
+    <lead-list-add-new
       :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
-      :role-options="roleOptions"
-      :plan-options="planOptions"
+      :state-lead-options="stateLeadOptions"
+      :status-lead-options="statusLeadOptions"
+      :program-options="programOptions"
+      :language-options="languageOptions"
+      :state-options="stateOptions"
+      :country-options="countryOptions"
+      :source-name-options="sourceNameOptions"
+      :source-lead-options="sourceLeadOptions"
+      :user-creator-owner-options="userCreatorOwnerOptions"
       @refetch-data="refetchData"
     />
     <b-card-code title="LEADS" :actions="true">
@@ -53,7 +60,7 @@ import LeadList from './lead-list/LeadsList.vue'
 import LeadSnList from './lead-list/LeadsSnList.vue'
 import LeadWPotentialList from './lead-list/LeadsWPotentialList.vue'
 import useUsersList from './lead-list/useLeadsList'
-import UserListAddNew from './lead-list/LeadListAddNew.vue'
+import LeadListAddNew from './lead-list/LeadListAddNew.vue'
 import crmService from '@/views/crm/services/crm.service'
 import { ref, onUnmounted } from '@vue/composition-api'
 
@@ -63,15 +70,20 @@ export default {
     LeadList,
     LeadSnList,
     LeadWPotentialList,
-    UserListAddNew
+    LeadListAddNew
   },
   data() {
     return {
+      stateLeadOptions: [],
       statusLeadOptions: [],
+      sourceLeadOptions: [],
       ownerOptions: [],
       sourceNameOptions: [],
       programOptions: [],
       stAdOptions: [],
+      stateOptions: [],
+      countryOptions: [],
+      userCreatorOwnerOptions: [],
     }
   },
   setup() {
@@ -88,18 +100,9 @@ export default {
       { label: 'ITIN', value: 'itin' },
       { label: 'CPN', value: 'cpn' },
     ]
-    const roleOptions = [
-      { label: 'Admin', value: 'admin' },
-      { label: 'Author', value: 'author' },
-      { label: 'Editor', value: 'editor' },
-      { label: 'Maintainer', value: 'maintainer' },
-      { label: 'Subscriber', value: 'subscriber' },
-    ]
-    const planOptions = [
-      { label: 'Basic', value: 'basic' },
-      { label: 'Company', value: 'company' },
-      { label: 'Enterprise', value: 'enterprise' },
-      { label: 'Team', value: 'team' },
+    const languageOptions = [
+      { label: 'English', value: 'EN' },
+      { label: 'Spanish', value: 'ES' },
     ]
 
     const {
@@ -113,21 +116,33 @@ export default {
       refetchData,
       crOptions,
       typeDocOptions,
-      roleOptions,
-      planOptions,
+      languageOptions,
     }
   },
   created() {
+    this.getStateLeads()
     this.getStatusLeads()
+    this.getSourceLeads()
     this.getOwners()
     this.getSourceNames()
     this.getPrograms()
     this.getStates()
+    this.getStatesEeuu()
+    this.getCountries()
+    this.getUserCreatorOwner()
   },
   methods: {
+    async getStateLeads () {
+      const response = await crmService.getStateLeads()
+      this.stateLeadOptions = response.map(el => ({ label: el.name, value: el.id }))
+    },
     async getStatusLeads () {
       const response = await crmService.getStatusLeads()
       this.statusLeadOptions = response.map(el => ({ label: el.value, value: el.id }))
+    },
+    async getSourceLeads () {
+      const response = await crmService.getSourceLeads()
+      this.sourceLeadOptions = response.map(el => ({ label: el.value, value: el.id }))
     },
     async getOwners () {
       const response = await crmService.getOwners({
@@ -149,6 +164,18 @@ export default {
         type: 1,
       })
       this.stAdOptions = response.map(el => ({ label: el.slug, value: el.id }))
+    },
+    async getStatesEeuu () {
+      const response = await crmService.getStatesEeuu()
+      this.stateOptions = response.map(el => ({ label: el.state, value: el.slug }))
+    },
+    async getCountries () {
+      const response = await crmService.getCountries()
+      this.countryOptions = response.map(el => ({ label: el.name, value: el.id }))
+    },
+    async getUserCreatorOwner () {
+      const response = await crmService.getUserCreatorOwner({ modul: 2, roles: "[]", type: "1", })
+      this.userCreatorOwnerOptions = response.map(el => ({ label: el.user_name, value: el.id }))
     },
   }
 }

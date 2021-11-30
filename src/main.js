@@ -10,6 +10,7 @@ import {amgApi} from './service/axios';
 import { initialize } from './service/general'
 import { BootstrapVue } from "bootstrap-vue";
 import generalMixins from './mixins/general'
+import VueMask from 'v-mask'
 // Global Components
 import './global-components'
 
@@ -38,6 +39,8 @@ Vue.use(ModalPlugin)
 Vue.use(BootstrapVue);
 // Composition API
 Vue.use(VueCompositionAPI)
+
+Vue.use(VueMask)
 
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard

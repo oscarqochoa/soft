@@ -3,7 +3,7 @@
     id="add-new-user-sidebar"
     :visible="isAddNewUserSidebarActive"
     bg-variant="white"
-    sidebar-class="sidebar-lg"
+    sidebar-class="sidebar-xl"
     shadow
     backdrop
     no-header
@@ -38,198 +38,26 @@
           @submit.prevent="handleSubmit(onSubmit)"
           @reset.prevent="resetForm"
         >
-
-          <!-- First Name -->
-          <validation-provider
-            #default="validationContext"
-            name="First Name"
-            rules="required"
-          >
-            <b-form-group
-              label="First Name"
-              label-for="first-name"
-            >
-              <b-form-input
-                id="first-name"
-                v-model="userData.firstName"
-                autofocus
-                :state="getValidationState(validationContext)"
-                trim
-                placeholder="John Doe"
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Username -->
-          <validation-provider
-            #default="validationContext"
-            name="Username"
-            rules="required|alpha-num"
-          >
-            <b-form-group
-              label="Username"
-              label-for="username"
-            >
-              <b-form-input
-                id="username"
-                v-model="userData.username"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Email -->
-          <validation-provider
-            #default="validationContext"
-            name="Email"
-            rules="required|email"
-          >
-            <b-form-group
-              label="Email"
-              label-for="email"
-            >
-              <b-form-input
-                id="email"
-                v-model="userData.email"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Company -->
-          <validation-provider
-            #default="validationContext"
-            name="Contact"
-            rules="required"
-          >
-            <b-form-group
-              label="Contact"
-              label-for="contact"
-            >
-              <b-form-input
-                id="contact"
-                v-model="userData.contact"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Company -->
-          <validation-provider
-            #default="validationContext"
-            name="Company"
-            rules="required"
-          >
-            <b-form-group
-              label="Company"
-              label-for="company"
-            >
-              <b-form-input
-                id="company"
-                v-model="userData.company"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Country -->
-          <validation-provider
-            #default="validationContext"
-            name="Country"
-            rules="required"
-          >
-            <b-form-group
-              label="Country"
-              label-for="country"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userData.country"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="countries"
-                :clearable="false"
-                input-id="country"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- User Role -->
-          <validation-provider
-            #default="validationContext"
-            name="User Role"
-            rules="required"
-          >
-            <b-form-group
-              label="User Role"
-              label-for="user-role"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userData.role"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="roleOptions"
-                :reduce="val => val.value"
-                :clearable="false"
-                input-id="user-role"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Plan -->
-          <validation-provider
-            #default="validationContext"
-            name="Plan"
-            rules="required"
-          >
-            <b-form-group
-              label="Plan"
-              label-for="plan"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userData.currentPlan"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="planOptions"
-                :reduce="val => val.value"
-                :clearable="false"
-                input-id="plan"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
+          <basic-information-lead
+            :user-data="userData"
+            :state-lead-options="stateLeadOptions"
+            :status-lead-options="statusLeadOptions"
+            :program-options="programOptions"
+            :language-options="languageOptions"
+            :state-options="stateOptions"
+            :country-options="countryOptions"
+          />
+          <lead-information-lead
+            :user-data="userData"
+            :status-lead-options="statusLeadOptions"
+            :source-name-options="sourceNameOptions"
+            :source-lead-options="sourceLeadOptions"
+            :user-creator-owner-options="userCreatorOwnerOptions"
+          />
+          <billing-information-lead
+            :user-data="userData"
+            :state-options="stateOptions"
+          />
           <!-- Form Actions -->
           <div class="d-flex mt-2">
             <b-button
@@ -257,6 +85,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -267,10 +96,16 @@ import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 import countries from '@/@fake-db/data/other/countries'
-import store from '@/store'
+import BasicInformationLead from './create/BasicInformationLead.vue'
+import LeadInformationLead from './create/LeadInformationLead.vue'
+import BillingInformationLead from './create/BillingInformationLead.vue'
+
 
 export default {
   components: {
+    BasicInformationLead,
+    LeadInformationLead,
+    BillingInformationLead,
     BSidebar,
     BForm,
     BFormGroup,
@@ -295,63 +130,241 @@ export default {
       type: Boolean,
       required: true,
     },
-    roleOptions: {
+    stateLeadOptions: {
       type: Array,
       required: true,
     },
-    planOptions: {
+    statusLeadOptions: {
+      type: Array,
+      required: true,
+    },
+    programOptions: {
+      type: Array,
+      required: true,
+    },
+    languageOptions: {
+      type: Array,
+      required: true,
+    },
+    stateOptions: {
+      type: Array,
+      required: true,
+    },
+    countryOptions: {
+      type: Array,
+      required: true,
+    },
+    sourceNameOptions: {
+      type: Array,
+      required: true,
+    },
+    sourceLeadOptions: {
+      type: Array,
+      required: true,
+    },
+    userCreatorOwnerOptions: {
       type: Array,
       required: true,
     },
   },
   data() {
     return {
+      modul: 2,
+      blankUserData: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        email: '',
+        programs: [],
+        dob: '',
+        language: '',
+        stateLead: '',
+        social: {
+          value: ''
+        },
+        ssn: '',
+        itin: '',
+        other: '',
+        phone: '',
+        mobile: '',
+        other: '',
+        address: {
+          prename: 'main',
+          street: '',
+          city: '',
+          state: '',
+          zipcode: '',
+          country: '',
+        },
+        originCountry: { value: 146, label: 'México' },
+        anotherAddress: false,
+        otherAddress: {
+          prename: 'origin',
+          street: '',
+          city: '',
+          state: '',
+          zipcode: '',
+          country: '',
+        },
+        ownerId: '',
+        sourceId: '',
+        leadStatusId: '',
+        sourceNameId: '',
+        cardNumber1: '',
+        cardNumber2: '',
+        cardNumber3: '',
+        cardNumber4: '',
+        cardExpiMonth: '',
+        cardExpiYear: '',
+        cardSecurityCode: '',
+        cardAddress: {
+          prename: 'card',
+          street: '',
+          city: '',
+          state: '',
+          zipcode: '',
+          country: '',
+        },
+        programId: null,
+        work: '',
+        creditReport: true,
+        payment: '0',
+        ammount: '',
+        description: '',
+        cardNumber: '',
+        typeCredit: '0',
+        dateOnline: '',
+        plataform: null,
+        usernameOnline: '',
+        passwordOnline: '',
+        memberNumberOnline: '',
+      },
+      userData: {},
       required,
       alphaNum,
       email,
       countries,
+      refFormObserver: formValidation(this.resetuserData).refFormObserver,
+      getValidationState: formValidation(this.resetuserData).getValidationState,
+      resetForm: formValidation(this.resetuserData).resetForm
     }
   },
-  setup(props, { emit }) {
-    const blankUserData = {
-      firstName: '',
-      username: '',
-      email: '',
-      role: null,
-      currentPlan: null,
-      company: '',
-      country: '',
-      contact: '',
-    }
-
-    const userData = ref(JSON.parse(JSON.stringify(blankUserData)))
-    const resetuserData = () => {
-      userData.value = JSON.parse(JSON.stringify(blankUserData))
-    }
-
-    const onSubmit = () => {
-      store.dispatch('app-user/addUser', userData.value)
+  created () {
+    this.resetuserData()
+    /* const {
+      refFormObserver,
+      getValidationState,
+      resetForm,
+    } = formValidation(resetuserData) */
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+      token: "auth/token"
+    }),
+  },
+  methods: {
+    resetuserData () {
+      this.userData = JSON.parse(JSON.stringify(this.blankUserData))
+    },
+    getSelectValue (element) {
+      return (element) ? element.value : null
+    },
+    async onSubmit () {
+      try {
+        let route = '';
+        switch (this.modul) {
+          case (2) : route = 'show/'; break
+          case (3) : route = '/bussiness/leads'; break
+          case (4) : route = '/administration/leads'; break
+          case (5) : route = '/debtsolution/leads'; break
+          case (6) : route = '/creditexperts/leads'; break
+          case (7) : route = '/boostcredit/leads'; break
+          case (8) : route = '/taxresearch/leads'; break
+          case (10) : route = '/claimdepartment/leads'; break
+          case (11) : route = '/specialists/leads'; break
+        }
+        if ( ![ this.userData.cardNumber1, this.userData.cardNumber2, this.userData.cardNumber3, this.userData.cardNumber4 ].includes('')) {
+          this.userData.cardNumber = `${this.userData.cardNumber1}-${this.userData.cardNumber2}-${this.userData.cardNumber3}-${this.userData.cardNumber4}`
+        }
+        //VALIDATION ITIN & SSN
+        const val = this.userData.social.value.substr(0, 1)
+        if (val == 9) {
+          this.userData.itin = this.userData.social.value
+        } else {
+          this.userData.ssn = this.userData.social.value
+        }
+        const { id: user_id, id: role_id } = this.currentUser
+        const { email, firstName, lastName, middleName, sourceId, sourceNameId, programId, phone, mobile, work, creditReport, payment, ammount, programs, leadStatusId, address, description, cardExpiMonth, cardExpiYear, ssn, cardHoldername, cardNumber, cardSecurityCode, dob, cardAddress, typeCredit, dateOnline, plataform, usernameOnline, passwordOnline, memberNumberOnline, language, itin, other, stateLead, anotherAddress, otherAddress, originCountry } = this.userData
+        const body = {
+          id: '',
+          email,
+          user_id,
+          first_name: firstName,
+          last_name: lastName,
+          middle_name: middleName,
+          source_id: this.getSelectValue(sourceId),
+          sourcesname_id: this.getSelectValue(sourceNameId),
+          program_id: programId,
+          phone,
+          mobile,
+          work,
+          credit_report: creditReport,
+          payment,
+          ammount,
+          program: programs.map(el => ({ id: el.value, value: el.label, name: el.label })),
+          leadstatus_id: this.getSelectValue(leadStatusId),
+          street: address.street,
+          city: address.city,
+          state: this.getSelectValue(address.state),
+          country: address.country,
+          zipcode: address.zipcode,
+          description,
+          card_expi_month: cardExpiMonth,
+          card_expi_year: cardExpiYear,
+          ssn,
+          cardholdername: cardHoldername,
+          cardnumber: cardNumber,
+          cardsecuritycode: cardSecurityCode,
+          dob,
+          super: role_id,
+          created_by: user_id,
+          usercreator: user_id,
+          datecreator: new Date().toJSON().substring(0, 10),
+          streetcard: cardAddress.street,
+          citycard: cardAddress.city,
+          zipcodecard: cardAddress.zipcode,
+          statecard: this.getSelectValue(cardAddress.state),
+          countrycard: cardAddress.country,
+          type_credit: typeCredit,
+          dateonline: dateOnline,
+          plataform,
+          usernameonline: usernameOnline,
+          passwordonline: passwordOnline,
+          membernumberonline: memberNumberOnline,
+          language: this.getSelectValue(language),
+          itin,
+          other,
+          state_lead: stateLead,
+          another_address: anotherAddress,
+          otherstreet: otherAddress.street,
+          othercity: otherAddress.city,
+          otherstate: this.getSelectValue(otherAddress.state),
+          othercountry: otherAddress.country,
+          otherzipcode: otherAddress.zipcode,
+          originCountry: this.getSelectValue(originCountry.value)
+        }
+        console.log('this.userData', body)
+      } catch (error) {
+        console.log('spmething went wrong onSubmit: ', error)
+      }
+      /* store.dispatch('app-user/addUser', userData.value)
         .then(() => {
           emit('refetch-data')
           emit('update:is-add-new-user-sidebar-active', false)
-        })
+        }) */
     }
-
-    const {
-      refFormObserver,
-      getValidationState,
-      resetForm,
-    } = formValidation(resetuserData)
-
-    return {
-      userData,
-      onSubmit,
-
-      refFormObserver,
-      getValidationState,
-      resetForm,
-    }
-  },
+  }
 }
 </script>
 
@@ -362,5 +375,8 @@ export default {
   .vs__dropdown-menu {
     max-height: 200px !important;
   }
+}
+.sidebar-xl {
+  width: 90rem;
 }
 </style>

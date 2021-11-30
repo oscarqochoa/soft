@@ -321,6 +321,10 @@ export default {
     vSelect,
   },
   props: {
+    stateLeadOptions: {
+      type: Array,
+      required: false,
+    },
     statusLeadOptions: {
       type: Array,
       required: false,
