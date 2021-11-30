@@ -1,7 +1,7 @@
 import SalesMadeNavigation from '../views/sales-made/sales-made.nav'
+import CommissionsNavigation from '../views/commissions/commissions.nav'
 
-export default [
-  {
+export default [{
     header: 'CRM',
   },
   {
@@ -12,6 +12,7 @@ export default [
     //   tagVariant: 'light-danger'
   },
   SalesMadeNavigation,
+  CommissionsNavigation,
   {
     title: 'Clients',
     icon: 'UsersIcon',

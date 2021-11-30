@@ -1,0 +1,125 @@
+<template>
+  <div class="d-inline-flex">
+    <b-button
+      variant="gradient-warning"
+      class="btn-icon button-size button-margin-l"
+      title="'Edit'"
+      v-b-tooltip.hover.bottom="'Edit'"
+      v-show="!editMode"
+      @click="edit()"
+    >
+      <feather-icon icon="SettingsIcon"></feather-icon>
+    </b-button>
+    <b-button
+      variant="gradient-danger"
+      class="btn-icon button-size button-margin-l"
+      v-b-tooltip.hover.bottom="'Cancel'"
+      @click="cancel()"
+      v-show="editMode"
+    >
+      <feather-icon icon="Trash2Icon"></feather-icon>
+    </b-button>
+    <b-button
+      variant="gradient-success"
+      class="btn-icon button-size button-margin-l"
+      v-b-tooltip.hover.bottom="'Update'"
+      v-show="editMode"
+      @click="update()"
+    >
+      <feather-icon icon="CheckIcon"></feather-icon>
+    </b-button>
+  </div>
+</template>
+
+<script>
+export default {
+  directives: {
+    Ripple
+  },
+  emits: ["edit", "cancel", "update"],
+  props: {
+    editMode: {
+      type: Boolean,
+      default: false
+    },
+    data: {
+      type: Object,
+      default: () => ({
+        messageEdit: "Information",
+        messageUpdate: "Information"
+      })
+    }
+  },
+  methods: {
+    edit() {
+      this.$swal({
+        icon: "warning",
+        title: "Are you sure?",
+        text: `Do you want to edit the ${this.data.messageEdit}?`,
+        showCancelButton: true,
+        reverseButtons: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes",
+        customClass: {
+          confirmButton: "btn btn-success btn-sm ml-3",
+          cancelButton: "btn btn-danger btn-sm"
+        }
+      }).then(r => {
+        if (r.value) {
+          this.$emit("edit");
+        }
+      });
+    },
+    cancel() {
+      this.$swal({
+        icon: "warning",
+        title: "Are you sure?",
+        text: "Changes will be lost",
+        showCancelButton: true,
+        reverseButtons: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes",
+        customClass: {
+          confirmButton: "btn btn-success btn-sm ml-3",
+          cancelButton: "btn btn-danger btn-sm"
+        }
+      }).then(r => {
+        if (r.value) {
+          this.$emit("cancel");
+        }
+      });
+    },
+    update() {
+      this.$swal({
+        icon: "warning",
+        title: "Are you sure?",
+        text: `The  ${this.data.messageUpdate} will be save!`,
+        showCancelButton: true,
+        reverseButtons: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes",
+        customClass: {
+          confirmButton: "btn btn-success btn-sm ml-3",
+          cancelButton: "btn btn-danger btn-sm"
+        }
+      }).then(r => {
+        if (r.value) {
+          this.$emit("update");
+        }
+      });
+    }
+  }
+};
+</script>
+
+<style scoped>
+.button-size {
+  height: 23px;
+  padding: 3px;
+}
+.button-margin-l {
+  margin-left: 3px;
+}
+</style>
+
+
