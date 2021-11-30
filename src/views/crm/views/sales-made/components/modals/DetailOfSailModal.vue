@@ -1,12 +1,12 @@
 <template>
   <b-modal
+    v-model="modal.boost_credit"
     lazy
-    v-model="modal.tracking"
     centered
     header-bg-variant="primary"
     title-class="text-white h3"
     size="lg"
-    title="TRACKING"
+    title="DETAIL OF SALE"
     hide-footer
     scrollable
   >
@@ -21,7 +21,7 @@
             </b-input-group-prepend>
             <b-form-input
               disabled
-              :value="tracking.program"
+              :value="boost_credit.program"
             />
           </b-input-group>
         </b-col>
@@ -34,28 +34,22 @@
             </b-input-group-prepend>
             <b-form-input
               disabled
-              :value="tracking.client"
+              :value="boost_credit.client"
             />
           </b-input-group>
         </b-col>
       </b-row>
       <b-row class="mt-2">
-        <b-table
-          :fields="fields"
-          :items="tracking.tabla"
-          small
-        >
-          <template v-slot:cell(type)="data">
-            <p
-              class="text-capitalize my-auto"
-              :class="(data.item.type === 'send') ? 'text-info' :
-                (data.item.type === 'approved') ? 'text-success' : 'text-warning'
-              "
-            >
-              {{ data.item.type }}
+        <b-col class="d-flex justify-content-center align-items-center">
+          <div class="text-center border p-0 rounded">
+            <p class="m-0 py-1">
+              FEE
             </p>
-          </template>
-        </b-table>
+            <p class="bg-secondary px-4 py-2 text-white m-0 rounded-bottom">
+              $ {{ boost_credit.fee }}
+            </p>
+          </div>
+        </b-col>
       </b-row>
     </b-container>
   </b-modal>
@@ -63,44 +57,17 @@
 
 <script>
 export default {
-  name: 'TrackingModal',
+  name: 'DetailOfSailModal',
   props: {
     modal: {
       type: Object,
       required: true,
     },
-    tracking: {
+    boost_credit: {
       type: Object,
       required: true,
     },
   },
-  data() {
-    return {
-      fields: [
-        {
-          key: 'date',
-          sortable: false,
-          label: 'Date',
-        },
-        {
-          key: 'user_name',
-          sortable: false,
-          label: 'User',
-        },
-        {
-          key: 'type',
-          sortable: false,
-          label: 'Action',
-        },
-        {
-          key: 'comments',
-          sortable: false,
-          label: 'Observation',
-        },
-      ],
-    }
-  },
-
 }
 </script>
 
