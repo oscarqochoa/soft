@@ -10,6 +10,7 @@ import store from './store'
 import App from './App.vue'
 import { amgApi } from './service/axios'
 import { initialize } from './service/general'
+import VueMoment from 'vue-moment'
 
 import generalMixins from './mixins/general'
 import VueMask from 'v-mask'
@@ -42,6 +43,8 @@ Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 // Composition API
 Vue.use(VueCompositionAPI)
+
+Vue.use(VueMoment)
 
 Vue.use(VueMask)
 

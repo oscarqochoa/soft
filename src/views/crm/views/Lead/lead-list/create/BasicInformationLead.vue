@@ -185,7 +185,7 @@
           rules="required"
         >
           <b-form-group
-            label="State"
+            label="Status"
             label-for="state-lead"
             :state="getValidationState(validationContext)"
           >

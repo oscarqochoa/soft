@@ -125,6 +125,15 @@ class CrmService {
       throw error
     }
   }
+  async postCreateLead (body) {
+    try {
+      const data = await amgApi.post('/api/leadscreate', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on postCreateLead:', error)
+      throw error
+    }
+  }
 }
 
 export default new CrmService()

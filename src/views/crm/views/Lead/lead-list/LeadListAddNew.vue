@@ -66,7 +66,11 @@
               class="mr-2"
               type="submit"
             >
-              Add
+              <template v-if="isLoading">
+                <b-spinner small />
+                <span>Loading...</span>
+              </template>
+              <span v-else>Add</span>
             </b-button>
             <b-button
               v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -99,6 +103,7 @@ import countries from '@/@fake-db/data/other/countries'
 import BasicInformationLead from './create/BasicInformationLead.vue'
 import LeadInformationLead from './create/LeadInformationLead.vue'
 import BillingInformationLead from './create/BillingInformationLead.vue'
+import crmService from '@/views/crm/services/crm.service'
 
 
 export default {
@@ -178,7 +183,7 @@ export default {
         programs: [],
         dob: '',
         language: '',
-        stateLead: '',
+        stateLead: null,
         social: {
           value: ''
         },
@@ -192,21 +197,21 @@ export default {
           prename: 'main',
           street: '',
           city: '',
-          state: '',
+          state: 'CA',
           zipcode: '',
-          country: '',
+          country: 'United States',
         },
         originCountry: { value: 146, label: 'México' },
-        anotherAddress: false,
+        anotherAddress: '',
         otherAddress: {
           prename: 'origin',
           street: '',
           city: '',
           state: '',
           zipcode: '',
-          country: '',
+          country: 'United States',
         },
-        ownerId: '',
+        userId: {},
         sourceId: '',
         leadStatusId: '',
         sourceNameId: '',
@@ -223,7 +228,7 @@ export default {
           city: '',
           state: '',
           zipcode: '',
-          country: '',
+          country: 'United States',
         },
         programId: null,
         work: '',
@@ -244,34 +249,35 @@ export default {
       alphaNum,
       email,
       countries,
-      refFormObserver: formValidation(this.resetuserData).refFormObserver,
-      getValidationState: formValidation(this.resetuserData).getValidationState,
-      resetForm: formValidation(this.resetuserData).resetForm
+      refFormObserver: () => formValidation(this.resetuserData).refFormObserver(),
+      getValidationState: () => formValidation(this.resetuserData).getValidationState(),
+      resetForm: () => formValidation(this.resetuserData).resetForm(),
+      isLoading: false,
     }
   },
   created () {
     this.resetuserData()
-    /* const {
-      refFormObserver,
-      getValidationState,
-      resetForm,
-    } = formValidation(resetuserData) */
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-      token: "auth/token"
+      currentUser: 'auth/currentUser',
+      token: 'auth/token'
     }),
   },
   methods: {
     resetuserData () {
+      this.blankUserData.userId = { value: this.currentUser.id, label: this.currentUser.fullName }
       this.userData = JSON.parse(JSON.stringify(this.blankUserData))
     },
     getSelectValue (element) {
-      return (element) ? element.value : null
+      if (typeof element === 'string')
+        return (element) ? element : ''
+      else
+        return (element) ? element.value : ''
     },
     async onSubmit () {
       try {
+        this.isLoading = true
         let route = '';
         switch (this.modul) {
           case (2) : route = 'show/'; break
@@ -294,12 +300,13 @@ export default {
         } else {
           this.userData.ssn = this.userData.social.value
         }
-        const { id: user_id, id: role_id } = this.currentUser
-        const { email, firstName, lastName, middleName, sourceId, sourceNameId, programId, phone, mobile, work, creditReport, payment, ammount, programs, leadStatusId, address, description, cardExpiMonth, cardExpiYear, ssn, cardHoldername, cardNumber, cardSecurityCode, dob, cardAddress, typeCredit, dateOnline, plataform, usernameOnline, passwordOnline, memberNumberOnline, language, itin, other, stateLead, anotherAddress, otherAddress, originCountry } = this.userData
+        const { id: role_id } = this.currentUser
+        const { email, userId, firstName, lastName, middleName, sourceId, sourceNameId, programId, phone, mobile, work, creditReport, payment, ammount, programs, leadStatusId, address, description, cardExpiMonth, cardExpiYear, ssn, cardHoldername, cardNumber, cardSecurityCode, dob, cardAddress, typeCredit, dateOnline, plataform, usernameOnline, passwordOnline, memberNumberOnline, language, itin, other, stateLead, anotherAddress, otherAddress, originCountry } = this.userData
+        console.log('preData', this.userData)
         const body = {
           id: '',
           email,
-          user_id,
+          user_id: this.getSelectValue(userId),
           first_name: firstName,
           last_name: lastName,
           middle_name: middleName,
@@ -326,11 +333,11 @@ export default {
           cardholdername: cardHoldername,
           cardnumber: cardNumber,
           cardsecuritycode: cardSecurityCode,
-          dob,
+          dob: this.$moment(dob, 'YYYY-MM-DD').format('MM/DD/YYYY'),
           super: role_id,
-          created_by: user_id,
-          usercreator: user_id,
-          datecreator: new Date().toJSON().substring(0, 10),
+          created_by: this.getSelectValue(userId),
+          usercreator: this.getSelectValue(userId),
+          datecreator: this.$moment(dob, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DD'),
           streetcard: cardAddress.street,
           citycard: cardAddress.city,
           zipcodecard: cardAddress.zipcode,
@@ -352,11 +359,36 @@ export default {
           otherstate: this.getSelectValue(otherAddress.state),
           othercountry: otherAddress.country,
           otherzipcode: otherAddress.zipcode,
-          originCountry: this.getSelectValue(originCountry.value)
+          originCountry: this.getSelectValue(originCountry)
         }
-        console.log('this.userData', body)
+        const response = await crmService.postCreateLead(body)
+        if (response.status == 201) {
+          this.isLoading = false
+          this.$swal.fire({
+            type: 'success',
+            icon: 'success',
+            title: 'Lead Created in successfully',
+          }).then((res) => {
+            if (res) {
+              this.isLoading = false
+              const idUser = response.data.id;
+              /* if (this.module == 2) {
+                window.location.href = `${route}${idUser}`
+              } else {
+                window.location.href = `${route}`
+              } */
+            }
+          })
+        }
+
       } catch (error) {
         console.log('spmething went wrong onSubmit: ', error)
+        this.isLoading = false
+        this.$swal.fire({
+          type: 'error',
+          icon: 'error',
+          title: 'Oops! Something went wrong',
+        })
       }
       /* store.dispatch('app-user/addUser', userData.value)
         .then(() => {

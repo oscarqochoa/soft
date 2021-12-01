@@ -359,7 +359,7 @@ export default {
         const response = await crmService.postUniqueMobile({ mobile: this.userData.mobile })
         if (response.status == 200) {
           if (response.data.code == 'mobile') {
-            swal.fire({
+            this.$swal.fire({
               type: 'warning',
               title: `The phone number already exists: response.data.message`,
               confirmButtonText: 'REQUEST LEAD TO SOCIAL NETWORK',

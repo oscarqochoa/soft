@@ -13,10 +13,11 @@
         >
           <b-form-group
             label="Lead Owner"
-            label-for="ownerId"
+            label-for="userId"
           >
             <v-select
-              v-model="userData.ownerId"
+              id="userId"
+              v-model="userData.userId"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="label"
               :options="userCreatorOwnerOptions"
