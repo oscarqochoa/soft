@@ -3,7 +3,9 @@ import CommissionsNavigation from '../views/commissions/commissions.nav'
 import DashboardNavigation from '../views/dashboard/dashboard.nav'
 import ClientsNavigation from '../views/clients/clients.nav'
 
-export default [{
+export default [
+
+  {
     header: 'CRM',
   },
   {
@@ -13,12 +15,6 @@ export default [{
   },
   SalesMadeNavigation,
   CommissionsNavigation,
-  {
-    title: 'Clients',
-    icon: 'UsersIcon',
-    route: 'crm-clients-list',
-  },
-
   DashboardNavigation,
   ClientsNavigation,
 

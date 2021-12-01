@@ -33,9 +33,6 @@
 
 <script>
 export default {
-  directives: {
-    Ripple
-  },
   emits: ["edit", "cancel", "update"],
   props: {
     editMode: {
@@ -61,8 +58,8 @@ export default {
         buttonsStyling: false,
         confirmButtonText: "Yes",
         customClass: {
-          confirmButton: "btn btn-success btn-sm ml-3",
-          cancelButton: "btn btn-danger btn-sm"
+          confirmButton: "btn btn-success btn-sm ml-3 rounded-0",
+          cancelButton: "btn btn-danger btn-sm rounded-0 "
         }
       }).then(r => {
         if (r.value) {
@@ -80,8 +77,8 @@ export default {
         buttonsStyling: false,
         confirmButtonText: "Yes",
         customClass: {
-          confirmButton: "btn btn-success btn-sm ml-3",
-          cancelButton: "btn btn-danger btn-sm"
+          confirmButton: "btn btn-success btn-sm ml-3 rounded-0",
+          cancelButton: "btn btn-danger btn-sm rounded-0"
         }
       }).then(r => {
         if (r.value) {
@@ -99,8 +96,8 @@ export default {
         buttonsStyling: false,
         confirmButtonText: "Yes",
         customClass: {
-          confirmButton: "btn btn-success btn-sm ml-3",
-          cancelButton: "btn btn-danger btn-sm"
+          confirmButton: "btn btn-success btn-sm ml-3 rounded-0",
+          cancelButton: "btn btn-danger btn-sm rounded-0"
         }
       }).then(r => {
         if (r.value) {
