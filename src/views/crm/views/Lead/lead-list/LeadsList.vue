@@ -27,7 +27,7 @@
             />
             <label>entries</label>
             <b-button
-              variant="secondary"
+              variant="link"
               class="btn-icon ml-50"
               v-b-tooltip.hover.bottom="'Refresh'"
               @click="refresh = true"
@@ -54,27 +54,14 @@
                 variant="warning"
                 @click="advanceSearch = !advanceSearch"
               >
-                <span
-                  v-if="!advanceSearch"
-                  class="text-nowrap"
-                >
-                  Advance Search
+                <span class="text-nowrap">
                   <feather-icon
-                    icon="ChevronsRightIcon"
+                    icon="FilterIcon"
                     size="18"
                     class="mr-50 text-white"
                   />
-                </span>
-                <span
-                  v-else
-                  class="text-nowrap"
-                >
-                  <feather-icon
-                    icon="ChevronsLeftIcon"
-                    size="18"
-                    class="mr-50 text-white"
-                  />
-                  Basic Search
+                  <span v-if="!advanceSearch">Advance Search</span>
+                  <span v-else>Basic Search</span>
                 </span>
               </b-button>
             </div>
@@ -147,7 +134,7 @@
             <span class="align-text-top text-capitalize">{{ data.item.date_even }}</span>
           </b-badge>
         </template>
-        
+
         <!-- Column: Name -->
         <template #cell(lead_name)="data">
           <a
@@ -361,7 +348,7 @@ export default {
   data() {
     return {
       advanceSearch: false,
-      baseUrl: process.env.VUE_APP_BASE_URL,
+      baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
       mainProps: { width: 75, height: 75, class: 'm1' }
     }
   },

@@ -9,8 +9,8 @@
       :to-page="toPage"
     >
       <b-table
-        slot="table"
         id="new-client-done-table"
+        slot="table"
         ref="new-client-done-table"
         small
         class="text-center"
@@ -49,6 +49,8 @@
           <b-button
             :style="`color: ${data.item.program_color} !important; border-color: ${data.item.program_color} !important; background-color: transparent !important;`"
             size="sm"
+            @click="openModalProgram(data.item)"
+
           >
             {{ data.item.program }}
             <b-icon
@@ -168,6 +170,7 @@
             icon="list-check"
             :variant="
               (data.item.trackings) ? 'success': 'muted' "
+            @click="openTrackingModal(data.item.program, data.item.client, data.item.trackings)"
           />
         </template>
         <template v-slot:cell(files)="data">
@@ -217,7 +220,14 @@
         </template>
       </b-table>
     </filter-slot>
-    <tracking-modal/>
+    <tracking-modal
+      :modal="modal"
+      :tracking="modalData.tracking"
+    />
+    <detail-of-sail-modal
+      :modal="modal"
+      :boost_credit="modalData.boost_credit"
+    />
   </div>
 </template>
 
@@ -228,11 +238,12 @@ from '@/views/crm/views/sales-made/components/new-client/components/FilterSlot.v
 import dataFields from '@/views/crm/views/sales-made/components/new-client/components/fields.data'
 import dataFilters from '@/views/crm/views/sales-made/components/new-client/components/filters.data'
 import CrmService from '@/views/crm/services/crm.service'
-import TrackingModal from "@/views/crm/views/sales-made/components/modals/TrackingModal";
+import TrackingModal from '@/views/crm/views/sales-made/components/modals/TrackingModal.vue'
+import DetailOfSailModal from '@/views/crm/views/sales-made/components/modals/DetailOfSailModal.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
-  components: {TrackingModal, FilterSlot },
+  components: { DetailOfSailModal, TrackingModal, FilterSlot },
   props: {
     done: {
       required: true,
@@ -256,6 +267,22 @@ export default {
       filter: dataFilters,
       startPage: null,
       toPage: null,
+      modal: {
+        tracking: false,
+        boost_credit: false,
+      },
+      modalData: {
+        tracking: {
+          program: '',
+          client: '',
+          tabla: '',
+        },
+        boost_credit: {
+          program: '',
+          client: '',
+          fee: null,
+        },
+      },
     }
   },
   computed: {
@@ -302,7 +329,6 @@ export default {
           per_page: ctx.perPage,
         },
         ctx.currentPage)
-        console.log(data)
         this.startPage = data.from
         this.toPage = data.to
         if (this.totalRows !== data.total) this.totalRows = data.total
@@ -319,6 +345,23 @@ export default {
         })
         return []
       }
+    },
+    openTrackingModal(program, client, tabla) {
+      this.modalData.tracking.program = program
+      this.modalData.tracking.client = client
+      if (tabla) {
+        this.modalData.tracking.tabla = JSON.parse(tabla)
+        this.modal.tracking = true
+      }
+    },
+    openModalProgram(data) {
+      if (data.program_id === 2 || data.program_id === 7 || data.program_id === 6) this.openDetailOfSail(data.program, data.client, data.fee)
+    },
+    openDetailOfSail(program, client, fee) {
+      this.modalData.boost_credit.program = program
+      this.modalData.boost_credit.client = client
+      this.modalData.boost_credit.fee = fee
+      this.modal.boost_credit = true
     },
   },
 }
