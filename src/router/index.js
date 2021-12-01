@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 // Routes
 import { canNavigate } from '@/libs/acl/routeProtection'
 import { isUserLoggedIn, getUserData, getHomeRouteForLoggedInUser } from '@/auth/utils'
+import crm from '@/views/crm/router'
 import apps from './routes/apps'
 import dashboard from './routes/dashboard'
 import uiElements from './routes/ui-elements/index'
@@ -11,7 +12,6 @@ import pages from './routes/pages'
 import chartsMaps from './routes/charts-maps'
 import formsTable from './routes/forms-tables'
 import others from './routes/others'
-import crm from '../views/crm/router/index';
 
 Vue.use(VueRouter)
 
@@ -23,6 +23,7 @@ const router = new VueRouter({
   },
   routes: [
     { path: '/', redirect: { name: 'dashboard-ecommerce' } },
+    ...crm,
     ...apps,
     ...dashboard,
     ...pages,
@@ -30,7 +31,6 @@ const router = new VueRouter({
     ...formsTable,
     ...uiElements,
     ...others,
-    ...crm,
     {
       path: '*',
       redirect: 'error-404',
