@@ -205,14 +205,15 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
-              <feather-icon icon="FileTextIcon" />
-              <span class="align-middle ml-50">Details</span>
-            </b-dropdown-item>
-
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
-              <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50">Edit</span>
+            <b-dropdown-item
+              v-b-tooltip.hover.left="'Return to Social Network'"
+              v-if="data.item.status_sn_id == 2"
+              @click="onRowProcess(data.item.id)"
+            >
+              <feather-icon icon="CornerUpLeftIcon" />
+              <span
+                class="align-middle ml-50"
+              >Return</span>
             </b-dropdown-item>
 
             <b-dropdown-item
@@ -470,7 +471,7 @@ export default {
             })
             if (response) {
               this.refresh = true
-              this.$swal('Successful!', 'successful operation', 'success')
+              this.$swal('Successful!', 'Operation successfully', 'success')
             } else {
               this.$swal('Failed!', 'There was something wronge', 'warning')
             }
@@ -479,6 +480,46 @@ export default {
       } catch (error) {
         console.log('Something went wrong onRowDelete:', error)
         this.$swal('Oops!', 'There was something wronge', 'error')
+      }
+    },
+    onRowProcess (id) {
+      try {
+        this.$swal.fire({
+          title: 'Are you sure?',
+          icon: 'question',
+          text: 'You won\'t be able to revert this!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ab9220',
+          cancelButtonColor: '#8f9194',
+          confirmButtonText: 'Yes',
+          input: 'textarea',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to write something!'
+            }
+          },
+        })
+        .then(async (result) => {
+          if (result.value) {
+            const { id: user_id, id: role_id } = this.currentUser
+            const response = await crmService.postProcessLead({
+              lead_id: id,
+              status: 3,
+              user_id,
+              description: result.value,
+            })
+            if (response.status == 200) {
+              this.refresh = true
+              this.$swal('Successful!', 'Operation successfully', 'success')
+            } else {
+              this.$swal('Failed!', 'There was something wronge', 'warning')
+            }
+          }
+        })
+      } catch (error) {
+        console.log('Something went wrong onRowProcess:', error)
+        this.$swal('Oops!', 'There was something wrong', 'error')
       }
     }
   },

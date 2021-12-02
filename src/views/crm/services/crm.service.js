@@ -171,10 +171,19 @@ class CrmService {
   }
   async postDeleteLead(body) {
     try {
-      const { data } = await amgApi.post('/api/leaddelete', body)
+      const data = await amgApi.post('/api/leaddelete', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postDeleteLead:', error)
+      throw error
+    }
+  }
+  async postProcessLead (body) {
+    try {
+      const data = await amgApi.post('/api/process-lead-sn', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on postProcessLead:', error)
       throw error
     }
   }
