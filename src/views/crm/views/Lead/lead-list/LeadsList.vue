@@ -215,7 +215,10 @@
               <span class="align-middle ml-50">Edit</span>
             </b-dropdown-item>
 
-            <b-dropdown-item>
+            <b-dropdown-item
+              variant="danger"
+              @click="onRowDelete(data.item.id)"
+            >
               <feather-icon icon="TrashIcon" />
               <span class="align-middle ml-50">Delete</span>
             </b-dropdown-item>
@@ -273,6 +276,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
   BBadge, BDropdown, BDropdownItem, BPagination,
@@ -285,6 +289,7 @@ import BCardCode from '@core/components/b-card-code'
 import LeadsListFilters from './LeadsListFilters.vue'
 import useUsersList from './useLeadsList'
 import userStoreModule from '../leadStoreModule'
+import crmService from '@/views/crm/services/crm.service'
 
 // Notification
 import { useToast } from 'vue-toastification/composition'
@@ -439,10 +444,50 @@ export default {
     }
   },
   methods: {
-    onRowSelected(items) {
+    onRowSelected (items) {
       this.leadsSelecteds.leads = items
     },
-  }
+    onRowDelete (id) {
+      try {
+        this.$swal.fire({
+          title: 'Are you sure?',
+          icon: 'question',
+          text: 'You won\'t be able to revert this!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ab9220',
+          cancelButtonColor: '#8f9194',
+          confirmButtonText: 'Yes, delete it!',
+        })
+        .then(async (result) => {
+          if (result.value) {
+            const { id: user_id, id: role_id } = this.currentUser
+            const response = await crmService.postDeleteLead({
+              leadid: id,
+              idsession: user_id,
+              iduser: user_id,
+              idrole: role_id,
+            })
+            if (response) {
+              this.refresh = true
+              this.$swal('Successful!', 'successful operation', 'success')
+            } else {
+              this.$swal('Failed!', 'There was something wronge', 'warning')
+            }
+          }
+        })
+      } catch (error) {
+        console.log('Something went wrong onRowDelete:', error)
+        this.$swal('Oops!', 'There was something wronge', 'error')
+      }
+    }
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+      token: 'auth/token'
+    }),
+  },
 }
 </script>
 

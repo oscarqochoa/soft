@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import { ref, onUnmounted } from '@vue/composition-api'
 import BCardCode from '@core/components/b-card-code'
 import LeadList from './lead-list/LeadsList.vue'
 import LeadSnList from './lead-list/LeadsSnList.vue'
@@ -82,7 +83,6 @@ import LeadWPotentialList from './lead-list/LeadsWPotentialList.vue'
 import useUsersList from './lead-list/useLeadsList'
 import LeadListAddNew from './lead-list/LeadListAddNew.vue'
 import crmService from '@/views/crm/services/crm.service'
-import { ref, onUnmounted } from '@vue/composition-api'
 
 export default {
   components: {

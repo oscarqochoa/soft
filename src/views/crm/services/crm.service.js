@@ -169,6 +169,15 @@ class CrmService {
     data = data.data
     return data
   }
+  async postDeleteLead(body) {
+    try {
+      const { data } = await amgApi.post('/api/leaddelete', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on postDeleteLead:', error)
+      throw error
+    }
+  }
 }
 
 export default new CrmService()
