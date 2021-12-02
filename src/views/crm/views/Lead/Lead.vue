@@ -15,17 +15,36 @@
     />
     <b-card-code title="LEADS" :actions="true">
       <template #actions>
-        <b-button
-          variant="success"
-          @click="isAddNewUserSidebarActive = true"
-        >
-          <feather-icon
-            icon="PlusIcon"
-            size="18"
-            class="mr-50 text-white"
-          />
-          CREATE
-        </b-button>
+        <div>
+          <b-button
+            variant="success"
+            class="mr-1"
+            @click="isAddNewUserSidebarActive = true"
+          >
+            <feather-icon
+              icon="PlusIcon"
+              size="15"
+              class="mr-50 text-white"
+            />
+            CREATE
+          </b-button>
+          <b-dropdown
+            id="dropdown-6"
+            variant="info"
+          >
+            <template #button-content>
+              <feather-icon
+                icon="DownloadIcon"
+                size="16"
+                class="align-middle"
+              />
+              <span class="ml-1">EXPORT TO EXCEL</span>
+            </template>
+            <b-dropdown-item @click="exportExcel(1, 1)">EXPORT CURRENT PAGE</b-dropdown-item>
+            <b-dropdown-item @click="exportExcel(1, 2)">EXPORT ALL PAGE</b-dropdown-item>
+            <b-dropdown-item @click="exportExcel(1, 3)">EXPORT SELECTION</b-dropdown-item>
+          </b-dropdown>
+        </div>
       </template>
       <b-tabs content-class="mt-1">
         <b-tab title="LEADS">
@@ -38,6 +57,7 @@
             :source-name-options="sourceNameOptions"
             :type-doc-options="typeDocOptions"
             :st-ad-options="stAdOptions"
+            :leads-selecteds="leadsSelecteds"
           />
         </b-tab>
         <b-tab title="LEADS SN">
@@ -84,6 +104,12 @@ export default {
       stateOptions: [],
       countryOptions: [],
       userCreatorOwnerOptions: [],
+      leadsSelecteds: {
+        leads: []
+      },
+      start_page : '',
+      dato1: 'desc',
+      dato2: 10,
     }
   },
   setup() {
@@ -106,7 +132,18 @@ export default {
     ]
 
     const {
-      refetchData
+      refetchData,
+      perPage,
+      currentPage,
+      searchQuery,
+      fromFilter,
+      toFilter,
+      crFilter,
+      statusLeadFilter,
+      programFilter,
+      assignToFilter,
+      ownerFilter,
+      sourceNameFilter
     } = useUsersList()
 
     return {
@@ -114,6 +151,17 @@ export default {
       isAddNewUserSidebarActive,
 
       refetchData,
+      perPage,
+      currentPage,
+      searchQuery,
+      fromFilter,
+      toFilter,
+      crFilter,
+      statusLeadFilter,
+      programFilter,
+      assignToFilter,
+      ownerFilter,
+      sourceNameFilter,
       crOptions,
       typeDocOptions,
       languageOptions,
@@ -176,6 +224,41 @@ export default {
     async getUserCreatorOwner () {
       const response = await crmService.getUserCreatorOwner({ modul: 2, roles: "[]", type: "1", })
       this.userCreatorOwnerOptions = response.map(el => ({ label: el.user_name, value: el.id }))
+    },
+    exportExcel (Export, TypeExport) {
+      const jsonString = JSON.stringify(this.leadsSelecteds.leads.map(el => el.id))
+      const name_text = (this.searchQuery) ? this.searchQuery : null
+
+      this.dato2 = this.perPage
+
+      if (this.dato2 == 10) {
+        if (this.dato1 == 'desc') {
+          this.oneDateLead = false
+          this.orderDateDesc = true
+          this.orderDateAsc = false
+        } else {
+          this.orderDateAsc = true
+          this.orderDateDesc = false
+          this.oneDateLead = false
+        }
+      } else if (this.dato2 == 2) {
+        if (this.dato1 == 'desc') {
+          this.oneEventLead = false
+          this.orderLeadDesc = true
+          this.orderLeadAsc = false
+        } else {
+          this.orderLeadAsc = true
+          this.orderLeadDesc = false
+          this.oneEventLead = false
+        }
+      }
+
+      const date_from = this.fromFilter == '' ? null : this.fromFilter
+      const date_to = this.toFilter == '' ? null : this.toFilter
+      const orderby = this.dato2 == null ? 10 : this.dato2
+      const order = this.dato1 == null ? 'desc' : this.dato1
+      const dataExport = `name_text=${name_text}&lead_status=${this.statusLeadFilter}&cr=${this.crFilter}&program=${this.programFilter}&date_from=${date_from}&date_to=${date_to}&orderby=${orderby}&order=${order}&user_owner=${this.ownerFilter}&assign_to=${this.assignToFilter}&sourcename=${this.sourceNameFilter}&Export=${Export}&TypeExport=${TypeExport}&current_pageE=${this.currentPage}&id_leads=${jsonString}`
+      window.open(`${process.env.VUE_APP_BASE_URL}/exportleadsexcel?${dataExport}`)
     },
   }
 }

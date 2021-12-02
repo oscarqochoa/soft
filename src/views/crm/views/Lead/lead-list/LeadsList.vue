@@ -110,6 +110,9 @@
         show-empty
         empty-text="No matching records found"
         :sort-desc.sync="isSortDirDesc"
+        selectable
+        select-mode="multi"
+        @row-selected="onRowSelected"
       >
         <template #table-busy>
           <div class="text-center text-primary my-2">
@@ -121,6 +124,7 @@
         <!-- Column: Date Even -->
         <template #cell(date_even)="data">
           <b-badge
+            v-if="data.item.date_even"
             pill
             variant="light-danger"
             class="text-capitalize"
@@ -343,6 +347,10 @@ export default {
     stAdOptions: {
       type: Array,
       required: false,
+    },
+    leadsSelecteds: {
+      type: Object,
+      required: true,
     }
   },
   data() {
@@ -430,6 +438,11 @@ export default {
       stAdFilter
     }
   },
+  methods: {
+    onRowSelected(items) {
+      this.leadsSelecteds.leads = items
+    },
+  }
 }
 </script>
 
