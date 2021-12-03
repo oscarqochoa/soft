@@ -27,7 +27,7 @@
             />
             <label>entries</label>
             <b-button
-              variant="secondary"
+              variant="link"
               class="btn-icon ml-50"
               v-b-tooltip.hover.bottom="'Refresh'"
               @click="refresh = true"
@@ -54,27 +54,14 @@
                 variant="warning"
                 @click="advanceSearch = !advanceSearch"
               >
-                <span
-                  v-if="!advanceSearch"
-                  class="text-nowrap"
-                >
-                  Advance Search
+                <span class="text-nowrap">
                   <feather-icon
-                    icon="ChevronsRightIcon"
+                    icon="FilterIcon"
                     size="18"
                     class="mr-50 text-white"
                   />
-                </span>
-                <span
-                  v-else
-                  class="text-nowrap"
-                >
-                  <feather-icon
-                    icon="ChevronsLeftIcon"
-                    size="18"
-                    class="mr-50 text-white"
-                  />
-                  Basic Search
+                  <span v-if="!advanceSearch">Advance Search</span>
+                  <span v-else>Basic Search</span>
                 </span>
               </b-button>
             </div>
@@ -123,6 +110,9 @@
         show-empty
         empty-text="No matching records found"
         :sort-desc.sync="isSortDirDesc"
+        selectable
+        select-mode="multi"
+        @row-selected="onRowSelected"
       >
         <template #table-busy>
           <div class="text-center text-primary my-2">
@@ -134,6 +124,7 @@
         <!-- Column: Date Even -->
         <template #cell(date_even)="data">
           <b-badge
+            v-if="data.item.date_even"
             pill
             variant="light-danger"
             class="text-capitalize"
@@ -202,33 +193,7 @@
 
         <!-- Column: Actions -->
         <template #cell(actions)="data">
-          <b-dropdown
-            variant="link"
-            no-caret
-            :right="$store.state.appConfig.isRTL"
-          >
-            <template #button-content>
-              <feather-icon
-                icon="MoreVerticalIcon"
-                size="16"
-                class="align-middle text-body"
-              />
-            </template>
-            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
-              <feather-icon icon="FileTextIcon" />
-              <span class="align-middle ml-50">Details</span>
-            </b-dropdown-item>
-
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
-              <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50">Edit</span>
-            </b-dropdown-item>
-
-            <b-dropdown-item>
-              <feather-icon icon="TrashIcon" />
-              <span class="align-middle ml-50">Delete</span>
-            </b-dropdown-item>
-          </b-dropdown>
+          <table-actions :options="[ 'returnToSocialNetwork', 'sendSMS', 'delete' ]" :row-data="data.item" @onRowDelete="onRowDelete" @onRowProcess="onRowProcess" @modalSmsOpen="modalSmsOpen"></table-actions>
         </template>
 
       </b-table>
@@ -278,13 +243,100 @@
         </b-row>
       </div>
     </b-card>
+    <!-- modal -->
+    <b-modal
+      id="modal-send-sms"
+      ok-only
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      title="SEND SMS"
+    >
+      <modal-send-sms
+        :row-data="rowData"
+        :smss="leads_sms"
+        :modul="modul"
+        :typesms="typesms"
+        :sms="leads_sms_o"
+        :name-leads="name_leads_arr"
+        :quicks="quicks"
+        @modalQuickOpen="modalQuickOpen"
+      />
+
+      <template #modal-footer>
+        <b-form-group
+          label="VARS"
+          class="w-100"
+        >
+          <b-row>
+            <b-col sm="3">
+              <b-input-group size="sm">
+                <b-input-group-prepend is-text>
+                  @1
+                </b-input-group-prepend>
+                <b-form-input placeholder="FIRST NAME" readonly />
+              </b-input-group>
+            </b-col>
+            <b-col sm="3">
+              <b-input-group size="sm">
+                <b-input-group-prepend is-text>
+                  @2
+                </b-input-group-prepend>
+                <b-form-input placeholder="LAST NAME" readonly />
+              </b-input-group>
+            </b-col>
+            <b-col v-if="modul == 15" sm="3">
+              <b-input-group size="sm">
+                <b-input-group-prepend is-text>
+                  @3
+                </b-input-group-prepend>
+                <b-form-input placeholder="LAST NAME" readonly />
+              </b-input-group>
+            </b-col>
+          </b-row>
+        </b-form-group>
+      </template>
+    </b-modal>
+    <b-modal
+      id="modal-quick-sms"
+      ok-only
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      title="QUICK SMS"
+      hide-footer
+    >
+      <modal-quick-sms
+        :modul="modul"
+        :quicks="quicks"
+        @modalQuickCreateOpen="modalQuickCreateOpen"
+        @modalQuickEditOpen="modalQuickEditOpen"
+      />
+    </b-modal>
+    <b-modal
+      id="modal-quick-sms-save"
+      ok-only
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      :title="(quickData.id) ? 'EDIT QUICK SMS' : 'NEW QUICK SMS'"
+      hide-footer
+    >
+      <modal-quick-sms-save
+        :modul="modul"
+        :quick-data="quickData"
+        @updateQuicks="updateQuicks"
+        @modalQuickCreateClose="$bvModal.hide('modal-quick-sms-save')"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
-  BBadge, BDropdown, BDropdownItem, BPagination,
+  BBadge, BDropdown, BDropdownItem, BPagination, BModal
 } from 'bootstrap-vue'
 import vSelect from 'vue-select'
 import store from '@/store'
@@ -294,15 +346,20 @@ import BCardCode from '@core/components/b-card-code'
 import LeadsListFilters from './LeadsListFilters.vue'
 import useUsersList from './useLeadsList'
 import userStoreModule from '../leadStoreModule'
-
-// Notification
-import { useToast } from 'vue-toastification/composition'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import TableActions from './components/TableActions.vue'
+import ModalSendSms from './components/ModalSendSms.vue'
+import ModalQuickSms from './components/ModalQuickSms.vue'
+import ModalQuickSmsSave from './components/ModalQuickSmsSave.vue'
+import crmService from '@/views/crm/services/crm.service'
 
 export default {
   components: {
     BCardCode,
     LeadsListFilters,
+    TableActions,
+    ModalSendSms,
+    ModalQuickSms,
+    ModalQuickSmsSave,
 
     BCard,
     BRow,
@@ -317,10 +374,15 @@ export default {
     BDropdown,
     BDropdownItem,
     BPagination,
+    BModal,
 
     vSelect,
   },
   props: {
+    stateLeadOptions: {
+      type: Array,
+      required: false,
+    },
     statusLeadOptions: {
       type: Array,
       required: false,
@@ -352,13 +414,37 @@ export default {
     stAdOptions: {
       type: Array,
       required: false,
+    },
+    leadsSelecteds: {
+      type: Object,
+      required: true,
     }
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+      token: 'auth/token'
+    }),
   },
   data() {
     return {
+      modul: 2,
       advanceSearch: false,
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
-      mainProps: { width: 75, height: 75, class: 'm1' }
+      mainProps: { width: 75, height: 75, class: 'm1' },
+      rowData: {},
+      name_leads_arr: [],
+      leads_sms: [],
+      typesms: null,
+      leads_sms_o: [],
+      name_leads_arr: [],
+      quicks: [],
+      quickData: {},
+      blankQuickData: {
+        id: null,
+        sms: '',
+        title: ''
+      }
     }
   },
   setup() {
@@ -439,13 +525,134 @@ export default {
       stAdFilter
     }
   },
+  methods: {
+    onRowSelected (items) {
+      this.leadsSelecteds.leads = items
+    },
+    onRowDelete (id) {
+      try {
+        this.$swal.fire({
+          title: 'Are you sure?',
+          icon: 'question',
+          text: 'You won\'t be able to revert this!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ab9220',
+          cancelButtonColor: '#8f9194',
+          confirmButtonText: 'Yes, delete it!',
+        })
+        .then(async (result) => {
+          if (result.value) {
+            const { id: user_id, id: role_id } = this.currentUser
+            const response = await crmService.postDeleteLead({
+              leadid: id,
+              idsession: user_id,
+              iduser: user_id,
+              idrole: role_id,
+            })
+            if (response) {
+              this.refresh = true
+              this.$swal('Successful!', 'Operation successfully', 'success')
+            } else {
+              this.$swal('Failed!', 'There was something wronge', 'warning')
+            }
+          }
+        })
+      } catch (error) {
+        console.log('Something went wrong onRowDelete:', error)
+        this.$swal('Oops!', 'There was something wronge', 'error')
+      }
+    },
+    onRowProcess (id) {
+      try {
+        this.$swal.fire({
+          title: 'Are you sure?',
+          icon: 'question',
+          text: 'You won\'t be able to revert this!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ab9220',
+          cancelButtonColor: '#8f9194',
+          confirmButtonText: 'Yes',
+          input: 'textarea',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to write something!'
+            }
+          },
+        })
+        .then(async (result) => {
+          if (result.value) {
+            const { id: user_id, id: role_id } = this.currentUser
+            const response = await crmService.postProcessLead({
+              lead_id: id,
+              status: 3,
+              user_id,
+              description: result.value,
+            })
+            if (response.status == 200) {
+              this.refresh = true
+              this.$swal('Successful!', 'Operation successfully', 'success')
+            } else {
+              this.$swal('Failed!', 'There was something wronge', 'warning')
+            }
+          }
+        })
+      } catch (error) {
+        console.log('Something went wrong onRowProcess:', error)
+        this.$swal('Oops!', 'There was something wrong', 'error')
+      }
+    },
+    async getAllQuicksSms () {
+      try {
+        const response = await crmService.getAllQuicksSms({
+          modul: this.modul,
+        })
+        this.quicks = response.map(el => ({ ...el, value: el.sms, label: el.title }))
+      } catch (error) {
+        console.log('Something wnet wrong getAllQuicksSms:', error)
+      }
+    },
+    modalSmsOpen (item) {
+      this.rowData = item
+      this.leads_sms = []
+      this.typesms = 1
+      this.leads_sms_o = []
+      this.leads_sms_o.push(item)
+      const namecl = []
+      this.leads_sms_o.map((el) => {
+        namecl.push({ name: el.lead_name, id: el.id })
+      })
+      this.name_leads_arr = namecl
+      this.$bvModal.show('modal-send-sms')
+    },
+    modalQuickOpen () {
+      this.$bvModal.show('modal-quick-sms')
+    },
+    modalQuickCreateOpen () {
+      this.quickData = JSON.parse(JSON.stringify(this.blankQuickData))
+      this.$bvModal.show('modal-quick-sms-save')
+    },
+    modalQuickEditOpen (item) {
+      this.quickData = item
+      this.$bvModal.show('modal-quick-sms-save')
+    },
+    updateQuicks (item) {
+      const index = this.quicks.map(el => el.id).indexOf(item.id)
+      if (index !== -1) {
+        this.quicks[index] = { ...item, value: item.sms, label: item.title }
+      } else {
+        this.quicks.push({ ...item, value: item.sms, label: item.title })
+      }
+    }
+  },
+  created() {
+    this.getAllQuicksSms()
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.per-page-selector {
-  width: 90px;
-}
 </style>
 
 <style lang="scss">

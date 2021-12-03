@@ -27,7 +27,7 @@
             />
             <label>entries</label>
             <b-button
-              variant="secondary"
+              variant="link"
               class="btn-icon ml-50"
               v-b-tooltip.hover.bottom="'Refresh'"
               @click="refresh = true"
@@ -54,27 +54,14 @@
                 variant="warning"
                 @click="advanceSearch = !advanceSearch"
               >
-                <span
-                  v-if="!advanceSearch"
-                  class="text-nowrap"
-                >
-                  Advance Search
+                <span class="text-nowrap">
                   <feather-icon
-                    icon="ChevronsRightIcon"
+                    icon="FilterIcon"
                     size="18"
                     class="mr-50 text-white"
                   />
-                </span>
-                <span
-                  v-else
-                  class="text-nowrap"
-                >
-                  <feather-icon
-                    icon="ChevronsLeftIcon"
-                    size="18"
-                    class="mr-50 text-white"
-                  />
-                  Basic Search
+                  <span v-if="!advanceSearch">Advance Search</span>
+                  <span v-else>Basic Search</span>
                 </span>
               </b-button>
             </div>

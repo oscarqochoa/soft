@@ -3,7 +3,7 @@
     id="add-new-user-sidebar"
     :visible="isAddNewUserSidebarActive"
     bg-variant="white"
-    sidebar-class="sidebar-lg"
+    sidebar-class="sidebar-xl"
     shadow
     backdrop
     no-header
@@ -38,198 +38,26 @@
           @submit.prevent="handleSubmit(onSubmit)"
           @reset.prevent="resetForm"
         >
-
-          <!-- First Name -->
-          <validation-provider
-            #default="validationContext"
-            name="First Name"
-            rules="required"
-          >
-            <b-form-group
-              label="First Name"
-              label-for="first-name"
-            >
-              <b-form-input
-                id="first-name"
-                v-model="userData.firstName"
-                autofocus
-                :state="getValidationState(validationContext)"
-                trim
-                placeholder="John Doe"
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Username -->
-          <validation-provider
-            #default="validationContext"
-            name="Username"
-            rules="required|alpha-num"
-          >
-            <b-form-group
-              label="Username"
-              label-for="username"
-            >
-              <b-form-input
-                id="username"
-                v-model="userData.username"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Email -->
-          <validation-provider
-            #default="validationContext"
-            name="Email"
-            rules="required|email"
-          >
-            <b-form-group
-              label="Email"
-              label-for="email"
-            >
-              <b-form-input
-                id="email"
-                v-model="userData.email"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Company -->
-          <validation-provider
-            #default="validationContext"
-            name="Contact"
-            rules="required"
-          >
-            <b-form-group
-              label="Contact"
-              label-for="contact"
-            >
-              <b-form-input
-                id="contact"
-                v-model="userData.contact"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Company -->
-          <validation-provider
-            #default="validationContext"
-            name="Company"
-            rules="required"
-          >
-            <b-form-group
-              label="Company"
-              label-for="company"
-            >
-              <b-form-input
-                id="company"
-                v-model="userData.company"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Country -->
-          <validation-provider
-            #default="validationContext"
-            name="Country"
-            rules="required"
-          >
-            <b-form-group
-              label="Country"
-              label-for="country"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userData.country"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="countries"
-                :clearable="false"
-                input-id="country"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- User Role -->
-          <validation-provider
-            #default="validationContext"
-            name="User Role"
-            rules="required"
-          >
-            <b-form-group
-              label="User Role"
-              label-for="user-role"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userData.role"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="roleOptions"
-                :reduce="val => val.value"
-                :clearable="false"
-                input-id="user-role"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Plan -->
-          <validation-provider
-            #default="validationContext"
-            name="Plan"
-            rules="required"
-          >
-            <b-form-group
-              label="Plan"
-              label-for="plan"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userData.currentPlan"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="planOptions"
-                :reduce="val => val.value"
-                :clearable="false"
-                input-id="plan"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
+          <basic-information-lead
+            :user-data="userData"
+            :state-lead-options="stateLeadOptions"
+            :status-lead-options="statusLeadOptions"
+            :program-options="programOptions"
+            :language-options="languageOptions"
+            :state-options="stateOptions"
+            :country-options="countryOptions"
+          />
+          <lead-information-lead
+            :user-data="userData"
+            :status-lead-options="statusLeadOptions"
+            :source-name-options="sourceNameOptions"
+            :source-lead-options="sourceLeadOptions"
+            :user-creator-owner-options="userCreatorOwnerOptions"
+          />
+          <billing-information-lead
+            :user-data="userData"
+            :state-options="stateOptions"
+          />
           <!-- Form Actions -->
           <div class="d-flex mt-2">
             <b-button
@@ -238,7 +66,11 @@
               class="mr-2"
               type="submit"
             >
-              Add
+              <template v-if="isLoading">
+                <b-spinner small />
+                <span>Loading...</span>
+              </template>
+              <span v-else>Add</span>
             </b-button>
             <b-button
               v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -257,6 +89,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -267,10 +100,17 @@ import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 import countries from '@/@fake-db/data/other/countries'
-import store from '@/store'
+import BasicInformationLead from './create/BasicInformationLead.vue'
+import LeadInformationLead from './create/LeadInformationLead.vue'
+import BillingInformationLead from './create/BillingInformationLead.vue'
+import crmService from '@/views/crm/services/crm.service'
+
 
 export default {
   components: {
+    BasicInformationLead,
+    LeadInformationLead,
+    BillingInformationLead,
     BSidebar,
     BForm,
     BFormGroup,
@@ -295,63 +135,268 @@ export default {
       type: Boolean,
       required: true,
     },
-    roleOptions: {
+    stateLeadOptions: {
       type: Array,
       required: true,
     },
-    planOptions: {
+    statusLeadOptions: {
+      type: Array,
+      required: true,
+    },
+    programOptions: {
+      type: Array,
+      required: true,
+    },
+    languageOptions: {
+      type: Array,
+      required: true,
+    },
+    stateOptions: {
+      type: Array,
+      required: true,
+    },
+    countryOptions: {
+      type: Array,
+      required: true,
+    },
+    sourceNameOptions: {
+      type: Array,
+      required: true,
+    },
+    sourceLeadOptions: {
+      type: Array,
+      required: true,
+    },
+    userCreatorOwnerOptions: {
       type: Array,
       required: true,
     },
   },
   data() {
     return {
+      modul: 2,
+      blankUserData: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        email: '',
+        programs: [],
+        dob: '',
+        language: '',
+        stateLead: null,
+        social: {
+          value: ''
+        },
+        ssn: '',
+        itin: '',
+        other: '',
+        phone: '',
+        mobile: '',
+        other: '',
+        address: {
+          prename: 'main',
+          street: '',
+          city: '',
+          state: 'CA',
+          zipcode: '',
+          country: 'United States',
+        },
+        originCountry: { value: 146, label: 'México' },
+        anotherAddress: '',
+        otherAddress: {
+          prename: 'origin',
+          street: '',
+          city: '',
+          state: '',
+          zipcode: '',
+          country: 'United States',
+        },
+        userId: {},
+        sourceId: '',
+        leadStatusId: '',
+        sourceNameId: '',
+        cardNumber1: '',
+        cardNumber2: '',
+        cardNumber3: '',
+        cardNumber4: '',
+        cardExpiMonth: '',
+        cardExpiYear: '',
+        cardSecurityCode: '',
+        cardAddress: {
+          prename: 'card',
+          street: '',
+          city: '',
+          state: '',
+          zipcode: '',
+          country: 'United States',
+        },
+        programId: null,
+        work: '',
+        creditReport: true,
+        payment: '0',
+        ammount: '',
+        description: '',
+        cardNumber: '',
+        typeCredit: '0',
+        dateOnline: '',
+        plataform: null,
+        usernameOnline: '',
+        passwordOnline: '',
+        memberNumberOnline: '',
+      },
+      userData: {},
       required,
       alphaNum,
       email,
       countries,
+      refFormObserver: () => formValidation(this.resetuserData).refFormObserver(),
+      getValidationState: () => formValidation(this.resetuserData).getValidationState(),
+      resetForm: () => formValidation(this.resetuserData).resetForm(),
+      isLoading: false,
     }
   },
-  setup(props, { emit }) {
-    const blankUserData = {
-      firstName: '',
-      username: '',
-      email: '',
-      role: null,
-      currentPlan: null,
-      company: '',
-      country: '',
-      contact: '',
-    }
+  created () {
+    this.resetuserData()
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+      token: 'auth/token'
+    }),
+  },
+  methods: {
+    resetuserData () {
+      this.blankUserData.userId = { value: this.currentUser.id, label: this.currentUser.fullName }
+      this.userData = JSON.parse(JSON.stringify(this.blankUserData))
+    },
+    getSelectValue (element) {
+      if (typeof element === 'string')
+        return (element) ? element : ''
+      else
+        return (element) ? element.value : ''
+    },
+    async onSubmit () {
+      try {
+        this.isLoading = true
+        let route = '';
+        switch (this.modul) {
+          case (2) : route = 'show/'; break
+          case (3) : route = '/bussiness/leads'; break
+          case (4) : route = '/administration/leads'; break
+          case (5) : route = '/debtsolution/leads'; break
+          case (6) : route = '/creditexperts/leads'; break
+          case (7) : route = '/boostcredit/leads'; break
+          case (8) : route = '/taxresearch/leads'; break
+          case (10) : route = '/claimdepartment/leads'; break
+          case (11) : route = '/specialists/leads'; break
+        }
+        if ( ![ this.userData.cardNumber1, this.userData.cardNumber2, this.userData.cardNumber3, this.userData.cardNumber4 ].includes('')) {
+          this.userData.cardNumber = `${this.userData.cardNumber1}-${this.userData.cardNumber2}-${this.userData.cardNumber3}-${this.userData.cardNumber4}`
+        }
+        //VALIDATION ITIN & SSN
+        const val = this.userData.social.value.substr(0, 1)
+        if (val == 9) {
+          this.userData.itin = this.userData.social.value
+        } else {
+          this.userData.ssn = this.userData.social.value
+        }
+        const { id: role_id } = this.currentUser
+        const { email, userId, firstName, lastName, middleName, sourceId, sourceNameId, programId, phone, mobile, work, creditReport, payment, ammount, programs, leadStatusId, address, description, cardExpiMonth, cardExpiYear, ssn, cardHoldername, cardNumber, cardSecurityCode, dob, cardAddress, typeCredit, dateOnline, plataform, usernameOnline, passwordOnline, memberNumberOnline, language, itin, other, stateLead, anotherAddress, otherAddress, originCountry } = this.userData
+        console.log('preData', this.userData)
+        const body = {
+          id: '',
+          email,
+          user_id: this.getSelectValue(userId),
+          first_name: firstName,
+          last_name: lastName,
+          middle_name: middleName,
+          source_id: this.getSelectValue(sourceId),
+          sourcesname_id: this.getSelectValue(sourceNameId),
+          program_id: programId,
+          phone,
+          mobile,
+          work,
+          credit_report: creditReport,
+          payment,
+          ammount,
+          program: programs.map(el => ({ id: el.value, value: el.label, name: el.label })),
+          leadstatus_id: this.getSelectValue(leadStatusId),
+          street: address.street,
+          city: address.city,
+          state: this.getSelectValue(address.state),
+          country: address.country,
+          zipcode: address.zipcode,
+          description,
+          card_expi_month: cardExpiMonth,
+          card_expi_year: cardExpiYear,
+          ssn,
+          cardholdername: cardHoldername,
+          cardnumber: cardNumber,
+          cardsecuritycode: cardSecurityCode,
+          dob: this.$moment(dob, 'YYYY-MM-DD').format('MM/DD/YYYY'),
+          super: role_id,
+          created_by: this.getSelectValue(userId),
+          usercreator: this.getSelectValue(userId),
+          datecreator: this.$moment(dob, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DD'),
+          streetcard: cardAddress.street,
+          citycard: cardAddress.city,
+          zipcodecard: cardAddress.zipcode,
+          statecard: this.getSelectValue(cardAddress.state),
+          countrycard: cardAddress.country,
+          type_credit: typeCredit,
+          dateonline: dateOnline,
+          plataform,
+          usernameonline: usernameOnline,
+          passwordonline: passwordOnline,
+          membernumberonline: memberNumberOnline,
+          language: this.getSelectValue(language),
+          itin,
+          other,
+          state_lead: stateLead,
+          another_address: anotherAddress,
+          otherstreet: otherAddress.street,
+          othercity: otherAddress.city,
+          otherstate: this.getSelectValue(otherAddress.state),
+          othercountry: otherAddress.country,
+          otherzipcode: otherAddress.zipcode,
+          originCountry: this.getSelectValue(originCountry)
+        }
+        const response = await crmService.postCreateLead(body)
+        if (response.status == 201) {
+          this.isLoading = false
+          this.$swal.fire({
+            type: 'success',
+            icon: 'success',
+            title: 'Lead Created in successfully',
+          }).then((res) => {
+            if (res) {
+              this.isLoading = false
+              const idUser = response.data.id;
+              /* if (this.module == 2) {
+                window.location.href = `${route}${idUser}`
+              } else {
+                window.location.href = `${route}`
+              } */
+            }
+          })
+        }
 
-    const userData = ref(JSON.parse(JSON.stringify(blankUserData)))
-    const resetuserData = () => {
-      userData.value = JSON.parse(JSON.stringify(blankUserData))
-    }
-
-    const onSubmit = () => {
-      store.dispatch('app-user/addUser', userData.value)
+      } catch (error) {
+        console.log('spmething went wrong onSubmit: ', error)
+        this.isLoading = false
+        this.$swal.fire({
+          type: 'error',
+          icon: 'error',
+          title: 'Oops! Something went wrong',
+        })
+      }
+      /* store.dispatch('app-user/addUser', userData.value)
         .then(() => {
           emit('refetch-data')
           emit('update:is-add-new-user-sidebar-active', false)
-        })
+        }) */
     }
-
-    const {
-      refFormObserver,
-      getValidationState,
-      resetForm,
-    } = formValidation(resetuserData)
-
-    return {
-      userData,
-      onSubmit,
-
-      refFormObserver,
-      getValidationState,
-      resetForm,
-    }
-  },
+  }
 }
 </script>
 
@@ -362,5 +407,8 @@ export default {
   .vs__dropdown-menu {
     max-height: 200px !important;
   }
+}
+.sidebar-xl {
+  width: 90rem;
 }
 </style>
