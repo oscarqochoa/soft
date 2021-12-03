@@ -10,17 +10,31 @@ export default {
   children: [
     // Note we provide the above parent route name on the default child tab
     // route to ensure this tab is rendered by default when using named routes
-    { path: '', component: NewClientComponent, name: 'sales-made-crm-new-client' },
-    { path: 'programs', component: AddChangeComponent, name: 'sales-made-crm-add-change' },
-    { path: 'annul', component: AnnuledComponent, name: 'sales-made-crm-annulled' },
-    { path: 'modal', component: PruebaModal, name: 'prueba-modal' },
+    {
+      path: '',
+      component: NewClientComponent,
+      name: 'sales-made-crm-new-client'
+    },
+    {
+      path: 'programs',
+      component: AddChangeComponent,
+      name: 'sales-made-crm-add-change'
+    },
+    {
+      path: 'annul',
+      component: AnnuledComponent,
+      name: 'sales-made-crm-annulled'
+    },
+    {
+      path: 'modal',
+      component: PruebaModal,
+      name: 'prueba-modal'
+    },
   ],
   meta: {
     pageTitle: 'Sales Made',
-    breadcrumb: [
-      {
-        text: 'Sales Made',
-      },
-    ],
+    breadcrumb: [{
+      text: 'Sales Made',
+    }, ],
   },
 }

@@ -6,18 +6,33 @@
     <b-btn @click="modal.boost_credit = !modal.boost_credit">
       ABRETE BOOST CREDIT
     </b-btn>
-    <tracking-modal :modal="modal" :tracking="modalData.tracking" />
-    <boost-credit-modal :modal="modal" :boost_credit="modalData.boost_credit"/>
+    <b-btn @click="modal.initial_payment = !modal.initial_payment">
+      ABRETE INITIAL PAYMENT
+    </b-btn>
+    <tracking-modal
+      :modal="modal"
+      :tracking="modalData.tracking"
+    />
+    <boost-credit-modal
+      :modal="modal"
+      :boost_credit="modalData.boost_credit"
+    />
+    <initial-payment-modal
+      :modal="modal"
+      :initial_payment="modalData.initial_payment"
+    />
   </div>
 </template>
 
 <script>
 import TrackingModal from '@/views/crm/views/sales-made/components/modals/TrackingModal'
-import BoostCreditModal from "@/views/crm/views/sales-made/components/modals/DetailOfSailModal";
+import BoostCreditModal from '@/views/crm/views/sales-made/components/modals/DetailOfSailModal'
+import InitialPaymentModal from '@/views/crm/views/sales-made/components/modals/InitialPaymentModal'
 
 export default {
   name: 'PruebaModal',
   components: {
+    InitialPaymentModal,
     BoostCreditModal,
     TrackingModal,
   },
@@ -26,6 +41,7 @@ export default {
       modal: {
         tracking: false,
         boost_credit: false,
+        initial_payment: false,
       },
       modalData: {
         tracking: {
@@ -37,6 +53,10 @@ export default {
           program: 'Credit Express',
           client: 'Roger Segura',
           fee: 29.99,
+        },
+        initial_payment: {
+          program: 'Credit Express',
+          client: 'Roger Segura',
         },
       },
     }
