@@ -9,7 +9,6 @@ import verticalMenu from "@/store/vertical-menu";
 import auth from "@/store/auth";
 import CrmStore from "@/views/crm/store";
 import CommissionsStore from "@/commons/components/commissions/store";
-import ecommerceStoreModule from "@/views/apps/e-commerce/eCommerceStoreModule";
 import stickyNotesStoreModule from "@/layouts/components/navbar/components/sticky-notes/store/sticky-notes.store";
 
 Vue.use(Vuex);

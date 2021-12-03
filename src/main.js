@@ -21,7 +21,6 @@ import VueTheMask from 'vue-the-mask'
 // import 'vue-loading-rx/dist/vue-loading.css';
 // global register
 
-import generalMixins from './mixins/general'
 import VueMask from 'v-mask'
 // Global Components
 import './global-components'
