@@ -117,19 +117,17 @@
           @onChangeFilter="$refs.refClientsList.refresh()"
         ></filters-component>
       </transition>
-      <div class="table-responsive">
-        <b-table small
+      <b-table small
+          v-scrollbar
          :api-url="clientRoute"
           ref="refClientsList"
-          class="position-relative"
           :items="myProvider"
-          stacked="lg"
           :fields="visibleFields"
           primary-key="id"
           table-class="text-nowrap"
-          responsive
+          responsive="sm"
           show-empty
-          sticky-header
+          sticky-header="50vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
@@ -193,7 +191,6 @@
             </div>
           </template>
         </b-table>
-      </div>
       <div class="mx-2 mb-2">
         <b-row>
           <b-col

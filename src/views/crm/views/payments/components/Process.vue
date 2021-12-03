@@ -198,6 +198,7 @@
           </div>
         </div>
       </div>
+      {{$log('hola')}}
     </b-card>
   </div>
 </template>

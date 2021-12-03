@@ -48,6 +48,18 @@
                   <span> {{ 'XXXX-XXXX-XXXX-'+data.item.cardnumber }} </span>
                 </div>
               </template>
+              <template #cell(cardsecuritycode)="data">
+                <div
+                  class="
+                    d-flex
+                    flex-column
+                    justify-content-start
+                    align-items-start
+                  "
+                >
+                  <span> {{ data.item.cardsecuritycode.length == 3 ? "XX"+data.item.cardsecuritycode.substr(2) : "XXX" + data.item.cardsecuritycode.substr(3) }} </span>
+                </div>
+              </template>
             </b-table>
           </div>
         </div>
@@ -55,10 +67,15 @@
       <div class="col-lg-12 text-right pr-0 mt-4">
         <b-button
           type="button"
+          variant="primary"
           class="btn rounded float-right btn-orange"
           @click="openModalCreateCard"
         >
-          <i class="fas fa-plus mr-2"></i> ADD
+         
+          <feather-icon
+                      icon="PlusCircleIcon"
+                      size="15"
+                    ></feather-icon> ADD
         </b-button>
       </div>
     </div>
@@ -92,7 +109,12 @@
 </template>
 <script>
 import { amgApi } from "@/service/axios.js";
+import  ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue"
+
 export default {
+  components:{
+    ModalCardCreate,
+  },
   props: {
     cardsLead: {
       type: Object,
@@ -165,7 +187,7 @@ export default {
 
     //Edit and Cancel information
     editInformation() {
-      swal
+      this.$swal
         .fire({
           title: "Are you Sure ? ",
           text: "Do you want to edit the information?",
