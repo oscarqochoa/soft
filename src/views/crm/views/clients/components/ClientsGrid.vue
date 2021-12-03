@@ -2,51 +2,51 @@
   <div>
     <b-card no-body class="mb-1">
       <div class="mx-2 mb-2 mt-2">
-          <b-row>
-            <b-col
-              cols="12"
-              sm="6"
-              class="
-                d-flex
-                align-items-center
-                justify-content-center justify-content-sm-start
-              "
+        <b-row>
+          <b-col
+            cols="12"
+            sm="6"
+            class="
+              d-flex
+              align-items-center
+              justify-content-center justify-content-sm-start
+            "
+          >
+            <span class="text-muted"
+              >Showing {{ startPage }} to {{ toPage }} of
+              {{ totalData }} entries</span
             >
-              <span class="text-muted"
-                >Showing {{ startPage }} to {{ toPage }} of
-                {{ totalData }} entries</span
-              >
-            </b-col>
-            <!-- Pagination -->
-            <b-col
-              cols="12"
-              sm="6"
-              class="
-                d-flex
-                align-items-center
-                justify-content-center justify-content-sm-end
-              "
+          </b-col>
+          <!-- Pagination -->
+          <b-col
+            cols="12"
+            sm="6"
+            class="
+              d-flex
+              align-items-center
+              justify-content-center justify-content-sm-end
+            "
+          >
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalData"
+              :per-page="perPage"
+              first-number
+              last-number
+              class="mb-0 mt-1 mt-sm-0"
+              prev-class="prev-item"
+              next-class="next-item"
             >
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="totalData"
-                :per-page="perPage"
-                first-number
-                last-number
-                class="mb-0 mt-1 mt-sm-0"
-                prev-class="prev-item"
-                next-class="next-item"
-              >
-                <template #prev-text>
-                  <feather-icon icon="ChevronLeftIcon" size="18" />
-                </template>
-                <template #next-text>
-                  <feather-icon icon="ChevronRightIcon" size="18" />
-                </template>
-              </b-pagination>
-            </b-col>
-          </b-row>
-        </div>
+              <template #prev-text>
+                <feather-icon icon="ChevronLeftIcon" size="18" />
+              </template>
+              <template #next-text>
+                <feather-icon icon="ChevronRightIcon" size="18" />
+              </template>
+            </b-pagination>
+          </b-col>
+        </b-row>
+      </div>
       <div class="m-2">
         <!-- Table Top -->
         <b-row>
@@ -122,19 +122,19 @@
           ref="refClientsList"
           class="position-relative"
           :items="myProvider"
-          stacked="lg"
           :fields="visibleFields"
           primary-key="id"
           table-class="text-nowrap"
-          responsive
+          responsive="sm"
           show-empty
-          sticky-header
+          sticky-header="50vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
           :current-page="currentPage"
           :per-page="perPage"
           :filter="searchInput"
+          v-scrollbar
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -308,7 +308,7 @@ import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
-import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+import ClientService from "../service/clients.service";
 import { mapGetters } from "vuex";
 export default {
   directives: {
@@ -393,7 +393,7 @@ export default {
           labelSelect: "value",
           cols: 12,
           md: 2,
-          visible: true
+          visible: true,
         },
         {
           label: "Advisor",
@@ -403,57 +403,58 @@ export default {
           labelSelect: "user_name",
           cols: 12,
           md: 2,
-          visible: this.$route.meta.isClientsTab
+          visible: this.$route.meta.isClientsTab,
         },
         {
           label: "Status",
           options: [
-            {value: 0, label: "All"},
-            {value: 1, label: "Active"},
-            {value: 4, label: "Canceled"},
-            {value: 6, label: "Closed"},
-            {value: 2, label: "Hold"},
-            {value: 5, label: "Loyal"},
-            {value: 3, label: "Transition"},
+            { value: 0, label: "All" },
+            { value: 1, label: "Active" },
+            { value: 4, label: "Canceled" },
+            { value: 6, label: "Closed" },
+            { value: 2, label: "Hold" },
+            { value: 5, label: "Loyal" },
+            { value: 3, label: "Transition" },
           ],
           model: "",
           primaryKey: "value",
           labelSelect: "label",
           cols: 12,
           md: 2,
-          visible: true
+          visible: true,
         },
         {
           label: "Payment Type",
           options: [
-            {value: 0, label: "All"},
-            {value: 1, label: "Automatic"},
-            {value: 2, label: "Manual"},
-            {value: 3, label: "Others"}          ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
-          cols: 12,
-          md: 2,
-          visible: true
-        },
-        {
-          label: "Day Payment",
-          options: [
-            {value: 0, label: "All"},
-            {value: 5, label: "5"},
-            {value: 10, label: "10"},
-            {value: 15, label: "15"},
-            {value: 20, label: "20"},
-            {value: 25, label: "25"},
-            {value: 30, label: "30"},
+            { value: 0, label: "All" },
+            { value: 1, label: "Automatic" },
+            { value: 2, label: "Manual" },
+            { value: 3, label: "Others" },
           ],
           model: "",
           primaryKey: "value",
           labelSelect: "label",
           cols: 12,
           md: 2,
-          visible: false
+          visible: true,
+        },
+        {
+          label: "Day Payment",
+          options: [
+            { value: 0, label: "All" },
+            { value: 5, label: "5" },
+            { value: 10, label: "10" },
+            { value: 15, label: "15" },
+            { value: 20, label: "20" },
+            { value: 25, label: "25" },
+            { value: 30, label: "30" },
+          ],
+          model: "",
+          primaryKey: "value",
+          labelSelect: "label",
+          cols: 12,
+          md: 2,
+          visible: false,
         },
       ],
       filterController: false,
@@ -475,38 +476,40 @@ export default {
     visibleFields() {
       return this.arrayColumns.filter((column) => column.visible);
     },
-    program(){
+    program() {
       return this.filters[0].model;
     },
-    advisor(){
+    advisor() {
       return this.filters[1].model;
     },
-    status(){
+    status() {
       return this.filters[2].model;
     },
-    paymentType:{
-      get(){
+    paymentType: {
+      get() {
         return this.filters[3].model;
       },
-      set(value){
+      set(value) {
         this.filters[3].model = value;
-      }
+      },
     },
-    paymentDay:{
-      get(){
+    paymentDay: {
+      get() {
         return this.filters[4].model;
       },
-      set(value){
+      set(value) {
         this.filters[4].visible = value;
-      }
+      },
     },
   },
   methods: {
     onChangeFilter() {
       this.$refs.refClientsList.refresh();
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+    async myProvider(ctx) {
+      let params = {
+        api_url: ctx.apiUrl,
+        current_page: ctx.currentPage,
         per_page: ctx.perPage,
         text: ctx.filter,
         from: this.fromToObject.from,
@@ -522,44 +525,41 @@ export default {
           .role_id,
         session: this.currentUser.user_id,
         modul: 2,
-      });
-
-      // Must return a promise that resolves to an array of items
-      return promise.then((data) => {
-        // Pluck the array of items off our axios response
-        const items = data.data.data;
-        this.startPage = data.data.from;
-        this.currentPage = data.data.current_page;
-        this.perPage = data.data.per_page;
-        this.nextPage = this.startPage + 1;
-        this.endPage = data.data.last_page;
-        this.totalData = data.data.total;
-        this.toPage = data.data.to;
-        // Must return an array of items or an empty array if an error occurred
-        return items || [];
-      });
+      };
+      const data = await ClientService.getCrmUsers(params);
+      const items = data.data;
+      this.startPage = data.from;
+      this.currentPage = data.current_page;
+      this.perPage = data.per_page;
+      this.nextPage = this.startPage + 1;
+      this.endPage = data.last_page;
+      this.totalData = data.total;
+      this.toPage = data.to;
+      // Must return an array of items or an empty array if an error occurred
+      return items || [];
     },
     async getAllPrograms() {
-      const data = await amgApi.get(`/programs`);
+      const data = await ClientService.getAllPrograms();
       let firstOption = {
         value: "All",
         id: 0,
       };
-      let newData = data.data;
+      let newData = data;
       newData.unshift(firstOption);
       this.filters[0].options = newData;
     },
     async getAllAdvisors(program) {
-      const data = await amgApi.post(`/usersprograms`, {
+      let params = {
         idmodule: this.convertProgramToModule(program),
         iduser: this.currentUser.user_id,
         idrole: this.currentUser.role_id ? this.currentUser.role_id : 1,
-      });
+      }
+      const data = await ClientService.getAllAdvisors(params);
       let firstOption = {
         user_name: "All",
         id: 0,
       };
-      let newData = data.data;
+      let newData = data;
       newData.unshift(firstOption);
       this.filters[1].options = newData;
     },
@@ -567,34 +567,18 @@ export default {
       this.searchInput = "";
       this.$refs.refClientsList.refresh();
     },
-    showToast(variant, position, title, icon, text) {
-      this.$toast(
-        {
-          component: ToastificationContent,
-          props: {
-            title,
-            icon,
-            text,
-            variant,
-          },
-        },
-        {
-          position,
-        }
-      );
-    },
   },
   watch: {
-    program(newVal){
+    program(newVal) {
       this.getAllAdvisors(newVal);
     },
-    paymentType(newVal){
-      if(newVal == 1){
-        this.paymentDay = true
-      }else{
-        this.paymentDay = false
+    paymentType(newVal) {
+      if (newVal == 1) {
+        this.paymentDay = true;
+      } else {
+        this.paymentDay = false;
       }
-    }
+    },
   },
 };
 </script>
