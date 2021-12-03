@@ -27,7 +27,7 @@
             />
             <label>entries</label>
             <b-button
-              variant="secondary"
+              variant="link"
               class="btn-icon ml-50"
               v-b-tooltip.hover.bottom="'Refresh'"
               @click="refresh = true"
@@ -54,27 +54,14 @@
                 variant="warning"
                 @click="advanceSearch = !advanceSearch"
               >
-                <span
-                  v-if="!advanceSearch"
-                  class="text-nowrap"
-                >
-                  Advance Search
+                <span class="text-nowrap">
                   <feather-icon
-                    icon="ChevronsRightIcon"
+                    icon="FilterIcon"
                     size="18"
                     class="mr-50 text-white"
                   />
-                </span>
-                <span
-                  v-else
-                  class="text-nowrap"
-                >
-                  <feather-icon
-                    icon="ChevronsLeftIcon"
-                    size="18"
-                    class="mr-50 text-white"
-                  />
-                  Basic Search
+                  <span v-if="!advanceSearch">Advance Search</span>
+                  <span v-else>Basic Search</span>
                 </span>
               </b-button>
             </div>
@@ -123,6 +110,9 @@
         show-empty
         empty-text="No matching records found"
         :sort-desc.sync="isSortDirDesc"
+        selectable
+        select-mode="multi"
+        @row-selected="onRowSelected"
       >
         <template #table-busy>
           <div class="text-center text-primary my-2">
@@ -134,6 +124,7 @@
         <!-- Column: Date Even -->
         <template #cell(date_even)="data">
           <b-badge
+            v-if="data.item.date_even"
             pill
             variant="light-danger"
             class="text-capitalize"
@@ -214,17 +205,21 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
-              <feather-icon icon="FileTextIcon" />
-              <span class="align-middle ml-50">Details</span>
+            <b-dropdown-item
+              v-b-tooltip.hover.left="'Return to Social Network'"
+              v-if="data.item.status_sn_id == 2"
+              @click="onRowProcess(data.item.id)"
+            >
+              <feather-icon icon="CornerUpLeftIcon" />
+              <span
+                class="align-middle ml-50"
+              >Return</span>
             </b-dropdown-item>
 
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
-              <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50">Edit</span>
-            </b-dropdown-item>
-
-            <b-dropdown-item>
+            <b-dropdown-item
+              variant="danger"
+              @click="onRowDelete(data.item.id)"
+            >
               <feather-icon icon="TrashIcon" />
               <span class="align-middle ml-50">Delete</span>
             </b-dropdown-item>
@@ -282,6 +277,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import {
   BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
   BBadge, BDropdown, BDropdownItem, BPagination,
@@ -294,6 +290,7 @@ import BCardCode from '@core/components/b-card-code'
 import LeadsListFilters from './LeadsListFilters.vue'
 import useUsersList from './useLeadsList'
 import userStoreModule from '../leadStoreModule'
+import crmService from '@/views/crm/services/crm.service'
 
 // Notification
 import { useToast } from 'vue-toastification/composition'
@@ -321,6 +318,10 @@ export default {
     vSelect,
   },
   props: {
+    stateLeadOptions: {
+      type: Array,
+      required: false,
+    },
     statusLeadOptions: {
       type: Array,
       required: false,
@@ -352,6 +353,10 @@ export default {
     stAdOptions: {
       type: Array,
       required: false,
+    },
+    leadsSelecteds: {
+      type: Object,
+      required: true,
     }
   },
   data() {
@@ -438,6 +443,91 @@ export default {
       typeDocFilter,
       stAdFilter
     }
+  },
+  methods: {
+    onRowSelected (items) {
+      this.leadsSelecteds.leads = items
+    },
+    onRowDelete (id) {
+      try {
+        this.$swal.fire({
+          title: 'Are you sure?',
+          icon: 'question',
+          text: 'You won\'t be able to revert this!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ab9220',
+          cancelButtonColor: '#8f9194',
+          confirmButtonText: 'Yes, delete it!',
+        })
+        .then(async (result) => {
+          if (result.value) {
+            const { id: user_id, id: role_id } = this.currentUser
+            const response = await crmService.postDeleteLead({
+              leadid: id,
+              idsession: user_id,
+              iduser: user_id,
+              idrole: role_id,
+            })
+            if (response) {
+              this.refresh = true
+              this.$swal('Successful!', 'Operation successfully', 'success')
+            } else {
+              this.$swal('Failed!', 'There was something wronge', 'warning')
+            }
+          }
+        })
+      } catch (error) {
+        console.log('Something went wrong onRowDelete:', error)
+        this.$swal('Oops!', 'There was something wronge', 'error')
+      }
+    },
+    onRowProcess (id) {
+      try {
+        this.$swal.fire({
+          title: 'Are you sure?',
+          icon: 'question',
+          text: 'You won\'t be able to revert this!',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ab9220',
+          cancelButtonColor: '#8f9194',
+          confirmButtonText: 'Yes',
+          input: 'textarea',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to write something!'
+            }
+          },
+        })
+        .then(async (result) => {
+          if (result.value) {
+            const { id: user_id, id: role_id } = this.currentUser
+            const response = await crmService.postProcessLead({
+              lead_id: id,
+              status: 3,
+              user_id,
+              description: result.value,
+            })
+            if (response.status == 200) {
+              this.refresh = true
+              this.$swal('Successful!', 'Operation successfully', 'success')
+            } else {
+              this.$swal('Failed!', 'There was something wronge', 'warning')
+            }
+          }
+        })
+      } catch (error) {
+        console.log('Something went wrong onRowProcess:', error)
+        this.$swal('Oops!', 'There was something wrong', 'error')
+      }
+    }
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+      token: 'auth/token'
+    }),
   },
 }
 </script>
