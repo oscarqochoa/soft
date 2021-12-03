@@ -9,6 +9,7 @@ import App from './App.vue'
 import {amgApi} from './service/axios';
 import { initialize } from './service/general'
 import generalMixins from './mixins/general'
+import Autocomplete from 'vuejs-auto-complete'
 // Global Components
 import './global-components'
 
@@ -37,7 +38,7 @@ Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
-
+Vue.component('autocomplete', Autocomplete)
 
 
 // Composition API

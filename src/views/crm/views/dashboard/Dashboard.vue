@@ -197,9 +197,10 @@
                 <div class="col-lg-7 ">
                   <v-select
                     v-on:input="filtrocont()"
-                    class="input-form w-100"
+                    class="input-form w-100 "
                     style="font-size: 15px; width: 50%; float: left; "
                     v-model="year" 
+                    :clearable="false"
                     :options="years"
                   >
                   </v-select>
@@ -428,6 +429,10 @@ export default {
     transform: translateY(-5px);
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
   }
+}
+
+.per-page-selector {
+  width: 90px;
 }
 </style>
 

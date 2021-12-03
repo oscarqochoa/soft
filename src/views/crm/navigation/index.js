@@ -14,5 +14,12 @@ export default [
         //   tag: '3',
         //   tagVariant: 'light-danger'
     },
+    {
+        title: 'Payments',
+        icon: 'DollarSignIcon',
+        route: 'payments-crm-list',
+        //   tag: '3',
+        //   tagVariant: 'light-danger'
+    },
     
 ]
