@@ -187,6 +187,24 @@ class CrmService {
       throw error
     }
   }
+  async getAllQuicksSms (body) {
+    try {
+      const { data } = await amgApi.post('/api/allquickssms', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getAllQuicksSms:', error)
+      throw error
+    }
+  }
+  async postSaveQuickSms (body) {
+    try {
+      const data = await amgApi.post('/api/savequicksms', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on postSaveQuickSms:', error)
+      throw error
+    }
+  }
 }
 
 export default new CrmService()

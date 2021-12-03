@@ -27,7 +27,7 @@
                 />
                 <b-input-group-append is-text variant="warning">
                   <feather-icon
-                    :icon="addSocial ? 'XIcon' : 'PlusIcon'"
+                    :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
                     class="cursor-pointer"
                     @click="toggleSocial"
                   />

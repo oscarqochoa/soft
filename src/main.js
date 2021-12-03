@@ -60,6 +60,11 @@ Vue.use(BootstrapVueIcons)
 
 // Composition API
 Vue.use(VueCompositionAPI)
+
+Vue.use(VueMoment)
+
+Vue.use(VueMask)
+
 Vue.use(ScrollBar);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
@@ -68,10 +73,6 @@ Vue.use(vueLoader, 'loading');
 Vue.use(money, {precision: 4})
 // register directive v-mask and component <the-mask>
 Vue.use(VueTheMask)
-
-Vue.use(VueMoment)
-
-Vue.use(VueMask)
 
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard
