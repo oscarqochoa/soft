@@ -20,3 +20,32 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
     border-right: 7px solid transparent;
     border-bottom: 14px solid #ffc107;
 }
+
+
+//buttons utilities
+
+.button-size {
+  height: 23px;
+  padding: 3px;
+}
+
+.button-margin-l {
+  margin-left: 3px;
+}
+
+.footer-black {
+    background: #666666 !important;
+    color: #fff !important;
+    padding: 17px !important;
+}
+
+.footer-span {
+    color: #666666;
+    background: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.w-50 {
+    width: 16% !important;
+}

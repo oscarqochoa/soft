@@ -58,8 +58,8 @@ export default {
         buttonsStyling: false,
         confirmButtonText: "Yes",
         customClass: {
-          confirmButton: "btn btn-success btn-sm ml-3 rounded-0",
-          cancelButton: "btn btn-danger btn-sm rounded-0 "
+          confirmButton: "btn btn-success  ml-3 ",
+          cancelButton: "btn btn-danger  "
         }
       }).then(r => {
         if (r.value) {
@@ -77,8 +77,8 @@ export default {
         buttonsStyling: false,
         confirmButtonText: "Yes",
         customClass: {
-          confirmButton: "btn btn-success btn-sm ml-3 rounded-0",
-          cancelButton: "btn btn-danger btn-sm rounded-0"
+          confirmButton: "btn btn-success  ml-3 ",
+          cancelButton: "btn btn-danger  "
         }
       }).then(r => {
         if (r.value) {
@@ -96,8 +96,8 @@ export default {
         buttonsStyling: false,
         confirmButtonText: "Yes",
         customClass: {
-          confirmButton: "btn btn-success btn-sm ml-3 rounded-0",
-          cancelButton: "btn btn-danger btn-sm rounded-0"
+          confirmButton: "btn btn-success  ml-3",
+          cancelButton: "btn btn-danger"
         }
       }).then(r => {
         if (r.value) {
@@ -113,9 +113,6 @@ export default {
 .button-size {
   height: 23px;
   padding: 3px;
-}
-.button-margin-l {
-  margin-left: 3px;
 }
 </style>
 

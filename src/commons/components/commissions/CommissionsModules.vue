@@ -1,6 +1,6 @@
 <template>
   <div>
-    <commissions-component modul="2" tab="crm"></commissions-component>
+    <commissions-component :module="$route.meta.module" :tab="$route.meta.tab"></commissions-component>
   </div>
 </template>
 <script>
