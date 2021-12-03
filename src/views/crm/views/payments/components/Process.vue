@@ -191,14 +191,13 @@
               </b-form-group>
               
             </div>
-            <div class="col-lg-12 w-100" style="display: inline-block;" v-if="methodpayment == 1">
+            <div class="col-lg-12 w-100" style="display: inline-block;" v-if="methodpayment == 1" >
                   <ModalCreditCard :cardsLead="cardsLead"></ModalCreditCard>
                   
               </div>
           </div>
         </div>
       </div>
-      {{$log('hola')}}
     </b-card>
   </div>
 </template>

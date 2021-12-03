@@ -270,7 +270,7 @@
 
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
-import { extend } from "vee-validate";
+import { extend } from "vee-validate";x
 import { amgApi } from '@/service/axios';
 export default {
   components: { VueGoogleAutocomplete },
