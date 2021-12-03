@@ -10,7 +10,7 @@ import App from './App.vue'
 import { amgApi } from './service/axios'
 import { initialize } from './service/general'
 
-import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
+
 import generalMixins from './mixins/general'
 import ScrollBar from '@morioh/v-perfect-scrollbar'
 import vueLoader from './directives/preloader/index';
@@ -20,6 +20,7 @@ import VueTheMask from 'vue-the-mask'
 // import 'vue-loading-rx/dist/vue-loading.css';
 // global register
 
+import generalMixins from './mixins/general'
 // Global Components
 import './global-components'
 
@@ -52,8 +53,10 @@ window.amgApi = amgApi
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
-Vue.use(BootstrapVue);
-Vue.use(BootstrapVueIcons);
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
+
+
 // Composition API
 Vue.use(VueCompositionAPI)
 Vue.use(ScrollBar);

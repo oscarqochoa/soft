@@ -265,7 +265,6 @@ import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { mapGetters } from "vuex";
-
 export default {
   directives: {
     Ripple

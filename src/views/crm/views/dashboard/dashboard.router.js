@@ -1,6 +1,6 @@
 export default [
   {
-    path: '/crm/',
+    path: '/dasboard',
     name: 'dashboard-crm',
     component: () => import('@/views/crm/views/dashboard/Dashboard.vue'),
     meta: {
@@ -13,3 +13,10 @@ export default [
     },
   },
 ]
+    // {
+    //     path: '/dashboard',
+    //     name: 'dashboard-crm',
+    //     component: () => import('@/views/crm/views/dashboard/Dashboard.vue'),
+        
+    // }
+
