@@ -73,6 +73,7 @@ Vue.use(vueLoader, 'loading');
 Vue.use(money, {precision: 4})
 // register directive v-mask and component <the-mask>
 Vue.use(VueTheMask)
+
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard
 require('@core/assets/fonts/feather/iconfont.css') // For form-wizard
