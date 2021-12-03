@@ -23,7 +23,8 @@ export default {
     baseUrl: process.env.VUE_APP_BASE_URL
   },
   getters: {
-    baseUrl: state => state.baseUrl
+    baseUrl: state => state.baseUrl,
+    skin: state => state.layout.skin
   },
   mutations: {
     TOGGLE_RTL(state) {

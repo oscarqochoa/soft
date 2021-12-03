@@ -8,6 +8,7 @@ import appConfig from '@/store/app-config'
 import verticalMenu from '@/store/vertical-menu'
 import auth from '@/store/auth'
 import CrmStore from '@/views/crm/store'
+import stickyNotesStoreModule from '@/layouts/components/navbar/components/sticky-notes/store/sticky-notes.store'
 
 Vue.use(Vuex)
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     'app-ecommerce': ecommerceStoreModule,
     auth,
     'crm-store': CrmStore,
+    'sticky-notes': stickyNotesStoreModule
   },
   strict: process.env.DEV,
 })
