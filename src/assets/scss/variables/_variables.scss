@@ -18,6 +18,9 @@ $theme-dark-box-shadow: 0 5px 20px 0 rgb(20 23 26 / 10%);
 
 //Typography
 $theme-dark-headings-color: #d0d2d6 !default;
+.dark-layout .table.b-table thead tr th{
+    color: #d0d2d6 // for sticky header dark layout;
+}
 $theme-dark-label-color: #d0d2d6 !default;
 // $theme-dark-text-muted-color: rgb(82 77 70 / 50%) !default;
 $theme-dark-text-muted-color: #818285 !default;

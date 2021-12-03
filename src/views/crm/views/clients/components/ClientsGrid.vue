@@ -110,19 +110,19 @@
           :api-url="clientRoute"
           class="position-relative"
           :items="myProvider"
-          stacked="lg"
           :fields="visibleFields"
           primary-key="id"
           table-class="text-nowrap"
-          responsive
+          responsive="sm"
           show-empty
-          sticky-header
+          sticky-header="50vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
           :current-page="currentPage"
           :per-page="perPage"
           :filter="searchInput"
+          v-scrollbar
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -263,7 +263,7 @@ import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
-import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+import ClientService from "../service/clients.service";
 import { mapGetters } from "vuex";
 export default {
   directives: {
@@ -350,7 +350,7 @@ export default {
           labelSelect: "value",
           cols: 12,
           md: 2,
-          visible: true
+          visible: true,
         },
         {
           label: "Advisor",
@@ -360,7 +360,7 @@ export default {
           labelSelect: "user_name",
           cols: 12,
           md: 2,
-          visible: this.$route.meta.isClientsTab
+          visible: this.$route.meta.isClientsTab,
         },
         {
           label: "Status",
@@ -378,7 +378,7 @@ export default {
           labelSelect: "label",
           cols: 12,
           md: 2,
-          visible: true
+          visible: true,
         },
         {
           label: "Payment Type",
@@ -393,7 +393,7 @@ export default {
           labelSelect: "label",
           cols: 12,
           md: 2,
-          visible: true
+          visible: true,
         },
         {
           label: "Day Payment",
@@ -446,7 +446,7 @@ export default {
       },
       set(value) {
         this.filters[3].model = value;
-      }
+      },
     },
     paymentDay: {
       get() {
@@ -461,8 +461,10 @@ export default {
     onChangeFilter() {
       this.$refs.refClientsList.refresh();
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+    async myProvider(ctx) {
+      let params = {
+        api_url: ctx.apiUrl,
+        current_page: ctx.currentPage,
         per_page: ctx.perPage,
         text: ctx.filter,
         from: this.fromToObject.from,
@@ -477,45 +479,42 @@ export default {
         rol_id: this.currentUser.arrRoles.find(rol => rol.module_id == 2)
           .role_id,
         session: this.currentUser.user_id,
-        modul: 2
-      });
-
-      // Must return a promise that resolves to an array of items
-      return promise.then(data => {
-        // Pluck the array of items off our axios response
-        const items = data.data.data;
-        this.startPage = data.data.from;
-        this.currentPage = data.data.current_page;
-        this.perPage = data.data.per_page;
-        this.nextPage = this.startPage + 1;
-        this.endPage = data.data.last_page;
-        this.totalData = data.data.total;
-        this.toPage = data.data.to;
-        // Must return an array of items or an empty array if an error occurred
-        return items || [];
-      });
+        modul: 2,
+      };
+      const data = await ClientService.getCrmUsers(params);
+      const items = data.data;
+      this.startPage = data.from;
+      this.currentPage = data.current_page;
+      this.perPage = data.per_page;
+      this.nextPage = this.startPage + 1;
+      this.endPage = data.last_page;
+      this.totalData = data.total;
+      this.toPage = data.to;
+      // Must return an array of items or an empty array if an error occurred
+      return items || [];
     },
     async getAllPrograms() {
-      const data = await amgApi.get("/programs");
-      const firstOption = {
+      const data = await ClientService.getAllPrograms();
+      let firstOption = {
         value: "All",
         id: 0
       };
-      const newData = data.data;
+      let newData = data;
       newData.unshift(firstOption);
       this.filters[0].options = newData;
     },
     async getAllAdvisors(program) {
-      const data = await amgApi.post("/usersprograms", {
+      let params = {
         idmodule: this.convertProgramToModule(program),
         iduser: this.currentUser.user_id,
-        idrole: this.currentUser.role_id ? this.currentUser.role_id : 1
-      });
-      const firstOption = {
+        idrole: this.currentUser.role_id ? this.currentUser.role_id : 1,
+      }
+      const data = await ClientService.getAllAdvisors(params);
+      let firstOption = {
         user_name: "All",
         id: 0
       };
-      const newData = data.data;
+      let newData = data;
       newData.unshift(firstOption);
       this.filters[1].options = newData;
     },
@@ -523,22 +522,6 @@ export default {
       this.searchInput = "";
       this.$refs.refClientsList.refresh();
     },
-    showToast(variant, position, title, icon, text) {
-      this.$toast(
-        {
-          component: ToastificationContent,
-          props: {
-            title,
-            icon,
-            text,
-            variant
-          }
-        },
-        {
-          position
-        }
-      );
-    }
   },
   watch: {
     program(newVal) {
@@ -550,8 +533,8 @@ export default {
       } else {
         this.paymentDay = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
