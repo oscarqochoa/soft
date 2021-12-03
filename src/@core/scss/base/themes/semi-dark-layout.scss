@@ -77,15 +77,21 @@
       }
       .sidebar-group-active {
         a {
-          background: $theme-dark-card-bg;
+          background: $theme-dark-body-bg !important;
           border-radius: 4px;
+          
+        }
+        ul{
+          a{
+            background: $theme-dark-card-bg !important;
+          }
         }
         .menu-content {
           background-color: $theme-dark-card-bg;
           .active {
             z-index: 1;
             a {
-              background-color: transparent;
+              background-color: transparent !important;
             }
           }
         }
