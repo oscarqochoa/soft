@@ -71,7 +71,7 @@
                 v-model="searchInput"
                 class="d-inline-block mr-1"
                 placeholder="Client..."
-                debounce="200"
+                debounce="300"
               />
               <b-button
                 variant="primary"
@@ -117,7 +117,7 @@
           responsive
           show-empty
           sticky-header
-          :busy.sync="isBusy"
+          :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
           :current-page="currentPage"

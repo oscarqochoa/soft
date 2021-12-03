@@ -3,7 +3,6 @@ import {
   ToastPlugin, ModalPlugin, BootstrapVue, BootstrapVueIcons,
 } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
-
 import i18n from '@/libs/i18n'
 import router from './router'
 import store from './store'
@@ -11,7 +10,16 @@ import App from './App.vue'
 import { amgApi } from './service/axios'
 import { initialize } from './service/general'
 
+import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import generalMixins from './mixins/general'
+import ScrollBar from '@morioh/v-perfect-scrollbar'
+import vueLoader from './directives/preloader/index';
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import money from 'v-money'
+import VueTheMask from 'vue-the-mask'
+// import 'vue-loading-rx/dist/vue-loading.css';
+// global register
+
 // Global Components
 import './global-components'
 
@@ -29,19 +37,33 @@ import '@/libs/tour'
 import '@/@fake-db/db'
 
 // Filters
+import './filters/dates.js'
+import './filters/times.js'
 
-import './filters/dates'
+// Validation rules (Vee validate)
+
+import './validation/rules.js'
+
+Vue.prototype.$log = console.log
+
 
 window.amgApi = amgApi
 // require('./service/axios');
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
-Vue.use(BootstrapVue)
-Vue.use(BootstrapVueIcons)
+Vue.use(BootstrapVue);
+Vue.use(BootstrapVueIcons);
 // Composition API
 Vue.use(VueCompositionAPI)
-
+Vue.use(ScrollBar);
+Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
+Vue.use(vueLoader, 'loading');
+// register directive v-money and component <money>
+Vue.use(money, {precision: 4})
+// register directive v-mask and component <the-mask>
+Vue.use(VueTheMask)
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard
 require('@core/assets/fonts/feather/iconfont.css') // For form-wizard

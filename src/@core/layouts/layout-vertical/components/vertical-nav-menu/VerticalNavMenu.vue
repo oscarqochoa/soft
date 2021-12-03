@@ -9,7 +9,7 @@
     @mouseleave="updateMouseHovered(false)"
   >
     <!-- main menu header-->
-    <div class="navbar-header expanded">
+    <div class="navbar-header expanded" style="height: 5.45rem;">
       <slot
         name="header"
         :toggleVerticalMenuActive="toggleVerticalMenuActive"
