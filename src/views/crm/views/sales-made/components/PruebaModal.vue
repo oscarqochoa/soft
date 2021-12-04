@@ -57,6 +57,8 @@ export default {
         initial_payment: {
           program: 'Credit Express',
           client: 'Roger Segura',
+          amount: 29.99,
+          sale_id: 11838,
         },
       },
     }
