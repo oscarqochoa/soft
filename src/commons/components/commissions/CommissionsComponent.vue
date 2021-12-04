@@ -16,15 +16,16 @@
           <div v-else>
             <b-table-simple
               responsive
-              table-class="table-bordered "
               sticky-header="74vh"
               no-border-collapse
               striped
               hover
+              v-scrollbar
+              bordered
             >
               <b-thead>
                 <b-tr class="width-th">
-                  <b-th style="width: 100px !important">User</b-th>
+                  <b-th style="width: 100px !important" class="text-white">User</b-th>
                   <b-th v-if="isCrm || isDepartment"></b-th>
                   <template v-if="halfYear">
                     <b-th>Jan</b-th>
@@ -46,7 +47,7 @@
               </b-thead>
               <b-tbody>
                 <b-tr v-for="(item,index) in commissions" :key="item.user_id">
-                  <b-td class="font-weight-bolder">{{ item.user_name }}</b-td>
+                  <b-td class="font-weight-bolder text-primary">{{ item.user_name }}</b-td>
                   <b-td v-if="isCrm">
                     <div>
                       <div class="font-weight-bold">Generated:</div>

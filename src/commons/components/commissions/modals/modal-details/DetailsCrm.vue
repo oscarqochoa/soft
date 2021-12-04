@@ -6,6 +6,7 @@
       class="mt-2"
       responsive
       no-border-collapse
+      striped
       sticky-header="50vh"
       :busy="isBusy"
     >
@@ -73,7 +74,7 @@
         <div class="font-weight-bolder">TOTAL GENERATED:</div>
       </b-col>
       <b-col lg="6" :class="[textLeftBig]">
-        <div>$ {{ this.total? this.total.toFixed(2): 0 }}</div>
+        <div>$ {{ this.total }}</div>
       </b-col>
       <template v-if="total > total_to_pay && !isCeo && !isSupervisor">
         <b-col lg="6" :class="[textRightBig]">
@@ -88,7 +89,7 @@
           <div class="font-weight-bolder">TOTAL TO PAY:</div>
         </b-col>
         <b-col lg="6" :class="[textLeftBig]">
-          <div>$ {{ this.total_to_pay? this.total_to_pay.toFixed(2): 0 }}</div>
+          <div>$ {{ this.total_to_pay }}</div>
         </b-col>
       </template>
     </b-row>
@@ -174,6 +175,7 @@ export default {
         this.total = this.info.amountTotal ? this.info.amountTotal : 0;
         this.total = this.total.toFixed(2);
         this.total_to_pay = this.info.amountTotal ? this.info.amountTotal : 0;
+        this.total_to_pay = this.total_to_pay.toFixed(2);
         this.total_supervisor_program = this.info.amountTotal
           ? this.info.amountTotal
           : 0;

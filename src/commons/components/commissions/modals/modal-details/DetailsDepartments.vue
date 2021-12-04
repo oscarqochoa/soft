@@ -5,6 +5,7 @@
       :fields="fields"
       class="mt-2"
       responsive
+      striped
       no-border-collapse
       sticky-header="50vh"
       :busy="isBusy"
