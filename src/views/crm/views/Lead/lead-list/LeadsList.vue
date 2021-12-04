@@ -37,6 +37,16 @@
                 size="18"
               />
             </b-button>
+            <b-button
+              variant="success"
+              class="ml-50"
+              @click="modalSmssOpen"
+            >
+              <feather-icon
+                icon="MessageCircleIcon"
+              />
+              Send SMS
+            </b-button>
           </b-col>
 
           <!-- Search -->
@@ -193,7 +203,14 @@
 
         <!-- Column: Actions -->
         <template #cell(actions)="data">
-          <table-actions :options="[ 'returnToSocialNetwork', 'sendSMS', 'delete' ]" :row-data="data.item" @onRowDelete="onRowDelete" @onRowProcess="onRowProcess" @modalSmsOpen="modalSmsOpen"></table-actions>
+          <table-actions
+            :options="[ 'returnToSocialNetwork', 'sendSMS', 'historySMS', 'delete' ]"
+            :row-data="data.item"
+            @onRowDelete="onRowDelete"
+            @onRowProcess="onRowProcess"
+            @modalSmsOpen="modalSmsOpen"
+            @modalHistorySmsOpen="modalHistorySmsOpen"
+          />
         </template>
 
       </b-table>
@@ -243,7 +260,8 @@
         </b-row>
       </div>
     </b-card>
-    <!-- modal -->
+
+    <!-- modal SEND SMS -->
     <b-modal
       id="modal-send-sms"
       ok-only
@@ -297,6 +315,8 @@
         </b-form-group>
       </template>
     </b-modal>
+
+    <!-- modal QUICK SMS -->
     <b-modal
       id="modal-quick-sms"
       ok-only
@@ -311,8 +331,11 @@
         :quicks="quicks"
         @modalQuickCreateOpen="modalQuickCreateOpen"
         @modalQuickEditOpen="modalQuickEditOpen"
+        @modalQuickDelete="modalQuickDelete"
       />
     </b-modal>
+
+    <!-- modal SAVE QUICK SMS -->
     <b-modal
       id="modal-quick-sms-save"
       ok-only
@@ -327,6 +350,22 @@
         :quick-data="quickData"
         @updateQuicks="updateQuicks"
         @modalQuickCreateClose="$bvModal.hide('modal-quick-sms-save')"
+      />
+    </b-modal>
+
+    <!-- modal HISTORY SMS -->
+    <b-modal
+      id="modal-history-sms"
+      ok-only
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      title="HISTORY OF SMS"
+      hide-footer
+    >
+      <modal-history-sms
+        :modul="modul"
+        :row-data="rowData"
       />
     </b-modal>
   </div>
@@ -350,6 +389,7 @@ import TableActions from './components/TableActions.vue'
 import ModalSendSms from './components/ModalSendSms.vue'
 import ModalQuickSms from './components/ModalQuickSms.vue'
 import ModalQuickSmsSave from './components/ModalQuickSmsSave.vue'
+import ModalHistorySms from './components/ModalHistorySms.vue'
 import crmService from '@/views/crm/services/crm.service'
 
 export default {
@@ -360,6 +400,7 @@ export default {
     ModalSendSms,
     ModalQuickSms,
     ModalQuickSmsSave,
+    ModalHistorySms,
 
     BCard,
     BRow,
@@ -437,14 +478,13 @@ export default {
       leads_sms: [],
       typesms: null,
       leads_sms_o: [],
-      name_leads_arr: [],
       quicks: [],
       quickData: {},
       blankQuickData: {
         id: null,
         sms: '',
         title: ''
-      }
+      },
     }
   },
   setup() {
@@ -528,87 +568,86 @@ export default {
   methods: {
     onRowSelected (items) {
       this.leadsSelecteds.leads = items
+      this.leads_sms = items.map(el => el.id)
     },
     onRowDelete (id) {
-      try {
-        this.$swal.fire({
-          title: 'Are you sure?',
-          icon: 'question',
-          text: 'You won\'t be able to revert this!',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes, delete it!',
-        })
-        .then(async (result) => {
-          if (result.value) {
-            const { id: user_id, id: role_id } = this.currentUser
-            const response = await crmService.postDeleteLead({
-              leadid: id,
-              idsession: user_id,
-              iduser: user_id,
-              idrole: role_id,
-            })
-            if (response) {
-              this.refresh = true
-              this.$swal('Successful!', 'Operation successfully', 'success')
-            } else {
-              this.$swal('Failed!', 'There was something wronge', 'warning')
-            }
+      this.$swal.fire({
+        title: 'Are you sure?',
+        icon: 'question',
+        text: 'You won\'t be able to revert this!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ab9220',
+        cancelButtonColor: '#8f9194',
+        confirmButtonText: 'Yes, delete it!',
+      })
+      .then(async (result) => {
+        if (result.value) {
+          const { id: user_id, id: role_id } = this.currentUser
+          const response = await crmService.postDeleteLead({
+            leadid: id,
+            idsession: user_id,
+            iduser: user_id,
+            idrole: role_id,
+          })
+          if (response) {
+            this.refresh = true
+            this.$swal('Successful!', 'Operation successfully', 'success')
+          } else {
+            this.$swal('Failed!', 'There was something wronge', 'warning')
           }
-        })
-      } catch (error) {
+        }
+      })
+      .catch(error => {
         console.log('Something went wrong onRowDelete:', error)
         this.$swal('Oops!', 'There was something wronge', 'error')
-      }
+      })
     },
     onRowProcess (id) {
-      try {
-        this.$swal.fire({
-          title: 'Are you sure?',
-          icon: 'question',
-          text: 'You won\'t be able to revert this!',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes',
-          input: 'textarea',
-          inputValidator: (value) => {
-            if (!value) {
-              return 'You need to write something!'
-            }
-          },
-        })
-        .then(async (result) => {
-          if (result.value) {
-            const { id: user_id, id: role_id } = this.currentUser
-            const response = await crmService.postProcessLead({
-              lead_id: id,
-              status: 3,
-              user_id,
-              description: result.value,
-            })
-            if (response.status == 200) {
-              this.refresh = true
-              this.$swal('Successful!', 'Operation successfully', 'success')
-            } else {
-              this.$swal('Failed!', 'There was something wronge', 'warning')
-            }
+      this.$swal.fire({
+        title: 'Are you sure?',
+        icon: 'question',
+        text: 'You won\'t be able to revert this!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ab9220',
+        cancelButtonColor: '#8f9194',
+        confirmButtonText: 'Yes',
+        input: 'textarea',
+        inputValidator: (value) => {
+          if (!value) {
+            return 'You need to write something!'
           }
-        })
-      } catch (error) {
+        },
+      })
+      .then(async (result) => {
+        if (result.value) {
+          const { id: user_id, id: role_id } = this.currentUser
+          const response = await crmService.postProcessLead({
+            lead_id: id,
+            status: 3,
+            user_id,
+            description: result.value,
+          })
+          if (response.status == 200) {
+            this.refresh = true
+            this.$swal('Successful!', 'Operation successfully', 'success')
+          } else {
+            this.$swal('Failed!', 'There was something wronge', 'warning')
+          }
+        }
+      })
+      .catch(error => {
         console.log('Something went wrong onRowProcess:', error)
         this.$swal('Oops!', 'There was something wrong', 'error')
-      }
+      })
     },
     async getAllQuicksSms () {
       try {
         const response = await crmService.getAllQuicksSms({
           modul: this.modul,
         })
-        this.quicks = response.map(el => ({ ...el, value: el.sms, label: el.title }))
+        this.quicks = response.map(el => ({ ...el, value: el.sms, label: el.title, showMore: false }))
       } catch (error) {
         console.log('Something wnet wrong getAllQuicksSms:', error)
       }
@@ -618,12 +657,17 @@ export default {
       this.leads_sms = []
       this.typesms = 1
       this.leads_sms_o = []
-      this.leads_sms_o.push(item)
-      const namecl = []
-      this.leads_sms_o.map((el) => {
-        namecl.push({ name: el.lead_name, id: el.id })
-      })
-      this.name_leads_arr = namecl
+      this.leads_sms_o.push(item.id)
+      this.name_leads_arr = [{ name: item.lead_name, id: item.id }]
+      this.$bvModal.show('modal-send-sms')
+    },
+    modalHistorySmsOpen (item) {
+      this.rowData = item
+      this.$bvModal.show('modal-history-sms')
+    },
+    modalSmssOpen () {
+      this.typesms = 0
+      this.name_leads_arr = this.leadsSelecteds.leads.map(el => ({ name: el.lead_name, id: el.id }))
       this.$bvModal.show('modal-send-sms')
     },
     modalQuickOpen () {
@@ -644,11 +688,43 @@ export default {
       } else {
         this.quicks.push({ ...item, value: item.sms, label: item.title })
       }
+    },
+    resetQuickData (item) {
+      this.quickData = item
+    },
+    async modalQuickDelete (id) {
+      this.$swal.fire({
+        title: 'Are you sure?',
+        icon: 'question',
+        text: 'You won\'t be able to revert this!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ab9220',
+        cancelButtonColor: '#8f9194',
+        confirmButtonText: 'Yes, delete it!',
+      })
+      .then(async (result) => {
+        if (result.value) {
+          const response = await crmService.postDeleteQuickSms({ id })
+          console.log('response postDeleteQuickSms', response)
+          if (response.status == 200) {
+            const index = this.quicks.map(el => el.id).indexOf(id)
+            if (index !== -1)
+              this.quicks.splice(index, 1)
+            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+          } else
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', response.message)
+        }
+      })
+      .catch(error => {
+        console.log('Something went wrong modalQuickDelete', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', 'Something went wrong')
+      })
     }
   },
-  created() {
+  created () {
     this.getAllQuicksSms()
-  }
+  },
 }
 </script>
 

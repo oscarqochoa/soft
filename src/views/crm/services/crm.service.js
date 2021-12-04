@@ -205,6 +205,24 @@ class CrmService {
       throw error
     }
   }
+  async postDeleteQuickSms (body) {
+    try {
+      const data = await amgApi.post('/api/deletequick', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on postDeleteQuickSms:', error)
+      throw error
+    }
+  }
+  async postHistorySmsLead (body) {
+    try {
+      const data = await amgApi.post('/api/allsmshistorylead', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on postHistorySmsLead:', error)
+      throw error
+    }
+  }
 }
 
 export default new CrmService()
