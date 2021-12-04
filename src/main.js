@@ -19,9 +19,12 @@ import vueLoader from "./directives/preloader/index";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import money from "v-money";
 import VueTheMask from "vue-the-mask";
+import VueMoment from "vue-moment";
+
 // import 'vue-loading-rx/dist/vue-loading.css';
 // global register
 
+import VueMask from "v-mask";
 // Global Components
 import "./global-components";
 
@@ -55,8 +58,14 @@ Vue.use(ToastPlugin);
 Vue.use(ModalPlugin);
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
+
 // Composition API
 Vue.use(VueCompositionAPI);
+
+Vue.use(VueMoment);
+
+Vue.use(VueMask);
+
 Vue.use(ScrollBar);
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);
@@ -65,6 +74,7 @@ Vue.use(vueLoader, "loading");
 Vue.use(money, { precision: 4 });
 // register directive v-mask and component <the-mask>
 Vue.use(VueTheMask);
+
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard
 require("@core/assets/fonts/feather/iconfont.css"); // For form-wizard
