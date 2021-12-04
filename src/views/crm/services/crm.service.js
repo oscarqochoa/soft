@@ -1,7 +1,7 @@
 import { amgApi } from '@/service/axios'
 
 class CrmService {
-  async getLeads (body) {
+  async getLeads(body) {
     try {
       const { data } = await amgApi.post('/api/searchleads', body)
       return data
@@ -10,7 +10,8 @@ class CrmService {
       throw error
     }
   }
-  async getLeadsSn (body) {
+
+  async getLeadsSn(body) {
     try {
       const { data } = await amgApi.post('/api/search-leads-sn-recovery', body)
       return data
@@ -19,7 +20,8 @@ class CrmService {
       throw error
     }
   }
-  async getStatusLeads (params) {
+
+  async getStatusLeads(params) {
     try {
       const { data } = await amgApi.get('/api/leadstatus', { params })
       return data
@@ -28,7 +30,8 @@ class CrmService {
       throw error
     }
   }
-  async getStateLeads (params) {
+
+  async getStateLeads(params) {
     try {
       const { data } = await amgApi.get('/api/stateleads', { params })
       return data
@@ -37,7 +40,8 @@ class CrmService {
       throw error
     }
   }
-  async getSourceLeads (params) {
+
+  async getSourceLeads(params) {
     try {
       const { data } = await amgApi.get('/api/leadsource', { params })
       return data
@@ -46,7 +50,8 @@ class CrmService {
       throw error
     }
   }
-  async getOwners (body) {
+
+  async getOwners(body) {
     try {
       const { data } = await amgApi.post('/api/usermodule/2', body)
       return data
@@ -55,7 +60,8 @@ class CrmService {
       throw error
     }
   }
-  async getSourceNames (params) {
+
+  async getSourceNames(params) {
     try {
       const { data } = await amgApi.get('/api/sourcesnames', { params })
       return data
@@ -64,7 +70,8 @@ class CrmService {
       throw error
     }
   }
-  async getPrograms (params) {
+
+  async getPrograms(params) {
     try {
       const { data } = await amgApi.get('/api/programs', { params })
       return data
@@ -73,7 +80,8 @@ class CrmService {
       throw error
     }
   }
-  async getStates (body) {
+
+  async getStates(body) {
     try {
       const { data } = await amgApi.post('/api/get-states', body)
       return data
@@ -82,7 +90,8 @@ class CrmService {
       throw error
     }
   }
-  async getStatesEeuu (params) {
+
+  async getStatesEeuu(params) {
     try {
       const { data } = await amgApi.get('/api/stateseeuu', { params })
       return data
@@ -91,13 +100,14 @@ class CrmService {
       throw error
     }
   }
+
   async getAlgo() {
     // eslint-disable-next-line no-undef
     const data = await amgApi.get('/welcome')
     return data
   }
 
-  async getListCards(body){
+  async getListCards(body) {
     try {
       console.log(body)
       const { data } = await amgApi.post('/getlistcards', body)
@@ -131,7 +141,8 @@ class CrmService {
     data = data.data
     return data
   }
-  async getCountries (body) {
+
+  async getCountries(body) {
     try {
       const { data } = await amgApi.post('/api/view-countrys', body)
       return data
@@ -140,7 +151,8 @@ class CrmService {
       throw error
     }
   }
-  async getUserCreatorOwner (body) {
+
+  async getUserCreatorOwner(body) {
     try {
       const { data } = await amgApi.post(`/api/sellerall/${body.modul}`, body)
       return data
@@ -149,7 +161,8 @@ class CrmService {
       throw error
     }
   }
-  async postUniqueMobile (body) {
+
+  async postUniqueMobile(body) {
     try {
       const { data } = await amgApi.post('/api/uniquemobile', body)
       return data
@@ -158,7 +171,8 @@ class CrmService {
       throw error
     }
   }
-  async postRequestLead (body) {
+
+  async postRequestLead(body) {
     try {
       const { data } = await amgApi.post('/api/socialnetwork/request-lead', body)
       return data
@@ -167,7 +181,8 @@ class CrmService {
       throw error
     }
   }
-  async postCreateLead (body) {
+
+  async postCreateLead(body) {
     try {
       const data = await amgApi.post('/api/leadscreate', body)
       return data
@@ -175,11 +190,13 @@ class CrmService {
       console.log('Something went wrong on postCreateLead:', error)
     }
   }
+
   async getSources() {
     let data = await amgApi.get('/sourcesnames')
     data = data.data
     return data
   }
+
   async postDeleteLead(body) {
     try {
       const data = await amgApi.post('/api/leaddelete', body)
@@ -189,7 +206,8 @@ class CrmService {
       throw error
     }
   }
-  async postProcessLead (body) {
+
+  async postProcessLead(body) {
     try {
       const data = await amgApi.post('/api/process-lead-sn', body)
       return data
@@ -198,7 +216,8 @@ class CrmService {
       throw error
     }
   }
-  async getAllQuicksSms (body) {
+
+  async getAllQuicksSms(body) {
     try {
       const { data } = await amgApi.post('/api/allquickssms', body)
       return data
@@ -207,7 +226,8 @@ class CrmService {
       throw error
     }
   }
-  async postSaveQuickSms (body) {
+
+  async postSaveQuickSms(body) {
     try {
       const data = await amgApi.post('/api/savequicksms', body)
       return data
