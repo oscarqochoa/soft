@@ -3,25 +3,24 @@ import {
   ToastPlugin, ModalPlugin, BootstrapVue, BootstrapVueIcons,
 } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
+import ScrollBar from '@morioh/v-perfect-scrollbar'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import money from 'v-money'
+import VueTheMask from 'vue-the-mask'
+import VueMoment from 'vue-moment'
+import VueMask from 'v-mask'
 import i18n from '@/libs/i18n'
 import router from './router'
 import store from './store'
 import App from './App.vue'
 import { amgApi } from './service/axios'
 import { initialize } from './service/general'
-import VueMoment from 'vue-moment'
-
 
 import generalMixins from './mixins/general'
-import ScrollBar from '@morioh/v-perfect-scrollbar'
-import vueLoader from './directives/preloader/index';
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import money from 'v-money'
-import VueTheMask from 'vue-the-mask'
+import vueLoader from './directives/preloader/index'
 // import 'vue-loading-rx/dist/vue-loading.css';
 // global register
 
-import VueMask from 'v-mask'
 // Global Components
 import './global-components'
 
@@ -39,15 +38,14 @@ import '@/libs/tour'
 import '@/@fake-db/db'
 
 // Filters
-import './filters/dates.js'
-import './filters/times.js'
+import './filters/dates'
+import './filters/times'
 
 // Validation rules (Vee validate)
 
-import './validation/rules.js'
+import './validation/rules'
 
 Vue.prototype.$log = console.log
-
 
 window.amgApi = amgApi
 // require('./service/axios');
@@ -57,20 +55,16 @@ Vue.use(ModalPlugin)
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 
-
 // Composition API
 Vue.use(VueCompositionAPI)
-
 Vue.use(VueMoment)
-
 Vue.use(VueMask)
-
-Vue.use(ScrollBar);
-Vue.component('ValidationProvider', ValidationProvider);
-Vue.component('ValidationObserver', ValidationObserver);
-Vue.use(vueLoader, 'loading');
+Vue.use(ScrollBar)
+Vue.component('ValidationProvider', ValidationProvider)
+Vue.component('ValidationObserver', ValidationObserver)
+Vue.use(vueLoader, 'loading')
 // register directive v-money and component <money>
-Vue.use(money, {precision: 4})
+Vue.use(money, { precision: 4 })
 // register directive v-mask and component <the-mask>
 Vue.use(VueTheMask)
 

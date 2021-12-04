@@ -97,6 +97,17 @@ class CrmService {
     return data
   }
 
+  async getListCards(body){
+    try {
+      console.log(body)
+      const { data } = await amgApi.post('/getlistcards', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getListCards:', error)
+      throw error
+    }
+  }
+
   async getSaleMade(body, page) {
     // eslint-disable-next-line no-undef
     let data = await amgApi.post(`/salemade?page=${page}`, {

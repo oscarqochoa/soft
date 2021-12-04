@@ -9,6 +9,8 @@
       :to-page="toPage"
     >
       <b-table
+        v-scrollbar
+        sticky-header="70vh"
         id="new-client-done-table"
         slot="table"
         ref="new-client-done-table"
@@ -120,22 +122,24 @@
           </b-row>
         </template>
         <template v-slot:cell(initial_amount)="data">
-          <b-icon
-            v-if="data.item.initial_payment_status === 1"
-            icon="wallet2"
-            variant="muted"
-          />
-          <b-icon
-            v-else-if="data.item.initial_payment_status === 3"
-            icon="wallet2"
-            variant="warning"
-          />
-          <p
-            v-else-if="data.item.initial_payment_status === 2"
-            class="text-success font-weight-bold"
-          >
-            $ {{ data.item.initial_amount }}
-          </p>
+          <div class="cursor-pointer" @click="openInitialPaymentModal(data.item.program, data.item.client, data.item.initial_amount, data.item.id)">
+            <b-icon
+                v-if="data.item.initial_payment_status === 1"
+                icon="wallet2"
+                variant="muted"
+            />
+            <b-icon
+                v-else-if="data.item.initial_payment_status === 3"
+                icon="wallet2"
+                variant="warning"
+            />
+            <p
+                v-else-if="data.item.initial_payment_status === 2"
+                class="text-success font-weight-bold"
+            >
+              $ {{ data.item.initial_amount }}
+            </p>
+          </div>
         </template>
         <template v-slot:cell(contract_fee_status)="data">
           <b-icon
@@ -228,6 +232,11 @@
       :modal="modal"
       :boost_credit="modalData.boost_credit"
     />
+    <initial-payment-modal
+        :key="initialPaymentKey"
+        :modal="modal"
+        :initial_payment="modalData.initial_payment"
+    />
   </div>
 </template>
 
@@ -240,10 +249,11 @@ import dataFilters from '@/views/crm/views/sales-made/components/new-client/comp
 import CrmService from '@/views/crm/services/crm.service'
 import TrackingModal from '@/views/crm/views/sales-made/components/modals/TrackingModal.vue'
 import DetailOfSailModal from '@/views/crm/views/sales-made/components/modals/DetailOfSailModal.vue'
+import InitialPaymentModal from "@/views/crm/views/sales-made/components/modals/InitialPaymentModal";
 
 export default {
   name: 'SalesMadeNewComponent',
-  components: { DetailOfSailModal, TrackingModal, FilterSlot },
+  components: { InitialPaymentModal, DetailOfSailModal, TrackingModal, FilterSlot },
   props: {
     done: {
       required: true,
@@ -270,6 +280,7 @@ export default {
       modal: {
         tracking: false,
         boost_credit: false,
+        initial_payment: false,
       },
       modalData: {
         tracking: {
@@ -282,7 +293,14 @@ export default {
           client: '',
           fee: null,
         },
+        initial_payment: {
+          program: '',
+          client: '',
+          amount: null,
+          sale_id: null,
+        },
       },
+      initialPaymentKey: 0,
     }
   },
   computed: {
@@ -353,6 +371,14 @@ export default {
         this.modalData.tracking.tabla = JSON.parse(tabla)
         this.modal.tracking = true
       }
+    },
+    openInitialPaymentModal(program, client, amount, saleId) {
+      this.modalData.initial_payment.amount = amount
+      this.modalData.initial_payment.client = client
+      this.modalData.initial_payment.program = program
+      this.modalData.initial_payment.sale_id = saleId
+      this.modal.initial_payment = true
+      this.initialPaymentKey = (this.initialPaymentKey + 1) % 2
     },
     openModalProgram(data) {
       if (data.program_id === 2 || data.program_id === 7 || data.program_id === 6) this.openDetailOfSail(data.program, data.client, data.fee)
