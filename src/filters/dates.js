@@ -3,7 +3,8 @@ import moment from 'moment';
 
 
 Vue.filter('myGlobal', function (created) {
-    return moment(created).format('MM/DD/YYYY')
+    if(created) return moment(created).format('MM/DD/YYYY')
+    return '-'
 });
 Vue.filter('myGlobalWithHour', function (created) {
     return moment(created).format('MM/DD/YYYY h:mm A')

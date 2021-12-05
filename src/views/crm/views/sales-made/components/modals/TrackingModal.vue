@@ -45,6 +45,9 @@
           :items="tracking.tabla"
           small
         >
+          <template v-slot:cell(date)="data">
+            {{data.item.date | myGlobalWithHour}}
+          </template>
           <template v-slot:cell(type)="data">
             <p
               class="text-capitalize my-auto"

@@ -113,7 +113,7 @@
                   /></span>
 
                   <span class="text-nowrap">{{
-                    basicSearch ? "Basic Search" : "Advanced Search"
+                    basicSearch ? "Advanced Search" : "Basic Search"
                   }}</span>
                 </div>
               </b-button>
@@ -164,7 +164,7 @@
                     size="sm"
                   />
                 </b-col>
-                <b-col>
+                <b-col v-if="!annulled">
                   <label>Source name:</label>
                   <b-form-select
                     v-model="filter.source"
@@ -196,7 +196,7 @@
                     size="sm"
                   />
                 </b-col>
-                <b-col>
+                <b-col v-if="!annulled">
                   <label>ST/AD:</label>
                   <b-form-select
                     v-model="filter.state"
@@ -210,7 +210,7 @@
         </b-row>
       </div>
       <div class="table-responsive">
-        <slot name="table"></slot>
+        <slot name="table" />
       </div>
       <div class="mx-2 mb-2 mt-2">
         <b-row>
@@ -277,7 +277,14 @@ export default {
   components: {
     vSelect,
   },
-  props: ['fields', 'totalRows', 'filter','startPage', 'toPage', 'paginate'],
+  props: {
+    totalRows: { required: true, type: Number },
+    filter: { required: true, type: Object },
+    startPage: { required: true, type: Number },
+    toPage: { required: true, type: Number },
+    paginate: { required: true, type: Object },
+    annulled: { required: false, type: Boolean, default: false },
+  },
   data() {
     return {
       basicSearch: true,

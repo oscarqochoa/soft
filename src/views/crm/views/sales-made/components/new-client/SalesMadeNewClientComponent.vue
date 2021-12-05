@@ -9,11 +9,12 @@
       :to-page="toPage"
     >
       <b-table
-        v-scrollbar
-        sticky-header="70vh"
+        :has-provider="true"
         id="new-client-done-table"
         slot="table"
         ref="new-client-done-table"
+        v-scrollbar
+        sticky-header="70vh"
         small
         class="text-center"
         :busy.sync="isBusy"
@@ -30,11 +31,11 @@
           </div>
         </template>
         <template #head(selected)="data">
-          <b-form-checkbox />
+          <b-form-checkbox v-model="selectAll" @input="selectedAll"/>
         </template>
         <template v-slot:cell(selected)="row">
           <b-form-group>
-            <b-form-checkbox />
+            <b-form-checkbox v-model="row.item.selected" @input="selectedRow(row.item)"/>
           </b-form-group>
         </template>
         <template v-slot:cell(client)="data">
@@ -52,7 +53,6 @@
             :style="`color: ${data.item.program_color} !important; border-color: ${data.item.program_color} !important; background-color: transparent !important;`"
             size="sm"
             @click="openModalProgram(data.item)"
-
           >
             {{ data.item.program }}
             <b-icon
@@ -122,20 +122,23 @@
           </b-row>
         </template>
         <template v-slot:cell(initial_amount)="data">
-          <div class="cursor-pointer" @click="openInitialPaymentModal(data.item.program, data.item.client, data.item.initial_amount, data.item.id)">
+          <div
+            class="cursor-pointer"
+            @click="openInitialPaymentModal(data.item.program, data.item.client, data.item.initial_amount, data.item.id)"
+          >
             <b-icon
-                v-if="data.item.initial_payment_status === 1"
-                icon="wallet2"
-                variant="muted"
+              v-if="data.item.initial_payment_status === 1"
+              icon="wallet2"
+              variant="muted"
             />
             <b-icon
-                v-else-if="data.item.initial_payment_status === 3"
-                icon="wallet2"
-                variant="warning"
+              v-else-if="data.item.initial_payment_status === 3"
+              icon="wallet2"
+              variant="warning"
             />
             <p
-                v-else-if="data.item.initial_payment_status === 2"
-                class="text-success font-weight-bold"
+              v-else-if="data.item.initial_payment_status === 2"
+              class="text-success font-weight-bold"
             >
               $ {{ data.item.initial_amount }}
             </p>
@@ -192,13 +195,13 @@
           </b-button>
         </template>
         <template v-slot:cell(creates)="data">
-          <span>{{ new Date(Date.parse(data.item.creates)).toLocaleDateString("en-US") }}</span>
+          <span>{{ data.item.creates | myGlobal }}</span>
         </template>
         <template v-slot:cell(approved)="data">
           <span
             v-if="data.item.approved"
             class="bg-warning py-1 px-1 rounded-pill text-white"
-          > {{ new Date(Date.parse(data.item.approved)).toLocaleDateString("en-US") }}</span>
+          > {{ data.item.approved | myGlobal }}</span>
           <span v-else>-</span>
         </template>
         <template v-slot:cell(sms)="data">
@@ -233,9 +236,9 @@
       :boost_credit="modalData.boost_credit"
     />
     <initial-payment-modal
-        :key="initialPaymentKey"
-        :modal="modal"
-        :initial_payment="modalData.initial_payment"
+      :key="initialPaymentKey"
+      :modal="modal"
+      :initial_payment="modalData.initial_payment"
     />
   </div>
 </template>
@@ -243,35 +246,35 @@
 <script>
 import { mapState } from 'vuex'
 import FilterSlot
-from '@/views/crm/views/sales-made/components/new-client/components/FilterSlot.vue'
-import dataFields from '@/views/crm/views/sales-made/components/new-client/components/fields.data'
-import dataFilters from '@/views/crm/views/sales-made/components/new-client/components/filters.data'
+from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
+import dataFields from '@/views/crm/views/sales-made/components/new-client/fields.data'
+import dataFilters from '@/views/crm/views/sales-made/components/new-client/filters.data'
 import CrmService from '@/views/crm/services/crm.service'
 import TrackingModal from '@/views/crm/views/sales-made/components/modals/TrackingModal.vue'
 import DetailOfSailModal from '@/views/crm/views/sales-made/components/modals/DetailOfSailModal.vue'
-import InitialPaymentModal from "@/views/crm/views/sales-made/components/modals/InitialPaymentModal";
+import InitialPaymentModal from '@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
-  components: { InitialPaymentModal, DetailOfSailModal, TrackingModal, FilterSlot },
+  components: {
+    InitialPaymentModal, DetailOfSailModal, TrackingModal, FilterSlot,
+  },
   props: {
     done: {
       required: true,
       type: Number,
     },
-    inputFields: {
-      required: true,
-      type: Array,
-    },
   },
   data() {
     return {
+      items: {},
+      selected: [],
       isBusy: false,
       fields: dataFields,
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 100,
+        perPage: 10,
       },
       basicSearch: true,
       filter: dataFilters,
@@ -301,6 +304,7 @@ export default {
         },
       },
       initialPaymentKey: 0,
+      selectAll: false,
     }
   },
   computed: {
@@ -308,7 +312,8 @@ export default {
       status: state => state['crm-store'].status,
     }),
     filteredFields() {
-      return this.fields.filter(field => this.inputFields.includes(field.key))
+      if (this.done === 0) return this.fields
+      return this.fields.filter(field => field.key !== 'done')
     },
   },
   methods: {
@@ -350,17 +355,21 @@ export default {
         this.startPage = data.from
         this.toPage = data.to
         if (this.totalRows !== data.total) this.totalRows = data.total
-        return data.data
+        const selectedIds = this.selected.map(s => s.id)
+        let index = 0
+        while (selectedIds.length > 0 && index < data.data.length) {
+          if (selectedIds.includes(data.data[index].id)) {
+            const { id } = data.data[index]
+            data.data[index].selected = true
+            const deleted = selectedIds.findIndex(s => s === id)
+            if (deleted !== -1) selectedIds.splice(deleted, 1)
+          }
+          index += 1
+        }
+        this.items = data.data
+        return this.items
       } catch (e) {
-        this.$swal({
-          title: 'Error!',
-          text: 'Ocurrio un error inesperado, vuelva a intentarlo.',
-          icon: 'error',
-          customClass: {
-            confirmButton: 'btn btn-primary',
-          },
-          buttonsStyling: false,
-        })
+        this.showToast('danger', 'top-right', 'Error', 'XIcon', e)
         return []
       }
     },
@@ -384,10 +393,20 @@ export default {
       if (data.program_id === 2 || data.program_id === 7 || data.program_id === 6) this.openDetailOfSail(data.program, data.client, data.fee)
     },
     openDetailOfSail(program, client, fee) {
-      this.modalData.boost_credit.program = program
+      this.$refs['new-client-done-table']
+        .this.modalData.boost_credit.program = program
       this.modalData.boost_credit.client = client
       this.modalData.boost_credit.fee = fee
       this.modal.boost_credit = true
+    },
+    selectedRow(data) {
+      const index = this.selected.findIndex(select => select.id === data.id)
+      if (data.selected === true && index === -1) this.selected.push(data)
+      else if (data.selected === false && index !== -1) this.selected.splice(index, 1)
+    },
+    selectedAll() {
+      if (this.selectAll) this.items.forEach(item => item.selected = true)
+      else this.items.forEach(item => item.selected = false)
     },
   },
 }
