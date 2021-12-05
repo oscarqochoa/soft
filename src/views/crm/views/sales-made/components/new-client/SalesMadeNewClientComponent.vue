@@ -9,14 +9,14 @@
       :to-page="toPage"
     >
       <b-table
-        :has-provider="true"
         id="new-client-done-table"
         slot="table"
         ref="new-client-done-table"
         v-scrollbar
+        :has-provider="true"
         sticky-header="70vh"
         small
-        class="text-center"
+        class="font-small-3 text-center"
         :busy.sync="isBusy"
         :items="myProvider"
         :fields="filteredFields"
@@ -31,17 +31,25 @@
           </div>
         </template>
         <template #head(selected)="data">
-          <b-form-checkbox v-model="selectAll" @input="selectedAll"/>
+          <b-form-checkbox
+            v-model="selectAll"
+            @input="selectedAll"
+          />
         </template>
         <template v-slot:cell(selected)="row">
           <b-form-group>
-            <b-form-checkbox v-model="row.item.selected" @input="selectedRow(row.item)"/>
+            <b-form-checkbox
+              v-model="row.item.selected"
+              @input="selectedRow(row.item)"
+            />
           </b-form-group>
         </template>
         <template v-slot:cell(client)="data">
-          <h6>{{ data.item.client }}</h6>
+          <p class="mb-0 font-weight-bold">
+            {{ data.item.client }}
+          </p>
           <p class="mb-0">
-            <small> {{ data.item.mobile }}</small>
+            {{ data.item.mobile }}
           </p>
           <p class="mb-0">
             <small>{{ data.item.state }}</small>
@@ -187,22 +195,18 @@
           />
         </template>
         <template v-slot:cell(status)="data">
-          <b-button
-            size="sm"
-            :variant="status[data.item.status].variant"
+          <p
+            class="m-0 font-weight-bold font-small-3"
+            :class="'color: text-' + status[data.item.status].variant"
           >
             {{ status[data.item.status].text }}
-          </b-button>
+          </p>
         </template>
         <template v-slot:cell(creates)="data">
           <span>{{ data.item.creates | myGlobal }}</span>
         </template>
         <template v-slot:cell(approved)="data">
-          <span
-            v-if="data.item.approved"
-            class="bg-warning py-1 px-1 rounded-pill text-white"
-          > {{ data.item.approved | myGlobal }}</span>
-          <span v-else>-</span>
+          <span class="font-weight-bold text-info"> {{ data.item.approved | myGlobal }}</span>
         </template>
         <template v-slot:cell(sms)="data">
           <b-icon

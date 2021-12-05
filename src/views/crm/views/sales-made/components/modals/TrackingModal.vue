@@ -65,6 +65,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'TrackingModal',
   props: {

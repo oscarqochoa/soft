@@ -93,8 +93,10 @@
         </template>
         <template v-slot:cell(files)="data">
           <b-icon
+            class="cursor-pointer"
             icon="folder-fill"
             variant="warning"
+            @click="openFilesModal(data.item.lead_id, data.item.program, data.item.client)"
           />
         </template>
         <template v-slot:cell(status)="data">
@@ -119,6 +121,7 @@
         </template>
       </b-table>
     </filter-slot>
+    <files-modal :modal="modal" :files="modalData.files" :key="modalControllers.files" />
   </div>
 </template>
 
@@ -129,11 +132,13 @@ from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
 import dataFields from './fields.data'
 import dataFilters from './filters.data'
 import CrmService from '@/views/crm/services/crm.service'
+import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
 /* Modals Import can be deleted */
 
 export default {
   name: 'SalesMadeAnnulledComponent', // Change name component
   components: {
+    FilesModal,
     FilterSlot,
   },
   data() {
@@ -151,14 +156,17 @@ export default {
       startPage: null,
       toPage: null,
       modal: {
-        tracking: false,
+        files: false,
       },
       modalData: {
-        tracking: {
+        files: {
+          id: null,
           program: '',
           client: '',
-          tabla: '',
         },
+      },
+      modalControllers: {
+        files: 0,
       },
     }
   },
@@ -171,6 +179,14 @@ export default {
     },
   },
   methods: {
+    openFilesModal(id, program, client) {
+
+      this.modalData.files.id = id
+      this.modalData.files.program = program
+      this.modalData.files.client = client
+      this.modal.files = true
+      this.modalControllers.files = (this.modalControllers.files + 1) % 2
+    },
     async myProvider(ctx) {
       try {
         const sortBy = 30
@@ -200,14 +216,6 @@ export default {
       } catch (e) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', e)
         return []
-      }
-    },
-    openTrackingModal(program, client, tabla) {
-      this.modalData.tracking.program = program
-      this.modalData.tracking.client = client
-      if (tabla) {
-        this.modalData.tracking.tabla = JSON.parse(tabla)
-        this.modal.tracking = true
       }
     },
   },

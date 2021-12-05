@@ -147,33 +147,25 @@ class CrmService {
     }
   }
 
+  async getLeadsFiles(body) {
+    try {
+      const { data } = await amgApi.post('/allfileslead', body)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on getLeadsFiles:', error)
+      throw error
+    }
+  }
+
   async getSaleMade(body, page) {
-    // eslint-disable-next-line no-undef
-    let data = await amgApi.post(`/salemade?page=${page}`, {
-      text: body.text,
-      status: body.status,
-      program: body.program,
-      state_h: body.state_h,
-      from: body.from,
-      to: body.to,
-      orderby: body.orderby,
-      order: body.order,
-      captured: body.captured,
-      seller: body.seller,
-      salemade: body.salemade,
-      rolsession: body.rolsession,
-      statusip: body.statusip,
-      sourcesname_id: body.sourcesname_id,
-      done: body.done,
-      per_page: body.per_page,
-    })
-    data = data.data
-    // eslint-disable-next-line array-callback-return
-    data.data.map(d => {
-      // eslint-disable-next-line no-param-reassign
-      d.selected = false
-    })
-    return data
+    try {
+      const { data } = await amgApi.post(`/salemade?page=${page}`, body)
+      data.data.map(d => d.selected = false)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on getSaleMade:', error)
+      throw error
+    }
   }
 
   async getCountries(body) {
