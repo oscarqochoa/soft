@@ -151,30 +151,18 @@ export default {
     }),
   },
   data() {
+    const resetRowData = () => {}
+    const {
+      getValidationState,
+    } = formValidation(resetRowData)
     return {
+      getValidationState,
       userId: null,
       roleId: null,
       required,
-      resetForm: () => formValidation(this.resetSmsData).resetForm(),
       isLoading: false,
-    }
-  },
-  setup(props, { emit }) {
-    const blankSmsData = {
-      optionsms: '',
-      contmessage: '',
-    }
-    const resetRowData = () => {
-      rowData.value = JSON.parse(JSON.stringify(blankSmsData))
-    }
-    const {
-      refFormObserver,
-      getValidationState,
-    } = formValidation(resetRowData)
-
-    return {
-      refFormObserver,
-      getValidationState
+      edited: false,
+      blankQuickData: {}
     }
   },
   methods: {
@@ -186,44 +174,22 @@ export default {
           modul: this.modul
         })
         if (response.status == 200) {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Success!',
-              icon: 'CheckIcon',
-              text: 'Successful operation',
-              variant: 'success',
-            },
-          })
+          this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
           const data = JSON.parse(response.config.data)
           this.quickData.id = data.id
-          this.quickData.user_created = data.user_created
+          this.quickData.created_by = data.user_created
           this.quickData.created_at = data.created_at
-          this.quickData.user_updated = data.user_updated
+          this.quickData.updated_by = data.user_updated
           this.quickData.updated_at = data.updated_at
+          this.quickData.showMore = false
+          this.edited = true
           this.$emit('updateQuicks', this.quickData)
           this.$emit('modalQuickCreateClose', true)
         } else
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Warning!',
-              icon: 'AlertTriangleIcon',
-              text: 'Something went wrong',
-              variant: 'warning',
-            },
-          })
+          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong')
       } catch (error) {
         console.log('Something went wrong onSubmit', error)
-        this.$toast({
-          component: ToastificationContent,
-          props: {
-            title: 'Oop!',
-            icon: 'AlertOctagonIcon',
-            text: 'Something went wrong',
-            variant: 'danger',
-          },
-        })
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', 'Something went wrong')
       }
     }
   },
@@ -231,6 +197,15 @@ export default {
     this.userId = this.currentUser.id
     this.roleId = this.currentUser.id
     this.quickData.sms = this.quickData.sms.replace(/\n/g, "<br \/>").replace(/<br \/>/g, "\n")
+    this.blankQuickData = JSON.parse(JSON.stringify(this.quickData))
   },
+  mounted () {
+    this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
+      if (modalId === 'modal-quick-sms-save' && !this.edited) {
+        this.quickData.sms = this.blankQuickData.sms
+        this.quickData.title = this.blankQuickData.title
+      }
+    })
+  }
 }
 </script>

@@ -181,8 +181,11 @@ export default {
   },
   methods: {
     async getStateLeads () {
-      const response = await crmService.getStateLeads()
-      this.stateLeadOptions = response.map(el => ({ label: el.name, value: el.id }))
+      try {
+        const response = await crmService.getStateLeads()
+        this.stateLeadOptions = response.map(el => ({ label: el.name, value: el.id }))
+      } catch (error) {
+      }
     },
     async getStatusLeads () {
       const response = await crmService.getStatusLeads()

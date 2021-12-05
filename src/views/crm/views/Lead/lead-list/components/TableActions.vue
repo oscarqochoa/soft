@@ -37,6 +37,19 @@
       >SMS</span>
     </b-dropdown-item>
 
+    <!-- historySMS -->
+    <b-dropdown-item
+      v-if="options.includes('historySMS')"
+      v-b-tooltip.hover.left="'History of SMS'"
+      v-b-modal.modal-primary
+      @click="onRowHistorySms(rowData)"
+    >
+      <feather-icon icon="RotateCcwIcon" />
+      <span
+        class="align-middle ml-50"
+      >History</span>
+    </b-dropdown-item>
+
     <!-- Edit -->
     <b-dropdown-item
       v-if="options.includes('edit')"
@@ -100,6 +113,9 @@ export default {
     },
     onRowSms (item) {
       this.$emit('modalSmsOpen', item)
+    },
+    onRowHistorySms (item) {
+      this.$emit('modalHistorySmsOpen', item)
     },
     onRowEdit (id) {
       this.$emit('onRowEdit', id)
