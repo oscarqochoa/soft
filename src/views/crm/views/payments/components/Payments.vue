@@ -176,6 +176,7 @@
               >
 
               </b-icon>
+              <feather-icon v-else-if="data.item.result =='Unverified' " icon="ClockIcon" class="text-warning"  />
               <feather-icon v-else icon="XCircleIcon" class="text-danger"  />
             </div>
             

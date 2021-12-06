@@ -1,41 +1,26 @@
 <template>
-  <b-card no-body class="mt-2  h-28">
+  <b-card no-body class="mt-2 h-28">
     <span class="title-card mb-3">Cards</span>
     <div class="col-lg-12 px-0">
-      <div >
+      <div>
         <div
-          
           :style="cards.length >= 3 ? 'height: 166px;overflow: auto;' : ''"
           id="cont-list"
         >
-          <!-- <table class="table">
-            <tbody class="font-bureau-style">
-              <tr class="bg-light-gray text-table-gray">
-                <th>Card Holder Name</th>
-                <th>Card Number</th>
-                <th>Type</th>
-                <th>MM</th>
-                <th>YY</th>
-                <th>CVC</th>
-              </tr>
-              <tr v-for="card in cards" :key="card.id">
-                <td>{{ card.cardholdername }}</td>
-                <td>{{ "XXXX-XXXX-XXXX-" + card.cardnumber }}</td>
-                <td>{{ card.type_card }}</td>
-                <td>{{ card.card_expi_month }}</td>
-                <td>{{ card.card_expi_year }}</td>
-                <td>
-                  {{
-                    card.cardsecuritycode.length == 3
-                      ? "XX" + card.cardsecuritycode.substr(2)
-                      : "XXX" + card.cardsecuritycode.substr(3)
-                  }}
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
-          <div class="table-responsive">
-            <b-table responsive="sm" :items="cards" :fields="fields">
+          <div class="table-responsive" style="margin-bottom: 0" >
+            <b-table responsive="sm"  style="margin-bottom:0px"
+              show-empty table-class="text-nowrap"
+              sticky-header :items="cards" :fields="fields">
+              <template #cell(Select)="data">
+                  <b-form-radio
+                  class="vs-checkbox-con"
+                  :value="data.item.id"
+                  @change="$emit('CardId',data.item.id)"
+                  v-model="selected"
+                  plain
+                >
+                </b-form-radio>
+              </template>
               <template #cell(cardnumber)="data">
                 <div
                   class="
@@ -45,7 +30,7 @@
                     align-items-start
                   "
                 >
-                  <span> {{ 'XXXX-XXXX-XXXX-'+data.item.cardnumber }} </span>
+                  <span> {{ "XXXX-XXXX-XXXX-" + data.item.cardnumber }} </span>
                 </div>
               </template>
               <template #cell(cardsecuritycode)="data">
@@ -57,7 +42,13 @@
                     align-items-start
                   "
                 >
-                  <span> {{ data.item.cardsecuritycode.length == 3 ? "XX"+data.item.cardsecuritycode.substr(2) : "XXX" + data.item.cardsecuritycode.substr(3) }} </span>
+                  <span>
+                    {{
+                      data.item.cardsecuritycode.length == 3
+                        ? "XX" + data.item.cardsecuritycode.substr(2)
+                        : "XXX" + data.item.cardsecuritycode.substr(3)
+                    }}
+                  </span>
                 </div>
               </template>
             </b-table>
@@ -71,22 +62,11 @@
           class="btn rounded float-right btn-orange"
           @click="openModalCreateCard"
         >
-         
-          <feather-icon
-                      icon="PlusCircleIcon"
-                      size="15"
-                    ></feather-icon> ADD
+          <feather-icon icon="PlusCircleIcon" size="15"></feather-icon> ADD
         </b-button>
       </div>
     </div>
 
-    <modal-card-edit
-      v-if="modalCard"
-      :ifModalCard="modalCard"
-      :cards="card"
-      @click="closeModalCard"
-      :modul="modul"
-    ></modal-card-edit>
     <modal-card-create
       v-if="modalCreateCard"
       :ifModalCard="modalCreateCard"
@@ -95,24 +75,15 @@
       :idlead="cardsLead.lead_id"
       @new="addCard"
     ></modal-card-create>
-    <modal-card-delete
-      v-if="deletecardmodal"
-      :ifModalCard="deletecardmodal"
-      :card_id="card_id"
-      :lead_id="cardsLead.lead_id"
-      @click="closedModalDeleteCar"
-      @new="addCard"
-      style="z-index: 99"
-      :session="cardsLead.user_id"
-    ></modal-card-delete>
+    
   </b-card>
 </template>
 <script>
 import { amgApi } from "@/service/axios.js";
-import  ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue"
+import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
 
 export default {
-  components:{
+  components: {
     ModalCardCreate,
   },
   props: {
@@ -123,6 +94,7 @@ export default {
   },
   data() {
     return {
+      selected:null,
       //More information
       statesCard: [],
       states_leads: [],
@@ -134,6 +106,10 @@ export default {
       deletecardmodal: false,
       card_id: "",
       fields: [
+        {
+          key:"Select",
+          label:"Select",
+        },
         {
           key: "cardholdername",
           label: "Card Holder Name",
@@ -173,25 +149,13 @@ export default {
     },
   },
   methods: {
-    //Add and Remove Preoloader
-    addPreloader() {
-      var x = document.getElementById("app");
-      x.classList.add("preloader");
-      x.classList.add("opacity-uno");
-    },
-    removePreloader() {
-      var x = document.getElementById("app");
-      x.classList.remove("preloader");
-      x.classList.remove("opacity-uno");
-    },
-
     //Edit and Cancel information
     editInformation() {
       this.$swal
         .fire({
           title: "Are you Sure ? ",
           text: "Do you want to edit the information?",
-          type: "warning",
+          icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#ab9220",
           cancelButtonColor: "#8f9194",

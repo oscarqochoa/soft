@@ -2,25 +2,21 @@
   <div>
     <b-modal
       modal
-      v-model="ifModalCard"
+      title="Create Credit Card"
+      v-model="mutableIfModalCard"
       size="lg"
       modal-class="top-modal"
-      header-class="bg-white py-3"
+      
       hide-footer
       body-class="mb-2"
       @hidden="closeModal"
     >
-      <template #modal-header="{close}">
-        <div class="text-center">
-          <span class="title-card">Create Credit Card</span>
-        </div>
-        <img src="/images/new-icons/x.png" style="width:16px; cursor:pointer;" @click="close" />
-      </template>
+      
       <ValidationObserver ref="form">
         <b-row class="font-bureau-style">
           <b-col cols="6">
             <div class="form-group">
-              <label for="card_holder">Card Holder Name</label>
+                <label for="card_holder">Card Holder Name</label>
               <ValidationProvider rules="required" v-slot="{errors}">
                 <b-form-input
                   class="border-hover-p"
@@ -46,7 +42,7 @@
                       @input="activeFocus(1, 4)"
                       v-model="cardnumber1"
                       type="text"
-                      v-mask="'####'"
+                      
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -59,7 +55,7 @@
                       @input="activeFocus(2, 4)"
                       v-model="cardnumber2"
                       type="text"
-                      v-mask="'####'"
+                    
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -72,7 +68,7 @@
                       @input="activeFocus(3, 4)"
                       v-model="cardnumber3"
                       type="text"
-                      v-mask="'####'"
+                     
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -85,7 +81,7 @@
                       @input="activeFocus(4, 4)"
                       v-model="cardnumber4"
                       type="text"
-                      v-mask="'####'"
+                     
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -103,7 +99,7 @@
                   id="card-expi-month"
                   ref="input-5"
                   @input="activeFocus(5, 2)"
-                  v-mask="'##'"
+                  
                   v-model="form.card_expi_month"
                   :class="{'border border-danger':errors[0]}"
                 />
@@ -120,7 +116,7 @@
                   id="card-expi-year"
                   ref="input-6"
                   @input="activeFocus(6, 2)"
-                  v-mask="'##'"
+                 
                   v-model="form.card_expi_year"
                   :class="{'border border-danger':errors[0]}"
                 />
@@ -136,7 +132,7 @@
                   v-model="form.cardsecuritycode"
                   ref="input-7"
                   id="card-cvv"
-                  v-mask="'####'"
+                  
                   type="text"
                   maxlength="16"
                   :class="{'border border-danger':errors[0]}"
@@ -150,21 +146,23 @@
               <label for="billing">Billing Address is the same the Mailling Address ?</label>
               <b-row>
                 <b-col cols="6" class="px-1">
-                  <button
+                  <b-button
                     @click="moreInfo = 1"
                     class="btn rounded w-100 btn-gray-selector"
-                    :class="{'btn-orange': moreInfo == 1}"
-                  >Yes</button>
+                    :variant="`${moreInfo == 1? 'primary':'' }`"
+                   
+                  >Yes</b-button>
                 </b-col>
                 <b-col cols="6" class="px-1">
-                  <button
+                  <b-button
                     @click="moreInfo = 0"
                     class="btn rounded w-100 btn-gray-selector"
-                    :class="{'btn-orange': moreInfo == 0}"
-                  >No</button>
+                   :variant="`${moreInfo == 0? 'primary':'' }`"
+                  >No</b-button>
                 </b-col>
               </b-row>
             </div>
+           
           </b-col>
         </b-row>
         <b-row v-if="moreInfo == 0" class="font-bureau-style">
@@ -256,10 +254,10 @@
           <b-col md="12" style="text-align: center;" class="mt-4">
             <b-button
               class="btn-update-sn rounded font-bureau-style text-white"
-              variant="white"
+              variant="success"
               @click="createCard"
             >
-              <i class="fas fa-save"></i> Send
+              <i class="fas fa-save"></i> Save
             </b-button>
           </b-col>
         </b-row>
@@ -270,13 +268,14 @@
 
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
-import { extend } from "vee-validate";x
+import { extend } from "vee-validate";
 import { amgApi } from '@/service/axios';
 export default {
   components: { VueGoogleAutocomplete },
   props: ["idlead", "session", "ifModalCard"],
   data() {
     return {
+      mutableIfModalCard:this.ifModalCard,
       address_create_card_modal: "",
       states: [],
       cards: [],
@@ -311,7 +310,7 @@ export default {
   methods: {
     activeFocus(index, max) {
       let inputValue = this.$refs?.[`input-${index}`];
-      if (inputValue.value.length === max) {
+      if (inputValue.value.length === max-1) {
         const nextElement = this.$refs?.[`input-${index + 1}`];
         if (nextElement) nextElement.focus();
       }
@@ -348,11 +347,11 @@ export default {
           } else {
             this.form.street = "";
           }
-        swal
+        this.$swal
           .fire({
             title: "Are you sure?",
             text: "You want to create this card?",
-            type: "warning",
+            icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
@@ -360,14 +359,14 @@ export default {
           })
           .then((result) => {
             if (result.value) {
-              this.addPreloader();
-              this.form.post("/api/createcard", this.form).then((response) => {
-                this.removePreloader();
+              
+              amgApi.post("/createcard", this.form).then((response) => {
+               
                 this.cards = response.data;
                 this.$emit("new", this.cards);
                 this.$emit("click", false);
-                swal.fire({
-                  type: "success",
+                this.$swal.fire({
+                  icon: "success",
                   title: "Card Created Successfully",
                 });
               });
@@ -378,16 +377,6 @@ export default {
     closeModal() {
       this.$emit("click", false);
     },
-    addPreloader() {
-      var x = document.getElementById("app");
-      x.classList.add("preloader");
-      x.classList.add("opacity-uno");
-    },
-    removePreloader() {
-      var x = document.getElementById("app");
-      x.classList.remove("preloader");
-      x.classList.remove("opacity-uno");
-    },
   },
 };
 </script>
@@ -397,7 +386,7 @@ export default {
   color: #706989;
 }
 
-.form-group > label {
+label {
   font-weight: 300 !important;
 }
 .border-hover-p:hover,
