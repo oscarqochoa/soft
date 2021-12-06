@@ -157,6 +157,16 @@ class CrmService {
     }
   }
 
+  async deleteFile(body) {
+    try {
+      const { data } = await amgApi.post('/deletefile', body)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on getLeadsFiles:', error)
+      throw error
+    }
+  }
+
   async getSaleMade(body, page) {
     try {
       const { data } = await amgApi.post(`/salemade?page=${page}`, body)
