@@ -58,8 +58,8 @@ export default {
         buttonsStyling: false,
         confirmButtonText: "Yes",
         customClass: {
-          confirmButton: "btn btn-success  ml-3 ",
-          cancelButton: "btn btn-danger  "
+          confirmButton: "btn btn-gradient-success  ml-3 ",
+          cancelButton: "btn btn-gradient-danger  "
         }
       }).then(r => {
         if (r.value) {
@@ -77,8 +77,8 @@ export default {
         buttonsStyling: false,
         confirmButtonText: "Yes",
         customClass: {
-          confirmButton: "btn btn-success  ml-3 ",
-          cancelButton: "btn btn-danger  "
+          confirmButton: "btn btn-gradient-success  ml-3 ",
+          cancelButton: "btn btn-gradient-danger  "
         }
       }).then(r => {
         if (r.value) {
@@ -96,8 +96,8 @@ export default {
         buttonsStyling: false,
         confirmButtonText: "Yes",
         customClass: {
-          confirmButton: "btn btn-success  ml-3",
-          cancelButton: "btn btn-danger"
+          confirmButton: "btn btn-gradient-success  ml-3",
+          cancelButton: "btn btn-gradient-danger"
         }
       }).then(r => {
         if (r.value) {

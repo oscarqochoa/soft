@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="h-100" :class="[skinClasses]">
+  <div id="app" class="h-100" :class="[skinClasses] " v-loading.full="loading">
     <component :is="layout">
       <router-view />
     </component>
@@ -20,6 +20,7 @@ import useAppConfig from "@core/app-config/useAppConfig";
 import { useWindowSize, useCssVar } from "@vueuse/core";
 
 import store from "@/store";
+import { mapGetters } from "vuex";
 
 const LayoutVertical = () => import("@/layouts/vertical/LayoutVertical.vue");
 const LayoutHorizontal = () =>
@@ -44,7 +45,15 @@ export default {
     },
     contentLayoutType() {
       return this.$store.state.appConfig.layout.type;
-    }
+    },
+    ...mapGetters({
+      loading: "app/loading"
+    })
+  },
+  mounted() {
+    this.$root.$on("bv::modal::shown", bvEvent => {
+      bvEvent.vueTarget.$refs.content.attributes.removeNamedItem("tabindex");
+    });
   },
   beforeCreate() {
     // Set colors in theme
