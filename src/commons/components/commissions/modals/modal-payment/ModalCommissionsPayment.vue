@@ -8,7 +8,7 @@
       modal-class="modal-primary"
       :footer-class="showEdit || showAnull? 'justify-content-between':''"
       centered
-      @hidden="hideModal()"
+      @hidden="hideModal(false, null)"
     >
       <b-card-text>
         <ModalHeader :info="info" />
@@ -20,7 +20,9 @@
       <template #modal-footer>
         <!-- PAY OR ANNUL BY -->
         <div v-if="showEdit || showAnull">
-          <span>listo</span>
+          <label class="font-weight-bolder">{{anullApprove}} &nbsp;</label>
+          <span>{{anullApproveName}}</span>
+          <span v-if="info.paid_state == 2">({{payment.anullDate | myGlobal }})</span>
         </div>
 
         <!-- buttons -->
@@ -29,13 +31,13 @@
             v-if="showSave"
             size="sm"
             variant="gradient-success"
-            @click="savePayment()"
+            @click="approveCommissions()"
           >{{saveUpdate}}</b-button>
           <b-button v-if="showEdit" size="sm" variant="gradient-info" @click="editPayment()">EDIT</b-button>
           <b-button
             v-if="showAnull"
             size="sm"
-            variant="gradient-danger"
+            variant="gradient-danger ml-1"
             @click="anullPayment()"
           >ANULL</b-button>
         </div>
@@ -71,6 +73,7 @@ export default {
       modalUp: false,
       disabledPayment: false,
       isPaid: null,
+      approveBy: null,
       payment: {
         methoPayment: 2,
         datePayment: moment().format("MM-DD-YYYY"),
@@ -96,8 +99,26 @@ export default {
   },
   computed: {
     ...mapGetters({
-      loading: "app/loading"
+      loading: "app/loading",
+      currentUser: "auth/currentUser"
     }),
+    anullApprove() {
+      if (this.info.paid_state == 1) {
+        return "Approved by:   ";
+      } else if (this.info.paid_state == 2) {
+        return "Anulled by:   ";
+      }
+    },
+    anullApproveName() {
+      if (this.info.paid_state == 1) {
+        return this.payment.approveName;
+      } else if (this.info.paid_state == 2) {
+        return this.payment.anullName;
+      }
+    },
+    amountToShow() {
+      return this.info.tab == "crm" ? this.info.amountToPay : this.info.amount;
+    },
     isCeo() {
       return this.info.role_id == 1;
     },
@@ -127,22 +148,11 @@ export default {
     }
   },
   methods: {
-    hideModal(status) {
+    hideModal(status = false, payment, user, ps_month) {
       this.modalUp = false;
-      this.$emit("hide-modal");
+      this.$emit("hide-modal", status, payment, user, ps_month);
     },
-    savePayment() {
-      this.$refs.form.validate().then(success => {
-        if (success) {
-          alert("success");
-          console.log("success");
-        }
-      });
-    },
-    editPayment() {
-      this.disabledPayment = false;
-      this.isPaid = 3;
-    },
+
     async searchCommission() {
       if (this.info.paid_state) {
         //start preloader
@@ -165,9 +175,6 @@ export default {
           this.payment.approveName = response[0].approve_name;
           this.payment.anullName = response[0].annulled_name;
           this.payment.anullDate = response[0].annulled_at;
-          this.payment.loading = false;
-
-          //close preloader
           this.$store.commit("app/SET_LOADING", false);
         } catch (error) {
           this.showErroSwal();
@@ -175,8 +182,76 @@ export default {
         }
       }
     },
+    async approveCommissions() {
+      const validate = await this.$refs.form.validate();
+      if (validate) {
+        const result = await this.showSwalGeneric(
+          "Are you sure?",
+          "Are you sure of pay this commission?",
+          "warning"
+        );
+        if (result.isConfirmed) {
+          try {
+            //start preloader
+            this.$store.commit("app/SET_LOADING", true);
+            const params = {
+              user_id: this.info.user_id,
+              year: this.info.year,
+              month: this.info.month,
+              method: this.payment.methoPayment,
+              observation: this.payment.observation,
+              approve_by: this.currentUser.user_id,
+              approve_date: moment(this.payment.datePayment).format(
+                "MM/DD/YYYY"
+              ),
+              module: this.info.module,
+              num_operation: this.operationNumber,
+              amount_paid: this.amountToShow
+            };
+            let response = await commissionsService.approveCommissions(params);
+            this.hideModal(true, 1, this.info.user_id, this.info.ps_month);
+          } catch (error) {
+            this.showErroSwal();
+            this.$store.commit("app/SET_LOADING", false);
+            this.hideModal(false, null);
+          }
+        }
+      }
+    },
+    editPayment() {
+      this.disabledPayment = false;
+      this.isPaid = 3;
+    },
 
-    anullPayment() {}
+    async anullPayment() {
+      const result = await this.showSwalGeneric(
+        "Are you sure?",
+        "Are you sure of anull this commission?",
+        "warning"
+      );
+      if (result.isConfirmed) {
+        try {
+          //start preloader
+          this.$store.commit("app/SET_LOADING", true);
+          const params = {
+            user_id: this.info.user_id,
+            year: this.info.year,
+            month: this.info.month,
+            method: this.payment.methoPayment,
+            observation: this.payment.observation,
+            num_operation: this.operationNumber,
+            anulled_by: this.currentUser.user_id,
+            module: this.info.module
+          };
+          let response = await commissionsService.anullComissions(params);
+          this.hideModal(true, 2, this.info.user_id, this.info.ps_month);
+        } catch (error) {
+          this.showErroSwal();
+          this.$store.commit("app/SET_LOADING", false);
+          this.hideModal(false, null);
+        }
+      }
+    }
   },
   watch: {}
 };

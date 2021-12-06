@@ -79,5 +79,20 @@ export default {
         buttonsStyling: false,
       });
     },
+    showSwalGeneric(title, text, icon) {
+      return this.$swal({
+        icon,
+        title,
+        text,
+        showCancelButton: true,
+        reverseButtons: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes",
+        customClass: {
+          confirmButton: "btn btn-gradient-success  ml-3 ",
+          cancelButton: "btn btn-gradient-danger  ",
+        },
+      });
+    },
   },
 };

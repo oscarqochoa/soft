@@ -12,7 +12,7 @@ export default [
         },
       ],
       module: 16,
-      tab: "crm",
+      tab: "7",
     },
   },
 ];
