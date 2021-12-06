@@ -38,7 +38,7 @@
           <div class="font-weight-bolder">DISCOUNT:</div>
         </b-col>
         <b-col lg="6" :class="[textLeftBig]">
-          <div>$ {{ this.discount }}</div>
+          <div>$ {{ discount }}</div>
         </b-col>
       </template>
 
@@ -47,7 +47,7 @@
           <div class="font-weight-bolder">20% OF COMMISSIONS</div>
         </b-col>
         <b-col lg="6" :class="[textLeftBig]">
-          <div>$ {{ this.total_department }}</div>
+          <div>$ {{ total_department }}</div>
         </b-col>
       </template>
 
@@ -55,7 +55,7 @@
         <div class="font-weight-bolder">TOTAL:</div>
       </b-col>
       <b-col lg="6" :class="[textLeftBig]">
-        <div>$ {{ this.total }}</div>
+        <div>$ {{ total }}</div>
       </b-col>
     </b-row>
   </div>

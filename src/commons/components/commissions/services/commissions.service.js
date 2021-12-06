@@ -6,7 +6,6 @@ class CommissionsService {
       const { data } = await amgApi.post("/getreportcommissionsad", params);
       return data;
     } catch (error) {
-      console.log("Something went wrong on Commissions:", error);
       throw error;
     }
   }
@@ -18,7 +17,6 @@ class CommissionsService {
       );
       return data;
     } catch (error) {
-      console.log("Something went wrong on Commissions:", error);
       throw error;
     }
   }
@@ -30,7 +28,6 @@ class CommissionsService {
       );
       return data;
     } catch (error) {
-      console.log("Something went wrong on Commissions:", error);
       throw error;
     }
   }
@@ -39,7 +36,6 @@ class CommissionsService {
       const { data } = await amgApi.post("/percentage-department", params);
       return data;
     } catch (error) {
-      console.log("Something went wrong on Commissions:", error);
       throw error;
     }
   }
@@ -48,7 +44,6 @@ class CommissionsService {
       const { data } = await amgApi.post("/getcommissions", params);
       return data;
     } catch (error) {
-      console.log("Something went wrong on Commissions:", error);
       throw error;
     }
   }
@@ -66,7 +61,30 @@ class CommissionsService {
       const { data } = await amgApi.post("/getcommissionsprogram", params);
       return data;
     } catch (error) {
-      console.log("Something went wrong on Commissions:", error);
+      throw error;
+    }
+  }
+  async searchCommissionsApprove(params) {
+    try {
+      const { data } = await amgApi.post("/searchapprovecommissions", params);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async anullComissions(params) {
+    try {
+      const { data } = await amgApi.post("/anullcommissions", params);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async approveCommissions(params) {
+    try {
+      const { data } = await amgApi.post("/approvecommissions", params);
+      return data;
+    } catch (error) {
       throw error;
     }
   }
