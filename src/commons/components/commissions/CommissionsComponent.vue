@@ -16,11 +16,11 @@
           <div v-else>
             <b-table-simple
               responsive
-              table-class="table-bordered "
               sticky-header="74vh"
               no-border-collapse
               striped
-              hover
+              v-scrollbar
+              bordered
             >
               <b-thead>
                 <b-tr class="width-th">
@@ -46,7 +46,7 @@
               </b-thead>
               <b-tbody>
                 <b-tr v-for="(item,index) in commissions" :key="item.user_id">
-                  <b-td class="font-weight-bolder">{{ item.user_name }}</b-td>
+                  <b-td class="font-weight-bolder text-primary">{{ item.user_name }}</b-td>
                   <b-td v-if="isCrm">
                     <div>
                       <div class="font-weight-bold">Generated:</div>
@@ -64,7 +64,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'jan_percentage_pay')"
                         @find="findCommissions( $event,'01',item, 'January')"
-                        @pay="payCommissions($event,'01', item, item.ps_jan, item.jan_to_pay, item.jan,'ps_jan')"
+                        @pay="payCommissions($event,'01', item, item.ps_jan, item.jan_to_pay, item.jan,'ps_jan', 'January')"
                         @edit="editPercentageUser(index, 'edit_jan', item)"
                         @cancel="cancelPercentageUser(index, 'edit_jan', item)"
                         @update="updatePercentageUser($event, index, 'edit_jan','jan_percentage_pay','jan_to_pay', '01', item)"
@@ -83,7 +83,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'feb_percentage_pay')"
                         @find="findCommissions( $event,'02',item, 'February')"
-                        @pay="payCommissions($event,'02', item, item.ps_feb, item.feb_to_pay, item.feb,'ps_feb')"
+                        @pay="payCommissions($event,'02', item, item.ps_feb, item.feb_to_pay, item.feb,'ps_feb', 'February')"
                         @edit="editPercentageUser(index, 'edit_feb', item)"
                         @cancel="cancelPercentageUser(index, 'edit_feb', item)"
                         @update="updatePercentageUser($event, index, 'edit_feb','feb_percentage_pay','feb_to_pay', '02', item)"
@@ -101,7 +101,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'mar_percentage_pay')"
                         @find="findCommissions( $event,'03',item, 'March')"
-                        @pay="payCommissions($event,'03', item, item.ps_mar, item.mar_to_pay, item.mar,'ps_mar')"
+                        @pay="payCommissions($event,'03', item, item.ps_mar, item.mar_to_pay, item.mar,'ps_mar','March')"
                         @edit="editPercentageUser(index, 'edit_mar', item)"
                         @cancel="cancelPercentageUser(index, 'edit_mar', item)"
                         @update="updatePercentageUser($event, index, 'edit_mar','mar_percentage_pay','mar_to_pay', '03', item)"
@@ -119,7 +119,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'apr_percentage_pay')"
                         @find="findCommissions( $event,'04',item, 'April')"
-                        @pay="payCommissions($event,'04', item, item.ps_apr, item.apr_to_pay, item.apr,'ps_apr')"
+                        @pay="payCommissions($event,'04', item, item.ps_apr, item.apr_to_pay, item.apr,'ps_apr', 'April')"
                         @edit="editPercentageUser(index, 'edit_apr', item)"
                         @cancel="cancelPercentageUser(index, 'edit_apr', item)"
                         @update="updatePercentageUser($event, index, 'edit_apr','apr_percentage_pay','apr_to_pay', '04', item)"
@@ -137,7 +137,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'may_percentage_pay')"
                         @find="findCommissions( $event,'05',item, 'May')"
-                        @pay="payCommissions($event,'05', item, item.ps_may, item.may_to_pay, item.may,'ps_may')"
+                        @pay="payCommissions($event,'05', item, item.ps_may, item.may_to_pay, item.may,'ps_may', 'May')"
                         @edit="editPercentageUser(index, 'edit_may', item)"
                         @cancel="cancelPercentageUser(index, 'edit_may', item)"
                         @update="updatePercentageUser($event, index, 'edit_may','may_percentage_pay','may_to_pay', '05', item)"
@@ -155,7 +155,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'jun_percentage_pay')"
                         @find="findCommissions( $event,'06',item, 'June')"
-                        @pay="payCommissions($event,'06', item, item.ps_jun, item.jun_to_pay, item.jun,'ps_jun')"
+                        @pay="payCommissions($event,'06', item, item.ps_jun, item.jun_to_pay, item.jun,'ps_jun', 'June')"
                         @edit="editPercentageUser(index, 'edit_jun', item)"
                         @cancel="cancelPercentageUser(index, 'edit_jun', item)"
                         @update="updatePercentageUser($event, index, 'edit_jun','jun_percentage_pay','jun_to_pay', '06', item)"
@@ -175,7 +175,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'jul_percentage_pay')"
                         @find="findCommissions( $event,'07',item, 'July')"
-                        @pay="payCommissions($event,'07', item, item.ps_jul, item.jul_to_pay, item.jun,'ps_jul')"
+                        @pay="payCommissions($event,'07', item, item.ps_jul, item.jul_to_pay, item.jun,'ps_jul', 'July')"
                         @edit="editPercentageUser(index, 'edit_jul', item)"
                         @cancel="cancelPercentageUser(index, 'edit_jul', item)"
                         @update="updatePercentageUser($event, index, 'edit_jul','jul_percentage_pay','jul_to_pay', '07', item)"
@@ -192,7 +192,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'aug_percentage_pay')"
                         @find="findCommissions( $event,'08',item, 'August')"
-                        @pay="payCommissions($event,'08', item, item.ps_aug, item.aug_to_pay, item.aug,'ps_aug')"
+                        @pay="payCommissions($event,'08', item, item.ps_aug, item.aug_to_pay, item.aug,'ps_aug', 'August')"
                         @edit="editPercentageUser(index, 'edit_aug', item)"
                         @cancel="cancelPercentageUser(index, 'edit_aug', item)"
                         @update="updatePercentageUser($event, index, 'edit_aug','aug_percentage_pay','aug_to_pay', '08', item)"
@@ -209,7 +209,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'sep_percentage_pay')"
                         @find="findCommissions( $event,'09',item, 'September')"
-                        @pay="payCommissions($event,'09', item, item.ps_sep, item.sep_to_pay, item.sep,'ps_sep')"
+                        @pay="payCommissions($event,'09', item, item.ps_sep, item.sep_to_pay, item.sep,'ps_sep', 'September')"
                         @edit="editPercentageUser(index, 'edit_sep', item)"
                         @cancel="cancelPercentageUser(index, 'edit_sep', item)"
                         @update="updatePercentageUser($event, index, 'edit_sep','sep_percentage_pay','sep_to_pay', '09', item)"
@@ -226,7 +226,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'oct_percentage_pay')"
                         @find="findCommissions( $event,'10',item, 'October')"
-                        @pay="payCommissions($event,'10', item, item.ps_oct, item.oct_to_pay, item.oct,'ps_oct')"
+                        @pay="payCommissions($event,'10', item, item.ps_oct, item.oct_to_pay, item.oct,'ps_oct', 'September')"
                         @edit="editPercentageUser(index, 'edit_oct', item)"
                         @cancel="cancelPercentageUser(index, 'edit_oct', item)"
                         @update="updatePercentageUser($event, index, 'edit_oct','oct_percentage_pay', 'oct_to_pay', '10', item)"
@@ -243,7 +243,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'nov_percentage_pay')"
                         @find="findCommissions( $event,'11',item, 'November')"
-                        @pay="payCommissions($event,'11', item, item.ps_nov, item.nov_to_pay, item.nov,'ps_nov')"
+                        @pay="payCommissions($event,'11', item, item.ps_nov, item.nov_to_pay, item.nov,'ps_nov', 'November')"
                         @edit="editPercentageUser(index, 'edit_nov', item)"
                         @cancel="cancelPercentageUser(index, 'edit_nov', item)"
                         @update="updatePercentageUser($event, index, 'edit_nov','nov_percentage_pay','nov_to_pay', '11', item)"
@@ -260,7 +260,7 @@
                       <commissions-monthly
                         @max="maxPercentageUser($event,index,'dec_percentage_pay')"
                         @find="findCommissions( $event,'12',item, 'December')"
-                        @pay="payCommissions($event,'12', item, item.ps_dec, item.dec_to_pay, item.dec,'ps_dec')"
+                        @pay="payCommissions($event,'12', item, item.ps_dec, item.dec_to_pay, item.dec,'ps_dec', 'December')"
                         @edit="editPercentageUser(index, 'edit_dec', item)"
                         @cancel="cancelPercentageUser(index, 'edit_dec', item)"
                         @update="updatePercentageUser($event, index, 'edit_dec','dec_percentage_pay','dec_to_pay', '12', item)"
@@ -499,7 +499,8 @@ export default {
       year: "commissions-store/year",
       halfYear: "commissions-store/halfYear",
       percentApartment: "commissions-store/percentApartment",
-      skin: "appConfig/skin"
+      skin: "appConfig/skin",
+      loading: "commissions-store/loading"
     }),
 
     isManagement() {
@@ -640,9 +641,7 @@ export default {
       this.commissions = response;
       this.departmentCommissions();
       this.showOverlay = false;
-      console.log(this.commissions);
       let total = this.sumTotal("jan");
-      console.log(total);
     },
     departmentCommissions() {
       if (this.isDepartment) {
@@ -724,13 +723,6 @@ export default {
       });
     },
 
-    //Modals Pay and Show Commissions
-    closeModalApproveC() {
-      this.modalApprove = false;
-      var boton = document.getElementById("loading");
-      boton.classList.remove("preloader-event");
-    },
-
     findCommissions(event, month_t, item, monthName) {
       this.infoDetails = {
         user: item.user_id,
@@ -764,51 +756,13 @@ export default {
           : item.module,
         amountTotal: event.amountTotal,
         year: this.year,
-        monthName: monthName
+        monthName: monthName,
+        type: "details"
       };
       this.modalDetails = true;
-
-      switch (this.module) {
-        case 2:
-          this.modal = true;
-          break;
-        case 4:
-          this.modalm = true;
-          break;
-        default:
-          this.modalp = true;
-          break;
-      }
     },
     hideModalDetails() {
       this.modalDetails = false;
-    },
-    closeModal() {
-      switch (this.module) {
-        case 2:
-          this.modal = false;
-          break;
-        case 4:
-          this.modalm = false;
-          break;
-        default:
-          this.modalp = false;
-          break;
-      }
-      var boton = document.getElementById("loading");
-      boton.classList.remove("preloader-event");
-    },
-
-    hideModalPayment() {
-      this.modalPayment = false;
-    },
-
-    closeModalApprove(status) {
-      this.addPreloader();
-      this.modalApprove = false;
-      var boton = document.getElementById("loading");
-      boton.classList.remove("preloader-event");
-      this.changeStatusPayment(status);
     },
     payCommissions(
       event,
@@ -817,20 +771,29 @@ export default {
       state_t,
       amount_to_pay,
       amount,
-      ps_month
+      ps_month,
+      monthName
     ) {
-      var boton = document.getElementById("loading");
-      boton.classList.add("preloader-event");
-      this.month = month_t;
-      this.ps_month = ps_month;
-      this.user_name = item.user_name;
-      this.user_id = item.user_id;
-      this.amountToPayCommission = amount_to_pay;
-      this.amountCommission = this.isDepartment ? event.total : amount;
-      this.approve_by = this.global.layout.id;
-      this.paid_state = this.isDepartment ? event.ps : state_t;
-      this.module = item.module_id;
-      this.modalApprove = true;
+      this.infoPayment = {
+        month: month_t,
+        ps_month: ps_month,
+        user_name: item.user_name,
+        user_id: item.user_id,
+        amountToPay: amount_to_pay,
+        amount: this.isDepartment ? event.total : amount,
+        approve_by: this.currentUser.user_id,
+        paid_state: this.isDepartment ? event.ps : state_t,
+        module: item.module_id,
+        monthName: monthName,
+        tab: this.tab,
+        type: "payment",
+        year: this.year
+      };
+
+      this.modalPayment = true;
+    },
+    hideModalPayment() {
+      this.modalPayment = false;
     },
 
     changeStatusPayment(status) {
@@ -849,7 +812,6 @@ export default {
           }
         });
       }
-      this.removePreloader();
     }
   },
   watch: {}

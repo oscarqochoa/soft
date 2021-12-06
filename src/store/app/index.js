@@ -5,6 +5,7 @@ export default {
   state: {
     windowWidth: 0,
     shallShowOverlay: false,
+    loading: false,
   },
   getters: {
     currentBreakPoint: (state) => {
@@ -20,6 +21,9 @@ export default {
         getters.currentBreakPoint === "xl" || getters.currentBreakPoint === "lg"
       );
     },
+    loading: (state) => {
+      return state.loading;
+    },
   },
   mutations: {
     UPDATE_WINDOW_WIDTH(state, val) {
@@ -28,6 +32,9 @@ export default {
     TOGGLE_OVERLAY(state, val) {
       state.shallShowOverlay =
         val !== undefined ? val : !state.shallShowOverlay;
+    },
+    SET_LOADING(state, val) {
+      state.loading = val;
     },
   },
   actions: {},

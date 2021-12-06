@@ -69,5 +69,16 @@ export default {
         },
       )
     },
+    showErroSwal() {
+      this.$swal({
+        title: "Error!",
+        text: " Sorry, there was an error ... try again or contact support !!!",
+        icon: "error",
+        customClass: {
+          confirmButton: "btn btn-primary",
+        },
+        buttonsStyling: false,
+      });
+    },
   },
 }
