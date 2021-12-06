@@ -134,6 +134,7 @@
                           size="sm"
                           :href="data.item.url"
                           target="_blank"
+                          :disabled="!data.item.url"
                         >
                           <feather-icon icon="DownloadIcon" />
                         </b-btn>
@@ -162,6 +163,7 @@
                           size="sm"
                           :href="data.item.route_es"
                           target="_blank"
+                          :disabled="!data.item.route_es"
                         >
                           <feather-icon icon="DownloadIcon" />
                         </b-btn>
@@ -182,6 +184,7 @@
                     <b-btn
                       variant="warning"
                       size="sm"
+                      @click="generatePdf(files.id, files.program, files.sale_id, data.item.is_ag)"
                     >
                       <feather-icon icon="RefreshCcwIcon" />
                     </b-btn>
@@ -301,6 +304,32 @@ export default {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
       }
     },
+    async generatePdf(lead_id, program, sale_id, typee) {
+      const result = await this.$swal.fire({
+        icon: 'warning',
+        title: 'Are you sure ?',
+        text: 'You won\'t be able to revert this!',
+        showCancelButton: true,
+      })
+      try {
+        if (result.isConfirmed) {
+          this.$store.commit('app/SET_LOADING', true)
+          const response = await CrmService.generatePdf({
+            lead_id,
+            program,
+            sale_id,
+            typee
+          })
+          this.$store.commit('app/SET_LOADING', false)
+          if (response === 'ok') this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Tu archivo se genero correctamente')
+          await this.loadTable()
+        }
+      } catch (error) {
+        this.$store.commit('app/SET_LOADING', false)
+        this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+        await this.loadTable()
+      }
+    },
     async deleteFile(id, url) {
       const result = await this.$swal.fire({
         icon: 'warning',
@@ -322,6 +351,7 @@ export default {
       } catch (error) {
         this.$store.commit('app/SET_LOADING', false)
         this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+        await this.loadTable()
       }
     },
   },

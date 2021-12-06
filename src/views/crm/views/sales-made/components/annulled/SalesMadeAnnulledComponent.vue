@@ -96,7 +96,7 @@
             class="cursor-pointer"
             icon="folder-fill"
             variant="warning"
-            @click="openFilesModal(data.item.lead_id, data.item.program, data.item.client)"
+            @click="openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id)"
           />
         </template>
         <template v-slot:cell(status)="data">
@@ -163,6 +163,7 @@ export default {
           id: null,
           program: '',
           client: '',
+          sale_id: null,
         },
       },
       modalControllers: {
@@ -179,11 +180,12 @@ export default {
     },
   },
   methods: {
-    openFilesModal(id, program, client) {
+    openFilesModal(id, program, client, sale_id) {
 
       this.modalData.files.id = id
       this.modalData.files.program = program
       this.modalData.files.client = client
+      this.modalData.files.sale_id = sale_id
       this.modal.files = true
       this.modalControllers.files = (this.modalControllers.files + 1) % 2
     },

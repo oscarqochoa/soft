@@ -157,6 +157,16 @@ class CrmService {
     }
   }
 
+  async generatePdf(body) {
+    try {
+      const { data } = await amgApi.post('/generate-pdf', body)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on generatePdf:', error)
+      throw error
+    }
+  }
+
   async deleteFile(body) {
     try {
       const { data } = await amgApi.post('/deletefile', body)
