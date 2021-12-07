@@ -5,8 +5,8 @@
       title="Create Credit Card"
       v-model="mutableIfModalCard"
       size="lg"
-      modal-class="top-modal"
-      
+      modal-class="modal-primary"
+     
       hide-footer
       body-class="mb-2"
       @hidden="closeModal"
