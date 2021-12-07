@@ -300,6 +300,35 @@ class CrmService {
       throw error
     }
   }
-}
 
+  async getCapturedByTracking(body) {
+    try {
+      const { data } = await amgApi.post('/alltrackingcapt', body)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on getCapturedByTracking:', error)
+      throw error
+    }
+  }
+
+  async getSellerTracking(body) {
+    try {
+      const { data } = await amgApi.post('/alltrackingsel', body)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on getSellerTracking:', error)
+      throw error
+    }
+  }
+
+  async getFeeTracking(body) {
+    try {
+      const { data } = await amgApi.post('/alltrackingfee', body)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on getSellerTracking:', error)
+      throw error
+    }
+  }
+}
 export default new CrmService()
