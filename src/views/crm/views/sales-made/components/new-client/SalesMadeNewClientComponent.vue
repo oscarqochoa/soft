@@ -30,7 +30,7 @@
             <strong>Loading ...</strong>
           </div>
         </template>
-        <template #head(selected)="data">
+        <template #head(selected)>
           <b-form-checkbox
             v-model="selectAll"
             @input="selectedAll"
@@ -72,8 +72,16 @@
         </template>
         <template v-slot:cell(captured)="data">
           <b-row>
-            <b-col>
+            <b-col v-if="!data.item.editCaptured">
               <p> {{ data.item.captured }}</p>
+            </b-col>
+            <b-col v-else>
+              <v-select
+                v-model="data.item.capturedNew"
+                class="font-small-1 mb-1"
+                :clearable="false"
+                :options="captured"
+              />
             </b-col>
           </b-row>
           <b-row>
@@ -85,21 +93,47 @@
           </b-row>
           <b-row v-if="data.item.status == 1 || data.item.status == 3">
             <b-col>
-              <b-icon icon="pencil-fill" />
+              <b-icon
+                v-if="!data.item.editCaptured"
+                icon="pencil-fill"
+                class="cursor-pointer"
+                @click="data.item.editCaptured = true;data.item.editCaptured = data.item.captured"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="SaveIcon"
+                @click="saveNewCaptured(data.item.captured, data.item.capturedNew, data.item.id, data.item)"
+              />
             </b-col>
             <b-col>
               <b-icon
+                v-if="!data.item.editCaptured"
                 class="cursor-pointer"
                 icon="list-ul"
                 @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 1)"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="XSquareIcon"
+                @click="data.item.editCaptured = false"
               />
             </b-col>
           </b-row>
         </template>
         <template v-slot:cell(seller)="data">
           <b-row>
-            <b-col>
+            <b-col v-if="!data.item.editSeller">
               <p> {{ data.item.seller }}</p>
+            </b-col>
+            <b-col v-else>
+              <v-select
+                v-model="data.item.sellerNew"
+                class="font-small-2 mb-1"
+                :clearable="false"
+                :options="sellers"
+              />
             </b-col>
           </b-row>
           <b-row>
@@ -109,34 +143,77 @@
               </p>
             </b-col>
           </b-row>
-          <b-row v-if="data.item.status === 1 || data.item.status === 3">
+          <b-row v-if="data.item.status == 1 || data.item.status == 3">
             <b-col>
-              <b-icon icon="pencil-fill" />
+              <b-icon
+                v-if="!data.item.editSeller"
+                icon="pencil-fill"
+                class="cursor-pointer"
+                @click="data.item.editSeller = true"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="SaveIcon"
+                @click="saveNewSeller(data.item.seller, data.item.sellerNew, data.item.id, data.item)"
+              />
             </b-col>
             <b-col>
               <b-icon
-                icon="list-ul"
+                v-if="!data.item.editSeller"
                 class="cursor-pointer"
+                icon="list-ul"
                 @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 2)"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="XSquareIcon"
+                @click="data.item.editSeller = false;data.item.editSeller = data.item.seller"
               />
             </b-col>
           </b-row>
         </template>
         <template v-slot:cell(fee)="data">
-          <b-row>
+          <b-row v-if="!data.item.editFee">
             <b-col>
               <p> $ {{ data.item.fee }} </p>
             </b-col>
           </b-row>
+          <b-row v-else>
+            <b-col>
+              <b-input-group prepend="$" size="sm" class="mb-1">
+                <b-form-input v-model="data.item.feeNew" type="number"/>
+              </b-input-group>
+            </b-col>
+          </b-row>
           <b-row v-if="data.item.status === 1 || data.item.status === 3">
             <b-col>
-              <b-icon icon="pencil-fill" />
+              <b-icon
+                v-if="!data.item.editFee"
+                icon="pencil-fill"
+                class="cursor-pointer"
+                @click="data.item.editFee = true"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="SaveIcon"
+                @click="saveNewFee(data.item.fee, data.item.feeNew, data.item.id, data.item)"
+              />
             </b-col>
             <b-col>
               <b-icon
+                v-if="!data.item.editFee"
                 icon="list-ul"
                 class="cursor-pointer"
                 @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 3)"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="XSquareIcon"
+                @click="data.item.editFee = false; data.item.feeNew = data.item.fee"
               />
             </b-col>
           </b-row>
@@ -211,7 +288,7 @@
             class="m-0 font-weight-bold font-small-3"
             :class="'color: text-' + status[data.item.status].variant"
           >
-            {{ status[data.item.status].text }}
+            {{ status[data.item.status].label }}
           </p>
         </template>
         <template v-slot:cell(creates)="data">
@@ -265,7 +342,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+
+import vSelect from 'vue-select'
 import FilterSlot
 from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
 import dataFields from '@/views/crm/views/sales-made/components/new-client/fields.data'
@@ -284,6 +363,7 @@ export default {
     DetailOfSailModal,
     TrackingModal,
     FilterSlot,
+    vSelect,
   },
   props: {
     done: {
@@ -345,6 +425,11 @@ export default {
   computed: {
     ...mapState({
       status: state => state['crm-store'].status,
+      sellers: state => state['crm-store'].sellersCrm,
+      captured: state => state['crm-store'].capturedCrm,
+    }),
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
     }),
     filteredFields() {
       if (this.done === 0) return this.fields
@@ -453,6 +538,83 @@ export default {
     selectedAll() {
       if (this.selectAll) this.items.forEach(item => item.selected = true)
       else this.items.forEach(item => item.selected = false)
+    },
+    async saveNewCaptured(captured, capturedNew, userId, user) {
+      if (captured === capturedNew) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'You can\'t select the same captured')
+      else if (captured === capturedNew.label) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'You can\'t select the same captured')
+      else {
+        this.$store.commit('app/SET_LOADING', true)
+        try {
+          const response = await CrmService.saveNewCaptured({
+            capt: capturedNew.id,
+            id: userId,
+            user: this.currentUser.user_id,
+          })
+          if (response.status === 200) this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Se actualizo satisfactoriamente')
+          else return
+          // eslint-disable-next-line no-param-reassign
+          user.captured = user.capturedNew.label
+          // eslint-disable-next-line no-param-reassign
+          user.capturedNew = user.captured
+          // eslint-disable-next-line no-param-reassign
+          user.editCaptured = false
+          this.$store.commit('app/SET_LOADING', false)
+        } catch (error) {
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+          this.$store.commit('app/SET_LOADING', false)
+        }
+      }
+    },
+    async saveNewSeller(seller, sellerNew, userId, user) {
+      if (seller === sellerNew) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'You can\'t select the same captured')
+      else if (seller === sellerNew.label) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'You can\'t select the same captured')
+      else {
+        this.$store.commit('app/SET_LOADING', true)
+        try {
+          const response = await CrmService.saveNewSeller({
+            sel: sellerNew.id,
+            id: userId,
+            user: this.currentUser.user_id,
+          })
+          if (response.status === 200) this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Se actualizo satisfactoriamente')
+          else return
+          // eslint-disable-next-line no-param-reassign
+          user.seller = user.sellerNew.label
+          // eslint-disable-next-line no-param-reassign
+          user.sellerNew = user.seller
+          // eslint-disable-next-line no-param-reassign
+          user.editSeller = false
+          this.$store.commit('app/SET_LOADING', false)
+        } catch (error) {
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+          this.$store.commit('app/SET_LOADING', false)
+        }
+      }
+    },
+    async saveNewFee(fee, feeNew, userId, user) {
+      if (fee === feeNew) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'You can\'t select the same captured')
+      else {
+        this.$store.commit('app/SET_LOADING', true)
+        try {
+          const response = await CrmService.saveNewFee({
+            fee: feeNew,
+            id: userId,
+            user: this.currentUser.user_id,
+          })
+          if (response.status === 200) this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Se actualizo satisfactoriamente')
+          else return
+          // eslint-disable-next-line no-param-reassign
+          user.fee = user.feeNew
+          // eslint-disable-next-line no-param-reassign
+          user.feeNew = user.fee
+          // eslint-disable-next-line no-param-reassign
+          user.editFee = false
+          this.$store.commit('app/SET_LOADING', false)
+        } catch (error) {
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+          this.$store.commit('app/SET_LOADING', false)
+        }
+      }
     },
   },
 }

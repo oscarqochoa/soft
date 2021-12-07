@@ -12,23 +12,29 @@ class CrmService {
   }
 
   async getSellersCrm() {
-    // eslint-disable-next-line no-undef
-    let data = await amgApi.post('/sellerall/2', {
-      roles: '[1,2,5]',
-      type: '1',
-    })
-    data = data.data
-    return data
+    try {
+      const { data } = await amgApi.post('/sellerall/2', {
+        roles: '[1,2,5]',
+        type: '1',
+      })
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getCapturedCrm:', error)
+      throw error
+    }
   }
 
   async getCapturedCrm() {
-    // eslint-disable-next-line no-undef
-    let data = await amgApi.post('/capturedall/2', {
-      roles: '[]',
-      type: '1',
-    })
-    data = data.data
-    return data
+    try {
+      const { data } = await amgApi.post('/capturedall/2', {
+        roles: '[]',
+        type: '1',
+      })
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getCapturedCrm:', error)
+      throw error
+    }
   }
 
   async getLeadsSn(body) {
@@ -122,9 +128,12 @@ class CrmService {
   }
 
   async getAlgo() {
-    // eslint-disable-next-line no-undef
-    const data = await amgApi.get('/welcome')
-    return data
+    try {
+      return await amgApi.get('/welcome')
+    } catch (error) {
+      console.log('Something went wrong on getAlgo:', error)
+      throw error
+    }
   }
 
   async getListCards(body) {
@@ -180,7 +189,23 @@ class CrmService {
   async getSaleMade(body, page) {
     try {
       const { data } = await amgApi.post(`/salemade?page=${page}`, body)
-      data.data.map(d => d.selected = false)
+      // eslint-disable-next-line array-callback-return
+      data.data.map(d => {
+        // eslint-disable-next-line no-param-reassign
+        d.selected = false
+        // eslint-disable-next-line no-param-reassign
+        d.editCaptured = false
+        // eslint-disable-next-line no-param-reassign
+        d.capturedNew = d.captured
+        // eslint-disable-next-line no-param-reassign
+        d.editSeller = false
+        // eslint-disable-next-line no-param-reassign
+        d.sellerNew = d.seller
+        // eslint-disable-next-line no-param-reassign
+        d.editFee = false
+        // eslint-disable-next-line no-param-reassign
+        d.feeNew = d.fee
+      })
       return data
     } catch (error) {
       console.error('Something went wrong on getSaleMade:', error)
@@ -230,23 +255,26 @@ class CrmService {
 
   async postCreateLead(body) {
     try {
-      const data = await amgApi.post('/leadscreate', body)
-      return data
+      return await amgApi.post('/leadscreate', body)
     } catch (error) {
       console.log('Something went wrong on postCreateLead:', error)
+      throw error
     }
   }
 
   async getSources() {
-    let data = await amgApi.get('/sourcesnames')
-    data = data.data
-    return data
+    try {
+      const { data } = await amgApi.get('/sourcesnames')
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getSources:', error)
+      throw error
+    }
   }
 
   async postDeleteLead(body) {
     try {
-      const data = await amgApi.post('/leaddelete', body)
-      return data
+      return await amgApi.post('/leaddelete', body)
     } catch (error) {
       console.log('Something went wrong on postDeleteLead:', error)
       throw error
@@ -255,8 +283,7 @@ class CrmService {
 
   async postProcessLead(body) {
     try {
-      const data = await amgApi.post('/process-lead-sn', body)
-      return data
+      return await amgApi.post('/process-lead-sn', body)
     } catch (error) {
       console.log('Something went wrong on postProcessLead:', error)
       throw error
@@ -275,26 +302,25 @@ class CrmService {
 
   async postSaveQuickSms(body) {
     try {
-      const data = await amgApi.post('/savequicksms', body)
-      return data
+      return await amgApi.post('/savequicksms', body)
     } catch (error) {
       console.log('Something went wrong on postSaveQuickSms:', error)
       throw error
     }
   }
-  async postDeleteQuickSms (body) {
+
+  async postDeleteQuickSms(body) {
     try {
-      const data = await amgApi.post('/deletequick', body)
-      return data
+      return await amgApi.post('/deletequick', body)
     } catch (error) {
       console.log('Something went wrong on postDeleteQuickSms:', error)
       throw error
     }
   }
-  async postHistorySmsLead (body) {
+
+  async postHistorySmsLead(body) {
     try {
-      const data = await amgApi.post('/allsmshistorylead', body)
-      return data
+      return await amgApi.post('/allsmshistorylead', body)
     } catch (error) {
       console.log('Something went wrong on postHistorySmsLead:', error)
       throw error
@@ -327,6 +353,33 @@ class CrmService {
       return data
     } catch (error) {
       console.error('Something went wrong on getSellerTracking:', error)
+      throw error
+    }
+  }
+
+  async saveNewCaptured(body) {
+    try {
+      return await amgApi.post('/savenewcapt', body)
+    } catch (error) {
+      console.error('Something went wrong on getSellerTracking:', error)
+      throw error
+    }
+  }
+
+  async saveNewSeller(body) {
+    try {
+      return await amgApi.post('/savenewsel', body)
+    } catch (error) {
+      console.error('Something went wrong on getSellerTracking:', error)
+      throw error
+    }
+  }
+
+  async saveNewFee(body) {
+    try {
+      return await amgApi.post('/savenewfee', body)
+    } catch (error) {
+      console.error('Something went wrong on saveNewFee:', error)
       throw error
     }
   }

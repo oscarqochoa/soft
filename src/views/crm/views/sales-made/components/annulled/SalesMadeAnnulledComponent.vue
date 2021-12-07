@@ -10,11 +10,11 @@
       :to-page="toPage"
     >
       <b-table
-        v-scrollbar
-        :has-provider="true"
         id="annull-table"
         slot="table"
         ref="annull-table"
+        v-scrollbar
+        :has-provider="true"
         sticky-header="70vh"
         small
         class="font-small-3 text-center"
@@ -32,7 +32,7 @@
           </div>
         </template>
         <template v-slot:cell(program)="data">
-            {{ data.item.program }}
+          {{ data.item.program }}
         </template>
         <template v-slot:cell(captured)="data">
           <b-row>
@@ -42,7 +42,9 @@
           </b-row>
           <b-row v-if="data.item.commission">
             <b-col>
-              <p class=" m-0 text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[0].commission }} </p>
+              <p class=" m-0 text-primary font-weight-bold">
+                $ {{ JSON.parse(data.item.commission)[0].commission }}
+              </p>
             </b-col>
           </b-row>
         </template>
@@ -54,7 +56,9 @@
           </b-row>
           <b-row v-if="data.item.commission">
             <b-col>
-              <p class="m-0 text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[1].commission }} </p>
+              <p class="m-0 text-primary font-weight-bold">
+                $ {{ JSON.parse(data.item.commission)[1].commission }}
+              </p>
             </b-col>
           </b-row>
         </template>
@@ -72,9 +76,9 @@
         </template>
         <template v-slot:cell(contract_fee_status)="data">
           <b-icon
+            v-if="data.item.contract_fee_status === 0"
             icon="file-text"
             variant="muted"
-            v-if="data.item.contract_fee_status === 0"
           />
         </template>
         <template v-slot:cell(notes_status)="data">
@@ -104,24 +108,31 @@
             class="m-0 font-weight-bold font-small-3"
             :class="'color: text-' + status[data.item.status].variant"
           >
-            {{ status[data.item.status].text }}
+            {{ status[data.item.status].label }}
           </p>
         </template>
         <template v-slot:cell(creates)="data">
           <span>{{ data.item.creates | myGlobal }}</span>
         </template>
         <template v-slot:cell(approved)="data">
-          <span class="font-weight-bold" :class="data.item.approved ? 'text-info' : ''">{{ data.item.approved | myGlobal }}</span>
+          <span
+            class="font-weight-bold"
+            :class="data.item.approved ? 'text-info' : ''"
+          >{{ data.item.approved | myGlobal }}</span>
         </template>
         <template v-slot:cell(annulled_by)="data">
           <div>
-            <p>{{data.item.annulled_by}}</p>
-            <p>{{data.item.annulled_at | myGlobal}}</p>
+            <p>{{ data.item.annulled_by }}</p>
+            <p>{{ data.item.annulled_at | myGlobal }}</p>
           </div>
         </template>
       </b-table>
     </filter-slot>
-    <files-modal :modal="modal" :files="modalData.files" :key="modalControllers.files" />
+    <files-modal
+      :key="modalControllers.files"
+      :modal="modal"
+      :files="modalData.files"
+    />
   </div>
 </template>
 
@@ -181,7 +192,6 @@ export default {
   },
   methods: {
     openFilesModal(id, program, client, sale_id) {
-
       this.modalData.files.id = id
       this.modalData.files.program = program
       this.modalData.files.client = client
