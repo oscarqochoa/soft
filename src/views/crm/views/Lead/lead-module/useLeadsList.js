@@ -167,14 +167,7 @@ export default function useUsersList() {
       return response.data
     } catch (error) {
       console.log('Something went wrong fetchLeads:', error)
-      toast({
-        component: ToastificationContent,
-        props: {
-          title: 'Error fetching leads list',
-          icon: 'AlertTriangleIcon',
-          variant: 'danger',
-        },
-      })
+      this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
     }
   }
   const fetchLeadsSn = async (ctx, callback) => {
@@ -199,14 +192,7 @@ export default function useUsersList() {
       return response.data
     } catch (error) {
       console.log('Something went wrong fetchLeadsSn:', error)
-      toast({
-        component: ToastificationContent,
-        props: {
-          title: 'Error fetching leads Sn list',
-          icon: 'AlertTriangleIcon',
-          variant: 'danger',
-        },
-      })
+      this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
     }
   }
 

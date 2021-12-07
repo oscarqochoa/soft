@@ -68,5 +68,21 @@ export default {
         }
       );
     },
+    getInternalErrors (error, split = '\n') {
+      try {
+        if (error.response && error.response.data) {
+          const message = error.response.data.message || 'Something went wrong.'
+          const errors = []
+          for (let key in error.response.data.errors) {
+            errors.push(error.response.data.errors[key])
+          }
+          return `${message + split}${errors.join('.' + split)}`
+        } else
+          return 'Something went wrong'
+      } catch (error) {
+        console.log('Something went wrong getInternalErrors:', error)
+        return 'Something went wrong'
+      }
+    }
   },
 };

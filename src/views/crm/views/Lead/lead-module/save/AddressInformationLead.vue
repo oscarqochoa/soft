@@ -7,7 +7,6 @@
           <validation-provider
             #default="validationContext"
             name="SNN?"
-            rules="required"
           >
             <b-form-group
               :label="`${!labssn && !labitin ? 'SNN' : statusLabs}`"
@@ -40,7 +39,6 @@
             v-if="hideSSN"
             #default="validationContext"
             name="SNN"
-            rules="required"
           >
             <b-form-group
               label="SNN"
@@ -63,7 +61,6 @@
             v-if="hideITIN"
             #default="validationContext"
             name="ITIN"
-            rules="required"
           >
             <b-form-group
               label="ITIN"
@@ -86,7 +83,6 @@
             v-if="hideCPN"
             #default="validationContext"
             name="CPN"
-            rules="required"
           >
             <b-form-group
               label="CPN"
@@ -110,7 +106,6 @@
           <validation-provider
             #default="validationContext"
             name="Phone"
-            rules="required"
           >
             <b-form-group
               label="Phone (H)"
@@ -208,12 +203,15 @@ import {
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { required, alphaNum, email } from '@validations'
-import formValidation from '@core/comp-functions/forms/form-validation'
-import countries from '@/@fake-db/data/other/countries'
+
 import vSelect from 'vue-select'
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
-import crmService from '@/views/crm/services/crm.service'
+
+import formValidation from '@core/comp-functions/forms/form-validation'
+import countries from '@/@fake-db/data/other/countries'
+
 import AddressLead from './AddressLead.vue'
+import crmService from '@/views/crm/services/crm.service'
 
 export default {
   components: {
@@ -348,33 +346,38 @@ export default {
         : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "")
     },
     async mobile () {
-      var x = this.userData.mobile
-        .replace(/\D/g, "")
-        .match(/(\d{0,3})(\d{0,3})(\d{0,4})/)
-      this.userData.mobile = !x[2]
-        ? x[1]
-        : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "")
-      if (this.userData.mobile.length == 14) {
-        this.errorFormatMobile = false
-        const response = await crmService.postUniqueMobile({ mobile: this.userData.mobile })
-        if (response.status == 200) {
-          if (response.data.code == 'mobile') {
-            this.$swal.fire({
-              type: 'warning',
-              title: `The phone number already exists: response.data.message`,
-              confirmButtonText: 'REQUEST LEAD TO SOCIAL NETWORK',
-              cancelButtonText: 'OK',
-            })
-            .then(async (result) => {
-              if (result.value) {
-                await crmService.postRequestLead({
-                  lead_id: response.data.lead_id,
-                  lead_name: response.data.message,
-                })
-              }
-            })
+      try {
+        var x = this.userData.mobile
+          .replace(/\D/g, "")
+          .match(/(\d{0,3})(\d{0,3})(\d{0,4})/)
+        this.userData.mobile = !x[2]
+          ? x[1]
+          : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "")
+        if (this.userData.mobile.length == 14) {
+          this.errorFormatMobile = false
+          const response = await crmService.postUniqueMobile({ mobile: this.userData.mobile })
+          if (response.status == 200) {
+            if (response.data.code == 'mobile') {
+              this.$swal.fire({
+                type: 'warning',
+                title: `The phone number already exists: response.data.message`,
+                confirmButtonText: 'REQUEST LEAD TO SOCIAL NETWORK',
+                cancelButtonText: 'OK',
+              })
+              .then(async (result) => {
+                if (result.value) {
+                  await crmService.postRequestLead({
+                    lead_id: response.data.lead_id,
+                    lead_name: response.data.message,
+                  })
+                }
+              })
+            }
           }
         }
+      } catch (error) {
+        console.log('Something went wrong mobile:', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
   },

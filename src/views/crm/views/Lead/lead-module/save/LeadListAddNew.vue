@@ -94,16 +94,18 @@ import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import { ref } from '@vue/composition-api'
+
 import { required, alphaNum, email } from '@validations'
-import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
+
+import formValidation from '@core/comp-functions/forms/form-validation'
 import countries from '@/@fake-db/data/other/countries'
-import BasicInformationLead from './create/BasicInformationLead.vue'
-import LeadInformationLead from './create/LeadInformationLead.vue'
-import BillingInformationLead from './create/BillingInformationLead.vue'
+
 import crmService from '@/views/crm/services/crm.service'
+import BasicInformationLead from './BasicInformationLead.vue'
+import BillingInformationLead from './BillingInformationLead.vue'
+import LeadInformationLead from './LeadInformationLead.vue'
 
 
 export default {
@@ -173,7 +175,14 @@ export default {
     },
   },
   data() {
+    const resetRowData = () => {}
+    const {
+      getValidationState,
+      resetForm,
+    } = formValidation(resetRowData)
     return {
+      getValidationState,
+      resetForm,
       modul: 2,
       blankUserData: {
         firstName: '',
@@ -249,9 +258,6 @@ export default {
       alphaNum,
       email,
       countries,
-      refFormObserver: () => formValidation(this.resetuserData).refFormObserver(),
-      getValidationState: () => formValidation(this.resetuserData).getValidationState(),
-      resetForm: () => formValidation(this.resetuserData).resetForm(),
       isLoading: false,
     }
   },
@@ -333,7 +339,7 @@ export default {
           cardholdername: cardHoldername,
           cardnumber: cardNumber,
           cardsecuritycode: cardSecurityCode,
-          dob: this.$moment(dob, 'YYYY-MM-DD').format('MM/DD/YYYY'),
+          dob: (dob) ? this.$moment(dob, 'YYYY-MM-DD').format('MM/DD/YYYY') : '',
           super: role_id,
           created_by: this.getSelectValue(userId),
           usercreator: this.getSelectValue(userId),
@@ -362,39 +368,24 @@ export default {
           originCountry: this.getSelectValue(originCountry)
         }
         const response = await crmService.postCreateLead(body)
-        if (response.status == 201) {
+        console.log('response', response)
+        if (response && (response.status == 200 || response.status == 201)) {
           this.isLoading = false
-          this.$swal.fire({
-            type: 'success',
-            icon: 'success',
-            title: 'Lead Created in successfully',
-          }).then((res) => {
-            if (res) {
-              this.isLoading = false
-              const idUser = response.data.id;
-              /* if (this.module == 2) {
-                window.location.href = `${route}${idUser}`
-              } else {
-                window.location.href = `${route}`
-              } */
-            }
-          })
-        }
-
+          this.isLoading = false
+          const idUser = response.data.id
+          /* if (this.module == 2) {
+            window.location.href = `${route}${idUser}`
+          } else {
+            window.location.href = `${route}`
+          } */
+          this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+        } else
+          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong.`)
       } catch (error) {
         console.log('spmething went wrong onSubmit: ', error)
         this.isLoading = false
-        this.$swal.fire({
-          type: 'error',
-          icon: 'error',
-          title: 'Oops! Something went wrong',
-        })
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
-      /* store.dispatch('app-user/addUser', userData.value)
-        .then(() => {
-          emit('refetch-data')
-          emit('update:is-add-new-user-sidebar-active', false)
-        }) */
     }
   }
 }

@@ -1,5 +1,22 @@
 <template>
   <div>
+    <user-list-add-new
+      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
+      :role-options="roleOptions"
+      :plan-options="planOptions"
+      @refetch-data="refetchData"
+    />
+
+    <!-- Filters -->
+    <users-list-filters
+      :role-filter.sync="roleFilter"
+      :plan-filter.sync="planFilter"
+      :status-filter.sync="statusFilter"
+      :role-options="roleOptions"
+      :plan-options="planOptions"
+      :status-options="statusOptions"
+    />
+
     <!-- Table Container Card -->
     <b-card
       no-body
@@ -26,17 +43,6 @@
               class="per-page-selector d-inline-block mx-50"
             />
             <label>entries</label>
-            <b-button
-              variant="link"
-              class="btn-icon ml-50"
-              v-b-tooltip.hover.bottom="'Refresh'"
-              @click="refresh = true"
-            >
-              <feather-icon
-                icon="RefreshCcwIcon"
-                size="18"
-              />
-            </b-button>
           </b-col>
 
           <!-- Search -->
@@ -51,36 +57,12 @@
                 placeholder="Search..."
               />
               <b-button
-                variant="warning"
-                @click="advanceSearch = !advanceSearch"
+                variant="primary"
+                @click="isAddNewUserSidebarActive = true"
               >
-                <span class="text-nowrap">
-                  <feather-icon
-                    icon="FilterIcon"
-                    size="18"
-                    class="mr-50 text-white"
-                  />
-                  <span v-if="!advanceSearch">Advance Search</span>
-                  <span v-else>Basic Search</span>
-                </span>
+                <span class="text-nowrap">Add User</span>
               </b-button>
             </div>
-          </b-col>
-          <b-col
-            v-if="advanceSearch"
-            cols="12"
-            class="pt-2"
-          >
-            <!-- Filters -->
-            <leads-list-filters
-              :filters="[ 'from', 'to', 'owner', 'st-ad' ]"
-              :from-filter.sync="fromFilter"
-              :to-filter.sync="toFilter"
-              :owner-filter.sync="ownerFilter"
-              :st-ad-filter.sync="stAdFilter"
-              :owner-options="ownerOptions"
-              :st-ad-options="stAdOptions"
-            />
           </b-col>
         </b-row>
 
@@ -98,13 +80,6 @@
         empty-text="No matching records found"
         :sort-desc.sync="isSortDirDesc"
       >
-        <template #table-busy>
-          <div class="text-center text-primary my-2">
-            <b-spinner class="align-middle mr-1" />
-            <strong>Loading ...</strong>
-          </div>
-        </template>
-
         <!-- Column: Nickname -->
         <template #cell(nickname)="data">
           <a href="#" target="_blank">{{ data.item.nickname }}</a>
@@ -235,15 +210,15 @@ import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
 import BCardCode from '@core/components/b-card-code'
-import LeadsListFilters from './LeadsListFilters.vue'
-import useUsersList from './useLeadsList'
-import userStoreModule from '../leadStoreModule'
-import UserListAddNew from './LeadListAddNew.vue'
+import UsersListFilters from '../../lead-table/FiltersTable.vue'
+import useUsersList from '../useLeadsList'
+import userStoreModule from '../../leadStoreModule'
+import UserListAddNew from '../save/LeadListAddNew.vue'
 
 export default {
   components: {
     BCardCode,
-    LeadsListFilters,
+    UsersListFilters,
     UserListAddNew,
 
     BCard,
@@ -262,28 +237,20 @@ export default {
 
     vSelect,
   },
-  props: {
-    ownerOptions: {
-      type: Array,
-      required: false,
-    },
-    stAdOptions: {
-      type: Array,
-      required: false,
-    }
-  },
   data() {
     return {
-      advanceSearch: false,
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
-      mainProps: { width: 75, height: 75, class: 'm1' },
-      filtersOptions: {
-        statusLeads: [],
-        owners: [],
-        sourceNames: [],
-        programs: [],
-        states: [],
-      }
+      mainProps: { width: 75, height: 75, class: 'm1' }
+    }
+  },
+  methods: {
+    resolveLeadSnStatusVariant (status) {
+      if (status === 2) return 'success'
+      if ([3, 4].includes(status)) return 'dark'
+      if (status === 5) return 'secondary'
+      if (status === 6) return 'warning'
+      if (status === 7) return 'danger'
+      return 'primary'
     }
   },
   setup() {
@@ -297,11 +264,33 @@ export default {
       if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
     })
 
+    const isAddNewUserSidebarActive = ref(false)
+
+    const roleOptions = [
+      { label: 'Admin', value: 'admin' },
+      { label: 'Author', value: 'author' },
+      { label: 'Editor', value: 'editor' },
+      { label: 'Maintainer', value: 'maintainer' },
+      { label: 'Subscriber', value: 'subscriber' },
+    ]
+
+    const planOptions = [
+      { label: 'Basic', value: 'basic' },
+      { label: 'Company', value: 'company' },
+      { label: 'Enterprise', value: 'enterprise' },
+      { label: 'Team', value: 'team' },
+    ]
+
+    const statusOptions = [
+      { label: 'Pending', value: 'pending' },
+      { label: 'Active', value: 'active' },
+      { label: 'Inactive', value: 'inactive' },
+    ]
+
     const {
       fetchLeadsSn,
       tableColumns,
       tableLeadSn,
-      refresh,
       perPage,
       currentPage,
       totalUsers,
@@ -318,24 +307,19 @@ export default {
       resolveUserStatusVariant,
 
       // Extra Filters
-      fromFilter,
-      toFilter,
-      statusLeadFilter,
-      ownerFilter,
-      assignToFilter,
-      crFilter,
-      programFilter,
-      sourceNameFilter,
-      typeDocFilter,
-      stAdFilter,
+      roleFilter,
+      planFilter,
+      statusFilter,
     } = useUsersList()
 
     return {
 
+      // Sidebar
+      isAddNewUserSidebarActive,
+
       fetchLeadsSn,
       tableColumns,
       tableLeadSn,
-      refresh,
       perPage,
       currentPage,
       totalUsers,
@@ -354,29 +338,16 @@ export default {
       resolveUserRoleIcon,
       resolveUserStatusVariant,
 
+      roleOptions,
+      planOptions,
+      statusOptions,
+
       // Extra Filters
-      fromFilter,
-      toFilter,
-      statusLeadFilter,
-      ownerFilter,
-      assignToFilter,
-      crFilter,
-      programFilter,
-      sourceNameFilter,
-      typeDocFilter,
-      stAdFilter
+      roleFilter,
+      planFilter,
+      statusFilter,
     }
   },
-  methods: {
-    resolveLeadSnStatusVariant (status) {
-      if (status === 2) return 'success'
-      if ([3, 4].includes(status)) return 'dark'
-      if (status === 5) return 'secondary'
-      if (status === 6) return 'warning'
-      if (status === 7) return 'danger'
-      return 'primary'
-    },
-  }
 }
 </script>
 

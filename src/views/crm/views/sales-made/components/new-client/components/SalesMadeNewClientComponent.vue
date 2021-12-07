@@ -333,16 +333,9 @@ export default {
         this.toPage = data.to
         if (this.totalRows !== data.total) this.totalRows = data.total
         return data.data
-      } catch (e) {
-        this.$swal({
-          title: 'Error!',
-          text: 'Ocurrio un error inesperado, vuelva a intentarlo.',
-          icon: 'error',
-          customClass: {
-            confirmButton: 'btn btn-primary',
-          },
-          buttonsStyling: false,
-        })
+      } catch (error) {
+        console.log('Something went wrong myProvider:', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
         return []
       }
     },

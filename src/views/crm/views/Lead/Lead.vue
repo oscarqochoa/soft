@@ -75,13 +75,13 @@
 </template>
 
 <script>
-import { ref, onUnmounted } from '@vue/composition-api'
+import { ref } from '@vue/composition-api'
 import BCardCode from '@core/components/b-card-code'
-import LeadList from './lead-list/LeadsList.vue'
-import LeadSnList from './lead-list/LeadsSnList.vue'
-import LeadWPotentialList from './lead-list/LeadsWPotentialList.vue'
-import useUsersList from './lead-list/useLeadsList'
-import LeadListAddNew from './lead-list/LeadListAddNew.vue'
+import LeadList from './lead-module/list/LeadsList.vue'
+import LeadSnList from './lead-module/list/LeadsSnList.vue'
+import LeadWPotentialList from './lead-module/list/LeadsWPotentialList.vue'
+import useUsersList from './lead-module/useLeadsList'
+import LeadListAddNew from './lead-module/save/LeadListAddNew.vue'
 import crmService from '@/views/crm/services/crm.service'
 
 export default {
@@ -185,48 +185,85 @@ export default {
         const response = await crmService.getStateLeads()
         this.stateLeadOptions = response.map(el => ({ label: el.name, value: el.id }))
       } catch (error) {
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
     async getStatusLeads () {
+      try {
       const response = await crmService.getStatusLeads()
       this.statusLeadOptions = response.map(el => ({ label: el.value, value: el.id }))
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
     },
     async getSourceLeads () {
-      const response = await crmService.getSourceLeads()
-      this.sourceLeadOptions = response.map(el => ({ label: el.value, value: el.id }))
+      try {
+        const response = await crmService.getSourceLeads()
+        this.sourceLeadOptions = response.map(el => ({ label: el.value, value: el.id }))
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
     },
     async getOwners () {
-      const response = await crmService.getOwners({
-        roles: '[1,2,5]',
-        type: '1',
-      })
-      this.ownerOptions = response.map(el => ({ label: el.user_name, value: el.id }))
+      try {
+        const response = await crmService.getOwners({
+          roles: '[1,2,5]',
+          type: '1',
+        })
+        this.ownerOptions = response.map(el => ({ label: el.user_name, value: el.id }))
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
     },
     async getSourceNames () {
-      const response = await crmService.getSourceNames()
-      this.sourceNameOptions = response.map(el => ({ label: el.name, value: el.id }))
+      try {
+        const response = await crmService.getSourceNames()
+        this.sourceNameOptions = response.map(el => ({ label: el.name, value: el.id }))
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
     },
     async getPrograms () {
-      const response = await crmService.getPrograms()
-      this.programOptions = response.map(el => ({ label: el.value, value: el.id }))
+      try {
+        const response = await crmService.getPrograms()
+        this.programOptions = response.map(el => ({ label: el.value, value: el.id }))
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
     },
     async getStates () {
-      const response = await crmService.getStates({
-        type: 1,
-      })
-      this.stAdOptions = response.map(el => ({ label: el.slug, value: el.id }))
+      try {
+        const response = await crmService.getStates({
+          type: 1,
+        })
+        this.stAdOptions = response.map(el => ({ label: el.slug, value: el.id }))
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
     },
     async getStatesEeuu () {
-      const response = await crmService.getStatesEeuu()
-      this.stateOptions = response.map(el => ({ label: el.state, value: el.slug }))
+      try {
+        const response = await crmService.getStatesEeuu()
+        this.stateOptions = response.map(el => ({ label: el.state, value: el.slug }))
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
     },
     async getCountries () {
-      const response = await crmService.getCountries()
-      this.countryOptions = response.map(el => ({ label: el.name, value: el.id }))
+      try {
+        const response = await crmService.getCountries()
+        this.countryOptions = response.map(el => ({ label: el.name, value: el.id }))
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
     },
     async getUserCreatorOwner () {
-      const response = await crmService.getUserCreatorOwner({ modul: 2, roles: "[]", type: "1", })
-      this.userCreatorOwnerOptions = response.map(el => ({ label: el.user_name, value: el.id }))
+      try {
+        const response = await crmService.getUserCreatorOwner({ modul: 2, roles: "[]", type: "1", })
+        this.userCreatorOwnerOptions = response.map(el => ({ label: el.user_name, value: el.id }))
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
     },
     exportExcel (Export, TypeExport) {
       const jsonString = JSON.stringify(this.leadsSelecteds.leads.map(el => el.id))

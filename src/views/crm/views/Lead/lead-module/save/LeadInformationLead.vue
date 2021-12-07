@@ -101,11 +101,13 @@
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
-import { ref } from '@vue/composition-api'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
+
 import { required, alphaNum, email } from '@validations'
-import formValidation from '@core/comp-functions/forms/form-validation'
 import vSelect from 'vue-select'
+
+import formValidation from '@core/comp-functions/forms/form-validation'
+
 
 export default {
   components: {

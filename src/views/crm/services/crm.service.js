@@ -98,27 +98,32 @@ class CrmService {
   }
 
   async getSaleMade(body, page) {
-    // eslint-disable-next-line no-undef
-    let data = await amgApi.post(`/salemade?page=${page}`, {
-      text: body.text,
-      status: body.status,
-      program: body.program,
-      state_h: body.state_h,
-      from: body.from,
-      to: body.to,
-      orderby: body.orderby,
-      order: body.order,
-      captured: body.captured,
-      seller: body.seller,
-      salemade: body.salemade,
-      rolsession: body.rolsession,
-      statusip: body.statusip,
-      sourcesname_id: body.sourcesname_id,
-      done: body.done,
-      per_page: body.per_page,
-    })
-    data = data.data
-    return data
+    try {
+      // eslint-disable-next-line no-undef
+      let data = await amgApi.post(`/salemade?page=${page}`, {
+        text: body.text,
+        status: body.status,
+        program: body.program,
+        state_h: body.state_h,
+        from: body.from,
+        to: body.to,
+        orderby: body.orderby,
+        order: body.order,
+        captured: body.captured,
+        seller: body.seller,
+        salemade: body.salemade,
+        rolsession: body.rolsession,
+        statusip: body.statusip,
+        sourcesname_id: body.sourcesname_id,
+        done: body.done,
+        per_page: body.per_page,
+      })
+      data = data.data
+      return data
+    } catch (error) {
+      console.log('Something went wrong on postRequestLead:', error)
+      throw error
+    }
   }
   async getCountries (body) {
     try {
@@ -162,12 +167,18 @@ class CrmService {
       return data
     } catch (error) {
       console.log('Something went wrong on postCreateLead:', error)
+      throw error
     }
   }
   async getSources() {
-    let data = await amgApi.get('/sourcesnames')
-    data = data.data
-    return data
+    try {
+      let data = await amgApi.get('/sourcesnames')
+      data = data.data
+      return data
+    } catch (error) {
+      console.log('Something went wrong on postRequestLead:', error)
+      throw error
+    }
   }
   async postDeleteLead(body) {
     try {

@@ -57,18 +57,19 @@
 
       <!-- Column: Actions -->
       <template #cell(actions)="data">
-        <table-actions :options="[ 'edit', 'delete' ]" :row-data="data.item" @onRowEdit="onRowEdit($event, data.item)" @onRowDelete="onRowDelete" />
+        <actions-table :options="[ 'edit', 'delete' ]" :row-data="data.item" @onRowEdit="onRowEdit($event, data.item)" @onRowDelete="onRowDelete" />
       </template>
     </b-table>
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import TableActions from './TableActions.vue'
+
+import ActionsTable from '../lead-table/ActionsTable.vue'
 
 export default {
   components: {
-    TableActions
+    ActionsTable
   },
   props: {
     modul: {

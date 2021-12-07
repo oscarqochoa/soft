@@ -40,13 +40,10 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import TableActions from './TableActions.vue'
+
 import crmService from '@/views/crm/services/crm.service'
 
 export default {
-  components: {
-    TableActions
-  },
   props: {
     modul: {
       type: Number,
@@ -86,7 +83,8 @@ export default {
           this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', response.message)
         this.isBusy = false
       } catch (error) {
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', 'Something went wrong')
+        console.log('Something went wrong getHistorySms:', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
   },
