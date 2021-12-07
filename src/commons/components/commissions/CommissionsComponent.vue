@@ -792,23 +792,28 @@ export default {
 
       this.modalPayment = true;
     },
-    hideModalPayment() {
+    hideModalPayment(status, payment, user_id, ps_month) {
+      if (status) {
+        this.changeStatusPayment(payment, user_id, ps_month);
+        //close preloader
+        this.$store.commit("app/SET_LOADING", false);
+      }
       this.modalPayment = false;
     },
 
-    changeStatusPayment(status) {
+    changeStatusPayment(status, user_id, ps_month) {
       if (this.isDepartment) {
         this.commissions.forEach(element => {
-          if (element.user_id == this.user_id) {
+          if (element.user_id == user_id) {
             element.commissions.forEach(item => {
-              item[this.ps_month] = status;
+              item[ps_month] = status;
             });
           }
         });
       } else {
         this.commissions.forEach(element => {
-          if (element.user_id == this.user_id) {
-            element[this.ps_month] = status;
+          if (element.user_id == user_id) {
+            element[ps_month] = status;
           }
         });
       }

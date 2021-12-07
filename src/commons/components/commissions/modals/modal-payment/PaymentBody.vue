@@ -14,7 +14,7 @@
           <flat-pickr
             v-model="payment.datePayment"
             class="form-control"
-            :config="{dateFormat: 'm-d-Y'}"
+            :config="{dateFormat: 'm/d/Y'}"
             :disabled="disabledPayment"
           />
         </b-form-group>
