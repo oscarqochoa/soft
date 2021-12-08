@@ -73,7 +73,32 @@ const leadSnFields = [
   { key: 'owner', sortable: true }
 ]
 
+const leadWPotentials = [
+  { key: 'nickname', sortable: true },
+  { key: 'mobile', sortable: true },
+  { key: 'status', sortable: true },
+  {
+    key: 'status_recovery',
+    label: 'Type',
+    sortable: true
+  },
+  { key: 'fanpage', sortable: true },
+  {
+    key: 'programs',
+    label: 'Recomendations',
+    sortable: true
+  },
+  { key: 'appointment', sortable: true },
+  {
+    key: 'created_date',
+    label: 'Created Date',
+    sortable: true
+  },
+  { key: 'owner', sortable: true }
+]
+
 export default {
   leadFields,
-  leadSnFields
+  leadSnFields,
+  leadWPotentials
 }

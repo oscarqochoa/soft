@@ -23,8 +23,8 @@
           :filter="optionFilters"
           :per-page="perPage"
           :per-page-options="perPageOptions"
-          :owner-options="ownerOptions"
-          :st-ad-options="stAdOptions"
+          :owner-options="G_OWNERS"
+          :st-ad-options="G_STATES"
           @onSearch="myProvider"
         />
 
@@ -134,11 +134,11 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import { BTable, BPagination } from 'bootstrap-vue'
 
 import vSelect from 'vue-select'
 
-import crmService from '@/views/crm/services/crm.service'
 import dataFields from '@/views/crm/views/Lead/lead-table/fields.data'
 import FiltersTable from '../../lead-table/FiltersTable.vue'
 import PaginateTable from '@/views/crm/views/Lead/lead-table/PaginateTable.vue'
@@ -152,15 +152,13 @@ export default {
     FiltersTable,
     PaginateTable
   },
-  props: {
-    ownerOptions: {
-      type: Array,
-      required: false,
-    },
-    stAdOptions: {
-      type: Array,
-      required: false,
-    }
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+      token: 'auth/token',
+      G_OWNERS: 'CrmLeadStore/G_OWNERS',
+      G_STATES: 'CrmLeadStore/G_STATES',
+    }),
   },
   data() {
     return {
@@ -191,6 +189,9 @@ export default {
     this.myProvider()
   },
   methods: {
+    ...mapActions({
+      A_GET_SN_LEADS: 'CrmLeadStore/A_GET_SN_LEADS',
+    }),
     resolveLeadSnStatusVariant (status) {
       if (status === 2) return 'success'
       if ([3, 4].includes(status)) return 'dark'
@@ -202,7 +203,7 @@ export default {
     async myProvider () {
       try {
         this.isBusy = true
-        const response = await crmService.getLeadsSn({
+        const response = await this.A_GET_SN_LEADS({
           cr: null,
           date_from: this.optionFilters.from,
           date_to: this.optionFilters.to,

@@ -198,6 +198,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -211,7 +212,6 @@ import formValidation from '@core/comp-functions/forms/form-validation'
 import countries from '@/@fake-db/data/other/countries'
 
 import AddressLead from './AddressLead.vue'
-import crmService from '@/views/crm/services/crm.service'
 
 export default {
   components: {
@@ -290,6 +290,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      A_UNIQUE_MOBILE: 'CrmLeadStore/A_UNIQUE_MOBILE',
+      A_SET_REQUEST_LEADS: 'CrmLeadStore/A_SET_REQUEST_LEADS'
+    }),
     security() {
       const val = this.userData.social.value.substr(0, 1)
       if ([ '', '0', '1', '2', '3', '4', '5', '6', '7', '8' ].includes(val)) {
@@ -355,7 +359,7 @@ export default {
           : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "")
         if (this.userData.mobile.length == 14) {
           this.errorFormatMobile = false
-          const response = await crmService.postUniqueMobile({ mobile: this.userData.mobile })
+          const response = await this.A_UNIQUE_MOBILE({ mobile: this.userData.mobile })
           if (response.status == 200) {
             if (response.data.code == 'mobile') {
               this.$swal.fire({
@@ -366,7 +370,7 @@ export default {
               })
               .then(async (result) => {
                 if (result.value) {
-                  await crmService.postRequestLead({
+                  await this.A_SET_REQUEST_LEADS({
                     lead_id: response.data.lead_id,
                     lead_name: response.data.message,
                   })

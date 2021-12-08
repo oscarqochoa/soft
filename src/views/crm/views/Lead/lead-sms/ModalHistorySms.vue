@@ -39,9 +39,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-
-import crmService from '@/views/crm/services/crm.service'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -73,10 +71,13 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      A_GET_HISTORY_SMS_LEADS: 'CrmLeadStore/A_GET_HISTORY_SMS_LEADS'
+    }),
     async getHistorySms () {
       try {
         this.isBusy = true
-        const response = await crmService.postHistorySmsLead({ id: this.rowData.id })
+        const response = await this.A_GET_HISTORY_SMS_LEADS({ id: this.rowData.id })
         if (response.status == 200) {
           this.items = response.data
         } else

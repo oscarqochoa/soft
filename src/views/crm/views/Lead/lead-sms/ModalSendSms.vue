@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -129,8 +129,6 @@ import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 
 import formValidation from '@core/comp-functions/forms/form-validation'
-
-import crmService from '@/views/crm/services/crm.service'
 
 export default {
   components: {
@@ -213,6 +211,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      A_SEND_MESSAGE_LEAD: 'CrmLeadStore/A_SEND_MESSAGE_LEAD',
+    }),
     deleteAccount (id) {
       for (let i = 0; i < this.nameLeads.length; i++) {
         if (this.nameLeads[i].id == id) {
@@ -254,7 +255,7 @@ export default {
       })
       .then(async (result) => {
         if (result.value) {
-          const response = await crmService.postSendMessageLead({
+          const response = await this.A_SEND_MESSAGE_LEAD({
             contmessage: this.smsData.contmessage,
             user: this.userId,
             sms: this.typesms == 0 ? this.smss : this.sms,

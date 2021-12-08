@@ -8,6 +8,7 @@ import appConfig from "@/store/app-config";
 import verticalMenu from "@/store/vertical-menu";
 import auth from "@/store/auth";
 import CrmStore from "@/views/crm/store";
+import saleMade from "@/views/crm/store/saleMade.store";
 import CommissionsStore from "@/commons/components/commissions/store";
 import stickyNotesStoreModule from "@/layouts/components/navbar/components/sticky-notes/store/sticky-notes.store";
 
@@ -20,7 +21,8 @@ export default new Vuex.Store({
     verticalMenu,
     "app-ecommerce": ecommerceStoreModule,
     auth,
-    "crm-store": CrmStore,
+    "crm-store": saleMade,
+    ...CrmStore,
     "commissions-store": CommissionsStore,
     "sticky-notes": stickyNotesStoreModule,
   },

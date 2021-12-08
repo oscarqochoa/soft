@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -115,8 +115,6 @@ import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 
 import formValidation from '@core/comp-functions/forms/form-validation'
-
-import crmService from '@/views/crm/services/crm.service'
 
 export default {
   components: {
@@ -166,9 +164,12 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      A_SET_SMS_QUICK: 'CrmLeadStore/A_SET_SMS_QUICK'
+    }),
     async onSubmit () {
       try {
-        const response = await crmService.postSaveQuickSms({
+        const response = await this.A_SET_SMS_QUICK({
           ...this.quickData,
           user_id : this.userId,
           modul: this.modul

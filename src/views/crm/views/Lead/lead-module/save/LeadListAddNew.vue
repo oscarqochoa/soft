@@ -8,7 +8,6 @@
     backdrop
     no-header
     right
-    @hidden="resetForm"
     @change="(val) => $emit('update:is-add-new-user-sidebar-active', val)"
   >
     <template #default="{ hide }">
@@ -70,7 +69,7 @@
                 <b-spinner small />
                 <span>Loading...</span>
               </template>
-              <span v-else>Add</span>
+              <span v-else>Save</span>
             </b-button>
             <b-button
               v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -89,7 +88,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -102,7 +101,6 @@ import vSelect from 'vue-select'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import countries from '@/@fake-db/data/other/countries'
 
-import crmService from '@/views/crm/services/crm.service'
 import BasicInformationLead from './BasicInformationLead.vue'
 import BillingInformationLead from './BillingInformationLead.vue'
 import LeadInformationLead from './LeadInformationLead.vue'
@@ -271,6 +269,9 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      A_SET_LEADS: 'CrmLeadStore/A_SET_LEADS'
+    }),
     resetuserData () {
       this.blankUserData.userId = { value: this.currentUser.id, label: this.currentUser.fullName }
       this.userData = JSON.parse(JSON.stringify(this.blankUserData))
@@ -367,11 +368,12 @@ export default {
           otherzipcode: otherAddress.zipcode,
           originCountry: this.getSelectValue(originCountry)
         }
-        const response = await crmService.postCreateLead(body)
+        const response = await this.A_SET_LEADS(body)
         console.log('response', response)
         if (response && (response.status == 200 || response.status == 201)) {
           this.isLoading = false
-          this.isLoading = false
+          this.$emit('update:is-add-new-user-sidebar-active', false)
+          this.resetuserData()
           const idUser = response.data.id
           /* if (this.module == 2) {
             window.location.href = `${route}${idUser}`
@@ -400,6 +402,6 @@ export default {
   }
 }
 .sidebar-xl {
-  width: 90rem;
+  width: 90rem !important;
 }
 </style>

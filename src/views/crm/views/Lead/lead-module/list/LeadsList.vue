@@ -23,14 +23,14 @@
           :filter="optionFilters"
           :per-page="perPage"
           :per-page-options="perPageOptions"
-          :status-lead-options="statusLeadOptions"
-          :owner-options="ownerOptions"
-          :assign-to-options="assignToOptions"
-          :cr-options="crOptions"
-          :program-options="programOptions"
-          :source-name-options="sourceNameOptions"
-          :type-doc-options="typeDocOptions"
-          :st-ad-options="stAdOptions"
+          :status-lead-options="G_STATUS_LEADS"
+          :owner-options="G_OWNERS"
+          :assign-to-options="G_OWNERS"
+          :cr-options="G_CRS"
+          :program-options="G_PROGRAMS"
+          :source-name-options="G_SOURCE_NAMES"
+          :type-doc-options="G_TYPE_DOCS"
+          :st-ad-options="G_STATES"
           @onSearch="myProvider"
         >
           <template #actions>
@@ -282,13 +282,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { BTable, BPagination, BModal } from 'bootstrap-vue'
 
 import vSelect from 'vue-select'
 
 import ActionsTable from '../../lead-table/ActionsTable.vue'
-import crmService from '@/views/crm/services/crm.service'
 import dataFields from '@/views/crm/views/Lead/lead-table/fields.data'
 import FiltersTable from '../../lead-table/FiltersTable.vue'
 import ModalSendSms from '../../lead-sms/ModalSendSms.vue'
@@ -313,72 +312,23 @@ export default {
     vSelect,
     PaginateTable,
   },
-  props: {
-    stateLeadOptions: {
-      type: Array,
-      required: false,
-    },
-    statusLeadOptions: {
-      type: Array,
-      required: false,
-    },
-    ownerOptions: {
-      type: Array,
-      required: false,
-    },
-    assignToOptions: {
-      type: Array,
-      required: false,
-    },
-    crOptions: {
-      type: Array,
-      required: false,
-    },
-    programOptions: {
-      type: Array,
-      required: false,
-    },
-    sourceNameOptions: {
-      type: Array,
-      required: false,
-    },
-    typeDocOptions: {
-      type: Array,
-      required: false,
-    },
-    stAdOptions: {
-      type: Array,
-      required: false,
-    },
-    leadsSelecteds: {
-      type: Object,
-      required: true,
-    }
-  },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
+      G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
+      G_OWNERS: 'CrmLeadStore/G_OWNERS',
+      G_PROGRAMS: 'CrmLeadStore/G_PROGRAMS',
+      G_SOURCE_NAMES: 'CrmLeadStore/G_SOURCE_NAMES',
+      G_STATES: 'CrmLeadStore/G_STATES',
+      G_CRS: 'CrmLeadStore/G_CRS',
+      G_TYPE_DOCS: 'CrmLeadStore/G_TYPE_DOCS',
     }),
   },
   data() {
     return {
       modul: 2,
-      advanceSearch: false,
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
-      mainProps: { width: 75, height: 75, class: 'm1' },
-      rowData: {},
-      name_leads_arr: [],
-      leads_sms: [],
-      typesms: null,
-      leads_sms_o: [],
-      quicks: [],
-      quickData: {},
-      blankQuickData: {
-        id: null,
-        sms: '',
-        title: ''
-      },
       
       isBusy: false,
       fields: dataFields.leadFields,
@@ -405,6 +355,21 @@ export default {
       perPageOptions: [10, 25, 50, 100],
       sortBy: 'id',
       isSortDirDesc: true,
+
+      rowData: {},
+      name_leads_arr: [],
+      leads_sms: [],
+      typesms: null,
+      leads_sms_o: [],
+      quicks: [],
+      quickData: {},
+      blankQuickData: {
+        id: null,
+        sms: '',
+        title: ''
+      },
+
+      leadsSelecteds: []
     }
   },
   created () {
@@ -412,6 +377,15 @@ export default {
     this.getAllQuicksSms()
   },
   methods: {
+    ...mapActions({
+      A_GET_LEADS: 'CrmLeadStore/A_GET_LEADS',
+      A_SET_FILTERS_LEADS: 'CrmLeadStore/A_SET_FILTERS_LEADS',
+      A_GET_SMS_QUICKS: 'CrmLeadStore/A_GET_SMS_QUICKS',
+      A_SET_SELECTED_LEADS: 'CrmLeadStore/A_SET_SELECTED_LEADS',
+      A_DELETE_LEADS: 'CrmLeadStore/A_DELETE_LEADS',
+      A_DELETE_SMS_QUICK: 'CrmLeadStore/A_DELETE_SMS_QUICK',
+      A_PROCESS_LEADS: 'CrmLeadStore/A_PROCESS_LEADS',
+    }),
     resolveUserStatusVariant (status) {
       if (status === 'Pending') return 'warning'
       if (status === 'Active') return 'success'
@@ -421,8 +395,9 @@ export default {
     },
     async myProvider () {
       try {
+        this.setFilters()
         this.isBusy = true
-        const response = await crmService.getLeads({
+        const response = await this.A_GET_LEADS({
           assign_to: this.optionFilters.assignTo,
           cr: this.optionFilters.cr,
           date_from: this.optionFilters.from,
@@ -442,8 +417,8 @@ export default {
           page: this.currentPage
         })
         this.totalLeads = response.total
-        this.fromPage = response.from
-        this.toPage = response.to
+        this.fromPage = response.from || 0
+        this.toPage = response.to || 0
         this.items = response.data
         this.isBusy = false
       } catch (error) {
@@ -455,8 +430,12 @@ export default {
       this.currentPage = e
       this.myProvider()
     },
+    setFilters () {
+      this.A_SET_FILTERS_LEADS({ ...this.optionFilters, perPage: this.perPage, currentPage: this.currentPage })
+    },
     onRowSelected (items) {
-      this.leadsSelecteds.leads = items
+      this.A_SET_SELECTED_LEADS(items)
+      this.leadsSelecteds = items
       this.leads_sms = items.map(el => el.id)
     },
     onRowDelete (id) {
@@ -473,16 +452,15 @@ export default {
       .then(async (result) => {
         if (result.value) {
           const { id: user_id, id: role_id } = this.currentUser
-          const response = await crmService.postDeleteLead({
+          const response = await this.A_DELETE_LEADS({
             leadid: id,
             idsession: user_id,
             iduser: user_id,
             idrole: role_id,
           })
-          if (response) {
-            /*
-              DELETED ROW HERE
-            */
+          if (response.status == 200) {
+            const index = this.items.map(el => el.id).indexOf(id)
+            if (index !== -1) this.items.splice(index, 1)
             this.$swal('Successful!', 'Operation successfully', 'success')
           } else {
             this.$swal('Failed!', 'There was something wronge', 'warning')
@@ -491,7 +469,7 @@ export default {
       })
       .catch(error => {
         console.log('Something went wrong onRowDelete:', error)
-        this.$swal('Oops!', 'There was something wronge', 'error')
+        this.$swal('Oops!', this.getInternalErrors(error), 'error')
       })
     },
     onRowProcess (id) {
@@ -514,14 +492,15 @@ export default {
       .then(async (result) => {
         if (result.value) {
           const { id: user_id, id: role_id } = this.currentUser
-          const response = await crmService.postProcessLead({
+          const response = await this.A_PROCESS_LEADS({
             lead_id: id,
             status: 3,
             user_id,
             description: result.value,
           })
           if (response.status == 200) {
-            this.refresh = true
+            const index = this.items.map(el => el.id).indexOf(id)
+            if (index !== -1) this.items[index].status_sn_id = 3
             this.$swal('Successful!', 'Operation successfully', 'success')
           } else {
             this.$swal('Failed!', 'There was something wronge', 'warning')
@@ -530,15 +509,15 @@ export default {
       })
       .catch(error => {
         console.log('Something went wrong onRowProcess:', error)
-        this.$swal('Oops!', 'There was something wrong', 'error')
+        this.$swal('Oops!', this.getInternalErrors(error), 'error')
       })
     },
     async getAllQuicksSms () {
       try {
-        const response = await crmService.getAllQuicksSms({
+        const response = await this.A_GET_SMS_QUICKS({
           modul: this.modul,
         })
-        this.quicks = response.map(el => ({ ...el, value: el.sms, label: el.title, showMore: false }))
+        this.quicks = response.data.map(el => ({ ...el, value: el.sms, label: el.title, showMore: false }))
       } catch (error) {
         console.log('Something wnet wrong getAllQuicksSms:', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -559,7 +538,7 @@ export default {
     },
     modalSmssOpen () {
       this.typesms = 0
-      this.name_leads_arr = this.leadsSelecteds.leads.map(el => ({ name: el.lead_name, id: el.id }))
+      this.name_leads_arr = this.leadsSelecteds.map(el => ({ name: el.lead_name, id: el.id }))
       this.$bvModal.show('modal-send-sms')
     },
     modalQuickOpen () {
@@ -597,7 +576,7 @@ export default {
       })
       .then(async (result) => {
         if (result.value) {
-          const response = await crmService.postDeleteQuickSms({ id })
+          const response = await this.A_DELETE_SMS_QUICK({ id })
           console.log('response postDeleteQuickSms', response)
           if (response.status == 200) {
             const index = this.quicks.map(el => el.id).indexOf(id)
@@ -612,7 +591,7 @@ export default {
         console.log('Something went wrong modalQuickDelete', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       })
-    }
+    },
   },
 }
 </script>
