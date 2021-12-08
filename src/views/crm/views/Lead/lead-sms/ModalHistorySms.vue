@@ -39,14 +39,9 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-import TableActions from './TableActions.vue'
-import crmService from '@/views/crm/services/crm.service'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  components: {
-    TableActions
-  },
   props: {
     modul: {
       type: Number,
@@ -76,17 +71,21 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      A_GET_HISTORY_SMS_LEADS: 'CrmLeadStore/A_GET_HISTORY_SMS_LEADS'
+    }),
     async getHistorySms () {
       try {
         this.isBusy = true
-        const response = await crmService.postHistorySmsLead({ id: this.rowData.id })
+        const response = await this.A_GET_HISTORY_SMS_LEADS({ id: this.rowData.id })
         if (response.status == 200) {
           this.items = response.data
         } else
           this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', response.message)
         this.isBusy = false
       } catch (error) {
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', 'Something went wrong')
+        console.log('Something went wrong getHistorySms:', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
   },

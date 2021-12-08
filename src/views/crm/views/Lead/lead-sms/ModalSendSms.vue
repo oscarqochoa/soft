@@ -118,16 +118,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
-import vSelect from 'vue-select'
-import { required, alphaNum, email } from '@validations'
+import { required } from '@validations'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import formValidation from '@core/comp-functions/forms/form-validation'
+
 import Ripple from 'vue-ripple-directive'
-import crmService from '@/views/crm/services/crm.service'
+import vSelect from 'vue-select'
+
+import formValidation from '@core/comp-functions/forms/form-validation'
 
 export default {
   components: {
@@ -210,6 +211,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      A_SEND_MESSAGE_LEAD: 'CrmLeadStore/A_SEND_MESSAGE_LEAD',
+    }),
     deleteAccount (id) {
       for (let i = 0; i < this.nameLeads.length; i++) {
         if (this.nameLeads[i].id == id) {
@@ -251,7 +255,7 @@ export default {
       })
       .then(async (result) => {
         if (result.value) {
-          const response = await crmService.postSendMessageLead({
+          const response = await this.A_SEND_MESSAGE_LEAD({
             contmessage: this.smsData.contmessage,
             user: this.userId,
             sms: this.typesms == 0 ? this.smss : this.sms,
@@ -267,7 +271,7 @@ export default {
       })
       .catch(error => {
         console.log('Something went wrong onSubmit:', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', 'Something went wrong')
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       })
     }
   },

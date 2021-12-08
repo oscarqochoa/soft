@@ -34,7 +34,6 @@
         <validation-provider
           #default="validationContext"
           name="MiddleName"
-          rules="required"
         >
           <b-form-group
             label="MiddleName"
@@ -114,7 +113,6 @@
         <validation-provider
           #default="validationContext"
           name="Programs"
-          rules="required"
         >
           <b-form-group
             label="Programs"
@@ -135,11 +133,10 @@
         <!-- Dob -->
         <validation-provider
           #default="validationContext"
-          name="Dob"
-          rules="required"
+          name="DOB"
         >
           <b-form-group
-            label="Dob"
+            label="DOB"
             label-for="dob"
           >
             <b-form-datepicker
@@ -182,7 +179,6 @@
         <validation-provider
           #default="validationContext"
           name="Lead State"
-          rules="required"
         >
           <b-form-group
             label="Status"
@@ -218,11 +214,13 @@
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
-import { ref } from '@vue/composition-api'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { required, alphaNum, email } from '@validations'
-import formValidation from '@core/comp-functions/forms/form-validation'
+
 import vSelect from 'vue-select'
+
+import formValidation from '@core/comp-functions/forms/form-validation'
+
 import AddressInformationLead from './AddressInformationLead.vue'
 
 export default {
