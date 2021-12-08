@@ -101,26 +101,7 @@
                   />
                 </b-form-group>
               </div>
-              <div class="col-lg-12">
-                <b-form-group class="inline">
-                  <b-button
-                    type="submit"
-                    variant="primary"
-                    class="mr-1"
-                    @click="submitAutorize"
-                  >
-                    Submit
-                  </b-button>
-                  <b-form-checkbox
-                    v-if="methodpayment == 1"
-                    v-model="sendsms"
-                    value="true"
-                    class="custom-control-primary"
-                  >
-                    Send SMS
-                  </b-form-checkbox>
-                </b-form-group>
-              </div>
+              
               <div class="col-lg-12" v-if="errosList">
                 <div
                   class="form-group"
@@ -170,30 +151,58 @@
                 class="col-lg-9 col-md-9 col-sm-9"
                 v-if="dataLead"
               >
-                <div class="row w-100" >
-                    <b-form-radio-group
-                      v-model="methodpayment"
-                      :options="optionsMethodPay"
-                      class="demo-inline-spacing"
-                      name="radio-inline"
-                    />
-                      <b-form-checkbox
-                      class="mt-2"
-                        v-if="methodpayment == 1"
-                        v-model="charge"
-                        value="true"
-                         @input="chargeStatus()"
-                         name="radio-inline"
-                      >
-                        Charge
-                      </b-form-checkbox>
+                <div class="row w-100">
+                  <b-form-radio-group
+                    v-model="methodpayment"
+                    :options="optionsMethodPay"
+                    class="demo-inline-spacing"
+                    name="radio-inline"
+                  />
+                  <b-form-checkbox
+                    class="mt-2"
+                    v-if="methodpayment == 1"
+                    v-model="charge"
+                    value="true"
+                    @input="chargeStatus()"
+                    name="radio-inline"
+                  >
+                    Charge
+                  </b-form-checkbox>
                 </div>
               </b-form-group>
-              
             </div>
-            <div class="col-lg-12 w-100" style="display: inline-block;" v-if="methodpayment == 1">
-                  <ModalCreditCard :cardsLead="cardsLead"></ModalCreditCard>
-                  
+            <div
+              class="col-lg-12 w-100"
+              style="display: inline-block"
+              v-if="methodpayment == 1"
+            >
+              <modal-credit-card
+                :key="modalCreditController"
+                :cardsLead="cardsLead"
+                @CardId="getCardId"
+              ></modal-credit-card>
+            </div>
+          </div>
+          <div class="row w-100">
+            <div class="col-lg-12 ml-2">
+                <b-form-group class="inline">
+                  <b-button
+                    type="submit"
+                    variant="primary"
+                    class="mr-1"
+                    @click="submitAutorize"
+                  >
+                    Submit
+                  </b-button>
+                  <b-form-checkbox
+                    v-if="methodpayment == 1"
+                    v-model="sendsms"
+                    value="true"
+                    class="custom-control-primary"
+                  >
+                    Send SMS
+                  </b-form-checkbox>
+                </b-form-group>
               </div>
           </div>
         </div>
@@ -205,9 +214,9 @@
 <script>
 import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
-import  ModalCreditCard from "@/views/crm/views/payments/components/ModalCreditCard.vue"
+import ModalCreditCard from "@/views/crm/views/payments/components/ModalCreditCard.vue";
 
 export default {
   name: "process-crm",
@@ -217,9 +226,8 @@ export default {
   },
   data() {
     return {
-      cardsLead: {
-       
-      },
+      modalCreditController: 0,
+      cardsLead: {},
       options: [
         { text: "Realtor", value: "1" },
         { text: "Appointment", value: "2" },
@@ -257,16 +265,15 @@ export default {
       return this.userfilter == "" ? false : true;
     },
     ...mapGetters({
-      currentUser: 'auth/currentUser'
-    })
-    
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
     getCardsLead() {
       this.cardsLead = {
-        lead_id: 50552,
-        user_id: 1,
-        rol: 1,
+        lead_id: this.user_id, //user_id
+        user_id: this.currentUser.user_id,
+        rol: this.currentUser.arrRoles[0].role_id,
       };
       console.log(this.cardsLead);
     },
@@ -317,7 +324,6 @@ export default {
       }
     },
     searchlead() {
-      
       if (this.userfilter != "") {
         amgApi
           .post("/searchlead", {
@@ -338,8 +344,11 @@ export default {
       this.userfilter = first + " " + last + " | " + mobile;
       this.users = null;
     },
+    getCardId(Card) {
+      console.log(Card);
+      this.card_id = Card;
+    },
     getcard() {
-      console.log(this.currentUser)
       amgApi
         .post("/searchleadpayment", {
           id: this.user_id,
@@ -347,6 +356,8 @@ export default {
         .then((response) => {
           if (response.status == 200) {
             this.cards = response.data;
+            this.modalCreditController++;
+            this.getCardsLead();
             this.dataLead = true;
             if (this.cards.length > 0) {
               this.lead = this.cards[0].lead_name;
@@ -358,11 +369,11 @@ export default {
           }
         });
     },
-    submitAutorize(){
-      this.subtAutorize()
+    submitAutorize() {
+      this.subtAutorize();
     },
-    subtAutorize(){
-        this.$swal
+    subtAutorize() {
+      this.$swal
         .fire({
           title: "Process Payment",
           text: "You won't be able to revert this!",
@@ -371,33 +382,156 @@ export default {
           confirmButtonColor: "#ab9220",
           cancelButtonColor: "#8f9194",
           confirmButtonText: "Yes",
-        }).then((result)=>{
-              if (result.value){
-                amgApi.post("/checkoutpayment",{
-                  idcard: this.card_id,
-                  amount: this.amount,
-                  merchant: this.merchant,
-                  idsession: this.currentUser.status_session,
-                  payment: this.payment,
-                  lead_id: this.user_id,
-                  methodpayment: this.methodpayment,
-                  observationOther: this.observationOther,
-                  charge: this.charge == false ? 1 : 0,
-                  sendsms: this.sendsms == true ? 1 : 0,
-                })
-                .then(response =>{})
-                .catch(error =>{
-                  console.log(error)
-                })
-              }
         })
-    }
-
-
+        .then((result) => {
+          if (result.value) {
+            amgApi
+              .post("/checkoutpayment", {
+                idcard: this.card_id,
+                amount: this.amount,
+                merchant: this.merchant,
+                idsession: this.currentUser.status_session,
+                payment: this.payment,
+                lead_id: this.user_id,
+                methodpayment: this.methodpayment,
+                observationOther: this.observationOther,
+                charge: this.charge == false ? 1 : 0,
+                sendsms: this.sendsms == true ? 1 : 0,
+              })
+              .then((response) => {
+                if (response.status == 200 && response.data.status == 200) {
+                  if (this.methodpayment == 1) {
+                    if (response.data.transaction.messages) {
+                      this.$swal.fire({
+                        icon: "success",
+                        title:
+                          response.data.transaction.responseCode == 1
+                            ? "Approved"
+                            : response.data.transaction.responseCode == 2
+                            ? "Declined"
+                            : response.data.transaction.responseCode == 3
+                            ? "Error"
+                            : response.data.transaction.responseCode == 4
+                            ? "Held For Review"
+                            : "",
+                      });
+                      
+                      this.$router.push({name:"payments-crm-list"})
+                    } else {
+                      this.$swal
+                        .fire({
+                          icon: "error",
+                          title:
+                            response.data.transaction.responseCode == 1
+                              ? "Approved"
+                              : response.data.transaction.responseCode == 2
+                              ? "Declined"
+                              : response.data.transaction.responseCode == 3
+                              ? "Error"
+                              : response.data.transaction.responseCode == 4
+                              ? "Held For Review"
+                              : "",
+                              
+                        })
+                        .then((res) => {
+                          if (res) {
+                            this.getcard();
+                            this.card_id = "";
+                          }
+                        });
+                    }
+                  } else {
+                    this.$swal
+                      .fire({
+                        icon: "success",
+                        title: "Transaction Unverified",
+                      })
+                      .then((res) => {
+                        if (res) {
+                          this.$emit("clickList", true);
+                        }
+                      });
+                      this.$router.push({name:"payments-crm-list"})
+                  }
+                } else if (
+                  response.status == 200 &&
+                  response.data.status == 500
+                ) {
+                 
+                  if (response.data.transaction.errors) {
+                    this.errosAutorize = response.data.transaction.errors.error;
+                    this.responseCode = response.data.transaction.responseCode;
+                    this.messageList = false;
+                    this.errosList = true;
+                    if (this.methodpayment == 1) {
+                      
+                        this.$swal
+                          .fire({
+                            icon: "error",
+                            title:
+                              response.data.transaction.responseCode == 1
+                                ? "Approved"
+                                : response.data.transaction.responseCode == 2
+                                ? "Declined"
+                                : response.data.transaction.responseCode == 3
+                                ? "Error"
+                                : response.data.transaction.responseCode == 4
+                                ? "Held For Review"
+                                : "",
+                           
+                          })
+                          .then((res) => {
+                            if (res) {
+                              this.getcard();
+                              this.card_id = "";
+                            }
+                          });
+                    }
+                  } else {
+                    this.$swal
+                      .fire({
+                        icon: "error",
+                        title:
+                          response.data.transaction.responseCode == 1
+                            ? "Approved"
+                            : response.data.transaction.responseCode == 2
+                            ? "Declined"
+                            : response.data.transaction.responseCode == 3
+                            ? "Error"
+                            : response.data.transaction.responseCode == 4
+                            ? "Held For Review"
+                            : "",
+                      })
+                      .then((res) => {
+                        if (res) {
+                          this.getcard();
+                          this.card_id = "";
+                        }
+                      });
+                  }
+                }
+              })
+              .catch((error) => {
+                // if (error.response.status == 500) {
+                //   if (this.methodpayment == 1) {
+                //     this.$swal
+                //       .fire({
+                //         icon: "error",
+                //         title: "Error",
+                //       })
+                //       .then((res) => {
+                //         if (res) {
+                //           //this.$emit('clickList',true)
+                //         }
+                //       });
+                //   }
+                // }
+              });
+          }
+        });
+    },
   },
-  created(){
-    this.getCardsLead()
-  }
+  created() {},
 };
 </script>
 
