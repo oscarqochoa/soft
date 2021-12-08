@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <b-card no-body class="mb-1">
@@ -117,7 +116,7 @@
           @onChangeFilter="$refs.refClientsList.refresh()"
         ></filters-component>
       </transition>
-      <b-table small
+      <b-table 
           v-scrollbar
          :api-url="clientRoute"
           ref="refClientsList"
@@ -140,47 +139,17 @@
               <strong>Loading ...</strong>
             </div>
           </template>
-          <template #cell(amount)="data">
+          <template #cell(credit_report)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
             >
-              <span>
-                $ {{data.item.amount}}
+              <span v-if="data.item.credit_report =='1'" class="text-danger">
+               NO
+              </span>
+              <span v-else class="text-blue">
+                YES
               </span>
             </div>
-          </template>
-          <template #cell(charge)="data">
-            <div
-              class="d-flex flex-column justify-content-center align-items-center"
-            >
-              <b-icon
-              v-if="data.item.charge"
-                icon="check-circle-fill"
-                variant="success"
-              >
-
-              </b-icon>
-              <feather-icon v-else icon="XCircleIcon" class="text-danger"  />
-            </div>
-            
-            
-          </template>
-          <template #cell(result)="data">
-            <div
-              class="d-flex flex-column justify-content-center align-items-center"
-            >
-              <b-icon
-              v-if="data.item.result == 'Approved'"
-                icon="check-circle-fill"
-                variant="success"
-              >
-
-              </b-icon>
-              <feather-icon v-else-if="data.item.result =='Unverified' " icon="ClockIcon" class="text-warning"  />
-              <feather-icon v-else icon="XCircleIcon" class="text-danger"  />
-            </div>
-            
-            
           </template>
           <template #cell(created_at)="data">
             <div
@@ -191,143 +160,64 @@
               </span>
             </div>
           </template>
+          <template #cell(action)="data">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+              v-if="changeStatus"
+            >
+              <b-button v-if="data.item.status == 'pending'"
+                variant="success"
+                class="mr-1 reset-radius btn-sm"
+                @click="modalChange(data.item)">DONE 
+                <feather-icon icon="FileIcon"></feather-icon>
+              </b-button>
+            </div>
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+              v-else
+            >
+              <b-button v-if="data.item.status == 'done'"
+                variant="success"
+                class="mr-1 reset-radius btn-sm"
+                @click="modalChange(data.item)">COMMENT 
+                <feather-icon icon="FileIcon"></feather-icon>
+              </b-button>
+            </div>
+          </template>
         </b-table>
-      <div class="mx-2 mb-2">
-        <b-row>
-          <b-col
-            cols="12"
-            sm="4"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            "
-          >
-            <span class="text-muted"
-              >Showing {{ startPage }} to {{ toPage }} of
-              {{ totalData }} entries</span
-            >
-          </b-col>
-          <b-col
-          cols="12"
-            sm="4"
-          class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            ">
-           
-            <b-button  variant="primary" >
-              <span> Total Amount  $ {{totalAmount}} </span>
-            </b-button>
-            </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="4"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-end
-            "
-          >
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
-          </b-col>
-        </b-row>
-      </div>
-      
     </b-card>
+    <modal-pending 
+      v-if="modalChanging"
+      :ifModalCard="modalChanging"
+      :objectLead="objectLead"
+      @close="closeModalCreateCard"
+      @update="update">
+      </modal-pending>
   </div>
 </template>
 
 <script>
 import { amgApi } from '@/service/axios';
 import vSelect from "vue-select";
+import { mapGetters } from "vuex";
+import ModalPending from './ModalGeneral.vue';
 export default {
     components: {
     vSelect,
+    ModalPending,
     
+  },
+  props:{
+    status:{
+      type:[Number,String],
+      
+    }
   },
   data() {
     return {
-      totalAmount:0,
+      objectLead:null,
       sortBy: "created_at",
       sortDesc: true,
-      arrayColumns: [
-        {
-          key: "lead_name",
-          label: "Name",
-          visible: true,
-        },
-        {
-          key: "type_transaction",
-          label: "Type",
-          visible: true,
-        },
-        {
-          key: "transaction_id",
-          label: "Transaction ID",
-          visible: true,
-        },
-        {
-          key: "amount",
-          label: "Amount",
-          visible: true,
-        },
-        {
-          key: "charge",
-          label: "Charge",
-          visible: true,
-        },
-        {
-          key: "result",
-          label: "Result",
-          visible: true,
-        },
-        {
-          key: "card_number",
-          label: "Credit Card",
-          visible: true,
-        },
-        {
-          key: "account",
-          label: "Account",
-          visible: true,
-        },
-        {
-          key: "program",
-          label: "Program",
-          visible: true,
-        },
-        {
-          key: "user_name",
-          label: "User",
-          visible: true,
-        },
-        {
-          key: "created_at",
-          label: "Creation Date",
-          sortable: true,
-          visible: true,
-        },
-        // { key: "actions", label: "Acciones", class: "text-center " },
-      ],
       searchInput: "",
       orderby: "",
       order: "",
@@ -340,99 +230,102 @@ export default {
       toPage: "",
       isBusy: false,
       perPageOptions: [10, 25, 50, 100],
-
+      arrayColumns: [
+        {
+          key: "leadname",
+          label: "Lead",
+          visible: true,
+        },
+        {
+          key: "status_lead",
+          label: "Status",
+          visible: true,
+        },
+        {
+          key: "credit_report",
+          label: "CR",
+          visible: true,
+        },
+        {
+          key: "mobile",
+          label: "Mobile",
+          visible: true,
+        },
+        {
+          key: "created_at",
+          label: "Created",
+          sortable: true,
+          visible: true,
+        },
+        {
+          key: "action",
+          label: "Actions",
+          visible: true,
+        },
+       
+      ],
       fromToObject: {
         from: null,
         to: null,
       },
-       filters: [
-        {
-          label: "Type",
-          options: [
-              {value: 0, label: "All"},
-              {value: 1, label: "Realtor"},
-              {value: 2, label: "Appointment"},
-              {value: 3, label: "Inital Payment"},
-              {value: 4, label: "Others"},
-              
-          ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
-          cols: 12,
-          md: 2,
-          visible: true
-        },
-        {
-          label: "Result",
-          options: [
-              {value: 0, label: "All"},
-              {value: 1, label: "Approved"},
-              {value: 2, label: "Declined"},
-              {value: 3, label: "Underview"},
-          ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
-          cols: 12,
-          md: 2,
-          visible: true
-        },
-        {
-          label: "User",
-          options: [],
-          model: null,
-          primaryKey: "id",
-          labelSelect: "user_name",
-          cols: 12,
-          md: 2,
-          visible: true
-        },
-        
-        
-      ],
+      filters:[],
       filterController: false,
+      modalChanging:false,
     };
   },
-  mounted() {
-    this.getAllUsers();
-    
-  },
-  computed: {
+  computed:{
+    changeStatus(){
+      return this.status == '1'? true: false 
+    },
     clientRoute() {
-      return "/payment";
+      return "/get-my-list";
     },
     visibleFields() {
       return this.arrayColumns.filter((column) => column.visible);
     },
-    type(){
-       return this.filters[0].model;
-    },
-    user(){
-      return this.filters[2].model;
-    },
-    result(){
-      return this.filters[1].model;
-    }
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
   },
-  methods: {
+  created(){
+    
+  },
+  methods:{
+    update(){
+      this.modalChanging =false
+      this.resetSearch()
+    },
+    closeModalCreateCard() {
+      
+      this.modalChanging = false;
+     
+    },
+    modalChange(Lead){
+      this.objectLead = Lead
+      if(this.modalChanging == false){
+        this.modalChanging =true
+      }else{
+        this.modalChanging =false
+      }
+    },
+    resetSearch() {
+      this.searchInput = "";
+      this.$refs.refClientsList.refresh();
+    },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        per_page: ctx.perPage,
-        text: ctx.filter,
-        from: this.fromToObject.from,
-        to: this.fromToObject.to,
-        result: this.result,
-        type: this.type,
-        user: this.user,
+        page: ctx.currentPage,
+        leadname: ctx.filter,
+        startdate: this.fromToObject.from,
+        enddate: this.fromToObject.to,
+        status: this.status == '1'? 1: 2 ,
+        user_id:this.currentUser.user_id,
       });
 
       // Must return a promise that resolves to an array of items
       return promise.then((data) => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
-        this.totalAmount = items[0].t_amount
-
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
         this.perPage = data.data.per_page;
@@ -444,30 +337,11 @@ export default {
         return items || [];
       });
     },
-    onChangeFilter() {
-      this.$refs.refClientsList.refresh();
-    },
-
-    async getAllUsers() {
-      const data = await amgApi.post(`/usermodule/2`,{
-        roles: "[1,2,5]",
-        type: "0",
-      });
-      let firstOption = {
-        value: "All",
-        id: 0,
-      };
-      let newData = data.data;
-      newData.unshift(firstOption);
-      this.filters[2].options = newData;
-    },
-    resetSearch() {
-      this.searchInput = "";
-      this.$refs.refClientsList.refresh();
-    },
   },
 };
 </script>
+
+
 
 <style lang="scss" scoped>
 .per-page-selector {
@@ -488,5 +362,3 @@ td.div {
 @import "@core/scss/vue/libs/vue-select.scss";
 @import "@core/scss/vue/libs/vue-sweetalert.scss";
 </style>
-
-

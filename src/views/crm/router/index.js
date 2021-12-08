@@ -5,6 +5,7 @@ import clientsRoute from '../views/clients/clients.router'
 import commissionsRoute from '../views/commissions/commissions.router'
 import viewDashboard from '../views/dashboard/dashboard.router'
 import PaymentsRoute from '../views/payments/payments.router'
+import ListsRoute from '../views/lists/lists.router'
 export default [
   ...viewRoute,
   ...leadRoute,
@@ -12,7 +13,8 @@ export default [
   SalesMadeRoute,
   ...commissionsRoute,
   ...viewDashboard,
-  ...PaymentsRoute
+  ...PaymentsRoute,
+  ...ListsRoute
 ]
 
 
