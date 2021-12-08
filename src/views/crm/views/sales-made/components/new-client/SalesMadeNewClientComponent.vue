@@ -1,5 +1,6 @@
 <template>
   <div>
+    aa: {{ (currentUser.role_id)? 'gaaa' : 'nulo' }}
     <filter-slot
       :fields="fields"
       :filter="filter"
@@ -12,7 +13,6 @@
         id="new-client-done-table"
         slot="table"
         ref="new-client-done-table"
-        v-scrollbar
         :has-provider="true"
         sticky-header="70vh"
         small
@@ -86,12 +86,12 @@
           </b-row>
           <b-row>
             <b-col>
-              <p v-if="data.item.commission">
+              <p v-if="data.item.commission && (currentUser.role_id == null || currentUser.role_id == 2)">
                 <small class="text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[0].commission }} </small>
               </p>
             </b-col>
           </b-row>
-          <b-row v-if="data.item.status == 1 || data.item.status == 3">
+          <b-row v-if="data.item.status == 1 || data.item.status == 3 && (currentUser.role_id == null || currentUser.role_id == 2)">
             <b-col>
               <b-icon
                 v-if="!data.item.editCaptured"
@@ -138,12 +138,12 @@
           </b-row>
           <b-row>
             <b-col>
-              <p v-if="data.item.commission">
+              <p v-if="data.item.commission && (currentUser.role_id == null || currentUser.role_id == 2)">
                 <small class="text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[1].commission }} </small>
               </p>
             </b-col>
           </b-row>
-          <b-row v-if="data.item.status == 1 || data.item.status == 3">
+          <b-row v-if="data.item.status == 1 || data.item.status == 3 && (currentUser.role_id == null || currentUser.role_id == 2)">
             <b-col>
               <b-icon
                 v-if="!data.item.editSeller"
@@ -169,7 +169,7 @@
                 v-else
                 class="cursor-pointer"
                 icon="XSquareIcon"
-                @click="data.item.editSeller = false;data.item.editSeller = data.item.seller"
+                @click="data.item.editSeller = false;data.item.sellerNew = data.item.seller"
               />
             </b-col>
           </b-row>
@@ -182,12 +182,19 @@
           </b-row>
           <b-row v-else>
             <b-col>
-              <b-input-group prepend="$" size="sm" class="mb-1">
-                <b-form-input v-model="data.item.feeNew" type="number"/>
+              <b-input-group
+                prepend="$"
+                size="sm"
+                class="mb-1"
+              >
+                <b-form-input
+                  v-model="data.item.feeNew"
+                  type="number"
+                />
               </b-input-group>
             </b-col>
           </b-row>
-          <b-row v-if="data.item.status === 1 || data.item.status === 3">
+          <b-row v-if="data.item.status === 1 || data.item.status === 3 && (currentUser.role_id == null || currentUser.role_id == 2)">
             <b-col>
               <b-icon
                 v-if="!data.item.editFee"
@@ -281,6 +288,8 @@
           <b-icon
             icon="folder-fill"
             variant="warning"
+            class="cursor-pointer"
+            @click="openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id)"
           />
         </template>
         <template v-slot:cell(status)="data">
@@ -290,6 +299,181 @@
           >
             {{ status[data.item.status].label }}
           </p>
+        </template>
+        <template v-slot:cell(actions)="data">
+          <b-row
+            v-if="data.item.creates > '2021-05-16 00:00:00'"
+            class="d-flex align-items-center justify-content-center"
+          >
+            <b-button
+              v-if="(data.item.status == 1 || data.item.status == 7) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 &&
+                data.item.initial_payment_status == 2 &&
+                currentUser.user_id !== 1 && currentUser.user_id !== 2"
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="(data.item.status == 1 || data.item.status == 6) &&
+                (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 &&
+                data.item.initial_payment_status == 2"
+              size="sm"
+              :disabled="
+                data.item.type == 1 && currentUser.user_id == 1
+                  ? false
+                  : data.item.type!==0
+              "
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 5 &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2 &&
+                  (currentUser.user_id == 1 || currentUser.user_id == 2)
+              "
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 5 &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2 &&
+                  (currentUser.user_id == 1 || currentUser.user_id == 2)
+              "
+              size="sm"
+              variant="warning"
+            >
+              Return
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 3 &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2 &&
+                  (currentUser.user_id == data.item.user_id ||
+                    currentUser.user_id == 1 ||
+                    currentUser.user_id == 2)
+              "
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.initial_payment_status == 1 &&
+                  (currentUser.role_id == null ||
+                    currentUser.role_id == 2)
+              "
+              size="sm"
+              variant="danger"
+            >
+              ANNUL
+            </b-button>
+          </b-row>
+          <b-row
+            v-else
+            class="d-flex align-items-center justify-content-center"
+          >
+            <b-button
+              v-if="
+                (data.item.status == 1 || data.item.status == 7) &&
+                  currentUser.user_id !== 1 &&
+                  currentUser.user_id !== 2 &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                (data.item.status == 1 || data.item.status == 6) &&
+                  (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+              size="sm"
+              variant="info"
+              :disabled="
+                data.item.type == 1 && currentUser.user_id == 1
+                  ? false
+                  : data.item.type!==0
+              "
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 5 &&
+                  (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 5 &&
+                  (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
+              "
+              size="sm"
+              variant="warning"
+            >
+              Return
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 3 &&
+                  (currentUser.user_id == data.item.user_id ||
+                    currentUser.user_id == 1 ||
+                    currentUser.user_id == 2) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.initial_payment_status == 1 &&
+                  (currentUser.role_id == null ||
+                    currentUser.role_id == 2)
+              "
+              size="sm"
+              variant="danger"
+            >
+              ANNUL
+            </b-button>
+          </b-row>
         </template>
         <template v-slot:cell(creates)="data">
           <span>{{ data.item.creates | myGlobal }}</span>
@@ -305,7 +489,7 @@
         </template>
         <template v-slot:cell(url)="data">
           <b-icon
-            v-if="data.item.initial_payment_status === 1"
+            v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.user_id == null || currentUser.user_id == 2)"
             icon="link"
             variant="primary"
           />
@@ -338,6 +522,11 @@
       :modal="modal"
       :captured-by-tracking="modalData.capturedByTracking"
     />
+    <files-modal
+      :key="modalKeys.files"
+      :modal="modal"
+      :files="modalData.files"
+    />
   </div>
 </template>
 
@@ -354,10 +543,12 @@ import TrackingModal from '@/views/crm/views/sales-made/components/modals/Tracki
 import DetailOfSailModal from '@/views/crm/views/sales-made/components/modals/DetailOfSailModal.vue'
 import InitialPaymentModal from '@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue'
 import TrackingCapturedByModal from '@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue'
+import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
   components: {
+    FilesModal,
     TrackingCapturedByModal,
     InitialPaymentModal,
     DetailOfSailModal,
@@ -391,6 +582,7 @@ export default {
         boost_credit: false,
         initial_payment: false,
         captuerd_by_tracking: false,
+        files: false,
       },
       modalData: {
         tracking: {
@@ -414,10 +606,17 @@ export default {
           client: '',
           id: 0,
         },
+        files: {
+          id: null,
+          program: '',
+          client: '',
+          sale_id: null,
+        },
       },
       modalKeys: {
         initialPaymentKey: 0,
         capturedByTracking: 0,
+        files: 0,
       },
       selectAll: false,
     }
@@ -529,6 +728,14 @@ export default {
       this.modalData.boost_credit.client = client
       this.modalData.boost_credit.fee = fee
       this.modal.boost_credit = true
+    },
+    openFilesModal(id, program, client, sale_id) {
+      this.modalData.files.id = id
+      this.modalData.files.program = program
+      this.modalData.files.client = client
+      this.modalData.files.sale_id = sale_id
+      this.modal.files = true
+      this.modalKeys.files = (this.modalKeys.files + 1) % 2
     },
     selectedRow(data) {
       const index = this.selected.findIndex(select => select.id === data.id)
