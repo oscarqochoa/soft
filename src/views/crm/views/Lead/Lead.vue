@@ -15,17 +15,8 @@
     <b-card-code title="LEADS" :actions="true">
       <template #actions>
         <div>
-          <b-button
-            variant="success"
-            class="mr-1"
-            @click="isAddNewUserSidebarActive = true"
-          >
-            <feather-icon
-              icon="PlusIcon"
-              size="15"
-              class="mr-50 text-white"
-            />
-            CREATE
+          <b-button variant="success" class="mr-1" @click="isAddNewUserSidebarActive = true">
+            <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />CREATE
           </b-button>
           <b-dropdown
             v-if="isOnlyLead"
@@ -33,11 +24,7 @@
             variant="info"
           >
             <template #button-content>
-              <feather-icon
-                icon="DownloadIcon"
-                size="16"
-                class="align-middle"
-              />
+              <feather-icon icon="DownloadIcon" size="16" class="align-middle" />
               <span class="ml-1">EXPORT TO EXCEL</span>
             </template>
             <b-dropdown-item @click="exportExcel(1, 1)">EXPORT CURRENT PAGE</b-dropdown-item>
@@ -208,24 +195,24 @@ export default {
       this.dato2 = this.S_FILTERS_LEADS.perPage
 
       if (this.dato2 == 10) {
-        if (this.dato1 == 'desc') {
-          this.oneDateLead = false
-          this.orderDateDesc = true
-          this.orderDateAsc = false
+        if (this.dato1 == "desc") {
+          this.oneDateLead = false;
+          this.orderDateDesc = true;
+          this.orderDateAsc = false;
         } else {
-          this.orderDateAsc = true
-          this.orderDateDesc = false
-          this.oneDateLead = false
+          this.orderDateAsc = true;
+          this.orderDateDesc = false;
+          this.oneDateLead = false;
         }
       } else if (this.dato2 == 2) {
-        if (this.dato1 == 'desc') {
-          this.oneEventLead = false
-          this.orderLeadDesc = true
-          this.orderLeadAsc = false
+        if (this.dato1 == "desc") {
+          this.oneEventLead = false;
+          this.orderLeadDesc = true;
+          this.orderLeadAsc = false;
         } else {
-          this.orderLeadAsc = true
-          this.orderLeadDesc = false
-          this.oneEventLead = false
+          this.orderLeadAsc = true;
+          this.orderLeadDesc = false;
+          this.oneEventLead = false;
         }
       }
 
@@ -237,7 +224,7 @@ export default {
       window.open(`${process.env.VUE_APP_BASE_URL}/exportleadsexcel?${dataExport}`)
     },
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

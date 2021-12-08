@@ -21,7 +21,7 @@
 
 <script>
 import commissionsService from "@/commons/components/commissions/services/commissions.service";
-import ModalHeader from "@/commons/components/commissions/modals/modal-details/ModalHeader.vue";
+import ModalHeader from "@/commons/components/commissions/modals/ModalHeader.vue";
 import DetailsCrm from "@/commons/components/commissions/modals/modal-details/DetailsCrm.vue";
 import DetailsAdm from "@/commons/components/commissions/modals/modal-details/DetailsAdm.vue";
 import DetailsDepartments from "@/commons/components/commissions/modals/modal-details/DetailsDepartments.vue";

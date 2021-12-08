@@ -138,6 +138,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import ButtonsEdit from "@/commons/utilities/ButtonsEdit";
 import moment from "moment";
 export default {

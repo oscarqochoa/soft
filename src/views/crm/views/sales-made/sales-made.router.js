@@ -1,7 +1,6 @@
-import NewClientComponent from '@/views/crm/views/sales-made/components/new-client/NewClientComponent.vue'
+import NewClientComponent from '@/views/crm/views/sales-made/components/NewClientComponent.vue'
 import AddChangeComponent from '@/views/crm/views/sales-made/components/AddChangeComponent.vue'
 import AnnuledComponent from '@/views/crm/views/sales-made/components/AnnuledComponent.vue'
-import PruebaModal from "@/views/crm/views/sales-made/components/PruebaModal";
 
 export default {
   path: '/crm/sales-made/',
@@ -25,16 +24,12 @@ export default {
       component: AnnuledComponent,
       name: 'sales-made-crm-annulled'
     },
-    {
-      path: 'modal',
-      component: PruebaModal,
-      name: 'prueba-modal'
-    },
+
   ],
   meta: {
     pageTitle: 'Sales Made',
     breadcrumb: [{
       text: 'Sales Made',
-    }, ],
+    }],
   },
 }
