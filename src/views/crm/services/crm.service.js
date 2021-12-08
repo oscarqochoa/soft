@@ -13,6 +13,32 @@ class CrmService {
 
   async getSellersCrm() {
     try {
+      const { data } = await amgApi.post('/sellerall/2', {
+        roles: '[1,2,5]',
+        type: '1',
+      })
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getCapturedCrm:', error)
+      throw error
+    }
+  }
+
+  async getCapturedCrm() {
+    try {
+      const { data } = await amgApi.post('/capturedall/2', {
+        roles: '[]',
+        type: '1',
+      })
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getCapturedCrm:', error)
+      throw error
+    }
+  }
+
+  async getLeadsSn(body) {
+    try {
       const { data } = await amgApi.post('/search-leads-sn-recovery', body)
       return data
     } catch (error) {
@@ -81,7 +107,7 @@ class CrmService {
 
   async getPrograms(params) {
     try {
-      const { data } = await amgApi.get('/programs', { params })
+      const data = await amgApi.get('/programs', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getPrograms:', error)
@@ -199,41 +225,15 @@ class CrmService {
   async getCountries (body) {
     try {
       const data = await amgApi.post('/view-countrys', body)
-      // eslint-disable-next-line array-callback-return
-      data.data.map(d => {
-        // eslint-disable-next-line no-param-reassign
-        d.selected = false
-        // eslint-disable-next-line no-param-reassign
-        d.editCaptured = false
-        // eslint-disable-next-line no-param-reassign
-        d.capturedNew = d.captured
-        // eslint-disable-next-line no-param-reassign
-        d.editSeller = false
-        // eslint-disable-next-line no-param-reassign
-        d.sellerNew = d.seller
-        // eslint-disable-next-line no-param-reassign
-        d.editFee = false
-        // eslint-disable-next-line no-param-reassign
-        d.feeNew = d.fee
-      })
       return data
     } catch (error) {
-      console.error('Something went wrong on getSaleMade:', error)
+      console.log('Something went wrong on getCountries:', error)
       throw error
     }
   }
   async getSellers (body) {
     try {
       const data = await amgApi.post(`/sellerall/${body.modul}`, body)
-      return data
-    } catch (error) {
-      console.log('Something went wrong on getSellers:', error)
-      throw error
-    }
-  }
-  async getUserCreatorOwner(body) {
-    try {
-      const { data } = await amgApi.post(`/sellerall/${body.modul}`, body)
       return data
     } catch (error) {
       console.log('Something went wrong on getSellers:', error)
@@ -273,7 +273,8 @@ class CrmService {
 
   async getSources() {
     try {
-      const { data } = await amgApi.get('/sourcesnames')
+      let data = await amgApi.get('/sourcesnames')
+      data = data.data
       return data
     } catch (error) {
       console.log('Something went wrong on getSources:', error)
