@@ -6,6 +6,7 @@
           @search="searchCommissions"
           @update-percentage="updatePercentageDepartment"
           :tab="tab"
+          :isManagement="isManagement"
         />
 
         <b-card>
@@ -27,20 +28,59 @@
                   <b-th style="width: 100px !important">User</b-th>
                   <b-th v-if="isCrm || isDepartment"></b-th>
                   <template v-if="halfYear">
-                    <b-th>Jan</b-th>
-                    <b-th>Feb</b-th>
-                    <b-th>Mar</b-th>
-                    <b-th>Apr</b-th>
-                    <b-th>May</b-th>
-                    <b-th>Jun</b-th>
+                    <b-th>
+                      Jan
+                      <span v-if="isCrm" class="float-right">{{percentages.january_percentage}}%</span>
+                    </b-th>
+                    <b-th>
+                      Feb
+                      <span v-if="isCrm" class="float-right">{{percentages.february_percentage}}%</span>
+                    </b-th>
+                    <b-th>
+                      Mar
+                      <span v-if="isCrm" class="float-right">{{percentages.march_percentage}}%</span>
+                    </b-th>
+                    <b-th>
+                      Apr
+                      <span v-if="isCrm" class="float-right">{{percentages.april_percentage}}%</span>
+                    </b-th>
+                    <b-th>
+                      May
+                      <span v-if="isCrm" class="float-right">{{percentages.may_percentage}}%</span>
+                    </b-th>
+                    <b-th>
+                      Jun
+                      <span v-if="isCrm" class="float-right">{{percentages.june_percentage}}%</span>
+                    </b-th>
                   </template>
                   <template v-else>
-                    <b-th>Jul</b-th>
-                    <b-th>Aug</b-th>
-                    <b-th>Sep</b-th>
-                    <b-th>Oct</b-th>
-                    <b-th>Nov</b-th>
-                    <b-th>Dic</b-th>
+                    <b-th>
+                      Jul
+                      <span v-if="isCrm" class="float-right">{{percentages.july_percentage}}%</span>
+                    </b-th>
+                    <b-th>
+                      Aug
+                      <span v-if="isCrm" class="float-right">{{percentages.august_percentage}}%</span>
+                    </b-th>
+                    <b-th>
+                      Sep
+                      <span
+                        v-if="isCrm"
+                        class="float-right"
+                      >{{percentages.september_percentage}}%</span>
+                    </b-th>
+                    <b-th>
+                      Oct
+                      <span v-if="isCrm" class="float-right">{{percentages.october_percentage}}%</span>
+                    </b-th>
+                    <b-th>
+                      Nov
+                      <span v-if="isCrm" class="float-right">{{percentages.november_percentage}}%</span>
+                    </b-th>
+                    <b-th>
+                      Dic
+                      <span v-if="isCrm" class="float-right">{{percentages.december_percentage}}%</span>
+                    </b-th>
                   </template>
                 </b-tr>
               </b-thead>
@@ -445,9 +485,7 @@ export default {
       default: null
     }
   },
-  mounted() {
-    console.log(this.currentUser);
-  },
+  mounted() {},
   data() {
     return {
       sessionUser: null,
@@ -462,19 +500,12 @@ export default {
       user_id: "",
       user_name: "",
       role_id: "",
-      modalApprove: false,
-      amountCommission: "",
-      amountToPayCommission: "",
       approve_by: "",
       paid_state: "",
-      programs: [],
-      program_id: "",
       module_id: null,
-      modalp: false,
       type: "",
       modalm: false,
       module_name: "",
-      ready: false,
       percentages: null,
       amountTotal: null,
       showOverlay: true,
@@ -629,7 +660,7 @@ export default {
     //Get Commissions
     async searchCommissions() {
       this.showOverlay = true;
-      this.module_id = this.convertProgramToModule(this.tab);
+      this.module_id = this.convertModuleToProgramString(this.tab);
       const params = {
         user: this.user,
         year: this.year,
@@ -671,16 +702,13 @@ export default {
         id_user: this.currentUser.user_id
       };
       let response = await commissionsService.updatePercentage(params);
+      let result = await this.searchCommissions();
       this.showOverlay = false;
-      this.$swal({
-        title: "Percentage updated",
-        text: "The percentage to pay of the department was updated",
-        icon: "success",
-        customClass: {
-          confirmButton: "btn btn-primary"
-        },
-        buttonsStyling: false
-      });
+      this.showSwalSuccess(
+        "Percentage updated",
+        "The percentage to pay of the department was updated",
+        "success"
+      );
     },
     editPercentageUser(index, edit, item) {
       this.commissions[index][edit] = 1;
@@ -712,15 +740,12 @@ export default {
       this.commissions[index][percentage_pay] = valuePercentage;
       this.commissions[index][edit] = 0;
       this.showOverlay = false;
-      this.$swal({
-        title: "Percentage updated",
-        html: `The percentage to pay of <b> ${item.user_name}</b> was updated`,
-        icon: "success",
-        customClass: {
-          confirmButton: "btn btn-primary"
-        },
-        buttonsStyling: false
-      });
+      this.showSwalSuccess(
+        "Percentage updated",
+        "",
+        "success",
+        `The percentage to pay of <b> ${item.user_name}</b> was updated`
+      );
     },
 
     findCommissions(event, month_t, item, monthName) {

@@ -12,7 +12,7 @@
         </b-input-group>
       </b-col>
       <b-col lg="4 d-flex justify-content-center">
-        <template v-if="tab == 'crm'">
+        <template v-if="tab == 'crm' && isManagement">
           <b-input-group prepend="To Pay" append="%" :class="{'w-input-percent':bigWindow}">
             <b-form-input
               min="1"
@@ -63,6 +63,10 @@ export default {
     tab: {
       type: String,
       default: ""
+    },
+    isManagement: {
+      type: Boolean,
+      default: false
     }
   },
   directives: {

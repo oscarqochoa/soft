@@ -11,8 +11,8 @@ export default [
           text: "Commissions",
         },
       ],
-      module: 16,
-      tab: "7",
+      module: 2,
+      tab: "crm",
     },
   },
 ];
