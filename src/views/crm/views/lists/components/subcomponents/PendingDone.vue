@@ -163,18 +163,36 @@
           <template #cell(action)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
+              v-if="changeStatus"
             >
               <b-button v-if="data.item.status == 'pending'"
-              variant="success"
-                        class="mr-1 reset-radius btn-sm">DONE 
-                        <feather-icon icon="FileIcon"></feather-icon>
+                variant="success"
+                class="mr-1 reset-radius btn-sm"
+                @click="modalChange(data.item)">DONE 
+                <feather-icon icon="FileIcon"></feather-icon>
+              </b-button>
+            </div>
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+              v-else
+            >
+              <b-button v-if="data.item.status == 'done'"
+                variant="success"
+                class="mr-1 reset-radius btn-sm"
+                @click="modalChange(data.item)">COMMENT 
+                <feather-icon icon="FileIcon"></feather-icon>
               </b-button>
             </div>
           </template>
         </b-table>
     </b-card>
-    <b-button @click="abrir">Abrir</b-button>
-    <modal-pending></modal-pending>
+    <modal-pending 
+      v-if="modalChanging"
+      :ifModalCard="modalChanging"
+      :objectLead="objectLead"
+      @close="closeModalCreateCard"
+      @update="update">
+      </modal-pending>
   </div>
 </template>
 
@@ -182,15 +200,22 @@
 import { amgApi } from '@/service/axios';
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-import ModalPending from './ModalPending.vue';
+import ModalPending from './ModalGeneral.vue';
 export default {
     components: {
     vSelect,
     ModalPending,
     
   },
+  props:{
+    status:{
+      type:[Number,String],
+      
+    }
+  },
   data() {
     return {
+      objectLead:null,
       sortBy: "created_at",
       sortDesc: true,
       searchInput: "",
@@ -245,10 +270,13 @@ export default {
       },
       filters:[],
       filterController: false,
-      abrirbool:false,
+      modalChanging:false,
     };
   },
   computed:{
+    changeStatus(){
+      return this.status == '1'? true: false 
+    },
     clientRoute() {
       return "/get-my-list";
     },
@@ -260,14 +288,24 @@ export default {
     }),
   },
   created(){
-    this.search()
+    
   },
   methods:{
-    abrir(){
-      if(this.abrirbool == false){
-        this.abrirbool =true
+    update(){
+      this.modalChanging =false
+      this.resetSearch()
+    },
+    closeModalCreateCard() {
+      
+      this.modalChanging = false;
+     
+    },
+    modalChange(Lead){
+      this.objectLead = Lead
+      if(this.modalChanging == false){
+        this.modalChanging =true
       }else{
-        this.abrirbool =false
+        this.modalChanging =false
       }
     },
     resetSearch() {
@@ -280,8 +318,7 @@ export default {
         leadname: ctx.filter,
         startdate: this.fromToObject.from,
         enddate: this.fromToObject.to,
-        status: 1 ,
-       
+        status: this.status == '1'? 1: 2 ,
         user_id:this.currentUser.user_id,
       });
 
@@ -289,8 +326,6 @@ export default {
       return promise.then((data) => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
-       
-
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
         this.perPage = data.data.per_page;
@@ -300,30 +335,6 @@ export default {
         this.toPage = data.data.to;
         // Must return an array of items or an empty array if an error occurred
         return items || [];
-      });
-    },
-
-    search() {
-      const params = {
-        page: 1,
-        user_id:this.currentUser.user_id,
-        leadname: this.leadname,
-        startdate: this.startdate,
-        enddate: this.enddate,
-        status: 1 ,
-      };
-      
-      amgApi.post("/get-my-list?page=1", params).then((response) => {
-        if (response.status == 200) {
-          this.myList = response.data.data;
-          console.log(this.myList)
-          this.start_page = response.data.current_page;
-          this.perpage = response.data.per_page;
-          this.next_page = this.start_page + 1;
-          this.last_page = response.data.last_page;
-          this.total_data = response.data.total;
-         
-        }
       });
     },
   },
