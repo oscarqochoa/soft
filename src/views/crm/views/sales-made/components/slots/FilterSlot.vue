@@ -150,58 +150,65 @@
                 </b-col>
                 <b-col>
                   <label>Captured By:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.captured"
                     :options="captured"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
                 <b-col>
                   <label>Seller:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.seller"
                     :options="sellers"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
                 <b-col v-if="!annulled">
                   <label>Source name:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.source"
                     :options="sources"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
                 <b-col>
                   <label>Status:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.status"
                     :options="status"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
                 <b-col>
                   <label>Services:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.program"
                     :options="programs"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
                 <b-col>
                   <label>IP:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.stip"
                     :options="stip"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
                 <b-col v-if="!annulled">
                   <label>ST/AD:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.state"
                     :options="sts"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
               </b-form-row>

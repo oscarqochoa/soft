@@ -60,6 +60,11 @@ export default [
     label: 'ST',
   },
   {
+    key: 'actions',
+    sortable: false,
+    label: 'Action',
+  },
+  {
     key: 'creates',
     sortable: true,
     label: 'Created',

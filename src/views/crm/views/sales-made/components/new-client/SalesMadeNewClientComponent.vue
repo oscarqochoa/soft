@@ -1,5 +1,6 @@
 <template>
   <div>
+    aa: {{ (currentUser.role_id)? 'gaaa' : 'nulo' }}
     <filter-slot
       :fields="fields"
       :filter="filter"
@@ -12,7 +13,6 @@
         id="new-client-done-table"
         slot="table"
         ref="new-client-done-table"
-        v-scrollbar
         :has-provider="true"
         sticky-header="70vh"
         small
@@ -30,7 +30,7 @@
             <strong>Loading ...</strong>
           </div>
         </template>
-        <template #head(selected)="data">
+        <template #head(selected)>
           <b-form-checkbox
             v-model="selectAll"
             @input="selectedAll"
@@ -72,60 +72,156 @@
         </template>
         <template v-slot:cell(captured)="data">
           <b-row>
-            <b-col>
+            <b-col v-if="!data.item.editCaptured">
               <p> {{ data.item.captured }}</p>
+            </b-col>
+            <b-col v-else>
+              <v-select
+                v-model="data.item.capturedNew"
+                class="font-small-1 mb-1"
+                :clearable="false"
+                :options="captured"
+              />
             </b-col>
           </b-row>
           <b-row>
             <b-col>
-              <p v-if="data.item.commission">
+              <p v-if="data.item.commission && (currentUser.role_id == null || currentUser.role_id == 2)">
                 <small class="text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[0].commission }} </small>
               </p>
             </b-col>
           </b-row>
-          <b-row v-if="data.item.status == 1 || data.item.status == 3">
+          <b-row v-if="data.item.status == 1 || data.item.status == 3 && (currentUser.role_id == null || currentUser.role_id == 2)">
             <b-col>
-              <b-icon icon="pencil-fill" />
+              <b-icon
+                v-if="!data.item.editCaptured"
+                icon="pencil-fill"
+                class="cursor-pointer"
+                @click="data.item.editCaptured = true;data.item.editCaptured = data.item.captured"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="SaveIcon"
+                @click="saveNewCaptured(data.item.captured, data.item.capturedNew, data.item.id, data.item)"
+              />
             </b-col>
             <b-col>
-              <b-icon icon="list-ul" />
+              <b-icon
+                v-if="!data.item.editCaptured"
+                class="cursor-pointer"
+                icon="list-ul"
+                @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 1)"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="XSquareIcon"
+                @click="data.item.editCaptured = false"
+              />
             </b-col>
           </b-row>
         </template>
         <template v-slot:cell(seller)="data">
           <b-row>
-            <b-col>
+            <b-col v-if="!data.item.editSeller">
               <p> {{ data.item.seller }}</p>
+            </b-col>
+            <b-col v-else>
+              <v-select
+                v-model="data.item.sellerNew"
+                class="font-small-2 mb-1"
+                :clearable="false"
+                :options="sellers"
+              />
             </b-col>
           </b-row>
           <b-row>
             <b-col>
-              <p v-if="data.item.commission">
+              <p v-if="data.item.commission && (currentUser.role_id == null || currentUser.role_id == 2)">
                 <small class="text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[1].commission }} </small>
               </p>
             </b-col>
           </b-row>
-          <b-row v-if="data.item.status === 1 || data.item.status === 3">
+          <b-row v-if="data.item.status == 1 || data.item.status == 3 && (currentUser.role_id == null || currentUser.role_id == 2)">
             <b-col>
-              <b-icon icon="pencil-fill" />
+              <b-icon
+                v-if="!data.item.editSeller"
+                icon="pencil-fill"
+                class="cursor-pointer"
+                @click="data.item.editSeller = true"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="SaveIcon"
+                @click="saveNewSeller(data.item.seller, data.item.sellerNew, data.item.id, data.item)"
+              />
             </b-col>
             <b-col>
-              <b-icon icon="list-ul" />
+              <b-icon
+                v-if="!data.item.editSeller"
+                class="cursor-pointer"
+                icon="list-ul"
+                @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 2)"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="XSquareIcon"
+                @click="data.item.editSeller = false;data.item.sellerNew = data.item.seller"
+              />
             </b-col>
           </b-row>
         </template>
         <template v-slot:cell(fee)="data">
-          <b-row>
+          <b-row v-if="!data.item.editFee">
             <b-col>
               <p> $ {{ data.item.fee }} </p>
             </b-col>
           </b-row>
-          <b-row v-if="data.item.status === 1 || data.item.status === 3">
+          <b-row v-else>
             <b-col>
-              <b-icon icon="pencil-fill" />
+              <b-input-group
+                prepend="$"
+                size="sm"
+                class="mb-1"
+              >
+                <b-form-input
+                  v-model="data.item.feeNew"
+                  type="number"
+                />
+              </b-input-group>
+            </b-col>
+          </b-row>
+          <b-row v-if="data.item.status === 1 || data.item.status === 3 && (currentUser.role_id == null || currentUser.role_id == 2)">
+            <b-col>
+              <b-icon
+                v-if="!data.item.editFee"
+                icon="pencil-fill"
+                class="cursor-pointer"
+                @click="data.item.editFee = true"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="SaveIcon"
+                @click="saveNewFee(data.item.fee, data.item.feeNew, data.item.id, data.item)"
+              />
             </b-col>
             <b-col>
-              <b-icon icon="list-ul" />
+              <b-icon
+                v-if="!data.item.editFee"
+                icon="list-ul"
+                class="cursor-pointer"
+                @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 3)"
+              />
+              <feather-icon
+                v-else
+                class="cursor-pointer"
+                icon="XSquareIcon"
+                @click="data.item.editFee = false; data.item.feeNew = data.item.fee"
+              />
             </b-col>
           </b-row>
         </template>
@@ -192,6 +288,8 @@
           <b-icon
             icon="folder-fill"
             variant="warning"
+            class="cursor-pointer"
+            @click="openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id)"
           />
         </template>
         <template v-slot:cell(status)="data">
@@ -199,8 +297,183 @@
             class="m-0 font-weight-bold font-small-3"
             :class="'color: text-' + status[data.item.status].variant"
           >
-            {{ status[data.item.status].text }}
+            {{ status[data.item.status].label }}
           </p>
+        </template>
+        <template v-slot:cell(actions)="data">
+          <b-row
+            v-if="data.item.creates > '2021-05-16 00:00:00'"
+            class="d-flex align-items-center justify-content-center"
+          >
+            <b-button
+              v-if="(data.item.status == 1 || data.item.status == 7) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 &&
+                data.item.initial_payment_status == 2 &&
+                currentUser.user_id !== 1 && currentUser.user_id !== 2"
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="(data.item.status == 1 || data.item.status == 6) &&
+                (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 &&
+                data.item.initial_payment_status == 2"
+              size="sm"
+              :disabled="
+                data.item.type == 1 && currentUser.user_id == 1
+                  ? false
+                  : data.item.type!==0
+              "
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 5 &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2 &&
+                  (currentUser.user_id == 1 || currentUser.user_id == 2)
+              "
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 5 &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2 &&
+                  (currentUser.user_id == 1 || currentUser.user_id == 2)
+              "
+              size="sm"
+              variant="warning"
+            >
+              Return
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 3 &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2 &&
+                  (currentUser.user_id == data.item.user_id ||
+                    currentUser.user_id == 1 ||
+                    currentUser.user_id == 2)
+              "
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.initial_payment_status == 1 &&
+                  (currentUser.role_id == null ||
+                    currentUser.role_id == 2)
+              "
+              size="sm"
+              variant="danger"
+            >
+              ANNUL
+            </b-button>
+          </b-row>
+          <b-row
+            v-else
+            class="d-flex align-items-center justify-content-center"
+          >
+            <b-button
+              v-if="
+                (data.item.status == 1 || data.item.status == 7) &&
+                  currentUser.user_id !== 1 &&
+                  currentUser.user_id !== 2 &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                (data.item.status == 1 || data.item.status == 6) &&
+                  (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+              size="sm"
+              variant="info"
+              :disabled="
+                data.item.type == 1 && currentUser.user_id == 1
+                  ? false
+                  : data.item.type!==0
+              "
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 5 &&
+                  (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 5 &&
+                  (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
+              "
+              size="sm"
+              variant="warning"
+            >
+              Return
+            </b-button>
+            <b-button
+              v-if="
+                data.item.status == 3 &&
+                  (currentUser.user_id == data.item.user_id ||
+                    currentUser.user_id == 1 ||
+                    currentUser.user_id == 2) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+              size="sm"
+              variant="info"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="
+                data.item.initial_payment_status == 1 &&
+                  (currentUser.role_id == null ||
+                    currentUser.role_id == 2)
+              "
+              size="sm"
+              variant="danger"
+            >
+              ANNUL
+            </b-button>
+          </b-row>
         </template>
         <template v-slot:cell(creates)="data">
           <span>{{ data.item.creates | myGlobal }}</span>
@@ -216,7 +489,7 @@
         </template>
         <template v-slot:cell(url)="data">
           <b-icon
-            v-if="data.item.initial_payment_status === 1"
+            v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.user_id == null || currentUser.user_id == 2)"
             icon="link"
             variant="primary"
           />
@@ -240,15 +513,27 @@
       :boost_credit="modalData.boost_credit"
     />
     <initial-payment-modal
-      :key="initialPaymentKey"
+      :key="modalKeys.initialPaymentKey"
       :modal="modal"
       :initial_payment="modalData.initial_payment"
+    />
+    <tracking-captured-by-modal
+      :key="modalKeys.capturedByTracking"
+      :modal="modal"
+      :captured-by-tracking="modalData.capturedByTracking"
+    />
+    <files-modal
+      :key="modalKeys.files"
+      :modal="modal"
+      :files="modalData.files"
     />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+
+import vSelect from 'vue-select'
 import FilterSlot
 from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
 import dataFields from '@/views/crm/views/sales-made/components/new-client/fields.data'
@@ -257,11 +542,19 @@ import CrmService from '@/views/crm/services/crm.service'
 import TrackingModal from '@/views/crm/views/sales-made/components/modals/TrackingModal.vue'
 import DetailOfSailModal from '@/views/crm/views/sales-made/components/modals/DetailOfSailModal.vue'
 import InitialPaymentModal from '@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue'
+import TrackingCapturedByModal from '@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue'
+import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
   components: {
-    InitialPaymentModal, DetailOfSailModal, TrackingModal, FilterSlot,
+    FilesModal,
+    TrackingCapturedByModal,
+    InitialPaymentModal,
+    DetailOfSailModal,
+    TrackingModal,
+    FilterSlot,
+    vSelect,
   },
   props: {
     done: {
@@ -288,6 +581,8 @@ export default {
         tracking: false,
         boost_credit: false,
         initial_payment: false,
+        captuerd_by_tracking: false,
+        files: false,
       },
       modalData: {
         tracking: {
@@ -306,14 +601,34 @@ export default {
           amount: null,
           sale_id: null,
         },
+        capturedByTracking: {
+          program: '',
+          client: '',
+          id: 0,
+        },
+        files: {
+          id: null,
+          program: '',
+          client: '',
+          sale_id: null,
+        },
       },
-      initialPaymentKey: 0,
+      modalKeys: {
+        initialPaymentKey: 0,
+        capturedByTracking: 0,
+        files: 0,
+      },
       selectAll: false,
     }
   },
   computed: {
     ...mapState({
       status: state => state['crm-store'].status,
+      sellers: state => state['crm-store'].sellersCrm,
+      captured: state => state['crm-store'].capturedCrm,
+    }),
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
     }),
     filteredFields() {
       if (this.done === 0) return this.fields
@@ -385,13 +700,24 @@ export default {
         this.modal.tracking = true
       }
     },
+    openTrackingCapturedByModal(program, client, id, type) {
+      this.modalData.capturedByTracking.client = client
+      this.modalData.capturedByTracking.program = program
+      this.modalData.capturedByTracking.id = id
+      this.modalData.capturedByTracking.type = type
+      if (type === 1) this.modalData.capturedByTracking.tittle = 'CAPTURED BY'
+      else if (type === 2) this.modalData.capturedByTracking.tittle = 'SELLER'
+      else if (type === 3) this.modalData.capturedByTracking.tittle = 'FEE'
+      this.modal.captuerd_by_tracking = true
+      this.modalKeys.capturedByTracking += 1
+    },
     openInitialPaymentModal(program, client, amount, saleId) {
       this.modalData.initial_payment.amount = amount
       this.modalData.initial_payment.client = client
       this.modalData.initial_payment.program = program
       this.modalData.initial_payment.sale_id = saleId
       this.modal.initial_payment = true
-      this.initialPaymentKey = (this.initialPaymentKey + 1) % 2
+      this.modalKeys.initialPaymentKey = (this.modalKeys.initialPaymentKey + 1) % 2
     },
     openModalProgram(data) {
       if (data.program_id === 2 || data.program_id === 7 || data.program_id === 6) this.openDetailOfSail(data.program, data.client, data.fee)
@@ -403,6 +729,14 @@ export default {
       this.modalData.boost_credit.fee = fee
       this.modal.boost_credit = true
     },
+    openFilesModal(id, program, client, sale_id) {
+      this.modalData.files.id = id
+      this.modalData.files.program = program
+      this.modalData.files.client = client
+      this.modalData.files.sale_id = sale_id
+      this.modal.files = true
+      this.modalKeys.files = (this.modalKeys.files + 1) % 2
+    },
     selectedRow(data) {
       const index = this.selected.findIndex(select => select.id === data.id)
       if (data.selected === true && index === -1) this.selected.push(data)
@@ -411,6 +745,83 @@ export default {
     selectedAll() {
       if (this.selectAll) this.items.forEach(item => item.selected = true)
       else this.items.forEach(item => item.selected = false)
+    },
+    async saveNewCaptured(captured, capturedNew, userId, user) {
+      if (captured === capturedNew) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'You can\'t select the same captured')
+      else if (captured === capturedNew.label) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'You can\'t select the same captured')
+      else {
+        this.$store.commit('app/SET_LOADING', true)
+        try {
+          const response = await CrmService.saveNewCaptured({
+            capt: capturedNew.id,
+            id: userId,
+            user: this.currentUser.user_id,
+          })
+          if (response.status === 200) this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Se actualizo satisfactoriamente')
+          else return
+          // eslint-disable-next-line no-param-reassign
+          user.captured = user.capturedNew.label
+          // eslint-disable-next-line no-param-reassign
+          user.capturedNew = user.captured
+          // eslint-disable-next-line no-param-reassign
+          user.editCaptured = false
+          this.$store.commit('app/SET_LOADING', false)
+        } catch (error) {
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+          this.$store.commit('app/SET_LOADING', false)
+        }
+      }
+    },
+    async saveNewSeller(seller, sellerNew, userId, user) {
+      if (seller === sellerNew) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'You can\'t select the same captured')
+      else if (seller === sellerNew.label) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'You can\'t select the same captured')
+      else {
+        this.$store.commit('app/SET_LOADING', true)
+        try {
+          const response = await CrmService.saveNewSeller({
+            sel: sellerNew.id,
+            id: userId,
+            user: this.currentUser.user_id,
+          })
+          if (response.status === 200) this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Se actualizo satisfactoriamente')
+          else return
+          // eslint-disable-next-line no-param-reassign
+          user.seller = user.sellerNew.label
+          // eslint-disable-next-line no-param-reassign
+          user.sellerNew = user.seller
+          // eslint-disable-next-line no-param-reassign
+          user.editSeller = false
+          this.$store.commit('app/SET_LOADING', false)
+        } catch (error) {
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+          this.$store.commit('app/SET_LOADING', false)
+        }
+      }
+    },
+    async saveNewFee(fee, feeNew, userId, user) {
+      if (fee === feeNew) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'You can\'t select the same captured')
+      else {
+        this.$store.commit('app/SET_LOADING', true)
+        try {
+          const response = await CrmService.saveNewFee({
+            fee: feeNew,
+            id: userId,
+            user: this.currentUser.user_id,
+          })
+          if (response.status === 200) this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Se actualizo satisfactoriamente')
+          else return
+          // eslint-disable-next-line no-param-reassign
+          user.fee = user.feeNew
+          // eslint-disable-next-line no-param-reassign
+          user.feeNew = user.fee
+          // eslint-disable-next-line no-param-reassign
+          user.editFee = false
+          this.$store.commit('app/SET_LOADING', false)
+        } catch (error) {
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+          this.$store.commit('app/SET_LOADING', false)
+        }
+      }
     },
   },
 }

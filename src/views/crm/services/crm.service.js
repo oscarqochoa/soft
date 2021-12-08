@@ -12,23 +12,29 @@ class CrmService {
   }
 
   async getSellersCrm() {
-    // eslint-disable-next-line no-undef
-    let data = await amgApi.post('/sellerall/2', {
-      roles: '[1,2,5]',
-      type: '1',
-    })
-    data = data.data
-    return data
+    try {
+      const { data } = await amgApi.post('/sellerall/2', {
+        roles: '[1,2,5]',
+        type: '1',
+      })
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getCapturedCrm:', error)
+      throw error
+    }
   }
 
   async getCapturedCrm() {
-    // eslint-disable-next-line no-undef
-    let data = await amgApi.post('/capturedall/2', {
-      roles: '[]',
-      type: '1',
-    })
-    data = data.data
-    return data
+    try {
+      const { data } = await amgApi.post('/capturedall/2', {
+        roles: '[]',
+        type: '1',
+      })
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getCapturedCrm:', error)
+      throw error
+    }
   }
 
   async getLeadsSn(body) {
@@ -40,10 +46,18 @@ class CrmService {
       throw error
     }
   }
-
-  async getStatusLeads(params) {
+  async getLeadsWPotential (body) {
     try {
-      const { data } = await amgApi.get('/leadstatus', { params })
+      const { data } = await amgApi.post('/search-leads-sn-potential', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getLeadsWPotential:', error)
+      throw error
+    }
+  }
+  async getStatusLeads (params) {
+    try {
+      const data = await amgApi.get('/leadstatus', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getStatusLeads:', error)
@@ -53,7 +67,7 @@ class CrmService {
 
   async getStateLeads(params) {
     try {
-      const { data } = await amgApi.get('/stateleads', { params })
+      const data = await amgApi.get('/stateleads', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getStateLeads:', error)
@@ -63,7 +77,7 @@ class CrmService {
 
   async getSourceLeads(params) {
     try {
-      const { data } = await amgApi.get('/leadsource', { params })
+      const data = await amgApi.get('/leadsource', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getSourceLeads:', error)
@@ -73,7 +87,7 @@ class CrmService {
 
   async getOwners(body) {
     try {
-      const { data } = await amgApi.post('/usermodule/2', body)
+      const data = await amgApi.post('/usermodule/2', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getOwners:', error)
@@ -83,7 +97,7 @@ class CrmService {
 
   async getSourceNames(params) {
     try {
-      const { data } = await amgApi.get('/sourcesnames', { params })
+      const data = await amgApi.get('/sourcesnames', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getSourceNames:', error)
@@ -93,7 +107,7 @@ class CrmService {
 
   async getPrograms(params) {
     try {
-      const { data } = await amgApi.get('/programs', { params })
+      const data = await amgApi.get('/programs', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getPrograms:', error)
@@ -103,7 +117,7 @@ class CrmService {
 
   async getStates(body) {
     try {
-      const { data } = await amgApi.post('/get-states', body)
+      const data = await amgApi.post('/get-states', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getStates:', error)
@@ -113,7 +127,7 @@ class CrmService {
 
   async getStatesEeuu(params) {
     try {
-      const { data } = await amgApi.get('/stateseeuu', { params })
+      const data = await amgApi.get('/stateseeuu', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getStatesEeuu:', error)
@@ -122,9 +136,12 @@ class CrmService {
   }
 
   async getAlgo() {
-    // eslint-disable-next-line no-undef
-    const data = await amgApi.get('/welcome')
-    return data
+    try {
+      return await amgApi.get('/welcome')
+    } catch (error) {
+      console.log('Something went wrong on getAlgo:', error)
+      throw error
+    }
   }
 
   async getListCards(body) {
@@ -179,38 +196,54 @@ class CrmService {
 
   async getSaleMade(body, page) {
     try {
-      const { data } = await amgApi.post(`/salemade?page=${page}`, body)
-      data.data.map(d => d.selected = false)
+      // eslint-disable-next-line no-undef
+      let data = await amgApi.post(`/salemade?page=${page}`, {
+        text: body.text,
+        status: body.status,
+        program: body.program,
+        state_h: body.state_h,
+        from: body.from,
+        to: body.to,
+        orderby: body.orderby,
+        order: body.order,
+        captured: body.captured,
+        seller: body.seller,
+        salemade: body.salemade,
+        rolsession: body.rolsession,
+        statusip: body.statusip,
+        sourcesname_id: body.sourcesname_id,
+        done: body.done,
+        per_page: body.per_page,
+      })
+      data = data.data
       return data
     } catch (error) {
-      console.error('Something went wrong on getSaleMade:', error)
+      console.log('Something went wrong on postRequestLead:', error)
       throw error
     }
   }
-
-  async getCountries(body) {
+  async getCountries (body) {
     try {
-      const { data } = await amgApi.post('/view-countrys', body)
+      const data = await amgApi.post('/view-countrys', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getCountries:', error)
       throw error
     }
   }
-
-  async getUserCreatorOwner(body) {
+  async getSellers (body) {
     try {
-      const { data } = await amgApi.post(`/sellerall/${body.modul}`, body)
+      const data = await amgApi.post(`/sellerall/${body.modul}`, body)
       return data
     } catch (error) {
-      console.log('Something went wrong on getUserCreatorOwner:', error)
+      console.log('Something went wrong on getSellers:', error)
       throw error
     }
   }
 
   async postUniqueMobile(body) {
     try {
-      const { data } = await amgApi.post('/uniquemobile', body)
+      const data = await amgApi.post('/uniquemobile', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postUniqueMobile:', error)
@@ -220,7 +253,7 @@ class CrmService {
 
   async postRequestLead(body) {
     try {
-      const { data } = await amgApi.post('/socialnetwork/request-lead', body)
+      const data = await amgApi.post('/socialnetwork/request-lead', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postRequestLead:', error)
@@ -234,13 +267,19 @@ class CrmService {
       return data
     } catch (error) {
       console.log('Something went wrong on postCreateLead:', error)
+      throw error
     }
   }
 
   async getSources() {
-    let data = await amgApi.get('/sourcesnames')
-    data = data.data
-    return data
+    try {
+      let data = await amgApi.get('/sourcesnames')
+      data = data.data
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getSources:', error)
+      throw error
+    }
   }
 
   async postDeleteLead(body) {
@@ -265,7 +304,7 @@ class CrmService {
 
   async getAllQuicksSms(body) {
     try {
-      const { data } = await amgApi.post('/allquickssms', body)
+      const data = await amgApi.post('/allquickssms', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getAllQuicksSms:', error)
@@ -282,24 +321,91 @@ class CrmService {
       throw error
     }
   }
-  async postDeleteQuickSms (body) {
+
+  async postDeleteQuickSms(body) {
     try {
-      const data = await amgApi.post('/api/deletequick', body)
+      const data = await amgApi.post('/deletequick', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postDeleteQuickSms:', error)
       throw error
     }
   }
-  async postHistorySmsLead (body) {
+
+  async postHistorySmsLead(body) {
     try {
-      const data = await amgApi.post('/api/allsmshistorylead', body)
+      const data = await amgApi.post('/allsmshistorylead', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postHistorySmsLead:', error)
       throw error
     }
   }
-}
+  async postSendMessageLead (body) {
+    try {
+      const data = await amgApi.post('/sendmessagelead', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on postSendMessageLead:', error)
+      throw error
+    }
+  }
 
+  async getCapturedByTracking(body) {
+    try {
+      const { data } = await amgApi.post('/alltrackingcapt', body)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on getCapturedByTracking:', error)
+      throw error
+    }
+  }
+
+  async getSellerTracking(body) {
+    try {
+      const { data } = await amgApi.post('/alltrackingsel', body)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on getSellerTracking:', error)
+      throw error
+    }
+  }
+
+  async getFeeTracking(body) {
+    try {
+      const { data } = await amgApi.post('/alltrackingfee', body)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on getSellerTracking:', error)
+      throw error
+    }
+  }
+
+  async saveNewCaptured(body) {
+    try {
+      return await amgApi.post('/savenewcapt', body)
+    } catch (error) {
+      console.error('Something went wrong on getSellerTracking:', error)
+      throw error
+    }
+  }
+
+  async saveNewSeller(body) {
+    try {
+      return await amgApi.post('/savenewsel', body)
+    } catch (error) {
+      console.error('Something went wrong on getSellerTracking:', error)
+      throw error
+    }
+  }
+
+  async saveNewFee(body) {
+    try {
+      return await amgApi.post('/savenewfee', body)
+    } catch (error) {
+      console.error('Something went wrong on saveNewFee:', error)
+      throw error
+    }
+  }
+}
 export default new CrmService()

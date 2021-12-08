@@ -9,7 +9,6 @@
         <validation-provider
           #default="validationContext"
           name="Card Holder Name"
-          rules="required"
         >
           <b-form-group
             label="Card Holder Name"
@@ -33,7 +32,7 @@
         <validation-provider
           #default="validationContext"
           name="Card"
-          rules="required|alpha-num"
+          rules="alpha-num"
         >
           <b-form-group>
             <label for="card-number-1" class="d-block">Card</label>
@@ -107,7 +106,7 @@
         <validation-provider
           #default="validationContext"
           name="Expired Date"
-          rules="required|alpha-num"
+          rules="alpha-num"
         >
           <b-form-group>
             <label for="card-expi-month" class="d-block">Expired Date</label>
@@ -142,6 +141,7 @@
                 <b-form-input
                   id="card-security-code"
                   ref="input-7"
+                  type="number"
                   placeholder="CVV"
                   v-model="userData.cardSecurityCode"
                   autofocus
@@ -181,15 +181,19 @@ import {
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { required, alphaNum, email } from '@validations'
-import formValidation from '@core/comp-functions/forms/form-validation'
+
 import vSelect from 'vue-select'
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
-import imageVisa from '@/assets/images/cards/visa2.png'
+
+import formValidation from '@core/comp-functions/forms/form-validation'
+
+import AddressLead from './AddressLead.vue'
+
 import imageAmerican from '@/assets/images/cards/american.png'
 import imageDiscover from '@/assets/images/cards/Discover.jpg'
-import imageMastercard from '@/assets/images/cards/mastercard2.png'
 import imageJcb from '@/assets/images/cards/jcb2.png'
-import AddressLead from './AddressLead.vue'
+import imageMastercard from '@/assets/images/cards/mastercard2.png'
+import imageVisa from '@/assets/images/cards/visa2.png'
 
 export default {
   components: {
