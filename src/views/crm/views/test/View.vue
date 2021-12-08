@@ -25,7 +25,12 @@ export default {
   },
   async created()
   {
-    await CrmService.getAlgo()
+    try {
+      await CrmService.getAlgo()
+    } catch (error) {
+      console.log('Somthing went wrong created:', error)
+      this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+    }
   },
   computed: {
     ...mapGetters({

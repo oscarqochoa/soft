@@ -77,9 +77,8 @@ import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import formValidation from '@core/comp-functions/forms/form-validation'
+
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
-import crmService from '@/views/crm/services/crm.service'
 
 export default {
   components: {

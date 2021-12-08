@@ -6,37 +6,34 @@
       class="mb-0"
     >
 
+      <!-- Paginate -->
+      <paginate-table
+        :currentPage="currentPage"
+        :total-rows="totalLeads"
+        :per-page="perPage"
+        :from-page="fromPage"
+        :to-page="toPage"
+        @onChangeCurrentPage="onChangeCurrentPage"
+      />
+
       <div class="m-2">
 
-        <!-- Table Top -->
-        <b-row>
-
-          <!-- Per Page -->
-          <b-col
-            cols="12"
-            md="6"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Show</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label>entries</label>
-            <b-button
-              variant="link"
-              class="btn-icon ml-50"
-              v-b-tooltip.hover.bottom="'Refresh'"
-              @click="refresh = true"
-            >
-              <feather-icon
-                icon="RefreshCcwIcon"
-                size="18"
-              />
-            </b-button>
+        <!-- Filters -->
+        <filters-table
+          :filter="optionFilters"
+          :per-page="perPage"
+          :per-page-options="perPageOptions"
+          :status-lead-options="G_STATUS_LEADS"
+          :owner-options="G_OWNERS"
+          :assign-to-options="G_OWNERS"
+          :cr-options="G_CRS"
+          :program-options="G_PROGRAMS"
+          :source-name-options="G_SOURCE_NAMES"
+          :type-doc-options="G_TYPE_DOCS"
+          :st-ad-options="G_STATES"
+          @onSearch="myProvider"
+        >
+          <template #actions>
             <b-button
               variant="success"
               class="ml-50"
@@ -47,74 +44,18 @@
               />
               Send SMS
             </b-button>
-          </b-col>
-
-          <!-- Search -->
-          <b-col
-            cols="12"
-            md="6"
-          >
-            <div class="d-flex align-items-center justify-content-end">
-              <b-form-input
-                v-model="searchQuery"
-                class="d-inline-block mr-1"
-                placeholder="Search..."
-              />
-              <b-button
-                variant="warning"
-                @click="advanceSearch = !advanceSearch"
-              >
-                <span class="text-nowrap">
-                  <feather-icon
-                    icon="FilterIcon"
-                    size="18"
-                    class="mr-50 text-white"
-                  />
-                  <span v-if="!advanceSearch">Advance Search</span>
-                  <span v-else>Basic Search</span>
-                </span>
-              </b-button>
-            </div>
-          </b-col>
-          <b-col
-            v-if="advanceSearch"
-            cols="12"
-            class="pt-2"
-          >
-            <!-- Filters -->
-            <leads-list-filters
-              :filters="[ 'from', 'to', 'status-lead', 'owner', 'assign-to', 'cr', 'program', 'source-name', 'type-doc', 'st-ad' ]"
-              :from-filter.sync="fromFilter"
-              :to-filter.sync="toFilter"
-              :status-lead-filter.sync="statusLeadFilter"
-              :owner-filter.sync="ownerFilter"
-              :assign-to-filter.sync="assignToFilter"
-              :cr-filter.sync="crFilter"
-              :program-filter.sync="programFilter"
-              :source-name-filter.sync="sourceNameFilter"
-              :type-doc-filter.sync="typeDocFilter"
-              :st-ad-filter.sync="stAdFilter"
-              :status-lead-options="statusLeadOptions"
-              :owner-options="ownerOptions"
-              :assign-to-options="assignToOptions"
-              :cr-options="crOptions"
-              :program-options="programOptions"
-              :source-name-options="sourceNameOptions"
-              :type-doc-options="typeDocOptions"
-              :st-ad-options="stAdOptions"
-            />
-          </b-col>
-        </b-row>
+          </template>
+        </filters-table>
 
       </div>
 
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchLeads"
+        :fields="fields"
+        :items="items"
         responsive
         small
-        :fields="tableColumns"
         primary-key="id"
         :sort-by.sync="sortBy"
         show-empty
@@ -122,6 +63,7 @@
         :sort-desc.sync="isSortDirDesc"
         selectable
         select-mode="multi"
+        :busy.sync="isBusy"
         @row-selected="onRowSelected"
       >
         <template #table-busy>
@@ -175,16 +117,18 @@
 
         <!-- Column: Programs -->
         <template #cell(programs)="data">
-          <template v-for="(program, key) in JSON.parse(data.item.programs)">
-            <b-img
-              :key="key"
-              thumbnail
-              fluid
-              :src="`${baseUrl + '' + program.logo}`"
-              :alt="program.value"
-              v-bind="mainProps"
-            ></b-img>
-          </template>
+          <div
+            class="d-flex"
+            style="gap: .5rem"
+          >
+            <template v-for="(program, key) in JSON.parse(data.item.programs)">
+              <div
+                :key="key"
+                style="width: 50px;height: 50px;background-position: center;background-repeat: no-repeat;background-size: contain;"
+                v-bind:style="{ backgroundImage: `url(${baseUrl + program.logo})` }"
+              />
+            </template>
+          </div>
         </template>
 
         <!-- Column: Created By -->
@@ -203,7 +147,7 @@
 
         <!-- Column: Actions -->
         <template #cell(actions)="data">
-          <table-actions
+          <actions-table
             :options="[ 'returnToSocialNetwork', 'sendSMS', 'historySMS', 'delete' ]"
             :row-data="data.item"
             @onRowDelete="onRowDelete"
@@ -214,51 +158,17 @@
         </template>
 
       </b-table>
-      <div class="mx-2 mb-2">
-        <b-row>
+      
+      <!-- Paginate -->
+      <paginate-table
+        :currentPage="currentPage"
+        :total-rows="totalLeads"
+        :per-page="perPage"
+        :from-page="fromPage"
+        :to-page="toPage"
+        @onChangeCurrentPage="onChangeCurrentPage"
+      />
 
-          <b-col
-            cols="12"
-            sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-start"
-          >
-            <span class="text-muted">Showing {{ dataMeta.from }} to {{ dataMeta.to }} of {{ dataMeta.of }} entries</span>
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-end"
-          >
-
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalUsers"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon
-                  icon="ChevronLeftIcon"
-                  size="18"
-                />
-              </template>
-              <template #next-text>
-                <feather-icon
-                  icon="ChevronRightIcon"
-                  size="18"
-                />
-              </template>
-            </b-pagination>
-
-          </b-col>
-
-        </b-row>
-      </div>
     </b-card>
 
     <!-- modal SEND SMS -->
@@ -372,107 +282,80 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import {
-  BCard, BRow, BCol, BFormInput, BButton, BTable, BMedia, BAvatar, BLink,
-  BBadge, BDropdown, BDropdownItem, BPagination, BModal
-} from 'bootstrap-vue'
+import { mapActions, mapGetters } from 'vuex'
+import { BTable, BPagination, BModal } from 'bootstrap-vue'
+
 import vSelect from 'vue-select'
-import store from '@/store'
-import { ref, onUnmounted } from '@vue/composition-api'
-import { avatarText } from '@core/utils/filter'
-import BCardCode from '@core/components/b-card-code'
-import LeadsListFilters from './LeadsListFilters.vue'
-import useUsersList from './useLeadsList'
-import userStoreModule from '../leadStoreModule'
-import TableActions from './components/TableActions.vue'
-import ModalSendSms from './components/ModalSendSms.vue'
-import ModalQuickSms from './components/ModalQuickSms.vue'
-import ModalQuickSmsSave from './components/ModalQuickSmsSave.vue'
-import ModalHistorySms from './components/ModalHistorySms.vue'
-import crmService from '@/views/crm/services/crm.service'
+
+import ActionsTable from '../../lead-table/ActionsTable.vue'
+import dataFields from '@/views/crm/views/Lead/lead-table/fields.data'
+import FiltersTable from '../../lead-table/FiltersTable.vue'
+import ModalSendSms from '../../lead-sms/ModalSendSms.vue'
+import ModalQuickSms from '../../lead-sms/ModalQuickSms.vue'
+import ModalQuickSmsSave from '../../lead-sms/ModalQuickSmsSave.vue'
+import ModalHistorySms from '../../lead-sms/ModalHistorySms.vue'
+import PaginateTable from '@/views/crm/views/Lead/lead-table/PaginateTable.vue'
 
 export default {
   components: {
-    BCardCode,
-    LeadsListFilters,
-    TableActions,
+    FiltersTable,
+    ActionsTable,
     ModalSendSms,
     ModalQuickSms,
     ModalQuickSmsSave,
     ModalHistorySms,
 
-    BCard,
-    BRow,
-    BCol,
-    BFormInput,
-    BButton,
     BTable,
-    BMedia,
-    BAvatar,
-    BLink,
-    BBadge,
-    BDropdown,
-    BDropdownItem,
     BPagination,
     BModal,
 
     vSelect,
-  },
-  props: {
-    stateLeadOptions: {
-      type: Array,
-      required: false,
-    },
-    statusLeadOptions: {
-      type: Array,
-      required: false,
-    },
-    ownerOptions: {
-      type: Array,
-      required: false,
-    },
-    assignToOptions: {
-      type: Array,
-      required: false,
-    },
-    crOptions: {
-      type: Array,
-      required: false,
-    },
-    programOptions: {
-      type: Array,
-      required: false,
-    },
-    sourceNameOptions: {
-      type: Array,
-      required: false,
-    },
-    typeDocOptions: {
-      type: Array,
-      required: false,
-    },
-    stAdOptions: {
-      type: Array,
-      required: false,
-    },
-    leadsSelecteds: {
-      type: Object,
-      required: true,
-    }
+    PaginateTable,
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
+      G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
+      G_OWNERS: 'CrmLeadStore/G_OWNERS',
+      G_PROGRAMS: 'CrmLeadStore/G_PROGRAMS',
+      G_SOURCE_NAMES: 'CrmLeadStore/G_SOURCE_NAMES',
+      G_STATES: 'CrmLeadStore/G_STATES',
+      G_CRS: 'CrmLeadStore/G_CRS',
+      G_TYPE_DOCS: 'CrmLeadStore/G_TYPE_DOCS',
     }),
   },
   data() {
     return {
       modul: 2,
-      advanceSearch: false,
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
-      mainProps: { width: 75, height: 75, class: 'm1' },
+      
+      isBusy: false,
+      fields: dataFields.leadFields,
+      items: [],
+      totalLeads: 0,
+      perPage: 10,
+      fromPage: 0,
+      toPage: 0,
+      currentPage: 1,
+      optionFilters: {
+        searchQuery: '',
+        assignTo: null,
+        from: null,
+        to: null,
+        statusLead: null,
+        owner: null,
+        assignTo: null,
+        cr: null,
+        program: null,
+        sourceName: null,
+        typeDoc: null,
+        stAd: null,
+      },
+      perPageOptions: [10, 25, 50, 100],
+      sortBy: 'id',
+      isSortDirDesc: true,
+
       rowData: {},
       name_leads_arr: [],
       leads_sms: [],
@@ -485,89 +368,74 @@ export default {
         sms: '',
         title: ''
       },
+
+      leadsSelecteds: []
     }
   },
-  setup() {
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
-
-    // Register module
-    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
-
-    // UnRegister on leave
-    onUnmounted(() => {
-      if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
-    })
-
-    const {
-      fetchLeads,
-      tableColumns,
-      refresh,
-      perPage,
-      currentPage,
-      totalUsers,
-      dataMeta,
-      perPageOptions,
-      searchQuery,
-      sortBy,
-      isSortDirDesc,
-      refUserListTable,
-
-      // UI
-      resolveUserRoleVariant,
-      resolveUserRoleIcon,
-      resolveUserStatusVariant,
-
-      // Extra Filters
-      fromFilter,
-      toFilter,
-      statusLeadFilter,
-      ownerFilter,
-      assignToFilter,
-      crFilter,
-      programFilter,
-      sourceNameFilter,
-      typeDocFilter,
-      stAdFilter,
-    } = useUsersList()
-
-    return {
-      fetchLeads,
-      tableColumns,
-      refresh,
-      perPage,
-      currentPage,
-      totalUsers,
-      dataMeta,
-      perPageOptions,
-      searchQuery,
-      sortBy,
-      isSortDirDesc,
-      refUserListTable,
-
-      // Filter
-      avatarText,
-
-      // UI
-      resolveUserRoleVariant,
-      resolveUserRoleIcon,
-      resolveUserStatusVariant,
-
-      // Extra Filters
-      fromFilter,
-      toFilter,
-      statusLeadFilter,
-      ownerFilter,
-      assignToFilter,
-      crFilter,
-      programFilter,
-      sourceNameFilter,
-      typeDocFilter,
-      stAdFilter
-    }
+  created () {
+    this.myProvider()
+    this.getAllQuicksSms()
   },
   methods: {
+    ...mapActions({
+      A_GET_LEADS: 'CrmLeadStore/A_GET_LEADS',
+      A_SET_FILTERS_LEADS: 'CrmLeadStore/A_SET_FILTERS_LEADS',
+      A_GET_SMS_QUICKS: 'CrmLeadStore/A_GET_SMS_QUICKS',
+      A_SET_SELECTED_LEADS: 'CrmLeadStore/A_SET_SELECTED_LEADS',
+      A_DELETE_LEADS: 'CrmLeadStore/A_DELETE_LEADS',
+      A_DELETE_SMS_QUICK: 'CrmLeadStore/A_DELETE_SMS_QUICK',
+      A_PROCESS_LEADS: 'CrmLeadStore/A_PROCESS_LEADS',
+    }),
+    resolveUserStatusVariant (status) {
+      if (status === 'Pending') return 'warning'
+      if (status === 'Active') return 'success'
+      if (status === 'Inactive') return 'secondary'
+      if (status === 'Not Contacted') return 'danger'
+      return 'primary'
+    },
+    async myProvider () {
+      try {
+        this.setFilters()
+        this.isBusy = true
+        const response = await this.A_GET_LEADS({
+          assign_to: this.optionFilters.assignTo,
+          cr: this.optionFilters.cr,
+          date_from: this.optionFilters.from,
+          date_to: this.optionFilters.to,
+          idrole: 1,
+          iduser: 1,
+          lead_status: this.optionFilters.statusLead,
+          name_text: this.optionFilters.searchQuery,
+          order: 'desc',
+          orderby: 10,
+          program: this.optionFilters.program,
+          sourcename: this.optionFilters.sourceName,
+          state_h: this.optionFilters.stAd,
+          typedoc: this.optionFilters.typeDoc,
+          user_owner: this.optionFilters.owner,
+          perpage: this.perPage,
+          page: this.currentPage
+        })
+        this.totalLeads = response.total
+        this.fromPage = response.from || 0
+        this.toPage = response.to || 0
+        this.items = response.data
+        this.isBusy = false
+      } catch (error) {
+        console.log('Somtehing went wrong myProvider', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
+    },
+    onChangeCurrentPage (e) {
+      this.currentPage = e
+      this.myProvider()
+    },
+    setFilters () {
+      this.A_SET_FILTERS_LEADS({ ...this.optionFilters, perPage: this.perPage, currentPage: this.currentPage })
+    },
     onRowSelected (items) {
-      this.leadsSelecteds.leads = items
+      this.A_SET_SELECTED_LEADS(items)
+      this.leadsSelecteds = items
       this.leads_sms = items.map(el => el.id)
     },
     onRowDelete (id) {
@@ -584,14 +452,15 @@ export default {
       .then(async (result) => {
         if (result.value) {
           const { id: user_id, id: role_id } = this.currentUser
-          const response = await crmService.postDeleteLead({
+          const response = await this.A_DELETE_LEADS({
             leadid: id,
             idsession: user_id,
             iduser: user_id,
             idrole: role_id,
           })
-          if (response) {
-            this.refresh = true
+          if (response.status == 200) {
+            const index = this.items.map(el => el.id).indexOf(id)
+            if (index !== -1) this.items.splice(index, 1)
             this.$swal('Successful!', 'Operation successfully', 'success')
           } else {
             this.$swal('Failed!', 'There was something wronge', 'warning')
@@ -600,7 +469,7 @@ export default {
       })
       .catch(error => {
         console.log('Something went wrong onRowDelete:', error)
-        this.$swal('Oops!', 'There was something wronge', 'error')
+        this.$swal('Oops!', this.getInternalErrors(error), 'error')
       })
     },
     onRowProcess (id) {
@@ -623,14 +492,15 @@ export default {
       .then(async (result) => {
         if (result.value) {
           const { id: user_id, id: role_id } = this.currentUser
-          const response = await crmService.postProcessLead({
+          const response = await this.A_PROCESS_LEADS({
             lead_id: id,
             status: 3,
             user_id,
             description: result.value,
           })
           if (response.status == 200) {
-            this.refresh = true
+            const index = this.items.map(el => el.id).indexOf(id)
+            if (index !== -1) this.items[index].status_sn_id = 3
             this.$swal('Successful!', 'Operation successfully', 'success')
           } else {
             this.$swal('Failed!', 'There was something wronge', 'warning')
@@ -639,17 +509,18 @@ export default {
       })
       .catch(error => {
         console.log('Something went wrong onRowProcess:', error)
-        this.$swal('Oops!', 'There was something wrong', 'error')
+        this.$swal('Oops!', this.getInternalErrors(error), 'error')
       })
     },
     async getAllQuicksSms () {
       try {
-        const response = await crmService.getAllQuicksSms({
+        const response = await this.A_GET_SMS_QUICKS({
           modul: this.modul,
         })
-        this.quicks = response.map(el => ({ ...el, value: el.sms, label: el.title, showMore: false }))
+        this.quicks = response.data.map(el => ({ ...el, value: el.sms, label: el.title, showMore: false }))
       } catch (error) {
         console.log('Something wnet wrong getAllQuicksSms:', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
     modalSmsOpen (item) {
@@ -667,7 +538,7 @@ export default {
     },
     modalSmssOpen () {
       this.typesms = 0
-      this.name_leads_arr = this.leadsSelecteds.leads.map(el => ({ name: el.lead_name, id: el.id }))
+      this.name_leads_arr = this.leadsSelecteds.map(el => ({ name: el.lead_name, id: el.id }))
       this.$bvModal.show('modal-send-sms')
     },
     modalQuickOpen () {
@@ -705,7 +576,7 @@ export default {
       })
       .then(async (result) => {
         if (result.value) {
-          const response = await crmService.postDeleteQuickSms({ id })
+          const response = await this.A_DELETE_SMS_QUICK({ id })
           console.log('response postDeleteQuickSms', response)
           if (response.status == 200) {
             const index = this.quicks.map(el => el.id).indexOf(id)
@@ -718,12 +589,9 @@ export default {
       })
       .catch(error => {
         console.log('Something went wrong modalQuickDelete', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', 'Something went wrong')
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       })
-    }
-  },
-  created () {
-    this.getAllQuicksSms()
+    },
   },
 }
 </script>
