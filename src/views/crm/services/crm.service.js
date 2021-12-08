@@ -11,7 +11,7 @@ class CrmService {
     }
   }
 
-  async getSellersCrm() {
+  async getSellersCrm(body) {
     try {
       const { data } = await amgApi.post('/search-leads-sn-recovery', body)
       return data

@@ -51,7 +51,7 @@ export default {
   },
   actions: {
     async getSellers({ commit }) {
-      const sellers = await CrmServices.getSellersCrm()
+      const sellers = await CrmServices.getSellers({modul: 2})
       const formatedSellers = sellers.map(seller => ({
         value: seller.id,
         text: seller.user_name,
