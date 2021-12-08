@@ -1,6 +1,6 @@
 <template>
   <div>
-    aa: {{ (currentUser.role_id)? 'gaaa' : 'nulo' }}
+    aa: {{ (currentUser.role_id == null || currentUser.role_id == 2)? 'verdadero' : 'falso' }}
     <filter-slot
       :fields="fields"
       :filter="filter"
@@ -86,12 +86,12 @@
           </b-row>
           <b-row>
             <b-col>
-              <p v-if="data.item.commission && (currentUser.role_id == null || currentUser.role_id == 2)">
+              <p v-if="(data.item.commission) && (currentUser.role_id == null || currentUser.role_id == 2)">
                 <small class="text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[0].commission }} </small>
               </p>
             </b-col>
           </b-row>
-          <b-row v-if="data.item.status == 1 || data.item.status == 3 && (currentUser.role_id == null || currentUser.role_id == 2)">
+          <b-row v-if="(data.item.status == 1 || data.item.status == 3) && (currentUser.role_id == null || currentUser.role_id == 2)">
             <b-col>
               <b-icon
                 v-if="!data.item.editCaptured"
@@ -143,7 +143,7 @@
               </p>
             </b-col>
           </b-row>
-          <b-row v-if="data.item.status == 1 || data.item.status == 3 && (currentUser.role_id == null || currentUser.role_id == 2)">
+          <b-row v-if="(data.item.status == 1 || data.item.status == 3) && (currentUser.role_id == null || currentUser.role_id == 2)">
             <b-col>
               <b-icon
                 v-if="!data.item.editSeller"
@@ -194,7 +194,7 @@
               </b-input-group>
             </b-col>
           </b-row>
-          <b-row v-if="data.item.status === 1 || data.item.status === 3 && (currentUser.role_id == null || currentUser.role_id == 2)">
+          <b-row v-if="(data.item.status === 1 || data.item.status === 3) && (currentUser.role_id == null || currentUser.role_id == 2)">
             <b-col>
               <b-icon
                 v-if="!data.item.editFee"
@@ -227,8 +227,13 @@
         </template>
         <template v-slot:cell(initial_amount)="data">
           <div
-            class="cursor-pointer"
-            @click="openInitialPaymentModal(data.item.program, data.item.client, data.item.initial_amount, data.item.id)"
+            :class="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
+              currentUser.role_id == null ||
+              currentUser.role_id == 2)) ? 'cursor-pointer' : ''"
+            @click="( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
+              currentUser.role_id == null ||
+              currentUser.role_id == 2) &&
+              openInitialPaymentModal(data.item.program, data.item.client, data.item.initial_amount, data.item.id)"
           >
             <b-icon
               v-if="data.item.initial_payment_status === 1"
@@ -250,6 +255,9 @@
         </template>
         <template v-slot:cell(contract_fee_status)="data">
           <b-icon
+            :class="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
+              currentUser.role_id == null ||
+              currentUser.role_id == 2)) ? 'cursor-pointer' : ''"
             icon="file-text"
             :variant="
               ( data.item.contract_fee_status === 0 ||
@@ -286,10 +294,14 @@
         </template>
         <template v-slot:cell(files)="data">
           <b-icon
+            :class="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
+              currentUser.role_id == null ||
+              currentUser.role_id == 2)) ? 'cursor-pointer' : ''"
             icon="folder-fill"
             variant="warning"
-            class="cursor-pointer"
-            @click="openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id)"
+            @click="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
+              currentUser.role_id == null ||
+              currentUser.role_id == 2)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id)"
           />
         </template>
         <template v-slot:cell(status)="data">
@@ -310,23 +322,24 @@
                 data.item.contract_fee_status == 1 &&
                 data.item.notes_status_new == 0 &&
                 data.item.initial_payment_status == 2 &&
-                currentUser.user_id !== 1 && currentUser.user_id !== 2"
+                currentUser.role_id != null && currentUser.role_id != 2"
               size="sm"
               variant="info"
+              :disabled="((data.item.user_id != currentUser.user_id) && currentUser.role_id == 5)"
             >
               Revission
             </b-button>
             <b-button
               v-if="(data.item.status == 1 || data.item.status == 6) &&
-                (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                (currentUser.role_id == null || currentUser.role_id == 2) &&
                 data.item.contract_fee_status == 1 &&
                 data.item.notes_status_new == 0 &&
                 data.item.initial_payment_status == 2"
               size="sm"
               :disabled="
-                data.item.type == 1 && currentUser.user_id == 1
+                data.item.type == 1 && currentUser.role_id == null
                   ? false
-                  : data.item.type!==0
+                  : data.item.type == 0 ? false : true
               "
               variant="info"
             >
@@ -338,7 +351,7 @@
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2 &&
-                  (currentUser.user_id == 1 || currentUser.user_id == 2)
+                  (currentUser.role_id == null || currentUser.role_id == 2)
               "
               size="sm"
               variant="info"
@@ -351,7 +364,7 @@
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2 &&
-                  (currentUser.user_id == 1 || currentUser.user_id == 2)
+                  (currentUser.role_id == null || currentUser.role_id == 2)
               "
               size="sm"
               variant="warning"
@@ -365,8 +378,8 @@
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2 &&
                   (currentUser.user_id == data.item.user_id ||
-                    currentUser.user_id == 1 ||
-                    currentUser.user_id == 2)
+                    currentUser.role_id == null ||
+                    currentUser.role_id == 2)
               "
               size="sm"
               variant="info"
@@ -392,8 +405,8 @@
             <b-button
               v-if="
                 (data.item.status == 1 || data.item.status == 7) &&
-                  currentUser.user_id !== 1 &&
-                  currentUser.user_id !== 2 &&
+                  currentUser.role_id != null &&
+                  currentUser.role_id != 2 &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
                   data.item.initial_payment_status == 2
@@ -406,7 +419,7 @@
             <b-button
               v-if="
                 (data.item.status == 1 || data.item.status == 6) &&
-                  (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                  (currentUser.role_id == null || currentUser.role_id == 2) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
                   data.item.initial_payment_status == 2
@@ -414,9 +427,9 @@
               size="sm"
               variant="info"
               :disabled="
-                data.item.type == 1 && currentUser.user_id == 1
+                data.item.type == 1 && currentUser.role_id == null
                   ? false
-                  : data.item.type!==0
+                  : data.item.type == 0 ? false : true
               "
             >
               Revission
@@ -424,7 +437,7 @@
             <b-button
               v-if="
                 data.item.status == 5 &&
-                  (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                  (currentUser.role_id == null || currentUser.role_id == 2) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
                   data.item.initial_payment_status == 2
@@ -437,7 +450,7 @@
             <b-button
               v-if="
                 data.item.status == 5 &&
-                  (currentUser.user_id == 1 || currentUser.user_id == 2) &&
+                  (currentUser.role_id == null || currentUser.role_id == 2) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2
@@ -451,8 +464,8 @@
               v-if="
                 data.item.status == 3 &&
                   (currentUser.user_id == data.item.user_id ||
-                    currentUser.user_id == 1 ||
-                    currentUser.user_id == 2) &&
+                    currentUser.role_id == null ||
+                    currentUser.role_id == 2) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
                   data.item.initial_payment_status == 2
@@ -489,7 +502,7 @@
         </template>
         <template v-slot:cell(url)="data">
           <b-icon
-            v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.user_id == null || currentUser.user_id == 2)"
+            v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.role_id == null || currentUser.role_id == 2)"
             icon="link"
             variant="primary"
           />

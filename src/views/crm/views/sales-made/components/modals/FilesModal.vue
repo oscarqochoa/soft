@@ -101,7 +101,7 @@
             <template v-slot:cell(file_name)="data">
               <div>
                 <feather-icon icon="FileTextIcon" />
-                {{ data.item.file_name }}
+                {{ data.item.file_name.replace('UNSIGNED', files.client) }}
               </div>
             </template>
             <template v-slot:cell(size)="data">

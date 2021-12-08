@@ -10,17 +10,17 @@ export default {
     sources: {},
     states: {},
     statusip: [
-      { value: 0, text: 'ALL' },
-      { value: 1, text: 'NO' },
-      { value: 2, text: 'YES' },
+      { id: 0, label: 'ALL' },
+      { id: 1, label: 'NO' },
+      { id: 2, label: 'YES' },
     ],
     status: [
-      { value: 0, text: 'ALL', variant: '' },
-      { value: 1, text: 'PENDING', variant: 'warning' },
-      { value: 2, text: 'REVISION', variant: 'primary' },
-      { value: 3, text: 'DESAPROVE', variant: 'danger' },
-      { value: 4, text: 'APPROVED', variant: 'success' },
-      { value: 5, text: 'SUPERVISOR', variant: 'warning' },
+      { id: 0, label: 'ALL', variant: '' },
+      { id: 1, label: 'PENDING', variant: 'warning' },
+      { id: 2, label: 'REVISION', variant: 'primary' },
+      { id: 3, label: 'DESAPROVE', variant: 'danger' },
+      { id: 4, label: 'APPROVED', variant: 'success' },
+      { id: 5, label: 'SUPERVISOR', variant: 'warning' },
     ],
   },
   getters: {
@@ -51,18 +51,18 @@ export default {
   },
   actions: {
     async getSellers({ commit }) {
-      const sellers = await CrmServices.getSellers({modul: 2})
+      const sellers = await CrmServices.getSellersCrm()
       const formatedSellers = sellers.map(seller => ({
-        value: seller.id,
-        text: seller.user_name,
+        id: seller.id,
+        label: seller.user_name,
       }))
       commit('SET_SELLERS_CRM', formatedSellers)
     },
     async getCaptured({ commit }) {
       const captured = await CrmServices.getCapturedCrm()
       const formatedCaptured = captured.map(cap => ({
-        value: cap.id,
-        text: cap.user_name,
+        id: cap.id,
+        label: cap.user_name,
       }))
       commit('SET_CAPTURED_CRM', formatedCaptured)
     },
@@ -70,24 +70,24 @@ export default {
     async getPrograms({ commit }) {
       const programs = await CrmServices.getPrograms()
       const formatedPrograms = programs.map(pro => ({
-        value: pro.id,
-        text: pro.name,
+        id: pro.id,
+        label: pro.name,
       }))
       commit('SET_PROGRAMS', formatedPrograms)
     },
     async getSources({ commit }) {
       const sources = await CrmServices.getSources()
       const formatedSources = sources.map(source => ({
-        value: source.id,
-        text: source.name,
+        id: source.id,
+        label: source.name,
       }))
       commit('SET_SOURCES', formatedSources)
     },
     async getStates({ commit }) {
       const states = await CrmServices.getStates()
       const formatedStates = states.map(state => ({
-        value: state.slug,
-        text: state.slug,
+        id: state.slug,
+        label: state.slug,
       }))
       commit('SET_STATES', formatedStates)
     },
