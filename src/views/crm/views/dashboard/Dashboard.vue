@@ -291,9 +291,11 @@
                 </div>
                 <div class="col-lg-7 ">
                   <v-select
-                    v-model="year"
-                    class="input-form w-100"
+                    v-on:input="filtrocont()"
+                    class="input-form w-100 "
                     style="font-size: 15px; width: 50%; float: left; "
+                    v-model="year" 
+                    :clearable="false"
                     :options="years"
                     @input="filtrocont()"
                   />
@@ -449,20 +451,31 @@ export default {
     filtrocont() {
       if (this.userfilter != null) {
         amgApi
-          .post('/filtrouserdash', {
-            created_id: this.userfilter.id,
-            anio: this.year,
-          }).then(response => {
-            this.global = response.data
-            this.leads = response.data.leads.map(list => list)
-            this.quotes = response.data.quotes.map(list => list)
-            this.calls = response.data.calls.map(list => list)
-            this.sales = response.data.sales.map(list => list)
-            this.captur = response.data.vendio.map(list => list)
-            this.chargeDataToEchart(this.leads, 'Total Leads')
-            this.total_year = this.global.leads_year
-          })
-      } else {
+        .post("/filtrouserdash", {
+          created_id:this.userfilter.id,
+          anio: this.year,
+        }).then(response =>{
+              this.global = response.data;
+              this.leads = response.data.leads.map((list) => {
+                return list;
+              });
+              this.quotes = response.data.quotes.map((list) => {
+                return list;
+              });
+              this.calls = response.data.calls.map((list) => {
+                return list;
+              });
+              this.sales = response.data.sales.map((list) => {
+                return list;
+              });
+              this.captur = response.data.vendio.map((list) => {
+                return list;
+              });
+              this.chargeDataToEchart(this.leads,'Total Leads')
+              this.total_year = this.global.leads_year;
+        }) 
+      }else{
+        
         this.allData()
         this.year = '2021'
       }
@@ -504,5 +517,9 @@ export default {
     transform: translateY(-5px);
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
   }
+}
+
+.per-page-selector {
+  width: 90px;
 }
 </style>

@@ -1,8 +1,8 @@
 import jwtDefaultConfig from './jwtDefaultConfig'
-
+import {amgApi} from '../../../service/axios';
 export default class JwtService {
   // Will be used by this service for making API calls
-  axiosIns = null
+  axiosIns = amgApi
 
   // jwtConfig <= Will be used by this service
   jwtConfig = { ...jwtDefaultConfig }
@@ -22,7 +22,6 @@ export default class JwtService {
       config => {
         // Get token from localStorage
         const accessToken = this.getToken()
-
         // If token is present add it to request's Authorization Header
         if (accessToken) {
           // eslint-disable-next-line no-param-reassign
@@ -44,6 +43,7 @@ export default class JwtService {
         // if (status === 401) {
         if (response && response.status === 401) {
           if (!this.isAlreadyFetchingAccessToken) {
+            
             this.isAlreadyFetchingAccessToken = true
             this.refreshToken().then(r => {
               this.isAlreadyFetchingAccessToken = false

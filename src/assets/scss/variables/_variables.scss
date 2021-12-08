@@ -1,3 +1,47 @@
 //  ================================================================================================
 //  ? TIP:  It is recommended to use this file for overriding bootstrap variables.
 //  ================================================================================================
+
+
+$primary: #FF9F43;
+
+//Background bg
+$theme-dark-body-bg: #141311 !default;
+$theme-dark-border-color: rgb(82 77 70 / 50%) !default;
+
+//Card bg
+
+$theme-dark-card-bg: #22201d !default;
+$theme-dark-box-shadow: 0 5px 20px 0 rgb(20 23 26 / 10%);
+// Table color
+
+
+//Typography
+$theme-dark-headings-color: #d0d2d6 !default;
+$theme-dark-label-color: #d0d2d6 !default;
+// $theme-dark-text-muted-color: rgb(82 77 70 / 50%) !default;
+$theme-dark-text-muted-color: #818285 !default;
+
+//Table
+$theme-dark-table-bg: #22201d !default;
+$theme-dark-table-header-bg: #5F5850 !default;
+$theme-dark-table-row-bg: #22201d !default;
+$theme-dark-table-hover-bg: #141311 !default;
+$theme-dark-table-striped-bg: #141311 !default;
+
+$theme-dark-modal-header-bg: #141311 !default;
+$theme-dark-pagination-bg: #141311 !default;
+$theme-dark-chart-bg: #384056 !default;
+$theme-dark-widget-bg: #384056 !default;
+
+
+// Switch
+$theme-dark-switch-bg: #545a6a;
+$theme-dark-switch-bg-disabled: #1b2337;
+
+//Input
+$theme-dark-input-bg: #22201d !default;
+$theme-dark-input-placeholder-color: #818285 !default;
+$theme-dark-input-border-color: #818285 !default;
+$theme-dark-input-disabled-bg: #24233a !default;
+$theme-dark-input-disabled-border-color: #444b60 !default;

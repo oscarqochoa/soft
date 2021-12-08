@@ -1,22 +1,28 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
 // Modules
-import ecommerceStoreModule from '@/views/apps/e-commerce/eCommerceStoreModule'
-import app from './app'
-import appConfig from './app-config'
-import verticalMenu from './vertical-menu'
-import auth from './auth'
+import ecommerceStoreModule from "@/views/apps/e-commerce/eCommerceStoreModule";
+import app from "@/store/app";
+import appConfig from "@/store/app-config";
+import verticalMenu from "@/store/vertical-menu";
+import auth from "@/store/auth";
+import CrmStore from "@/views/crm/store";
+import CommissionsStore from "@/commons/components/commissions/store";
+import stickyNotesStoreModule from "@/layouts/components/navbar/components/sticky-notes/store/sticky-notes.store";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
     app,
     appConfig,
     verticalMenu,
-    'app-ecommerce': ecommerceStoreModule,
-    auth
+    "app-ecommerce": ecommerceStoreModule,
+    auth,
+    "crm-store": CrmStore,
+    "commissions-store": CommissionsStore,
+    "sticky-notes": stickyNotesStoreModule,
   },
   strict: process.env.DEV,
-})
+});

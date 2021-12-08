@@ -4,3 +4,51 @@ NOTE:
 ------
 PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+.client-status {
+    // height: 10px;
+    // width: 10px;
+    border-radius: 50%;
+    // left: 0;
+    // top: 22px;
+    // transform: translate(0, -50%);
+}
+.client-status-hold1 {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 14px solid #ffc107;
+}
+
+.pac-container{
+    z-index: 100000000  !important;
+}
+
+//buttons utilities
+
+.button-size {
+  height: 23px;
+  padding: 3px;
+}
+
+.button-margin-l {
+  margin-left: 3px;
+}
+
+.footer-black {
+    background: #666666 !important;
+    color: #fff !important;
+    padding: 17px !important;
+}
+
+.footer-span {
+    color: #666666;
+    background: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.w-50 {
+    width: 16% !important;
+}
