@@ -855,3 +855,97 @@ export default {
 <style scoped>
 
 </style>
+/*
+Route::get('welcome', 'Api\v1\WelcomeController@index');
+Route::post('searchprogram', 'Api\Clients\ApiClientsController@searchprogram');
+Route::post('alltrackingcapt', 'Api\ApiSaleMadeController@alltrackingcapt');
+Route::post('alltrackingsel', 'Api\ApiSaleMadeController@alltrackingsel');
+Route::post('alltrackingfee', 'Api\ApiSaleMadeController@alltrackingfee');
+Route::post('allfileslead', 'Api\ApiSaleMadeController@allfileslead');
+Route::post('salemade', 'Api\ApiSaleMadeController@search');
+Route::post('savenewcapt', 'Api\ApiSaleMadeController@savenewcapt');
+Route::post('savenewfee', 'Api\ApiSaleMadeController@savenewfee');
+Route::post('savenewsel', 'Api\ApiSaleMadeController@savenewsel');
+Route::post('saleprogram', 'Api\ApiSaleMadeController@searchprogram');
+Route::post('saleannul', 'Api\ApiSaleMadeController@searchannul');
+Route::post('capturedall/{id}', 'Api\ApiDataController@usersModulebyRole');
+Route::post('sellerall/{id}', 'Api\ApiDataController@usersModulebyRole');
+Route::get('sourcesnames', 'Api\ApiDataController@sourcesnames');
+Route::get('programs', 'Api\ApiDataController@programs');
+Route::post('get-states', 'Api\ApiLeadController@getStates');
+Route::post('clients', 'Api\Clients\ApiClientsController@search');
+Route::post('filtrouserdash', 'Api\ApiCrmDashboardController@filteruser');
+Route::get('leadstatus/{id?}', 'Api\ApiDataController@leadstatus');
+Route::post('usermodule/{id}', 'Api\ApiDataController@usersModulebyRole');
+Route::post('searchleads', 'Api\ApiLeadController@search');
+Route::post('search-leads-sn-recovery', 'Api\SocialNetwork\ApiLeadController@searchLeadSnRecovery');
+Route::post('deletefile', 'Api\ApiSaleMadeController@deletefile');
+Route::post('generate-pdf', 'Api\ApiSaleMadeController@generatePdf');
+Route::post('allquickssms', 'Api\Messages\ApiMessagesController@allquickssms');
+Route::post('deletequick', 'Api\ApiMessageController@deletequick');
+Route::post('savequick', 'Api\ApiMessageController@savequick');
+Route::post('view-countrys', 'Api\ApiApplicationController@allcountrys');
+Route::get('stateseeuu', 'Api\ApiStatesController@index');
+Route::get('leadsource', 'Api\ApiDataController@leadsource');
+Route::get('stateleads', 'Api\ApiDataController@stateleads');
+Route::post('allsmshistorylead', 'Api\Messages\ApiMessagesController@allsmshistorylead');
+//CRM Clients
+Route::post('clients', 'Api\Clients\ApiClientsController@search');
+Route::post('clientsshareother', 'Api\Clients\ApiClientsController@clientsshareother');
+
+
+
+
+//Programs
+Route::get('programs', 'Api\ApiDataController@programs');
+Route::post('usersprograms', 'Api\ApiDataController@usersPrograms');
+
+
+
+//Tasks
+Route::post('getnotificationstask', 'Api\ApiNotificationController@getnotificationstask');
+
+
+//Notifications
+Route::post('getnotifications', 'Api\ApiNotificationController@getnotifications');
+
+
+//Notes
+Route::post('getnotes', 'Api\ApiStickyNotesController@getnotesicons');
+Route::post('getcategory-notes', 'Api\ApiStickyNotesController@getcategorynotes');
+Route::post('save-notes', 'Api\ApiStickyNotesController@save');
+Route::post('delete-note', 'Api\ApiStickyNotesController@deletenote');
+
+
+//COMMISSIONS
+Route::post('searchcommissions', 'Api\ApiCommissionController@search');
+Route::post('getreportcommissions', 'Api\ApiCommissionController@getReportCommissions');
+Route::post('getcommissions', 'Api\ApiCommissionController@getCommissions');
+Route::post('createcard', 'Api\ApiCardController@create');
+Route::post('approvecommissions', 'Api\ApiCommissionController@approveCommissions');
+Route::post('searchapprovecommissions', 'Api\ApiCommissionController@searchApproveCommissions');
+Route::post('anullcommissions', 'Api\ApiCommissionController@anullCommissions');
+Route::post('searchleadpayment', 'Api\ApiPaymentController@searchleadpayment');
+Route::post('searchlead', 'Api\ApiPaymentController@searchlead');
+Route::post('searchcards', 'Api\ApiCardController@searchcards');
+Route::post('searchapprovecommissionsad', 'Api\ApiCommissionController@searchApproveCommissionsAd');
+Route::post('approvecommissionsad', 'Api\ApiCommissionController@approveCommissionsAd');
+Route::post('change-percentage-to-pay-crm', 'Api\ApiCommissionController@changePercentageToPayCrm');
+Route::post('percentage-department', 'Api\ApiCommissionController@percentageDepartment');
+Route::post('payment', 'Api\ApiPaymentController@search');
+
+Route::post('getmodulcommissions', 'Api\ApiCommissionController@getModulCommissions');
+Route::post('searchmoduleapprovecommissions', 'Api\ApiCommissionController@searchModuleApproveCommissions');
+Route::post('approvemodulecommissions', 'Api\ApiCommissionController@approveModuleCommissions');
+Route::post('anullmodulecommissions', 'Api\ApiCommissionController@anullModuleCommissions');
+Route::post('annulcommissionp', 'Api\ApiCommissionController@annulCommissionp');
+
+Route::post('getreportcommissionsprogram', 'Api\ApiCommissionController@getReportCommissionsProgram');
+Route::post('getcommissionsprogram', 'Api\ApiCommissionController@getCommissionsProgram');
+Route::post('getreportcommissionsad', 'Api\ApiCommissionController@getReportCommissionsAd');
+Route::post('get-report-commission-department', 'Api\ApiCommissionController@getReportCommissionsDepartment');
+
+Route::post('getcommissionsad', 'Api\ApiCommissionController@getCommissionsAd');
+//COMMISSIONS
+Route::post('getlistcards', 'Api\ApiSaleMadeController@getlistcards');
+*/
