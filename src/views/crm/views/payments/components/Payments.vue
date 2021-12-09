@@ -99,7 +99,7 @@
                   /></span>
 
                   <span class="text-nowrap">{{
-                    filterController ? "Basic Search" : "Advanced Search"
+                    filterController ? "BASIC SEARCH" : "ADVANCED SEARCH"
                   }}</span>
                 </div>
               </b-button>

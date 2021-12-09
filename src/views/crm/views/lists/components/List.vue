@@ -161,9 +161,11 @@
         </template>
         <template #cell(users)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
-              <b-button variant="flat-primary" style="padding-left:2px; padding-right:2px; padding-top:5px;padding-bottom:5px"
+              <b-button variant="flat-primary" 
+              style="padding-left:2px; padding-right:2px; padding-top:5px;padding-bottom:5px"
                 v-for="(user, index) in JSON.parse(data.item.users)"
                 :key="index"
+                 @click="modalopen(user, data.item.id)"
               >{{ user.user_name }}</b-button>
             </div>
           </template>
@@ -193,6 +195,13 @@
           </template>
       </b-table>
     </b-card>
+    <modal-by-user
+      v-if="modalChanging"
+      :ifModalCard="modalChanging"
+      :objectUser="objectUser"
+      :idByUser="idByUser"
+      @close="closeModal"
+      ></modal-by-user>
   </div>
 </template>
 
@@ -200,9 +209,11 @@
 import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
+import ModalByUser from '../components/subcomponents/ModalByUser.vue'
 export default {
   components: {
     vSelect,
+    ModalByUser,
   },
   data() {
     return {
@@ -257,6 +268,9 @@ export default {
       filters: [],
       count_alltask: 0,
       count_donetask: 0,
+      modalChanging:false,
+      idByUser:null,
+      objectUser:null
     };
   },
   computed: {
@@ -384,7 +398,19 @@ export default {
               });
           }
         });
-    }
+    },
+    modalopen(user,idByUser){
+      this.objectUser = user
+      this.idByUser =idByUser
+      if(this.modalChanging == false){
+        this.modalChanging =true
+      }else{
+        this.modalChanging =false
+      }
+    },
+    closeModal() {
+      this.modalChanging = false;
+    },
   },
   created() {
     this.listsgroups();

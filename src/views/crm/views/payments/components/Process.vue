@@ -192,7 +192,7 @@
                     class="mr-1"
                     @click="submitAutorize"
                   >
-                    Submit
+                    SUBMIT
                   </b-button>
                   <b-form-checkbox
                     v-if="methodpayment == 1"
