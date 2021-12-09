@@ -233,7 +233,7 @@
             @click="( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
               currentUser.role_id == null ||
               currentUser.role_id == 2) &&
-              openInitialPaymentModal(data.item.program, data.item.client, data.item.initial_amount, data.item.id)"
+              openInitialPaymentModal(data.item.program, data.item.client, data.item.initial_amount, data.item.id, data.item.lead_id)"
           >
             <b-icon
               v-if="data.item.initial_payment_status === 1"
@@ -517,6 +517,10 @@
         </template>
       </b-table>
     </filter-slot>
+    <buisness-modal
+      :modal="modal"
+      :tracking="modalData.buisness"
+    />
     <tracking-modal
       :modal="modal"
       :tracking="modalData.tracking"
@@ -557,10 +561,12 @@ import DetailOfSailModal from '@/views/crm/views/sales-made/components/modals/De
 import InitialPaymentModal from '@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue'
 import TrackingCapturedByModal from '@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue'
 import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
+import BuisnessModal from '@/views/crm/views/sales-made/components/modals/BuisnessModal.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
   components: {
+    BuisnessModal,
     FilesModal,
     TrackingCapturedByModal,
     InitialPaymentModal,
@@ -613,6 +619,7 @@ export default {
           client: '',
           amount: null,
           sale_id: null,
+          lead_id: null,
         },
         capturedByTracking: {
           program: '',
@@ -625,6 +632,9 @@ export default {
           client: '',
           sale_id: null,
         },
+        buisness : {
+
+        }
       },
       modalKeys: {
         initialPaymentKey: 0,
@@ -724,11 +734,13 @@ export default {
       this.modal.captuerd_by_tracking = true
       this.modalKeys.capturedByTracking += 1
     },
-    openInitialPaymentModal(program, client, amount, saleId) {
+    openInitialPaymentModal(program, client, amount, saleId, leadId) {
       this.modalData.initial_payment.amount = amount
       this.modalData.initial_payment.client = client
       this.modalData.initial_payment.program = program
       this.modalData.initial_payment.sale_id = saleId
+      this.modalData.initial_payment.lead_id = leadId
+      this.modalData.initial_payment.session_id = this.currentUser.user_id
       this.modal.initial_payment = true
       this.modalKeys.initialPaymentKey = (this.modalKeys.initialPaymentKey + 1) % 2
     },

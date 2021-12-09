@@ -285,10 +285,10 @@ export default {
     vSelect,
   },
   props: {
-    totalRows: { required: true, type: Number },
+    totalRows: { required: false, type: Number },
     filter: { required: true, type: Object },
-    startPage: { required: true, type: Number },
-    toPage: { required: true, type: Number },
+    startPage: { required: false, type: Number },
+    toPage: { required: false, type: Number },
     paginate: { required: true, type: Object },
     annulled: { required: false, type: Boolean, default: false },
   },
