@@ -327,7 +327,7 @@ export default {
     }),
   },
   created() {
-    this.$store.commit('app/SET_LOADING', true)
+   
     this.userCreator();
     this.allData();
     this.year_select();
@@ -370,7 +370,7 @@ export default {
       this.index = index;
     },
     allData() {
-      
+      this.$store.commit('app/SET_LOADING', true)
       let { user_id } = this.currentUser;
       if (
         this.currentUser.arrRoles[0].role_id == 1 ||
@@ -395,10 +395,14 @@ export default {
           this.chargeDataToEchart(this.leads, "Total Leads");
           this.total_year = this.global.leads_year;
           this.nameOfTab = "Leads";
-        });
+        }).catch(error=> {
+          this.$store.commit('app/SET_LOADING', false)
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Something went wrong!')
+          console.error(error)});
     },
     filtrocont() {
       if (this.userfilter != null) {
+        this.$store.commit('app/SET_LOADING', true)
         amgApi
           .post("/filtrouserdash", {
             created_id: this.userfilter.id,
@@ -423,7 +427,11 @@ export default {
             });
             this.chargeDataToEchart(this.leads, "Total Leads");
             this.total_year = this.global.leads_year;
-          });
+            this.$store.commit('app/SET_LOADING', false)
+          }).catch(error=> {
+          this.$store.commit('app/SET_LOADING', false)
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Something went wrong!')
+          console.error(error)});
       } else {
         this.allData();
         this.year = "2021";
@@ -437,7 +445,9 @@ export default {
         })
         .then((response) => {
           this.users = response.data;
-        });
+        }).catch(error=> {
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Something went wrong with users!')
+          console.error(error)});
     },
     year_select() {
       for (let x = 2014; x <= moment().format("YYYY"); x++) {
