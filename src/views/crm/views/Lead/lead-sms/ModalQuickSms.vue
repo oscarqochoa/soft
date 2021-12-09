@@ -12,7 +12,7 @@
     <b-table
       responsive="sm"
       :fields="fieldsQuicks"
-      :items="itemsQuick"
+      :items="quicks"
       :busy="isBusy"
       sticky-header
     >
@@ -57,18 +57,19 @@
 
       <!-- Column: Actions -->
       <template #cell(actions)="data">
-        <table-actions :options="[ 'edit', 'delete' ]" :row-data="data.item" @onRowEdit="onRowEdit($event, data.item)" @onRowDelete="onRowDelete" />
+        <actions-table :options="[ 'edit', 'delete' ]" :row-data="data.item" @onRowEdit="onRowEdit($event, data.item)" @onRowDelete="onRowDelete" />
       </template>
     </b-table>
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import TableActions from './TableActions.vue'
+
+import ActionsTable from '../lead-table/ActionsTable.vue'
 
 export default {
   components: {
-    TableActions
+    ActionsTable
   },
   props: {
     modul: {
@@ -79,10 +80,6 @@ export default {
       type: Array,
       required: true
     },
-    updateQuicks: {
-      type: Array,
-      required: true
-    }
   },
   computed: {
     ...mapGetters({
@@ -101,34 +98,20 @@ export default {
         { key: 'created_by'},
         { key: 'updated_by'},
       ],
-      itemsQuick: this.quicks.map(el => ({
-        ...el,
-        showMore: false
-      })),
-    }
-  },
-  watch: {
-    updateQuicks: function () {
-      if (this.updateQuicks) {
-        this.itemsQuick = this.quicks.map(el => ({
-          ...el,
-          showMore: false
-        })),
-        this.updateQuicks = false
-      }
     }
   },
   methods: {
     onShowMore (id) {
-      const index = this.itemsQuick.map(el => el.id).indexOf(id)
+      const index = this.quicks.map(el => el.id).indexOf(id)
       if (index !== -1) {
-        this.itemsQuick[index].showMore = !this.itemsQuick[index].showMore
+        this.quicks[index].showMore = !this.quicks[index].showMore
       }
     },
     onRowEdit (id, item) {
       this.$emit('modalQuickEditOpen', item)
     },
     onRowDelete (id) {
+      this.$emit('modalQuickDelete', id)
     }
   },
   created() {

@@ -104,19 +104,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
-import vSelect from 'vue-select'
-import { required, alphaNum, email } from '@validations'
+import { required } from '@validations'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import formValidation from '@core/comp-functions/forms/form-validation'
-import Ripple from 'vue-ripple-directive'
-import crmService from '@/views/crm/services/crm.service'
 
-// Notification
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import Ripple from 'vue-ripple-directive'
+import vSelect from 'vue-select'
+
+import formValidation from '@core/comp-functions/forms/form-validation'
 
 export default {
   components: {
@@ -151,79 +149,48 @@ export default {
     }),
   },
   data() {
+    const resetRowData = () => {}
+    const {
+      getValidationState,
+    } = formValidation(resetRowData)
     return {
+      getValidationState,
       userId: null,
       roleId: null,
       required,
-      resetForm: () => formValidation(this.resetSmsData).resetForm(),
       isLoading: false,
-    }
-  },
-  setup(props, { emit }) {
-    const blankSmsData = {
-      optionsms: '',
-      contmessage: '',
-    }
-    const resetRowData = () => {
-      rowData.value = JSON.parse(JSON.stringify(blankSmsData))
-    }
-    const {
-      refFormObserver,
-      getValidationState,
-    } = formValidation(resetRowData)
-
-    return {
-      refFormObserver,
-      getValidationState
+      edited: false,
+      blankQuickData: {}
     }
   },
   methods: {
+    ...mapActions({
+      A_SET_SMS_QUICK: 'CrmLeadStore/A_SET_SMS_QUICK'
+    }),
     async onSubmit () {
       try {
-        const response = await crmService.postSaveQuickSms({
+        const response = await this.A_SET_SMS_QUICK({
           ...this.quickData,
           user_id : this.userId,
           modul: this.modul
         })
         if (response.status == 200) {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Success!',
-              icon: 'CheckIcon',
-              text: 'Successful operation',
-              variant: 'success',
-            },
-          })
+          this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
           const data = JSON.parse(response.config.data)
           this.quickData.id = data.id
-          this.quickData.user_created = data.user_created
+          this.quickData.created_by = data.user_created
           this.quickData.created_at = data.created_at
-          this.quickData.user_updated = data.user_updated
+          this.quickData.updated_by = data.user_updated
           this.quickData.updated_at = data.updated_at
+          this.quickData.showMore = false
+          this.edited = true
           this.$emit('updateQuicks', this.quickData)
           this.$emit('modalQuickCreateClose', true)
         } else
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Warning!',
-              icon: 'AlertTriangleIcon',
-              text: 'Something went wrong',
-              variant: 'warning',
-            },
-          })
+          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong')
       } catch (error) {
         console.log('Something went wrong onSubmit', error)
-        this.$toast({
-          component: ToastificationContent,
-          props: {
-            title: 'Oop!',
-            icon: 'AlertOctagonIcon',
-            text: 'Something went wrong',
-            variant: 'danger',
-          },
-        })
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     }
   },
@@ -231,6 +198,15 @@ export default {
     this.userId = this.currentUser.id
     this.roleId = this.currentUser.id
     this.quickData.sms = this.quickData.sms.replace(/\n/g, "<br \/>").replace(/<br \/>/g, "\n")
+    this.blankQuickData = JSON.parse(JSON.stringify(this.quickData))
   },
+  mounted () {
+    this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
+      if (modalId === 'modal-quick-sms-save' && !this.edited) {
+        this.quickData.sms = this.blankQuickData.sms
+        this.quickData.title = this.blankQuickData.title
+      }
+    })
+  }
 }
 </script>

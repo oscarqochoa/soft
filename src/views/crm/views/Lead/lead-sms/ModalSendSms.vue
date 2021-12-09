@@ -86,7 +86,7 @@
             id="message"
             placeholder="Write new message"
             rows="3"
-            v-model="rowData.contmessage"
+            v-model="smsData.contmessage"
             maxlength="1000"
           />
           <template #description>
@@ -118,15 +118,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
-import vSelect from 'vue-select'
-import { required, alphaNum, email } from '@validations'
+import { required } from '@validations'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import formValidation from '@core/comp-functions/forms/form-validation'
+
 import Ripple from 'vue-ripple-directive'
+import vSelect from 'vue-select'
+
+import formValidation from '@core/comp-functions/forms/form-validation'
 
 export default {
   components: {
@@ -181,25 +183,16 @@ export default {
     }),
   },
   data() {
-    return {
-      userId: null,
-      roleId: null,
-      required,
-      smsData: {
-        optionsms: '',
-        contmessage: '',
-      },
-      resetForm: () => formValidation(this.resetSmsData).resetForm(),
-      isLoading: false,
+    let smsData = {
+      optionsms: '',
+      contmessage: '',
     }
-  },
-  setup(props, { emit }) {
     const blankSmsData = {
       optionsms: '',
       contmessage: '',
     }
     const resetRowData = () => {
-      rowData.value = JSON.parse(JSON.stringify(blankSmsData))
+      smsData = JSON.parse(JSON.stringify(blankSmsData))
     }
     const {
       refFormObserver,
@@ -208,34 +201,79 @@ export default {
 
     return {
       refFormObserver,
-      getValidationState
+      getValidationState,
+      userId: null,
+      roleId: null,
+      required,
+      smsData,
+      isLoading: false,
+      savenote: false,
     }
   },
   methods: {
+    ...mapActions({
+      A_SEND_MESSAGE_LEAD: 'CrmLeadStore/A_SEND_MESSAGE_LEAD',
+    }),
     deleteAccount (id) {
       for (let i = 0; i < this.nameLeads.length; i++) {
         if (this.nameLeads[i].id == id) {
           this.nameLeads.splice(i, 1)
         }
       }
-      if (this.typesm == 0) {
-        for (let i = 0; i < this.smss.length; i++) {
-          if (this.smss[i] == id) {
-            this.smss.splice(i, 1)
-          }
-        }
+      if (this.typesms == 0) {
+        console.log('this.smss',this.smss)
+        const index = this.smss.indexOf(id)
+        console.log('index', index)
+        if (index !== -1)
+          this.smss.splice(index, 1)
       } else {
-        for (let i = 0; i < this.sms.length; i++) {
-          if (this.sms[i] == id) {
-            this.sms.splice(i, 1)
-          }
-        }
+        const index = this.sms.indexOf(id)
+        console.log('index', index)
+        if (index !== -1)
+          this.sms.splice(index, 1)
       }
     },
     onSelectSms () {
-      const format = this.smsData.optionsms ? this.smsData.optionsms.value.replace(/<br \/>/g, "\n") : ''
-      this.rowData.contmessage = format
+      const index = this.quicks.map(el => el.id).indexOf((this.smsData.optionsms) ? this.smsData.optionsms.id : null)
+      if (index !== -1) {
+        const format = this.quicks[index].sms ? this.quicks[index].sms.replace(/<br \/>/g, "\n") : ''
+        this.smsData.contmessage = format
+      } else {
+        this.smsData.contmessage = ''
+      }
     },
+    async onSubmit () {
+      this.$swal.fire({
+        title: 'Are you Sure Send SMS',
+        icon: 'question',
+        text: 'You won\'t be able to revert this!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ab9220',
+        cancelButtonColor: '#8f9194',
+        confirmButtonText: 'Yes, delete it!',
+      })
+      .then(async (result) => {
+        if (result.value) {
+          const response = await this.A_SEND_MESSAGE_LEAD({
+            contmessage: this.smsData.contmessage,
+            user: this.userId,
+            sms: this.typesms == 0 ? this.smss : this.sms,
+            savenote: this.savenote == true ? 1 : 0,
+            modul: this.modul,
+          })
+          console.log('response', response)
+          if (response.status == 200) {
+            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+          } else
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', response.message)
+        }
+      })
+      .catch(error => {
+        console.log('Something went wrong onSubmit:', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      })
+    }
   },
   created() {
     this.userId = this.currentUser.id

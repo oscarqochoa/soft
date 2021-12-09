@@ -32,7 +32,6 @@
       <validation-provider
         #default="validationContext"
         :name="`City (${addressData.prename})`"
-        rules="required"
       >
         <b-form-group
           label="City"
@@ -54,7 +53,6 @@
       <validation-provider
         #default="validationContext"
         :name="`Zip Code (${addressData.prename})`"
-        rules="required"
       >
         <b-form-group
           label="Zip Code"
@@ -78,7 +76,6 @@
       <validation-provider
         #default="validationContext"
         :name="`State (${addressData.prename})`"
-        rules="required"
       >
         <b-form-group
           label="State"
@@ -100,7 +97,6 @@
       <validation-provider
         #default="validationContext"
         :name="`Country (${addressData.prename})`"
-        rules="required"
       >
         <b-form-group
           label="Country"
@@ -128,9 +124,11 @@ import {
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { required } from '@validations'
-import formValidation from '@core/comp-functions/forms/form-validation'
+
 import vSelect from 'vue-select'
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
+
+import formValidation from '@core/comp-functions/forms/form-validation'
 
 export default {
   components: {

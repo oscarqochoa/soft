@@ -37,6 +37,19 @@
       >SMS</span>
     </b-dropdown-item>
 
+    <!-- historySMS -->
+    <b-dropdown-item
+      v-if="options.includes('historySMS')"
+      v-b-tooltip.hover.left="'History of SMS'"
+      v-b-modal.modal-primary
+      @click="onRowHistorySms(rowData)"
+    >
+      <feather-icon icon="RotateCcwIcon" />
+      <span
+        class="align-middle ml-50"
+      >History</span>
+    </b-dropdown-item>
+
     <!-- Edit -->
     <b-dropdown-item
       v-if="options.includes('edit')"
@@ -64,9 +77,8 @@ import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import formValidation from '@core/comp-functions/forms/form-validation'
+
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
-import crmService from '@/views/crm/services/crm.service'
 
 export default {
   components: {
@@ -100,6 +112,9 @@ export default {
     },
     onRowSms (item) {
       this.$emit('modalSmsOpen', item)
+    },
+    onRowHistorySms (item) {
+      this.$emit('modalHistorySmsOpen', item)
     },
     onRowEdit (id) {
       this.$emit('onRowEdit', id)

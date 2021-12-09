@@ -113,7 +113,7 @@
                   /></span>
 
                   <span class="text-nowrap">{{
-                    basicSearch ? "Basic Search" : "Advanced Search"
+                    basicSearch ? "Advanced Search" : "Basic Search"
                   }}</span>
                 </div>
               </b-button>
@@ -150,58 +150,65 @@
                 </b-col>
                 <b-col>
                   <label>Captured By:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.captured"
                     :options="captured"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
                 <b-col>
                   <label>Seller:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.seller"
                     :options="sellers"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
-                <b-col>
+                <b-col v-if="!annulled">
                   <label>Source name:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.source"
                     :options="sources"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
                 <b-col>
                   <label>Status:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.status"
                     :options="status"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
                 <b-col>
                   <label>Services:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.program"
                     :options="programs"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
                 <b-col>
                   <label>IP:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.stip"
                     :options="stip"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
-                <b-col>
+                <b-col v-if="!annulled">
                   <label>ST/AD:</label>
-                  <b-form-select
+                  <v-select
                     v-model="filter.state"
                     :options="sts"
                     size="sm"
+                    :reduce="(option) => option.id"
                   />
                 </b-col>
               </b-form-row>
@@ -210,7 +217,7 @@
         </b-row>
       </div>
       <div class="table-responsive">
-        <slot name="table"></slot>
+        <slot name="table" />
       </div>
       <div class="mx-2 mb-2 mt-2">
         <b-row>
@@ -277,7 +284,14 @@ export default {
   components: {
     vSelect,
   },
-  props: ['fields', 'totalRows', 'filter','startPage', 'toPage', 'paginate'],
+  props: {
+    totalRows: { required: true, type: Number },
+    filter: { required: true, type: Object },
+    startPage: { required: true, type: Number },
+    toPage: { required: true, type: Number },
+    paginate: { required: true, type: Object },
+    annulled: { required: false, type: Boolean, default: false },
+  },
   data() {
     return {
       basicSearch: true,

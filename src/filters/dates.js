@@ -1,19 +1,17 @@
-import Vue from "vue";
-import moment from 'moment';
+import Vue from 'vue'
+import moment from 'moment'
 
+Vue.filter('myGlobal', created => {
+  if (created) return moment(created).format('MM/DD/YYYY')
+  return '-'
+})
+Vue.filter('myGlobalWithHour', created => {
+  if (created) return moment(created).format('MM/DD/YYYY h:mm A')
+  return '-'
+})
+Vue.filter('myDateGlobal', created => moment(created).format('ddd, D MMM YYYY hh:mm A'))
 
-Vue.filter('myGlobal', function (created) {
-    return moment(created).format('MM/DD/YYYY')
-});
-Vue.filter('myGlobalWithHour', function (created) {
-    return moment(created).format('MM/DD/YYYY h:mm A')
-});
-Vue.filter('myDateGlobal', function (created) {
-    return moment(created).format('ddd, D MMM YYYY hh:mm A');
-
-});
-
-Vue.filter('myGlobalDay', function (created) {
-    if (created) return moment(created).format('MM/DD/YYYY hh:mm A')
-    else return '-'
-});
+Vue.filter('myGlobalDay', created => {
+  if (created) return moment(created).format('MM/DD/YYYY hh:mm A')
+  return '-'
+})

@@ -1,10 +1,5 @@
 export default [
   {
-    key: 'selected',
-    label: '',
-    sortable: false,
-  },
-  {
     key: 'client',
     sortable: true,
     label: 'Client',
@@ -66,22 +61,12 @@ export default [
   },
   {
     key: 'approved',
-    sortable: true,
+    sortable: false,
     label: 'Approved',
   },
   {
-    key: 'sms',
+    key: 'annulled_by',
     sortable: false,
-    label: 'SMS',
-  },
-  {
-    key: 'url',
-    sortable: false,
-    label: 'Url',
-  },
-  {
-    key: 'done',
-    sortable: false,
-    label: 'Done',
+    label: 'Annulled By',
   },
 ]
