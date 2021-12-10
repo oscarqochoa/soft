@@ -1,6 +1,90 @@
 <template>
   <div>
     <b-card no-body class="mb-1">
+      <div class="m-2">
+        <b-row>
+          <b-col
+            cols="12"
+            md="6"
+            lg="6"
+            sm="6"
+            class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
+          >
+          </b-col>
+          <b-col
+            cols="12"
+            md="6"
+            lg="6"
+            sm="6"
+            class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
+          >
+            <b-button variant="info" v-if="add" @click="addlist">
+              CREATE LIST
+            </b-button>
+            <b-button variant="danger" v-if="cancelList" @click="closelist">
+              CANCEL
+            </b-button>
+          </b-col>
+        </b-row>
+      </div>
+
+      <div class="m-2">
+        <b-card
+          no-body
+          class="m-2"
+          style="
+            box-shadow: 0px 4px 4 px 0 rgb(200 200 200 /10%);
+            background-color: floralwhite;
+          "
+        >
+        <div class="m-2">
+          <h3 style="color:#FF9F43 !important;display: inline-block">CREATE LIST</h3>
+          <validation-observer ref="simpleRules">
+            <b-form>
+              <b-row>
+                <b-col md="6">
+                  <b-form-group label="Selec User">
+                    <validation-provider
+                      #default="{ errors }"
+                      name="First Name"
+                      rules="required"
+                    >
+                      <v-select  multiple :options="options"></v-select>
+                      <small class="text-danger">{{ errors[0] }}</small>
+                    </validation-provider>
+                  </b-form-group>
+                </b-col>
+                <b-col md="6">
+                  <b-form-group label="Number of leads by user">
+                    <validation-provider
+                      #default="{ errors }"
+                      name="Email"
+                      rules="required"
+                    >
+                      <b-form-input
+                      
+                        type="number"
+                        
+                      />
+                      <small class="text-danger">{{ errors[0] }}</small>
+                    </validation-provider>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="12">
+                  <b-button
+                    variant="primary"
+                    type="submit"
+                    @click.prevent="validationForm"
+                  >
+                    Submit
+                  </b-button>
+                </b-col>
+              </b-row>
+            </b-form>
+          </validation-observer>
+        </div>
+        </b-card>
+      </div>
       <div class="mx-2 mb-2 mt-2">
         <b-row>
           <b-col
@@ -47,6 +131,7 @@
           </b-col>
         </b-row>
       </div>
+
       <div class="m-2">
         <!-- Table Top -->
         <b-row>
@@ -74,45 +159,39 @@
           </b-col>
           <!-- Search -->
           <b-col cols="12" md="6">
-            <div
-              class="
-                d-flex
-                align-items-end
-                justify-content-end
-                
-              "
-            >
-                <b-form-group label="From" label-for="from" class="mb-md-0 mb-2">
-                  <b-form-datepicker class="per-page-datepicker d-inline-block mx-50"
-                    id="from"
-                    :date-format-options="{
-                      year: 'numeric',
-                      month: 'numeric',
-                      day: 'numeric',
-                    }"
-                    v-model="fromToObject.from"
-                    
-                  />
-                </b-form-group>
-                <!-- <label>{{filter.label}}</label> -->
-              
-             
-                <b-form-group label="To" label-for="to" class="mb-md-0 mb-2">
-                  <b-form-datepicker class="per-page-datepicker d-inline-block mx-50"
-                    id="to"
-                    :date-format-options="{
-                      year: 'numeric',
-                      month: 'numeric',
-                      day: 'numeric',
-                    }"
-                    v-model="fromToObject.to"
-                    
-                  />
-                </b-form-group>
-                <!-- <label>{{filter.label}}</label> -->
-            
+            <div class="d-flex align-items-end justify-content-end">
+              <b-form-group label="From" label-for="from" class="mb-md-0 mb-2">
+                <b-form-datepicker
+                  class="per-page-datepicker d-inline-block mx-50"
+                  id="from"
+                  :date-format-options="{
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                  }"
+                  v-model="fromToObject.from"
+                />
+              </b-form-group>
+              <!-- <label>{{filter.label}}</label> -->
 
-              <b-button variant="primary" @click="$refs.refClientsList.refresh()">
+              <b-form-group label="To" label-for="to" class="mb-md-0 mb-2">
+                <b-form-datepicker
+                  class="per-page-datepicker d-inline-block mx-50"
+                  id="to"
+                  :date-format-options="{
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                  }"
+                  v-model="fromToObject.to"
+                />
+              </b-form-group>
+              <!-- <label>{{filter.label}}</label> -->
+
+              <b-button
+                variant="primary"
+                @click="$refs.refClientsList.refresh()"
+              >
                 <div class="d-flex justify-content-between">
                   <span class="mr-50"
                     ><feather-icon icon="FilterIcon" size="15"
@@ -134,7 +213,7 @@
           @onChangeFilter="$refs.refClientsList.refresh()"
         ></filters-component>
       </transition> -->
-    
+
       <b-table
         v-scrollbar
         :api-url="clientRoute"
@@ -160,28 +239,38 @@
           </div>
         </template>
         <template #cell(users)="data">
-            <div class="d-flex flex-column justify-content-start align-items-start">
-              <b-button variant="flat-primary" 
-              style="padding-left:2px; padding-right:2px; padding-top:5px;padding-bottom:5px"
-                v-for="(user, index) in JSON.parse(data.item.users)"
-                :key="index"
-                 @click="modalopen(user, data.item.id)"
-              >{{ user.user_name }}</b-button>
-            </div>
-          </template>
-        <template #cell(action)="data">
-            <div
-              class="d-flex flex-column justify-content-center align-items-center"
-              v-if="getRoles"
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <b-button
+              variant="flat-primary"
+              style="
+                padding-left: 2px;
+                padding-right: 2px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+              "
+              v-for="(user, index) in JSON.parse(data.item.users)"
+              :key="index"
+              @click="modalopen(user, data.item.id)"
+              >{{ user.user_name }}</b-button
             >
-              <b-button 
-                variant="danger"
-                class="mr-1 reset-radius btn-sm"
-                @click="deleteuser(data.item.id)"> 
-                <feather-icon icon="Trash2Icon"></feather-icon>
-              </b-button>
-            </div>
-            <!-- <div
+          </div>
+        </template>
+        <template #cell(action)="data">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+            v-if="getRoles"
+          >
+            <b-button
+              variant="danger"
+              class="mr-1 reset-radius btn-sm"
+              @click="deleteuser(data.item.id)"
+            >
+              <feather-icon icon="Trash2Icon"></feather-icon>
+            </b-button>
+          </div>
+          <!-- <div
               class="d-flex flex-column justify-content-start align-items-start"
               v-else
             >
@@ -192,7 +281,7 @@
                 <feather-icon icon="FileIcon"></feather-icon>
               </b-button>
             </div> -->
-          </template>
+        </template>
       </b-table>
     </b-card>
     <modal-by-user
@@ -202,7 +291,7 @@
       :idByUser="idByUser"
       @close="closeModal"
       @updateList="updateList"
-      ></modal-by-user>
+    ></modal-by-user>
   </div>
 </template>
 
@@ -210,7 +299,8 @@
 import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-import ModalByUser from '../components/subcomponents/ModalByUser.vue'
+import ModalByUser from "../components/subcomponents/ModalByUser.vue";
+
 export default {
   components: {
     vSelect,
@@ -218,6 +308,8 @@ export default {
   },
   data() {
     return {
+      value: null,
+      options: ["list", "of", "options"],
       searchInput: "",
       startPage: "",
       toPage: "",
@@ -269,15 +361,21 @@ export default {
       filters: [],
       count_alltask: 0,
       count_donetask: 0,
-      modalChanging:false,
-      idByUser:null,
-      objectUser:null
+      modalChanging: false,
+      idByUser: null,
+      objectUser: null,
+      cancelList: false,
+      add: null,
     };
   },
   computed: {
-      getRoles(){
-          return this.currentUser.arrRoles[0].role_id == 1 ||  this.global.layout.role_id == 2? true:false
-      },
+    getRoles() {
+      return this.currentUser.arrRoles[0].role_id == 1 ||
+        this.currentUser.arrRoles[0].role_id == 2
+        ? true
+        : false;
+    },
+
     clientRoute() {
       return "/listusers";
     },
@@ -289,7 +387,18 @@ export default {
     }),
   },
   methods: {
-    updateList(){
+    statusRol() {
+      this.add = this.currentUser.arrRoles[0].role_id == 2 ? false : true;
+    },
+    addlist() {
+      this.add = false;
+      this.cancelList = true;
+    },
+    closelist() {
+      this.add = true;
+      this.cancelList = false;
+    },
+    updateList() {
       this.$refs.refClientsList.refresh();
     },
     resetSearch() {
@@ -303,13 +412,12 @@ export default {
         per_page: ctx.perPage,
         id:
           this.currentUser.arrRoles[0].role_id == 1 ||
-          this.global.layout.role_id == 2
+          this.currentUser.arrRoles[0].role_id == 2
             ? null
             : this.currentUser.user_id,
         from: this.fromToObject.from,
         to: this.fromToObject.to,
       });
-
       // Must return a promise that resolves to an array of items
       return promise.then((data) => {
         // Pluck the array of items off our axios response
@@ -338,7 +446,7 @@ export default {
         .post("/listusers", {
           id:
             this.currentUser.arrRoles[0].role_id == 1 ||
-            this.global.layout.role_id == 2
+            this.currentUser.arrRoles[0].role_id == 2
               ? null
               : this.currentUser.user_id,
           from: this.from,
@@ -373,12 +481,12 @@ export default {
           text: "You won't be able to revert this!",
           icon: "warning",
           showCancelButton: true,
-          confirmButtonAriaLabel: 'Thumbs up, great!',
-            cancelButtonAriaLabel: 'Thumbs down',
+          confirmButtonAriaLabel: "Thumbs up, great!",
+          cancelButtonAriaLabel: "Thumbs down",
           customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-danger ',
-            },
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-danger ",
+          },
           confirmButtonText: "Yes, delete it!",
         })
         .then((result) => {
@@ -393,7 +501,7 @@ export default {
                   .fire("Deleted!", "Your file has been deleted.", "success")
                   .then((res) => {
                     if (res) {
-                      this.resetSearch()
+                      this.resetSearch();
                     }
                   });
               })
@@ -403,13 +511,13 @@ export default {
           }
         });
     },
-    modalopen(user,idByUser){
-      this.objectUser = user
-      this.idByUser =idByUser
-      if(this.modalChanging == false){
-        this.modalChanging =true
-      }else{
-        this.modalChanging =false
+    modalopen(user, idByUser) {
+      this.objectUser = user;
+      this.idByUser = idByUser;
+      if (this.modalChanging == false) {
+        this.modalChanging = true;
+      } else {
+        this.modalChanging = false;
       }
     },
     closeModal() {
@@ -417,6 +525,7 @@ export default {
     },
   },
   created() {
+    this.statusRol();
     this.listsgroups();
   },
 };
@@ -427,8 +536,8 @@ export default {
 .per-page-selector {
   width: 90px;
 }
-.per-page-datepicker{
-    width: 180px;
+.per-page-datepicker {
+  width: 180px;
 }
 td.div {
   width: 100% !important;

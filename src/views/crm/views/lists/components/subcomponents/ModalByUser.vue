@@ -82,7 +82,7 @@
           <div
             class="d-flex flex-column justify-content-center align-items-center"
           >
-            <b-form-checkbox :disabled="!rolByUser"
+            <b-form-checkbox :disabled="rolByUser"
             v-model="data.item.done" :value="1"   
             @change="callead(data.item.done,data.item.lead_id,data.item.id_list,data.item.user_id)">
             
