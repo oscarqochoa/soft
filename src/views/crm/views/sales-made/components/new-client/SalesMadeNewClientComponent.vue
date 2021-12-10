@@ -1,6 +1,5 @@
 <template>
   <div>
-    aa: {{ (currentUser.role_id == null || currentUser.role_id == 2)? 'verdadero' : 'falso' }}
     <filter-slot
       :fields="fields"
       :filter="filter"
@@ -8,6 +7,7 @@
       :paginate="paginate"
       :start-page="startPage"
       :to-page="toPage"
+      @reload="$refs['new-client-done-table'].refresh()"
     >
       <b-table
         id="new-client-done-table"
@@ -519,7 +519,9 @@
     </filter-slot>
     <buisness-modal
       :modal="modal"
-      :tracking="modalData.buisness"
+      :buisness="modalData.buisness"
+      :key="modalKeys.business"
+      @reload="$refs['new-client-done-table'].refresh()"
     />
     <tracking-modal
       :modal="modal"
@@ -602,6 +604,7 @@ export default {
         initial_payment: false,
         captuerd_by_tracking: false,
         files: false,
+        business_modal: false,
       },
       modalData: {
         tracking: {
@@ -632,14 +635,23 @@ export default {
           client: '',
           sale_id: null,
         },
-        buisness : {
-
-        }
+        buisness: {
+          program: '',
+          client: '',
+          salesClient: {
+            event_id: '',
+            account_id: '',
+            id: '',
+            lead_id: '',
+          },
+          typeModal: 1,
+        },
       },
       modalKeys: {
-        initialPaymentKey: 0,
-        capturedByTracking: 0,
-        files: 0,
+        initialPaymentKey: 3,
+        capturedByTracking: 2,
+        files: 1,
+        business: 0,
       },
       selectAll: false,
     }
@@ -742,14 +754,26 @@ export default {
       this.modalData.initial_payment.lead_id = leadId
       this.modalData.initial_payment.session_id = this.currentUser.user_id
       this.modal.initial_payment = true
-      this.modalKeys.initialPaymentKey = (this.modalKeys.initialPaymentKey + 1) % 2
+      this.modalKeys.initialPaymentKey += 1
     },
     openModalProgram(data) {
       if (data.program_id === 2 || data.program_id === 7 || data.program_id === 6) this.openDetailOfSail(data.program, data.client, data.fee)
+      if (data.program_id === 1) {
+        if (data.haveRates === 1) this.openBusinessModal(data.program, data.client, data, 2)
+        else this.openBusinessModal(data.program, data.client, data, 1)
+      }
+      console.log(data.program_id)
+    },
+    openBusinessModal(program, client, salesClient, typeModal) {
+      this.modalData.buisness.program = program
+      this.modalData.buisness.client = client
+      this.modalData.buisness.salesClient = salesClient
+      this.modalData.buisness.typeModal = typeModal
+      this.modalKeys.business += 1
+      this.modal.business_modal = true
     },
     openDetailOfSail(program, client, fee) {
-      this.$refs['new-client-done-table']
-        .this.modalData.boost_credit.program = program
+      this.modalData.boost_credit.program = program
       this.modalData.boost_credit.client = client
       this.modalData.boost_credit.fee = fee
       this.modal.boost_credit = true
@@ -760,7 +784,7 @@ export default {
       this.modalData.files.client = client
       this.modalData.files.sale_id = sale_id
       this.modal.files = true
-      this.modalKeys.files = (this.modalKeys.files + 1) % 2
+      this.modalKeys.files += 1
     },
     selectedRow(data) {
       const index = this.selected.findIndex(select => select.id === data.id)
@@ -855,97 +879,3 @@ export default {
 <style scoped>
 
 </style>
-/*
-Route::get('welcome', 'Api\v1\WelcomeController@index');
-Route::post('searchprogram', 'Api\Clients\ApiClientsController@searchprogram');
-Route::post('alltrackingcapt', 'Api\ApiSaleMadeController@alltrackingcapt');
-Route::post('alltrackingsel', 'Api\ApiSaleMadeController@alltrackingsel');
-Route::post('alltrackingfee', 'Api\ApiSaleMadeController@alltrackingfee');
-Route::post('allfileslead', 'Api\ApiSaleMadeController@allfileslead');
-Route::post('salemade', 'Api\ApiSaleMadeController@search');
-Route::post('savenewcapt', 'Api\ApiSaleMadeController@savenewcapt');
-Route::post('savenewfee', 'Api\ApiSaleMadeController@savenewfee');
-Route::post('savenewsel', 'Api\ApiSaleMadeController@savenewsel');
-Route::post('saleprogram', 'Api\ApiSaleMadeController@searchprogram');
-Route::post('saleannul', 'Api\ApiSaleMadeController@searchannul');
-Route::post('capturedall/{id}', 'Api\ApiDataController@usersModulebyRole');
-Route::post('sellerall/{id}', 'Api\ApiDataController@usersModulebyRole');
-Route::get('sourcesnames', 'Api\ApiDataController@sourcesnames');
-Route::get('programs', 'Api\ApiDataController@programs');
-Route::post('get-states', 'Api\ApiLeadController@getStates');
-Route::post('clients', 'Api\Clients\ApiClientsController@search');
-Route::post('filtrouserdash', 'Api\ApiCrmDashboardController@filteruser');
-Route::get('leadstatus/{id?}', 'Api\ApiDataController@leadstatus');
-Route::post('usermodule/{id}', 'Api\ApiDataController@usersModulebyRole');
-Route::post('searchleads', 'Api\ApiLeadController@search');
-Route::post('search-leads-sn-recovery', 'Api\SocialNetwork\ApiLeadController@searchLeadSnRecovery');
-Route::post('deletefile', 'Api\ApiSaleMadeController@deletefile');
-Route::post('generate-pdf', 'Api\ApiSaleMadeController@generatePdf');
-Route::post('allquickssms', 'Api\Messages\ApiMessagesController@allquickssms');
-Route::post('deletequick', 'Api\ApiMessageController@deletequick');
-Route::post('savequick', 'Api\ApiMessageController@savequick');
-Route::post('view-countrys', 'Api\ApiApplicationController@allcountrys');
-Route::get('stateseeuu', 'Api\ApiStatesController@index');
-Route::get('leadsource', 'Api\ApiDataController@leadsource');
-Route::get('stateleads', 'Api\ApiDataController@stateleads');
-Route::post('allsmshistorylead', 'Api\Messages\ApiMessagesController@allsmshistorylead');
-//CRM Clients
-Route::post('clients', 'Api\Clients\ApiClientsController@search');
-Route::post('clientsshareother', 'Api\Clients\ApiClientsController@clientsshareother');
-
-
-
-
-//Programs
-Route::get('programs', 'Api\ApiDataController@programs');
-Route::post('usersprograms', 'Api\ApiDataController@usersPrograms');
-
-
-
-//Tasks
-Route::post('getnotificationstask', 'Api\ApiNotificationController@getnotificationstask');
-
-
-//Notifications
-Route::post('getnotifications', 'Api\ApiNotificationController@getnotifications');
-
-
-//Notes
-Route::post('getnotes', 'Api\ApiStickyNotesController@getnotesicons');
-Route::post('getcategory-notes', 'Api\ApiStickyNotesController@getcategorynotes');
-Route::post('save-notes', 'Api\ApiStickyNotesController@save');
-Route::post('delete-note', 'Api\ApiStickyNotesController@deletenote');
-
-
-//COMMISSIONS
-Route::post('searchcommissions', 'Api\ApiCommissionController@search');
-Route::post('getreportcommissions', 'Api\ApiCommissionController@getReportCommissions');
-Route::post('getcommissions', 'Api\ApiCommissionController@getCommissions');
-Route::post('createcard', 'Api\ApiCardController@create');
-Route::post('approvecommissions', 'Api\ApiCommissionController@approveCommissions');
-Route::post('searchapprovecommissions', 'Api\ApiCommissionController@searchApproveCommissions');
-Route::post('anullcommissions', 'Api\ApiCommissionController@anullCommissions');
-Route::post('searchleadpayment', 'Api\ApiPaymentController@searchleadpayment');
-Route::post('searchlead', 'Api\ApiPaymentController@searchlead');
-Route::post('searchcards', 'Api\ApiCardController@searchcards');
-Route::post('searchapprovecommissionsad', 'Api\ApiCommissionController@searchApproveCommissionsAd');
-Route::post('approvecommissionsad', 'Api\ApiCommissionController@approveCommissionsAd');
-Route::post('change-percentage-to-pay-crm', 'Api\ApiCommissionController@changePercentageToPayCrm');
-Route::post('percentage-department', 'Api\ApiCommissionController@percentageDepartment');
-Route::post('payment', 'Api\ApiPaymentController@search');
-
-Route::post('getmodulcommissions', 'Api\ApiCommissionController@getModulCommissions');
-Route::post('searchmoduleapprovecommissions', 'Api\ApiCommissionController@searchModuleApproveCommissions');
-Route::post('approvemodulecommissions', 'Api\ApiCommissionController@approveModuleCommissions');
-Route::post('anullmodulecommissions', 'Api\ApiCommissionController@anullModuleCommissions');
-Route::post('annulcommissionp', 'Api\ApiCommissionController@annulCommissionp');
-
-Route::post('getreportcommissionsprogram', 'Api\ApiCommissionController@getReportCommissionsProgram');
-Route::post('getcommissionsprogram', 'Api\ApiCommissionController@getCommissionsProgram');
-Route::post('getreportcommissionsad', 'Api\ApiCommissionController@getReportCommissionsAd');
-Route::post('get-report-commission-department', 'Api\ApiCommissionController@getReportCommissionsDepartment');
-
-Route::post('getcommissionsad', 'Api\ApiCommissionController@getCommissionsAd');
-//COMMISSIONS
-Route::post('getlistcards', 'Api\ApiSaleMadeController@getlistcards');
-*/

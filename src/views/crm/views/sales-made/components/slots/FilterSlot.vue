@@ -332,6 +332,7 @@ export default {
       this.filter.state = null
       this.filter.stip = null
       this.filter.status = null
+      this.$emit('reload')
     },
     swapSearch() {
       this.resetFilter()
