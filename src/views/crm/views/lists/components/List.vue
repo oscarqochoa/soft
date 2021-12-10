@@ -201,6 +201,7 @@
       :objectUser="objectUser"
       :idByUser="idByUser"
       @close="closeModal"
+      @updateList="updateList"
       ></modal-by-user>
   </div>
 </template>
@@ -288,6 +289,9 @@ export default {
     }),
   },
   methods: {
+    updateList(){
+      this.$refs.refClientsList.refresh();
+    },
     resetSearch() {
       this.searchInput = "";
       this.fromToObject.from = null;
