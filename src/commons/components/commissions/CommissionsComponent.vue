@@ -446,7 +446,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.currentUser);
   },
   data() {
     return {

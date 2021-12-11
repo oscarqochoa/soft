@@ -6,7 +6,7 @@
         v-model="modal.business_modal"
         title-class="h3"
         size="lg"
-        :title="(this.buisness.typeModal === 1) ? 'COMPLETE RATES' : 'DETAIL OF SALE'"
+        :title="(this.service.typeModal === 1) ? 'COMPLETE RATES' : 'DETAIL OF SALE'"
         scrollable
       >
         <b-row class="mb-2">
@@ -19,7 +19,7 @@
               </b-input-group-prepend>
               <b-form-input
                 disabled
-                :value="buisness.program"
+                :value="service.program"
               />
             </b-input-group>
           </b-col>
@@ -32,7 +32,7 @@
               </b-input-group-prepend>
               <b-form-input
                 disabled
-                :value="buisness.client"
+                :value="service.client"
               />
             </b-input-group>
           </b-col>
@@ -398,7 +398,7 @@ export default {
       required: true,
       validator: value => 'business_modal' in value,
     },
-    buisness: {
+    service: {
       type: Object,
       default() {
         return {
@@ -450,10 +450,10 @@ export default {
       currentUser: 'auth/currentUser',
     }),
     isModalShow() {
-      return this.buisness.typeModal === 2 || this.buisness.typeModal === 5
+      return this.service.typeModal === 2 || this.service.typeModal === 5
     },
     isModalAdd() {
-      return this.buisness.typeModal === 3 || this.buisness.typeModal === 4 || this.buisness.typeModal === 6
+      return this.service.typeModal === 3 || this.service.typeModal === 4 || this.service.typeModal === 6
     },
 
     otherTotalS() {
@@ -472,8 +472,8 @@ export default {
     },
   },
   async mounted() {
-    console.log(this.buisness.typeModal)
-    this.client = this.buisness.salesClient
+    console.log(this.service.typeModal)
+    this.client = this.service.salesClient
     if (this.program) {
       await this.searchRate()
     }
@@ -512,7 +512,7 @@ export default {
           default: break
         }
         // Depends of the Modal type
-        switch (this.buisness.typeModal) {
+        switch (this.service.typeModal) {
           case 1:
             message = 'complete Rates'
             route = '/attendend'
@@ -541,7 +541,7 @@ export default {
           fee: this.fee,
           suggested: this.suggested,
           otherpricesp: this.othersPayments,
-          event: this.buisness.salesClient.event_id,
+          event: this.service.salesClient.event_id,
           json_noce: this.add_json_ce,
           stateid: 0,
 
@@ -624,7 +624,7 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post('/searchprogramsalemade', { id: this.buisness.salesClient.id })
+        const response = await amgApi.post('/searchprogramsalemade', { id: this.service.salesClient.id })
         if (response.status === 200) {
           this.fee = response.data[0].fee
           this.rate_selected = response.data[0].rate_selected ? JSON.parse(response.data[0].rate_selected) : ''
@@ -647,7 +647,7 @@ export default {
     },
     async getScore() {
       try {
-        const response = await amgApi.post('/getscoreattend', { lead_id: this.buisness.salesClient.lead_id })
+        const response = await amgApi.post('/getscoreattend', { lead_id: this.service.salesClient.lead_id })
         if (response.status === 200) {
           this.score_id = response.data.score_id
         }

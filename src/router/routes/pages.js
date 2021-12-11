@@ -117,8 +117,7 @@ export default [
     name: 'misc-not-authorized',
     component: () => import('@/views/pages/miscellaneous/NotAuthorized.vue'),
     meta: {
-      layout: 'full',
-      resource: 'Auth',
+      layout: 'full'
     },
   },
   {

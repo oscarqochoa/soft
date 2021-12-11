@@ -394,6 +394,7 @@
               "
               size="sm"
               variant="danger"
+              @click="annulSale(data.item)"
             >
               ANNUL
             </b-button>
@@ -500,6 +501,7 @@
             variant="primary"
           />
         </template>
+
         <template v-slot:cell(url)="data">
           <b-icon
             v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.role_id == null || currentUser.role_id == 2)"
@@ -517,32 +519,30 @@
         </template>
       </b-table>
     </filter-slot>
-    <buisness-modal
-      :modal="modal"
-      :buisness="modalData.buisness"
-      :key="modalKeys.business"
-      @reload="$refs['new-client-done-table'].refresh()"
-    />
     <tracking-modal
       :modal="modal"
       :tracking="modalData.tracking"
     />
-    <detail-of-sail-modal
-      :modal="modal"
-      :boost_credit="modalData.boost_credit"
+    <component
+      :is="modalData.programs.programSelected"
+      v-if="modal.programs"
+      :modal-services="modal.programs"
+      :sales-client="modalData.programs.salesClient"
+      :type-modal="modalData.programs.typeModal"
+      @closeModal="hideModalProgram"
     />
     <initial-payment-modal
-      :key="modalKeys.initialPaymentKey"
+      v-if="modal.initial_payment"
       :modal="modal"
       :initial_payment="modalData.initial_payment"
     />
     <tracking-captured-by-modal
-      :key="modalKeys.capturedByTracking"
+      v-if="modal.captuerd_by_tracking"
       :modal="modal"
       :captured-by-tracking="modalData.capturedByTracking"
     />
     <files-modal
-      :key="modalKeys.files"
+      v-if="modal.files"
       :modal="modal"
       :files="modalData.files"
     />
@@ -559,23 +559,25 @@ import dataFields from '@/views/crm/views/sales-made/components/new-client/field
 import dataFilters from '@/views/crm/views/sales-made/components/new-client/filters.data'
 import CrmService from '@/views/crm/services/crm.service'
 import TrackingModal from '@/views/crm/views/sales-made/components/modals/TrackingModal.vue'
-import DetailOfSailModal from '@/views/crm/views/sales-made/components/modals/DetailOfSailModal.vue'
 import InitialPaymentModal from '@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue'
 import TrackingCapturedByModal from '@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue'
 import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
-import BuisnessModal from '@/views/crm/views/sales-made/components/modals/BuisnessModal.vue'
+import BusinessModal from '@/views/crm/views/sales-made/components/modals/BuisnessModal.vue'
+import CreditExpertsModal from '@/views/crm/views/sales-made/components/modals/CreditExpertsModal.vue'
+import BoostCreditModal from '@/views/crm/views/sales-made/components/modals/BoostCreditModal.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
   components: {
-    BuisnessModal,
+    CreditExpertsModal,
+    BusinessModal,
     FilesModal,
     TrackingCapturedByModal,
     InitialPaymentModal,
-    DetailOfSailModal,
     TrackingModal,
     FilterSlot,
     vSelect,
+    BoostCreditModal,
   },
   props: {
     done: {
@@ -600,22 +602,16 @@ export default {
       toPage: null,
       modal: {
         tracking: false,
-        boost_credit: false,
         initial_payment: false,
         captuerd_by_tracking: false,
         files: false,
-        business_modal: false,
+        programs: false,
       },
       modalData: {
         tracking: {
           program: '',
           client: '',
           tabla: '',
-        },
-        boost_credit: {
-          program: '',
-          client: '',
-          fee: null,
         },
         initial_payment: {
           program: '',
@@ -635,23 +631,11 @@ export default {
           client: '',
           sale_id: null,
         },
-        buisness: {
-          program: '',
-          client: '',
-          salesClient: {
-            event_id: '',
-            account_id: '',
-            id: '',
-            lead_id: '',
-          },
-          typeModal: 1,
+        programs: {
+          programSelected: '',
+          typeModal: 0,
+          salesClient: {},
         },
-      },
-      modalKeys: {
-        initialPaymentKey: 3,
-        capturedByTracking: 2,
-        files: 1,
-        business: 0,
       },
       selectAll: false,
     }
@@ -727,6 +711,10 @@ export default {
         return []
       }
     },
+    hideModalProgram(refresh) {
+      if (refresh) this.$refs['new-client-done-table'].refresh()
+      this.modal.programs = false
+    },
     openTrackingModal(program, client, tabla) {
       this.modalData.tracking.program = program
       this.modalData.tracking.client = client
@@ -744,7 +732,6 @@ export default {
       else if (type === 2) this.modalData.capturedByTracking.tittle = 'SELLER'
       else if (type === 3) this.modalData.capturedByTracking.tittle = 'FEE'
       this.modal.captuerd_by_tracking = true
-      this.modalKeys.capturedByTracking += 1
     },
     openInitialPaymentModal(program, client, amount, saleId, leadId) {
       this.modalData.initial_payment.amount = amount
@@ -754,37 +741,31 @@ export default {
       this.modalData.initial_payment.lead_id = leadId
       this.modalData.initial_payment.session_id = this.currentUser.user_id
       this.modal.initial_payment = true
-      this.modalKeys.initialPaymentKey += 1
     },
     openModalProgram(data) {
-      if (data.program_id === 2 || data.program_id === 7 || data.program_id === 6) this.openDetailOfSail(data.program, data.client, data.fee)
-      if (data.program_id === 1) {
-        if (data.haveRates === 1) this.openBusinessModal(data.program, data.client, data, 2)
-        else this.openBusinessModal(data.program, data.client, data, 1)
+      console.log(data.program_id, data.haveRates)
+      switch (data.program_id) {
+        case 1: break
+        case 2: this.modalData.programs.programSelected = 'boost-credit-modal'; break
+        case 3: break
+        case 4: break
+        case 5: break
+        case 6: break
+        case 7: break
+        case 8: break
+        case 9: break
+        default: break
       }
-      console.log(data.program_id)
+      this.modalData.programs.typeModal = (data.haveRates == 1) ? 2 : 1
+      this.modalData.programs.salesClient = data
+      this.modal.programs = true
     },
-    openBusinessModal(program, client, salesClient, typeModal) {
-      this.modalData.buisness.program = program
-      this.modalData.buisness.client = client
-      this.modalData.buisness.salesClient = salesClient
-      this.modalData.buisness.typeModal = typeModal
-      this.modalKeys.business += 1
-      this.modal.business_modal = true
-    },
-    openDetailOfSail(program, client, fee) {
-      this.modalData.boost_credit.program = program
-      this.modalData.boost_credit.client = client
-      this.modalData.boost_credit.fee = fee
-      this.modal.boost_credit = true
-    },
-    openFilesModal(id, program, client, sale_id) {
+    openFilesModal(id, program, client, saleId) {
       this.modalData.files.id = id
       this.modalData.files.program = program
       this.modalData.files.client = client
-      this.modalData.files.sale_id = sale_id
+      this.modalData.files.sale_id = saleId
       this.modal.files = true
-      this.modalKeys.files += 1
     },
     selectedRow(data) {
       const index = this.selected.findIndex(select => select.id === data.id)
@@ -870,6 +851,31 @@ export default {
           this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
           this.$store.commit('app/SET_LOADING', false)
         }
+      }
+    },
+    async annulSale(sale) {
+      try {
+        const swal = await this.$swal.fire({
+          title: 'Are you sure?',
+          text: 'Are you suere annuled this sale',
+          icon: 'danger',
+          showCancelButton: true,
+        })
+        if (swal.isConfirmed) {
+          const response = await amgApi.post('/annulsale', {
+            id: sale.id,
+            id_event: sale.event_id,
+            user: this.currentUser.user_id,
+          })
+          if (response.status === 200) {
+            this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Your sale has been annulled successfully')
+            this.$refs['new-client-done-table'].refresh()
+          } else {
+            this.showErroSwal()
+          }
+        }
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Error', 'Error', 'XIcon', 'Some error, please try again or contact to support')
       }
     },
   },

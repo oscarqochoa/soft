@@ -95,10 +95,11 @@
               "
             >
               <b-form-input
-                v-model="filter.text"
+                v-model="filterController.text"
                 class="d-inline-block mr-1"
                 placeholder="Client..."
                 debounce="200"
+                @keyup.enter="filter.text = filterController.text"
               />
               <b-button
                 variant="primary"
@@ -295,6 +296,11 @@ export default {
   data() {
     return {
       basicSearch: true,
+      filterController: {
+        text: '',
+        seller: null,
+        captured: null,
+      }
     }
   },
   async created() {
