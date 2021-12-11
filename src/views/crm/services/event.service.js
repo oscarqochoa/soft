@@ -52,5 +52,13 @@ class EventService {
       throw error
     }
   }
+  async postAttendEvent (body) {
+    try {
+      const data = await amgApi.post('/attendevent', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
 }
 export default new EventService()

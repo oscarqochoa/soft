@@ -7,12 +7,14 @@
       <b-card title="CREDIT REPORT" sub-title="This Lead do not have credit report"/>
     </b-col>
     <b-col cols="12" lg="6">
-      <card-lead-appointment :modul="modul" :only-read="onlyRead" :lead="lead" />
+      <card-lead-appointment :modul="modul" :only-read="onlyRead" :is-busy="isBusyAppointment" :lead="lead" />
     </b-col>
   </b-row>
 </template>
 
 <script>
+
+import { mapActions, mapGetters } from 'vuex'
 
 import CardLeadClient from './CardLeadClient.vue'
 import CardLeadAppointment from './CardLeadAppointment.vue'
@@ -25,6 +27,7 @@ export default {
   props: {},
   data () {
     return {
+      isBusyAppointment: false,
       modul: 2,
       lead: {
         dob: '1997-28-08',
@@ -47,14 +50,51 @@ export default {
       }
     }
   },
-  created () {},
+  created () {
+    this.getEvents()
+    this.getOwners()
+    this.getPrograms()
+  },
   computed: {
     onlyRead () {
       return this.modul === 18
     },
   },
   watch: {},
-  methods: {}
+  methods: {
+    ...mapActions({
+      A_GET_OWNERS: 'CrmLeadStore/A_GET_OWNERS',
+      A_GET_EVENTS: 'CrmEventStore/A_GET_EVENTS',
+      A_GET_PROGRAMS: 'CrmLeadStore/A_GET_PROGRAMS'
+    }),
+    async getEvents () {
+      try {
+        this.isBusyAppointment = true
+        await this.A_GET_EVENTS({ idLead: this.$route.params.id })
+        this.isBusyAppointment = false
+      } catch (error) {
+        console.log('Something went wrong getEvents', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
+    },
+    async getOwners () {
+      try {
+        const roles = [2, 4].includes(this.modul) ? '[1,2,5]' : '[1,2,3,5]'
+        await this.A_GET_OWNERS({ modul: this.modul, body: { roles, type: '1' } })
+      } catch (error) {
+        console.log('Something went wrong getOwners:', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
+    },
+    async getPrograms () {
+      try {
+        await this.A_GET_PROGRAMS()
+      } catch (error) {
+        console.log('Something went wrong getPrograms', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
+    }
+  }
 }
 </script>
 

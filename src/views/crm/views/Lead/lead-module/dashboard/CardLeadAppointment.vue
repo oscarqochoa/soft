@@ -148,6 +148,10 @@ export default {
       type: Boolean,
       required: true
     },
+    isBusy: {
+      type: Boolean,
+      required: true
+    },
     lead: {
       type: Object,
       required: true
@@ -176,13 +180,11 @@ export default {
         { key: 'to' },
         { key: 'Actions' },
       ],
-      isBusy: false,
       titleModalEventEdit: 'EVENT EDIT',
     }
   },
   mounted () {},
   created () {
-    this.getEvents()
     this.setDataBlank('event')
   },
   computed: {
@@ -196,7 +198,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_GET_EVENTS: 'CrmEventStore/A_GET_EVENTS',
       A_DELETE_EVENTS: 'CrmEventStore/A_DELETE_EVENTS',
       A_GET_EVENT: 'CrmEventStore/A_GET_EVENT',
     }),
@@ -205,16 +206,6 @@ export default {
     },
     resetData (key) {
       this[key] = Object.assign({}, this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`])
-    },
-    async getEvents () {
-      try {
-        this.isBusy = true
-        await this.A_GET_EVENTS({ idLead: this.$route.params.id })
-        this.isBusy = false
-      } catch (error) {
-        console.log('Something went wrong getEvents', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-      }
     },
     async openModalEditEventShow (id) {
       try {
@@ -233,22 +224,14 @@ export default {
       }
     },
     deleteEvent (id) {
-      this.$swal.fire({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes, delete it!',
-      })
+      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'warning')
       .then(async (result) => {
         if (result.value) {
           const response = await this.A_DELETE_EVENTS(id)
           if (this.isResponseSuccess(response)) {
             this.$swal.fire('Deleted!', 'Your file has been deleted.', 'success')
           } else {
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong.`)
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
           }
         }
       }).catch(error => {

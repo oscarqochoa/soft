@@ -113,7 +113,7 @@
                 <validation-provider>
                   <b-form-group label="Comment">
                     <b-form-textarea
-                      value="Soy un valor"
+                      :value="event.comment"
                       :disabled="true"
                     />
                   </b-form-group>
@@ -298,9 +298,43 @@
               <span>Save</span>
             </template>
           </b-button>
+          <b-button
+            v-if="!onlyRead && event.seller_id === currentUser.id && event.type !== 'task'"
+            v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+            type="button"
+            variant="outline-dark"
+            class="ml-2"
+            :disabled="isLoading || event.attend"
+            @click="onAttend"
+          >
+            <template>
+              <feather-icon v-if="event.attend" icon="SaveIcon" class="mr-50" />
+              <feather-icon v-else icon="CalendarIcon" class="mr-50" />
+              <span v-if="event.attend">Attended</span>
+              <span v-else>Attend</span>
+            </template>
+          </b-button>
         </div>
       </b-form>
     </validation-observer>
+
+    <!-- modal SALE MADE -->
+    <b-modal
+      id="modal-sale-made"
+      ok-only
+      modal-class="modal-primary"
+      centered
+      size="sm"
+      title="Sale Made"
+      hide-footer
+      no-close-on-backdrop
+    >
+      <modal-sale-made
+        :modul="modul"
+        :only-read="onlyRead"
+        :event="event"
+      />
+    </b-modal>
   </div>
 </template>
 
@@ -311,11 +345,13 @@ import { mapGetters, mapActions } from 'vuex'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
-import { months } from 'vue-moment'
+
+import ModalSaleMade from './ModalSaleMade.vue'
 
 export default {
   components: {
-    vSelect
+    vSelect,
+    ModalSaleMade
   },
   props: {
     modul: {
@@ -362,7 +398,7 @@ export default {
   },
   mounted () {},
   created () {
-    this.getOwners()
+    this.sellers = this.G_OWNERS
     this.setDataBlank('event')
   },
   computed: {
@@ -394,9 +430,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_GET_OWNERS: 'CrmLeadStore/A_GET_OWNERS',
       A_SET_EVENT: 'CrmEventStore/A_SET_EVENT',
-      A_GET_USER_APPOINTMENT_SN: 'CrmLeadStore/A_GET_USER_APPOINTMENT_SN',
       A_DELETE_EVENT: 'CrmEventStore/A_DELETE_EVENT',
       A_GET_DATE_EVENTS_TASKS: 'CrmEventStore/A_GET_DATE_EVENTS_TASKS',
       A_UPDATE_EVENT: 'CrmEventStore/A_UPDATE_EVENT',
@@ -408,16 +442,6 @@ export default {
       const object = this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`]
       for (let subkey in object) {
         this[key][subkey] = object[subkey]
-      }
-    },
-    async getOwners () {
-      try {
-        const roles = [2, 4].includes(this.modul) ? '[1,2,5]' : '[1,2,3,5]'
-        await this.A_GET_OWNERS({ modul: this.modul, body: { roles, type: '1' } })
-        this.sellers = this.G_OWNERS
-      } catch (error) {
-        console.log('Something went wrong getOwners:', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
     onToggleEdit () {
@@ -502,6 +526,15 @@ export default {
         console.log('Something went wrong deleteEvent', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       })
+    },
+    onAttend () {
+      if (this.modul === 2) {
+        this.attend_id = this.event.id
+        this.$bvModal.show('modal-sale-made')
+      } else {
+        /* *INTEGRATE* resources\js\components\modal\ModaEventEdit.vue - method: attendOtheModule */
+        /* *INTEGRATE* resources\js\components\lead\showlead\ShowLead.vue - method: attendOtherModule */
+      }
     }
   },
   directives: {

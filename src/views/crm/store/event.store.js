@@ -167,6 +167,16 @@ const actions = {
       throw error
     }
   },
+  async A_ATTEND_EVENT ({ commit }, body) {
+    try {
+      const response = await eventService.postAttendEvent(body)
+      console.log('A_ATTEND_EVENT response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_ATTEND_EVENT [ACTION]', error)
+      throw error
+    }
+  },
 
 
 }
