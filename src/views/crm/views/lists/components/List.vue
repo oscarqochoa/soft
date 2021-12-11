@@ -8,8 +8,11 @@
             md="6"
             lg="6"
             sm="6"
-            class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
+            class="d-flex align-items-start justify-content-start mb-1 mb-md-0"
           >
+            <!-- <span
+                        style="display: inline-block;margin-left: 10px;color: black;"
+                      >Total Leads Pending : 146789</span> -->
           </b-col>
           <b-col
             cols="12"
@@ -27,8 +30,7 @@
           </b-col>
         </b-row>
       </div>
-
-      <div class="m-2">
+      <div class="m-2" v-if="newList">
         <b-card
           no-body
           class="m-2"
@@ -37,52 +39,55 @@
             background-color: floralwhite;
           "
         >
-        <div class="m-2">
-          <h3 style="color:#FF9F43 !important;display: inline-block">CREATE LIST</h3>
-          <validation-observer ref="simpleRules">
-            <b-form>
+          <div class="m-2">
+            <h3 style="color: #ff9f43 !important; display: inline-block">
+              CREATE LIST
+            </h3>
+            <ValidationObserver ref="form">
               <b-row>
-                <b-col md="6">
+                <b-col md="7">
                   <b-form-group label="Selec User">
-                    <validation-provider
-                      #default="{ errors }"
-                      name="First Name"
+                    <ValidationProvider
+                      name="comment"
                       rules="required"
+                      v-slot="{ errors }"
                     >
-                      <v-select  multiple :options="options"></v-select>
-                      <small class="text-danger">{{ errors[0] }}</small>
-                    </validation-provider>
+                      <v-select
+                        v-model="value"
+                        multiple
+                        :options="options"
+                        label="user_name"
+                      >
+                      </v-select>
+                      <small v-if="errors[0]" class="text-danger text-center"
+                        >User {{ errors[0] }}</small
+                      >
+                    </ValidationProvider>
                   </b-form-group>
                 </b-col>
-                <b-col md="6">
+                <b-col md="5">
                   <b-form-group label="Number of leads by user">
-                    <validation-provider
-                      #default="{ errors }"
-                      name="Email"
+                    <ValidationProvider
+                      name="comment"
                       rules="required"
+                      v-slot="{ errors }"
                     >
-                      <b-form-input
-                      
-                        type="number"
-                        
-                      />
-                      <small class="text-danger">{{ errors[0] }}</small>
-                    </validation-provider>
+                      <b-form-input v-model="number" type="number" />
+                      <small v-if="errors[0]" class="text-danger text-center">
+                        Number {{ errors[0] }}</small
+                      >
+                    </ValidationProvider>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12">
-                  <b-button
-                    variant="primary"
-                    type="submit"
-                    @click.prevent="validationForm"
-                  >
-                    Submit
+                  <b-button variant="success" type="submit" @click="savegroup">
+                    <feather-icon icon="FileIcon" size="15"></feather-icon>
+                    SAVE
                   </b-button>
                 </b-col>
               </b-row>
-            </b-form>
-          </validation-observer>
-        </div>
+            </ValidationObserver>
+          </div>
         </b-card>
       </div>
       <div class="mx-2 mb-2 mt-2">
@@ -131,7 +136,6 @@
           </b-col>
         </b-row>
       </div>
-
       <div class="m-2">
         <!-- Table Top -->
         <b-row>
@@ -204,16 +208,6 @@
           </b-col>
         </b-row>
       </div>
-      <!-- <transition name="fade">
-        <filters-component
-          class="mr-2 ml-2 mb-2"
-          :filters="filters"
-          fromToFilter
-          :fromToObject="fromToObject"
-          @onChangeFilter="$refs.refClientsList.refresh()"
-        ></filters-component>
-      </transition> -->
-
       <b-table
         v-scrollbar
         :api-url="clientRoute"
@@ -238,7 +232,16 @@
             <strong>Loading ...</strong>
           </div>
         </template>
-        <template #cell(users)="data">
+        <template #cell(created_at)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <span>
+              {{ data.item.created_at | myGlobalDay }}
+            </span>
+          </div>
+        </template>
+        <template #cell(users)="data" v-if="getRoles">
           <div
             class="d-flex flex-column justify-content-start align-items-start"
           >
@@ -252,7 +255,7 @@
               "
               v-for="(user, index) in JSON.parse(data.item.users)"
               :key="index"
-              @click="modalopen(user, data.item.id)"
+              @click="modalopen(user.user_name, user.id, data.item.id)"
               >{{ user.user_name }}</b-button
             >
           </div>
@@ -270,17 +273,31 @@
               <feather-icon icon="Trash2Icon"></feather-icon>
             </b-button>
           </div>
-          <!-- <div
-              class="d-flex flex-column justify-content-start align-items-start"
+          <div
+            class="d-flex flex-column justify-content-center align-items-start"
+            v-if="!getRoles"
+          >
+            <b-button
+              v-if="data.item.cant > 0"
+              variant="warning"
+              class="ml-1 reset-radius btn-sm"
+              @click="
+                modalopen(
+                  currentUser.fullName,
+                  currentUser.user_id,
+                  data.item.id
+                )">
+              <feather-icon icon="EyeIcon"></feather-icon>
+            </b-button>
+            <b-button
               v-else
+              disabled
+              variant="warning"
+              class="ml-1 reset-radius btn-sm"
             >
-              <b-button v-if="data.item.status == 'done'"
-                variant="success"
-                class="mr-1 reset-radius btn-sm"
-                @click="modalChange(data.item)">COMMENT 
-                <feather-icon icon="FileIcon"></feather-icon>
-              </b-button>
-            </div> -->
+              <feather-icon icon="EyeIcon"></feather-icon>
+            </b-button>
+          </div>
         </template>
       </b-table>
     </b-card>
@@ -291,6 +308,8 @@
       :idByUser="idByUser"
       @close="closeModal"
       @updateList="updateList"
+      :nameUser="nameUser"
+      :id="id"
     ></modal-by-user>
   </div>
 </template>
@@ -308,8 +327,11 @@ export default {
   },
   data() {
     return {
-      value: null,
-      options: ["list", "of", "options"],
+      id: null,
+      nameUser: "",
+      value: [],
+      number: "",
+      options: [],
       searchInput: "",
       startPage: "",
       toPage: "",
@@ -354,6 +376,34 @@ export default {
           visible: true,
         },
       ],
+      arrayColumnsTwo: [
+        {
+          key: "created_at",
+          label: "Create Date",
+          sortable: true,
+          visible: true,
+        },
+        {
+          key: "create_name",
+          label: "Create By",
+          visible: true,
+        },
+        {
+          key: "cant",
+          label: "Number of Leads by user",
+          visible: true,
+        },
+        {
+          key: "done",
+          label: "Done",
+          visible: true,
+        },
+        {
+          key: "action",
+          label: "Actions",
+          visible: true,
+        },
+      ],
       fromToObject: {
         from: null,
         to: null,
@@ -366,6 +416,7 @@ export default {
       objectUser: null,
       cancelList: false,
       add: null,
+      newList: false,
     };
   },
   computed: {
@@ -380,21 +431,29 @@ export default {
       return "/listusers";
     },
     visibleFields() {
-      return this.arrayColumns.filter((column) => column.visible);
+      return this.currentUser.arrRoles[0].role_id == 1 ||
+        this.currentUser.arrRoles[0].role_id == 2
+        ? this.arrayColumns.filter((column) => column.visible)
+        : this.arrayColumnsTwo.filter((column) => column.visible);
     },
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
   },
   methods: {
+    refresh() {
+      this.$refs.refClientsList.refresh();
+    },
     statusRol() {
-      this.add = this.currentUser.arrRoles[0].role_id == 2 ? false : true;
+      this.add = this.currentUser.arrRoles[0].role_id == 2 ? true : false;
     },
     addlist() {
+      this.newList = true;
       this.add = false;
       this.cancelList = true;
     },
     closelist() {
+      this.newList = false;
       this.add = true;
       this.cancelList = false;
     },
@@ -511,8 +570,74 @@ export default {
           }
         });
     },
-    modalopen(user, idByUser) {
-      this.objectUser = user;
+    groupusers() {
+      amgApi
+        .post("/sellerall/2", {
+          roles: "[]",
+          type: "1",
+        })
+        .then((response) => {
+          this.options = response.data;
+        })
+        .catch((resp) => {
+          this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong with users"
+          );
+        });
+    },
+    savegroup() {
+      this.$refs.form.validate().then((success) => {
+        if (!success) {
+          return;
+        } else {
+          this.$swal
+            .fire({
+              title: "Are you Sure ?",
+              text: "Do you want to create a List?",
+              icon: "warning",
+              showCancelButton: true,
+              customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-danger ",
+              },
+              confirmButtonText: "Yes",
+            })
+            .then((result) => {
+              if (result.value) {
+                const params = {
+                  users: this.value.map((user) => {
+                    return user.id;
+                  }),
+                  number: this.number,
+                  create_id: this.currentUser.user_id,
+                };
+                amgApi.post("/savegroup", params).then((response) => {
+                  this.$refs.refClientsList.refresh();
+                  this.$swal
+                    .fire({
+                      icon: "success",
+                      title: "List Created in successfully",
+                    })
+                    .then((res) => {
+                      if (res) {
+                        // (this.value = []), (this.number = "");
+                        // (this.cancelList = false), (this.add = true);
+                        // this.newList = false;
+                      }
+                    });
+                });
+              }
+            });
+        }
+      });
+    },
+    modalopen(name, id, idByUser) {
+      this.nameUser = name;
+      this.id = id;
       this.idByUser = idByUser;
       if (this.modalChanging == false) {
         this.modalChanging = true;
@@ -525,6 +650,7 @@ export default {
     },
   },
   created() {
+    this.groupusers();
     this.statusRol();
     this.listsgroups();
   },

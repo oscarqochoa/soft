@@ -7,7 +7,7 @@
       v-model="mutableIfModalCard"
       modal-class="modal-primary"
       top
-      :title="`${objectUser.user_name}`"
+      :title="`${nameUser}`"
       @hidden="closeModal"
       hide-footer
     >
@@ -107,6 +107,12 @@ export default {
     objectUser: {
       type: Object,
     },
+    nameUser:{
+      type:String,
+    },
+    id:{
+      type:[Number, String],
+    },
     ifModalCard: {
       type: Boolean,
     },
@@ -190,7 +196,7 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}`, {
-        id: this.objectUser.id,
+        id: this.id,
         listid: this.idByUser,
         filter: this.filterId,
       });
