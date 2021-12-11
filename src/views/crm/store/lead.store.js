@@ -194,9 +194,9 @@ const actions = {
       throw error
     }
   },
-  async A_GET_OWNERS ({ commit }, body) {
+  async A_GET_OWNERS ({ commit }, { modul, body }) {
     try {
-      const response = await crmService.getOwners(body)
+      const response = await crmService.getOwners({ modul, body })
       commit('SET_DATA', {
         destination: 'S_OWNERS',
         data: response.data
@@ -272,9 +272,9 @@ const actions = {
       throw error
     }
   },
-  async A_GET_SELLERS ({ commit }, body) {
+  async A_GET_SELLERS ({ commit }, { modul, body }) {
     try {
-      const response = await crmService.getSellers(body)
+      const response = await crmService.getSellers({ modul, body })
       commit('SET_DATA', {
         destination: 'S_SELLERS',
         data: response.data
@@ -425,6 +425,16 @@ const actions = {
       return response
     } catch (error) {
       console.log('ERROR_UNIQUE_MOBILE [ACTION]', error)
+      throw error
+    }
+  },
+  async A_GET_USER_APPOINTMENT_SN ({ commit }, body) {
+    try {
+      const response = await crmService.postUserAppointmentSn(body)
+      console.log('A_GET_USER_APPOINTMENT_SN response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_GET_USER_APPOINTMENT_SN [ACTION]', error)
       throw error
     }
   },

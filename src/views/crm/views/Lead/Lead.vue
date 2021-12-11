@@ -12,8 +12,11 @@
       :source-lead-options="G_SOURCE_LEADS"
       :user-creator-owner-options="G_SELLERS"
     />
-    <b-card-code title="LEADS" :actions="true">
-      <template #actions>
+    <b-card>
+      <div class="card-header">
+        <div>
+          <b-card-title>LEADS</b-card-title>
+        </div>
         <div>
           <b-button variant="success" class="mr-1" @click="isAddNewUserSidebarActive = true">
             <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />CREATE
@@ -32,27 +35,24 @@
             <b-dropdown-item @click="exportExcel(1, 3)">EXPORT SELECTION</b-dropdown-item>
           </b-dropdown>
         </div>
-      </template>
+      </div>
       <b-nav tabs>
         <b-nav-item :to="{ name: 'lead-crm-lead-list' }" @click="isOnlyLead = true" exact exact-active-class="active">LEADS</b-nav-item>
         <b-nav-item :to="{ name: 'lead-crm-lead-sn-list' }" @click="isOnlyLead = false" exact exact-active-class="active">LEADS SN</b-nav-item>
         <b-nav-item :to="{ name: 'lead-crm-lead-w-potential-list' }" @click="isOnlyLead = false" exact exact-active-class="active">LEADS W POTENTIAL</b-nav-item>
       </b-nav>
       <router-view/>
-    </b-card-code>
+    </b-card>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 
-import BCardCode from '@core/components/b-card-code'
-
 import LeadListAddNew from './lead-module/save/LeadListAddNew.vue'
 
 export default {
   components: {
-    BCardCode,
     LeadListAddNew
   },
   computed: {
@@ -134,7 +134,7 @@ export default {
     },
     async getOwners () {
       try {
-        await this.A_GET_OWNERS({ roles: '[1,2,5]', type: '1' })
+        await this.A_GET_OWNERS({ modul: this.modul, body: { roles: '[1,2,5]', type: '1' } })
       } catch (error) {
         console.log('Something went wrong getOwners:', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -182,7 +182,7 @@ export default {
     },
     async getSellers () {
       try {
-        await this.A_GET_SELLERS({ modul: this.modul, roles: "[]", type: "1", })
+        await this.A_GET_SELLERS({ modul: this.modul, body: { roles: '[]', type: '1' } })
       } catch (error) {
         console.log('Something went wrong getSellers:', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -231,7 +231,4 @@ export default {
 .per-page-selector {
   width: 90px;
 }
-</style>
-
-<style lang="scss">
 </style>

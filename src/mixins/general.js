@@ -95,6 +95,26 @@ export default {
         },
       });
     },
+    getModuleName (module) {
+      switch (module) {
+        case 2: return 'crm'
+        case 3: return 'bussiness'
+        case 4: return 'administration'
+        case 5: return 'debtsolution'
+        case 6: return 'creditexperts'
+        case 7: return 'boostcredit'
+        case 8: return 'taxresearch'
+        case 10: return 'claimdepartment'
+        case 11: return 'specialists'
+        case 12: return 'ti'
+        case 14: return 'bookeeping'
+        case 15: return 'socialnetwork'
+        case 18: return 'quality'
+      }
+    },
+    isResponseSuccess (response) {
+      return (response && String(response.status).substr(0, 2) === '20')
+    },
     getInternalErrors (error, split = '\n') {
       try {
         if (error.response && error.response.data) {
@@ -110,6 +130,9 @@ export default {
         console.log('Something went wrong getInternalErrors:', error)
         return 'Something went wrong'
       }
+    },
+    getCurrentMonth () {
+      return this.$moment().format('MMM')
     }
   },
 }

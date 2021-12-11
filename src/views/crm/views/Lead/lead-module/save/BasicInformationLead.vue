@@ -21,7 +21,6 @@
               autofocus
               :state="getValidationState(validationContext)"
               trim
-              placeholder="John Doe"
               @keyup="capitalize('firstName')"
             />
 
@@ -117,6 +116,7 @@
           <b-form-group
             label="Programs"
             label-for="programs"
+            :state="getValidationState(validationContext)"
           >
             <v-select
               v-model="userData.programs"
@@ -143,10 +143,11 @@
               id="dob"
               locale="en"
               :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+              :state="getValidationState(validationContext)"
               placeholder="From"
               v-model="userData.dob"
             />
-            <b-form-invalid-feedback :state="getValidationState(validationContext)">
+            <b-form-invalid-feedback>
               {{ validationContext.errors[0] }}
             </b-form-invalid-feedback>
 
