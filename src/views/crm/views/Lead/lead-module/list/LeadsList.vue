@@ -93,10 +93,10 @@
 
         <!-- Column: Name -->
         <template #cell(lead_name)="data">
-          <a
-            href="#"
+          <router-link
+            :to="{ name: 'lead-show', params: { id: data.item.id } }"
             target="_blank"
-          >{{ data.item.lead_name }}</a>
+          >{{ data.item.lead_name }}</router-link>
         </template>
 
         <!-- Column: Status -->

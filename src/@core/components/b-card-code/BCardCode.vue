@@ -12,10 +12,7 @@
           {{ $attrs['sub-title'] }}
         </b-card-sub-title>
       </div>
-
-      <slot v-if="actions" name="actions" />
       <i
-        v-else
         class="code-toggler feather icon-code cursor-pointer"
         :aria-expanded="!code_visible ? 'true' : 'false'"
         :aria-controls="parentID"

@@ -51,7 +51,7 @@
               icon="FilterIcon"
               class="mr-50 text-white"
             />
-            <span v-if="!advanceSearch">Advance Search</span>
+            <span v-if="!advanceSearch">Advanced Search</span>
             <span v-else>Basic Search</span>
           </span>
         </b-button>

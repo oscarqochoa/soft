@@ -85,9 +85,9 @@ class CrmService {
     }
   }
 
-  async getOwners(body) {
+  async getOwners({ modul, body }) {
     try {
-      const data = await amgApi.post('/usermodule/2', body)
+      const data = await amgApi.post(`/usermodule/${ modul }`, body)
       return data
     } catch (error) {
       console.log('Something went wrong on getOwners:', error)
@@ -231,9 +231,9 @@ class CrmService {
       throw error
     }
   }
-  async getSellers (body) {
+  async getSellers ({ modul, body }) {
     try {
-      const data = await amgApi.post(`/sellerall/${body.modul}`, body)
+      const data = await amgApi.post(`/sellerall/${ modul }`, body)
       return data
     } catch (error) {
       console.log('Something went wrong on getSellers:', error)
@@ -404,6 +404,15 @@ class CrmService {
       return await amgApi.post('/savenewfee', body)
     } catch (error) {
       console.error('Something went wrong on saveNewFee:', error)
+      throw error
+    }
+  }
+
+  async postUserAppointmentSn (body) {
+    try {
+      const data = await amgApi.post('/get-users-appointmens-sn', body)
+      return data
+    } catch (error) {
       throw error
     }
   }

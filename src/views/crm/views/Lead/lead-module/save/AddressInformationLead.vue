@@ -363,8 +363,8 @@ export default {
           if (response.status == 200) {
             if (response.data.code == 'mobile') {
               this.$swal.fire({
-                type: 'warning',
-                title: `The phone number already exists: response.data.message`,
+                icon: 'warning',
+                title: `The phone number already exists: ${response.data.message}`,
                 confirmButtonText: 'REQUEST LEAD TO SOCIAL NETWORK',
                 cancelButtonText: 'OK',
               })

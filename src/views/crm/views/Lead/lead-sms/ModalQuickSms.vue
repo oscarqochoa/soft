@@ -117,7 +117,7 @@ export default {
   created() {
     this.userId = this.currentUser.id
     this.roleId = this.currentUser.id
-    if ([ 1, 2 ].includes(this.roleId) || this.modul == 15)
+    /* if ([ 1, 2 ].includes(this.roleId) || this.modul == 15) */
       this.fieldsQuicks.push({ key: 'actions' })
     setTimeout(() => {
       this.isBusy = !this.isBusy
