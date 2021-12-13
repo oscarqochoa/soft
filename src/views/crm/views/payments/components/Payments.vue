@@ -99,7 +99,7 @@
                   /></span>
 
                   <span class="text-nowrap">{{
-                    filterController ? "Basic Search" : "Advanced Search"
+                    filterController ? "BASIC SEARCH" : "ADVANCED SEARCH"
                   }}</span>
                 </div>
               </b-button>
@@ -117,81 +117,104 @@
           @onChangeFilter="$refs.refClientsList.refresh()"
         ></filters-component>
       </transition>
-      <b-table small
-          v-scrollbar
-         :api-url="clientRoute"
-          ref="refClientsList"
-          :items="myProvider"
-          :fields="visibleFields"
-          primary-key="id"
-          table-class="text-nowrap"
-          responsive="sm"
-          show-empty
-          sticky-header="50vh"
-          :busy="isBusy"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          :current-page="currentPage"
-          :per-page="perPage"
-          :filter="searchInput">
-            <template #table-busy>
-            <div class="text-center text-primary my-2">
-              <b-spinner class="align-middle mr-1"></b-spinner>
-              <strong>Loading ...</strong>
-            </div>
-          </template>
-          <template #cell(amount)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
+      <b-table
+        small
+        v-scrollbar
+        :api-url="clientRoute"
+        ref="refClientsList"
+        :items="myProvider"
+        :fields="visibleFields"
+        primary-key="id"
+        table-class="text-nowrap"
+        responsive="sm"
+        show-empty
+        sticky-header="50vh"
+        :busy="isBusy"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="searchInput"
+      >
+        <template #table-busy>
+          <div class="text-center text-primary my-2">
+            <b-spinner class="align-middle mr-1"></b-spinner>
+            <strong>Loading ...</strong>
+          </div>
+        </template>
+        <template #cell(lead_name)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <b-button
+              variant="flat-primary"
+              style="
+                padding-left: 2px;
+                padding-right: 2px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+              "
+              >{{ data.item.lead_name }}</b-button
             >
-              <span>
-                $ {{data.item.amount}}
-              </span>
-            </div>
-          </template>
-          <template #cell(charge)="data">
-            <div
-              class="d-flex flex-column justify-content-center align-items-center"
-            >
-              <b-icon
+          </div>
+        </template>
+        <template #cell(amount)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <span> $ {{ data.item.amount }} </span>
+          </div>
+        </template>
+        <template #cell(charge)="data">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
+            <b-icon
               v-if="data.item.charge"
-                icon="check-circle-fill"
-                variant="success"
-              >
-
-              </b-icon>
-              <feather-icon v-else icon="XCircleIcon" class="text-danger"  />
-            </div>
-            
-            
-          </template>
-          <template #cell(result)="data">
-            <div
-              class="d-flex flex-column justify-content-center align-items-center"
+              icon="check-circle-fill"
+              variant="success"
             >
-              <b-icon
+            </b-icon>
+            <feather-icon v-else icon="XCircleIcon" class="text-danger" />
+          </div>
+        </template>
+        <template #cell(result)="data">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
+            <b-icon
               v-if="data.item.result == 'Approved'"
-                icon="check-circle-fill"
-                variant="success"
-              >
-
-              </b-icon>
-              <feather-icon v-else-if="data.item.result =='Unverified' " icon="ClockIcon" class="text-warning"  />
-              <feather-icon v-else icon="XCircleIcon" class="text-danger"  />
-            </div>
-            
-            
-          </template>
-          <template #cell(created_at)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
+              icon="check-circle-fill"
+              variant="success"
             >
-              <span>
-                 {{data.item.created_at | myGlobalDay}}
-              </span>
-            </div>
-          </template>
-        </b-table>
+            </b-icon>
+            <feather-icon
+              v-else-if="data.item.result == 'Unverified'"
+              icon="ClockIcon"
+              class="text-warning"
+            />
+            <feather-icon v-else icon="XCircleIcon" class="text-danger" />
+          </div>
+        </template>
+        <!-- <template #cell(created_at)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <span>
+              {{ data.item.created_at | myGlobalDay }}
+            </span>
+          </div>
+        </template> -->
+        <template #cell(user_name)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <span>
+             {{data.item.user_name}} - {{ data.item.created_at | myGlobalDay }}
+            </span>
+          </div>
+        </template>
+      </b-table>
       <div class="mx-2 mb-2">
         <b-row>
           <b-col
@@ -209,18 +232,22 @@
             >
           </b-col>
           <b-col
-          cols="12"
+            cols="12"
             sm="4"
-          class="
+            class="
               d-flex
               align-items-center
               justify-content-center justify-content-sm-start
-            ">
-           
-            <b-button  variant="primary" >
-              <span> Total Amount  $ {{totalAmount}} </span>
-            </b-button>
-            </b-col>
+            "
+          >
+            <div style=" background-color:#FF9F43 !important;padding:5px;
+                          border-radius: 30px;
+                          padding-left:15px;padding-right:15px">
+              <span class="text-nowrap"
+              style="color:#fff"> Total Amount {{ totalAmount==0? "$"+totalAmount : totalAmount }} </span>
+             
+            </div>
+          </b-col>
           <!-- Pagination -->
           <b-col
             cols="12"
@@ -251,28 +278,27 @@
           </b-col>
         </b-row>
       </div>
-      
     </b-card>
   </div>
 </template>
 
 <script>
-import { amgApi } from '@/service/axios';
+import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 export default {
-    components: {
+  components: {
     vSelect,
-    
   },
   data() {
     return {
-      totalAmount:0,
+      totalAmount: 0,
       sortBy: "created_at",
       sortDesc: true,
       arrayColumns: [
         {
           key: "lead_name",
           label: "Name",
+         
           visible: true,
         },
         {
@@ -317,15 +343,15 @@ export default {
         },
         {
           key: "user_name",
-          label: "User",
+          label: "Created By",
           visible: true,
         },
-        {
-          key: "created_at",
-          label: "Creation Date",
-          sortable: true,
-          visible: true,
-        },
+        // {
+        //   key: "created_at",
+        //   label: "Creation Date",
+        //   sortable: true,
+        //   visible: true,
+        // },
         // { key: "actions", label: "Acciones", class: "text-center " },
       ],
       searchInput: "",
@@ -345,38 +371,37 @@ export default {
         from: null,
         to: null,
       },
-       filters: [
+      filters: [
         {
           label: "Type",
           options: [
-              {value: 0, label: "All"},
-              {value: 1, label: "Realtor"},
-              {value: 2, label: "Appointment"},
-              {value: 3, label: "Inital Payment"},
-              {value: 4, label: "Others"},
-              
+            { value: 0, label: "All" },
+            { value: 1, label: "Realtor" },
+            { value: 2, label: "Appointment" },
+            { value: 3, label: "Inital Payment" },
+            { value: 4, label: "Others" },
           ],
           model: "",
           primaryKey: "value",
           labelSelect: "label",
           cols: 12,
           md: 2,
-          visible: true
+          visible: true,
         },
         {
           label: "Result",
           options: [
-              {value: 0, label: "All"},
-              {value: 1, label: "Approved"},
-              {value: 2, label: "Declined"},
-              {value: 3, label: "Underview"},
+            { value: 0, label: "All" },
+            { value: 1, label: "Approved" },
+            { value: 2, label: "Declined" },
+            { value: 3, label: "Underview" },
           ],
           model: "",
           primaryKey: "value",
           labelSelect: "label",
           cols: 12,
           md: 2,
-          visible: true
+          visible: true,
         },
         {
           label: "User",
@@ -386,17 +411,14 @@ export default {
           labelSelect: "user_name",
           cols: 12,
           md: 2,
-          visible: true
+          visible: true,
         },
-        
-        
       ],
       filterController: false,
     };
   },
   mounted() {
     this.getAllUsers();
-    
   },
   computed: {
     clientRoute() {
@@ -405,15 +427,15 @@ export default {
     visibleFields() {
       return this.arrayColumns.filter((column) => column.visible);
     },
-    type(){
-       return this.filters[0].model;
+    type() {
+      return this.filters[0].model;
     },
-    user(){
+    user() {
       return this.filters[2].model;
     },
-    result(){
+    result() {
       return this.filters[1].model;
-    }
+    },
   },
   methods: {
     myProvider(ctx) {
@@ -431,7 +453,21 @@ export default {
       return promise.then((data) => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
-        this.totalAmount = items[0].t_amount
+        let value = 0
+        if (items) {
+          items.forEach((element) => {
+            value += parseFloat(element.amount);
+          });
+          const formatter = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+          });
+
+          
+          this.totalAmount = formatter.format(value);
+        } else {
+          this.totalAmount = 0.00;
+        }
 
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
@@ -449,7 +485,7 @@ export default {
     },
 
     async getAllUsers() {
-      const data = await amgApi.post(`/usermodule/2`,{
+      const data = await amgApi.post(`/usermodule/2`, {
         roles: "[1,2,5]",
         type: "0",
       });
@@ -463,6 +499,8 @@ export default {
     },
     resetSearch() {
       this.searchInput = "";
+      this.fromToObject.from = null
+      this.fromToObject.to = null
       this.$refs.refClientsList.refresh();
     },
   },
@@ -482,6 +520,9 @@ td.div {
     flex-direction: column;
   }
 }
+// b-table{
+//    width: 100%;;  
+// }
 </style>
 
 <style lang="scss">

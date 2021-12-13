@@ -87,6 +87,7 @@
                 class="d-inline-block mr-1"
                 placeholder="Client..."
                 debounce="300"
+                v-on:keyup.enter="onEnter"
               />
               <b-button
                 variant="primary"
@@ -132,7 +133,8 @@
           :sort-desc.sync="sortDesc"
           :current-page="currentPage"
           :per-page="perPage"
-          :filter="searchInput">
+          :filter="searchInput"
+          >
             <template #table-busy>
             <div class="text-center text-primary my-2">
               <b-spinner class="align-middle mr-1"></b-spinner>
@@ -307,6 +309,9 @@ export default {
       }else{
         this.modalChanging =false
       }
+    },
+    onEnter(){
+      this.$refs.refClientsList.refresh();
     },
     resetSearch() {
       this.searchInput = "";

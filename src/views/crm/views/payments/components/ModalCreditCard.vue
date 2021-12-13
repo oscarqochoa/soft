@@ -108,7 +108,7 @@ export default {
       fields: [
         {
           key:"Select",
-          label:"Select",
+          label:"",
         },
         {
           key: "cardholdername",
