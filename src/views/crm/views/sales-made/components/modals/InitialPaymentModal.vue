@@ -2,8 +2,7 @@
   <b-modal
     v-model="modal.initial_payment"
     centered
-    header-bg-variant="primary"
-    title-class="text-white h3"
+    title-class="h3"
     size="lg"
     title="INITIAL PAYMENT"
     hide-footer
@@ -19,8 +18,8 @@
               </b-btn>
             </b-input-group-prepend>
             <b-form-input
-              disabled
-              :value="initial_payment.program"
+                disabled
+                :value="initial_payment.program"
             />
           </b-input-group>
         </b-col>
@@ -32,8 +31,8 @@
               </b-btn>
             </b-input-group-prepend>
             <b-form-input
-              disabled
-              :value="initial_payment.client"
+                disabled
+                :value="initial_payment.client"
             />
           </b-input-group>
         </b-col>
@@ -71,21 +70,42 @@
           </b-form-radio-group>
         </b-col>
       </b-row>
-      <b-row v-if="method === 'credit-card'" class="mt-2">
+      <b-row
+        v-if="method === 'credit-card'"
+        class="mt-2"
+      >
         <b-table
           :fields="fields"
           :items="payments"
         />
       </b-row>
+      <b-row class="mt-1 d-flex align-items-center justify-content-end">
+        <b-button
+          variant="info"
+          @click="openModalCreateCard"
+        >
+          <feather-icon icon="PlusIcon" /> Add
+        </b-button>
+      </b-row>
     </b-container>
+    <modal-card-create
+      v-if="modalCard"
+      :idlead="initial_payment.lead_id"
+      :session="initial_payment.session_id"
+      :if-modal-card="modalCard"
+      @click="closeModalCreateCard"
+      @new="getListCards"
+    />
   </b-modal>
 </template>
 
 <script>
 import CrmService from '@/views/crm/services/crm.service'
+import ModalCardCreate from '@/views/crm/views/payments/components/ModalCardCreate.vue'
 
 export default {
   name: 'InitialPaymentModal',
+  components: { ModalCardCreate },
   props: {
     modal: {
       type: Object,
@@ -95,12 +115,6 @@ export default {
       type: Object,
       required: true,
     },
-  },
-  async mounted() {
-    console.log(this.initial_payment.sale_id)
-    this.payments = await CrmService.getListCards({
-      sale_id: this.initial_payment.sale_id,
-    })
   },
   data() {
     return {
@@ -133,7 +147,29 @@ export default {
         },
       ],
       payments: {},
+      modalCard: false,
     }
+  },
+  async created() {
+    await this.getListCards()
+  },
+  methods: {
+    async getListCards() {
+      try {
+        this.payments = await CrmService.getListCards({
+          sale_id: this.initial_payment.sale_id,
+        })
+      } catch (error) {
+        this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+        this.modal.initial_payment = false
+      }
+    },
+    openModalCreateCard() {
+      this.modalCard = true
+    },
+    closeModalCreateCard() {
+      this.modalCard = false
+    },
   },
 }
 </script>

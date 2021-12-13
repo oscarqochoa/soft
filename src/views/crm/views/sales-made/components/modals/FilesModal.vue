@@ -304,6 +304,7 @@ export default {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
       }
     },
+    // eslint-disable-next-line camelcase
     async generatePdf(lead_id, program, sale_id, typee) {
       const result = await this.$swal.fire({
         icon: 'warning',
