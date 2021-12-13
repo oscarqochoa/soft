@@ -115,7 +115,7 @@
 
         <!-- Column: Created Date -->
         <template #cell(created_date)="data">
-          <small>{{ data.item.created_at }}</small>
+          <small>{{ data.item.created_at | myDateGlobalWithHour }}</small>
         </template>
 
       </b-table>
@@ -237,11 +237,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.per-page-selector {
-  width: 90px;
-}
-</style>
-
-<style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
+  .table-responsive {
+    min-height: 15rem;
+  }
 </style>

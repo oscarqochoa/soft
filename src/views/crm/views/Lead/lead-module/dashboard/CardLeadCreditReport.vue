@@ -1,6 +1,28 @@
 <template>
   <div>
-    <b-card title="CREDIT REPORT" sub-title="This Lead do not have credit report">
+    <b-card title="CREDIT REPORT" :sub-title="(score.equifax === '' && score.experian === '' && score.transunion === '') ? 'This Lead do not have credit report' : null">
+      <b-card-body v-if="score.equifax === '' && score.experian === '' && score.transunion === ''">
+        <b-row class="justify-content-center">
+          <b-col cols="4" class="text-center">
+            <p style="color: #0aafdb;">TransUnion</p>
+            <span class="show-lead-score-cr" style="border: 2px solid #0aafdb;" :style="`color: ${ colorScoreTransunion(score.transunion) };`">
+              {{ score.transunion }}
+            </span>
+          </b-col>
+          <b-col cols="4" class="text-center">
+            <p style="color: #0566b7;">Experian</p>
+            <span class="show-lead-score-cr" style="border: 2px solid #0566b7;" :style="`color: ${ colorScoreTransunion(score.experian) };`">
+              {{ score.experian }}
+            </span>
+          </b-col>
+          <b-col cols="4" class="text-center">
+            <p style="color: #f31414;">EQUIFAX</p>
+            <span class="show-lead-score-cr" style="border: 2px solid #f31414;" :style="`color: ${ colorScoreTransunion(score.equifax) };`">
+              {{ score.equifax }}
+            </span>
+          </b-col>
+        </b-row>
+      </b-card-body>
       <b-tabs>
         <b-tab active>
           <template #title>
@@ -83,7 +105,12 @@ export default {
   },
   data () {
     return {
-      countData: null
+      countData: null,
+      score: {
+        equifax: JSON.parse(this.currentUser.score) ? JSON.parse(this.currentUser.score)[0].equifax : '',
+        experian: JSON.parse(this.currentUser.score) ? JSON.parse(this.currentUser.score)[0].experian : '',
+        transunion: JSON.parse(this.currentUser.score) ? JSON.parse(this.currentUser.score)[0].transunion : '',
+      }
     }
   },
   directives: { Ripple },
@@ -111,13 +138,24 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_COUNT_CREDIT_REPORT_PENDINGS: 'CrmCreditReport/A_COUNT_CREDIT_REPORT_PENDINGS'
+      A_COUNT_CREDIT_REPORT_PENDINGS: 'CrmCreditReportStore/A_COUNT_CREDIT_REPORT_PENDINGS',
     }),
     setDataBlank (key) {
       this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`] = Object.assign({}, this[key])
     },
     resetData (key) {
       this[key] = Object.assign({}, this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`])
+    },
+    colorScoreTransunion (score) {
+      if (score <= 659)
+        return '#ff0707'
+      else if (score >= 660 && score <= 699)
+        return '#ffc107'
+      else if (score >= 700 && score <= 759)
+        return '#bfff00'
+      else if (score >= 760 && score <= 850)
+        return '#0dff34'
+      return '#000'
     },
     async countCreditReportPendings () {
       try {
@@ -134,3 +172,12 @@ export default {
   setup() {},
 }
 </script>
+
+<style lang="scss" scoped>
+  .show-lead-score-cr {
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 10px 7px;
+  }
+</style>

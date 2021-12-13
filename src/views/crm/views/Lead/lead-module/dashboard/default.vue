@@ -10,6 +10,7 @@
         :lead="lead"
         :is-busy-credit-report-obtained="isBusyCreditReportObtained"
         :is-busy-credit-report-service="isBusyCreditReportService"
+        :score="score"
       />
     </b-col>
     <b-col cols="12" lg="6">
@@ -57,7 +58,7 @@ export default {
         status_sn_id: 1,
         street: 'migrs usja',
         zipcode: 34,
-      }
+      },
     }
   },
   created () {
@@ -127,7 +128,7 @@ export default {
         console.log('Something went wrong getPrograms', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
-    }
+    },
   }
 }
 </script>
