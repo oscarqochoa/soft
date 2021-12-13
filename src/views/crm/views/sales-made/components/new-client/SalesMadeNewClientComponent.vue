@@ -569,6 +569,7 @@ import GeneralSupportModal from '@/views/crm/views/sales-made/components/modals/
 import KeyBookModal from '@/views/crm/views/sales-made/components/modals/services/KeyBookModal.vue'
 import ParagonModal from '@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue'
 import SpecialistModal from '@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue'
+import TaxResearchModal from '@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -586,6 +587,7 @@ export default {
     KeyBookModal,
     ParagonModal,
     SpecialistModal,
+    TaxResearchModal,
   },
   props: {
     done: {
@@ -759,7 +761,7 @@ export default {
         case 2: this.modalData.programs.programSelected = 'boost-credit-modal'; break
         case 3: this.modalData.programs.programSelected = 'credit-experts-modal'; break
         case 4: break
-        case 5: break
+        case 5: this.modalData.programs.programSelected = 'tax-research-modal'; break
         case 6: this.modalData.programs.programSelected = 'general-support-modal'; break
         case 7: this.modalData.programs.programSelected = 'specialist-modal'; break
         case 8: this.modalData.programs.programSelected = 'key-book-modal'; break
