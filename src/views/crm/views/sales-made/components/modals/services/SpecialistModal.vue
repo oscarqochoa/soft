@@ -75,7 +75,10 @@
         <!--  FOOTER START -->
         <template #modal-footer="{ }">
           <b-row class="w-100">
-            <b-col class="d-flex align-items-center justify-content-center" v-if="!isModalAdd">
+            <b-col
+              v-if="!isModalAdd"
+              class="d-flex align-items-center justify-content-center"
+            >
               <b-button
                 variant="danger"
                 class="mr-1"
@@ -108,6 +111,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
 
 export default {
@@ -122,17 +126,13 @@ export default {
     salesClient: {
       type: Object,
       default: () => ({
-        event_id: '',
-        account_id: '',
-        id: '',
-        lead_id: '',
+        event_id: '', account_id: '', id: '', lead_id: '',
       }),
     },
     typeModal: {
       type: Number,
       default: 1,
-      // 1: complete rates crm, 2: detail of sale, 3: add Services
-      // 4: change Services, 5 show add change Services, 6  add  services programs
+      // 1: complete rates, 2: detail of sale
     },
     usersServices: {
       type: Array,
@@ -144,61 +144,57 @@ export default {
     },
     headerS: {
       type: Object,
-      default: () => ({
-        program: '',
-        seller: '',
-        captured: '',
-      }),
+      default: () => ({ program: '', seller: '', captured: '' }),
     },
   },
   data() {
     return {
       client: null,
-      program: 2,
+      program: 7,
       rates: [],
       observation: 'Services',
       otherspayments: [],
-      add_json_ce: null,
+      add_json_ce: [],
       rate_selected: [],
       suggested: 0,
       rates_others: [],
-      fee: null,
-      selectService: true,
+      fee: 0,
+      vMoney: {
+        decimal: '.',
+        thousands: ',',
+        prefix: '',
+        precision: 2,
+        masked: false,
+      },
+      validateMoney: false,
       score_id: null,
       json_ce: null,
     }
   },
+  created() {},
+  async mounted() {
+    this.client = this.salesClient
+    if (this.program) {
+      if (this.isModalShow) {
+        await this.showRates()
+      } else {
+        this.removePreloader()
+      }
+    }
+    if (this.isModalAdd) {
+      await this.getScore()
+    }
+  },
   computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+    }),
     isModalShow() {
       return this.typeModal === 2 || this.typeModal === 5
     },
     isModalAdd() {
       return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
     },
-    hideFooter() {
-      return this.isModalShow || (this.isModalAdd && this.selectService)
-    },
-    hideBody() {
-      return !this.isModalAdd || !this.selectService
-    },
-  },
-  created() {},
-  mounted() {
-    this.client = this.salesClient
-    if (this.program) {
-      if (this.isModalShow) {
-        this.showRates()
-      } else if (!this.isModalAdd) {
-        this.removePreloader()
-      }
-
-      if (this.headerS.program) {
-        this.selectService = false
-      }
-    }
-    if (this.isModalAdd) {
-      this.getScore()
-    }
   },
   methods: {
     /* PRELOADER */
@@ -209,77 +205,77 @@ export default {
       this.$store.commit('app/SET_LOADING', false)
     },
     async saveRates() {
+      this.validateMoney = true
       // Validate Money
-      try {
-        const success = await this.$refs.form.validate()
-        if (success) {
-          let message = ''
-          let route = ''
-          let typeADD = ''
-          const prices = []
-          // Depends of the Modal type
-          switch (this.typeModal) {
-            case 1:
-              message = 'complete Rates'
-              route = '/attendend'
-              break
-            case 3:
-              message = 'add new service'
-              route = '/attendendprogram'
-              typeADD = 1
-              break
-            case 4:
-              message = 'change service'
-              route = '/attendendprogram'
-              typeADD = 2
-              break
-            case 6:
-              message = 'add new service'
-              route = '/leadattendend'
-              break
-            default: break
-          }
-          const param = {
-            prices,
-            observation: this.observation,
-            contract: 1,
-            program: this.program,
-            fee: this.fee,
-            suggested: this.suggested,
-            otherpricesp: this.otherspayments,
-            event: this.salesClient.event_id,
-            json_noce: this.add_json_ce,
-            stateid: 0,
+      const success = await this.$refs.form.validate()
+      if (success) {
+        let message = ''
+        let route = ''
+        let typeADD = ''
+        const prices = []
+        // Depends of the Modal type
+        switch (this.typeModal) {
+          case 1:
+            message = 'complete Rates'
+            route = '/attendend'
+            break
+          case 3:
+            message = 'add new service'
+            route = '/attendendprogram'
+            typeADD = 1
+            break
+          case 4:
+            message = 'change service'
+            route = '/attendendprogram'
+            typeADD = 2
+            break
+          case 6:
+            message = 'add new service'
+            route = '/leadattendend'
+            break
+          default: break
+        }
+        const param = {
+          prices,
+          observation: this.observation,
+          contract: 1,
+          program: this.program,
+          fee: this.fee,
+          suggested: this.suggested,
+          otherpricesp: this.otherspayments,
+          event: this.salesClient.event_id,
+          json_noce: this.add_json_ce,
+          stateid: 0,
 
-            // Diferents to add change Services
-            account: this.salesClient.account_id
-              ? this.salesClient.account_id
-              : '',
-            captured: this.headerS.captured,
-            seller: this.headerS.seller,
-            type: typeADD,
-            user_id: this.currentUser.user_id,
-            module: this.currentUser.modul_id,
-            id_score: this.score_id,
-            json_ce: this.json_ce,
-          }
+          // Diferents to add change Services
+          account: this.salesClient.account_id
+            ? this.salesClient.account_id
+            : '',
+          captured: this.headerS.captured,
+          seller: this.headerS.seller,
+          type: typeADD,
+          user_id: this.currentUser.id,
+          module: this.currentUser.modul_id,
+          id_score: this.score_id,
+          json_ce: this.json_ce,
+        }
 
-          const result = this.$swal.fire({
-            title: `Are you sure you want to ${message}?`,
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-          })
-          if (result.value) {
-            this.addPreloader()
-            const response = await amgApi.post(`${route}`, param)
-            if (response.status === 200) {
-              this.hideModal(true, this.program)
-            }
+        const result = await this.$swal.fire({
+          title: `Are you sure you want to ${message}?`,
+          text: "You won't be able to revert this!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ab9220',
+          cancelButtonColor: '#8f9194',
+          confirmButtonText: 'Yes',
+        })
+        if (result.value) {
+          this.addPreloader()
+          const response = await amgApi.post(`${route}`, param)
+          if (response.status === 200) {
+            this.hideModal(true, this.program)
           }
         }
-      } catch (error) {
-        console.error(error)
       }
     },
 
@@ -295,6 +291,13 @@ export default {
         console.error(error)
       }
     },
+
+    hideModal(refresh) {
+      this.$emit('closeModal', refresh)
+    },
+    changeProgram(headerS, programSelect) {
+      this.$emit('changeProgram', headerS, programSelect)
+    },
     async getScore() {
       try {
         const response = await amgApi.post('/getscoreattend', { lead_id: this.salesClient.lead_id })
@@ -304,14 +307,6 @@ export default {
       } catch (error) {
         console.error(error)
       }
-    },
-
-    hideModal(refresh, programSelect) {
-      this.$emit('closeModal', refresh, programSelect)
-    },
-    changeProgram(headerS) {
-      if (headerS.program == 2) this.selectService = false
-      this.$emit('changeProgram', headerS)
     },
   },
 }

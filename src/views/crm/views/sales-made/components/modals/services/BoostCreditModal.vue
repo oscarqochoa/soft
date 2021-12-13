@@ -101,7 +101,7 @@
 
 <script>
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
-
+import { mapGetters } from 'vuex'
 export default {
   components: {
     ModalServiceHeader,
@@ -161,6 +161,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+    }),
     isModalShow() {
       return this.typeModal === 2 || this.typeModal === 5
     },
