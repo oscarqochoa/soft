@@ -4,7 +4,7 @@ class EventService {
   async getEvents (params) {
     try {
       if (params.idLead) {
-        const data = await amgApi.get(`crm/crm-events/${ params.idLead }/event`, { params })
+        const data = await amgApi.get(`/crm/crm-events/${ params.idLead }/event`, { params })
         return data
       }
       throw 'Endpoint not exists'
@@ -52,5 +52,14 @@ class EventService {
       throw error
     }
   }
+  async postAttendEvent (body) {
+    try {
+      const data = await amgApi.post('/attendevent', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
 }
+
 export default new EventService()

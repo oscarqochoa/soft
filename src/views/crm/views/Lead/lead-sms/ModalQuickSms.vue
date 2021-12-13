@@ -10,11 +10,12 @@
       </b-button>
     </div>
     <b-table
+      show-empty
+      sticky-header
       responsive="sm"
       :fields="fieldsQuicks"
       :items="quicks"
       :busy="isBusy"
-      sticky-header
     >
       <template #table-busy>
         <div class="text-center text-primary my-2">
