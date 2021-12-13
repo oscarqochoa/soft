@@ -475,7 +475,7 @@ export default {
               location: this.event.location,
               description: this.event.description,
               seller: this.event.user_id.label,
-              userupdate: this.currentUser.id,
+              userupdate: this.currentUser.user_id,
               month: this.getCurrentMonth()
             }
             const response = await this.A_UPDATE_EVENT(body)

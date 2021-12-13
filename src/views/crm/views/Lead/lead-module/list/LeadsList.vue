@@ -135,14 +135,14 @@
         <template #cell(created_by)="data">
           <small>{{ data.item.owner }}</small>
           <br>
-          <small>{{ data.item.created_at }}</small>
+          <small>{{ data.item.created_at | myDateGlobalWithHour }}</small>
         </template>
 
         <!-- Column: Assign To -->
         <template #cell(assign_to)="data">
           <small>{{ data.item.assign_to }}</small>
           <br>
-          <small>{{ data.item.assign_date }}</small>
+          <small v-if="data.item.assign_date">{{ data.item.assign_date | myDateGlobal }}</small>
         </template>
 
         <!-- Column: Actions -->
@@ -179,6 +179,7 @@
       centered
       size="lg"
       title="SEND SMS"
+      no-close-on-backdrop
     >
       <modal-send-sms
         :row-data="rowData"
@@ -451,7 +452,7 @@ export default {
       })
       .then(async (result) => {
         if (result.value) {
-          const { id: user_id, id: role_id } = this.currentUser
+          const { user_id, role_id } = this.currentUser
           const response = await this.A_DELETE_LEADS({
             leadid: id,
             idsession: user_id,
@@ -491,7 +492,7 @@ export default {
       })
       .then(async (result) => {
         if (result.value) {
-          const { id: user_id, id: role_id } = this.currentUser
+          const { user_id, role_id } = this.currentUser
           const response = await this.A_PROCESS_LEADS({
             lead_id: id,
             status: 3,
@@ -597,8 +598,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-</style>
-
-<style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
+  .table-responsive {
+    min-height: 15rem;
+  }
 </style>

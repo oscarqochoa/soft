@@ -237,7 +237,7 @@ export default {
         if (result.value) {
           const params = {
             module_id: this.currentUser.modul_id,
-            user_id: this.currentUser.id,
+            user_id: this.currentUser.user_id,
             lead_id: this.$route.params.id,
           }
           /* *INTEGRATE* */

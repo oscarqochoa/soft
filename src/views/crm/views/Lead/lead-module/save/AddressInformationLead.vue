@@ -177,6 +177,7 @@
             <b-form-group
               label="Origin Country"
               label-for="originCountry"
+              :state="getValidationState(validationContext)"
             >
               <v-select
                 id="originCountry"
