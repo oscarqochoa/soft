@@ -121,7 +121,6 @@ export default {
         task.tasks = JSON.parse(task.tasks);
       });
       this.notifications = data;
-      console.log(data, "user_tasks");
     },
   },
 };

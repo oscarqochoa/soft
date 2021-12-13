@@ -95,10 +95,11 @@
               "
             >
               <b-form-input
-                v-model="filter.text"
+                v-model="filterController.text"
                 class="d-inline-block mr-1"
                 placeholder="Client..."
                 debounce="200"
+                @keyup.enter="filter.text = filterController.text"
               />
               <b-button
                 variant="primary"
@@ -285,16 +286,21 @@ export default {
     vSelect,
   },
   props: {
-    totalRows: { required: true, type: Number },
+    totalRows: { required: false, type: Number },
     filter: { required: true, type: Object },
-    startPage: { required: true, type: Number },
-    toPage: { required: true, type: Number },
+    startPage: { required: false, type: Number },
+    toPage: { required: false, type: Number },
     paginate: { required: true, type: Object },
     annulled: { required: false, type: Boolean, default: false },
   },
   data() {
     return {
       basicSearch: true,
+      filterController: {
+        text: '',
+        seller: null,
+        captured: null,
+      }
     }
   },
   async created() {
@@ -332,6 +338,7 @@ export default {
       this.filter.state = null
       this.filter.stip = null
       this.filter.status = null
+      this.$emit('reload')
     },
     swapSearch() {
       this.resetFilter()
