@@ -2,7 +2,7 @@
   <div class="d-inline-flex">
     <b-button
       variant="gradient-warning"
-      class="btn-icon button-size button-margin-l"
+      class="btn-icon button-little-size button-margin-l"
       title="'Edit'"
       v-b-tooltip.hover.bottom="'Edit'"
       v-show="!editMode"
@@ -12,7 +12,7 @@
     </b-button>
     <b-button
       variant="gradient-danger"
-      class="btn-icon button-size button-margin-l"
+      class="btn-icon button-little-size button-margin-l"
       v-b-tooltip.hover.bottom="'Cancel'"
       @click="cancel()"
       v-show="editMode"
@@ -21,7 +21,7 @@
     </b-button>
     <b-button
       variant="gradient-success"
-      class="btn-icon button-size button-margin-l"
+      class="btn-icon button-little-size button-margin-l"
       v-b-tooltip.hover.bottom="'Update'"
       v-show="editMode"
       @click="update()"
@@ -110,7 +110,7 @@ export default {
 </script>
 
 <style scoped>
-.button-size {
+.button-little-size {
   height: 23px;
   padding: 3px;
 }

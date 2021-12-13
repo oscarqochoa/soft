@@ -3,7 +3,7 @@
     <b-row>
       <b-col lg="6">
         <b-form-group label="Method of Payment:" label-size="lg" label-class="font-weight-bolder">
-          <b-form-radio-group v-model="payment.methoPayment" :disabled="disabledPayment">
+          <b-form-radio-group v-model="payment.methoPayment" :disabled="disabledPayment" stacked>
             <b-form-radio value="1">Check</b-form-radio>
             <b-form-radio value="2">Transfer</b-form-radio>
           </b-form-radio-group>

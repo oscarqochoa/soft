@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="tab=='crm'">
+    <template v-if="isCrm">
       <div>
         <a
           @click="findCommissions('crm', info.month_pay )"
@@ -30,7 +30,7 @@
       </template>
     </template>
 
-    <template v-if="admCrm">
+    <template v-if="admCrm || isSupervisorCrm ">
       <div :class="{'mt-2':isCrm}" v-if="info.month_pay != '0.00'">
         <a
           @click="findCommissions( 'crm', info.month_pay)"
@@ -139,7 +139,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import ButtonsEdit from "@/commons/utilities/ButtonsEdit";
+import ButtonsEdit from "@/views/commons/utilities/ButtonsEdit";
 import moment from "moment";
 export default {
   name: "CommissionsMonthly",
@@ -206,6 +206,9 @@ export default {
     },
     isCrm() {
       return this.tab == "crm";
+    },
+    isSupervisorCrm() {
+      return this.tab === "supervisorCrm";
     },
     total() {
       return this.payDepartmentCrm + this.payDepartment;

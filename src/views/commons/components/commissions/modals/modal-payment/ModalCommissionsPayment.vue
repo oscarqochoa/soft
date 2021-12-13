@@ -47,11 +47,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import moment from "moment";
-import commissionsService from "@/commons/components/commissions/services/commissions.service";
-import ModalHeader from "@/commons/components/commissions/modals/ModalHeader.vue";
-import PaymentBody from "@/commons/components/commissions/modals/modal-payment/PaymentBody.vue";
+import commissionsService from "@/views/commons/components/commissions/services/commissions.service";
+import ModalHeader from "@/views/commons/components/commissions/modals/ModalHeader.vue";
+import PaymentBody from "@/views/commons/components/commissions/modals/modal-payment/PaymentBody.vue";
 export default {
   name: "ModalCommissionsPayment",
   components: {
@@ -148,6 +148,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      setLoading: "app/SET_LOADING"
+    }),
     hideModal(status = false, payment, user, ps_month) {
       this.modalUp = false;
       this.$emit("hide-modal", status, payment, user, ps_month);
@@ -156,7 +159,7 @@ export default {
     async searchCommission() {
       if (this.info.paid_state) {
         //start preloader
-        this.$store.commit("app/SET_LOADING", true);
+        this.setLoading(true);
         try {
           const params = {
             user_id: this.info.user_id,
@@ -175,17 +178,17 @@ export default {
           this.payment.approveName = response[0].approve_name;
           this.payment.anullName = response[0].annulled_name;
           this.payment.anullDate = response[0].annulled_at;
-          this.$store.commit("app/SET_LOADING", false);
+          this.setLoading(false);
         } catch (error) {
           this.showErroSwal();
-          this.$store.commit("app/SET_LOADING", false);
+          this.setLoading(false);
         }
       }
     },
     async approveCommissions() {
       const validate = await this.$refs.form.validate();
       if (validate) {
-        const result = await this.showSwalGeneric(
+        const result = await this.showSwalConfirm(
           "Are you sure?",
           "Are you sure of pay this commission?",
           "warning"
@@ -193,7 +196,7 @@ export default {
         if (result.isConfirmed) {
           try {
             //start preloader
-            this.$store.commit("app/SET_LOADING", true);
+            this.setLoading(true);
             const params = {
               user_id: this.info.user_id,
               year: this.info.year,
@@ -205,14 +208,14 @@ export default {
                 "MM/DD/YYYY"
               ),
               module: this.info.module,
-              num_operation: this.operationNumber,
+              num_operation: this.payment.numberPayment,
               amount_paid: this.amountToShow
             };
             let response = await commissionsService.approveCommissions(params);
             this.hideModal(true, 1, this.info.user_id, this.info.ps_month);
           } catch (error) {
             this.showErroSwal();
-            this.$store.commit("app/SET_LOADING", false);
+            this.setLoading(false);
             this.hideModal(false, null);
           }
         }
@@ -224,7 +227,7 @@ export default {
     },
 
     async anullPayment() {
-      const result = await this.showSwalGeneric(
+      const result = await this.showSwalConfirm(
         "Are you sure?",
         "Are you sure of anull this commission?",
         "warning"
@@ -232,7 +235,7 @@ export default {
       if (result.isConfirmed) {
         try {
           //start preloader
-          this.$store.commit("app/SET_LOADING", true);
+          this.setLoading(true);
           const params = {
             user_id: this.info.user_id,
             year: this.info.year,
@@ -247,7 +250,7 @@ export default {
           this.hideModal(true, 2, this.info.user_id, this.info.ps_month);
         } catch (error) {
           this.showErroSwal();
-          this.$store.commit("app/SET_LOADING", false);
+          this.setLoading(false);
           this.hideModal(false, null);
         }
       }

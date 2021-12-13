@@ -16,21 +16,24 @@
           <strong>Loading...</strong>
         </div>
       </template>
-      <template #cell(approve_date)="data">
+      <template #cell(created_at)="data">
+        <span>{{data.value | myGlobal}}</span>
+      </template>
+      <template #cell(request_date)="data">
         <span>{{data.value | myGlobal}}</span>
       </template>
     </b-table>
     <b-row>
-      <template v-if="isSupervisor || isAdvisor || isSeller">
+      <template v-if="isSupervisor || isAdministrator">
         <b-col lg="6" :class="[textRightBig]">
           <div class="font-weight-bolder">SUM:</div>
         </b-col>
         <b-col lg="6" :class="[textLeftBig]">
-          <div>$ {{ total_amount }}</div>
+          <div>$ {{ this.total_amount }}</div>
         </b-col>
       </template>
 
-      <template v-if="isAdvisor || isSeller">
+      <template v-if="isAdministrator">
         <b-col lg="6" :class="[textRightBig]">
           <div class="font-weight-bolder">DISCOUNT:</div>
         </b-col>
@@ -41,8 +44,7 @@
 
       <template v-if="isSupervisor">
         <b-col lg="6" :class="[textRightBig]">
-          <div v-if="currentDate >='2021-11-24'" class="font-weight-bolder">20% OF COMMISSIONS</div>
-          <div v-else class="font-weight-bolder">10% OF COMMISSIONS</div>
+          <div class="font-weight-bolder">20% OF COMMISSIONS</div>
         </b-col>
         <b-col lg="6" :class="[textLeftBig]">
           <div>$ {{ total_department }}</div>
@@ -60,11 +62,10 @@
 </template>
 
 <script>
-import moment from "moment";
-import commissionsService from "@/commons/components/commissions/services/commissions.service";
+import commissionsService from "@/views/commons/components/commissions/services/commissions.service";
 import { mapGetters } from "vuex";
 export default {
-  name: "DetailsDepartments",
+  name: "DetailsAdm",
   props: {
     info: {
       type: Object,
@@ -73,14 +74,17 @@ export default {
   },
   data() {
     return {
+      modalUp: false,
+      showOverlay: false,
       commissionsUser: [],
       fields: [],
       isBusy: true,
       total_amount: "",
       discount: "",
       total: "",
+      total_commission: "",
       total_department: "",
-      currentDate: moment().format("YYYY-MM-DD")
+      total_programs: ""
     };
   },
   created() {
@@ -100,27 +104,24 @@ export default {
     isSupervisor() {
       return this.info.role_id == 2;
     },
-    isAdvisor() {
-      return this.info.role_id == 3;
-    },
-    isSeller() {
-      return this.info.role_id == 5;
+    isAdministrator() {
+      return this.info.role_id == 6;
     }
   },
   methods: {
     async searchCommissions() {
       this.getFields();
-      let response = await commissionsService.searchCommissionsUserDepartment(
+      let response = await commissionsService.searchCommissionsUserAdm(
         this.info
       );
       if (response.length > 0) {
         this.filterCommissions(response);
         this.total_amount = response[0].total_amount;
         this.discount = response[0].discount;
-        this.total_amount = response[0].total_amount;
-        this.discount = response[0].discount;
         this.total = response[0].total;
         this.total_department = response[0].commission_department;
+        this.total_commission = response[0].commission_bond;
+        this.total_programs = response[0].amount_programs;
       }
       this.isBusy = false;
     },
@@ -143,8 +144,20 @@ export default {
           label: "Amount"
         },
         {
-          key: "approve_date",
-          label: "Approved Date"
+          key: "created_at",
+          label: "Created Date"
+        },
+        {
+          key: "request_from",
+          label: "Request From"
+        },
+        {
+          key: "request_by",
+          label: "Request By"
+        },
+        {
+          key: "request_date",
+          label: "Request Date"
         }
       ];
     },
