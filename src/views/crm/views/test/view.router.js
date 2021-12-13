@@ -10,7 +10,7 @@ export default [
                     text: 'Test',
                 }
             ],
-            rolesPermitidos: [1]
+            rolesPermitidos: [2]
         },
     }
 ]

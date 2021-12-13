@@ -86,12 +86,12 @@
           </b-row>
           <b-row>
             <b-col>
-              <p v-if="(data.item.commission) && (currentUser.role_id == null || currentUser.role_id == 2)">
+              <p v-if="(data.item.commission) && (currentUser.role_id == 1 || currentUser.role_id == 2)">
                 <small class="text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[0].commission }} </small>
               </p>
             </b-col>
           </b-row>
-          <b-row v-if="(data.item.status == 1 || data.item.status == 3) && (currentUser.role_id == null || currentUser.role_id == 2)">
+          <b-row v-if="(data.item.status == 1 || data.item.status == 3) && (currentUser.role_id == 1 || currentUser.role_id == 2)">
             <b-col>
               <b-icon
                 v-if="!data.item.editCaptured"
@@ -138,12 +138,12 @@
           </b-row>
           <b-row>
             <b-col>
-              <p v-if="data.item.commission && (currentUser.role_id == null || currentUser.role_id == 2)">
+              <p v-if="data.item.commission && (currentUser.role_id == 1 || currentUser.role_id == 2)">
                 <small class="text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[1].commission }} </small>
               </p>
             </b-col>
           </b-row>
-          <b-row v-if="(data.item.status == 1 || data.item.status == 3) && (currentUser.role_id == null || currentUser.role_id == 2)">
+          <b-row v-if="(data.item.status == 1 || data.item.status == 3) && (currentUser.role_id == 1 || currentUser.role_id == 2)">
             <b-col>
               <b-icon
                 v-if="!data.item.editSeller"
@@ -194,7 +194,7 @@
               </b-input-group>
             </b-col>
           </b-row>
-          <b-row v-if="(data.item.status === 1 || data.item.status === 3) && (currentUser.role_id == null || currentUser.role_id == 2)">
+          <b-row v-if="(data.item.status === 1 || data.item.status === 3) && (currentUser.role_id == 1 || currentUser.role_id == 2)">
             <b-col>
               <b-icon
                 v-if="!data.item.editFee"
@@ -228,10 +228,10 @@
         <template v-slot:cell(initial_amount)="data">
           <div
             :class="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
-              currentUser.role_id == null ||
+              currentUser.role_id == 1 ||
               currentUser.role_id == 2)) ? 'cursor-pointer' : ''"
             @click="( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
-              currentUser.role_id == null ||
+              currentUser.role_id == 1 ||
               currentUser.role_id == 2) &&
               openInitialPaymentModal(data.item.program, data.item.client, data.item.initial_amount, data.item.id, data.item.lead_id)"
           >
@@ -256,7 +256,7 @@
         <template v-slot:cell(contract_fee_status)="data">
           <b-icon
             :class="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
-              currentUser.role_id == null ||
+              currentUser.role_id == 1 ||
               currentUser.role_id == 2)) ? 'cursor-pointer' : ''"
             icon="file-text"
             :variant="
@@ -295,12 +295,12 @@
         <template v-slot:cell(files)="data">
           <b-icon
             :class="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
-              currentUser.role_id == null ||
+              currentUser.role_id == 1 ||
               currentUser.role_id == 2)) ? 'cursor-pointer' : ''"
             icon="folder-fill"
             variant="warning"
             @click="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
-              currentUser.role_id == null ||
+              currentUser.role_id == 1 ||
               currentUser.role_id == 2)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id)"
           />
         </template>
@@ -322,7 +322,7 @@
                 data.item.contract_fee_status == 1 &&
                 data.item.notes_status_new == 0 &&
                 data.item.initial_payment_status == 2 &&
-                currentUser.role_id != null && currentUser.role_id != 2"
+                currentUser.role_id != 1 && currentUser.role_id != 2"
               size="sm"
               variant="info"
               :disabled="((data.item.user_id != currentUser.user_id) && currentUser.role_id == 5)"
@@ -331,13 +331,13 @@
             </b-button>
             <b-button
               v-if="(data.item.status == 1 || data.item.status == 6) &&
-                (currentUser.role_id == null || currentUser.role_id == 2) &&
+                (currentUser.role_id == 1 || currentUser.role_id == 2) &&
                 data.item.contract_fee_status == 1 &&
                 data.item.notes_status_new == 0 &&
                 data.item.initial_payment_status == 2"
               size="sm"
               :disabled="
-                data.item.type == 1 && currentUser.role_id == null
+                data.item.type == 1 && currentUser.role_id == 1
                   ? false
                   : data.item.type == 0 ? false : true
               "
@@ -351,7 +351,7 @@
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2 &&
-                  (currentUser.role_id == null || currentUser.role_id == 2)
+                  (currentUser.role_id == 1 || currentUser.role_id == 2)
               "
               size="sm"
               variant="info"
@@ -364,7 +364,7 @@
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2 &&
-                  (currentUser.role_id == null || currentUser.role_id == 2)
+                  (currentUser.role_id == 1 || currentUser.role_id == 2)
               "
               size="sm"
               variant="warning"
@@ -378,7 +378,7 @@
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2 &&
                   (currentUser.user_id == data.item.user_id ||
-                    currentUser.role_id == null ||
+                    currentUser.role_id == 1 ||
                     currentUser.role_id == 2)
               "
               size="sm"
@@ -389,7 +389,7 @@
             <b-button
               v-if="
                 data.item.initial_payment_status == 1 &&
-                  (currentUser.role_id == null ||
+                  (currentUser.role_id == 1 ||
                     currentUser.role_id == 2)
               "
               size="sm"
@@ -406,7 +406,7 @@
             <b-button
               v-if="
                 (data.item.status == 1 || data.item.status == 7) &&
-                  currentUser.role_id != null &&
+                  currentUser.role_id != 1 &&
                   currentUser.role_id != 2 &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
@@ -420,7 +420,7 @@
             <b-button
               v-if="
                 (data.item.status == 1 || data.item.status == 6) &&
-                  (currentUser.role_id == null || currentUser.role_id == 2) &&
+                  (currentUser.role_id == 1 || currentUser.role_id == 2) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
                   data.item.initial_payment_status == 2
@@ -428,7 +428,7 @@
               size="sm"
               variant="info"
               :disabled="
-                data.item.type == 1 && currentUser.role_id == null
+                data.item.type == 1 && currentUser.role_id == 1
                   ? false
                   : data.item.type == 0 ? false : true
               "
@@ -438,7 +438,7 @@
             <b-button
               v-if="
                 data.item.status == 5 &&
-                  (currentUser.role_id == null || currentUser.role_id == 2) &&
+                  (currentUser.role_id == 1 || currentUser.role_id == 2) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
                   data.item.initial_payment_status == 2
@@ -451,7 +451,7 @@
             <b-button
               v-if="
                 data.item.status == 5 &&
-                  (currentUser.role_id == null || currentUser.role_id == 2) &&
+                  (currentUser.role_id == 1 || currentUser.role_id == 2) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2
@@ -465,7 +465,7 @@
               v-if="
                 data.item.status == 3 &&
                   (currentUser.user_id == data.item.user_id ||
-                    currentUser.role_id == null ||
+                    currentUser.role_id == 1 ||
                     currentUser.role_id == 2) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
@@ -479,7 +479,7 @@
             <b-button
               v-if="
                 data.item.initial_payment_status == 1 &&
-                  (currentUser.role_id == null ||
+                  (currentUser.role_id == 1 ||
                     currentUser.role_id == 2)
               "
               size="sm"
@@ -504,7 +504,7 @@
 
         <template v-slot:cell(url)="data">
           <b-icon
-            v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.role_id == null || currentUser.role_id == 2)"
+            v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.role_id == 1 || currentUser.role_id == 2)"
             icon="link"
             variant="primary"
           />
@@ -562,9 +562,13 @@ import TrackingModal from '@/views/crm/views/sales-made/components/modals/Tracki
 import InitialPaymentModal from '@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue'
 import TrackingCapturedByModal from '@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue'
 import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
-import BusinessModal from '@/views/crm/views/sales-made/components/modals/BuisnessModal.vue'
-import CreditExpertsModal from '@/views/crm/views/sales-made/components/modals/CreditExpertsModal.vue'
-import BoostCreditModal from '@/views/crm/views/sales-made/components/modals/BoostCreditModal.vue'
+import BusinessModal from '@/views/crm/views/sales-made/components/modals/services/BuisnessModal.vue'
+import CreditExpertsModal from '@/views/crm/views/sales-made/components/modals/services/CreditExpertsModal.vue'
+import BoostCreditModal from '@/views/crm/views/sales-made/components/modals/services/BoostCreditModal.vue'
+import GeneralSupportModal from '@/views/crm/views/sales-made/components/modals/services/GeneralSupportModal.vue'
+import KeyBookModal from '@/views/crm/views/sales-made/components/modals/services/KeyBookModal.vue'
+import ParagonModal from '@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue'
+import SpecialistModal from '@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -578,6 +582,10 @@ export default {
     FilterSlot,
     vSelect,
     BoostCreditModal,
+    GeneralSupportModal,
+    KeyBookModal,
+    ParagonModal,
+    SpecialistModal,
   },
   props: {
     done: {
@@ -713,7 +721,9 @@ export default {
     },
     hideModalProgram(refresh) {
       if (refresh) this.$refs['new-client-done-table'].refresh()
+      this.modalData.programs.programSelected = ''
       this.modal.programs = false
+      this.$store.commit('app/SET_LOADING', false)
     },
     openTrackingModal(program, client, tabla) {
       this.modalData.tracking.program = program
@@ -745,20 +755,22 @@ export default {
     openModalProgram(data) {
       console.log(data.program_id, data.haveRates)
       switch (data.program_id) {
-        case 1: break
+        case 1: this.modalData.programs.programSelected = 'business-modal'; break
         case 2: this.modalData.programs.programSelected = 'boost-credit-modal'; break
-        case 3: break
+        case 3: this.modalData.programs.programSelected = 'credit-experts-modal'; break
         case 4: break
         case 5: break
-        case 6: break
-        case 7: break
-        case 8: break
-        case 9: break
+        case 6: this.modalData.programs.programSelected = 'general-support-modal'; break
+        case 7: this.modalData.programs.programSelected = 'specialist-modal'; break
+        case 8: this.modalData.programs.programSelected = 'key-book-modal'; break
+        case 9: this.modalData.programs.programSelected = 'paragon-modal'; break
         default: break
       }
-      this.modalData.programs.typeModal = (data.haveRates == 1) ? 2 : 1
-      this.modalData.programs.salesClient = data
-      this.modal.programs = true
+      if (this.modalData.programs.programSelected !== '') {
+        this.modalData.programs.typeModal = (data.haveRates == 1) ? 2 : 1
+        this.modalData.programs.salesClient = data
+        this.modal.programs = true
+      }
     },
     openFilesModal(id, program, client, saleId) {
       this.modalData.files.id = id

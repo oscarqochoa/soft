@@ -2,41 +2,25 @@
   <div>
     <ValidationObserver ref="form">
       <b-modal
-        ref="business-modal"
-        v-model="modal.business_modal"
-        title-class="h3"
-        size="lg"
-        :title="(this.service.typeModal === 1) ? 'COMPLETE RATES' : 'DETAIL OF SALE'"
+        v-model="modalServices"
+        modal
+        size="xl"
         scrollable
+        @hidden="hideModal(false,0)"
       >
-        <b-row class="mb-2">
-          <b-col>
-            <b-input-group>
-              <b-input-group-prepend>
-                <b-btn variant="secondary">
-                  PROGRAM
-                </b-btn>
-              </b-input-group-prepend>
-              <b-form-input
-                disabled
-                :value="service.program"
-              />
-            </b-input-group>
-          </b-col>
-          <b-col>
-            <b-input-group>
-              <b-input-group-prepend>
-                <b-btn variant="secondary">
-                  CLIENT
-                </b-btn>
-              </b-input-group-prepend>
-              <b-form-input
-                disabled
-                :value="service.client"
-              />
-            </b-input-group>
-          </b-col>
-        </b-row>
+        <!-- HEADER START -->
+        <template v-slot:modal-header>
+          <modal-service-header
+            :type-modal="typeModal"
+            :users-services="usersServices"
+            :programs-all="programsAll"
+            :header-s="headerS"
+            :sales="salesClient"
+            @changeProgram="changeProgram"
+            @close="hideModal(false,0)"
+          />
+        </template>
+        <!-- HEADER END -->
         <!-- BODY START -->
         <!-- rates -->
         <b-container fluid>
@@ -351,7 +335,7 @@
                       class="rounded mr-1"
                       variant="danger"
                       size="sm"
-                      @click="hideModal"
+                      @click="hideModal(false,0)"
                     >
                       <feather-icon icon="PowerIcon" /> CANCEL
                     </b-button>
@@ -390,30 +374,41 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
 
 export default {
+  components: {
+    ModalServiceHeader,
+  },
   props: {
-    modal: {
-      type: Object,
-      required: true,
-      validator: value => 'business_modal' in value,
+    modalServices: {
+      type: Boolean,
+      default: false,
     },
-    service: {
+    salesClient: {
       type: Object,
-      default() {
-        return {
-          program: '',
-          client: '',
-          salesClient: {
-            event_id: '',
-            account_id: '',
-            id: '',
-            lead_id: '',
-          },
-          typeModal: 1, // 1: complete rates, 2: detail of sale
-
-        }
-      },
+      default: () => ({
+        event_id: '', account_id: '', id: '', lead_id: '',
+      }),
+      // 1: complete rates crm, 2: detail of sale crm, 3: add Services
+      // 4: change Services, 5 show add change Services, 6  add  services to lead from programs
+    },
+    typeModal: {
+      type: Number,
+      default: 1,
+      // 1: complete rates, 2: detail of sale
+    },
+    usersServices: {
+      type: Array,
+      default: () => [],
+    },
+    programsAll: {
+      type: Array,
+      default: () => [],
+    },
+    headerS: {
+      type: Object,
+      default: () => ({ program: '', seller: '', captured: '' }),
     },
   },
   data() {
@@ -450,10 +445,10 @@ export default {
       currentUser: 'auth/currentUser',
     }),
     isModalShow() {
-      return this.service.typeModal === 2 || this.service.typeModal === 5
+      return this.typeModal === 2 || this.typeModal === 5
     },
     isModalAdd() {
-      return this.service.typeModal === 3 || this.service.typeModal === 4 || this.service.typeModal === 6
+      return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
     },
 
     otherTotalS() {
@@ -472,8 +467,8 @@ export default {
     },
   },
   async mounted() {
-    console.log(this.service.typeModal)
-    this.client = this.service.salesClient
+    console.log(this.typeModal)
+    this.client = this.salesClient
     if (this.program) {
       await this.searchRate()
     }
@@ -512,7 +507,7 @@ export default {
           default: break
         }
         // Depends of the Modal type
-        switch (this.service.typeModal) {
+        switch (this.typeModal) {
           case 1:
             message = 'complete Rates'
             route = '/attendend'
@@ -541,7 +536,7 @@ export default {
           fee: this.fee,
           suggested: this.suggested,
           otherpricesp: this.othersPayments,
-          event: this.service.salesClient.event_id,
+          event: this.salesClient.event_id,
           json_noce: this.add_json_ce,
           stateid: 0,
 
@@ -563,8 +558,7 @@ export default {
           if (response.status === 200) {
             this.removePreloader()
             this.showToast('success', 'top-right', 'Succes', 'CheckIcon', 'Su lead ya puede ser atendido')
-            this.$emit('reload')
-            this.hideModal()
+            this.hideModal(true, this.program)
           }
         }
       }
@@ -624,7 +618,7 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post('/searchprogramsalemade', { id: this.service.salesClient.id })
+        const response = await amgApi.post('/searchprogramsalemade', { id: this.salesClient.id })
         if (response.status === 200) {
           this.fee = response.data[0].fee
           this.rate_selected = response.data[0].rate_selected ? JSON.parse(response.data[0].rate_selected) : ''
@@ -642,12 +636,15 @@ export default {
         console.error(error)
       }
     },
-    hideModal() {
-      this.$refs['business-modal'].hide()
+    changeProgram(headerS) {
+      this.$emit('changeProgram', headerS)
+    },
+    hideModal(refresh, programSelect) {
+      this.$emit('closeModal', refresh, programSelect)
     },
     async getScore() {
       try {
-        const response = await amgApi.post('/getscoreattend', { lead_id: this.service.salesClient.lead_id })
+        const response = await amgApi.post('/getscoreattend', { lead_id: this.salesClient.lead_id })
         if (response.status === 200) {
           this.score_id = response.data.score_id
         }
@@ -656,6 +653,7 @@ export default {
       }
     },
   },
+
 }
 </script>
 

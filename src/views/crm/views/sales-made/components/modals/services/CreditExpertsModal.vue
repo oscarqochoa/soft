@@ -2,41 +2,25 @@
   <div>
     <ValidationObserver ref="form">
       <b-modal
-        ref="credit-express-modal"
-        v-model="modal.credit_express"
-        title-class="h3"
+        v-model="modalServices"
+        modal
         size="xl"
-        :title="(creditExpress.typeModal === 1) ? 'COMPLETE RATES' : 'DETAIL OF SALE'"
         scrollable
+        @hidden="hideModal(false,0)"
       >
-        <b-row class="mb-2">
-          <b-col>
-            <b-input-group>
-              <b-input-group-prepend>
-                <b-btn variant="secondary">
-                  PROGRAM
-                </b-btn>
-              </b-input-group-prepend>
-              <b-form-input
-                disabled
-                :value="creditExpress.program"
-              />
-            </b-input-group>
-          </b-col>
-          <b-col>
-            <b-input-group>
-              <b-input-group-prepend>
-                <b-btn variant="secondary">
-                  CLIENT
-                </b-btn>
-              </b-input-group-prepend>
-              <b-form-input
-                disabled
-                :value="creditExpress.client"
-              />
-            </b-input-group>
-          </b-col>
-        </b-row>
+        <!-- HEADER START -->
+        <template #modal-header>
+          <modal-service-header
+            :type-modal="typeModal"
+            :users-services="usersServices"
+            :programs-all="programsAll"
+            :header-s="headerS"
+            :sales="salesClient"
+            @changeProgram="changeProgram"
+            @close="hideModal(false,0)"
+          />
+        </template>
+        <!-- HEADER END -->
         <!-- BODY START -->
         <!-- rates -->
         <b-row>
@@ -196,7 +180,7 @@
                   variant="danger"
                   class="rounded mr-1"
                   size="sm"
-                  @click="hideModal"
+                  @click="hideModal(false, 0)"
                 >
                   <feather-icon icon="PowerIcon" /> CANCEL
                 </b-button>
@@ -230,36 +214,43 @@
 </template>
 
 <script>
-
 import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
+import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
 
 export default {
   components: {
     vSelect,
+    ModalServiceHeader,
   },
   props: {
-    modal: {
+    modalServices: {
+      type: Boolean,
+      required: true,
+    },
+    salesClient: {
       type: Object,
       default: () => ({
-        credit_express: false,
+        event_id: '', account_id: '', id: '', lead_id: '',
       }),
     },
-    creditExpress: {
+    typeModal: {
+      type: Number,
+      default: 1,
+      // 1: complete rates crm, 2: detail of sale, 3: add Services
+      // 4: change Services, 5 show add change Services, 6  add  services programs
+    },
+    usersServices: {
+      type: Array,
+      default: () => [],
+    },
+    programsAll: {
+      type: Array,
+      default: () => [],
+    },
+    headerS: {
       type: Object,
-      default: () => ({
-        salesClient: {
-          event_id: '',
-          account_id: '',
-          id: '',
-          lead_id: '',
-        },
-        typeModal: 1,
-        captured: null,
-        seller: null,
-        program: '',
-        client: '',
-      }),
+      default: () => ({ program: '', seller: '', captured: '' }),
     },
   },
   data() {
@@ -315,30 +306,18 @@ export default {
       ],
     }
   },
-  created() {
-    this.getSelects()
-  },
-  mounted() {
-    if (this.program) {
-      this.searchRate()
-    }
-    if (this.isModalAdd) {
-      this.getScore()
-    }
-  },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
     }),
     totalAmount() {
-      const total = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
-      return total
+      return this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
     },
     isModalShow() {
-      return this.creditExpress.typeModal == 2 || this.creditExpress.typeModal == 5
+      return this.typeModal == 2 || this.typeModal == 5
     },
     isModalAdd() {
-      return this.creditExpress.typeModal == 3 || this.creditExpress.typeModal == 4 || this.creditExpress.typeModal == 6
+      return this.typeModal == 3 || this.typeModal == 4 || this.typeModal == 6
     },
     table1() {
       const middle = this.rates.length / 2
@@ -359,6 +338,17 @@ export default {
       return table
     },
   },
+  created() {
+    this.getSelects()
+  },
+  mounted() {
+    if (this.program) {
+      this.searchRate()
+    }
+    if (this.isModalAdd) {
+      this.getScore()
+    }
+  },
   methods: {
     /* PRELOADER */
     addPreloader() {
@@ -378,7 +368,7 @@ export default {
           let typeADD = ''
           const prices = []
           // Depends of the Modal type
-          switch (this.creditExpress.typeModal) {
+          switch (this.typeModal) {
             case 1:
               message = 'complete Rates'
               route = '/attendend'
@@ -420,16 +410,16 @@ export default {
             fee: this.fee,
             suggested: this.totalAmount,
             otherpricesp: this.otherspayments,
-            event: this.creditExpress.salesClient.event_id,
+            event: this.salesClient.event_id,
             json_noce: this.add_json_ce,
             stateid: 0,
 
             // Diferents to add change Services
-            account: this.creditExpress.salesClient.account_id
-              ? this.creditExpress.salesClient.account_id
+            account: this.salesClient.account_id
+              ? this.salesClient.account_id
               : '',
-            captured: this.creditExpress.captured,
-            seller: this.creditExpress.seller,
+            captured: this.captured,
+            seller: this.seller,
             type: typeADD,
             user_id: this.currentUser.id,
             module: this.currentUser.modul_id,
@@ -449,7 +439,7 @@ export default {
             const response = await amgApi.post(`${route}`, param)
             if (response.status === 200) {
               this.$emit('reload')
-              this.hideModal()
+              this.hideModal(true, this.program)
             }
             this.removePreloader()
           }
@@ -502,7 +492,7 @@ export default {
     async getSelected() {
       if (this.isModalShow) {
         try {
-          const response = await amgApi.post('getjsonattendce', { sale_id: this.creditExpress.salesClient.id })
+          const response = await amgApi.post('getjsonattendce', { sale_id: this.salesClient.id })
           if (response.status === 200) {
             this.json_ce_new = response.data.json_ce
             this.date_sale = response.data.date_sale
@@ -549,7 +539,7 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post('searchprogramsalemade', { id: this.creditExpress.salesClient.id })
+        const response = await amgApi.post('searchprogramsalemade', { id: this.salesClient.id })
         if (response.status === 200) {
           this.fee = response.data[0].fee
           this.rate_selected = JSON.parse(response.data[0].rate_selected)
@@ -572,13 +562,15 @@ export default {
         console.log(error)
       }
     },
-
-    hideModal() {
-      this.$refs['credit-express-modal'].hide()
+    hideModal(refresh, programSelect) {
+      this.$emit('closeModal', refresh, programSelect)
+    },
+    changeProgram(headerS) {
+      this.$emit('changeProgram', headerS)
     },
     async getScore() {
       try {
-        const response = await amgApi.post('/getscoreattend', { lead_id: this.creditExpress.salesClient.lead_id })
+        const response = await amgApi.post('/getscoreattend', { lead_id: this.salesClient.lead_id })
         if (response.status === 200) {
           this.score_id = response.data.score_id
         }
@@ -608,10 +600,7 @@ export default {
   color: #baa345;
   border-radius: 5px;
 }
-.ancho{
-  max-width: 70px;
-  text-align: center;
-}
+
 .description-price {
   font-size: 11px;
   color: #666666;

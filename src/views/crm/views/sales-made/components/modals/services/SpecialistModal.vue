@@ -5,15 +5,12 @@
         v-model="modalServices"
         modal
         size="lg"
-        header-class="bg-white pt-0 pr-0"
-        footer-class="bg-white px-0"
         scrollable
-        modal-class="height-modal"
-        :hide-footer="hideFooter"
+        :hide-footer="isModalShow"
         @hidden="hideModal(false,0)"
       >
         <!-- HEADER START -->
-        <template #modal-header>
+        <template v-slot:modal-header>
           <modal-service-header
             :type-modal="typeModal"
             :users-services="usersServices"
@@ -27,13 +24,13 @@
         <!-- HEADER END -->
 
         <!-- BODY START -->
-        <div v-if="hideBody">
+        <div>
           <div class="row">
             <div class="col-lg-4" />
             <div class="col-lg-4">
               <ValidationProvider
                 v-slot="{errors}"
-                rules="required"
+                rules="required|money-1"
               >
                 <table class="table table-striped mb-0">
                   <tbody style="border: 1px solid #ccc">
@@ -49,48 +46,21 @@
                       <td class="text-center bg-gray">
                         <div class="div-style">
                           $
-                          <select
+                          <money
                             v-model="fee"
-                            class="select-style"
-                            :class="{'border border-danger':errors[0]}"
+                            v-bind="vMoney"
+                            class="input-total text-center"
+                            :style="errors[0] && validateMoney? 'color:red !important':''"
+                            :class="{'border border-danger':errors[0] && validateMoney}"
                             :disabled="isModalShow"
-                          >
-                            <option disabled />
-                            <option value="19.99">
-                              19.99
-                            </option>
-                            <option value="24.99">
-                              24.99
-                            </option>
-                            <option value="29.99">
-                              29.99
-                            </option>
-                            <option value="34.99">
-                              34.99
-                            </option>
-                            <option value="39.99">
-                              39.99
-                            </option>
-                            <option value="44.99">
-                              44.99
-                            </option>
-                            <option value="49.99">
-                              49.99
-                            </option>
-                            <option value="54.99">
-                              54.99
-                            </option>
-                            <option value="59.99">
-                              59.99
-                            </option>
-                          </select>
+                          />
                         </div>
                       </td>
                     </tr>
                   </tbody>
                 </table>
                 <div
-                  v-if="errors[0]"
+                  v-if="errors[0] && validateMoney"
                   class="fee-error"
                 >
                   Fee {{ errors[0] }}
@@ -104,37 +74,32 @@
 
         <!--  FOOTER START -->
         <template #modal-footer="{ }">
-          <template>
-            <template v-if="!isModalAdd">
-              <button
-                type="button"
-                class="btn rounded`bg-danger"
+          <b-row class="w-100">
+            <b-col class="d-flex align-items-center justify-content-center" v-if="!isModalAdd">
+              <b-button
+                variant="danger"
+                class="mr-1"
                 @click="hideModal(false,0)"
               >
-                <i class="fas fa-power-off" /> CANCEL
-              </button>
-              <button
-                type="button"
-                class="btn rounded`bg-success"
+                <feather-icon icon="PowerIcon" /> CANCEL
+              </b-button>
+              <b-button
+                variant="success"
                 @click="saveRates()"
               >
-                <i class="far fa-save" /> SAVE
-              </button>
-            </template>
-
-            <button
-              v-if="isModalAdd"
-              class="btn class-button-green"
-              style="background: #0066FF;text-transfor`:uppercase;float: none"
-              @click="saveRates()"
-            >
-              Continue
-              <i
-                style="font-size: 15px;margin-left: 5px;"
-                class="fas fa-caret-right"
-              />
-            </button>
-          </template>
+                <feather-icon icon="SaveIcon" /> SAVE
+              </b-button>
+            </b-col>
+            <b-col v-if="isModalAdd">
+              <b-button
+                variant="info"
+                @click="saveRates()"
+              >
+                Continue
+                <feather-icon icon="ChevronsRightIcon" />
+              </b-button>
+            </b-col>
+          </b-row>
         </template>
         <!-- FOOTER END -->
       </b-modal>
@@ -143,8 +108,7 @@
 </template>
 
 <script>
-import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/ModalServiceHeader.vue'
-import {mapGetters} from 'vuex'
+import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
 
 export default {
   components: {
@@ -397,7 +361,7 @@ export default {
 }
 
 .fee-error {
-  margin-left: 5rem;
+  margin-left: 6rem;
   font-size: 100%;
   width: 100%;
   color: #dc3545;
