@@ -2,8 +2,9 @@
   <div>
     <b-card title="APPOINTMENTS">
       <b-table
-        striped
+        show-empty
         sticky-header
+        striped
         responsive="sm"
         small
         :fields="fieldsEvent"

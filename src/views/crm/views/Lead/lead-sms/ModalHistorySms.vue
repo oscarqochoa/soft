@@ -10,11 +10,12 @@
       />
     </b-form-group>
     <b-table
+      show-empty
+      sticky-header
       responsive="sm"
       :fields="fieldsQuicks"
       :items="items"
       :busy="isBusy"
-      sticky-header
     >
       <template #table-busy>
         <div class="text-center text-primary my-2">
