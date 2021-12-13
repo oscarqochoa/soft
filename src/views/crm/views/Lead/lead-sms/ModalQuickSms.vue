@@ -10,11 +10,12 @@
       </b-button>
     </div>
     <b-table
+      show-empty
+      sticky-header
       responsive="sm"
       :fields="fieldsQuicks"
       :items="quicks"
       :busy="isBusy"
-      sticky-header
     >
       <template #table-busy>
         <div class="text-center text-primary my-2">
@@ -117,7 +118,7 @@ export default {
   created() {
     this.userId = this.currentUser.id
     this.roleId = this.currentUser.id
-    if ([ 1, 2 ].includes(this.roleId) || this.modul == 15)
+    /* if ([ 1, 2 ].includes(this.roleId) || this.modul == 15) */
       this.fieldsQuicks.push({ key: 'actions' })
     setTimeout(() => {
       this.isBusy = !this.isBusy

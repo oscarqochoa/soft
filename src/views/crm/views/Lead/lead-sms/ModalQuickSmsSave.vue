@@ -169,6 +169,7 @@ export default {
     }),
     async onSubmit () {
       try {
+        this.isLoading = true
         const response = await this.A_SET_SMS_QUICK({
           ...this.quickData,
           user_id : this.userId,
@@ -188,6 +189,7 @@ export default {
           this.$emit('modalQuickCreateClose', true)
         } else
           this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong')
+        this.isLoading = false
       } catch (error) {
         console.log('Something went wrong onSubmit', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))

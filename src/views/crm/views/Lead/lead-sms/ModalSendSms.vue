@@ -56,7 +56,7 @@
               @input="onSelectSms()"
             />
             <b-input-group-append
-              v-if="[ 1, 2 ].includes(userId) || modul == 15"
+              
             >
               <b-button variant="outline-info" @click="$emit('modalQuickOpen', true)">
                 <feather-icon

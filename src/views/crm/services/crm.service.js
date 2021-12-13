@@ -71,7 +71,7 @@ class CrmService {
     }
   }
 
-  async getOwners(body) {
+  async getOwners({ modul, body }) {
     try {
       const { data } = await amgApi.post('/usermodule/2', body)
       return data
@@ -364,6 +364,15 @@ class CrmService {
       return await amgApi.post('/savenewfee', body)
     } catch (error) {
       console.error('Something went wrong on saveNewFee:', error)
+      throw error
+    }
+  }
+
+  async postUserAppointmentSn (body) {
+    try {
+      const data = await amgApi.post('/get-users-appointmens-sn', body)
+      return data
+    } catch (error) {
       throw error
     }
   }

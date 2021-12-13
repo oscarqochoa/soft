@@ -3,7 +3,7 @@ export default [
     path: "/crm/commissions-crm",
     name: "commissions-crm",
     component: () =>
-      import("@/commons/components/commissions/CommissionsModules.vue"),
+      import("@/views/commons/components/commissions/CommissionsModules.vue"),
     meta: {
       pageTitle: "Commissions",
       breadcrumb: [
@@ -11,8 +11,8 @@ export default [
           text: "Commissions",
         },
       ],
-      module: 16,
-      tab: "7",
+      module: 2,
+      tab: "crm",
     },
   },
 ];
