@@ -230,7 +230,7 @@ export default {
         if (result.value) {
           const response = await this.A_DELETE_EVENTS(id)
           if (this.isResponseSuccess(response)) {
-            this.$swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+            this.showToast('success', 'top-right', 'Deleted!', 'CheckIcon', 'Your file has been deleted.')
           } else {
             this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
           }

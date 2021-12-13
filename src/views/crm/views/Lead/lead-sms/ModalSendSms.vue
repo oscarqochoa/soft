@@ -245,16 +245,7 @@ export default {
       }
     },
     async onSubmit () {
-      this.$swal.fire({
-        title: 'Are you Sure Send SMS',
-        icon: 'question',
-        text: 'You won\'t be able to revert this!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes, delete it!',
-      })
+      this.showSwalGeneric('Are you Sure Send SMS', 'You won\'t be able to revert this!', 'warning')
       .then(async (result) => {
         if (result.value) {
           const response = await this.A_SEND_MESSAGE_LEAD({

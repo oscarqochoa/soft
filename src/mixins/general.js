@@ -80,7 +80,7 @@ export default {
         buttonsStyling: false,
       });
     },
-    showSwalGeneric(title, text, icon) {
+    showSwalGeneric(title, text, icon, config = {}) {
       return this.$swal({
         icon,
         title,
@@ -93,7 +93,8 @@ export default {
           confirmButton: "btn btn-gradient-success  ml-3 ",
           cancelButton: "btn btn-gradient-danger  ",
         },
-      });
+        ...config
+      })
     },
     getModuleName (module) {
       switch (module) {

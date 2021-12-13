@@ -363,12 +363,7 @@ export default {
           const response = await this.A_UNIQUE_MOBILE({ mobile: this.userData.mobile })
           if (response.status == 200) {
             if (response.data.code == 'mobile') {
-              this.$swal.fire({
-                icon: 'warning',
-                title: `The phone number already exists: ${response.data.message}`,
-                confirmButtonText: 'REQUEST LEAD TO SOCIAL NETWORK',
-                cancelButtonText: 'OK',
-              })
+              this.showSwalGeneric('Are you sure?', `The phone number already exists: ${response.data.message}`, 'warning', { confirmButtonText: 'REQUEST LEAD TO SOCIAL NETWORK' })
               .then(async (result) => {
                 if (result.value) {
                   await this.A_SET_REQUEST_LEADS({
