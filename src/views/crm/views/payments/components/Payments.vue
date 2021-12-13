@@ -142,6 +142,22 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <template #cell(lead_name)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <b-button
+              variant="flat-primary"
+              style="
+                padding-left: 2px;
+                padding-right: 2px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+              "
+              >{{ data.item.lead_name }}</b-button
+            >
+          </div>
+        </template>
         <template #cell(amount)="data">
           <div
             class="d-flex flex-column justify-content-start align-items-start"
@@ -180,12 +196,21 @@
             <feather-icon v-else icon="XCircleIcon" class="text-danger" />
           </div>
         </template>
-        <template #cell(created_at)="data">
+        <!-- <template #cell(created_at)="data">
           <div
             class="d-flex flex-column justify-content-start align-items-start"
           >
             <span>
               {{ data.item.created_at | myGlobalDay }}
+            </span>
+          </div>
+        </template> -->
+        <template #cell(user_name)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <span>
+             {{data.item.user_name}} - {{ data.item.created_at | myGlobalDay }}
             </span>
           </div>
         </template>
@@ -273,6 +298,7 @@ export default {
         {
           key: "lead_name",
           label: "Name",
+         
           visible: true,
         },
         {
@@ -317,15 +343,15 @@ export default {
         },
         {
           key: "user_name",
-          label: "User",
+          label: "Created By",
           visible: true,
         },
-        {
-          key: "created_at",
-          label: "Creation Date",
-          sortable: true,
-          visible: true,
-        },
+        // {
+        //   key: "created_at",
+        //   label: "Creation Date",
+        //   sortable: true,
+        //   visible: true,
+        // },
         // { key: "actions", label: "Acciones", class: "text-center " },
       ],
       searchInput: "",
@@ -494,6 +520,9 @@ td.div {
     flex-direction: column;
   }
 }
+// b-table{
+//    width: 100%;;  
+// }
 </style>
 
 <style lang="scss">

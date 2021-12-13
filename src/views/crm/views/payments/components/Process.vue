@@ -20,7 +20,7 @@
                       placeholder="Search Leads | Clients"
                     ></b-form-input>
                     <b-list-group
-                      v-if="filterSearch && users != null"
+                      v-if="filterSearch && users != null && !statusSpinner"
                       class="autocomplete-results"
                     >
                       <b-list-group-item
@@ -39,6 +39,22 @@
                         {{ user.first_name }} {{ user.last_name }} |
                         {{ user.mobile }}
                       </b-list-group-item>
+                    </b-list-group>
+                    <b-list-group
+                      class="autocomplete-results"
+                      v-if="statusSpinner"
+                    >
+                      <div class="text-center ">
+                        <b-spinner variant="primary" label="Text Centered" />
+                      </div>
+                    </b-list-group>
+                    <b-list-group
+                      class="autocomplete-results"
+                      v-if="filterSearch && users == null && !statusSpinner && statusSelectedSearch"
+                    >
+                      <div class="text-center ">
+                        <strong>Sorry, There's not result</strong>
+                      </div>
                     </b-list-group>
                   </div>
                 </div>
@@ -199,6 +215,19 @@
                   </ValidationProvider>
                 </b-form-group>
               </div>
+              <!-- <div
+                class="col-lg-12 w-100"
+                style="display: inline-block"
+                v-if="methodpayment == 1"
+              >
+                <modal-credit-card
+                  :key="modalCreditController"
+                  :cardsLead="cardsLead"
+                  @CardId="getCardId"
+                ></modal-credit-card>
+              </div> -->
+            </div>
+            <div class="col-lg-10 col-md-12 col-sm-12 box">
               <div
                 class="col-lg-12 w-100"
                 style="display: inline-block"
@@ -211,6 +240,15 @@
                 ></modal-credit-card>
               </div>
             </div>
+            <!-- <div v-if="methodpayment == 1" class="row w-80">
+              <div class="col-lg-12 col-md-12 col-sm-12 ml-2" style="display: inline-block">
+                  <modal-credit-card
+                  :key="modalCreditController"
+                  :cardsLead="cardsLead"
+                  @CardId="getCardId"
+                ></modal-credit-card>
+              </div>
+            </div> -->
             <div class="row w-100">
               <div class="col-lg-12 ml-2">
                 <b-form-group class="inline">
@@ -288,9 +326,17 @@ export default {
       messageAutorize: [],
       messageList: false,
       charge: true,
+      spinner: false,
+      statusSelected:false,
     };
   },
   computed: {
+    statusSpinner() {
+      return this.spinner;
+    },
+    statusSelectedSearch(){
+      return this.statusSelected
+    },
     changeDisable() {
       return this.userfilter == "" ? true : false;
     },
@@ -359,14 +405,22 @@ export default {
     },
     searchlead() {
       if (this.userfilter != "") {
+        this.spinner = true;
+        this.statusSelected = true
         amgApi
           .post("/searchlead", {
             q: this.userfilter,
           })
           .then((response) => {
             this.users = response.data;
+            if(this.users.length == 0){
+              this.users = null
+            }
+            this.spinner = false;
           })
           .catch((err) => {
+            this.spinner = false;
+            this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Something went wrong with users, try again!')
             console.error(err);
           });
       } else {
@@ -377,12 +431,14 @@ export default {
       this.user_id = id;
       this.userfilter = first + " " + last + " | " + mobile;
       this.users = null;
+      this.statusSelected = false
     },
     getCardId(Card) {
-      console.log(Card);
+      
       this.card_id = Card;
     },
     getcard() {
+      this.$store.commit("app/SET_LOADING", true);
       amgApi
         .post("/searchleadpayment", {
           id: this.user_id,
@@ -400,7 +456,12 @@ export default {
               this.lead = "";
               this.mobile = "";
             }
+            this.$store.commit("app/SET_LOADING", false);
           }
+        })
+        .catch((error) => {
+          this.$store.commit("app/SET_LOADING", false);
+          console.log(error);
         });
     },
     submitAutorize() {
@@ -425,6 +486,7 @@ export default {
             })
             .then((result) => {
               if (result.value) {
+                this.$store.commit("app/SET_LOADING", true);
                 amgApi
                   .post("/checkoutpayment", {
                     idcard: this.card_id,
@@ -442,6 +504,7 @@ export default {
                     if (response.status == 200 && response.data.status == 200) {
                       if (this.methodpayment == 1) {
                         if (response.data.transaction.messages) {
+                          this.$store.commit("app/SET_LOADING", false);
                           this.$swal.fire({
                             icon: "success",
                             title:
@@ -458,6 +521,7 @@ export default {
 
                           this.$router.push({ name: "payments-crm-list" });
                         } else {
+                          this.$store.commit("app/SET_LOADING", false);
                           this.$swal
                             .fire({
                               icon: "error",
@@ -473,6 +537,7 @@ export default {
                                   : "",
                             })
                             .then((res) => {
+                              this.$store.commit("app/SET_LOADING", false);
                               if (res) {
                                 this.getcard();
                                 this.card_id = "";
@@ -480,6 +545,7 @@ export default {
                             });
                         }
                       } else {
+                        this.$store.commit("app/SET_LOADING", false);
                         this.$swal
                           .fire({
                             icon: "success",
@@ -487,6 +553,7 @@ export default {
                           })
                           .then((res) => {
                             if (res) {
+                              this.$store.commit("app/SET_LOADING", false);
                               this.$emit("clickList", true);
                             }
                           });
@@ -496,6 +563,7 @@ export default {
                       response.status == 200 &&
                       response.data.status == 500
                     ) {
+                      this.$store.commit("app/SET_LOADING", false);
                       if (response.data.transaction.errors) {
                         this.errosAutorize =
                           response.data.transaction.errors.error;
@@ -504,6 +572,7 @@ export default {
                         this.messageList = false;
                         this.errosList = true;
                         if (this.methodpayment == 1) {
+                          
                           this.$swal
                             .fire({
                               icon: "error",
@@ -526,6 +595,7 @@ export default {
                             });
                         }
                       } else {
+                        this.$store.commit("app/SET_LOADING", false);
                         this.$swal
                           .fire({
                             icon: "error",
@@ -544,6 +614,7 @@ export default {
                             if (res) {
                               this.getcard();
                               this.card_id = "";
+                              this.$store.commit("app/SET_LOADING", false);
                             }
                           });
                       }

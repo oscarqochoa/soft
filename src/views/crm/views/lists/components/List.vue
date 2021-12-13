@@ -236,7 +236,10 @@
           <div
             class="d-flex flex-column justify-content-start align-items-start"
           >
-            <span>
+            <span v-if="data.item.created_at=='Today'">
+              {{ data.item.created_at}}
+            </span>
+            <span v-else>
               {{ data.item.created_at | myGlobalDay }}
             </span>
           </div>
@@ -286,7 +289,9 @@
                   currentUser.fullName,
                   currentUser.user_id,
                   data.item.id
-                )">
+                )
+              "
+            >
               <feather-icon icon="EyeIcon"></feather-icon>
             </b-button>
             <b-button
@@ -495,6 +500,23 @@ export default {
           this.count_alltask = 0;
           this.count_donetask = 0;
         }
+        if (
+         this.currentUser.arrRoles[0].role_id == 1 ||
+          this.currentUser.arrRoles[0].role_id == 2
+        ) {
+         return items || [];
+        }else{
+          
+           let firstOption = {
+            created_at: "Today",
+            create_name: "System",
+            cant: this.count_alltask,
+            done: this.count_donetask,
+          };
+          // let newData = data.data;
+          items.unshift(firstOption);
+        }
+
         // Must return an array of items or an empty array if an error occurred
         return items || [];
       });
@@ -551,11 +573,13 @@ export default {
         .then((result) => {
           // Send request to the server
           if (result.value) {
+            this.$store.commit("app/SET_LOADING", true);
             amgApi
               .post("/deletelist", {
                 id: id,
               })
               .then((response) => {
+                this.$store.commit("app/SET_LOADING", false);
                 this.$swal
                   .fire("Deleted!", "Your file has been deleted.", "success")
                   .then((res) => {
@@ -565,6 +589,7 @@ export default {
                   });
               })
               .catch(() => {
+                this.$store.commit("app/SET_LOADING", false);
                 swal("Failed!", "There was something wronge.", "warning");
               });
           }
