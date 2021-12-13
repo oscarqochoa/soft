@@ -7,12 +7,14 @@ export default {
     halfYear: true,
     percentApartment: "100.00",
     loading: false,
+    moduleProgram: null,
   },
   getters: {
     year: (state) => state.year,
     halfYear: (state) => state.halfYear,
     percentApartment: (state) => state.percentApartment,
     loading: (state) => state.loading,
+    moduleProgram: (state) => state.moduleProgram,
   },
   mutations: {
     SET_YEAR_COMMISSIONS(state, payload) {
@@ -26,6 +28,9 @@ export default {
     },
     SET_LOADING(state, payload) {
       return (state.loading = payload);
+    },
+    SET_MODULE_PROGRAM(state, payload) {
+      return (state.moduleProgram = payload);
     },
   },
   actions: {},

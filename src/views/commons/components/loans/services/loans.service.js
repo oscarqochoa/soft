@@ -41,7 +41,7 @@ class LoansService {
       throw error;
     }
   }
-  async getUser(params) {
+  async getUserData(params) {
     try {
       const { data } = await amgApi.post("/loans/get-user", params);
       return data;

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import LoansTable from "@/commons/components/loans/LoansTable.vue";
+import LoansTable from "@/views/commons/components/loans/LoansTable.vue";
 export default {
   name: "LoansGeneral",
   components: {

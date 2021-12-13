@@ -5,8 +5,8 @@
       :fields="fields"
       class="mt-2"
       responsive
-      striped
       no-border-collapse
+      striped
       sticky-header="50vh"
       :busy="isBusy"
     >
@@ -19,12 +19,12 @@
       <template #cell(created_at)="data">
         <span>{{data.value | myGlobal}}</span>
       </template>
-      <template #cell(request_date)="data">
+      <template #cell(approve_date)="data">
         <span>{{data.value | myGlobal}}</span>
       </template>
     </b-table>
     <b-row>
-      <template v-if="isSupervisor || isAdministrator">
+      <template v-if="!isCeo">
         <b-col lg="6" :class="[textRightBig]">
           <div class="font-weight-bolder">SUM:</div>
         </b-col>
@@ -32,40 +32,75 @@
           <div>$ {{ this.total_amount }}</div>
         </b-col>
       </template>
-
-      <template v-if="isAdministrator">
+      <template v-if="!isCeo && !isSupervisor">
         <b-col lg="6" :class="[textRightBig]">
           <div class="font-weight-bolder">DISCOUNT:</div>
         </b-col>
         <b-col lg="6" :class="[textLeftBig]">
-          <div>$ {{ discount }}</div>
+          <div>$ {{ this.discount }}</div>
         </b-col>
       </template>
-
       <template v-if="isSupervisor">
         <b-col lg="6" :class="[textRightBig]">
           <div class="font-weight-bolder">20% OF COMMISSIONS</div>
         </b-col>
         <b-col lg="6" :class="[textLeftBig]">
-          <div>$ {{ total_department }}</div>
+          <div>$ {{ this.total_department }}</div>
+        </b-col>
+        <b-col lg="6" :class="[textRightBig]">
+          <div class="font-weight-bolder">10% OF COMMISSIONS</div>
+        </b-col>
+        <b-col lg="6" :class="[textLeftBig]">
+          <div>$ {{ this.total_commission }}</div>
+        </b-col>
+        <b-col lg="6" :class="[textRightBig]">
+          <div class="font-weight-bolder">10% OF PROGRAMS</div>
+        </b-col>
+        <b-col lg="6" :class="[textLeftBig]">
+          <div>$ {{ this.total_programs }}</div>
         </b-col>
       </template>
-
+      <template v-if="!isCeo && !isSupervisor">
+        <template v-if="total_supervisor_program > 0">
+          <b-col lg="6" :class="[textRightBig]">
+            <div class="font-weight-bolder">10% OF CRM:</div>
+          </b-col>
+          <b-col lg="6" :class="[textLeftBig]">
+            <div>$ {{ this.total_supervisor_program.toFixed(2) }}</div>
+          </b-col>
+        </template>
+      </template>
       <b-col lg="6" :class="[textRightBig]">
-        <div class="font-weight-bolder">TOTAL:</div>
+        <div class="font-weight-bolder">TOTAL GENERATED:</div>
       </b-col>
       <b-col lg="6" :class="[textLeftBig]">
-        <div>$ {{ total }}</div>
+        <div>$ {{ this.total }}</div>
       </b-col>
+      <template v-if="total > total_to_pay && !isCeo && !isSupervisor">
+        <b-col lg="6" :class="[textRightBig]">
+          <div class="font-weight-bolder">DISCOUNT FOR PENALTIES:</div>
+        </b-col>
+        <b-col lg="6" :class="[textLeftBig]">
+          <div>$ {{ (total - total_to_pay).toFixed(2) }}</div>
+        </b-col>
+      </template>
+      <template v-if="!isCeo && !isSupervisor">
+        <b-col lg="6" :class="[textRightBig]">
+          <div class="font-weight-bolder">TOTAL TO PAY:</div>
+        </b-col>
+        <b-col lg="6" :class="[textLeftBig]">
+          <div>$ {{ this.total_to_pay }}</div>
+        </b-col>
+      </template>
     </b-row>
   </div>
 </template>
 
 <script>
-import commissionsService from "@/commons/components/commissions/services/commissions.service";
+import commissionsService from "@/views/commons/components/commissions/services/commissions.service";
 import { mapGetters } from "vuex";
 export default {
-  name: "DetailsAdm",
+  name: "DetailsCrm",
   props: {
     info: {
       type: Object,
@@ -74,8 +109,6 @@ export default {
   },
   data() {
     return {
-      modalUp: false,
-      showOverlay: false,
       commissionsUser: [],
       fields: [],
       isBusy: true,
@@ -84,13 +117,18 @@ export default {
       total: "",
       total_commission: "",
       total_department: "",
-      total_programs: ""
+      total_programs: "",
+      total_to_pay: "",
+      total_supervisor_program: ""
     };
   },
   created() {
     this.searchCommissions();
   },
-  mounted() {},
+  mounted() {
+    this.modalUp = this.showModal;
+    this.showOverlay = this.showModal;
+  },
   computed: {
     ...mapGetters({
       bigWindow: "app/bigWindow"
@@ -101,17 +139,18 @@ export default {
     textLeftBig() {
       return this.bigWindow ? "text-left" : "text-center mb-1";
     },
+    isCeo() {
+      return this.info.role_id == 1;
+    },
     isSupervisor() {
       return this.info.role_id == 2;
-    },
-    isAdministrator() {
-      return this.info.role_id == 6;
     }
   },
   methods: {
     async searchCommissions() {
       this.getFields();
-      let response = await commissionsService.searchCommissionsUserAdm(
+
+      let response = await commissionsService.searchCommissionsUserCrm(
         this.info
       );
       if (response.length > 0) {
@@ -122,8 +161,28 @@ export default {
         this.total_department = response[0].commission_department;
         this.total_commission = response[0].commission_bond;
         this.total_programs = response[0].amount_programs;
+        this.total_to_pay = response[0].total_to_pay;
       }
+      this.ifNotEntries();
       this.isBusy = false;
+      this.showOverlay = false;
+    },
+    ifNotEntries() {
+      //When is Supervisor from Department, not Crm
+      if (this.commissionsUser.length == 0) {
+        this.total_amount = 0;
+        this.discount = 0;
+        this.total = this.info.amountTotal ? this.info.amountTotal : 0;
+        this.total = 2;
+        this.total_to_pay = this.info.amountTotal ? this.info.amountTotal : 0;
+        this.total_to_pay = this.total_to_pay.toFixed(2);
+        this.total_supervisor_program = this.info.amountTotal
+          ? this.info.amountTotal
+          : 0;
+      } else {
+        this.total_supervisor_program =
+          this.info.amountTotal - (this.total_amount - this.discount);
+      }
     },
     getFields() {
       this.fields = [
@@ -144,20 +203,16 @@ export default {
           label: "Amount"
         },
         {
+          key: "percentage_pay",
+          label: "Percentage to pay"
+        },
+        {
+          key: "approve_date",
+          label: "Approved Date"
+        },
+        {
           key: "created_at",
           label: "Created Date"
-        },
-        {
-          key: "request_from",
-          label: "Request From"
-        },
-        {
-          key: "request_by",
-          label: "Request By"
-        },
-        {
-          key: "request_date",
-          label: "Request Date"
         }
       ];
     },

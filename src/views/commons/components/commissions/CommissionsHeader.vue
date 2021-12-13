@@ -11,8 +11,15 @@
           ></b-form-select>
         </b-input-group>
       </b-col>
-      <b-col lg="4 d-flex justify-content-center">
-        <template v-if="tab == 'crm' && isManagement">
+
+      <b-col lg="4" v-if="isSupervisorCrm" :class="[bigWindowLeft,'d-flex justify-content-center']">
+        <b-input-group prepend="Departments">
+          <b-form-select v-model="program" :options="programs" @change="changeProgram()"></b-form-select>
+        </b-input-group>
+      </b-col>
+      <b-col lg="4" v-if="!isSupervisorCrm && !(isCrm && isManagement) "></b-col>
+      <b-col v-if="isCrm && isManagement" lg="4 d-flex justify-content-center">
+        <template>
           <b-input-group prepend="To Pay" append="%" :class="{'w-input-percent':bigWindow}">
             <b-form-input
               min="1"
@@ -45,6 +52,7 @@
         >
           <b-icon v-if="halfYear" icon="arrow-right" font-scale="1.5"></b-icon>
           <b-icon v-else icon="arrow-left" font-scale="1.5"></b-icon>
+          <span v-if="!bigWindow">&nbsp; Half of the Year</span>
         </b-button>
       </b-col>
     </b-row>
@@ -55,7 +63,7 @@
 import moment from "moment";
 import { mapGetters } from "vuex";
 import Ripple from "vue-ripple-directive";
-import ButtonsEdit from "@/commons/utilities/ButtonsEdit";
+import ButtonsEdit from "@/views/commons/utilities/ButtonsEdit";
 export default {
   name: "CommissionsHeader",
   components: { ButtonsEdit },
@@ -75,16 +83,25 @@ export default {
   data() {
     return {
       optionsYear: [],
-      editPercent: false
+      editPercent: false,
+      programShow: [],
+      program: null
     };
   },
-  created() {
-    this.year_select();
+  async created() {
+    try {
+      this.year_select();
+      if (this.isSupervisorCrm)
+        await this.$store.dispatch("global-store/getPrograms");
+      this.addProgramSn();
+    } catch (error) {}
   },
   computed: {
     ...mapGetters({
       bigWindow: "app/bigWindow",
-      halfYear: "commissions-store/halfYear"
+      halfYear: "commissions-store/halfYear",
+      moduleProgram: "commissions-store/moduleProgram",
+      programs: "global-store/programs"
     }),
     year: {
       get() {
@@ -105,6 +122,12 @@ export default {
         );
       }
     },
+    isSupervisorCrm() {
+      return this.tab === "supervisorCrm";
+    },
+    isCrm() {
+      return this.tab === "crm";
+    },
     //Classes CSS
     bigWindowLeft() {
       return this.bigWindow ? "" : "d-flex justify-content-center mb-1";
@@ -116,6 +139,20 @@ export default {
     }
   },
   methods: {
+    addProgramSn() {
+      this.programs.unshift({
+        id: 0,
+        text: "All"
+      });
+      this.programs.push({
+        value: 15,
+        text: "Social Network"
+      });
+    },
+    changeProgram() {
+      let module = this.convertProgramToModule(this.program);
+      this.$store.commit("commissions-store/SET_MODULE_PROGRAM", module);
+    },
     changePartOfYear() {
       this.$store.commit(
         "commissions-store/SET_HALF_YEAR_COMMISSIONS",

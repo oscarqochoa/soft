@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import commissionsService from "@/commons/components/commissions/services/commissions.service";
-import ModalHeader from "@/commons/components/commissions/modals/ModalHeader.vue";
-import DetailsCrm from "@/commons/components/commissions/modals/modal-details/DetailsCrm.vue";
-import DetailsAdm from "@/commons/components/commissions/modals/modal-details/DetailsAdm.vue";
-import DetailsDepartments from "@/commons/components/commissions/modals/modal-details/DetailsDepartments.vue";
+import commissionsService from "@/views/commons/components/commissions/services/commissions.service";
+import ModalHeader from "@/views/commons/components/commissions/modals/ModalHeader.vue";
+import DetailsCrm from "@/views/commons/components/commissions/modals/modal-details/DetailsCrm.vue";
+import DetailsAdm from "@/views/commons/components/commissions/modals/modal-details/DetailsAdm.vue";
+import DetailsDepartments from "@/views/commons/components/commissions/modals/modal-details/DetailsDepartments.vue";
 import { mapGetters } from "vuex";
 export default {
   name: "ModalCommissionsDetails",

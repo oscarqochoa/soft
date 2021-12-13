@@ -49,9 +49,9 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import moment from "moment";
-import commissionsService from "@/commons/components/commissions/services/commissions.service";
-import ModalHeader from "@/commons/components/commissions/modals/ModalHeader.vue";
-import PaymentBody from "@/commons/components/commissions/modals/modal-payment/PaymentBody.vue";
+import commissionsService from "@/views/commons/components/commissions/services/commissions.service";
+import ModalHeader from "@/views/commons/components/commissions/modals/ModalHeader.vue";
+import PaymentBody from "@/views/commons/components/commissions/modals/modal-payment/PaymentBody.vue";
 export default {
   name: "ModalCommissionsPayment",
   components: {

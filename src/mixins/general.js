@@ -36,11 +36,8 @@ export default {
           case 9:
             module = 12;
             break;
-          case "crm":
-            module = 2;
-            break;
-          case "adm":
-            module = 4;
+          case 15:
+            module = 15;
             break;
         }
       }
@@ -85,6 +82,9 @@ export default {
             break;
           case "adm":
             module = 4;
+            break;
+          case "supervisorCrm":
+            module = 2;
             break;
         }
       }

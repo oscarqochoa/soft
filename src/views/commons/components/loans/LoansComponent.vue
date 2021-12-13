@@ -6,7 +6,14 @@
           <h2>LOANS</h2>
         </b-col>
         <b-col lg="6" :class="[positionResponsive]">
-          <b-button variant="gradient-primary" :block="!bigWindow">REQUEST LOAN</b-button>
+          <b-button
+            v-if="isManagement"
+            variant="info"
+            :block="!bigWindow"
+            class="mr-1"
+            @click="openModalImportLoan"
+          >IMPORT LOAN</b-button>
+          <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()">REQUEST LOAN</b-button>
         </b-col>
       </b-row>
     </b-card>
@@ -31,17 +38,29 @@
       </keep-alive>-->
       <router-view :key="$route.name" />
     </b-card>
+    <ModalRequestLoan v-if="modalRequest.show" :info="modalRequest" @hide="closeModalLoan()" />
   </div>
 </template>
 
 <script>
+import ModalRequestLoan from "./modals/ModalRequestLoan.vue";
 import { mapGetters } from "vuex";
 export default {
   name: "LoansComponent",
+  components: {
+    ModalRequestLoan
+  },
   created() {},
 
   data() {
-    return {};
+    return {
+      tab: this.$route.meta.tab,
+      modalRequest: {
+        show: false,
+        idLoan: null,
+        tab: this.tab
+      }
+    };
   },
   computed: {
     ...mapGetters({
@@ -58,7 +77,23 @@ export default {
       return this.$route.meta.route;
     }
   },
-  methods: {}
+  methods: {
+    openModalImportLoan() {
+      this.showImportLoan = true;
+    },
+    closeModalImportLoan() {
+      this.$refs.loanTabOne.search();
+      this.showImportLoan = false;
+    },
+
+    openModalLoan(loan = null) {
+      this.modalRequest.show = true;
+    },
+    closeModalLoan(status) {
+      if (status) this.$refs.loanTabOne.search();
+      this.modalRequest.show = false;
+    }
+  }
 };
 </script>
 

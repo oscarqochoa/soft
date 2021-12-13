@@ -8,7 +8,6 @@
           :tab="tab"
           :isManagement="isManagement"
         />
-
         <b-card>
           <div v-if="!commissions" class="text-center text-primary my-2">
             <b-spinner class="align-middle mr-1" />
@@ -86,7 +85,10 @@
               </b-thead>
               <b-tbody>
                 <b-tr v-for="(item,index) in commissions" :key="item.user_id">
-                  <b-td class="font-weight-bolder text-primary">{{ item.user_name }}</b-td>
+                  <b-td>
+                    <div class="font-weight-bolder text-dark">{{ item.user_name }}</div>
+                    <div v-if="isSupervisorCrm" class="color-gray-m fs10">{{item.main_name}}</div>
+                  </b-td>
                   <b-td v-if="isCrm">
                     <div>
                       <div class="font-weight-bold">Generated:</div>
@@ -453,14 +455,14 @@
 <script>
 import { mapGetters } from "vuex";
 import Ripple from "vue-ripple-directive";
-import ButtonsEdit from "@/commons/utilities/ButtonsEdit";
-import OverlayWait from "@/commons/utilities/OverlayWait";
-import CommissionsHeader from "@/commons/components/commissions/CommissionsHeader";
-import CommissionsMonthly from "@/commons/components/commissions/CommissionsMonthly";
-import ModalCommissionsDetails from "@/commons/components/commissions/modals/modal-details/ModalCommissionsDetails";
-import ModalCommissionsPayment from "@/commons/components/commissions/modals/modal-payment/ModalCommissionsPayment";
+import ButtonsEdit from "@/views/commons/utilities/ButtonsEdit";
+import OverlayWait from "@/views/commons/utilities/OverlayWait";
+import CommissionsHeader from "@/views/commons/components/commissions/CommissionsHeader";
+import CommissionsMonthly from "@/views/commons/components/commissions/CommissionsMonthly";
+import ModalCommissionsDetails from "@/views/commons/components/commissions/modals/modal-details/ModalCommissionsDetails";
+import ModalCommissionsPayment from "@/views/commons/components/commissions/modals/modal-payment/ModalCommissionsPayment";
 import moment from "moment";
-import commissionsService from "@/commons/components/commissions/services/commissions.service";
+import commissionsService from "@/views/commons/components/commissions/services/commissions.service";
 
 export default {
   name: "CommissionsComponent",
@@ -492,13 +494,13 @@ export default {
       commissions: null,
       returnPercent: null,
       editPercent: false,
-      user: "",
+      user_id: null,
+      supervisorCrm: 0,
       users: "",
+      user_name: "",
       modal: false,
       month: "",
       ps_month: "",
-      user_id: "",
-      user_name: "",
       role_id: "",
       approve_by: "",
       paid_state: "",
@@ -508,7 +510,7 @@ export default {
       module_name: "",
       percentages: null,
       amountTotal: null,
-      showOverlay: true,
+      showOverlay: false,
       modalDetails: false,
       modalPayment: false,
       infoDetails: null,
@@ -524,6 +526,9 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
+      isCeo: "auth/isCeo",
+      isSupervisor: "auth/isSupervisor",
+      userSession: "auth/userSession",
       token: "auth/token",
       currentBreakPoint: "app/currentBreakPoint",
       bigWindow: "app/bigWindow",
@@ -531,7 +536,8 @@ export default {
       halfYear: "commissions-store/halfYear",
       percentApartment: "commissions-store/percentApartment",
       skin: "appConfig/skin",
-      loading: "commissions-store/loading"
+      loading: "commissions-store/loading",
+      moduleProgram: "commissions-store/moduleProgram"
     }),
 
     isManagement() {
@@ -543,7 +549,9 @@ export default {
     isCrm() {
       return this.tab == "crm";
     },
-
+    isSupervisorCrm() {
+      return this.tab == "supervisorCrm";
+    },
     //Total for each Month
     t_jan() {
       return this.sumTotal("jan");
@@ -629,7 +637,7 @@ export default {
             totalMonth += element[month];
           });
         }
-        totalMonth = totalMonth.toFixed(2);
+        totalMonth = parseFloat(totalMonth).toFixed(2);
         return totalMonth;
       }
 
@@ -637,7 +645,7 @@ export default {
         let totalMonth = this.commissions.reduce((total, commission) => {
           return total + Number(commission[month]);
         }, 0);
-        totalMonth = totalMonth.toFixed(2);
+        totalMonth = parseFloat(totalMonth).toFixed(2);
         return totalMonth;
       } else {
         return 0;
@@ -659,20 +667,30 @@ export default {
 
     //Get Commissions
     async searchCommissions() {
-      this.showOverlay = true;
+      this.$store.commit("app/SET_LOADING", true);
       this.module_id = this.convertModuleToProgramString(this.tab);
+
+      //Only when user is diferrent from CEO or SUPERVISOR
+      if (!(this.isSupervisor || this.isCeo || this.isManagement))
+        this.user_id = this.currentUser.user_id;
+
+      //Just for CRM Supervisor
+      if (this.isSupervisorCrm) this.supervisorCrm = 1;
+
       const params = {
-        user: this.user,
+        user: this.user_id,
         year: this.year,
-        module: this.module_id
+        module: this.module_id,
+        supervisorCrm: this.supervisorCrm,
+        subProgram: this.moduleProgram
       };
-      let response = this.isDepartment
-        ? await commissionsService.searchCommissionsDepartments(params)
-        : await commissionsService.searchCommissions(params);
+      let response =
+        this.isDepartment && !this.isSupervisorCrm
+          ? await commissionsService.searchCommissionsDepartments(params)
+          : await commissionsService.searchCommissions(params);
       this.commissions = response;
       this.departmentCommissions();
-      this.showOverlay = false;
-      let total = this.sumTotal("jan");
+      this.$store.commit("app/SET_LOADING", false);
     },
     departmentCommissions() {
       if (this.isDepartment) {
@@ -694,7 +712,7 @@ export default {
 
     //Update Percentage
     async updatePercentageDepartment() {
-      this.showOverlay = true;
+      this.$store.commit("app/SET_LOADING", true);
       const params = {
         type: 1, //Update all department
         percent: this.percentApartment,
@@ -703,7 +721,7 @@ export default {
       };
       let response = await commissionsService.updatePercentage(params);
       let result = await this.searchCommissions();
-      this.showOverlay = false;
+      this.$store.commit("app/SET_LOADING", false);
       this.showSwalSuccess(
         "Percentage updated",
         "The percentage to pay of the department was updated",
@@ -725,7 +743,7 @@ export default {
       month,
       item
     ) {
-      this.showOverlay = true;
+      this.$store.commit("app/SET_LOADING", true);
       const params = {
         type: 2, //Update specific user
         percent: valuePercentage,
@@ -739,7 +757,7 @@ export default {
       this.commissions[index][to_pay] = response[0].to_pay;
       this.commissions[index][percentage_pay] = valuePercentage;
       this.commissions[index][edit] = 0;
-      this.showOverlay = false;
+      this.$store.commit("app/SET_LOADING", false);
       this.showSwalSuccess(
         "Percentage updated",
         "",
@@ -844,7 +862,11 @@ export default {
       }
     }
   },
-  watch: {}
+  watch: {
+    moduleProgram(newValue, oldValue) {
+      if (newValue) this.searchCommissions();
+    }
+  }
 };
 </script>
 
@@ -855,5 +877,13 @@ export default {
 
 .width-th th {
   min-width: 166px;
+}
+
+.fs10 {
+  font-size: 10px;
+}
+
+.color-gray-m {
+  color: #9f9da8;
 }
 </style>

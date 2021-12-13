@@ -1,5 +1,5 @@
-import LoansComponent from "@/commons/components/loans/LoansComponent.vue";
-import LoansView from "@/commons/components/loans/LoansView.vue";
+import LoansComponent from "@/views/commons/components/loans/LoansComponent.vue";
+import LoansView from "@/views/commons/components/loans/LoansView.vue";
 export default [
   {
     path: "/crm/loans",
@@ -13,7 +13,7 @@ export default [
         component: LoansView,
         meta: {
           tab: 1,
-          module: 2,
+          module: 16,
           route: "crm",
         },
       },
@@ -23,14 +23,14 @@ export default [
         component: LoansView,
         meta: {
           tab: 2,
-          module: 2,
+          module: 16,
           route: "crm",
         },
       },
     ],
     meta: {
       tab: 1,
-      module: 2,
+      module: 16,
       route: "crm",
     },
   },
