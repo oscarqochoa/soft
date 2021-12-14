@@ -6,6 +6,7 @@ import commissionsRoute from '../views/commissions/commissions.router'
 import viewDashboard from '../views/dashboard/dashboard.router'
 import PaymentsRoute from '../views/payments/payments.router'
 import ListsRoute from '../views/lists/lists.router'
+import GlossaryRoute from '../views/glossary/glossary.router'
 export default [
   ...viewRoute,
   ...leadRoute,
@@ -14,7 +15,8 @@ export default [
   ...commissionsRoute,
   ...viewDashboard,
   ...PaymentsRoute,
-  ...ListsRoute
+  ...ListsRoute,
+  ...GlossaryRoute,
 ]
 
 

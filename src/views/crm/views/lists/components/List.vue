@@ -191,12 +191,12 @@
                 />
               </b-form-group>
               <!-- <label>{{filter.label}}</label> -->
-
+              
               <b-button
-                variant="primary"
+                variant="primary" class="button-top"
                 @click="$refs.refClientsList.refresh()"
               >
-                <div class="d-flex justify-content-between">
+                <div class="d-flex ">
                   <span class="mr-50"
                     ><feather-icon icon="FilterIcon" size="15"
                   /></span>
@@ -693,10 +693,23 @@ export default {
 td.div {
   width: 100% !important;
 }
-@media (max-width: 960px) {
+@media (max-width: 1024) {
   .column-table {
     display: flex;
     flex-direction: column;
+  }
+  .button-top{
+    margin-bottom:22px
+  }
+}
+
+@media (max-width: 740px) {
+  .per-page-datepicker {
+    width: 110px;
+  
+  }
+  .button-top{
+    margin-bottom:22px
   }
 }
 .b-calendar-grid-caption {
