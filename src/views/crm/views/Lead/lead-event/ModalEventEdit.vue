@@ -406,7 +406,7 @@ export default {
       currentUser: 'auth/currentUser',
       token: 'auth/token',
       G_EVENT_TITLES_OPTIONS: 'CrmEventStore/G_EVENT_TITLES',
-      G_OWNERS: 'CrmLeadStore/G_OWNERS',
+      G_OWNERS: 'CrmGlobalStore/G_OWNERS',
     }),
     dateSp () {
       return new Date(this.event.date.replace(/-/g, '/'))
@@ -475,7 +475,7 @@ export default {
               location: this.event.location,
               description: this.event.description,
               seller: this.event.user_id.label,
-              userupdate: this.currentUser.id,
+              userupdate: this.currentUser.user_id,
               month: this.getCurrentMonth()
             }
             const response = await this.A_UPDATE_EVENT(body)
@@ -485,13 +485,13 @@ export default {
               this.onToggleEdit()
               this.isLoading = false
             } else {
-              this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
+              this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
             }
           } else {
             this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'At this time and date, you already have an appointment or a task')
           }
         } else {
-          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ responseFirst.message }`)
+          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + responseFirst.message)
         }
         this.isLoading = false
       } catch (error) {
@@ -500,25 +500,17 @@ export default {
       }
     },
     onDeleteEvent () {
-      this.$swal.fire({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes, delete it!',
-      })
+      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'warning')
       .then(async (result) => {
         if (result.value) {
           this.isLoading = true
           const month = this.getCurrentMonth()
           const response = await this.A_DELETE_EVENT({ id: this.event.id, month })
           if (this.isResponseSuccess(response)) {
-            this.$swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+            this.showToast('success', 'top-right', 'Deleted!', 'CheckIcon', 'Your file has been deleted.')
             this.$bvModal.hide('modal-event-edit')
           } else {
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong.`)
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
           }
           this.isLoading = false
         }

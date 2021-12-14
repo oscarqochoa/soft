@@ -134,20 +134,21 @@
         <validation-provider
           #default="validationContext"
           name="DOB"
+          rules="required"
         >
           <b-form-group
             label="DOB"
             label-for="dob"
+            :state="getValidationState(validationContext)"
           >
-            <b-form-datepicker
+            <flat-pickr
               id="dob"
-              locale="en"
-              :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-              :state="getValidationState(validationContext)"
-              placeholder="From"
               v-model="userData.dob"
+              class="form-control"
+              :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'm/d/Y', locale: 'en' }"
+              placeholder="From"
             />
-            <b-form-invalid-feedback>
+            <b-form-invalid-feedback :state="getValidationState(validationContext)">
               {{ validationContext.errors[0] }}
             </b-form-invalid-feedback>
 
@@ -218,6 +219,7 @@ import {
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { required, alphaNum, email } from '@validations'
 
+import flatPickr from 'vue-flatpickr-component'
 import vSelect from 'vue-select'
 
 import formValidation from '@core/comp-functions/forms/form-validation'
@@ -232,6 +234,7 @@ export default {
     BFormInput,
     BFormInvalidFeedback,
     BButton,
+    flatPickr,
     vSelect,
     AddressInformationLead,
 
@@ -313,6 +316,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@core/scss/vue/libs/vue-flatpicker.scss';
 @import '@core/scss/vue/libs/vue-select.scss';
 
 #add-new-user-sidebar {

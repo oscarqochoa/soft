@@ -33,23 +33,23 @@
         </template>
 
         <template #cell(date)="data">
-          {{ data.item.date }}
+          {{ data.item.date | myDateGlobal }}
           <template v-if="data.item.state !== 'CA'">
             <br>
-            <span class="font-weight-bold">{{ data.item.real_time }}</span>
+            <span class="font-weight-bold">{{ data.item.real_time | myDateGlobal }}</span>
           </template>
         </template>
 
         <template #cell(from)="data">
-          {{ data.item.from }}
+          {{ data.item.from | myTime }}
           <template v-if="data.item.state !== 'CA'">
             <br>
-            <span class="font-weight-bold">{{ data.item.real_time }}</span>
+            <span class="font-weight-bold">{{ data.item.real_time | myDateGlobal }}</span>
           </template>
         </template>
 
         <template #cell(to)="data">
-          {{ data.item.to }}
+          {{ data.item.to | myTime }}
           <template v-if="data.item.state !== 'CA'">
             <br>
             <span class="font-weight-bold">-</span>
@@ -230,7 +230,7 @@ export default {
         if (result.value) {
           const response = await this.A_DELETE_EVENTS(id)
           if (this.isResponseSuccess(response)) {
-            this.$swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+            this.showToast('success', 'top-right', 'Deleted!', 'CheckIcon', 'Your file has been deleted.')
           } else {
             this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
           }

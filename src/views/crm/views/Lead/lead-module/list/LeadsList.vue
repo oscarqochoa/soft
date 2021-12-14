@@ -37,6 +37,7 @@
             <b-button
               variant="success"
               class="ml-50"
+              :disabled="!leadsSelecteds.length"
               @click="modalSmssOpen"
             >
               <feather-icon
@@ -61,16 +62,33 @@
         show-empty
         empty-text="No matching records found"
         :sort-desc.sync="isSortDirDesc"
-        selectable
         select-mode="multi"
         :busy.sync="isBusy"
         @row-selected="onRowSelected"
       >
+        <!-- Head: Check -->
+        <template #head(selected)>
+          <b-form-checkbox
+            v-model="selectAll"
+            @input="selectedAll"
+          />
+        </template>
+
         <template #table-busy>
           <div class="text-center text-primary my-2">
             <b-spinner class="align-middle mr-1" />
             <strong>Loading ...</strong>
           </div>
+        </template>
+        
+        <!-- Column: Selected -->
+        <template #cell(selected)="data">
+          <b-form-group>
+            <b-form-checkbox
+              v-model="data.item.selected"
+              @input="onSelectedRow(data.item)"
+            />
+          </b-form-group>
         </template>
 
         <!-- Column: Date Even -->
@@ -135,14 +153,14 @@
         <template #cell(created_by)="data">
           <small>{{ data.item.owner }}</small>
           <br>
-          <small>{{ data.item.created_at }}</small>
+          <small>{{ data.item.created_at | myDateGlobalWithHour }}</small>
         </template>
 
         <!-- Column: Assign To -->
         <template #cell(assign_to)="data">
           <small>{{ data.item.assign_to }}</small>
           <br>
-          <small>{{ data.item.assign_date }}</small>
+          <small v-if="data.item.assign_date">{{ data.item.assign_date | myDateGlobal }}</small>
         </template>
 
         <!-- Column: Actions -->
@@ -179,6 +197,7 @@
       centered
       size="lg"
       title="SEND SMS"
+      no-close-on-backdrop
     >
       <modal-send-sms
         :row-data="rowData"
@@ -317,12 +336,12 @@ export default {
       currentUser: 'auth/currentUser',
       token: 'auth/token',
       G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
-      G_OWNERS: 'CrmLeadStore/G_OWNERS',
-      G_PROGRAMS: 'CrmLeadStore/G_PROGRAMS',
-      G_SOURCE_NAMES: 'CrmLeadStore/G_SOURCE_NAMES',
-      G_STATES: 'CrmLeadStore/G_STATES',
-      G_CRS: 'CrmLeadStore/G_CRS',
-      G_TYPE_DOCS: 'CrmLeadStore/G_TYPE_DOCS',
+      G_OWNERS: 'CrmGlobalStore/G_OWNERS',
+      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
+      G_SOURCE_NAMES: 'CrmGlobalStore/G_SOURCE_NAMES',
+      G_STATES: 'CrmGlobalStore/G_STATES',
+      G_CRS: 'CrmGlobalStore/G_CRS',
+      G_TYPE_DOCS: 'CrmGlobalStore/G_TYPE_DOCS',
     }),
   },
   data() {
@@ -359,6 +378,7 @@ export default {
       rowData: {},
       name_leads_arr: [],
       leads_sms: [],
+      selectAll: false,
       typesms: null,
       leads_sms_o: [],
       quicks: [],
@@ -380,10 +400,10 @@ export default {
     ...mapActions({
       A_GET_LEADS: 'CrmLeadStore/A_GET_LEADS',
       A_SET_FILTERS_LEADS: 'CrmLeadStore/A_SET_FILTERS_LEADS',
-      A_GET_SMS_QUICKS: 'CrmLeadStore/A_GET_SMS_QUICKS',
+      A_GET_SMS_QUICKS: 'CrmSmsStore/A_GET_SMS_QUICKS',
       A_SET_SELECTED_LEADS: 'CrmLeadStore/A_SET_SELECTED_LEADS',
       A_DELETE_LEADS: 'CrmLeadStore/A_DELETE_LEADS',
-      A_DELETE_SMS_QUICK: 'CrmLeadStore/A_DELETE_SMS_QUICK',
+      A_DELETE_SMS_QUICK: 'CrmSmsStore/A_DELETE_SMS_QUICK',
       A_PROCESS_LEADS: 'CrmLeadStore/A_PROCESS_LEADS',
     }),
     resolveUserStatusVariant (status) {
@@ -392,6 +412,17 @@ export default {
       if (status === 'Inactive') return 'secondary'
       if (status === 'Not Contacted') return 'danger'
       return 'primary'
+    },
+    selectedAll() {
+      if (this.selectAll) this.items.forEach(item => item.selected = true)
+      else this.items.forEach(item => item.selected = false)
+      this.onRowSelected()
+    },
+    onSelectedRow(data) {
+      const index = this.leadsSelecteds.findIndex(select => select.id === data.id)
+      if (data.selected === true && index === -1) this.leadsSelecteds.push(data)
+      else if (data.selected === false && index !== -1) this.leadsSelecteds.splice(index, 1)
+      this.onRowSelected()
     },
     async myProvider () {
       try {
@@ -419,6 +450,19 @@ export default {
         this.totalLeads = response.total
         this.fromPage = response.from || 0
         this.toPage = response.to || 0
+
+        const selectedIds = this.leadsSelecteds.map(s => s.id)
+        let index = 0
+        while (selectedIds.length > 0 && index < response.data.length) {
+          if (selectedIds.includes(response.data[index].id)) {
+            const { id } = response.data[index]
+            response.data[index].selected = true
+            const deleted = selectedIds.findIndex(s => s === id)
+            if (deleted !== -1) selectedIds.splice(deleted, 1)
+          }
+          index += 1
+        }
+
         this.items = response.data
         this.isBusy = false
       } catch (error) {
@@ -433,25 +477,15 @@ export default {
     setFilters () {
       this.A_SET_FILTERS_LEADS({ ...this.optionFilters, perPage: this.perPage, currentPage: this.currentPage })
     },
-    onRowSelected (items) {
-      this.A_SET_SELECTED_LEADS(items)
-      this.leadsSelecteds = items
-      this.leads_sms = items.map(el => el.id)
+    onRowSelected () {
+      this.A_SET_SELECTED_LEADS(this.leadsSelecteds)
+      this.leads_sms = this.leadsSelecteds.map(el => el.id)
     },
     onRowDelete (id) {
-      this.$swal.fire({
-        title: 'Are you sure?',
-        icon: 'question',
-        text: 'You won\'t be able to revert this!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes, delete it!',
-      })
+      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'question')
       .then(async (result) => {
         if (result.value) {
-          const { id: user_id, id: role_id } = this.currentUser
+          const { user_id, role_id } = this.currentUser
           const response = await this.A_DELETE_LEADS({
             leadid: id,
             idsession: user_id,
@@ -461,37 +495,31 @@ export default {
           if (response.status == 200) {
             const index = this.items.map(el => el.id).indexOf(id)
             if (index !== -1) this.items.splice(index, 1)
-            this.$swal('Successful!', 'Operation successfully', 'success')
+            this.showToast('success', 'top-right', 'Deleted!', 'CheckIcon', 'Your file has been deleted.')
           } else {
-            this.$swal('Failed!', 'There was something wronge', 'warning')
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
           }
         }
       })
       .catch(error => {
         console.log('Something went wrong onRowDelete:', error)
-        this.$swal('Oops!', this.getInternalErrors(error), 'error')
+        this.showErroSwal(error)
       })
     },
     onRowProcess (id) {
-      this.$swal.fire({
-        title: 'Are you sure?',
-        icon: 'question',
-        text: 'You won\'t be able to revert this!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes',
-        input: 'textarea',
-        inputValidator: (value) => {
-          if (!value) {
-            return 'You need to write something!'
+      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'warning',
+        { 
+          input: 'textarea',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to write something!'
+            }
           }
-        },
-      })
+        }
+      )
       .then(async (result) => {
         if (result.value) {
-          const { id: user_id, id: role_id } = this.currentUser
+          const { user_id, role_id } = this.currentUser
           const response = await this.A_PROCESS_LEADS({
             lead_id: id,
             status: 3,
@@ -501,15 +529,15 @@ export default {
           if (response.status == 200) {
             const index = this.items.map(el => el.id).indexOf(id)
             if (index !== -1) this.items[index].status_sn_id = 3
-            this.$swal('Successful!', 'Operation successfully', 'success')
+              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
           } else {
-            this.$swal('Failed!', 'There was something wronge', 'warning')
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
           }
         }
       })
       .catch(error => {
         console.log('Something went wrong onRowProcess:', error)
-        this.$swal('Oops!', this.getInternalErrors(error), 'error')
+        this.showErroSwal(error)
       })
     },
     async getAllQuicksSms () {
@@ -517,7 +545,7 @@ export default {
         const response = await this.A_GET_SMS_QUICKS({
           modul: this.modul,
         })
-        this.quicks = response.data.map(el => ({ ...el, value: el.sms, label: el.title, showMore: false }))
+        this.quicks = response.data.map(el => ({ ...el, value: el.sms, label: el.title, showMore: false })).reverse()
       } catch (error) {
         console.log('Something wnet wrong getAllQuicksSms:', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -557,23 +585,14 @@ export default {
       if (index !== -1) {
         this.quicks[index] = { ...item, value: item.sms, label: item.title }
       } else {
-        this.quicks.push({ ...item, value: item.sms, label: item.title })
+        this.quicks.unshift({ ...item, value: item.sms, label: item.title })
       }
     },
     resetQuickData (item) {
       this.quickData = item
     },
     async modalQuickDelete (id) {
-      this.$swal.fire({
-        title: 'Are you sure?',
-        icon: 'question',
-        text: 'You won\'t be able to revert this!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes, delete it!',
-      })
+      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'warning')
       .then(async (result) => {
         if (result.value) {
           const response = await this.A_DELETE_SMS_QUICK({ id })
@@ -597,8 +616,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-</style>
-
-<style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
+  .table-responsive {
+    min-height: 15rem;
+  }
 </style>

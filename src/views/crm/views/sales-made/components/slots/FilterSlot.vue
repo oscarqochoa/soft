@@ -94,13 +94,19 @@
                 align-items-center
               "
             >
-              <b-form-input
-                v-model="filterController.text"
-                class="d-inline-block mr-1"
-                placeholder="Client..."
-                debounce="200"
-                @keyup.enter="filter.text = filterController.text"
-              />
+              <b-input-group class="mr-1">
+                <b-form-input
+                  v-model="filter.text"
+                  placeholder="Client..."
+                  debounce="200"
+                  @keyup.enter="$emit('reload')"
+                />
+                <b-input-group-append>
+                  <b-button variant="primary" @click="$emit('reload')">
+                    <feather-icon icon="SearchIcon" />
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
               <b-button
                 variant="primary"
                 @click="basicSearch = !basicSearch"
@@ -296,11 +302,6 @@ export default {
   data() {
     return {
       basicSearch: true,
-      filterController: {
-        text: '',
-        seller: null,
-        captured: null,
-      }
     }
   },
   async created() {

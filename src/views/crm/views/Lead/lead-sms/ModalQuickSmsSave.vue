@@ -49,12 +49,13 @@
             rows="3"
             v-model="quickData.sms"
             maxlength="1000"
+            :state="getValidationState(validationContext)"
           />
           <template #description>
             <small tabindex="-1" class="form-text text-danger">Max: 1000 characters</small>
           </template>
 
-          <b-form-invalid-feedback :state="getValidationState(validationContext)">
+          <b-form-invalid-feedback>
             {{ validationContext.errors[0] }}
           </b-form-invalid-feedback>
         </b-form-group>
@@ -165,7 +166,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_SET_SMS_QUICK: 'CrmLeadStore/A_SET_SMS_QUICK'
+      A_SET_SMS_QUICK: 'CrmSmsStore/A_SET_SMS_QUICK'
     }),
     async onSubmit () {
       try {
@@ -197,8 +198,8 @@ export default {
     }
   },
   created() {
-    this.userId = this.currentUser.id
-    this.roleId = this.currentUser.id
+    this.userId = this.currentUser.user_id
+    this.roleId = this.currentUser.role_id
     this.quickData.sms = this.quickData.sms.replace(/\n/g, "<br \/>").replace(/<br \/>/g, "\n")
     this.blankQuickData = JSON.parse(JSON.stringify(this.quickData))
   },

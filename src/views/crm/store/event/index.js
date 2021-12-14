@@ -1,7 +1,6 @@
 // IMPORT LIBRARIES
 import Vue from 'vue'
 
-import crmService from '@/views/crm/services/crm.service'
 import eventService from '@/views/crm/services/event.service'
 import mixins from '@/mixins/general'
 

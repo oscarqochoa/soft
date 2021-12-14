@@ -6,7 +6,9 @@ import commissionsRoute from "../views/commissions/commissions.router";
 import viewDashboard from "../views/dashboard/dashboard.router";
 import PaymentsRoute from "../views/payments/payments.router";
 import ListsRoute from "../views/lists/lists.router";
+import GlossaryRoute from "../views/glossary/glossary.router";
 import loansRoute from "../views/loans/loans.router";
+
 const routes = [
   ...viewRoute,
   ...leadRoute,
@@ -17,18 +19,10 @@ const routes = [
   ...viewDashboard,
   ...PaymentsRoute,
   ...ListsRoute,
+  ...GlossaryRoute,
 ];
 
 routes.map((route) => {
-  if (route.children) {
-    route.children.map((child) => {
-      if (child.meta) {
-        child.meta.module = 2;
-      } else {
-        child.meta = { module: 2 };
-      }
-    });
-  }
   if (route.meta) {
     route.meta.module = 2;
   } else {

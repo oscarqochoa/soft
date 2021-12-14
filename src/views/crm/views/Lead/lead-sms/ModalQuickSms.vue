@@ -12,6 +12,7 @@
     <b-table
       show-empty
       sticky-header
+      small
       responsive="sm"
       :fields="fieldsQuicks"
       :items="quicks"
@@ -42,7 +43,7 @@
       <template #cell(created_by)="data">
         <span>{{ data.item.user_created }}</span>
         <br>
-        <span>{{ data.item.created_at }}</span>
+        <span>{{ data.item.created_at | myDateGlobalWithHour }}</span>
       </template>
 
       <!-- Column: UpdatedBy -->
@@ -52,7 +53,7 @@
         <span
           v-if="data.item.updated_at"
         >
-          {{ data.item.updated_at }}
+          {{ data.item.updated_at | myDateGlobalWithHour }}
         </span>
       </template>
 
@@ -116,8 +117,8 @@ export default {
     }
   },
   created() {
-    this.userId = this.currentUser.id
-    this.roleId = this.currentUser.id
+    this.userId = this.currentUser.user_id
+    this.roleId = this.currentUser.role_id
     /* if ([ 1, 2 ].includes(this.roleId) || this.modul == 15) */
       this.fieldsQuicks.push({ key: 'actions' })
     setTimeout(() => {

@@ -314,7 +314,7 @@ export default {
       currentUser: 'auth/currentUser',
       token: 'auth/token',
       G_EVENT_TITLES_OPTIONS: 'CrmEventStore/G_EVENT_TITLES',
-      G_OWNERS: 'CrmLeadStore/G_OWNERS',
+      G_OWNERS: 'CrmGlobalStore/G_OWNERS',
     }),
     dateSp () {
       return new Date(this.event.date.replace(/-/g, '/'))
@@ -338,7 +338,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_GET_OWNERS: 'CrmLeadStore/A_GET_OWNERS',
+      A_GET_OWNERS: 'CrmGlobalStore/A_GET_OWNERS',
       A_SET_EVENT: 'CrmEventStore/A_SET_EVENT',
       A_GET_USER_APPOINTMENT_SN: 'CrmLeadStore/A_GET_USER_APPOINTMENT_SN',
     }),
@@ -362,7 +362,7 @@ export default {
           lead_id: this.$route.params.id,
           all_day: '',
           state: this.lead.state,
-          created_users: this.currentUser.id,
+          created_users: this.currentUser.user_id,
           type: 'event',
           modul: this.modul,
         }

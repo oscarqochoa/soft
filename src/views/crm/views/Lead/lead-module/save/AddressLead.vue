@@ -74,7 +74,6 @@
     <b-col md="6">
       <!-- State -->
       <validation-provider
-        #default="validationContext"
         :name="`State (${addressData.prename})`"
       >
         <b-form-group
@@ -88,9 +87,6 @@
             label="label"
             :options="stateOptions"
           />
-          <b-form-invalid-feedback :state="getValidationState(validationContext)">
-            {{ validationContext.errors[0] }}
-          </b-form-invalid-feedback>
         </b-form-group>
       </validation-provider>
       <!-- Country -->

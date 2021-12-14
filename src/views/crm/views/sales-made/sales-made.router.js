@@ -12,17 +12,23 @@ export default {
     {
       path: '',
       component: NewClientComponent,
-      name: 'sales-made-crm-new-client'
+      name: 'sales-made-crm-new-client',
     },
     {
       path: 'programs',
       component: AddChangeComponent,
-      name: 'sales-made-crm-add-change'
+      name: 'sales-made-crm-add-change',
+      meta: {
+        rolesPermitidos: [1, 2],
+      },
     },
     {
       path: 'annul',
       component: AnnuledComponent,
-      name: 'sales-made-crm-annulled'
+      name: 'sales-made-crm-annulled',
+      meta: {
+        rolesPermitidos: [1, 2],
+      },
     },
 
   ],

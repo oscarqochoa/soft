@@ -62,12 +62,12 @@ export default {
       G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
       G_STATE_LEADS: 'CrmLeadStore/G_STATE_LEADS',
       G_SOURCE_LEADS: 'CrmLeadStore/G_SOURCE_LEADS',
-      G_PROGRAMS: 'CrmLeadStore/G_PROGRAMS',
-      G_SOURCE_NAMES: 'CrmLeadStore/G_SOURCE_NAMES',
-      G_EEUU_STATES: 'CrmLeadStore/G_EEUU_STATES',
-      G_LANGUAGES: 'CrmLeadStore/G_LANGUAGES',
-      G_COUNTRIES: 'CrmLeadStore/G_COUNTRIES',
-      G_SELLERS: 'CrmLeadStore/G_SELLERS',
+      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
+      G_SOURCE_NAMES: 'CrmGlobalStore/G_SOURCE_NAMES',
+      G_EEUU_STATES: 'CrmGlobalStore/G_EEUU_STATES',
+      G_LANGUAGES: 'CrmGlobalStore/G_LANGUAGES',
+      G_COUNTRIES: 'CrmGlobalStore/G_COUNTRIES',
+      G_SELLERS: 'CrmGlobalStore/G_SELLERS',
     }),
     ...mapState({
       S_SELECTED_LEADS: state => state.CrmLeadStore.S_SELECTED_LEADS,
@@ -100,13 +100,13 @@ export default {
       A_GET_STATE_LEADS: 'CrmLeadStore/A_GET_STATE_LEADS',
       A_GET_STATUS_LEADS: 'CrmLeadStore/A_GET_STATUS_LEADS',
       A_GET_SOURCE_LEADS: 'CrmLeadStore/A_GET_SOURCE_LEADS',
-      A_GET_OWNERS: 'CrmLeadStore/A_GET_OWNERS',
-      A_GET_PROGRAMS: 'CrmLeadStore/A_GET_PROGRAMS',
-      A_GET_SOURCE_NAMES: 'CrmLeadStore/A_GET_SOURCE_NAMES',
-      A_GET_STATES: 'CrmLeadStore/A_GET_STATES',
-      A_GET_EEUU_STATES: 'CrmLeadStore/A_GET_EEUU_STATES',
-      A_GET_COUNTRIES: 'CrmLeadStore/A_GET_COUNTRIES',
-      A_GET_SELLERS: 'CrmLeadStore/A_GET_SELLERS',
+      A_GET_OWNERS: 'CrmGlobalStore/A_GET_OWNERS',
+      A_GET_PROGRAMS: 'CrmGlobalStore/A_GET_PROGRAMS',
+      A_GET_SOURCE_NAMES: 'CrmGlobalStore/A_GET_SOURCE_NAMES',
+      A_GET_STATES: 'CrmGlobalStore/A_GET_STATES',
+      A_GET_EEUU_STATES: 'CrmGlobalStore/A_GET_EEUU_STATES',
+      A_GET_COUNTRIES: 'CrmGlobalStore/A_GET_COUNTRIES',
+      A_GET_SELLERS: 'CrmGlobalStore/A_GET_SELLERS',
     }),
     async getStateLeads () {
       try {
@@ -228,7 +228,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.per-page-selector {
-  width: 90px;
-}
+  .per-page-selector {
+    width: 90px;
+  }
 </style>

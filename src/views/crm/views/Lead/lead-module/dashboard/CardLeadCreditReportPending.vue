@@ -114,7 +114,7 @@ export default {
     onOpenTrackingStatus (scoreId, leadName) {
       /* *INTEGRATE* */
     },
-    onChangeStatus (scoreId) {
+    onChangeStatus (scoreId, statusId) {
       /* *INTEGRATE* */
     }
   },
