@@ -20,15 +20,6 @@ const routes = [
 ]
 
 routes.map(route =>{
-  if(route.children){
-    route.children.map(child=>{
-      if(child.meta){
-        child.meta.module = 2
-      }else{
-        child.meta = {module: 2}
-      }
-    })
-  }
   if(route.meta){
     route.meta.module = 2
   }else{

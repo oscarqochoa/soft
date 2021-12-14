@@ -1,0 +1,197 @@
+<template>
+  <b-modal
+      v-model="modal.revission"
+      :title="title"
+      size="lg"
+  >
+    <b-container fluid>
+      <b-row>
+        <b-col>
+          <b-input-group>
+            <b-input-group-prepend>
+              <b-btn variant="secondary">
+                PROGRAM
+              </b-btn>
+            </b-input-group-prepend>
+            <b-form-input
+                disabled
+                :value="revission.nameProgram"
+            />
+          </b-input-group>
+        </b-col>
+        <b-col>
+          <b-input-group>
+            <b-input-group-prepend>
+              <b-btn variant="secondary">
+                CLIENT
+              </b-btn>
+            </b-input-group-prepend>
+            <b-form-input
+                disabled
+                :value="revission.nameClient"
+            />
+          </b-input-group>
+        </b-col>
+        <b-col v-if="type === 4">
+          <b-input-group>
+            <b-input-group-prepend>
+              <b-btn variant="secondary">
+                Advisor
+              </b-btn>
+            </b-input-group-prepend>
+            <b-form-select
+                v-model="advisorId"
+                disabled
+                :value="advisor"
+                value-field="id"
+                text-field="user_name"
+            />
+          </b-input-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <h3 class="mt-2">Observation</h3>
+        <b-form-textarea
+            id="textarea-1"
+            v-model="observation"
+            placeholder="Enter observation..."
+            rows="5"
+            max-rows="6"
+        />
+      </b-row>
+      <b-row v-if="type === 2">
+        <b-form-checkbox
+            v-model="sendSms"
+            switch
+        >
+          Send sms
+        </b-form-checkbox>
+      </b-row>
+    </b-container>
+    <template #modal-footer>
+      <b-button
+          :disabled="disabledButton"
+          :variant="type === 3 ? 'danger' : 'success'"
+          @click="revision"
+      >
+        {{ buttonText }}
+      </b-button>
+    </template>
+  </b-modal>
+</template>
+
+<script>
+export default {
+  name: 'RevissionModal',
+  props: {
+    modal: {
+      required: true,
+      type: Object,
+    },
+    revission: {
+      required: true,
+      type: Object,
+    },
+  },
+  data() {
+    return {
+      advisor: [],
+      advisorId: null,
+      sendSms: false,
+      observation: '',
+      disabledButton: (this.revission.type === 4 && this.revission.initialPayment == 1),
+    }
+  },
+  computed: {
+    title() {
+      if (this.revission.type === 2) return 'SEND TO REVISSION'
+      if (this.revission.type === 3) return 'DISAPPROVE'
+      if (this.revission.type === 4) return 'APPROVE'
+      if (this.revission.type === 5) return 'SEND TO SUPERVISOR'
+      if (this.revission.type === 6) return 'SEND TO CEO'
+      if (this.revission.type === 7) return 'RETURN'
+      return ''
+    },
+    buttonText() {
+      if (this.revission.type === 2 || this.revission.type === 6) return 'SEND'
+      if (this.revission.type === 3) return 'DISAPPROVE'
+      if (this.revission.type === 4) return 'APPROVE'
+      if (this.revission.type === 5) return 'SEND TO SUPERVISOR'
+      if (this.revission.type === 7) return 'RETURN'
+      return ''
+    },
+  },
+  async created() {
+    try {
+      let module = 0
+      if (this.revission.idProgram == 1) module = 3
+      else if (this.revission.idProgram == 2) module = 7
+      else if (this.revission.idProgram == 3) module = 6
+      else if (this.revission.idProgram == 4) module = 5
+      else if (this.revission.idProgram == 5) module = 8
+      else if (this.revission.idProgram == 6) module = 10
+      else if (this.revission.idProgram == 7) module = 11
+      else if (this.revission.idProgram == 8) module = 14
+      else module = 12
+      const response = await amgApi.post(`/usermodulep/${module}`, {
+        // eslint-disable-next-line no-nested-ternary
+        roles: (module === 12) ? '[8]' : (module === 11) ? '[1,2,8]' : '[1,2,3]',
+        type: '1',
+      })
+      if (response.status === 200) this.advisor = response.data
+      if (this.revission.type === 2) this.sendSms = true
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  methods: {
+    revision() {
+      if (this.revission.type !== 4) {
+        if (this.observation.trim() === '') this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Observation is required')
+        else this.send()
+      } else if (this.advisorId === null) this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Please select an advisor')
+      else if (this.observation.trim() === '') this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Observation is required')
+      else this.sendAutorize()
+    },
+    async send() {
+      try {
+        this.disabledButton = true
+        this.$store.commit('app/SET_LOADING', true)
+        const response = await amgApi.post('/revisionsale', {
+          sale_id: this.revission.idsales,
+          state: this.revission.type,
+          observation: this.observation,
+          user_id: this.revission.user_id,
+          client: this.revission.nameClient,
+          advisor_id: this.advisor_id,
+          namesession: this.revission.sessioName,
+          leadid: this.revission.leadid,
+          program: this.revission.nameProgram,
+          programid: this.revission.programid,
+          firstprogram: null,
+          firstacccout: null,
+          firstprogramname: null,
+          sendSms: this.sendSms,
+          modul: this.revission.modul,
+          sellerName: this.revission.sellerName,
+          language: this.revission.language,
+          last_name: this.revission.last_name,
+        })
+        if (response.status === 200) {
+          this.$emit('response', true)
+          this.$emit('click', false)
+        }
+        this.$store.commit('app/SET_LOADING', false)
+      } catch (error) {
+        this.disabledButton = false
+        this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+        this.$store.commit('app/SET_LOADING', false)
+      }
+    },
+  },
+}
+</script>
+
+<style scoped>
+
+</style>

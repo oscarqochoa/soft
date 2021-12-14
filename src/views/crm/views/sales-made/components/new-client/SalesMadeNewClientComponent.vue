@@ -326,6 +326,7 @@
               size="sm"
               variant="info"
               :disabled="((data.item.user_id != currentUser.user_id) && currentUser.role_id == 5)"
+              @click="revisionSale(5, data.item)"
             >
               Revission
             </b-button>
@@ -342,6 +343,7 @@
                   : data.item.type == 0 ? false : true
               "
               variant="info"
+              @click="revisionSale(2, data.item)"
             >
               Revission
             </b-button>
@@ -355,6 +357,7 @@
               "
               size="sm"
               variant="info"
+              @click="revisionSale(2, data.item)"
             >
               Revission
             </b-button>
@@ -368,6 +371,7 @@
               "
               size="sm"
               variant="warning"
+              @click="revisionSale(7, data.item)"
             >
               Return
             </b-button>
@@ -383,6 +387,7 @@
               "
               size="sm"
               variant="info"
+              @click="revisionSale(2, data.item)"
             >
               Revission
             </b-button>
@@ -414,6 +419,7 @@
               "
               size="sm"
               variant="info"
+              @click="revisionSale(5, data.item)"
             >
               Revission
             </b-button>
@@ -432,6 +438,7 @@
                   ? false
                   : data.item.type == 0 ? false : true
               "
+              @click="revisionSale(2, data.item)"
             >
               Revission
             </b-button>
@@ -445,6 +452,7 @@
               "
               size="sm"
               variant="info"
+              @click="revisionSale(2, data.item)"
             >
               Revission
             </b-button>
@@ -458,6 +466,7 @@
               "
               size="sm"
               variant="warning"
+              @click="revisionSale(7, data.item)"
             >
               Return
             </b-button>
@@ -473,6 +482,7 @@
               "
               size="sm"
               variant="info"
+              @click="revisionSale(2, data.item)"
             >
               Revission
             </b-button>
@@ -484,6 +494,7 @@
               "
               size="sm"
               variant="danger"
+              @click="annulSale(data.item)"
             >
               ANNUL
             </b-button>
@@ -546,6 +557,13 @@
       :modal="modal"
       :files="modalData.files"
     />
+    <revission-modal
+      v-if="modal.revission"
+      :modal="modal"
+      :revission="modalData.revission"
+      @click="$refs['new-client-done-table'].refresh(); modal.revission = false"
+      @response="$refs['new-client-done-table'].refresh(); modal.revission = false"
+    />
   </div>
 </template>
 
@@ -570,10 +588,12 @@ import KeyBookModal from '@/views/crm/views/sales-made/components/modals/service
 import ParagonModal from '@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue'
 import SpecialistModal from '@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue'
 import TaxResearchModal from '@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue'
+import RevissionModal from "@/views/crm/views/sales-made/components/modals/RevissionModal";
 
 export default {
   name: 'SalesMadeNewComponent',
   components: {
+    RevissionModal,
     CreditExpertsModal,
     BusinessModal,
     FilesModal,
@@ -616,6 +636,7 @@ export default {
         captuerd_by_tracking: false,
         files: false,
         programs: false,
+        revission: false,
       },
       modalData: {
         tracking: {
@@ -646,6 +667,7 @@ export default {
           typeModal: 0,
           salesClient: {},
         },
+        revission: {},
       },
       selectAll: false,
     }
@@ -720,6 +742,22 @@ export default {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', e)
         return []
       }
+    },
+    revisionSale(state, data) {
+      this.modalData.revission.nameProgram = data.program
+      this.modalData.revission.idProgram = data.program_id
+      this.modalData.revission.nameClient = data.client
+      this.modalData.revission.type = state
+      this.modalData.revission.idsales = data.id
+      this.modalData.revission.initialPayment = data.initial_payment_status
+      this.modalData.revission.account = data.account
+      this.modalData.revission.leadId = data.lead_id
+      this.modalData.revission.datevent = data.event_date
+      this.modalData.revission.sellerName = data.seller
+      this.modalData.revission.language = data.language
+      this.modalData.revission.user_id = this.currentUser.user_id
+      this.modalData.revission.last_name = data.last_name
+      this.modal.revission = true
     },
     hideModalProgram(refresh) {
       if (refresh) this.$refs['new-client-done-table'].refresh()
