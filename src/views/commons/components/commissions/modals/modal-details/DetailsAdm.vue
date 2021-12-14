@@ -16,6 +16,9 @@
           <strong>Loading...</strong>
         </div>
       </template>
+      <template #cell(request_from_id)="data">
+        <span>{{data.value == 2 || data.value == 15? 'Lead' :'Client'}}</span>
+      </template>
       <template #cell(created_at)="data">
         <span>{{data.value | myGlobal}}</span>
       </template>
@@ -150,6 +153,10 @@ export default {
         {
           key: "request_from",
           label: "Request From"
+        },
+        {
+          key: "request_from_id",
+          label: "Origin"
         },
         {
           key: "request_by",

@@ -16,13 +16,37 @@
           <strong>Loading...</strong>
         </div>
       </template>
+
+      <template #empty>
+        <div class="text-center text-primary my-2">
+          <strong>No commissions found</strong>
+        </div>
+      </template>
+
+      <template #cell(account)="data" v-if="isManagement">
+        <b-link>{{ data.value }}</b-link>
+      </template>
+
+      <template #cell(account_status)="data">
+        <div class="text-center">
+          <b-icon v-if="data.value == 2" icon="triangle-fill" style="color: #ffc107"></b-icon>
+          <b-icon
+            v-else
+            icon="circle-fill"
+            :style="`color:${data.value == 1? '#00CC00': data.value==3? '#0066FF': 'red'}`"
+          ></b-icon>
+        </div>
+      </template>
+
       <template #cell(created_at)="data">
         <span>{{data.value | myGlobal}}</span>
       </template>
+
       <template #cell(approve_date)="data">
         <span>{{data.value | myGlobal}}</span>
       </template>
     </b-table>
+
     <b-row>
       <template v-if="!isCeo">
         <b-col lg="6" :class="[textRightBig]">
@@ -66,7 +90,7 @@
             <div class="font-weight-bolder">10% OF CRM:</div>
           </b-col>
           <b-col lg="6" :class="[textLeftBig]">
-            <div>$ {{ this.total_supervisor_program.toFixed(2) }}</div>
+            <div>$ {{ this.total_supervisor_program }}</div>
           </b-col>
         </template>
       </template>
@@ -76,12 +100,12 @@
       <b-col lg="6" :class="[textLeftBig]">
         <div>$ {{ this.total }}</div>
       </b-col>
-      <template v-if="total > total_to_pay && !isCeo && !isSupervisor">
+      <template v-if="!isSupervisor">
         <b-col lg="6" :class="[textRightBig]">
           <div class="font-weight-bolder">DISCOUNT FOR PENALTIES:</div>
         </b-col>
         <b-col lg="6" :class="[textLeftBig]">
-          <div>$ {{ (total - total_to_pay).toFixed(2) }}</div>
+          <div>$ {{ discounts_penalties }}</div>
         </b-col>
       </template>
       <template v-if="!isCeo && !isSupervisor">
@@ -119,7 +143,8 @@ export default {
       total_department: "",
       total_programs: "",
       total_to_pay: "",
-      total_supervisor_program: ""
+      total_supervisor_program: "",
+      discounts_penalties: null
     };
   },
   created() {
@@ -144,6 +169,9 @@ export default {
     },
     isSupervisor() {
       return this.info.role_id == 2;
+    },
+    isManagement() {
+      return this.info.moduleSession == 16;
     }
   },
   methods: {
@@ -162,33 +190,72 @@ export default {
         this.total_commission = response[0].commission_bond;
         this.total_programs = response[0].amount_programs;
         this.total_to_pay = response[0].total_to_pay;
+        this.discounts_penalties = parseFloat(
+          this.total - this.total_to_pay
+        ).toFixed(2);
       }
       this.ifNotEntries();
       this.isBusy = false;
-      this.showOverlay = false;
     },
     ifNotEntries() {
       //When is Supervisor from Department, not Crm
       if (this.commissionsUser.length == 0) {
         this.total_amount = 0;
         this.discount = 0;
-        this.total = this.info.amountTotal ? this.info.amountTotal : 0;
-        this.total = 2;
-        this.total_to_pay = this.info.amountTotal ? this.info.amountTotal : 0;
-        this.total_to_pay = this.total_to_pay.toFixed(2);
-        this.total_supervisor_program = this.info.amountTotal
-          ? this.info.amountTotal
-          : 0;
+        this.info.amountTotal = parseFloat(this.info.amountTotal).toFixed(2);
+        this.total = this.info.amountTotal;
+        this.total_to_pay = this.info.amountTotal;
+        this.total_supervisor_program = this.info.amountTotal;
       } else {
-        this.total_supervisor_program =
-          this.info.amountTotal - (this.total_amount - this.discount);
+        this.total_supervisor_program = parseFloat(
+          this.info.amountTotal - (this.total_amount - this.discount)
+        ).toFixed(2);
       }
+    },
+    redirectToClientDashboard(program, id) {
+      let route = "";
+
+      switch (program) {
+        case 1:
+          route = "/bussiness/clients/account/" + id;
+          break;
+        case 2:
+          route = "/boostcredit/clients/account/" + id;
+          break;
+        case 3:
+          route = "/creditexperts/clients/account/" + id;
+          break;
+        case 4:
+          route = "/debtsolution/clients/account/" + id;
+          break;
+        case 5:
+          route = "/taxresearch/clients/account/" + id;
+          break;
+        case 7:
+          route = "/specialists/clients/account/" + id;
+          break;
+        case 8:
+          route = "/bookeeping/clients/account/" + id;
+          break;
+        case 9:
+          route = "/ti/clients/account/" + id;
+          break;
+      }
+      return route;
     },
     getFields() {
       this.fields = [
         {
           key: "lead",
           label: "Client"
+        },
+        {
+          key: "account",
+          label: "Account"
+        },
+        {
+          key: "account_status",
+          label: "Status"
         },
         {
           key: "value",

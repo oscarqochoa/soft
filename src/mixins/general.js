@@ -4,43 +4,43 @@ export default {
   methods: {
     convertProgramToModule(program) {
       let module = 0;
-      if (program == 0) {
-        module = 0;
-      } else {
-        // eslint-disable-next-line default-case
-        switch (program) {
-          case 1:
-            module = 3;
-            break;
-          case 2:
-            module = 7;
-            break;
-          case 3:
-            module = 6;
-            break;
-          case 4:
-            module = 5;
-            break;
-          case 5:
-            module = 8;
-            break;
-          case 6:
-            module = 10;
-            break;
-          case 7:
-            module = 11;
-            break;
-          case 8:
-            module = 14;
-            break;
-          case 9:
-            module = 12;
-            break;
-          case 15:
-            module = 15;
-            break;
-        }
+      switch (program) {
+        case 0:
+          module = 0;
+        case 1:
+          module = 3;
+          break;
+        case 2:
+          module = 7;
+          break;
+        case 3:
+          module = 6;
+          break;
+        case 4:
+          module = 5;
+          break;
+        case 5:
+          module = 8;
+          break;
+        case 6:
+          module = 10;
+          break;
+        case 7:
+          module = 11;
+          break;
+        case 8:
+          module = 14;
+          break;
+        case 9:
+          module = 12;
+          break;
+        case 15:
+          module = 15;
+          break;
+        case null:
+          module = null;
       }
+
       return module;
     },
     convertModuleToProgramString(program) {

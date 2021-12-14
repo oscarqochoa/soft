@@ -80,6 +80,12 @@ export default {
   directives: {
     Ripple
   },
+  mounted() {
+    console.log(this.isManagement);
+    console.log(this.isCrm);
+    console.log(this.isSupervisorCrm);
+    console.log(this.tab);
+  },
   data() {
     return {
       optionsYear: [],
@@ -141,7 +147,7 @@ export default {
   methods: {
     addProgramSn() {
       this.programs.unshift({
-        id: 0,
+        id: null,
         text: "All"
       });
       this.programs.push({
