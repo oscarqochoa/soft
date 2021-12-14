@@ -16,6 +16,7 @@
         :has-provider="true"
         sticky-header="70vh"
         small
+        no-provider-filtering
         class="font-small-3 text-center"
         :busy.sync="isBusy"
         :items="myProvider"
@@ -704,20 +705,20 @@ export default {
           else sortDirection = 'asc'
         }
         const data = await CrmService.getSaleMade({
-          text: ctx.filter.text,
-          status: ctx.filter.status,
-          program: ctx.filter.program,
-          state_h: ctx.filter.state,
-          from: ctx.filter.from,
-          to: ctx.filter.to,
+          text: this.filter.text,
+          status: this.filter.status,
+          program: this.filter.program,
+          state_h: this.filter.state,
+          from: this.filter.from,
+          to: this.filter.to,
           orderby: sortBy,
           order: sortDirection,
-          captured: ctx.filter.captured,
-          seller: ctx.filter.seller,
+          captured: this.filter.captured,
+          seller: this.filter.seller,
           salemade: 0,
           rolsession: 1,
-          statusip: ctx.filter.stip,
-          sourcesname_id: ctx.filter.source,
+          statusip: this.filter.stip,
+          sourcesname_id: this.filter.source,
           done: this.done,
           per_page: ctx.perPage,
         },

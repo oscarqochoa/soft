@@ -18,8 +18,8 @@
               </b-btn>
             </b-input-group-prepend>
             <b-form-input
-                disabled
-                :value="initial_payment.program"
+              disabled
+              :value="initial_payment.program"
             />
           </b-input-group>
         </b-col>
@@ -31,8 +31,8 @@
               </b-btn>
             </b-input-group-prepend>
             <b-form-input
-                disabled
-                :value="initial_payment.client"
+              disabled
+              :value="initial_payment.client"
             />
           </b-input-group>
         </b-col>
