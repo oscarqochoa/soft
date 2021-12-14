@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_GET_HISTORY_SMS_LEADS: 'CrmLeadStore/A_GET_HISTORY_SMS_LEADS'
+      A_GET_HISTORY_SMS_LEADS: 'CrmSmsStore/A_GET_HISTORY_SMS_LEADS'
     }),
     async getHistorySms () {
       try {

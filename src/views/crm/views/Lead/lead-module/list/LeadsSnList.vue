@@ -156,8 +156,8 @@ export default {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
-      G_OWNERS: 'CrmLeadStore/G_OWNERS',
-      G_STATES: 'CrmLeadStore/G_STATES',
+      G_OWNERS: 'CrmGlobalStore/G_OWNERS',
+      G_STATES: 'CrmGlobalStore/G_STATES',
     }),
   },
   data() {

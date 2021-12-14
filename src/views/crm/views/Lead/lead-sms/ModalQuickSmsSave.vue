@@ -166,7 +166,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_SET_SMS_QUICK: 'CrmLeadStore/A_SET_SMS_QUICK'
+      A_SET_SMS_QUICK: 'CrmSmsStore/A_SET_SMS_QUICK'
     }),
     async onSubmit () {
       try {

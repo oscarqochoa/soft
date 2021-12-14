@@ -406,7 +406,7 @@ export default {
       currentUser: 'auth/currentUser',
       token: 'auth/token',
       G_EVENT_TITLES_OPTIONS: 'CrmEventStore/G_EVENT_TITLES',
-      G_OWNERS: 'CrmLeadStore/G_OWNERS',
+      G_OWNERS: 'CrmGlobalStore/G_OWNERS',
     }),
     dateSp () {
       return new Date(this.event.date.replace(/-/g, '/'))

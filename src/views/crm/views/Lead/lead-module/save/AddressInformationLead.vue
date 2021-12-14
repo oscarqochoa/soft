@@ -292,7 +292,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_UNIQUE_MOBILE: 'CrmLeadStore/A_UNIQUE_MOBILE',
+      A_UNIQUE_MOBILE: 'CrmGlobalStore/A_UNIQUE_MOBILE',
       A_SET_REQUEST_LEADS: 'CrmLeadStore/A_SET_REQUEST_LEADS'
     }),
     security() {
