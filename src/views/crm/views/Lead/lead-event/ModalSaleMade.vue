@@ -134,7 +134,7 @@ export default {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
-      G_PROGRAMS: 'CrmLeadStore/G_PROGRAMS',
+      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
     }),
   },
   methods: {

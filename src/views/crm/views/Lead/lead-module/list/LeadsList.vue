@@ -336,12 +336,12 @@ export default {
       currentUser: 'auth/currentUser',
       token: 'auth/token',
       G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
-      G_OWNERS: 'CrmLeadStore/G_OWNERS',
-      G_PROGRAMS: 'CrmLeadStore/G_PROGRAMS',
-      G_SOURCE_NAMES: 'CrmLeadStore/G_SOURCE_NAMES',
-      G_STATES: 'CrmLeadStore/G_STATES',
-      G_CRS: 'CrmLeadStore/G_CRS',
-      G_TYPE_DOCS: 'CrmLeadStore/G_TYPE_DOCS',
+      G_OWNERS: 'CrmGlobalStore/G_OWNERS',
+      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
+      G_SOURCE_NAMES: 'CrmGlobalStore/G_SOURCE_NAMES',
+      G_STATES: 'CrmGlobalStore/G_STATES',
+      G_CRS: 'CrmGlobalStore/G_CRS',
+      G_TYPE_DOCS: 'CrmGlobalStore/G_TYPE_DOCS',
     }),
   },
   data() {
@@ -400,10 +400,10 @@ export default {
     ...mapActions({
       A_GET_LEADS: 'CrmLeadStore/A_GET_LEADS',
       A_SET_FILTERS_LEADS: 'CrmLeadStore/A_SET_FILTERS_LEADS',
-      A_GET_SMS_QUICKS: 'CrmLeadStore/A_GET_SMS_QUICKS',
+      A_GET_SMS_QUICKS: 'CrmSmsStore/A_GET_SMS_QUICKS',
       A_SET_SELECTED_LEADS: 'CrmLeadStore/A_SET_SELECTED_LEADS',
       A_DELETE_LEADS: 'CrmLeadStore/A_DELETE_LEADS',
-      A_DELETE_SMS_QUICK: 'CrmLeadStore/A_DELETE_SMS_QUICK',
+      A_DELETE_SMS_QUICK: 'CrmSmsStore/A_DELETE_SMS_QUICK',
       A_PROCESS_LEADS: 'CrmLeadStore/A_PROCESS_LEADS',
     }),
     resolveUserStatusVariant (status) {
@@ -507,13 +507,16 @@ export default {
       })
     },
     onRowProcess (id) {
-      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'question',
-        { inputValidator: (value) => {
-          if (!value) {
-            return 'You need to write something!'
+      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'warning',
+        { 
+          input: 'textarea',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to write something!'
+            }
           }
         }
-      })
+      )
       .then(async (result) => {
         if (result.value) {
           const { user_id, role_id } = this.currentUser

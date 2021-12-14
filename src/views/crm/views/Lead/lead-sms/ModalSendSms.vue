@@ -214,7 +214,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_SEND_MESSAGE_LEAD: 'CrmLeadStore/A_SEND_MESSAGE_LEAD',
+      A_SEND_MESSAGE_LEAD: 'CrmSmsStore/A_SEND_MESSAGE_LEAD',
     }),
     deleteAccount (id) {
       for (let i = 0; i < this.nameLeads.length; i++) {
