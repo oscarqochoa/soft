@@ -8,7 +8,8 @@ import PaymentsRoute from '../views/payments/payments.router'
 import ListsRoute from '../views/lists/lists.router'
 import GlossaryRoute from '../views/glossary/glossary.router'
 import loansRoute from '../views/loans/loans.router'
-export default [
+
+const routes = [
   ...viewRoute,
   ...leadRoute,
   ...clientsRoute,
@@ -21,16 +22,12 @@ export default [
   ...GlossaryRoute,
 ]
 
-routes.map(route =>{
-  if(route.meta){
+routes.map(route => {
+  if (route.meta) {
     route.meta.module = 2
-  }else{
-    route.meta = {module: 2}
+  } else {
+    route.meta = { module: 2 }
   }
 })
 
 export default routes
-
-
-
-  

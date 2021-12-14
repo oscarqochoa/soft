@@ -6,7 +6,7 @@ import ClientsNavigation from '../views/clients/clients.nav'
 import leadNav from '../views/Lead/lead.nav'
 import ListsNavigation from '../views/lists/lists.nav'
 import GlossaryNavigation from '../views/glossary/glossary.nav'
-
+import LoansNavigation from '../views/loans/loans.nav'
 
 export default [
   {
@@ -29,4 +29,4 @@ export default [
   GlossaryNavigation,
 
 ]
-    
+
