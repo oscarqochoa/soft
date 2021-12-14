@@ -362,7 +362,7 @@ export default {
           lead_id: this.$route.params.id,
           all_day: '',
           state: this.lead.state,
-          created_users: this.currentUser.id,
+          created_users: this.currentUser.user_id,
           type: 'event',
           modul: this.modul,
         }

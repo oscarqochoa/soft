@@ -228,7 +228,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.per-page-selector {
-  width: 90px;
-}
+  .per-page-selector {
+    width: 90px;
+  }
 </style>

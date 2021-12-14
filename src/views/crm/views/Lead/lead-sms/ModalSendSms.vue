@@ -45,6 +45,7 @@
           label="Add Quick SMS"
           label-for="first-name"
           label-cols-md="2"
+          :state="getValidationState(validationContext)"
         >
           <b-input-group>
             <v-select
@@ -88,12 +89,13 @@
             rows="3"
             v-model="smsData.contmessage"
             maxlength="1000"
+            :state="getValidationState(validationContext)"
           />
           <template #description>
             <small tabindex="-1" class="form-text text-danger">Max: 1000 characters</small>
           </template>
 
-          <b-form-invalid-feedback :state="getValidationState(validationContext)">
+          <b-form-invalid-feedback>
             {{ validationContext.errors[0] }}
           </b-form-invalid-feedback>
         </b-form-group>
@@ -243,16 +245,7 @@ export default {
       }
     },
     async onSubmit () {
-      this.$swal.fire({
-        title: 'Are you Sure Send SMS',
-        icon: 'question',
-        text: 'You won\'t be able to revert this!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes, delete it!',
-      })
+      this.showSwalGeneric('Are you Sure Send SMS', 'You won\'t be able to revert this!', 'warning')
       .then(async (result) => {
         if (result.value) {
           const response = await this.A_SEND_MESSAGE_LEAD({
@@ -276,8 +269,8 @@ export default {
     }
   },
   created() {
-    this.userId = this.currentUser.id
-    this.roleId = this.currentUser.id
+    this.userId = this.currentUser.user_id
+    this.roleId = this.currentUser.role_id
   },
 }
 </script>

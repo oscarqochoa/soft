@@ -224,20 +224,12 @@ export default {
   },
   methods: {
     addMyList () {
-      this.$swal.fire({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes',
-      })
+      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'warning')
       .then((result) => {
         if (result.value) {
           const params = {
             module_id: this.currentUser.modul_id,
-            user_id: this.currentUser.id,
+            user_id: this.currentUser.user_id,
             lead_id: this.$route.params.id,
           }
           /* *INTEGRATE* */
@@ -249,15 +241,7 @@ export default {
       })
     },
     setPotential (lead_id) {
-      this.$swal.fire({
-        title: 'Without Potential?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes',
-      })
+      this.showSwalGeneric('Without Potential?', 'You won\'t be able to revert this!', 'warning')
       .then((result) => {
         if (result.value) {
           /* *INTEGRATE* */
@@ -269,15 +253,7 @@ export default {
       })
     },
     notCall (lead_id) {
-      this.$swal.fire({
-        title: 'Your lead not responding to you?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes',
-      })
+      this.showSwalGeneric('Your lead not responding to you?', 'You won\'t be able to revert this!', 'warning')
       .then((result) => {
         if (result.value) {
           const specialist = `${this.currentUser.first_name} ${this.currentUser.last_name}`

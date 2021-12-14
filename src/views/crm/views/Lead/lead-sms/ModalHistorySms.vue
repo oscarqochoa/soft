@@ -12,6 +12,7 @@
     <b-table
       show-empty
       sticky-header
+      small
       responsive="sm"
       :fields="fieldsQuicks"
       :items="items"
@@ -91,8 +92,8 @@ export default {
     },
   },
   created() {
-    this.userId = this.currentUser.id
-    this.roleId = this.currentUser.id
+    this.userId = this.currentUser.user_id
+    this.roleId = this.currentUser.role_id
     this.getHistorySms()
   },
 }
