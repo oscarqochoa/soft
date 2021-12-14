@@ -6,8 +6,9 @@ import commissionsRoute from '../views/commissions/commissions.router'
 import viewDashboard from '../views/dashboard/dashboard.router'
 import PaymentsRoute from '../views/payments/payments.router'
 import ListsRoute from '../views/lists/lists.router'
+import GlossaryRoute from '../views/glossary/glossary.router'
 import loansRoute from '../views/loans/loans.router'
-const routes = [
+export default [
   ...viewRoute,
   ...leadRoute,
   ...clientsRoute,
@@ -16,7 +17,8 @@ const routes = [
   ...loansRoute,
   ...viewDashboard,
   ...PaymentsRoute,
-  ...ListsRoute
+  ...ListsRoute,
+  ...GlossaryRoute,
 ]
 
 routes.map(route =>{
