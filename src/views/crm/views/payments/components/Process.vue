@@ -215,19 +215,8 @@
                   </ValidationProvider>
                 </b-form-group>
               </div>
-              <!-- <div
-                class="col-lg-12 w-100"
-                style="display: inline-block"
-                v-if="methodpayment == 1"
-              >
-                <modal-credit-card
-                  :key="modalCreditController"
-                  :cardsLead="cardsLead"
-                  @CardId="getCardId"
-                ></modal-credit-card>
-              </div> -->
             </div>
-            <div class="col-lg-10 col-md-12 col-sm-12 box">
+            <div class="col-lg-11 col-md-12 col-sm-12 box">
               <div
                 class="col-lg-12 w-100"
                 style="display: inline-block"
@@ -240,15 +229,7 @@
                 ></modal-credit-card>
               </div>
             </div>
-            <!-- <div v-if="methodpayment == 1" class="row w-80">
-              <div class="col-lg-12 col-md-12 col-sm-12 ml-2" style="display: inline-block">
-                  <modal-credit-card
-                  :key="modalCreditController"
-                  :cardsLead="cardsLead"
-                  @CardId="getCardId"
-                ></modal-credit-card>
-              </div>
-            </div> -->
+
             <div class="row w-100">
               <div class="col-lg-12 ml-2">
                 <b-form-group class="inline">
@@ -621,20 +602,15 @@ export default {
                     }
                   })
                   .catch((error) => {
-                    // if (error.response.status == 500) {
-                    //   if (this.methodpayment == 1) {
-                    //     this.$swal
-                    //       .fire({
-                    //         icon: "error",
-                    //         title: "Error",
-                    //       })
-                    //       .then((res) => {
-                    //         if (res) {
-                    //           //this.$emit('clickList',true)
-                    //         }
-                    //       });
-                    //   }
-                    // }
+                     this.$store.commit("app/SET_LOADING", false);
+                     this.showToast(
+                      "danger",
+                      "top-right",
+                      "Error",
+                      "XIcon",
+                      "Something went wrong!"
+                    );
+                    console.log(error);
                   });
               }
             });
