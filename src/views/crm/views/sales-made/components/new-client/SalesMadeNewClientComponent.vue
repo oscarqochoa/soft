@@ -234,7 +234,7 @@
             @click="( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
               currentUser.role_id == 1 ||
               currentUser.role_id == 2) &&
-              openInitialPaymentModal(data.item.program, data.item.client, data.item.initial_amount, data.item.id, data.item.lead_id)"
+              openInitialPaymentModal(data.item)"
           >
             <b-icon
               v-if="data.item.initial_payment_status === 1"
@@ -519,6 +519,8 @@
             v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.role_id == 1 || currentUser.role_id == 2)"
             icon="link"
             variant="primary"
+            class="cursor-pointer"
+            @click="openUrlModal(data.item)"
           />
         </template>
         <template v-slot:cell(done)="data">
@@ -565,6 +567,11 @@
       @click="$refs['new-client-done-table'].refresh(); modal.revission = false"
       @response="$refs['new-client-done-table'].refresh(); modal.revission = false"
     />
+    <url-modal
+      v-if="modal.url"
+      :modal="modal"
+      :url="modalData.url"
+    />
   </div>
 </template>
 
@@ -589,11 +596,14 @@ import KeyBookModal from '@/views/crm/views/sales-made/components/modals/service
 import ParagonModal from '@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue'
 import SpecialistModal from '@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue'
 import TaxResearchModal from '@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue'
-import RevissionModal from "@/views/crm/views/sales-made/components/modals/RevissionModal";
+import RevissionModal from '@/views/crm/views/sales-made/components/modals/RevissionModal'
+import UrlModal from '@/views/crm/views/sales-made/components/modals/UrlModal'
+import { amgApi } from '@/service/axios'
 
 export default {
   name: 'SalesMadeNewComponent',
   components: {
+    UrlModal,
     RevissionModal,
     CreditExpertsModal,
     BusinessModal,
@@ -638,19 +648,35 @@ export default {
         files: false,
         programs: false,
         revission: false,
+        url: false,
       },
       modalData: {
+        url: {
+          client: '',
+          program: '',
+          amount: 0.00,
+        },
         tracking: {
           program: '',
           client: '',
           tabla: '',
         },
         initial_payment: {
-          program: '',
-          client: '',
-          amount: null,
-          sale_id: null,
-          lead_id: null,
+          payments: null,
+          nameProgram: null,
+          nameClient: null,
+          type: null,
+          editmodal: null,
+          statusSale: null,
+          sessionId: null,
+          valorInitalPaymetn: null,
+          feeprops: null,
+          modul: null,
+          cfeestatus: null,
+          idtransaction: null,
+          programid: null,
+          allcards: null,
+          role_id: null,
         },
         capturedByTracking: {
           program: '',
@@ -744,6 +770,12 @@ export default {
         return []
       }
     },
+    openUrlModal(data) {
+      this.modalData.url.client = data.client
+      this.modalData.url.program = data.program
+      this.modalData.url.selectedLead = data
+      this.modal.url = true
+    },
     revisionSale(state, data) {
       this.modalData.revission.nameProgram = data.program
       this.modalData.revission.idProgram = data.program_id
@@ -784,14 +816,32 @@ export default {
       else if (type === 3) this.modalData.capturedByTracking.tittle = 'FEE'
       this.modal.captuerd_by_tracking = true
     },
-    openInitialPaymentModal(program, client, amount, saleId, leadId) {
-      this.modalData.initial_payment.amount = amount
-      this.modalData.initial_payment.client = client
-      this.modalData.initial_payment.program = program
-      this.modalData.initial_payment.sale_id = saleId
-      this.modalData.initial_payment.lead_id = leadId
-      this.modalData.initial_payment.session_id = this.currentUser.user_id
-      this.modal.initial_payment = true
+    async openInitialPaymentModal(data) {
+      try {
+        this.modalData.initial_payment.programid = data.program_id
+        this.modalData.initial_payment.cnfeestatus = data.contract_fee_status
+        this.modalData.initial_payment.id_transaction = data.transaction_id
+        this.modalData.initial_payment.editmodal = data.user_id === this.currentUser.user_id || this.currentUser.role_id == 1 || this.currentUser.role_id == 2
+        this.modalData.initial_payment.statusSale = data.status
+        this.modalData.initial_payment.comissions = data.commission
+        this.modalData.initial_payment.nameProgram = data.program
+        this.modalData.initial_payment.nameClient = data.client
+        this.modalData.initial_payment.valorInitalPaymetn = data.initial_payment_status
+        this.modalData.initial_payment.feeprops = data.fee
+        const cards = await amgApi.post('/searchcards', { id: data.lead_id })
+        if (cards.status === 200) {
+          this.modalData.initial_payment.allcards = cards.data
+        }
+        const response = await amgApi.post('/paymentsales', { id: data.id })
+        if (response.status === 200) {
+          [this.modalData.initial_payment.payments] = response.data
+        }
+        this.modalData.initial_payment.modul = this.currentUser.modul_id
+        this.modalData.initial_payment.role_id = this.currentUser.role_id
+        this.modal.initial_payment = true
+      } catch (error) {
+        this.showErroSwal()
+      }
     },
     openModalProgram(data) {
       console.log(data.program_id, data.haveRates)

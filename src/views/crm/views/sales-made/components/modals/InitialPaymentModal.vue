@@ -19,7 +19,7 @@
             </b-input-group-prepend>
             <b-form-input
               disabled
-              :value="initial_payment.program"
+              :value="initial_payment.nameProgram"
             />
           </b-input-group>
         </b-col>
@@ -32,7 +32,7 @@
             </b-input-group-prepend>
             <b-form-input
               disabled
-              :value="initial_payment.client"
+              :value="initial_payment.nameClient"
             />
           </b-input-group>
         </b-col>
@@ -41,9 +41,11 @@
         <b-col>
           <label>Amount</label>
           <b-input-group prepend="$">
-            <b-form-input
-              disabled
-              :value="initial_payment.amount"
+            <money
+              v-model="amount"
+              class="form-control"
+              v-bind="{decimal: '.', thousands: ',', prefix: '$  ', precision: 2}"
+              :disabled="amount_camp"
             />
           </b-input-group>
         </b-col>
@@ -54,6 +56,7 @@
               v-model="method"
               name="some-radios"
               value="credit-card"
+              :disabled="valorEdit"
             >
               Credit Card
             </b-form-radio>
@@ -61,41 +64,45 @@
               v-model="method"
               name="some-radios"
               value="others"
+              :disabled="valorEdit"
             >
               Others
             </b-form-radio>
-            <b-checkbox v-if="method === 'credit-card'">
+            <b-checkbox
+              v-if="method === 'credit-card'"
+              v-model="charge"
+              :disabled="valorEdit"
+            >
               Charge
             </b-checkbox>
           </b-form-radio-group>
         </b-col>
       </b-row>
-      <b-row
-        v-if="method === 'credit-card'"
-        class="mt-2"
-      >
+      <b-row v-if="(method === 'credit-card' && listCards.length === 0 && initial_payment.idtransaction != null) || (method === 'credit-card' && this.initial_payment.programid == 2)">
         <b-table
-          :fields="fields"
-          :items="payments"
-        />
-      </b-row>
-      <b-row class="mt-1 d-flex align-items-center justify-content-end">
-        <b-button
-          variant="info"
-          @click="openModalCreateCard"
+          :fields="fieldsT1"
+          :items="initial_payment.allcards"
         >
-          <feather-icon icon="PlusIcon" /> Add
-        </b-button>
+          <template v-slot:cell(selects)="data">
+            <b-form-radio
+              v-model="cardId"
+              :value="data.item.id"
+              :disabled="valorEdit"
+            />
+          </template>
+          <template v-slot:cell(actions)="data">
+            <b-button
+              :disabled="!((initial_payment.role_id == 1 || initial_payment.role_id == 2) && initial_payment.modul == 2)"
+              variant="danger"
+              size="sm"
+              @click="deleteCard(data.item.id)"
+            >
+              <feather-icon icon="Trash2Icon" />
+            </b-button>
+          </template>
+        </b-table>
       </b-row>
     </b-container>
-    <modal-card-create
-      v-if="modalCard"
-      :idlead="initial_payment.lead_id"
-      :session="initial_payment.session_id"
-      :if-modal-card="modalCard"
-      @click="closeModalCreateCard"
-      @new="getListCards"
-    />
   </b-modal>
 </template>
 
@@ -114,41 +121,81 @@ export default {
     initial_payment: {
       type: Object,
       required: true,
+      default: () => ({
+        payments: null,
+        nameProgram: null,
+        nameClient: null,
+        type: null,
+        editmodal: null,
+        statusSale: null,
+        sessionId: null,
+        valorInitalPaymetn: null,
+        feeprops: null,
+        modul: null,
+        cfeestatus: null,
+        idtransaction: null,
+        programid: null,
+        allcards: null,
+        role_id: null,
+      }),
     },
   },
   data() {
     return {
       method: '',
-      fields: [
+      amount: this.initial_payment.payments.amount,
+      charge: true,
+      listCards: [],
+      cardId: null,
+      fieldsT1: [
         {
-          key: 'transaction_id',
-          label: 'Transaction ID',
-          sortable: false,
+          label: '',
+          key: 'selects',
         },
         {
-          key: 'amount',
-          label: 'Amount',
-          sortable: false,
+          label: 'Card Holder Name',
+          key: 'cardholdername',
         },
         {
-          key: 'card_number',
-          label: 'Credit Card',
-          sortable: false,
+          label: 'Card Number',
+          key: 'cardnumber',
+          formatter: value => `XXXX-XXXX-XXXX-${value}`,
         },
         {
-          key: 'user',
-          label: 'User',
-          sortable: false,
+          label: 'Type',
+          key: 'type_card',
         },
         {
-          key: 'settlement_date',
-          label: 'Date',
-          sortable: false,
+          label: 'MM',
+          key: 'card_expi_month',
+        },
+        {
+          label: 'YY',
+          key: 'card_expi_year',
+        },
+        {
+          label: 'CVC',
+          key: 'cardsecuritycode',
+          formatter: value => `XX${value}`,
+        },
+        {
+          label: 'Actions',
+          key: 'actions',
         },
       ],
-      payments: {},
-      modalCard: false,
     }
+  },
+  computed: {
+    valorEdit() {
+      return this.initial_payment.type == 1
+          || this.initial_payment.editmodal == false
+          || this.initial_payment.statusSale == 2
+          || this.initial_payment.statusSale == 4
+          || this.initial_payment.valorInitalPaymetn != 1
+    },
+    amount_camp() {
+      return this.method === 'credit-card' || this.method === ''
+    },
   },
   async created() {
     await this.getListCards()
@@ -156,9 +203,7 @@ export default {
   methods: {
     async getListCards() {
       try {
-        this.payments = await CrmService.getListCards({
-          sale_id: this.initial_payment.sale_id,
-        })
+        this.listCards = await CrmService.getListCards({ sale_id: this.initial_payment.payments.sale_id })
       } catch (error) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
         this.modal.initial_payment = false

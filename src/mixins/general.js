@@ -138,8 +138,8 @@ export default {
           confirmButton: "btn btn-gradient-success  ml-3 ",
           cancelButton: "btn btn-gradient-danger  ",
         },
-        ...config
-      })
+        ...config,
+      });
     },
     getModuleName(module) {
       switch (module) {
@@ -194,11 +194,12 @@ export default {
           const message =
             error.response.data.message || "Something went wrong.";
           const errors = [];
-          for (let key in error.response.data.errors) {
+          for (const key in error.response.data.errors) {
             errors.push(error.response.data.errors[key]);
           }
-          return `${message + split}${errors.join("." + split)}`;
-        } else return "Something went wrong";
+          return `${message + split}${errors.join(`.${split}`)}`;
+        }
+        return "Something went wrong";
       } catch (error) {
         console.log("Something went wrong getInternalErrors:", error);
         return "Something went wrong";
@@ -206,6 +207,12 @@ export default {
     },
     getCurrentMonth() {
       return this.$moment().format("MMM");
+    },
+    addPreloader() {
+      this.$store.commit("app/SET_LOADING", true);
+    },
+    removePreloader() {
+      this.$store.commit("app/SET_LOADING", false);
     },
   },
 };
