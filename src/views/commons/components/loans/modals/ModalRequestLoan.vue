@@ -5,7 +5,6 @@
       title-class="h2"
       size="lg"
       title="REQUEST LOAN"
-      scrollable
       modal-class="modal-primary"
       @hidden="hideModal(false)"
     >
@@ -543,12 +542,26 @@ export default {
         this.setLoading(false);
       }
     },
-    sendLoan() {
+    async sendLoan() {
       this.vmoneyValidate = true;
+      const validate = await this.$refs.form.validate();
+      if (validate && !this.this.isOverProvision) {
+        //Swal Comfirm
+        const result = await this.showSwalConfirm(
+          "Are you sure?",
+          "You won't be able to revert this!",
+          "warning"
+        );
+        if (result.isConfirmed) {
+          try {
+          } catch (error) {}
+        }
+      }
       this.$refs.form.validate().then(success => {
         if (!success || this.isOverProvision) {
           return;
         }
+
         swal
           .fire({
             title: "Are you sure?",

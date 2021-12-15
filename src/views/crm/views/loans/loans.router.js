@@ -13,7 +13,7 @@ export default [
         component: LoansView,
         meta: {
           tab: 1,
-          module: 16,
+          module: 2,
           route: "crm",
         },
       },
@@ -23,14 +23,14 @@ export default [
         component: LoansView,
         meta: {
           tab: 2,
-          module: 16,
+          module: 2,
           route: "crm",
         },
       },
     ],
     meta: {
       tab: 1,
-      module: 16,
+      module: 2,
       route: "crm",
     },
   },
