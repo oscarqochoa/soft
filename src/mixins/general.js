@@ -171,7 +171,7 @@ export default {
       }
     },
     isResponseSuccess(response) {
-      return response && String(response.status).substr(0, 2) === '20'
+      return response && response.status && String(response.status).substr(0, 2) === '20'
     },
 
     showSwalSuccess(title, text, icon, html) {
