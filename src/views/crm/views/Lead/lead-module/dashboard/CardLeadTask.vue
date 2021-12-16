@@ -142,7 +142,7 @@
         :only-read="onlyRead"
         :lead="lead"
         :type="type"
-        @onTaskCreated="onTaskCreated"
+        @onReloadTasks="onReloadTasks"
       />
     </b-modal>
 
@@ -163,6 +163,7 @@
         :lead="lead"
         :task="task"
         :is-disabled="isTaskDisabled"
+        @onReloadTasks="onReloadTasks"
       />
     </b-modal>
     
@@ -262,7 +263,7 @@ export default {
       this.type = 1
       this.$bvModal.show('modal-task-create')
     },
-    onTaskCreated (tasks) {
+    onReloadTasks (tasks) {
       this.lead.lead_tasks = tasks
     },
     onDoneTask (id) {
@@ -339,7 +340,6 @@ export default {
       this.isLoading = true
       this.showSwalGeneric('Are you sure?', 'Favorite Task', 'warning')
       .then(async result => {
-        favorite = favorite ? 0 : 1
         if (result.value) {
           const response = await this.A_MAKE_FAVORITE_LEAD_TASK({
             id,

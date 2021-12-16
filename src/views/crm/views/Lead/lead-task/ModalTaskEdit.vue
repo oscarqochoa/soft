@@ -440,13 +440,14 @@ export default {
                 this.$bvModal.hide('modal-task-create')
               } else
                 this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
+              this.isLoading = false
             }
           })
         }
-        this.isLoading = false
       } catch (error) {
         console.log('Something went wrong onGetTask', error)
         this.showErroSwal()
+        this.isLoading = false
       }
     },
     async validateTaskFavorites () {
@@ -467,6 +468,7 @@ export default {
       } catch (error) {
         console.log('Something went wrong onGetTask', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        this.isLoading = false
       }
     }
   },
