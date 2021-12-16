@@ -25,7 +25,7 @@
 					</validation-provider>
         </b-col>
         <b-col
-          v-if="!taskForSn"
+          v-if="!taskForSn && modul === 15"
         >
 					<validation-provider>
 						<b-form-group
@@ -45,7 +45,9 @@
 						</b-form-group>
 					</validation-provider>
         </b-col>
-        <b-col>
+        <b-col
+          cols="6"
+        >
 					<validation-provider>
 						<b-form-group
 							label="Send Sms"
@@ -327,7 +329,6 @@ export default {
   data () {
     return {
       authUser: {},
-      attendType: false,
       blankTask: {},
       isLoading: false,
       maxDate: new Date(2050, 9, 1),
@@ -382,6 +383,7 @@ export default {
                 status_sn: (this.modul === 15) ? 2 : null,
                 leadname: this.lead.lead_name,
                 modul_id: this.modul,
+                attend_id: this.task.attend_type ? 1 : 2,
                 program_id: this.authUser.role_id === 7 && this.this.lead.lead_programs.length ? this.this.lead.lead_programs[0].program_id : null,
                 ...this.task,
                 sms: this.task.sms ? this.task.sms : '',
@@ -390,10 +392,9 @@ export default {
                 method: this.authUser.role_id === 7 ? this.task.method : null,
                 withsms: this.task.withsms ? 1 : 0,
                 taskForSn: this.taskForSn,
-                attend_id: this.attendType ? 1 : 2,
               })
               if (this.isResponseSuccess(response)) {
-                this.$emit('onTaskCreated', response.data)
+                this.$emit('onReloadTasks', response.data)
                 this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
                 this.$bvModal.hide('modal-task-create')
               } else
@@ -433,9 +434,9 @@ export default {
   },
   mounted () {
     if (this.taskForSn)
-      this.attendType = true
+      this.task.attend_type = true
     else
-      this.attendType = this.task.type_attend_social === 'programed' ? true : false
+      this.task.attend_type = this.task.type_attend_social === 'programed' ? true : false
   },
   props: {
     modul: {
