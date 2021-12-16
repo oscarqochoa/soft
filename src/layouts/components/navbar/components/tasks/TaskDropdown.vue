@@ -5,7 +5,7 @@
   >
     <template #button-content>
       <feather-icon
-        badge="1"
+        :badge="S_TASKS.length"
         badge-classes="bg-danger"
         class="text-body"
         icon="ClipboardIcon"
@@ -26,7 +26,7 @@
       class="scrollable-container media-list scroll-area"
       tagname="li"
     >
-      <template v-for="notification in notifications">
+      <template v-for="notification in S_TASKS">
         <div :key="notification.id">
           <div class="media d-flex align-items-center">
             <h6 class="font-weight-bolder mr-auto mb-0 text-capitalize">
@@ -87,10 +87,10 @@
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import Ripple from "vue-ripple-directive";
 import NavbarService from "../../service/navbar.service";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 export default {
   mounted() {
-    this.getFirstFiveUserTasks();
+    this.getFirstFiveUserTasks()
   },
   components: {
     VuePerfectScrollbar,
@@ -102,6 +102,9 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    ...mapState({
+      S_TASKS: state => state.TaskStore.S_TASKS
+    })
   },
   data() {
     return {
@@ -113,14 +116,15 @@ export default {
     };
   },
   methods: {
-    async getFirstFiveUserTasks() {
-      let data = await NavbarService.getFirstFiveUserTask(
-        this.currentUser.user_id
-      );
-      data.forEach((task) => {
-        task.tasks = JSON.parse(task.tasks);
-      });
-      this.notifications = data;
+    ...mapActions({
+      A_GET_TASKS: 'TaskStore/A_GET_TASKS'
+    }),
+    async getFirstFiveUserTasks () {
+      try {
+        await this.A_GET_TASKS({ id: this.currentUser.user_id })
+      } catch (error) {
+
+      }
     },
   },
 };
