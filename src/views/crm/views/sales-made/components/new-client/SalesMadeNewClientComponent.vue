@@ -549,6 +549,8 @@
       v-if="modal.initial_payment"
       :modal="modal"
       :initial_payment="modalData.initial_payment"
+      @click="modal.initial_payment = false; $refs['new-client-done-table'].refresh()"
+      @close="modal.initial_payment = false; $refs['new-client-done-table'].refresh()"
     />
     <tracking-captured-by-modal
       v-if="modal.captuerd_by_tracking"
@@ -596,8 +598,9 @@ import KeyBookModal from '@/views/crm/views/sales-made/components/modals/service
 import ParagonModal from '@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue'
 import SpecialistModal from '@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue'
 import TaxResearchModal from '@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue'
-import RevissionModal from '@/views/crm/views/sales-made/components/modals/RevissionModal'
-import UrlModal from '@/views/crm/views/sales-made/components/modals/UrlModal'
+import DebtSolutionModal from '@/views/crm/views/sales-made/components/modals/services/DebtSolutionModal.vue'
+import RevissionModal from '@/views/crm/views/sales-made/components/modals/RevissionModal.vue'
+import UrlModal from '@/views/crm/views/sales-made/components/modals/UrlModal.vue'
 import { amgApi } from '@/service/axios'
 
 export default {
@@ -619,6 +622,7 @@ export default {
     ParagonModal,
     SpecialistModal,
     TaxResearchModal,
+    DebtSolutionModal,
   },
   props: {
     done: {
@@ -819,7 +823,9 @@ export default {
     async openInitialPaymentModal(data) {
       try {
         this.modalData.initial_payment.programid = data.program_id
-        this.modalData.initial_payment.cnfeestatus = data.contract_fee_status
+        this.modalData.initial_payment.sessionId = this.currentUser.user_id
+        this.modalData.initial_payment.cfeestatus = data.contract_fee_status
+        console.log(data)
         this.modalData.initial_payment.id_transaction = data.transaction_id
         this.modalData.initial_payment.editmodal = data.user_id === this.currentUser.user_id || this.currentUser.role_id == 1 || this.currentUser.role_id == 2
         this.modalData.initial_payment.statusSale = data.status
@@ -836,7 +842,7 @@ export default {
         if (response.status === 200) {
           [this.modalData.initial_payment.payments] = response.data
         }
-        this.modalData.initial_payment.modul = this.currentUser.modul_id
+        this.modalData.initial_payment.modul = 2
         this.modalData.initial_payment.role_id = this.currentUser.role_id
         this.modal.initial_payment = true
       } catch (error) {
@@ -849,7 +855,7 @@ export default {
         case 1: this.modalData.programs.programSelected = 'business-modal'; break
         case 2: this.modalData.programs.programSelected = 'boost-credit-modal'; break
         case 3: this.modalData.programs.programSelected = 'credit-experts-modal'; break
-        case 4: break
+        case 4: this.modalData.programs.programSelected = 'debt-solution-modal'; break
         case 5: this.modalData.programs.programSelected = 'tax-research-modal'; break
         case 6: this.modalData.programs.programSelected = 'general-support-modal'; break
         case 7: this.modalData.programs.programSelected = 'specialist-modal'; break

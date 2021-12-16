@@ -2,63 +2,39 @@
   <div>
     <b-modal
       v-model="ifModalCard"
-      modal
-      size="lg"
-      modal-class="top-modal"
-      header-class="bg-white py-3"
+      title="Delete Credit Card"
       hide-footer
-      body-class="mb-2"
       @hidden="closeModal"
     >
-      <template #modal-header="{close}">
-        <div class="text-center">
-          <span class="title-card">Delete Credit Card</span>
-        </div>
-        <img
-          src="/images/new-icons/x.png"
-          style="width:16px; cursor:pointer;"
-          @click="close"
-        >
-      </template>
       <ValidationObserver ref="form">
         <ValidationProvider
           v-slot="{errors}"
           rules="required"
         >
-          <b-row class="mt-2">
-            <b-col
-              class="font-bureau-style text-gray-light col-4 mb-2"
-              cols="12"
-            >
-              <span>Commentary</span>
-            </b-col>
-            <b-col md="12">
-              <div class="form-group mt-0">
-                <textarea
-                  v-model="commentary"
-                  class="style-area"
-                  :class="{'border border-danger':errors[0]}"
-                />
-              </div>
-            </b-col>
-          </b-row>
+          <b-container fluid>
+            <b-row>
+              <h4>Commentary</h4>
+            </b-row>
+            <b-row>
+              <b-form-textarea
+                v-model="commentary"
+                class="w-100"
+                rows="5"
+                max-rows="5"
+              />
+            </b-row>
+            <b-row>
+              <b-col class="mt-1 d-flex align-items-center justify-content-end">
+                <b-button
+                  variant="danger"
+                  @click="deletecard"
+                >
+                  <feather-icon icon="Trash2Icon"/> Delete
+                </b-button>
+              </b-col>
+            </b-row>
+          </b-container>
         </ValidationProvider>
-
-        <b-row>
-          <b-col
-            md="12"
-            style="text-align: center;"
-            class="mt-4"
-          >
-            <b-button
-              class="btn-update-sn rounded font-bureau-style text-white"
-              variant="white"
-              @click="deletecard"
-            >
-              <i class="fas fa-trash-alt mr-2" /> Delete
-            </b-button>
-          </b-col>
-        </b-row>
       </ValidationObserver>
     </b-modal>
   </div>
@@ -102,6 +78,9 @@ export default {
               this.showToast('success', 'top-right', 'Deleted', 'CheckIcon', 'The credit card has been deleted.')
             }
           }
+        }
+        else {
+          this.showToast('danger', 'top-right', 'Validation Error', 'XIcon', 'Comentary required')
         }
       } catch (error) {
         this.showErroSwal()
