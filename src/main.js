@@ -58,7 +58,6 @@ Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
-
 // Composition API
 Vue.use(VueCompositionAPI)
 
