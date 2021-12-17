@@ -463,7 +463,7 @@ import ModalCommissionsDetails from "@/views/commons/components/commissions/moda
 import ModalCommissionsPayment from "@/views/commons/components/commissions/modals/modal-payment/ModalCommissionsPayment";
 import moment from "moment";
 import commissionsService from "@/views/commons/components/commissions/services/commissions.service";
-
+import icons from "@/icons/icons.js";
 export default {
   name: "CommissionsComponent",
   components: {
@@ -487,7 +487,10 @@ export default {
       default: null
     }
   },
-  mounted() {},
+  mounted() {
+    //when change tab supervisorCrm, set to null subProgram
+    this.$store.commit("commissions-store/SET_MODULE_PROGRAM", null);
+  },
   data() {
     return {
       sessionUser: null,
@@ -682,7 +685,7 @@ export default {
         year: this.year,
         module: this.module_id,
         supervisorCrm: this.supervisorCrm,
-        subProgram: this.moduleProgram
+        subProgram: this.isSupervisorCrm ? this.moduleProgram : null
       };
       let response =
         this.isDepartment && !this.isSupervisorCrm
@@ -800,7 +803,8 @@ export default {
         amountTotal: event.amountTotal,
         year: this.year,
         monthName: monthName,
-        type: "details"
+        type: "details",
+        moduleSession: this.module
       };
       this.modalDetails = true;
     },
@@ -864,7 +868,7 @@ export default {
   },
   watch: {
     moduleProgram(newValue, oldValue) {
-      if (newValue) this.searchCommissions();
+      this.searchCommissions();
     }
   }
 };

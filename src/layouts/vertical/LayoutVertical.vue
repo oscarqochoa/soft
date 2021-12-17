@@ -2,7 +2,7 @@
   <layout-vertical>
     <router-view />
     <template #navbar>
-        <navbar></navbar>
+      <navbar></navbar>
     </template>
     <app-customizer v-if="showCustomizer" slot="customizer" />
   </layout-vertical>
@@ -12,7 +12,7 @@
 import LayoutVertical from "@core/layouts/layout-vertical/LayoutVertical.vue";
 import AppCustomizer from "@core/layouts/components/app-customizer/AppCustomizer.vue";
 import { $themeConfig } from "@themeConfig";
-import Navbar from '../components/navbar/Navbar.vue';
+import Navbar from "../components/navbar/Navbar.vue";
 export default {
   components: {
     AppCustomizer,
@@ -21,8 +21,8 @@ export default {
   },
   data() {
     return {
-      showCustomizer: $themeConfig.layout.customizer,
+      showCustomizer: $themeConfig.layout.customizer
     };
-  },
+  }
 };
 </script>

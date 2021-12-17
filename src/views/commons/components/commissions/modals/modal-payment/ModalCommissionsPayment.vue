@@ -180,7 +180,7 @@ export default {
           this.payment.anullDate = response[0].annulled_at;
           this.setLoading(false);
         } catch (error) {
-          this.showErroSwal();
+          this.showErrorSwal();
           this.setLoading(false);
         }
       }
@@ -188,7 +188,7 @@ export default {
     async approveCommissions() {
       const validate = await this.$refs.form.validate();
       if (validate) {
-        const result = await this.showSwalConfirm(
+        const result = await this.showConfirmSwal(
           "Are you sure?",
           "Are you sure of pay this commission?",
           "warning"
@@ -214,7 +214,7 @@ export default {
             let response = await commissionsService.approveCommissions(params);
             this.hideModal(true, 1, this.info.user_id, this.info.ps_month);
           } catch (error) {
-            this.showErroSwal();
+            this.showErrorSwal();
             this.setLoading(false);
             this.hideModal(false, null);
           }
@@ -227,7 +227,7 @@ export default {
     },
 
     async anullPayment() {
-      const result = await this.showSwalConfirm(
+      const result = await this.showConfirmSwal(
         "Are you sure?",
         "Are you sure of anull this commission?",
         "warning"
@@ -249,7 +249,7 @@ export default {
           let response = await commissionsService.anullComissions(params);
           this.hideModal(true, 2, this.info.user_id, this.info.ps_month);
         } catch (error) {
-          this.showErroSwal();
+          this.showErrorSwal();
           this.setLoading(false);
           this.hideModal(false, null);
         }

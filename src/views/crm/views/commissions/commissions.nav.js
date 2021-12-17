@@ -1,5 +1,5 @@
 export default {
-    title: 'Commissions',
-    icon: 'CreditCardIcon',
-    route: 'commissions-crm'
+  title: "Commissions",
+  icon: "ComissionsIcon",
+  route: "commissions-crm",
 };
