@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import CreditCard from './creditCard'
 import CreditReport from './creditReport'
 import Event from './event'
 import Global from './global'
@@ -11,6 +12,7 @@ import Sms from './sms'
 Vue.use(Vuex)
 
 export default {
+  CrmCreditCardStore: CreditCard,
   CrmCreditReportStore: CreditReport,
   CrmEventStore: Event,
   CrmGlobalStore: Global,
