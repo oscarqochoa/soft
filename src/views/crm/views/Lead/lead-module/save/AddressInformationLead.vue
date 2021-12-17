@@ -212,7 +212,7 @@ import VueGoogleAutocomplete from 'vue-google-autocomplete'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import countries from '@/@fake-db/data/other/countries'
 
-import AddressLead from './AddressLead.vue'
+import AddressLead from '@/views/crm/views/Lead/components/AddressComponent.vue'
 
 export default {
   components: {

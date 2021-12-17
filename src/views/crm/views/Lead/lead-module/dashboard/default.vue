@@ -35,6 +35,14 @@
         :lead="S_LEAD"
       />
     </b-col>
+    <b-col v-if="modul !== 15" cols="12" lg="6">
+      <card-lead-credit-card
+        v-if="Object.keys(S_LEAD).length"
+        :modul="modul"
+        :only-read="onlyRead"
+        :lead="S_LEAD"
+      />
+    </b-col>
   </b-row>
 </template>
 
@@ -42,8 +50,9 @@
 
 import { mapActions, mapGetters, mapState } from 'vuex'
 
-import CardLeadClient from './CardLeadClient.vue'
 import CardLeadAppointment from './CardLeadAppointment.vue'
+import CardLeadClient from './CardLeadClient.vue'
+import CardLeadCreditCard from './CardLeadCreditCard.vue'
 import CardLeadCreditReport from './CardLeadCreditReport.vue'
 import CardLeadTask from './CardLeadTask.vue'
 
@@ -51,6 +60,7 @@ export default {
   components: {
     CardLeadClient,
     CardLeadAppointment,
+    CardLeadCreditCard,
     CardLeadCreditReport,
     CardLeadTask
   },

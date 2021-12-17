@@ -187,7 +187,7 @@ import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 import formValidation from '@core/comp-functions/forms/form-validation'
 
-import AddressLead from './AddressLead.vue'
+import AddressLead from '@/views/crm/views/Lead/components/AddressComponent.vue'
 
 import imageAmerican from '@/assets/images/cards/american.png'
 import imageDiscover from '@/assets/images/cards/Discover.jpg'
