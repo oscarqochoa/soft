@@ -2,7 +2,7 @@
   <b-row>
     <b-col cols="12" lg="6">
       <card-lead-client
-        v-if="S_LEAD.hasOwnProperty('id')"
+        v-if="Object.keys(S_LEAD).length"
         :modul="modul"
         :only-read="onlyRead"
         :lead="S_LEAD"
@@ -10,7 +10,7 @@
     </b-col>
     <b-col cols="12" lg="6">
       <card-lead-credit-report
-        v-if="S_LEAD.hasOwnProperty('id')"
+        v-if="Object.keys(S_LEAD).length"
         :modul="modul"
         :only-read="onlyRead"
         :lead="S_LEAD"
@@ -20,7 +20,7 @@
     </b-col>
     <b-col cols="12" lg="6">
       <card-lead-appointment
-        v-if="S_LEAD.hasOwnProperty('id')"
+        v-if="Object.keys(S_LEAD).length"
         :modul="modul"
         :only-read="onlyRead"
         :is-busy="isBusyAppointment"
@@ -29,7 +29,7 @@
     </b-col>
     <b-col cols="12" lg="6">
       <card-lead-task
-        v-if="S_LEAD.hasOwnProperty('id')"
+        v-if="Object.keys(S_LEAD).length"
         :modul="modul"
         :only-read="onlyRead"
         :lead="S_LEAD"

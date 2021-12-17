@@ -18,7 +18,7 @@
       </b-row>
     </b-card>
 
-    <b-card>
+    <b-card body-class="pb-0">
       <b-nav tabs>
         <b-nav-item
           v-if="isManagement"
@@ -33,12 +33,10 @@
         >LOANS BY MODULE</b-nav-item>
         <b-nav-item :to="`/${route}/loans/my-loans`" exact exact-active-class="active">MY LOANS</b-nav-item>
       </b-nav>
-      <!-- <keep-alive>
-        
-      </keep-alive>-->
-      <router-view :key="$route.name" />
+
+      <router-view :key="this.$route.name" />
     </b-card>
-    <ModalRequestLoan v-if="modalRequest.show" :info="modalRequest" @hide="closeModalLoan()" />
+    <ModalRequestLoan v-if="modalRequest.show" :info="modalRequest" @hide="closeModalLoan" />
   </div>
 </template>
 
@@ -55,17 +53,16 @@ export default {
   data() {
     return {
       tab: this.$route.meta.tab,
-      modalRequest: {
-        show: false,
-        idLoan: null,
-        tab: this.tab
-      }
+
+      routeVar: this.$route.name
     };
   },
   computed: {
     ...mapGetters({
       bigWindow: "app/bigWindow",
-      currentUser: "auth/currentUser"
+      currentUser: "auth/currentUser",
+      researchLoans: "loans-store/researchLoans",
+      modalRequest: "loans-store/modalRequest"
     }),
     positionResponsive() {
       return this.bigWindow ? "text-right" : "";
@@ -86,13 +83,18 @@ export default {
       this.showImportLoan = false;
     },
 
-    openModalLoan(loan = null) {
+    openModalLoan() {
       this.modalRequest.show = true;
     },
     closeModalLoan(status) {
-      if (status) this.$refs.loanTabOne.search();
+      //Just is a new loan
+      if (status) this.$store.commit("loans-store/ADD_ONE_RESEARCH");
+
       this.modalRequest.show = false;
     }
+  },
+  mounted() {
+    this.modalRequest.tab = this.tab;
   }
 };
 </script>

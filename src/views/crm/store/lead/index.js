@@ -12,6 +12,7 @@ const state = {
   S_STATE_LEADS: [],
   S_STATUS_LEADS: [],
   S_SOURCE_LEADS: [],
+  S_USER_APPOINTEMENTS: [],
   S_LEAD: {},
   S_FILTERS_LEADS: {
     searchQuery: '',
@@ -234,6 +235,17 @@ const actions = {
     try {
       const response = await crmLead.postUserAppointmentSn(body)
       console.log('A_GET_USER_APPOINTMENT_SN response', response)
+      if (mixins.methods.isResponseSuccess(response)) {
+        response.data.map(el => {
+          el.label = body.taskForSn ? el.user_name : `${ el.user_name } (${ el.count_task }) ${ ( el.disabled > 0 ? '(Not Available)' : '') }`,
+          el.value = el.id,
+          el.itemDisabled = el.disabled > 0 ? true : false
+        })
+        commit('SET_DATA', {
+          destination: 'S_USER_APPOINTEMENTS',
+          data: response.data
+        })
+      }
       return response
     } catch (error) {
       console.log('ERROR_GET_USER_APPOINTMENT_SN [ACTION]', error)

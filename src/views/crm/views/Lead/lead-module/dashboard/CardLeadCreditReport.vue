@@ -104,11 +104,9 @@ export default {
   },
   created () {
     this.countCreditReportPendings()
-    if (this.lead.score && JSON.parse(this.lead.score).length > 0) {
-      this.score.equifax = JSON.parse(this.lead.score)[0].equifax
-      this.score.experian = JSON.parse(this.lead.score)[0].experian
-      this.score.transunion = JSON.parse(this.lead.score)[0].transunion
-    }
+    this.score.equifax = this.lead.score[0].equifax
+    this.score.experian = this.lead.score[0].experian
+    this.score.transunion = this.lead.score[0].transunion
   },
   data () {
     return {

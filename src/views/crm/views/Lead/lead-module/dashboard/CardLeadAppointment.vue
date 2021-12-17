@@ -1,88 +1,86 @@
 <template>
-  <div>
-    <b-card title="APPOINTMENTS">
-      <b-table
-        show-empty
-        sticky-header
-        striped
-        responsive="sm"
-        small
-        :fields="fieldsEvent"
-        :items="S_EVENTS"
-        :busy.sync="isBusy"
-        class="mb-0"
-      >
-        <template #table-busy>
-          <div class="text-center text-primary my-2">
-            <b-spinner class="align-middle mr-1" />
-            <strong>Loading ...</strong>
-          </div>
-        </template>
+  <b-card title="APPOINTMENTS">
+    <b-table
+      show-empty
+      sticky-header
+      striped
+      responsive="sm"
+      small
+      :fields="fieldsEvent"
+      :items="S_EVENTS"
+      :busy.sync="isBusy"
+      class="mb-0"
+    >
+      <template #table-busy>
+        <div class="text-center text-primary my-2">
+          <b-spinner class="align-middle mr-1" />
+          <strong>Loading ...</strong>
+        </div>
+      </template>
 
-        <template #cell(title)="data">
-          <b-button
-            variant="flat-primary"
-            @click="openModalEditEventShow(data.item.id)"
-          >
-            {{ data.item.title }}
-          </b-button>
-        </template>
-
-        <template #cell(seller)="data">
-          {{ data.item.user.first_name }} {{ data.item.user.last_name }}
-        </template>
-
-        <template #cell(date)="data">
-          {{ data.item.date | myDateGlobal }}
-          <template v-if="data.item.state !== 'CA'">
-            <br>
-            <span class="font-weight-bold">{{ data.item.real_time | myDateGlobal }}</span>
-          </template>
-        </template>
-
-        <template #cell(from)="data">
-          {{ data.item.from | myTime }}
-          <template v-if="data.item.state !== 'CA'">
-            <br>
-            <span class="font-weight-bold">{{ data.item.real_time | myDateGlobal }}</span>
-          </template>
-        </template>
-
-        <template #cell(to)="data">
-          {{ data.item.to | myTime }}
-          <template v-if="data.item.state !== 'CA'">
-            <br>
-            <span class="font-weight-bold">-</span>
-          </template>
-        </template>
-
-        <template #cell(actions)="data">
-          <b-button
-            v-if="data.item.attend != 2 && !onlyRead"
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            variant="outline-danger"
-            class="btn-icon"
-            @click="deleteEvent(data.item.id)"
-          >
-            <feather-icon icon="Trash2Icon" />
-          </b-button>
-        </template>
-
-      </b-table>
-      <div v-if="!onlyRead" class="pt-2 text-right">
+      <template #cell(title)="data">
         <b-button
-          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-          variant="outline-primary"
-          @click="isInfo = false, $bvModal.show('modal-event-create')"
+          variant="flat-primary"
+          @click="openModalEditEventShow(data.item.id)"
         >
-          <feather-icon
-            icon="PlusIcon"
-            class="mr-50"
-          />
-          <span class="align-middle">Add</span>
+          {{ data.item.title }}
         </b-button>
-      </div>
-    </b-card>
+      </template>
+
+      <template #cell(seller)="data">
+        {{ data.item.user.first_name }} {{ data.item.user.last_name }}
+      </template>
+
+      <template #cell(date)="data">
+        {{ data.item.date | myDateGlobal }}
+        <template v-if="data.item.state !== 'CA'">
+          <br>
+          <span class="font-weight-bold">{{ data.item.real_time | myDateGlobal }}</span>
+        </template>
+      </template>
+
+      <template #cell(from)="data">
+        {{ data.item.from | myTime }}
+        <template v-if="data.item.state !== 'CA'">
+          <br>
+          <span class="font-weight-bold">{{ data.item.real_time | myDateGlobal }}</span>
+        </template>
+      </template>
+
+      <template #cell(to)="data">
+        {{ data.item.to | myTime }}
+        <template v-if="data.item.state !== 'CA'">
+          <br>
+          <span class="font-weight-bold">-</span>
+        </template>
+      </template>
+
+      <template #cell(actions)="data">
+        <b-button
+          v-if="data.item.attend != 2 && !onlyRead"
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="outline-danger"
+          class="btn-icon"
+          @click="deleteEvent(data.item.id)"
+        >
+          <feather-icon icon="Trash2Icon" />
+        </b-button>
+      </template>
+
+    </b-table>
+    <div v-if="!onlyRead" class="pt-2 text-right">
+      <b-button
+        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+        variant="outline-primary"
+        @click="isInfo = false, $bvModal.show('modal-event-create')"
+      >
+        <feather-icon
+          icon="PlusIcon"
+          class="mr-50"
+        />
+        <span class="align-middle">Add</span>
+      </b-button>
+    </div>
 
     <!-- modal EVENT CREATE -->
     <b-modal
@@ -121,7 +119,7 @@
         :event="event"
       />
     </b-modal>
-  </div>
+  </b-card>
 </template>
 
 <script>
