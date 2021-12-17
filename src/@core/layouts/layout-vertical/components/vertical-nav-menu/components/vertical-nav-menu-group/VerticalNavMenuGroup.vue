@@ -8,26 +8,17 @@
       'sidebar-group-active': isActive,
     }"
   >
-    <b-link
-      class="d-flex align-items-center"
-      @click="() => updateGroupOpen(!isOpen)"
-    >
-      <feather-icon :icon="item.icon || 'CircleIcon'" />
+    <b-link class="d-flex align-items-center" @click="() => updateGroupOpen(!isOpen)">
+      <custom-feather-icons :icon="item.icon || 'CircleIcon'" />
       <span class="menu-title text-truncate">{{ t(item.title) }}</span>
       <b-badge
         v-if="item.tag"
         pill
         :variant="item.tagVariant || 'primary'"
         class="mr-1 ml-auto"
-      >
-        {{ item.tag }}
-      </b-badge>
+      >{{ item.tag }}</b-badge>
     </b-link>
-    <b-collapse
-      v-model="isOpen"
-      class="menu-content"
-      tag="ul"
-    >
+    <b-collapse v-model="isOpen" class="menu-content" tag="ul">
       <component
         :is="resolveNavItemComponent(child)"
         v-for="child in item.children"
@@ -40,43 +31,43 @@
 </template>
 
 <script>
-import { BLink, BBadge, BCollapse } from 'bootstrap-vue'
-import { resolveVerticalNavMenuItemComponent as resolveNavItemComponent } from '@core/layouts/utils'
-import { useUtils as useI18nUtils } from '@core/libs/i18n'
-import { useUtils as useAclUtils } from '@core/libs/acl'
-import VerticalNavMenuHeader from '../vertical-nav-menu-header'
-import VerticalNavMenuLink from '../vertical-nav-menu-link/VerticalNavMenuLink.vue'
+import { BLink, BBadge, BCollapse } from "bootstrap-vue";
+import { resolveVerticalNavMenuItemComponent as resolveNavItemComponent } from "@core/layouts/utils";
+import { useUtils as useI18nUtils } from "@core/libs/i18n";
+import { useUtils as useAclUtils } from "@core/libs/acl";
+import VerticalNavMenuHeader from "../vertical-nav-menu-header";
+import VerticalNavMenuLink from "../vertical-nav-menu-link/VerticalNavMenuLink.vue";
 
 // Composition Function
-import useVerticalNavMenuGroup from './useVerticalNavMenuGroup'
-import mixinVerticalNavMenuGroup from './mixinVerticalNavMenuGroup'
+import useVerticalNavMenuGroup from "./useVerticalNavMenuGroup";
+import mixinVerticalNavMenuGroup from "./mixinVerticalNavMenuGroup";
 
 export default {
-  name: 'VerticalNavMenuGroup',
+  name: "VerticalNavMenuGroup",
   components: {
     VerticalNavMenuHeader,
     VerticalNavMenuLink,
     BLink,
     BBadge,
-    BCollapse,
+    BCollapse
   },
   mixins: [mixinVerticalNavMenuGroup],
   props: {
     item: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   setup(props) {
     const {
       isOpen,
       isActive,
       updateGroupOpen,
-      updateIsActive,
-    } = useVerticalNavMenuGroup(props.item)
+      updateIsActive
+    } = useVerticalNavMenuGroup(props.item);
 
-    const { t } = useI18nUtils()
-    const { canViewVerticalNavMenuGroup } = useAclUtils()
+    const { t } = useI18nUtils();
+    const { canViewVerticalNavMenuGroup } = useAclUtils();
 
     return {
       resolveNavItemComponent,
@@ -89,12 +80,11 @@ export default {
       canViewVerticalNavMenuGroup,
 
       // i18n
-      t,
-    }
-  },
-}
+      t
+    };
+  }
+};
 </script>
 
 <style>
-
 </style>

@@ -81,7 +81,7 @@ class LoansService {
       throw error;
     }
   }
-  async trackingLoan(params) {
+  async getTrackingLoan(params) {
     try {
       const { data } = await amgApi.post("/loans/tracking-loan", params);
       return data;
@@ -119,6 +119,23 @@ class LoansService {
   async changeStatusPayLoan(params) {
     try {
       const { data } = await amgApi.post("/loans/change-status-pay", params);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async insertPay(params) {
+    try {
+      const { data } = await amgApi.post("/loans/insert-pay", params);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getDue(params) {
+    try {
+      const { data } = await amgApi.post("/loans/get-due", params);
       return data;
     } catch (error) {
       throw error;
