@@ -7,6 +7,7 @@ import viewDashboard from '../views/dashboard/dashboard.router'
 import PaymentsRoute from '../views/payments/payments.router'
 import ListsRoute from '../views/lists/lists.router'
 import GlossaryRoute from '../views/glossary/glossary.router'
+import InventoryRouter from '../views/inventory/inventory.router'
 export default [
   ...viewRoute,
   ...leadRoute,
@@ -17,6 +18,7 @@ export default [
   ...PaymentsRoute,
   ...ListsRoute,
   ...GlossaryRoute,
+  ...InventoryRouter,
 ]
 
 
