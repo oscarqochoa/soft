@@ -1,11 +1,7 @@
 <template>
   <div>
     <!-- Table Container Card -->
-    <b-card
-      no-body
-      class="mb-0"
-    >
-
+    <b-card no-body class="mb-0">
       <!-- Paginate -->
       <paginate-table
         :currentPage="currentPage"
@@ -17,7 +13,6 @@
       />
 
       <div class="m-2">
-
         <!-- Filters -->
         <filters-table
           :filter="optionFilters"
@@ -40,14 +35,10 @@
               :disabled="!leadsSelecteds.length"
               @click="modalSmssOpen"
             >
-              <feather-icon
-                icon="MessageCircleIcon"
-              />
-              Send SMS
+              <feather-icon icon="MessageCircleIcon" />Send SMS
             </b-button>
           </template>
         </filters-table>
-
       </div>
 
       <b-table
@@ -68,10 +59,7 @@
       >
         <!-- Head: Check -->
         <template #head(selected)>
-          <b-form-checkbox
-            v-model="selectAll"
-            @input="selectedAll"
-          />
+          <b-form-checkbox v-model="selectAll" @input="selectedAll" />
         </template>
 
         <template #table-busy>
@@ -80,25 +68,17 @@
             <strong>Loading ...</strong>
           </div>
         </template>
-        
+
         <!-- Column: Selected -->
         <template #cell(selected)="data">
           <b-form-group>
-            <b-form-checkbox
-              v-model="data.item.selected"
-              @input="onSelectedRow(data.item)"
-            />
+            <b-form-checkbox v-model="data.item.selected" @input="onSelectedRow(data.item)" />
           </b-form-group>
         </template>
 
         <!-- Column: Date Even -->
         <template #cell(date_even)="data">
-          <b-badge
-            v-if="data.item.date_even"
-            pill
-            variant="light-danger"
-            class="text-capitalize"
-          >
+          <b-badge v-if="data.item.date_even" pill variant="light-danger" class="text-capitalize">
             <feather-icon
               v-if="data.item.date_even"
               icon="CalendarIcon"
@@ -123,22 +103,19 @@
             pill
             :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
             class="text-capitalize"
-          >
-            {{ data.item.status }}
-          </b-badge>
+          >{{ data.item.status }}</b-badge>
         </template>
 
         <!-- Column: Status -->
         <template #cell(credit_report)="data">
-          <strong :class="`text-${ (data.item.credit_report == 1) ? 'danger' : 'success' }`">{{ (data.item.credit_report == 1) ? 'NO' : 'YES' }}</strong>
+          <strong
+            :class="`text-${ (data.item.credit_report == 1) ? 'danger' : 'success' }`"
+          >{{ (data.item.credit_report == 1) ? 'NO' : 'YES' }}</strong>
         </template>
 
         <!-- Column: Programs -->
         <template #cell(programs)="data">
-          <div
-            class="d-flex"
-            style="gap: .5rem"
-          >
+          <div class="d-flex" style="gap: .5rem">
             <template v-for="(program, key) in JSON.parse(data.item.programs)">
               <div
                 :key="key"
@@ -152,14 +129,14 @@
         <!-- Column: Created By -->
         <template #cell(created_by)="data">
           <small>{{ data.item.owner }}</small>
-          <br>
+          <br />
           <small>{{ data.item.created_at | myDateGlobalWithHour }}</small>
         </template>
 
         <!-- Column: Assign To -->
         <template #cell(assign_to)="data">
           <small>{{ data.item.assign_to }}</small>
-          <br>
+          <br />
           <small v-if="data.item.assign_date">{{ data.item.assign_date | myDateGlobal }}</small>
         </template>
 
@@ -174,9 +151,8 @@
             @modalHistorySmsOpen="modalHistorySmsOpen"
           />
         </template>
-
       </b-table>
-      
+
       <!-- Paginate -->
       <paginate-table
         :currentPage="currentPage"
@@ -186,7 +162,6 @@
         :to-page="toPage"
         @onChangeCurrentPage="onChangeCurrentPage"
       />
-
     </b-card>
 
     <!-- modal SEND SMS -->
@@ -211,32 +186,23 @@
       />
 
       <template #modal-footer>
-        <b-form-group
-          label="VARS"
-          class="w-100"
-        >
+        <b-form-group label="VARS" class="w-100">
           <b-row>
             <b-col sm="3">
               <b-input-group size="sm">
-                <b-input-group-prepend is-text>
-                  @1
-                </b-input-group-prepend>
+                <b-input-group-prepend is-text>@1</b-input-group-prepend>
                 <b-form-input placeholder="FIRST NAME" readonly />
               </b-input-group>
             </b-col>
             <b-col sm="3">
               <b-input-group size="sm">
-                <b-input-group-prepend is-text>
-                  @2
-                </b-input-group-prepend>
+                <b-input-group-prepend is-text>@2</b-input-group-prepend>
                 <b-form-input placeholder="LAST NAME" readonly />
               </b-input-group>
             </b-col>
             <b-col v-if="modul == 15" sm="3">
               <b-input-group size="sm">
-                <b-input-group-prepend is-text>
-                  @3
-                </b-input-group-prepend>
+                <b-input-group-prepend is-text>@3</b-input-group-prepend>
                 <b-form-input placeholder="LAST NAME" readonly />
               </b-input-group>
             </b-col>
@@ -292,28 +258,25 @@
       title="HISTORY OF SMS"
       hide-footer
     >
-      <modal-history-sms
-        :modul="modul"
-        :row-data="rowData"
-      />
+      <modal-history-sms :modul="modul" :row-data="rowData" />
     </b-modal>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import { BTable, BPagination, BModal } from 'bootstrap-vue'
+import { mapActions, mapGetters } from "vuex";
+import { BTable, BPagination, BModal } from "bootstrap-vue";
 
-import vSelect from 'vue-select'
+import vSelect from "vue-select";
 
-import ActionsTable from '../../lead-table/ActionsTable.vue'
-import dataFields from '@/views/crm/views/Lead/lead-table/fields.data'
-import FiltersTable from '../../lead-table/FiltersTable.vue'
-import ModalSendSms from '../../lead-sms/ModalSendSms.vue'
-import ModalQuickSms from '../../lead-sms/ModalQuickSms.vue'
-import ModalQuickSmsSave from '../../lead-sms/ModalQuickSmsSave.vue'
-import ModalHistorySms from '../../lead-sms/ModalHistorySms.vue'
-import PaginateTable from '@/views/crm/views/Lead/lead-table/PaginateTable.vue'
+import ActionsTable from "../../lead-table/ActionsTable.vue";
+import dataFields from "@/views/crm/views/Lead/lead-table/fields.data";
+import FiltersTable from "../../lead-table/FiltersTable.vue";
+import ModalSendSms from "../../lead-sms/ModalSendSms.vue";
+import ModalQuickSms from "../../lead-sms/ModalQuickSms.vue";
+import ModalQuickSmsSave from "../../lead-sms/ModalQuickSmsSave.vue";
+import ModalHistorySms from "../../lead-sms/ModalHistorySms.vue";
+import PaginateTable from "@/views/crm/views/Lead/lead-table/PaginateTable.vue";
 
 export default {
   components: {
@@ -329,26 +292,26 @@ export default {
     BModal,
 
     vSelect,
-    PaginateTable,
+    PaginateTable
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token',
-      G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
-      G_OWNERS: 'CrmGlobalStore/G_OWNERS',
-      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
-      G_SOURCE_NAMES: 'CrmGlobalStore/G_SOURCE_NAMES',
-      G_STATES: 'CrmGlobalStore/G_STATES',
-      G_CRS: 'CrmGlobalStore/G_CRS',
-      G_TYPE_DOCS: 'CrmGlobalStore/G_TYPE_DOCS',
-    }),
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      G_STATUS_LEADS: "CrmLeadStore/G_STATUS_LEADS",
+      G_OWNERS: "CrmGlobalStore/G_OWNERS",
+      G_PROGRAMS: "CrmGlobalStore/G_PROGRAMS",
+      G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
+      G_STATES: "CrmGlobalStore/G_STATES",
+      G_CRS: "CrmGlobalStore/G_CRS",
+      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS"
+    })
   },
   data() {
     return {
       modul: 2,
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
-      
+
       isBusy: false,
       fields: dataFields.leadFields,
       items: [],
@@ -358,7 +321,7 @@ export default {
       toPage: 0,
       currentPage: 1,
       optionFilters: {
-        searchQuery: '',
+        searchQuery: "",
         assignTo: null,
         from: null,
         to: null,
@@ -369,10 +332,10 @@ export default {
         program: null,
         sourceName: null,
         typeDoc: null,
-        stAd: null,
+        stAd: null
       },
       perPageOptions: [10, 25, 50, 100],
-      sortBy: 'id',
+      sortBy: "id",
       isSortDirDesc: true,
 
       rowData: {},
@@ -385,49 +348,53 @@ export default {
       quickData: {},
       blankQuickData: {
         id: null,
-        sms: '',
-        title: ''
+        sms: "",
+        title: ""
       },
 
       leadsSelecteds: []
-    }
+    };
   },
-  created () {
-    this.myProvider()
-    this.getAllQuicksSms()
+  created() {
+    this.myProvider();
+    this.getAllQuicksSms();
   },
   methods: {
     ...mapActions({
-      A_GET_LEADS: 'CrmLeadStore/A_GET_LEADS',
-      A_SET_FILTERS_LEADS: 'CrmLeadStore/A_SET_FILTERS_LEADS',
-      A_GET_SMS_QUICKS: 'CrmSmsStore/A_GET_SMS_QUICKS',
-      A_SET_SELECTED_LEADS: 'CrmLeadStore/A_SET_SELECTED_LEADS',
-      A_DELETE_LEADS: 'CrmLeadStore/A_DELETE_LEADS',
-      A_DELETE_SMS_QUICK: 'CrmSmsStore/A_DELETE_SMS_QUICK',
-      A_PROCESS_LEADS: 'CrmLeadStore/A_PROCESS_LEADS',
+      A_GET_LEADS: "CrmLeadStore/A_GET_LEADS",
+      A_SET_FILTERS_LEADS: "CrmLeadStore/A_SET_FILTERS_LEADS",
+      A_GET_SMS_QUICKS: "CrmSmsStore/A_GET_SMS_QUICKS",
+      A_SET_SELECTED_LEADS: "CrmLeadStore/A_SET_SELECTED_LEADS",
+      A_DELETE_LEADS: "CrmLeadStore/A_DELETE_LEADS",
+      A_DELETE_SMS_QUICK: "CrmSmsStore/A_DELETE_SMS_QUICK",
+      A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS"
     }),
-    resolveUserStatusVariant (status) {
-      if (status === 'Pending') return 'warning'
-      if (status === 'Active') return 'success'
-      if (status === 'Inactive') return 'secondary'
-      if (status === 'Not Contacted') return 'danger'
-      return 'primary'
+    resolveUserStatusVariant(status) {
+      if (status === "Pending") return "warning";
+      if (status === "Active") return "success";
+      if (status === "Inactive") return "secondary";
+      if (status === "Not Contacted") return "danger";
+      return "primary";
     },
     selectedAll() {
-      if (this.selectAll) this.items.forEach(item => item.selected = true)
-      else this.items.forEach(item => item.selected = false)
-      this.onRowSelected()
+      if (this.selectAll) this.items.forEach(item => (item.selected = true));
+      else this.items.forEach(item => (item.selected = false));
+      this.onRowSelected();
     },
     onSelectedRow(data) {
-      const index = this.leadsSelecteds.findIndex(select => select.id === data.id)
-      if (data.selected === true && index === -1) this.leadsSelecteds.push(data)
-      else if (data.selected === false && index !== -1) this.leadsSelecteds.splice(index, 1)
-      this.onRowSelected()
+      const index = this.leadsSelecteds.findIndex(
+        select => select.id === data.id
+      );
+      if (data.selected === true && index === -1)
+        this.leadsSelecteds.push(data);
+      else if (data.selected === false && index !== -1)
+        this.leadsSelecteds.splice(index, 1);
+      this.onRowSelected();
     },
-    async myProvider () {
+    async myProvider() {
       try {
-        this.setFilters()
-        this.isBusy = true
+        this.setFilters();
+        this.isBusy = true;
         const response = await this.A_GET_LEADS({
           assign_to: this.optionFilters.assignTo,
           cr: this.optionFilters.cr,
@@ -437,7 +404,7 @@ export default {
           iduser: 1,
           lead_status: this.optionFilters.statusLead,
           name_text: this.optionFilters.searchQuery,
-          order: 'desc',
+          order: "desc",
           orderby: 10,
           program: this.optionFilters.program,
           sourcename: this.optionFilters.sourceName,
@@ -446,177 +413,255 @@ export default {
           user_owner: this.optionFilters.owner,
           perpage: this.perPage,
           page: this.currentPage
-        })
-        this.totalLeads = response.total
-        this.fromPage = response.from || 0
-        this.toPage = response.to || 0
+        });
+        this.totalLeads = response.total;
+        this.fromPage = response.from || 0;
+        this.toPage = response.to || 0;
 
-        const selectedIds = this.leadsSelecteds.map(s => s.id)
-        let index = 0
+        const selectedIds = this.leadsSelecteds.map(s => s.id);
+        let index = 0;
         while (selectedIds.length > 0 && index < response.data.length) {
           if (selectedIds.includes(response.data[index].id)) {
-            const { id } = response.data[index]
-            response.data[index].selected = true
-            const deleted = selectedIds.findIndex(s => s === id)
-            if (deleted !== -1) selectedIds.splice(deleted, 1)
+            const { id } = response.data[index];
+            response.data[index].selected = true;
+            const deleted = selectedIds.findIndex(s => s === id);
+            if (deleted !== -1) selectedIds.splice(deleted, 1);
           }
-          index += 1
+          index += 1;
         }
 
-        this.items = response.data
-        this.isBusy = false
+        this.items = response.data;
+        this.isBusy = false;
       } catch (error) {
-        console.log('Somtehing went wrong myProvider', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        console.log("Somtehing went wrong myProvider", error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
-    onChangeCurrentPage (e) {
-      this.currentPage = e
-      this.myProvider()
+    onChangeCurrentPage(e) {
+      this.currentPage = e;
+      this.myProvider();
     },
-    setFilters () {
-      this.A_SET_FILTERS_LEADS({ ...this.optionFilters, perPage: this.perPage, currentPage: this.currentPage })
+    setFilters() {
+      this.A_SET_FILTERS_LEADS({
+        ...this.optionFilters,
+        perPage: this.perPage,
+        currentPage: this.currentPage
+      });
     },
-    onRowSelected () {
-      this.A_SET_SELECTED_LEADS(this.leadsSelecteds)
-      this.leads_sms = this.leadsSelecteds.map(el => el.id)
+    onRowSelected() {
+      this.A_SET_SELECTED_LEADS(this.leadsSelecteds);
+      this.leads_sms = this.leadsSelecteds.map(el => el.id);
     },
-    onRowDelete (id) {
-      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'question')
-      .then(async (result) => {
-        if (result.value) {
-          const { user_id, role_id } = this.currentUser
-          const response = await this.A_DELETE_LEADS({
-            leadid: id,
-            idsession: user_id,
-            iduser: user_id,
-            idrole: role_id,
-          })
-          if (response.status == 200) {
-            const index = this.items.map(el => el.id).indexOf(id)
-            if (index !== -1) this.items.splice(index, 1)
-            this.showToast('success', 'top-right', 'Deleted!', 'CheckIcon', 'Your file has been deleted.')
-          } else {
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
+    onRowDelete(id) {
+      this.showSwalGeneric(
+        "Are you sure?",
+        "You won't be able to revert this!",
+        "question"
+      )
+        .then(async result => {
+          if (result.value) {
+            const { user_id, role_id } = this.currentUser;
+            const response = await this.A_DELETE_LEADS({
+              leadid: id,
+              idsession: user_id,
+              iduser: user_id,
+              idrole: role_id
+            });
+            if (response.status == 200) {
+              const index = this.items.map(el => el.id).indexOf(id);
+              if (index !== -1) this.items.splice(index, 1);
+              this.showToast(
+                "success",
+                "top-right",
+                "Deleted!",
+                "CheckIcon",
+                "Your file has been deleted."
+              );
+            } else {
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                "Something went wrong." + response.message
+              );
+            }
           }
-        }
-      })
-      .catch(error => {
-        console.log('Something went wrong onRowDelete:', error)
-        this.showErroSwal(error)
-      })
+        })
+        .catch(error => {
+          console.log("Something went wrong onRowDelete:", error);
+          this.showErrorSwal(error);
+        });
     },
-    onRowProcess (id) {
-      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'warning',
-        { 
-          input: 'textarea',
-          inputValidator: (value) => {
+    onRowProcess(id) {
+      this.showSwalGeneric(
+        "Are you sure?",
+        "You won't be able to revert this!",
+        "warning",
+        {
+          input: "textarea",
+          inputValidator: value => {
             if (!value) {
-              return 'You need to write something!'
+              return "You need to write something!";
             }
           }
         }
       )
-      .then(async (result) => {
-        if (result.value) {
-          const { user_id, role_id } = this.currentUser
-          const response = await this.A_PROCESS_LEADS({
-            lead_id: id,
-            status: 3,
-            user_id,
-            description: result.value,
-          })
-          if (response.status == 200) {
-            const index = this.items.map(el => el.id).indexOf(id)
-            if (index !== -1) this.items[index].status_sn_id = 3
-              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          } else {
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
+        .then(async result => {
+          if (result.value) {
+            const { user_id, role_id } = this.currentUser;
+            const response = await this.A_PROCESS_LEADS({
+              lead_id: id,
+              status: 3,
+              user_id,
+              description: result.value
+            });
+            if (response.status == 200) {
+              const index = this.items.map(el => el.id).indexOf(id);
+              if (index !== -1) this.items[index].status_sn_id = 3;
+              this.showToast(
+                "success",
+                "top-right",
+                "Success!",
+                "CheckIcon",
+                "Successful operation"
+              );
+            } else {
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                "Something went wrong." + response.message
+              );
+            }
           }
-        }
-      })
-      .catch(error => {
-        console.log('Something went wrong onRowProcess:', error)
-        this.showErroSwal(error)
-      })
+        })
+        .catch(error => {
+          console.log("Something went wrong onRowProcess:", error);
+          this.showErrorSwal(error);
+        });
     },
-    async getAllQuicksSms () {
+    async getAllQuicksSms() {
       try {
         const response = await this.A_GET_SMS_QUICKS({
-          modul: this.modul,
-        })
-        this.quicks = response.data.map(el => ({ ...el, value: el.sms, label: el.title, showMore: false })).reverse()
+          modul: this.modul
+        });
+        this.quicks = response.data
+          .map(el => ({
+            ...el,
+            value: el.sms,
+            label: el.title,
+            showMore: false
+          }))
+          .reverse();
       } catch (error) {
-        console.log('Something wnet wrong getAllQuicksSms:', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        console.log("Something wnet wrong getAllQuicksSms:", error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
-    modalSmsOpen (item) {
-      this.rowData = item
-      this.leads_sms = []
-      this.typesms = 1
-      this.leads_sms_o = []
-      this.leads_sms_o.push(item.id)
-      this.name_leads_arr = [{ name: item.lead_name, id: item.id }]
-      this.$bvModal.show('modal-send-sms')
+    modalSmsOpen(item) {
+      this.rowData = item;
+      this.leads_sms = [];
+      this.typesms = 1;
+      this.leads_sms_o = [];
+      this.leads_sms_o.push(item.id);
+      this.name_leads_arr = [{ name: item.lead_name, id: item.id }];
+      this.$bvModal.show("modal-send-sms");
     },
-    modalHistorySmsOpen (item) {
-      this.rowData = item
-      this.$bvModal.show('modal-history-sms')
+    modalHistorySmsOpen(item) {
+      this.rowData = item;
+      this.$bvModal.show("modal-history-sms");
     },
-    modalSmssOpen () {
-      this.typesms = 0
-      this.name_leads_arr = this.leadsSelecteds.map(el => ({ name: el.lead_name, id: el.id }))
-      this.$bvModal.show('modal-send-sms')
+    modalSmssOpen() {
+      this.typesms = 0;
+      this.name_leads_arr = this.leadsSelecteds.map(el => ({
+        name: el.lead_name,
+        id: el.id
+      }));
+      this.$bvModal.show("modal-send-sms");
     },
-    modalQuickOpen () {
-      this.$bvModal.show('modal-quick-sms')
+    modalQuickOpen() {
+      this.$bvModal.show("modal-quick-sms");
     },
-    modalQuickCreateOpen () {
-      this.quickData = JSON.parse(JSON.stringify(this.blankQuickData))
-      this.$bvModal.show('modal-quick-sms-save')
+    modalQuickCreateOpen() {
+      this.quickData = JSON.parse(JSON.stringify(this.blankQuickData));
+      this.$bvModal.show("modal-quick-sms-save");
     },
-    modalQuickEditOpen (item) {
-      this.quickData = item
-      this.$bvModal.show('modal-quick-sms-save')
+    modalQuickEditOpen(item) {
+      this.quickData = item;
+      this.$bvModal.show("modal-quick-sms-save");
     },
-    updateQuicks (item) {
-      const index = this.quicks.map(el => el.id).indexOf(item.id)
+    updateQuicks(item) {
+      const index = this.quicks.map(el => el.id).indexOf(item.id);
       if (index !== -1) {
-        this.quicks[index] = { ...item, value: item.sms, label: item.title }
+        this.quicks[index] = { ...item, value: item.sms, label: item.title };
       } else {
-        this.quicks.unshift({ ...item, value: item.sms, label: item.title })
+        this.quicks.unshift({ ...item, value: item.sms, label: item.title });
       }
     },
-    resetQuickData (item) {
-      this.quickData = item
+    resetQuickData(item) {
+      this.quickData = item;
     },
-    async modalQuickDelete (id) {
-      this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'warning')
-      .then(async (result) => {
-        if (result.value) {
-          const response = await this.A_DELETE_SMS_QUICK({ id })
-          console.log('response postDeleteQuickSms', response)
-          if (response.status == 200) {
-            const index = this.quicks.map(el => el.id).indexOf(id)
-            if (index !== -1)
-              this.quicks.splice(index, 1)
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          } else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', response.message)
-        }
-      })
-      .catch(error => {
-        console.log('Something went wrong modalQuickDelete', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-      })
-    },
-  },
-}
+    async modalQuickDelete(id) {
+      this.showSwalGeneric(
+        "Are you sure?",
+        "You won't be able to revert this!",
+        "warning"
+      )
+        .then(async result => {
+          if (result.value) {
+            const response = await this.A_DELETE_SMS_QUICK({ id });
+            console.log("response postDeleteQuickSms", response);
+            if (response.status == 200) {
+              const index = this.quicks.map(el => el.id).indexOf(id);
+              if (index !== -1) this.quicks.splice(index, 1);
+              this.showToast(
+                "success",
+                "top-right",
+                "Success!",
+                "CheckIcon",
+                "Successful operation"
+              );
+            } else
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                response.message
+              );
+          }
+        })
+        .catch(error => {
+          console.log("Something went wrong modalQuickDelete", error);
+          this.showToast(
+            "danger",
+            "top-right",
+            "Oop!",
+            "AlertOctagonIcon",
+            this.getInternalErrors(error)
+          );
+        });
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  .table-responsive {
-    min-height: 15rem;
-  }
+.table-responsive {
+  min-height: 15rem;
+}
 </style>

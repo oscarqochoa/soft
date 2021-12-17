@@ -116,7 +116,8 @@
           show-empty
           small
           striped
-          sticky-header="50vh"
+          no-border-collapse
+          sticky-header="65vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
@@ -205,7 +206,7 @@
               v-b-tooltip.hover
               title="tracking"
               variant="dark button-little-size"
-              @click="trackingLoan(data.id_loan)"
+              @click="openTrackingLoan(data.item.id_loan)"
             >
               <b-icon icon="stoplights"></b-icon>
             </b-button>
@@ -237,19 +238,20 @@
               style="position:relative"
               v-if="(tab==1 || isManagement)&& [3,4].includes(data.item.status_loan)"
             >
-              <span
-                class="span-counter"
-                v-if="data.item.counter > 0"
-              >{{data.item.counter > 9 ? '9+' : data.item.counter }}</span>
               <b-button
                 size="sm"
                 v-b-tooltip.hover
                 title="REVISION PAYMENT"
                 class="button-little-size ml6"
                 variant="gradient-warning"
-                @click="openModalPays(data.item.id_loan)"
+                @click="openModalRevision(data.item.id_loan)"
               >
-                <b-icon icon="card-list"></b-icon>
+                <feather-icon
+                  icon="FileTextIcon"
+                  size="16"
+                  :badge="data.item.counter > 0? data.item.counter > 9 ? '9+' : data.item.counter : ''"
+                  badge-classes="badge-danger badge-glow"
+                />
               </b-button>
             </span>
             <b-button
@@ -305,6 +307,9 @@
         </b-row>
       </div>
     </b-card>
+    <ModalTrackingLoan v-if="modalsInfo.tracking" :info="modalsInfo" @hide="closeModals" />
+    <ModalNewPay v-if="modalsInfo.newPay" :info="modalsInfo" @hide="closeModals" />
+    <ModalRevisionPayment v-if="modalsInfo.revisionPay" :info="modalsInfo" @hide="closeModals" />
   </div>
 </template>
 
@@ -313,6 +318,9 @@ import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
+import ModalTrackingLoan from "./modals/ModalTrackingLoan.vue";
+import ModalNewPay from "./modals/ModalNewPay.vue";
+import ModalRevisionPayment from "./modals/ModalRevisionPayment.vue";
 import { mapGetters, mapMutations } from "vuex";
 import moment from "moment";
 import loansService from "@/views/commons/components/loans/services/loans.service";
@@ -324,7 +332,10 @@ export default {
   components: {
     vSelect,
     AppCollapse,
-    AppCollapseItem
+    AppCollapseItem,
+    ModalTrackingLoan,
+    ModalNewPay,
+    ModalRevisionPayment
   },
   props: {
     tab: {
@@ -334,6 +345,14 @@ export default {
   },
   data() {
     return {
+      modalsInfo: {
+        tracking: false,
+        newPay: false,
+        revisionPay: false,
+        invoice: false,
+        idLoan: null,
+        dueId: null
+      },
       module: this.$route.meta.module,
       loans: [],
       advance: false,
@@ -466,14 +485,15 @@ export default {
   },
   created() {
     this.search();
-    console.log(this.currentUser);
   },
   mounted() {},
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
       skin: "appConfig/skin",
-      loading: "commissions-store/loading"
+      loading: "commissions-store/loading",
+      researchLoans: "loans-store/researchLoans",
+      modalRequest: "loans-store/modalRequest"
     }),
     isManagement() {
       return this.module === 16;
@@ -513,7 +533,7 @@ export default {
         this.setLoading(false);
         console.log(this.loans);
       } catch (error) {
-        this.showErroSwal();
+        this.showErrorSwal();
         this.setLoading(false);
       }
     },
@@ -523,10 +543,7 @@ export default {
     },
 
     //Methods to Edit
-    openTrackingPayDay(id) {
-      this.idLoan = id;
-      this.modalTrackingPayDay = true;
-    },
+    openTrackingPayDay(id) {},
     updateDate() {
       swal
         .fire({
@@ -577,23 +594,49 @@ export default {
       this.idLoan = id;
       this.showModalLoanPays = true;
     },
-    openModalPay(id, due) {
-      this.idLoan = id;
-      this.idDue = due;
-      this.showModalLoanPay = true;
-    },
+
+    //OPEN MODALS
     openModalLoanId(id) {
-      console.log(id);
-      this.$emit("openLoan", id);
+      this.modalRequest.idLoan = id;
+      this.modalRequest.show = true;
     },
-    trackingLoan(id) {
-      this.idLoan = id;
-      this.modalTracking = true;
+    openModalPay(id, due) {
+      this.modalsInfo.idLoan = id;
+      this.modalsInfo.idDue = due;
+      this.modalsInfo.newPay = true;
+      this.addPreloader();
     },
-    changeOrdinal(number) {
-      var s = ["th", "st", "nd", "rd"];
-      var v = number % 100;
-      return number + (s[(v - 20) % 10] || s[v] || s[0]);
+    openTrackingLoan(id) {
+      this.addPreloader();
+      this.modalsInfo.idLoan = id;
+      this.modalsInfo.tracking = true;
+    },
+    openModalRevision(id) {
+      this.addPreloader();
+      this.modalsInfo.idLoan = id;
+      this.modalsInfo.revisionPay = true;
+    },
+    //CLOSE MODALS
+    closeModals(status) {
+      //Close Modals
+      this.modalsInfo.newPay = false;
+      this.modalsInfo.tracking = false;
+      this.modalsInfo.revisionPay = false;
+      this.modalsInfo.invoice = false;
+
+      //Clean Info
+      this.modalsInfo.idLoan = null;
+      this.modalsInfo.idDue = null;
+
+      //Research
+      if (status) this.$store.commit("loans-store/ADD_ONE_RESEARCH");
+    }
+  },
+  watch: {
+    researchLoans(newValue, oldValue) {
+      if (newValue) {
+        this.search();
+      }
     }
   }
 };

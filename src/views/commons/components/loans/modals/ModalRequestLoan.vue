@@ -4,7 +4,8 @@
       v-model="modalUp"
       title-class="h2"
       size="lg"
-      title="REQUEST LOAN"
+      :title="requestTitle"
+      :hide-footer="hideFooter"
       modal-class="modal-primary"
       @hidden="hideModal(false)"
     >
@@ -105,8 +106,8 @@
                           <b-input-group>
                             <b-input-group-prepend class="w-35">
                               <b-input-group-text
-                                class="w-100 text-light"
-                                :class="isLoanActive ? '' : 'bg-primary'"
+                                class="w-100"
+                                :class="isLoanActive ? '' : 'bg-primary text-light'"
                               >
                                 <span>AMOUNT</span>
                               </b-input-group-text>
@@ -120,7 +121,7 @@
                             ></money>
                             <span
                               v-if="isOverProvision"
-                              class="red-text-2"
+                              class="text-danger"
                             >The amount is over the middle provision.</span>
                           </b-input-group>
                         </b-form-group>
@@ -149,15 +150,15 @@
                     <b-input-group>
                       <b-input-group-prepend class="w-35">
                         <b-input-group-text
-                          class="w-100 text-light"
-                          :class="isLoanActive ? '' : 'bg-primary'"
+                          class="w-100"
+                          :class="isLoanActive ? '' : 'bg-primary text-light'"
                         >
                           <span>INTEREST</span>
                         </b-input-group-text>
                       </b-input-group-prepend>
                       <b-form-checkbox
                         v-model="selectedInterest"
-                        class="form-control pl-1"
+                        class="pl-1 form-control bg-transparent"
                         :disabled="isLoanActive"
                         switch
                       >
@@ -175,15 +176,15 @@
                       <b-input-group>
                         <b-input-group-prepend class="w-35">
                           <b-input-group-text
-                            class="w-100 text-light"
-                            :class="isLoanActive ? '' : 'bg-primary'"
+                            class="w-100"
+                            :class="isLoanActive ? '' : 'bg-primary text-light'"
                           >
                             <span>MONTHLY PAYMENT</span>
                           </b-input-group-text>
                         </b-input-group-prepend>
                         <b-radio-group
                           v-model="loan.payment"
-                          class="form-control text-center"
+                          class="form-control text-center bg-transparent"
                           :style="bigWindow? '' : 'height: 4rem;'"
                           :class="{'border border-danger':errors[0]}"
                         >
@@ -266,9 +267,8 @@
                   <b-row class="class-inline px-1">
                     <b-col
                       lg="5"
-                      class="class-campo-icon add-class-campo-icon text-light"
-                      :class="isLoanActive ? '' : 'bg-primary'"
-                      style="border-radius: 10px 10px 0px 0px"
+                      class="class-campo-icon add-class-campo-icon border-title-text"
+                      :class="isLoanActive ? '' : 'bg-primary  text-light'"
                     >
                       <span>MOTIVE</span>
                     </b-col>
@@ -279,7 +279,7 @@
                     <div class="form-group mt-0">
                       <textarea
                         v-model="loan.motive"
-                        class="textarea-style form-control"
+                        class="textarea-style form-control bg-transparent"
                         style="border-radius: 0px 10px 10px 10px"
                         :class="{'border border-danger':errors[0]}"
                         :disabled="isLoanActive"
@@ -291,18 +291,18 @@
               <b-row>
                 <b-col lg="12">
                   <b-row class="class-inline px-1">
-                    <b-col
-                      lg="5"
-                      class="class-campo-icon add-class-campo-icon"
-                      style="border-radius: 10px 10px 0px 0px; border: 1px solid #d8d6de;"
-                    >
+                    <b-col lg="5" class="class-campo-icon add-class-campo-icon border-title-text">
                       <span>OBSERVATION</span>
                     </b-col>
                   </b-row>
                 </b-col>
                 <b-col lg="12">
                   <div class="form-group mt-0">
-                    <div class="textarea-style" style="border-radius: 0px 10px 10px 10px" disabled>
+                    <div
+                      class="textarea-style bg-transparent"
+                      style="border-radius: 0px 10px 10px 10px"
+                      disabled
+                    >
                       <ul>
                         <li>The loan have a rate {{userData.interest_real}}%</li>
                         <li>If there is no payment on the 25th, a daily charge of $ 1 is generated</li>
@@ -439,14 +439,28 @@ export default {
   computed: {
     ...mapGetters({
       bigWindow: "app/bigWindow",
-      currentUser: "auth/currentUser"
+      currentUser: "auth/currentUser",
+      moduleId: "auth/moduleId",
+      userSession: "auth/userSession",
+      isSupervisor: "auth/isSupervisor",
+      isCeo: "auth/isCeo"
     }),
+    requestTitle() {
+      return this.info.idLoan ? "SHOW LOAN REQUEST" : "REQUEST NEW LOAN";
+    },
     isDataComplete() {
       return (
         this.userData &&
         this.userData.provision &&
         this.userData.userName &&
         this.userData.salary
+      );
+    },
+    hideFooter() {
+      return !(
+        !this.isLoanActive ||
+        (this.isNotUserLoan &&
+          (this.isShowSupervisor || this.isShowRrhh || this.isShowManagement))
       );
     },
     isOverProvision() {
@@ -456,23 +470,19 @@ export default {
       return this.info.idLoan != null;
     },
     isNotUserLoan() {
-      return (
-        this.info.idLoan != null && this.loan.id_user != this.global.layout.id
-      );
+      return this.info.idLoan != null && this.loan.id_user != this.userSession;
     },
     isShowSupervisor() {
       return (
-        (this.global.layout.role_id == 2 && this.loan.process == 1) ||
-        (this.global.layout.role_id == 1 && this.loan.process == 1)
+        (this.isSupervisor && this.loan.process == 1) ||
+        (this.isCeo && this.loan.process == 1)
       );
     },
 
     isShowManagement() {
       return (
-        (this.global.layout.modul_id == 16 && this.loan.process == 2) ||
-        (this.global.layout.role_id == 1 &&
-          this.loan.process == 2 &&
-          this.global.layout.modul_id == 16)
+        (this.moduleId == 16 && this.loan.process == 2) ||
+        (this.isCeo && this.loan.process == 2 && this.moduleId == 16)
       );
     },
     prefixSalary() {
@@ -485,6 +495,7 @@ export default {
     }),
 
     hideModal(status) {
+      this.info.idLoan = null;
       this.modalUp = false;
       this.$emit("hide", status);
     },
@@ -516,7 +527,7 @@ export default {
         this.userData.roleName = response[0].roleName;
         this.userData.interest_real = response[0].interest_real;
       } catch (error) {
-        this.showErroSwal();
+        this.showErrorSwal();
         this.setLoading(false);
       }
     },
@@ -538,75 +549,45 @@ export default {
         this.modalUp = true;
         this.setLoading(false);
       } catch (error) {
-        this.showErroSwal();
+        this.showErrorSwal();
         this.setLoading(false);
       }
     },
     async sendLoan() {
       this.vmoneyValidate = true;
       const validate = await this.$refs.form.validate();
-      if (validate && !this.this.isOverProvision) {
+      if (validate && !this.isOverProvision) {
         //Swal Comfirm
-        const result = await this.showSwalConfirm(
-          "Are you sure?",
-          "You won't be able to revert this!",
-          "warning"
-        );
+        const result = await this.showConfirmSwal();
         if (result.isConfirmed) {
           try {
-          } catch (error) {}
+            this.addPreloader();
+            this.noSend = true;
+            this.loan.interest = this.selectedInterest
+              ? 0
+              : this.userData.interest_real;
+            const params = {
+              id_user: this.userSession,
+              id_module: this.moduleId,
+              motive: this.loan.motive,
+              amount: this.loan.amount,
+              pay_day: 25,
+              payment: this.loan.payment,
+              exchange: this.loan.exchange,
+              interest: this.loan.interest
+            };
+            let response = await loansService.insertLoan(params);
+            this.removePreloader();
+            this.showSuccessSwal("Loan sent");
+            this.hideModal(true);
+          } catch (error) {
+            this.noSend = false;
+            this.hideModal(false);
+            this.showErrorSwal("Loan not sent");
+            this.removePreloader();
+          }
         }
       }
-      this.$refs.form.validate().then(success => {
-        if (!success || this.isOverProvision) {
-          return;
-        }
-
-        swal
-          .fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, send it!"
-          })
-          .then(result => {
-            if (result.value) {
-              this.noSend = true;
-              this.loan.interest = this.selectedInterest
-                ? 0
-                : this.userData.interest_real;
-              var x = document.getElementById("app");
-              x.classList.add("preloader");
-              x.classList.add("opacity-uno");
-              axios
-                .post("/api/loans/insert-loan", {
-                  id_user: this.global.layout.id,
-                  id_module: this.global.layout.modul_id,
-                  motive: this.loan.motive,
-                  amount: this.loan.amount,
-                  pay_day: 25,
-                  payment: this.loan.payment,
-                  exchange: this.loan.exchange,
-                  interest: this.loan.interest
-                })
-                .then(response => {
-                  if (response.status == 200) {
-                    swal.fire("Success!", "Loan sent", "success");
-                    this.$emit("click");
-                  } else {
-                    this.noSend = false;
-                    swal.fire("Error!", "Loan not sent", "error");
-                  }
-                  var x = document.getElementById("app");
-                  x.classList.remove("preloader");
-                  x.classList.remove("opacity-uno");
-                });
-            }
-          });
-      });
     },
     changeStatus(status) {
       this.acceptOrDeny.status = status;
@@ -640,9 +621,9 @@ export default {
       let role_id = this.isShowSupervisor ? 2 : 3;
       const params = {
         id_loan: this.info.idLoan,
-        id_user: this.global.layout.id,
+        id_user: this.userSession,
         motive: this.acceptOrDeny.comment,
-        id_module: this.global.layout.modul_id,
+        id_module: this.moduleId,
         status: this.acceptOrDeny.status,
         process: this.acceptOrDeny.status == 1 ? role_id : 4,
         rol: this.isShowSupervisor ? 2 : 4 // se cambio el 4 por el 3 que indicaba rrhh
@@ -708,5 +689,13 @@ export default {
 }
 .mr4px {
   margin-right: 4px;
+}
+.bg-transparent {
+  background-color: transparent !important;
+}
+
+.border-title-text {
+  border-radius: 10px 10px 0px 0px;
+  border: 1px solid #d8d6de;
 }
 </style>

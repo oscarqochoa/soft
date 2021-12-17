@@ -114,10 +114,43 @@ export default {
         }
       );
     },
-    showErroSwal() {
+    showConfirmSwal(
+      title = "Are you sure?",
+      text = "You won't be able to revert this!",
+      icon = "warning"
+    ) {
+      return this.$swal({
+        title,
+        text,
+        icon,
+        showCancelButton: true,
+        reverseButtons: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes",
+        customClass: {
+          confirmButton: "btn btn-gradient-success  ml-3 ",
+          cancelButton: "btn btn-gradient-danger  ",
+        },
+      });
+    },
+
+    showSuccessSwal(text = "Successful process") {
+      this.$swal({
+        title: "Success!",
+        text,
+        icon: "success",
+        customClass: {
+          confirmButton: "btn btn-primary",
+        },
+        buttonsStyling: false,
+      });
+    },
+    showErrorSwal(
+      text = "Sorry, there was an error ... try again or contact support !!!"
+    ) {
       this.$swal({
         title: "Error!",
-        text: " Sorry, there was an error ... try again or contact support !!!",
+        text,
         icon: "error",
         customClass: {
           confirmButton: "btn btn-danger",
@@ -125,6 +158,7 @@ export default {
         buttonsStyling: false,
       });
     },
+
     showSwalGeneric(title, text, icon, config = {}) {
       return this.$swal({
         icon,
