@@ -206,7 +206,7 @@ export default {
     vSelect,
   },
   props: {
-    filter: { required: true, type: Object },
+    filter: { required: true, type: Array },
     totalRows: { required: false, type: Number },
     paginate: { required: true, type: Object },
     startPage: { required: false, type: Number },

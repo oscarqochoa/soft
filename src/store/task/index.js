@@ -29,7 +29,6 @@ const actions = {
   async A_GET_TASKS ({ commit }, body) {
     try {
       const response = await TaskService.getTasks(body)
-      console.log('A_GET_TASKS response', response)
       if (mixins.methods.isResponseSuccess(response)) {
         response.data.forEach((task) => {
           task.tasks = JSON.parse(task.tasks)

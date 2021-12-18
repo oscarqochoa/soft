@@ -870,7 +870,6 @@ export default {
       }
     },
     openModalProgram(data) {
-      console.log(data.program_id, data.haveRates)
       switch (data.program_id) {
         case 1: this.modalData.programs.programSelected = 'business-modal'; break
         case 2: this.modalData.programs.programSelected = 'boost-credit-modal'; break
