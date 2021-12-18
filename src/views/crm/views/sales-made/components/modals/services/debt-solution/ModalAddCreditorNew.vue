@@ -1,240 +1,220 @@
 <template>
   <div>
     <ValidationObserver ref="form">
-      <div>
-        <div class="col-lg-12 col-md-12">
-          <div class="row">
-            <div
-              class="col-md-2"
-              style="padding-right: 0;"
+
+      <b-container fluid>
+        <b-row>
+          <b-col
+            md="2"
+          >
+            <label>Creditor Name</label>
+          </b-col>
+          <b-col md="10">
+            <vue-autosuggest
+              ref="autocomplete"
+              :suggestions="filteredOptions"
+              :get-suggestion-value="getSuggestionValue"
+              :input-props="{id:'autosuggest__input',class:'form-control', placeholder:'Select'}"
+              @input="onInputChange"
+              @selected="selectHandler"
             >
-              <label>Creditor Name</label>
-            </div>
-            <div class="col-md-10">
-              <vue-autosuggest
-                ref="autocomplete"
-                :suggestions="filteredOptions"
-                :limit="5"
-                :input-props="{id:'autosuggest__input',class:'form-control', placeholder:'Select'}"
-                @input="onInputChange"
-                @selected="selectHandler"
-              >
-                <template slot-scope="{suggestion}">
-                  <span class="my-suggestion-item">{{ suggestion.item.value }}</span>
-                </template>
-              </vue-autosuggest>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-md-2">
-              <label># Account</label>
-            </div>
-            <div class="col-md-10">
-              <ValidationProvider
-                v-slot="{errors}"
-                rules="required"
-              >
-                <input
-                  id="account"
-                  v-model="account"
-                  v-mask="'##############################'"
-                  class="form-control"
-                  type="text"
-                  :style="errors[0] ? 'border-color:red' : ''"
-                >
-                <div
-                  v-if="errors[0]"
-                  class="invalid-feedback"
-                >
-                  The field {{ errors[0] }}
-                </div>
-              </ValidationProvider>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-md-2">
-              <label>Total Balance</label>
-            </div>
-            <div
-              class="col-md-4"
-              style="position:relative"
+              <template slot-scope="{suggestion}">
+                <span class="my-suggestion-item">{{ suggestion.item.value }}</span>
+              </template>
+            </vue-autosuggest>
+          </b-col>
+        </b-row>
+        <b-row class="mt-1">
+          <b-col md="2">
+            <label># Account</label>
+          </b-col>
+          <b-col md="10">
+            <ValidationProvider
+              v-slot="{errors}"
+              rules="required"
             >
-              <span id="class-sign-inpu">$</span>
-              <ValidationProvider
-                v-slot="{errors}"
-                rules="required|money-1"
+              <input
+                id="account"
+                v-model="account"
+                v-mask="'##############################'"
+                class="form-control"
+                type="text"
+                :style="errors[0] ? 'border-color:red' : ''"
               >
+              <div
+                v-if="errors[0]"
+                class="invalid-feedback"
+              >
+                The field {{ errors[0] }}
+              </div>
+            </ValidationProvider>
+          </b-col>
+        </b-row>
+        <b-row class="mt-1">
+          <b-col md="2">
+            <label>Total Balance</label>
+          </b-col>
+          <b-col
+            md="4"
+          >
+            <ValidationProvider
+              v-slot="{errors}"
+              rules="required|money-1"
+            >
+              <b-input-group prepend="$">
                 <money
                   v-model="balance"
                   v-bind="vMoney"
-                  class="input-form"
-                  style="padding-left: 30px;"
+                  class="form-control"
                   :style="errors[0] && validateMoney ? 'border-color:red' : ''"
                 />
-                <div
-                  v-if="errors[0] && validateMoney"
-                  class="invalid-feedback"
-                >Balance {{ errors[0] }}</div>
-              </ValidationProvider>
-            </div>
-            <div
-              class="col-md-2"
-              style="padding-right: 0;"
+              </b-input-group>
+              <div
+                v-if="errors[0] && validateMoney"
+                class="invalid-feedback"
+              >Balance {{ errors[0] }}</div>
+            </ValidationProvider>
+          </b-col>
+          <b-col
+            md="2"
+          >
+            <label>Monthly Current Payment</label>
+          </b-col>
+          <b-col
+            md="4"
+          >
+            <ValidationProvider
+              v-slot="{errors}"
+              rules="required|money-1"
             >
-              <label>Monthly Current Payment</label>
-            </div>
-            <div
-              class="col-md-4"
-              style="position:relative"
-            >
-              <span id="class-sign-inpu">$</span>
-              <ValidationProvider
-                v-slot="{errors}"
-                rules="required|money-1"
-              >
+              <b-input-group prepend="$">
                 <money
                   v-model="monthly"
                   v-bind="vMoney"
-                  class="input-form"
+                  class="form-control"
                   style="padding-left: 30px;"
                   :style="errors[0] && validateMoney ? 'border-color:red' : ''"
                 />
-                <div
-                  v-if="errors[0] && validateMoney"
-                  class="invalid-feedback"
-                >Monthly is {{ errors[0] }}</div>
-              </ValidationProvider>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div
-              class="col-md-2"
-              style="padding-right: 0;"
-            >
-              <label>Months Behind</label>
-            </div>
-            <div class="col-md-2">
-              <ValidationProvider
-                v-slot="{errors}"
-                rules="required"
-              >
-                <input
-                  v-model="month"
-                  class="input-form"
-                  type="text"
-                  :style="errors[0] ? 'border-color:red' : ''"
-                >
-                <div
-                  v-if="errors[0]"
-                  class="invalid-feedback"
-                >
-                  The field {{ errors[0] }}
-                </div>
-              </ValidationProvider>
-            </div>
-            <div class="col-md-2" />
-            <div class="col-md-2">
-              <label>Interes Rate</label>
-            </div>
-            <div
-              class="col-md-4"
-              style="position:relative"
-            >
-              <span style="position:absolute;right: 25px;top: 4px;color: #999;">%</span>
-              <!-- <money v-model="monthly" v-bind="vMoney" class="input-form" style="padding-left: 30px;"></money> -->
-              <ValidationProvider
-                v-slot="{errors}"
-                rules="required"
-              >
-                <input
-                  v-model="interes"
-                  class="input-form"
-                  type="text"
-                  :style="errors[0] ? 'border-color:red' : ''"
-                >
-                <div
-                  v-if="errors[0]"
-                  class="invalid-feedback"
-                >
-                  The field {{ errors[0] }}
-                </div>
-              </ValidationProvider>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-md-2">
-              <label>Type</label>
-            </div>
-            <div class="col-md-4">
-              <ValidationProvider
-                v-slot="{errors}"
-                rules="required"
-              >
-                <select
-                  v-model="type"
-                  class="input-form"
-                  :style="errors[0] ? 'border-color:red' : ''"
-                >
-                  <option
-                    v-for="(item, index) in types"
-                    :key="index"
-                    :value="item.id"
-                  >{{ item.value }}</option>
-                </select>
-                <div
-                  v-if="errors[0]"
-                  class="invalid-feedback"
-                >
-                  The field {{ errors[0] }}
-                </div>
-              </ValidationProvider>
-            </div>
-            <div
-              class="col-md-2"
-              style="padding-right: 0;"
-            >
-              <label>Unsecured Type</label>
-            </div>
-            <div class="col-md-4">
-              <input
-                v-model="unsecured"
-                type="checkbox"
-                disabled
-              >
-            </div>
-          </div>
-          <br>
-          <div
-            v-if="trueRetainer == 1"
-            class="row"
+              </b-input-group>
+              <div
+                v-if="errors[0] && validateMoney"
+                class="invalid-feedback"
+              >Monthly is {{ errors[0] }}</div>
+            </ValidationProvider>
+          </b-col>
+        </b-row>
+        <b-row class="mt-1">
+          <b-col
+            md="2"
           >
-            <div
-              class="col-md-2"
-              style="padding-right: 0;"
+            <label>Months Behind</label>
+          </b-col>
+          <b-col md="4">
+            <ValidationProvider
+              v-slot="{errors}"
+              rules="required"
             >
-              <label>Add Retainer Fee:</label>
-            </div>
-            <div class="col-md-4">
-              <div class="form-control">
-                <label style="color: #e26969;">NO</label>
-                <label class="switch">
-                  <input
-                    v-model="retainerFee"
-                    type="checkbox"
-                    :disabled="state == 0"
-                  >
-                  <span class="slider round" />
-                </label>
-                <label style="color: #56bec4;">YES</label>
+              <b-form-input
+                v-model="month"
+                type="number"
+                :style="errors[0] ? 'border-color:red' : ''"
+              />
+              <div
+                v-if="errors[0]"
+                class="invalid-feedback"
+              >
+                The field {{ errors[0] }}
               </div>
+            </ValidationProvider>
+          </b-col>
+          <b-col md="2">
+            <label>Interes Rate</label>
+          </b-col>
+          <b-col
+            md="4"
+          >
+            <ValidationProvider
+              v-slot="{errors}"
+              rules="required"
+            >
+              <b-input-group append="%">
+                <b-form-input
+                  v-model="interes"
+                  type="number"
+                  :style="errors[0] ? 'border-color:red' : ''"
+                />
+              </b-input-group>
+              <div
+                v-if="errors[0]"
+                class="invalid-feedback"
+              >
+                The field {{ errors[0] }}
+              </div>
+            </ValidationProvider>
+          </b-col>
+        </b-row>
+        <b-row class="mt-1">
+          <b-col md="2">
+            <label>Type</label>
+          </b-col>
+          <b-col md="4">
+            <ValidationProvider
+              v-slot="{errors}"
+              rules="required"
+            >
+              <v-select
+                v-model="type"
+                :style="errors[0] ? 'border-color:red' : ''"
+                :options="types"
+                :reduce="value => value.id"
+                label="value"
+              >
+              </v-select>
+              <div
+                v-if="errors[0]"
+                class="invalid-feedback"
+              >
+                The field {{ errors[0] }}
+              </div>
+            </ValidationProvider>
+          </b-col>
+          <b-col
+            md="2"
+          >
+            <label>Unsecured Type</label>
+          </b-col>
+          <b-col md="4">
+            <input
+              v-model="unsecured"
+              type="checkbox"
+              disabled
+            />
+          </b-col>
+        </b-row>
+        <b-row
+          v-if="trueRetainer == 1"
+        >
+          <b-col
+              md="2"
+          >
+            <label>Add Retainer Fee:</label>
+          </b-col>
+          <b-col md="4">
+            <div class="form-control">
+              <label style="color: #e26969;">NO</label>
+              <label class="switch">
+                <input
+                  v-model="retainerFee"
+                  type="checkbox"
+                  :disabled="state == 0"
+                >
+                <span class="slider round" />
+              </label>
+              <label style="color: #56bec4;">YES</label>
             </div>
-          </div>
-        </div>
-      </div>
+          </b-col>
+        </b-row>
+      </b-container>
     </ValidationObserver>
   </div>
 </template>
@@ -242,10 +222,12 @@
 <script>
 import { VueAutosuggest } from 'vue-autosuggest'
 import { mapGetters } from 'vuex'
+import vSelect from 'vue-select'
 
 export default {
   components: {
     VueAutosuggest,
+    vSelect,
   },
   props: [
     'idevent',
@@ -371,7 +353,7 @@ export default {
           this.type = response.data[0].type_id
           this.unsecured = response.data[0].unsecured
           this.valuecreditor = response.data[0].credit_name
-          this.$refs.autocomplete.$el.children[0].childNodes[2].children[0].value = this.valuecreditor
+          this.$refs.autocomplete.value = this.valuecreditor
         }
       } catch (error) {
         console.error(error)
@@ -413,7 +395,8 @@ export default {
       }
     },
     onInputChange(text) {
-      if (text === '' || text === undefined){
+      this.creditor = null
+      if (text === '' || text === undefined) {
         this.filteredOptions = []
         return
       }
@@ -422,6 +405,12 @@ export default {
           this.filteredOptions = [{ data: [...response.data] }]
         }
       })
+    },
+    selectHandler(value) {
+      this.creditor = value.item.id
+    },
+    getSuggestionValue(suggestion) {
+      return suggestion.item.value
     },
   },
 }

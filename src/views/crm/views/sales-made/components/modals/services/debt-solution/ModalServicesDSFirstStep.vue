@@ -38,8 +38,16 @@
             v-if="!isModalShow"
             class="d-flex align-items-center justify-content-center"
           >
-            <feather-icon @click="editCreditor(data.item.id)" class="cursor-pointer text-info font-medium-4 mr-1" icon="EditIcon" />
-            <feather-icon @click="deleteCreditor(data.item.id)" class="cursor-pointer text-danger font-medium-4" icon="TrashIcon" />
+            <feather-icon
+              class="cursor-pointer text-info font-medium-4 mr-1"
+              icon="EditIcon"
+              @click="editCreditor(data.item.id)"
+            />
+            <feather-icon
+              class="cursor-pointer text-danger font-medium-4"
+              icon="TrashIcon"
+              @click="deleteCreditor(data.item.id)"
+            />
           </div>
         </template>
         <template #bottom-row>
@@ -104,20 +112,11 @@
     <b-modal
       v-model="openmodal"
       size="lg"
-      scrollable
-      header-class="b-vue-modal-header"
+      :title="statemodal == 1?'ADD CREDITOR':'EDIT CREDITOR'"
+      no-close-on-backdrop
+      title-tag="h3"
       @ok.prevent="statemodal==1?$refs.modalCreditorNew.savecreditor():$refs.modalCreditorNew.updatecreditor()"
     >
-      <template #modal-header="{ close }">
-        <span>
-          <h3>{{ statemodal == 1?'ADD CREDITOR':'EDIT CREDITOR' }}</h3>
-        </span>
-        <i
-          class="fas fa-times-circle text-white"
-          style="color: #d0cdc5; font-size: 20px; cursor: pointer"
-          @click="close"
-        />
-      </template>
       <modal-add-creditor-new
         ref="modalCreditorNew"
         :idevent="salesClient.event_id"
@@ -150,7 +149,7 @@
 </template>
 
 <script>
-import ModalAddCreditorNew from "@/views/crm/views/sales-made/components/modals/services/debt-solution/ModalAddCreditorNew.vue"
+import ModalAddCreditorNew from '@/views/crm/views/sales-made/components/modals/services/debt-solution/ModalAddCreditorNew.vue'
 
 export default {
   components: {
@@ -345,10 +344,145 @@ export default {
         console.error(error)
       }
     },
+    async nextfirst(id, type) {
+      // eslint-disable-next-line no-useless-catch
+      try {
+        if (this.isModalShow) return true
+        if (type == 1 || type == 2) {
+          return await this.axiosNext(id, type)
+        } else if (type == 4) {
+          return await this.saveant(id, type)
+        } else if (this.dato12 == null || this.dato12 == '') {
+          this.errorGoal = true
+          return false
+        } else {
+          this.errorGoal = false
+          if (this.date3 == null || this.date3 == '') {
+            this.errorDate = true
+            return false
+          } else {
+            this.errorDate = false
+            return await this.axiosNext(id, type)
+          }
+        }
+      } catch (error) {
+        throw error
+      }
+    },
+    async saveant(id, type) {
+      try {
+        const response = await amgApi.post('/savefirst', {
+          type,
+          id,
+          event: this.salesClient.event_id,
+          account: null,
+          total_due: this.mont12,
+          cost: this.mont13,
+          monthly: this.mont14,
+          porctrf: this.porctrf,
+          retainer: this.mont15,
+          months: this.mont16,
+          years: this.mont17,
+          estimated: this.mont18,
+          id_history: this.id_history,
+          id_analisis: this.id_analisis,
+          name1: this.name1,
+          last1: this.last1,
+          date1: this.date1,
+          ssn1: this.ssn1,
+          applicant: this.applicant,
+          name2: this.name2,
+          last2: this.last2,
+          date2: this.date2,
+          ssn2: this.ssn2,
+          address: this.address,
+          city: this.city,
+          state: this.state,
+          zipcode: this.zipcode,
+          civil: this.civil,
+          civil2: this.civil2,
+          dependents: this.dependents,
+          dependents2: this.dependents2,
+          phone1: this.phone1,
+          employer1: this.employer1,
+          workphone1: this.workphone1,
+          employer2: this.employer2,
+          workphone2: this.workphone2,
+          dato1: this.dato1,
+          dato2: this.dato2,
+          dato3: this.dato3,
+          dato4: this.dato4,
+          dato5: this.dato5,
+          dato6: this.dato6,
+          dato7: this.dato7,
+          dato8: this.dato8,
+          dato91: this.dato91,
+          dato92: this.dato92,
+          dato93: this.dato93,
+          dato94: this.dato94,
+          dato95: this.dato95,
+          dato10: this.dato10,
+          dato11: this.dato11,
+          dato12: this.dato12,
+          dato13: this.dato13,
+          dato14: this.dato14,
+          dato15: this.dato15,
+          date3: this.date3,
+          date4: this.date4,
+          date5: this.date5,
+          date6: this.date6,
+          others: this.others,
+          middle1: this.middle1,
+          state_lead1: this.state_lead1,
+          middle2: this.middle2,
+          state_lead2: this.state_lead2,
+          phone2: this.phone2,
+          email: this.email,
+          valorutility: this.valorutility,
+          montoutlity: this.montoutlity,
+          valorothers: this.valorothers,
+          montoothers: this.montoothers,
+          housing: this.housing == false ? 0 : 1,
+        })
+        if (response.status === 200) {
+          await this.allDebtSolution()
+          return true
+        }
+        return false
+      } catch (error) {
+        console.error(error)
+        return false
+      }
+    },
+    async axiosNext(id, type) {
+      try {
+        const result = await this.$swal.fire({
+          title: 'ARE YOU SURE OF CONTINUE ?',
+          text: 'Before finalizing you must save.',
+          icon: 'warning',
+          showCancelButton: true,
+        })
+        if (result.value) {
+          this.addPreloader()
+          const response = await amgApi.post('/savefirst', {
+            type,
+            id,
+            event: this.typeModal == 3 || this.typeModal == 4 ? null : this.salesClient.event_id,
+            account: this.typeModal == 3 || this.typeModal == 4 ? this.salesClient.account_id : null,
+          })
+          if (response.status === 200) this.$emit('nextStep')
+          return true
+        }
+        return false
+      } catch (error) {
+        console.error(error)
+        return false
+      }
+    },
     downloadPdf() {
       this.exportPdfDisabled = true
       // eslint-disable-next-line no-restricted-globals
-      location.href = `/imprimirfileappotc/?id=${this.salesClient.account_id}`
+      location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/imprimirfileappotc/?id=${this.salesClient.account_id}`
       setTimeout(() => {
         this.exportPdfDisabled = false
       }, 10000)
