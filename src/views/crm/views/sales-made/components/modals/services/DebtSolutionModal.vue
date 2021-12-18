@@ -3,7 +3,6 @@
     v-model="modalServices"
     modal
     size="xl"
-    scrollable
     hide-footer
   >
     <template #modal-header="{ }">
@@ -18,21 +17,24 @@
       />
     </template>
     <form-wizard
+      ref="wizard"
       color="#7367F0"
       :title="null"
       :subtitle="null"
       shape="square"
-      finish-button-text="Submit"
+      :finish-button-text="(isModalShow)? 'Close' : 'Submit'"
       back-button-text="Previous"
       class="mb-3"
+      @on-complete="formSubmitted"
     >
 
       <!-- accoint details tab -->
       <tab-content
         title="CREDITORS'S LIST"
+        :before-change="validationFirstStep"
       >
         <modal-services-d-s-first-step
-          v-if="isFirstStep"
+          v-if="this.state1 == 1 || isFirstStep"
           ref="firstStep"
           v-model="passwordIsCorrect"
           :idleyend="idleyend"
@@ -43,21 +45,41 @@
           @nextStep="leyendDebtsolution"
         />
       </tab-content>
-
       <!-- personal details tab -->
       <tab-content
         title="ANALYSIS"
+        :before-change="validationSecondStep"
       >
-        <modal-services-d-s-second-step />
+        <modal-services-d-s-second-step
+          v-if="this.state2 == 1 || isSecondStep"
+          :key="key2"
+          ref="secondStep"
+          :sales-client="salesClient"
+          :idleyend="idleyend"
+          :is-modal-show="isModalShow"
+          :is-modal-add="isModalAdd"
+          :type-modal="typeModal"
+          @nextStep="leyendDebtsolution"
+        />
       </tab-content>
 
       <!-- address  -->
       <tab-content
         title="QUESTIONNAIRE"
       >
-        <modal-services-d-s-third-step />
+        <modal-services-d-s-third-step
+          v-if="state3 == 1 || isThirdStep"
+          ref="thirdStep"
+          :key="key3"
+          :sales-client="salesClient"
+          :idleyend="idleyend"
+          :is-modal-show="isModalShow"
+          :is-modal-add="isModalAdd"
+          :header-s="headerS"
+          :type-modal="typeModal"
+          @hideModal="hideModal"
+        />
       </tab-content>
-
     </form-wizard>
   </b-modal>
 </template>
@@ -115,6 +137,8 @@ export default {
       state3: 0,
       idleyend: '',
       leyend: '',
+      key2: 0,
+      key3: 100,
     }
   },
   computed: {
@@ -134,15 +158,58 @@ export default {
       return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
     },
   },
+  mounted() {
+    console.log(this.$refs, 'wizard')
+  },
   created() {
     this.leyendDebtsolution()
   },
   methods: {
+    isLastStep() {
+      if (this.$refs.wizard) return this.$refs.wizard.isLastStep
+      return false
+    },
     hideModal(refresh, programSelect) {
       this.$emit('closeModal', refresh, programSelect)
     },
     changeProgram(headerS) {
       this.$emit('changeProgram', headerS)
+    },
+    validationFirstStep() {
+      return new Promise((resolve, reject) => {
+        if (!this.passwordIsCorrect && this.state1 === 1) {
+          this.showToast('danger', 'top-right', 'Validate error', 'XIcon', 'Please validate password')
+          reject()
+        } else {
+          this.$refs.firstStep.nextfirst(this.idleyend, 1).then(value => {
+            if (value) {
+              this.key2 += 1
+              resolve(true)
+            }
+            reject()
+          }).catch(error => {
+            console.error(error)
+            reject()
+          })
+        }
+      })
+    },
+    validationSecondStep() {
+      return new Promise((resolve, reject) => {
+        this.$refs.secondStep.nextfirst(this.idleyend, 2).then(value => {
+          if (value) {
+            this.key3 += 1
+            resolve(true)
+          }
+          reject()
+        }).catch(error => {
+          console.error(error)
+          reject()
+        })
+      })
+    },
+    async formSubmitted() {
+      await this.$refs.thirdStep.nextfirst(this.idleyend, 3)
     },
     async leyendDebtsolution() {
       try {
@@ -171,4 +238,13 @@ export default {
 <style lang="scss">
 @import '@core/scss/vue/libs/vue-wizard.scss';
 @import '@core/scss/vue/libs/vue-select.scss';
+.wizard-tab-content {
+    overflow: auto;
+    height: 300px;
+}
+//.wizard-nav{
+//  position: sticky !important;
+//  top: 0 !important;
+//  z-index: 99;
+//}
 </style>
