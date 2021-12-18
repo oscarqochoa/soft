@@ -301,7 +301,7 @@ export default {
         }
       }).catch(error => {
         console.log('Something went wrong onModalCardOpen', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        this.showErrorSwal()
         this.isLoading = false
       })
     }

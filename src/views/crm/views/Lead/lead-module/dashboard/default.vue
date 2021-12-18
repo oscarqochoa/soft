@@ -43,6 +43,16 @@
         :lead="S_LEAD"
       />
     </b-col>
+    <b-col v-if="modul !== 15" cols="12" lg="6">
+      <card-lead-call
+        v-if="Object.keys(S_LEAD).length"
+        :modul="modul"
+        :only-read="onlyRead"
+        :lead="S_LEAD"
+        :is-busy="isBusyCall"
+        @onReloadCall="getCalls"
+      />
+    </b-col>
   </b-row>
 </template>
 
@@ -51,6 +61,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 import CardLeadAppointment from './CardLeadAppointment.vue'
+import CardLeadCall from './CardLeadCall.vue'
 import CardLeadClient from './CardLeadClient.vue'
 import CardLeadCreditCard from './CardLeadCreditCard.vue'
 import CardLeadCreditReport from './CardLeadCreditReport.vue'
@@ -58,8 +69,9 @@ import CardLeadTask from './CardLeadTask.vue'
 
 export default {
   components: {
-    CardLeadClient,
     CardLeadAppointment,
+    CardLeadCall,
+    CardLeadClient,
     CardLeadCreditCard,
     CardLeadCreditReport,
     CardLeadTask
@@ -68,6 +80,7 @@ export default {
   data () {
     return {
       isBusyAppointment: false,
+      isBusyCall: false,
       isBusyCreditReportObtained: false,
       isBusyCreditReportPending: false,
       modul: 2,
@@ -78,6 +91,7 @@ export default {
     this.getCreditReports()
     this.getCreditReportPendings()
     this.getEvents()
+    this.getCalls(10)
     this.getOwners()
     this.getPrograms()
   },
@@ -98,6 +112,7 @@ export default {
       A_GET_PROGRAMS: 'CrmGlobalStore/A_GET_PROGRAMS',
       A_GET_CREDIT_REPORTS: 'CrmCreditReportStore/A_GET_CREDIT_REPORTS',
       A_GET_CREDIT_REPORT_PENDINGS: 'CrmCreditReportStore/A_GET_CREDIT_REPORT_PENDINGS',
+      A_GET_CALLS: 'CrmCallStore/A_GET_CALLS',
     }),
     async getLead () {
       try {
@@ -115,6 +130,7 @@ export default {
       } catch (error) {
         console.log('Something went wrong getCreditReports', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        this.isBusyCreditReportObtained = false
       }
     },
     async getCreditReportPendings () {
@@ -125,6 +141,7 @@ export default {
       } catch (error) {
         console.log('Something went wrong getCreditReportPendings', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        this.isBusyCreditReportPending = false
       }
     },
     async getEvents () {
@@ -135,6 +152,7 @@ export default {
       } catch (error) {
         console.log('Something went wrong getEvents', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        this.isBusyAppointment = false
       }
     },
     async getOwners () {
@@ -154,6 +172,20 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
+    async getCalls (limit) {
+      try {
+        this.isBusyCall = true
+        await this.A_GET_CALLS({
+          lead_id: this.$route.params.id,
+          limit,
+        })
+        this.isBusyCall = false
+      } catch (error) {
+        console.log('Something went wrong getCalls', error)
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        this.isBusyCall = false
+      }
+    }
   }
 }
 </script>
