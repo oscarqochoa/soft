@@ -53,6 +53,22 @@
         @onReloadCall="getCalls"
       />
     </b-col>
+    <b-col cols="12" lg="6">
+      <card-lead-notes
+        v-if="Object.keys(S_LEAD).length"
+        :modul="modul"
+        :only-read="onlyRead"
+        :lead="S_LEAD"
+      />
+    </b-col>
+    <b-col cols="12" lg="6">
+      <card-lead-files
+        v-if="Object.keys(S_LEAD).length"
+        :modul="modul"
+        :only-read="onlyRead"
+        :lead="S_LEAD"
+      />
+    </b-col>
   </b-row>
 </template>
 
@@ -65,6 +81,8 @@ import CardLeadCall from './CardLeadCall.vue'
 import CardLeadClient from './CardLeadClient.vue'
 import CardLeadCreditCard from './CardLeadCreditCard.vue'
 import CardLeadCreditReport from './CardLeadCreditReport.vue'
+import CardLeadFiles from './CardLeadFiles.vue'
+import CardLeadNotes from './CardLeadNotes.vue'
 import CardLeadTask from './CardLeadTask.vue'
 
 export default {
@@ -74,6 +92,8 @@ export default {
     CardLeadClient,
     CardLeadCreditCard,
     CardLeadCreditReport,
+    CardLeadFiles,
+    CardLeadNotes,
     CardLeadTask
   },
   props: {},
