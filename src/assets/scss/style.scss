@@ -60,6 +60,11 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .button-little-size {
   height: 23px;
   padding: 3px;
+  .b-icon {
+    vertical-align: initial !important;
+    width: 14px;
+    height: 14px
+  }
 }
 
 .textarea-style {

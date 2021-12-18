@@ -56,19 +56,22 @@
       </template>
 
       <template #cell(actions)="data">
-        <b-button
-          v-if="data.item.attend != 2 && !onlyRead"
-          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-          variant="outline-danger"
-          class="btn-icon"
-          @click="deleteEvent(data.item.id)"
-        >
-          <feather-icon icon="Trash2Icon" />
-        </b-button>
+        <div class="w-100 text-center">
+          <b-button
+            v-if="data.item.attend != 2 && !onlyRead"
+            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+            variant="flat-danger"
+            class="button-little-size rounded-circle"
+            @click="deleteEvent(data.item.id)"
+          >
+            <feather-icon icon="Trash2Icon" />
+          </b-button>
+        </div>
       </template>
 
     </b-table>
-    <div v-if="!onlyRead" class="pt-2 text-right">
+    
+    <b-card-footer v-if="!onlyRead" class="text-right">
       <b-button
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
         variant="outline-primary"
@@ -80,7 +83,7 @@
         />
         <span class="align-middle">Add</span>
       </b-button>
-    </div>
+    </b-card-footer>
 
     <!-- modal EVENT CREATE -->
     <b-modal

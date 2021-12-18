@@ -9,8 +9,11 @@
         <b-form-group
           label="Mailing address"
           :label-for="`${addressData.prename}-street`"
+          :state="getValidationState(validationContext)"
+          :rules="isRequired ? 'required' : null"
         >
           <vue-google-autocomplete
+            v-if="!isDisabled"
             :ref="`${addressData.prename}-street`"
             :id="`${addressData.prename}-street`"
             class="form-control input-form fond-white border-hover"
@@ -19,6 +22,12 @@
             country="us"
             v-model="addressData.street"
             style="height:40px !important;width: 100%"
+            :class="{ 'border border-danger' : validationContext.errors[0] }"
+          />
+          <b-form-input
+            v-else
+            disabled
+            :value="addressData.street"
           />
 
           <b-form-invalid-feedback :state="getValidationState(validationContext)">
@@ -32,6 +41,7 @@
       <validation-provider
         #default="validationContext"
         :name="`City (${addressData.prename})`"
+        :rules="isRequired ? 'required' : null"
       >
         <b-form-group
           label="City"
@@ -42,6 +52,7 @@
             v-model="addressData.city"
             :state="getValidationState(validationContext)"
             trim
+            :disabled="isDisabled"
           />
 
           <b-form-invalid-feedback>
@@ -53,6 +64,7 @@
       <validation-provider
         #default="validationContext"
         :name="`Zip Code (${addressData.prename})`"
+        :rules="isRequired ? 'required' : null"
       >
         <b-form-group
           label="Zip Code"
@@ -63,6 +75,7 @@
             v-model="addressData.zipcode"
             :state="getValidationState(validationContext)"
             trim
+            :disabled="isDisabled"
           />
 
           <b-form-invalid-feedback>
@@ -74,25 +87,34 @@
     <b-col md="6">
       <!-- State -->
       <validation-provider
+        #default="validationContext"
         :name="`State (${addressData.prename})`"
+        :rules="isRequired ? 'required' : null"
       >
         <b-form-group
           label="State"
           label-for="country"
+          :state="getValidationState(validationContext)"
         >
           <v-select
             id="country"
-            v-model="addressData.state"
+            v-model="stateAddress"
             :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
             label="label"
             :options="stateOptions"
+            :disabled="isDisabled"
           />
+
+          <b-form-invalid-feedback :state="getValidationState(validationContext)">
+            {{ validationContext.errors[0] }}
+          </b-form-invalid-feedback>
         </b-form-group>
       </validation-provider>
       <!-- Country -->
       <validation-provider
         #default="validationContext"
         :name="`Country (${addressData.prename})`"
+        :rules="isRequired ? 'required' : null"
       >
         <b-form-group
           label="Country"
@@ -103,6 +125,7 @@
             v-model="addressData.country"
             :state="getValidationState(validationContext)"
             trim
+            :disabled="isDisabled"
           />
 
           <b-form-invalid-feedback>
@@ -119,7 +142,6 @@ import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import { required } from '@validations'
 
 import vSelect from 'vue-select'
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
@@ -140,21 +162,28 @@ export default {
     ValidationProvider,
     ValidationObserver,
   },
-  model: {
-    event: 'update:is-add-new-user-sidebar-active',
-  },
   props: {
     addressData: {
+      type: Object,
       required: true
     },
     stateOptions: {
       type: Array,
       required: true,
     },
+    isRequired: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    isDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
   },
   data() {
     return {
-      required,
       labssn: false,
       labitin: false,
       hideSSN: false,
@@ -162,7 +191,8 @@ export default {
       hideCPN: false,
       addSocial: false,
       location: null,
-      hideWithOtherAddress: false
+      hideWithOtherAddress: false,
+      stateAddress: null,
     }
   },
   setup(props, { emit }) {
@@ -191,15 +221,31 @@ export default {
     }
   },
   methods: {
+    getObjectToKey (array, keyId) {
+      const index = array.map(el => el.id).indexOf(keyId)
+      if (index !== -1) return array[index]
+      return null
+    },
     getAddressData (mainAddress) {
       const location = mainAddress
       const address = `${location.street_number} ${location.route}`
       this.addressData.street = address
-      this.addressData.state = location.administrative_area_level_1
+      this.stateAddress = this.getObjectToKey(this.stateOptions, location.administrative_area_level_1)
+      if (!this.stateAddress) this.stateAddress = { label: location.administrative_area_level_1, key: location.administrative_area_level_1 }
       this.addressData.city = location.locality
       this.addressData.zipcode = location.postal_code
     },
   },
+  mounted() {
+    this.stateAddress = this.getObjectToKey(this.stateOptions, this.addressData.state)
+    if (!this.stateAddress && this.addressData.state !== '') this.stateAddress = { label: this.addressData.state, key: this.addressData.state }
+  },
+  watch: {
+    stateAddress (el) {
+      this.addressData.state = el ? el.key : ''
+      if (!this.addressData.state) this.addressData.state = el ? el.value : ''
+    }
+  }
 }
 </script>
 
