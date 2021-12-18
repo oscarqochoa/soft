@@ -1,8 +1,8 @@
 <template>
   <div>
     <filter-slot
-      :fields="fields"
       :filter="filter"
+      :filter-principal="filterPrincipal"
       :total-rows="totalRows"
       :paginate="paginate"
       :start-page="startPage"
@@ -625,6 +625,12 @@ export default {
       isBusy: false,
       fields: dataFields,
       totalRows: 0,
+      filterPrincipal: {
+        type: 'input',
+        inputType: 'text',
+        placeholder: 'Client...',
+        model: '',
+      },
       paginate: {
         currentPage: 1,
         perPage: 10,
@@ -693,9 +699,14 @@ export default {
   },
   computed: {
     ...mapState({
-      status: state => state['crm-store'].status,
       sellers: state => state['crm-store'].sellersCrm,
       captured: state => state['crm-store'].capturedCrm,
+      // TODO HACERLO GLOBAL
+      programs: state => state['crm-store'].programs,
+      sources: state => state['crm-store'].sources,
+      sts: state => state['crm-store'].states,
+      stip: state => state['crm-store'].statusip,
+      status: state => state['crm-store'].status,
     }),
     ...mapGetters({
       currentUser: 'auth/currentUser',
@@ -704,6 +715,26 @@ export default {
       if (this.done === 0) return this.fields
       return this.fields.filter(field => field.key !== 'done')
     },
+  },
+  async created() {
+    try {
+      await this.$store.dispatch('crm-store/getSellers')
+      await this.$store.dispatch('crm-store/getCaptured')
+      await this.$store.dispatch('crm-store/getPrograms')
+      await this.$store.dispatch('crm-store/getSources')
+      await this.$store.dispatch('crm-store/getStates')
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  mounted() {
+    this.filter[2].options = this.captured
+    this.filter[3].options = this.sellers
+    this.filter[4].options = this.sources
+    this.filter[5].options = this.status
+    this.filter[6].options = this.programs
+    this.filter[7].options = this.stip
+    this.filter[8].options = this.sts
   },
   methods: {
     async myProvider(ctx) {
@@ -724,20 +755,20 @@ export default {
         }
         const data = await CrmService.getSaleMade(
           {
-            text: this.filter.text,
-            status: this.filter.status,
-            program: this.filter.program,
-            state_h: this.filter.state,
-            from: this.filter.from,
-            to: this.filter.to,
+            text: this.filterPrincipal.model,
+            status: this.filter[5].model,
+            program: this.filter[6].model,
+            state_h: this.filter[8].model,
+            from: this.filter[0].model,
+            to: this.filter[1].model,
             orderby: sortBy,
             order: sortDirection,
-            captured: this.filter.captured,
-            seller: this.filter.seller,
+            captured: this.filter[2].model,
+            seller: this.filter[3].model,
             salemade: 0,
-            rolsession: 1,
-            statusip: this.filter.stip,
-            sourcesname_id: this.filter.source,
+            rolsession: this.currentUser.role_id,
+            statusip: this.filter[7].model,
+            sourcesname_id: this.filter[4].model,
             done: this.done,
             per_page: ctx.perPage,
           },
@@ -815,7 +846,6 @@ export default {
         this.modalData.initial_payment.programid = data.program_id
         this.modalData.initial_payment.sessionId = this.currentUser.user_id
         this.modalData.initial_payment.cfeestatus = data.contract_fee_status
-        console.log(data)
         this.modalData.initial_payment.id_transaction = data.transaction_id
         this.modalData.initial_payment.editmodal = data.user_id === this.currentUser.user_id || this.currentUser.role_id == 1 || this.currentUser.role_id == 2
         this.modalData.initial_payment.statusSale = data.status
