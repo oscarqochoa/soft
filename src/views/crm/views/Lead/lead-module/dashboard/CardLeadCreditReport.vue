@@ -45,7 +45,8 @@
 
       </b-tab>
     </b-tabs>
-    <div class="pt-2 text-right">
+    
+    <b-card-footer class="text-right">
       <b-button
         v-if="modul === 4"
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -78,7 +79,7 @@
       >
         Old Credentials
       </b-button>
-    </div>
+    </b-card-footer>
   </b-card>
 </template>
 

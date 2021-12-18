@@ -25,8 +25,8 @@
       <template #cell(actions)="data">
         <div class="d-flex justify-content-center">
           <b-button
-            variant="outline-info"
-            class="btn-icon"
+            variant="flat-info"
+            class="button-little-size rounded-circle"
             :disabled="isActionButtonLoading || isLoading"
             @click="onModalCardOpen(data.item.id)"
           >
@@ -38,8 +38,8 @@
           </b-button>
           <b-button
             v-if="(authUser.role_id == 1 || authUser.role_id == 2) && !onlyRead"
-            variant="outline-danger"
-            class="btn-icon ml-1"
+            variant="flat-danger"
+            class="button-little-size rounded-circle ml-1"
             :disabled="isActionButtonLoading || isLoading"
             @click="onDeleteCard(data.item.id)"
           >
@@ -53,7 +53,8 @@
       </template>
 
     </b-table>
-    <div v-if="!onlyRead" class="pt-2 text-right">
+    
+    <b-card-footer v-if="!onlyRead" class="text-right">
       <b-button
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
         variant="outline-primary"
@@ -65,7 +66,7 @@
         />
         <span class="align-middle">Add</span>
       </b-button>
-    </div>
+    </b-card-footer>
 
     <!-- modal CARD CREATE -->
     <b-modal

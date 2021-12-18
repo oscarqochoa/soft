@@ -42,8 +42,8 @@
           <a
             v-if="data.item.state == 1"
             :href="`/${ moduleName }/leads/report/${ data.item.lead_id }/${ data.item.id }`"
-            variant="outline-success"
-            class="btn-icon"
+            variant="flat-success"
+            class="button-little-size rounded-circle"
             target="_blanck"
           >
             <feather-icon
@@ -56,8 +56,8 @@
           <a
             v-if="data.item.route_pdf"
             :href="data.item.route_pdf"
-            variant="outline-danger"
-            class="btn-icon"
+            variant="flat-danger"
+            class="button-little-size rounded-circle"
             target="_blanck"
           >
             <feather-icon
@@ -68,8 +68,8 @@
         </template>
         <template #cell(ad)="data">
           <b-button
-            variant="outline-info"
-            class="btn-icon"
+            variant="flat-info"
+            class="button-little-size rounded-circle"
             @click="data.item.nlr/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - on: openModalAD(data.item.nlr, data.item.lead_name) */"
           >
             <feather-icon
@@ -82,8 +82,8 @@
           <a
             v-if="data.item.marked_pdf"
             :href="data.item.marked_pdf"
-            variant="outline-danger"
-            class="btn-icon"
+            variant="flat-danger"
+            class="button-little-size rounded-circle"
             target="_blanck"
           >
             <feather-icon

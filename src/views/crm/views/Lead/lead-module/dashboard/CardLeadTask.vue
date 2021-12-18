@@ -32,13 +32,13 @@
       </template>
 
       <template #cell(actions)="data">
-        <b-button-group
+        <div
           v-if="!onlyRead"
-          class="w-100 btn-group-sm"
+          class="w-100 text-center"
         >
           <b-button
-            variant="outline-success"
-            class="btn-icon"
+            variant="flat-success"
+            class="button-little-size rounded-circle"
             :disabled="isLoading"
             @click="onDoneTask(data.item.id)"
           >
@@ -49,8 +49,8 @@
             <b-spinner v-else small />
           </b-button>
           <b-button
-            variant="outline-warning"
-            class="btn-icon ml-1"
+            variant="flat-warning"
+            class="button-little-size rounded-circle ml-1"
             :disabled="isLoading"
             @click="onModalEditTaskOpen(data.item.id, false)"
           >
@@ -61,8 +61,8 @@
             <b-spinner v-else small />
           </b-button>
           <b-button
-            variant="outline-info"
-            class="btn-icon ml-1"
+            variant="flat-info"
+            class="button-little-size rounded-circle ml-1"
             :disabled="isLoading"
             @click="onModalEditTaskOpen(data.item.id, true)"
           >
@@ -73,8 +73,8 @@
             <b-spinner v-else small />
           </b-button>
           <b-button
-            variant="outline-danger"
-            class="btn-icon ml-1"
+            variant="flat-danger"
+            class="button-little-size rounded-circle ml-1"
             :disabled="isLoading"
             @click="onDeleteTask(data.item.id)"
           >
@@ -85,22 +85,30 @@
             <b-spinner v-else small />
           </b-button>
           <b-button
-            :variant="data.item.favorite ? 'warning' : 'outline-warning'"
-            class="btn-icon ml-1"
+            variant="flat-warning"
+            class="button-little-size rounded-circle ml-1"
+            :class="data.item.favorite ? 'text-warning' : null"
             :disabled="isLoading"
             @click="onMakeFavoriteTask(data.item.id, data.item.favorite)"
           >
-            <feather-icon
-              v-if="!isLoading"
-              icon="StarIcon"
-            />
-            <b-spinner v-else small />
+            <b-spinner v-if="isLoading" small />
+            <template v-else>
+              <b-icon
+                v-if="data.item.favorite"
+                icon="star-fill"
+              />
+              <b-icon
+                v-else
+                icon="star"
+              />
+            </template>
           </b-button>
-        </b-button-group>
+        </div>
       </template>
 
     </b-table>
-    <div v-if="!onlyRead" class="pt-2 text-right">
+    
+    <b-card-footer v-if="!onlyRead" class="text-right">
       <b-button
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
         variant="outline-primary"
@@ -124,7 +132,7 @@
           size="18"
         />
       </b-button>
-    </div>
+    </b-card-footer>
     
     <!-- modal TASK CREATE -->
     <b-modal

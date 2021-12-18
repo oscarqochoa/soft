@@ -29,8 +29,8 @@
           <div class="text-center">
             <b-button
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-              variant="outline-info"
-              class="btn-icon"
+              variant="flat-info"
+              class="button-little-size rounded-circle"
               @click="openTrackingStatus(data.item.score_id, data.item.lead_name)"
             >
               <feather-icon

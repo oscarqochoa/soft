@@ -45,6 +45,7 @@
       show-empty
       sticky-header
       striped
+      small
       responsive="sm"
       :fields="fieldsTask"
       :items="S_CALLS"
@@ -81,7 +82,8 @@
       </template>
 
     </b-table>
-    <div v-if="S_CALLS.length > 9" class="pt-2 text-right">
+    
+    <b-card-footer v-if="S_CALLS.length > 9" class="text-right">
       <b-button
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
         variant="outline-info"
@@ -93,7 +95,8 @@
         />
         <span class="align-middle">See More</span>
       </b-button>
-    </div>
+    </b-card-footer>
+
     <!-- modal CALL HISTORY -->
     <b-modal
       id="modal-call-history"
