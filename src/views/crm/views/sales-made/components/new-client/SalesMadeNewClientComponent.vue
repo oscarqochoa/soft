@@ -525,7 +525,7 @@
       @response="$refs['new-client-done-table'].refresh(); modal.revission = false"
     />
     <url-modal v-if="modal.url" :modal="modal" :url="modalData.url" />
-    <ModalNotesBoost v-if="modal.notes" :modal-notes="modal" :sales-notes="modalData.notes" />
+    <ModalNotesBoost v-if="modal.notes" @hide="closeModalNotes" :sales-notes="modalData.notes" />
   </div>
 </template>
 
@@ -767,6 +767,9 @@ export default {
     //Notes
     openNotesModal() {
       this.modal.notes = true;
+    },
+    closeModalNotes() {
+      this.modal.notes = false;
     },
     openUrlModal(data) {
       this.modalData.url.client = data.client;

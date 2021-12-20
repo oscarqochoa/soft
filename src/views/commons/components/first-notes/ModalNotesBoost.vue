@@ -2,10 +2,9 @@
   <div>
     <b-modal
       v-model="modalUp"
-      title-class="h2"
+      title-class="h2 text-light"
       size="lg"
       title="Boost Credit Note"
-      modal-class="modal-primary"
       @hidden="hideModal()"
     >
       <ValidationObserver ref="form">
@@ -163,11 +162,6 @@ export default {
     vSelect
   },
   props: {
-    modalNotes: {
-      type: Object,
-      required: true,
-      default: () => ({})
-    },
     salesNotes: {
       type: Object,
       required: true,
@@ -299,7 +293,6 @@ export default {
     },
     hideModal() {
       this.modalUp = false;
-      this.modalNotes.notes = false;
       this.$emit("hide");
     },
     async getListTypeGoal() {
