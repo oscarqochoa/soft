@@ -73,22 +73,119 @@
         </b-row>
         <b-row class="mt-1">
           <b-col>
-            <p class="text-center">Finished in {{months}} months</p>
+            <p class="text-center">
+              Finished in {{ months }} months
+            </p>
           </b-col>
         </b-row>
       </b-col>
-      <b-col />
+      <b-col>
+        <b-row>
+          <b-col>
+            <p>Method of Payment :</p>
+          </b-col>
+          <b-col>
+            <b-form-radio
+              v-model="methodPayment"
+              value="0"
+            >
+              Credit Card
+            </b-form-radio>
+            <b-form-radio
+              v-model="methodPayment"
+              value="1"
+              class="mt-1"
+            >
+              Others
+            </b-form-radio>
+          </b-col>
+        </b-row>
+        <b-row
+          v-if="methodPayment == 0"
+          class="mt-1"
+        >
+          <b-col>
+            <p>Type :</p>
+          </b-col>
+          <b-col>
+            <b-form-radio
+              v-model="cardType"
+              value="0"
+            >
+              Automatic
+            </b-form-radio>
+            <b-form-radio
+              v-model="cardType"
+              value="1"
+              class="mt-1"
+            >
+              Manual
+            </b-form-radio>
+          </b-col>
+        </b-row>
+        <b-row
+          v-if="cardType == 0"
+          class="mt-1"
+        >
+          <b-col>
+            <p>Start Date :</p>
+          </b-col>
+          <b-col />
+        </b-row>
+      </b-col>
     </b-row>
-    <b-row>
-      <b-table />
+    <b-row
+      v-if="cardType == 0"
+      class="mt-1"
+    >
+      <b-col>
+        <b-row>
+          <b-table
+            :items="cards"
+            :fields="fieldsT1"
+            size="sm"
+          >
+            <template v-slot:cell(select)="data">
+              <b-form-radio
+                v-model="cardId"
+                :value="data.item.id"
+                plain
+              />
+            </template>
+          </b-table>
+        </b-row>
+        <b-row class="d-flex align-items-center justify-content-end mt-1">
+          <b-button
+            variant="primary"
+            @click="addCardModal = true"
+          >
+            <feather-icon icon="PlusIcon" />
+            ADD
+          </b-button>
+        </b-row>
+      </b-col>
     </b-row>
     <template #modal-footer />
+    <modal-card-create
+      v-if="addCardModal"
+      :if-modal-card="addCardModal"
+      :idlead="contractFee.id"
+      :session="currentUser.user_id"
+      @new="addCard"
+      @click="closedModalCar"
+    />
   </b-modal>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import ModalCardCreate from '@/views/crm/views/payments/components/ModalCardCreate.vue'
+
 export default {
   name: 'ContractFeeModal',
+  components: {
+    ModalCardCreate,
+  },
   props: {
     modal: {
       type: Object,
@@ -119,7 +216,52 @@ export default {
       perPay: 0,
       monthlyAmount: 0,
       months: 0,
+      fieldsT1: [
+        {
+          label: '',
+          key: 'select',
+        },
+        {
+          label: 'Card Holder Name',
+          key: 'cardholdername',
+        },
+        {
+          label: 'Card Number',
+          key: 'cardnumber',
+          formatter: value => `XXXX-XXXX-XXXX-${value}`,
+        },
+        {
+          label: 'Type',
+          key: 'type_card',
+        },
+        {
+          label: 'MM',
+          key: 'card_expi_month',
+        },
+        {
+          label: 'YY',
+          key: 'card_expi_year',
+        },
+        {
+          label: 'CVC',
+          key: 'cardsecuritycode',
+          formatter: value => `XX${value}`,
+        },
+      ],
+      cardId: -1,
+      addCardModal: false,
     }
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+    }),
+    valorEdit() {
+      return this.contractFee.editmodal == false
+          || this.contractFee.statusSale == 2
+          || this.contractFee.statusSale == 4
+          || this.contractSale.st == 1
+    },
   },
   async created() {
     this.addPreloader()
@@ -128,7 +270,7 @@ export default {
       await this.getPaymentsDays()
       await this.getContractSales()
       this.perPay = this.fee - this.initialPayment
-      if (this.contractSale.program_id == 2){
+      if (this.contractSale.program_id == 2) {
         this.monthlyAmount = 0
         this.months = 0
       } else if (this.monthlyAmount > 0) {
@@ -175,12 +317,20 @@ export default {
           this.initialPayment = parseFloat(this.contractSale.initial_amount)
           if (this.contractSale.program_id == 2) this.monthlyAmount = this.fee
           else this.monthlyAmount = parseFloat(this.contractSale.monthly_amount)
+          this.methodPayment = this.contractSale.method_payment
+          this.cardType = this.contractSale.type_payment
         } else {
           this.showErrorSwal()
         }
       } catch (error) {
         console.error(error)
       }
+    },
+    addCard(cards) {
+      this.cards = cards
+    },
+    closedModalCar() {
+      this.addCardModal = false
     },
   },
 }

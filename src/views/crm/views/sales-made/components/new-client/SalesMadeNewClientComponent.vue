@@ -270,7 +270,6 @@
         </template>
         <template v-slot:cell(contract_fee_status)="data">
           <b-icon
-            @click="openContractFeeModal(data.item)"
             :class="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
               currentUser.role_id == 1 ||
               currentUser.role_id == 2)) ? 'cursor-pointer' : ''"
@@ -281,6 +280,7 @@
               ) ? 'muted' :
                 (data.item.contract_fee_status === 1 && data.item.initial_payment_status === 2) ? 'success' :
                 (data.item.contract_fee_status === 2) ? 'danger' : '' "
+            @click="openContractFeeModal(data.item)"
           />
         </template>
         <template v-slot:cell(notes_status)="data">
@@ -596,7 +596,7 @@ import DebtSolutionModal from '@/views/crm/views/sales-made/components/modals/se
 import RevissionModal from '@/views/crm/views/sales-made/components/modals/RevissionModal.vue'
 import UrlModal from '@/views/crm/views/sales-made/components/modals/UrlModal.vue'
 import { amgApi } from '@/service/axios'
-import ContractFeeModal from "@/views/crm/views/sales-made/components/modals/ContractFeeModal";
+import ContractFeeModal from '@/views/crm/views/sales-made/components/modals/ContractFeeModal'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -738,18 +738,16 @@ export default {
       await this.$store.dispatch('crm-store/getPrograms')
       await this.$store.dispatch('crm-store/getSources')
       await this.$store.dispatch('crm-store/getStates')
+      this.filter[2].options = this.captured
+      this.filter[3].options = this.sellers
+      this.filter[4].options = this.sources
+      this.filter[5].options = this.status
+      this.filter[6].options = this.programs
+      this.filter[7].options = this.stip
+      this.filter[8].options = this.sts
     } catch (error) {
       console.error(error)
     }
-  },
-  mounted() {
-    this.filter[2].options = this.captured
-    this.filter[3].options = this.sellers
-    this.filter[4].options = this.sources
-    this.filter[5].options = this.status
-    this.filter[6].options = this.programs
-    this.filter[7].options = this.stip
-    this.filter[8].options = this.sts
   },
   methods: {
     async myProvider(ctx) {
@@ -811,6 +809,11 @@ export default {
       }
     },
     openContractFeeModal(data) {
+      if (data.id == this.currentUser.user_id || this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
+        this.modalData.editmodal = true
+      } else {
+        this.modalData.editmodal = false
+      }
       this.modalData.contractFee.clientName = data.client
       this.modalData.contractFee.programName = data.program
       this.modalData.contractFee.id = data.lead_id
