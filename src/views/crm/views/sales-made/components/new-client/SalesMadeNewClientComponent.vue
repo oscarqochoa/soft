@@ -259,6 +259,7 @@
               ) ? 'muted' :
                 (data.item.contract_fee_status === 1 && data.item.initial_payment_status === 2) ? 'success' :
                 (data.item.contract_fee_status === 2) ? 'danger' : '' "
+            @click="openContractFeeModal(data.item)"
           />
         </template>
         <template v-slot:cell(notes_status)="data">
@@ -475,11 +476,10 @@
         <template #cell(approved)="data">
           <span class="font-weight-bold text-info">{{ data.item.approved | myGlobal }}</span>
         </template>
-        <template v-slot:cell(sms)="data">
+        <template #cell(sms)="data">
           <b-icon icon="chat-text-fill" variant="primary" />
         </template>
-
-        <template v-slot:cell(url)="data">
+        <template #cell(url)="data">
           <b-icon
             v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.role_id == 1 || currentUser.role_id == 2)"
             icon="link"
@@ -524,8 +524,13 @@
       @click="$refs['new-client-done-table'].refresh(); modal.revission = false"
       @response="$refs['new-client-done-table'].refresh(); modal.revission = false"
     />
-    <url-modal v-if="modal.url" :modal="modal" :url="modalData.url" />
     <ModalNotesBoost v-if="modal.notes" @hide="closeModalNotes" :sales-notes="modalData.notes" />
+    <url-modal v-if="modal.url" :modal="modal" :url="modalData.url" />
+    <contract-fee-modal
+      v-if="modal.contract_fee"
+      :modal="modal"
+      :contract-fee="modalData.contractFee"
+    />
   </div>
 </template>
 
@@ -551,13 +556,14 @@ import SpecialistModal from "@/views/crm/views/sales-made/components/modals/serv
 import TaxResearchModal from "@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue";
 import DebtSolutionModal from "@/views/crm/views/sales-made/components/modals/services/DebtSolutionModal.vue";
 import RevissionModal from "@/views/crm/views/sales-made/components/modals/RevissionModal.vue";
-import ModalNotesBoost from "@/views/commons/components/first-notes/ModalNotesBoost.vue";
 import UrlModal from "@/views/crm/views/sales-made/components/modals/UrlModal.vue";
 import { amgApi } from "@/service/axios";
+import ContractFeeModal from "@/views/crm/views/sales-made/components/modals/ContractFeeModal";
 
 export default {
   name: "SalesMadeNewComponent",
   components: {
+    ContractFeeModal,
     UrlModal,
     RevissionModal,
     CreditExpertsModal,
@@ -574,9 +580,7 @@ export default {
     ParagonModal,
     SpecialistModal,
     TaxResearchModal,
-    DebtSolutionModal,
-
-    ModalNotesBoost
+    DebtSolutionModal
   },
   props: {
     done: {
@@ -613,7 +617,7 @@ export default {
         programs: false,
         revission: false,
         url: false,
-        notes: false
+        contract_fee: false
       },
       modalData: {
         url: {
@@ -660,7 +664,12 @@ export default {
           salesClient: {}
         },
         revission: {},
-        notes: {}
+        contractFee: {
+          programName: "",
+          clientName: "",
+          saleId: null,
+          id: null
+        }
       },
       selectAll: false
     };
@@ -691,18 +700,16 @@ export default {
       await this.$store.dispatch("crm-store/getPrograms");
       await this.$store.dispatch("crm-store/getSources");
       await this.$store.dispatch("crm-store/getStates");
+      this.filter[2].options = this.captured;
+      this.filter[3].options = this.sellers;
+      this.filter[4].options = this.sources;
+      this.filter[5].options = this.status;
+      this.filter[6].options = this.programs;
+      this.filter[7].options = this.stip;
+      this.filter[8].options = this.sts;
     } catch (error) {
       console.error(error);
     }
-  },
-  mounted() {
-    this.filter[2].options = this.captured;
-    this.filter[3].options = this.sellers;
-    this.filter[4].options = this.sources;
-    this.filter[5].options = this.status;
-    this.filter[6].options = this.programs;
-    this.filter[7].options = this.stip;
-    this.filter[8].options = this.sts;
   },
   methods: {
     async myProvider(ctx) {
@@ -763,10 +770,21 @@ export default {
         return [];
       }
     },
-
-    //Notes
-    openNotesModal() {
-      this.modal.notes = true;
+    openContractFeeModal(data) {
+      if (
+        data.id == this.currentUser.user_id ||
+        this.currentUser.role_id == 1 ||
+        this.currentUser.role_id == 2
+      ) {
+        this.modalData.editmodal = true;
+      } else {
+        this.modalData.editmodal = false;
+      }
+      this.modalData.contractFee.clientName = data.client;
+      this.modalData.contractFee.programName = data.program;
+      this.modalData.contractFee.id = data.lead_id;
+      this.modalData.contractFee.saleId = data.id;
+      this.modal.contract_fee = true;
     },
     closeModalNotes() {
       this.modal.notes = false;
