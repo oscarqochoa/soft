@@ -59,7 +59,10 @@
             <b-input-group-append
               
             >
-              <b-button variant="outline-info" @click="$emit('modalQuickOpen', true)">
+              <b-button
+                variant="outline-info"
+                @click="$bvModal.show('modal-quick-sms')"
+              >
                 <feather-icon
                   icon="AlignJustifyIcon"
                   class="cursor-pointer mr-1"
@@ -116,6 +119,22 @@
         </b-button>
       </div>
     </b-form>
+
+    <!-- modal QUICK SMS -->
+    <b-modal
+      id="modal-quick-sms"
+      ok-only
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      title="QUICK SMS"
+      hide-footer
+    >
+      <modal-quick-sms
+        :modul="modul"
+        :quicks="quicks"
+      />
+    </b-modal>
   </validation-observer>
 </template>
 
@@ -127,10 +146,11 @@ import {
 import { required } from '@validations'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 
+import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 
-import formValidation from '@core/comp-functions/forms/form-validation'
+import ModalQuickSms from './ModalQuickSms.vue'
 
 export default {
   components: {
@@ -140,6 +160,7 @@ export default {
     BFormInvalidFeedback,
     BButton,
     vSelect,
+    ModalQuickSms,
 
     // Form Validation
     ValidationProvider,
