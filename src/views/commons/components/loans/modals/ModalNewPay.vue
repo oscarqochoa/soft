@@ -4,7 +4,7 @@
       v-model="modalUp"
       title-class="h2"
       size="lg"
-      title="LOAN REGISTER PAY"
+      title="Loan Register Pay"
       modal-class="modal-primary"
       @hidden="hideModal(false)"
     >
@@ -19,7 +19,7 @@
                       <b-input-group-text
                         class="w-100 bg-success bg-lighten-2 text-white font-weight-bolder"
                       >
-                        <span>MONTHLY PAYMENT</span>
+                        <span>Monthly Payment</span>
                       </b-input-group-text>
                     </b-input-group-prepend>
                     <money
@@ -44,7 +44,7 @@
                         class="w-100 badge-name-group font-weight-bolder"
                         :style="isPendingApprove ? 'background-color:#d0a62a' :''"
                       >
-                        <span>FOR APPROVAL</span>
+                        <span>For Approval</span>
                       </b-input-group-text>
                     </b-input-group-prepend>
                     <money
@@ -66,7 +66,7 @@
                   <b-input-group>
                     <b-input-group-prepend class="w-60">
                       <b-input-group-text class="w-100 badge-name-group font-weight-bolder">
-                        <span>BALANCE</span>
+                        <span>Balance</span>
                       </b-input-group-text>
                     </b-input-group-prepend>
                     <money
@@ -151,7 +151,7 @@
                   label="ADD IMAGE:"
                   label-class="font-weight-bolder"
                   label-for="input-5"
-                  description="Add the image of the operation"
+                  :description="files.length > 0? '':'Add the image of the operation'"
                 >
                   <b-button variant="primary" @click="showModalFiles = !showModalFiles">
                     {{files.length > 0 ? 'SHOW FILE' : 'ADD FILE'}}
@@ -181,15 +181,16 @@
             </b-row>
           </ValidationObserver>
         </b-form>
-        <!--  <b-modal
-          id="modal-upload"
+        <b-modal
           v-model="showModalFiles"
           title="Upload File"
-          header-class="b-vue-modal-header"
-          size="lg"
+          modal-class="modal-primary"
+          size="sm"
+          button-size="sm"
+          ok-title="Ok"
         >
-          <drag-and-drop-component single image v-model="files" :filesArray="files"></drag-and-drop-component>
-        </b-modal>-->
+          <DragAndDrop single image v-model="files" :filesArray="files" />
+        </b-modal>
       </div>
       <template #modal-footer>
         <b-button variant="success" @click="addPay">Send Payment</b-button>
@@ -200,8 +201,13 @@
 
 <script>
 import loansService from "@/views/commons/components/loans/services/loans.service";
+import DragAndDrop from "@/views/commons/utilities/DragAndDrop.vue";
 import { mapGetters, mapMutations } from "vuex";
 export default {
+  name: "ModalNewPay",
+  components: {
+    DragAndDrop
+  },
   props: {
     info: {
       type: Object,

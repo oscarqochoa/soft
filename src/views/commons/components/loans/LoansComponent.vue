@@ -12,26 +12,54 @@
             :block="!bigWindow"
             class="mr-1"
             @click="openModalImportLoan"
-          >IMPORT LOAN</b-button>
-          <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()">REQUEST LOAN</b-button>
+          >Import Loan</b-button>
+          <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()">Request Loan</b-button>
         </b-col>
       </b-row>
     </b-card>
 
     <b-card body-class="pb-0">
-      <b-nav tabs>
+      <b-nav pills>
         <b-nav-item
           v-if="isManagement"
           :to="`/${route}/loans/general`"
           exact
           exact-active-class="active"
-        >LOANS</b-nav-item>
+        >
+          Loans
+          <span class="ml-1" v-if="counterTab.management>0">
+            <feather-icon
+              icon
+              :badge="counterTab.management > 99 ? '99+' : counterTab.management"
+              badge-classes="badge-danger badge-glow"
+            />
+          </span>
+        </b-nav-item>
         <b-nav-item
+          v-if="isSupervisor"
           :to="`/${route}/loans/loans-module/`"
           exact
           exact-active-class="active"
-        >LOANS BY MODULE</b-nav-item>
-        <b-nav-item :to="`/${route}/loans/my-loans`" exact exact-active-class="active">MY LOANS</b-nav-item>
+        >
+          Loans by Module
+          <span class="ml-1" v-if="counterTab.supervisor>0">
+            <feather-icon
+              icon
+              :badge="counterTab.supervisor > 99 ? '99+' : counterTab.supervisor"
+              badge-classes="badge-danger badge-glow"
+            />
+          </span>
+        </b-nav-item>
+        <b-nav-item :to="`/${route}/loans/my-loans`" exact exact-active-class="active">
+          My Loans
+          <span class="ml-1" v-if="counterTab.my_loan>0">
+            <feather-icon
+              icon
+              :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
+              badge-classes="badge-danger badge-glow"
+            />
+          </span>
+        </b-nav-item>
       </b-nav>
 
       <router-view :key="this.$route.name" />
@@ -48,7 +76,9 @@ export default {
   components: {
     ModalRequestLoan
   },
-  created() {},
+  created() {
+    this.$store.dispatch("loans-store/loadCounterTab");
+  },
 
   data() {
     return {
@@ -62,7 +92,9 @@ export default {
       bigWindow: "app/bigWindow",
       currentUser: "auth/currentUser",
       researchLoans: "loans-store/researchLoans",
-      modalRequest: "loans-store/modalRequest"
+      counterTab: "loans-store/counterTab",
+      modalRequest: "loans-store/modalRequest",
+      isSupervisor: "auth/isSupervisor"
     }),
     positionResponsive() {
       return this.bigWindow ? "text-right" : "";
@@ -88,7 +120,10 @@ export default {
     },
     closeModalLoan(status) {
       //Just is a new loan
-      if (status) this.$store.commit("loans-store/ADD_ONE_RESEARCH");
+      if (status) {
+        this.$store.commit("loans-store/ADD_ONE_RESEARCH");
+        this.$store.dispatch("loans-store/loadCounterTab");
+      }
 
       this.modalRequest.show = false;
     }

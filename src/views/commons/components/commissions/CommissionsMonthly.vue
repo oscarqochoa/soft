@@ -4,7 +4,7 @@
       <div>
         <a
           @click="findCommissions('crm', info.month_pay )"
-          class="name-class color-gray-m clickable"
+          class="name-class color-gray-m cursor-pointer"
           v-b-tooltip.hover
           :title="info.monthUser"
           v-if="info.month_pay != '0.00' "
@@ -34,7 +34,7 @@
       <div :class="{'mt-2':isCrm}" v-if="info.month_pay != '0.00'">
         <a
           @click="findCommissions( 'crm', info.month_pay)"
-          class="name-class text-color-m clickable"
+          class="name-class text-color-m cursor-pointer"
           v-b-tooltip.hover
           :title="info.monthUser"
         >
@@ -81,7 +81,7 @@
         <a
           v-if="payDepartment"
           @click="findCommissions('program')"
-          class="name-class text-color-m clickable"
+          class="name-class text-color-m cursor-pointer"
           v-b-tooltip.hover
           :title="`${info.monthUser}-ADD/CHANGE`"
         >$ {{payDepartment.toFixed(2)}}</a>
@@ -91,7 +91,7 @@
         <a
           v-if="payDepartmentCrm"
           @click="findCommissions('crm',payDepartmentCrm)"
-          class="name-class text-color-m clickable"
+          class="name-class text-color-m cursor-pointer"
           v-b-tooltip.hover
           :title="`${info.monthUser}-CRM`"
         >$ {{payDepartmentCrm.toFixed(2)}}</a>

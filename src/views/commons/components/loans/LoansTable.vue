@@ -160,14 +160,14 @@
               <b-icon
                 v-if="isManagement && data.item.due == 1"
                 icon="pencil-square"
-                variant="success clickable ml2"
+                variant="success cursor-pointer ml2"
                 font-scale="1"
                 @click="editDatePay(data.item)"
               ></b-icon>
               <b-icon
                 v-if="isManagement && data.item.due == 1 && data.item.is_tracking"
                 icon="pencil-square"
-                variant="secondary clickable ml2"
+                variant="secondary cursor-pointer ml2"
                 font-scale="1"
                 @click="openTrackingPayDay(data.item.id_loan)"
               ></b-icon>
@@ -261,7 +261,7 @@
               title="INVOICE"
               class="button-little-size ml6"
               variant="gradient-secondary"
-              @click="openReportModal(item.id_loan)"
+              @click="openModalInvoice(data.item.id_loan)"
             >
               <b-icon icon="file-earmark-spreadsheet"></b-icon>
             </b-button>
@@ -307,9 +307,11 @@
         </b-row>
       </div>
     </b-card>
+
     <ModalTrackingLoan v-if="modalsInfo.tracking" :info="modalsInfo" @hide="closeModals" />
     <ModalNewPay v-if="modalsInfo.newPay" :info="modalsInfo" @hide="closeModals" />
     <ModalRevisionPayment v-if="modalsInfo.revisionPay" :info="modalsInfo" @hide="closeModals" />
+    <ModalInvoice v-if="modalsInfo.invoice" :info="modalsInfo" @hide="closeModals" />
   </div>
 </template>
 
@@ -321,6 +323,7 @@ import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
 import ModalTrackingLoan from "./modals/ModalTrackingLoan.vue";
 import ModalNewPay from "./modals/ModalNewPay.vue";
 import ModalRevisionPayment from "./modals/ModalRevisionPayment.vue";
+import ModalInvoice from "./modals/ModalInvoice.vue";
 import { mapGetters, mapMutations } from "vuex";
 import moment from "moment";
 import loansService from "@/views/commons/components/loans/services/loans.service";
@@ -335,12 +338,17 @@ export default {
     AppCollapseItem,
     ModalTrackingLoan,
     ModalNewPay,
-    ModalRevisionPayment
+    ModalRevisionPayment,
+    ModalInvoice
   },
   props: {
     tab: {
       type: Number,
-      default: ""
+      default: null
+    },
+    status: {
+      type: Number,
+      default: 1
     }
   },
   data() {
@@ -364,14 +372,7 @@ export default {
       next_page: "",
       last_page: "",
       total_data: "",
-      spinner: false,
       nameUser: "",
-      status: 1,
-      searchadvance: false,
-      administrator: "",
-      showModalLoanPay: false,
-      showModalLoanPays: false,
-      showModalLoanReport: false,
       showModalDate: false,
       modalTracking: false,
       modalTrackingPayDay: false,
@@ -586,10 +587,7 @@ export default {
       var v = number % 100;
       return number + (s[(v - 20) % 10] || s[v] || s[0]);
     },
-    openReportModal(idLoan) {
-      this.idLoan = idLoan;
-      this.showModalLoanReport = true;
-    },
+
     openModalPays(id) {
       this.idLoan = id;
       this.showModalLoanPays = true;
@@ -605,6 +603,11 @@ export default {
       this.modalsInfo.idDue = due;
       this.modalsInfo.newPay = true;
       this.addPreloader();
+    },
+    openModalInvoice(id) {
+      this.addPreloader();
+      this.modalsInfo.idLoan = id;
+      this.modalsInfo.invoice = true;
     },
     openTrackingLoan(id) {
       this.addPreloader();
@@ -629,7 +632,10 @@ export default {
       this.modalsInfo.idDue = null;
 
       //Research
-      if (status) this.$store.commit("loans-store/ADD_ONE_RESEARCH");
+      if (status) {
+        this.$store.commit("loans-store/ADD_ONE_RESEARCH");
+        this.$store.dispatch("loans-store/loadCounterTab");
+      }
     }
   },
   watch: {
