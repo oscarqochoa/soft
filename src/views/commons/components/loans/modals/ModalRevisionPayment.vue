@@ -4,7 +4,7 @@
       v-model="modalUp"
       title-class="h2"
       size="lg"
-      title="LOAN TRACKING"
+      title="Loan Tracking"
       hide-footer
       modal-class="modal-primary"
       @hidden="hideModal(false)"
@@ -86,7 +86,7 @@
                 </b-button>
               </template>
               <template v-else>
-                <b-badge variant="info" class="restart-font-size badge-finish">FINISH</b-badge>
+                <b-badge variant="info" class="restart-font-size badge-finish">Finish</b-badge>
               </template>
             </div>
             <div v-else>
@@ -100,7 +100,7 @@
                 </b-button>
               </template>
               <template v-else>
-                <b-badge variant="info" class="restart-font-size badge-finish">FINISH</b-badge>
+                <b-badge variant="info" class="restart-font-size badge-Finish">FINISH</b-badge>
               </template>
             </div>
           </template>

@@ -22,7 +22,7 @@
           </div>
           <div v-else>
             <div class="text-center mb-2">
-              <p class="badge-loan font-weight-bold text-primary">LOAN AUTORIZATION</p>
+              <p class="badge-loan font-weight-bold text-primary">Loan Autorization</p>
             </div>
             <ValidationObserver ref="form">
               <b-row>
@@ -33,7 +33,7 @@
                         <b-input-group>
                           <b-input-group-prepend class="w-35">
                             <b-input-group-text class="w-100">
-                              <span>FULL NAME</span>
+                              <span>Full Name</span>
                             </b-input-group-text>
                           </b-input-group-prepend>
                           <b-form-input v-model="userData.userName" type="text" disabled></b-form-input>
@@ -49,7 +49,7 @@
                         <b-input-group>
                           <b-input-group-prepend class="w-35">
                             <b-input-group-text class="w-100">
-                              <span>ROL</span>
+                              <span>Rol</span>
                             </b-input-group-text>
                           </b-input-group-prepend>
                           <b-form-input v-model="userData.roleName" type="text" disabled></b-form-input>
@@ -67,7 +67,7 @@
                         <b-input-group>
                           <b-input-group-prepend class="w-35">
                             <b-input-group-text class="w-100">
-                              <span>DEPARTMENT</span>
+                              <span>Department</span>
                             </b-input-group-text>
                           </b-input-group-prepend>
                           <b-form-input v-model="userData.moduleName" type="text" disabled></b-form-input>
@@ -83,7 +83,7 @@
                         <b-input-group>
                           <b-input-group-prepend class="w-35">
                             <b-input-group-text class="w-100">
-                              <span>SUPERVISOR</span>
+                              <span>Supervisor</span>
                             </b-input-group-text>
                           </b-input-group-prepend>
                           <b-form-input v-model="userData.superName" type="text" disabled></b-form-input>
@@ -109,7 +109,7 @@
                                 class="w-100"
                                 :class="isLoanActive ? '' : 'bg-primary text-light'"
                               >
-                                <span>AMOUNT</span>
+                                <span>Amount</span>
                               </b-input-group-text>
                             </b-input-group-prepend>
                             <money
@@ -117,10 +117,10 @@
                               v-bind="vMoney"
                               class="form-control"
                               :disabled="isLoanActive"
-                              :class="{'border border-danger':(errors[0] && vmoneyValidate) || isOverProvision}"
+                              :class="{'border border-danger':(errors[0] && vmoneyValidate) || (isOverProvision && !isSupervisorLoan)}"
                             ></money>
                             <span
-                              v-if="isOverProvision"
+                              v-if="isOverProvision && !isSupervisorLoan"
                               class="text-danger"
                             >The amount is over the middle provision.</span>
                           </b-input-group>
@@ -136,7 +136,7 @@
                         <b-input-group>
                           <b-input-group-prepend class="w-35">
                             <b-input-group-text class="w-100">
-                              <span>PAY DAY</span>
+                              <span>Pay Day</span>
                             </b-input-group-text>
                           </b-input-group-prepend>
                           <b-form-input value="25th" type="text" disabled></b-form-input>
@@ -153,7 +153,7 @@
                           class="w-100"
                           :class="isLoanActive ? '' : 'bg-primary text-light'"
                         >
-                          <span>INTEREST</span>
+                          <span>Interest</span>
                         </b-input-group-text>
                       </b-input-group-prepend>
                       <b-form-checkbox
@@ -179,7 +179,7 @@
                             class="w-100"
                             :class="isLoanActive ? '' : 'bg-primary text-light'"
                           >
-                            <span>MONTHLY PAYMENT</span>
+                            <span>Monthly Payment</span>
                           </b-input-group-text>
                         </b-input-group-prepend>
                         <b-radio-group
@@ -222,7 +222,7 @@
                         <b-input-group>
                           <b-input-group-prepend class="w-35">
                             <b-input-group-text class="w-100">
-                              <span>SALARY</span>
+                              <span>Salary</span>
                             </b-input-group-text>
                           </b-input-group-prepend>
                           <money
@@ -270,7 +270,7 @@
                       class="class-campo-icon add-class-campo-icon border-title-text"
                       :class="isLoanActive ? '' : 'bg-primary  text-light'"
                     >
-                      <span>MOTIVE</span>
+                      <span>Motive</span>
                     </b-col>
                   </b-row>
                 </b-col>
@@ -292,7 +292,7 @@
                 <b-col lg="12">
                   <b-row class="class-inline px-1">
                     <b-col lg="5" class="class-campo-icon add-class-campo-icon border-title-text">
-                      <span>OBSERVATION</span>
+                      <span>Observation</span>
                     </b-col>
                   </b-row>
                 </b-col>
@@ -320,45 +320,35 @@
         <b-row v-if="!isLoanActive">
           <b-col lg="12" style="text-align: center;">
             <b-button variant="success" @click="sendLoan" :disabled="noSend">
-              <feather-icon icon="SaveIcon" class="mr-50" size="17.5" />SEND LOAN
+              <feather-icon icon="SaveIcon" class="mr-50" size="17.5" />Send Loan
             </b-button>
           </b-col>
         </b-row>
         <b-row v-if="isNotUserLoan && (isShowSupervisor || isShowRrhh || isShowManagement)">
           <b-col lg="12" style="text-align: center;">
-            <b-button variant="success" :disabled="noSend" class="mr-1" @click="changeStatus(1)">
-              <b-icon icon="check-circle-fill" class="mr4px"></b-icon>ACCEPT LOAN
-            </b-button>
-            <b-button variant="danger" :disabled="noSend" @click="changeStatus(2)">
-              <b-icon icon="x-circle-fill" class="mr4px"></b-icon>DECLINE LOAN
-            </b-button>
+            <b-button
+              variant="success"
+              :disabled="noSend"
+              class="mr-1"
+              @click="changeStatus(1)"
+            >Accept Loan</b-button>
+            <b-button
+              variant="outline-danger"
+              :disabled="noSend"
+              @click="changeStatus(2)"
+            >Decline Loan</b-button>
           </b-col>
         </b-row>
       </template>
     </b-modal>
 
-    <b-modal
-      modal
-      v-model="showCommentModal"
-      header-class="b-vue-modal-header"
-      modal-class="top-modal"
-    >
-      <template #modal-header="{ close }">
-        <span>
-          <h5>MOTIVE</h5>
-        </span>
-        <i
-          class="fas fa-times-circle text-white"
-          style="color: #d0cdc5; font-size: 20px; cursor: pointer"
-          @click="close"
-        ></i>
-      </template>
+    <b-modal title="MOTIVE" modal v-model="showCommentModal" centered modal-class="modal-danger">
       <ValidationObserver ref="comment">
         <div class="form-group mt-0">
           <ValidationProvider name="comment" rules="required" v-slot="{errors}">
             <textarea
               v-model="acceptOrDeny.comment"
-              class="textarea-style"
+              class="textarea-style form-control"
               style="border-radius: 0px 10px 10px 10px"
               :class="{'border border-danger':errors[0]}"
             ></textarea>
@@ -366,12 +356,8 @@
         </div>
       </ValidationObserver>
       <template #modal-footer>
-        <b-button variant="success" @click="sendComment">
-          <i class="fas fa-save"></i> SEND
-        </b-button>
-        <b-button variant="danger" @click="showCommentModal = !showCommentModal">
-          <i class="fa fa-times-circle"></i> CANCEL
-        </b-button>
+        <b-button variant="success" @click="sendComment">Send</b-button>
+        <b-button variant="outline-danger" @click="showCommentModal = !showCommentModal">Cancel</b-button>
       </template>
     </b-modal>
   </div>
@@ -395,6 +381,7 @@ export default {
   },
   created() {
     this.getInitialData();
+    console.log(this.isSupervisor);
   },
   mounted() {},
   data() {
@@ -478,6 +465,9 @@ export default {
         (this.isCeo && this.loan.process == 1)
       );
     },
+    isSupervisorLoan() {
+      return this.isSupervisor || this.isLoanActive;
+    },
 
     isShowManagement() {
       return (
@@ -490,33 +480,31 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
-      setLoading: "app/SET_LOADING"
-    }),
-
     hideModal(status) {
       this.info.idLoan = null;
       this.modalUp = false;
       this.$emit("hide", status);
     },
+
+    //Open Initial Info Modal
     ifLoanActiveSelection() {
       if (this.isLoanActive) {
         this.loadDataLoan();
       } else {
         this.isLoadData = true;
-        this.setLoading(false);
+        this.removePreloader();
         this.modalUp = true;
       }
     },
     async getInitialData() {
-      let userData = await this.getUserData();
+      let userData = await this.getUserData(this.currentUser.user_id);
       this.ifLoanActiveSelection();
     },
-    async getUserData() {
+    async getUserData(userId) {
       try {
-        this.setLoading(true);
+        this.addPreloader();
         const params = {
-          id_user: this.currentUser.user_id,
+          id_user: userId,
           id_module: this.module
         };
         let response = await loansService.getUserData(params);
@@ -528,7 +516,7 @@ export default {
         this.userData.interest_real = response[0].interest_real;
       } catch (error) {
         this.showErrorSwal();
-        this.setLoading(false);
+        this.removePreloader();
       }
     },
     async loadDataLoan() {
@@ -542,21 +530,23 @@ export default {
         this.userData.provision = this.loan.provision;
         this.userData.salary = this.loan.salary;
         this.loan.payment = parseInt(this.loan.payment);
-        let user = await this.getUserData();
+        let user = await this.getUserData(this.loan.id_user);
         this.isLoadData = true;
 
         //Open Modal when request is finished
         this.modalUp = true;
-        this.setLoading(false);
+        this.removePreloader();
       } catch (error) {
         this.showErrorSwal();
-        this.setLoading(false);
+        this.removePreloader();
       }
     },
+
+    //Send Request Loan
     async sendLoan() {
       this.vmoneyValidate = true;
       const validate = await this.$refs.form.validate();
-      if (validate && !this.isOverProvision) {
+      if (validate && !this.isOverProvision && !this.isSupervisorLoan) {
         //Swal Comfirm
         const result = await this.showConfirmSwal();
         if (result.isConfirmed) {
@@ -589,35 +579,28 @@ export default {
         }
       }
     },
-    changeStatus(status) {
+
+    //ACTIONS SUPERVISOR AND MANAGEMENT
+
+    async changeStatus(status) {
       this.acceptOrDeny.status = status;
-      swal
-        .fire({
-          title: "ARE YOU SURE?",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonText: "YES",
-          cancelButtonText: "CANCEL"
-        })
-        .then(result => {
-          if (result.value) {
-            if (status == 2) {
-              this.showCommentModal = true;
-            } else {
-              this.sendStatus();
-            }
-          }
-        });
+
+      const result = await this.showConfirmSwal();
+      if (result.isConfirmed) {
+        if (status == 2) {
+          this.showCommentModal = true;
+        } else {
+          this.sendStatus();
+        }
+      }
     },
     sendComment() {
-      this.$refs.comment.validate().then(success => {
-        if (!success) {
-          return;
-        }
+      const validate = this.$refs.comment.validate();
+      if (validate) {
         this.sendStatus();
-      });
+      }
     },
-    sendStatus() {
+    async sendStatus() {
       let role_id = this.isShowSupervisor ? 2 : 3;
       const params = {
         id_loan: this.info.idLoan,
@@ -625,43 +608,33 @@ export default {
         motive: this.acceptOrDeny.comment,
         id_module: this.moduleId,
         status: this.acceptOrDeny.status,
-        process: this.acceptOrDeny.status == 1 ? role_id : 4,
+        process: this.acceptOrDeny.status == 1 ? role_id : 2,
         rol: this.isShowSupervisor ? 2 : 4 // se cambio el 4 por el 3 que indicaba rrhh
       };
+
       if (this.acceptOrDeny.status == 1) {
-        axios.post("/api/loans/insert-status", params).then(res => {
-          this.showCommentModal = false;
-          this.loan.process = params.rol;
-          this.$emit("click");
-          toast.fire({
-            type: "success",
-            title: "SAVE"
-          });
-        });
-      } else {
-        swal
-          .fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, send it!"
-          })
-          .then(result => {
-            if (result.value) {
-              axios.post("/api/loans/insert-status", params).then(res => {
-                this.showCommentModal = false;
-                this.loan.process = params.rol;
-                this.$emit("click");
-                toast.fire({
-                  type: "success",
-                  title: "SAVE"
-                });
-              });
-            }
-          });
+        this.insertStatus(params);
+        return;
+      }
+      if (this.acceptOrDeny.status == 2) {
+        const confirm = await this.showConfirmSwal();
+        if (confirm.isConfirmed) {
+          this.insertStatus(params);
+        }
+      }
+    },
+    async insertStatus(params) {
+      try {
+        this.addPreloader();
+        let response = await loansService.insertStatusLoan(params);
+        this.showCommentModal = false;
+        this.loan.process = params.rol;
+        this.removePreloader();
+        this.showSuccessSwal("Save");
+        this.hideModal(true);
+      } catch (error) {
+        this.removePreloader();
+        this.showErrorSwal();
       }
     }
   }

@@ -1,13 +1,7 @@
 <template>
   <div>
     <ValidationObserver ref="form">
-      <b-modal
-        v-model="modalServices"
-        modal
-        size="xl"
-        scrollable
-        @hidden="hideModal(false,0)"
-      >
+      <b-modal v-model="modalServices" modal size="xl" scrollable @hidden="hideModal(false,0)">
         <!-- HEADER START -->
         <template #modal-header="{ }">
           <modal-service-header
@@ -27,30 +21,16 @@
         <b-row>
           <div class="col-lg-6">
             <div class="form-group">
-              <table
-                v-if="rates.length>0"
-                class="table table-bordered table-striped"
-              >
+              <table v-if="rates.length>0" class="table table-bordered table-striped">
                 <tbody>
                   <tr class="description-price">
-                    <th style="font-weight: 100">
-                      Description
-                    </th>
-                    <th style="font-weight: 100; width: 15%">
-                      Price
-                    </th>
-                    <th style="font-weight: 100">
-                      Quantity
-                    </th>
-                    <th style="font-weight: 100">
-                      SubTotal
-                    </th>
+                    <th style="font-weight: 100">Description</th>
+                    <th style="font-weight: 100; width: 15%">Price</th>
+                    <th style="font-weight: 100">Quantity</th>
+                    <th style="font-weight: 100">SubTotal</th>
                   </tr>
                   <template v-for="(prices, index) in rates">
-                    <tr
-                      v-if="index < 9"
-                      :key="prices.id"
-                    >
+                    <tr v-if="index < 9" :key="prices.id">
                       <td class="description-price">
                         <span>{{ prices.description }}</span>
                       </td>
@@ -67,7 +47,7 @@
                           min="1"
                           max="99"
                           @change="calculateSubtotal(index)"
-                        >
+                        />
                       </td>
                       <td style="color: #baa345">
                         $
@@ -86,30 +66,16 @@
           </div>
           <div class="col-lg-6">
             <div class="form-group">
-              <table
-                v-if="rates.length>0"
-                class="table table-bordered table-striped"
-              >
+              <table v-if="rates.length>0" class="table table-bordered table-striped">
                 <tbody>
                   <tr class="description-price">
-                    <th style="font-weight: 100">
-                      Description
-                    </th>
-                    <th style="font-weight: 100; width: 15%">
-                      Price
-                    </th>
-                    <th style="font-weight: 100">
-                      Quantity
-                    </th>
-                    <th style="font-weight: 100">
-                      SubTotal
-                    </th>
+                    <th style="font-weight: 100">Description</th>
+                    <th style="font-weight: 100; width: 15%">Price</th>
+                    <th style="font-weight: 100">Quantity</th>
+                    <th style="font-weight: 100">SubTotal</th>
                   </tr>
                   <template v-for="(pdata2, index) in rates">
-                    <tr
-                      v-if="index > 8"
-                      :key="pdata2.id"
-                    >
+                    <tr v-if="index > 8" :key="pdata2.id">
                       <td class="description-price">
                         <span>{{ pdata2.description }}</span>
                       </td>
@@ -126,7 +92,7 @@
                           min="1"
                           max="99"
                           @change="calculateSubtotal(index)"
-                        >
+                        />
                       </td>
                       <td style="color: #baa345">
                         $
@@ -150,13 +116,9 @@
         <template #modal-footer="{ }">
           <!-- total -->
           <b-container fluid>
-            <b-row
-            >
+            <b-row>
               <b-col>
-                <ValidationProvider
-                  v-slot="{errors}"
-                  rules="required|money-1"
-                >
+                <ValidationProvider v-slot="{errors}" rules="required|money-1">
                   <div>
                     <div class="text-center">
                       TOTAL $
@@ -179,10 +141,7 @@
               <!-- Fee -->
 
               <b-col>
-                <ValidationProvider
-                  v-slot="{errors}"
-                  rules="required|money-1"
-                >
+                <ValidationProvider v-slot="{errors}" rules="required|money-1">
                   <div>
                     <div class="text-center">
                       FEE $
@@ -204,34 +163,21 @@
               </b-col>
             </b-row>
             <b-row v-if="!isModalShow">
-              <b-col
-                v-if="!isModalAdd"
-                class="d-flex align-items-center justify-content-center"
-              >
+              <b-col v-if="!isModalAdd" class="d-flex align-items-center justify-content-center">
                 <b-button
                   variant="danger"
                   class="rounded mr-1"
                   size="sm"
                   @click="hideModal(false, 0)"
                 >
-                  <feather-icon icon="PowerIcon" /> CANCEL
+                  <feather-icon icon="PowerIcon" />CANCEL
                 </b-button>
-                <b-button
-                  variant="success"
-                  class="rounded"
-                  size="sm"
-                  @click="saveRates"
-                >
-                  <feather-icon icon="SaveIcon" /> SAVE
+                <b-button variant="success" class="rounded" size="sm" @click="saveRates">
+                  <feather-icon icon="SaveIcon" />SAVE
                 </b-button>
               </b-col>
               <b-col v-else>
-                <b-button
-                  v-if="isModalAdd"
-                  variant="info"
-                  size="sm"
-                  @click="saveRates"
-                >
+                <b-button v-if="isModalAdd" variant="info" size="sm" @click="saveRates">
                   Continue
                   <feather-icon icon="ChevronsRightIcon" />
                 </b-button>
@@ -246,41 +192,44 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import { mapGetters } from "vuex";
+import ModalServiceHeader from "@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue";
 
 export default {
   components: {
-    ModalServiceHeader,
+    ModalServiceHeader
   },
   props: {
     modalServices: {
       type: Boolean,
-      default: false,
+      default: false
     },
     salesClient: {
       type: Object,
       default: () => ({
-        event_id: '', account_id: '', id: '', lead_id: '',
-      }),
+        event_id: "",
+        account_id: "",
+        id: "",
+        lead_id: ""
+      })
     },
     typeModal: {
       type: Number,
-      default: 1,
+      default: 1
       // 1: complete rates, 2: datail of sale
     },
     usersServices: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     programsAll: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     headerS: {
       type: Object,
-      default: () => ({ program: '', seller: '', captured: '' }),
-    },
+      default: () => ({ program: "", seller: "", captured: "" })
+    }
   },
   data() {
     return {
@@ -290,7 +239,7 @@ export default {
       rates: [],
       lead: null,
       fee: 0,
-      observation: 'Services',
+      observation: "Services",
       otherspayments: [],
       options_ce: [],
       select_option: [],
@@ -298,94 +247,97 @@ export default {
       json_ce_new: null,
       rate_selected: [],
       vMoney: {
-        decimal: '.',
-        thousands: ',',
-        prefix: '',
+        decimal: ".",
+        thousands: ",",
+        prefix: "",
         precision: 2,
-        masked: false,
+        masked: false
       },
       validateMoney: false,
       score_id: null,
-      json_ce: null,
-    }
+      json_ce: null
+    };
   },
   created() {},
   async mounted() {
-    this.client = this.salesClient
+    this.client = this.salesClient;
     if (this.program) {
-      await this.searchRate()
+      await this.searchRate();
     }
     if (this.isModalAdd) {
-      await this.getScore()
+      await this.getScore();
     }
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
+      currentUser: "auth/currentUser"
     }),
     totalAmount() {
-      return this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
+      return this.rates.reduce((sum, rate) => sum + rate.subtotal, 0);
     },
     isModalShow() {
-      return this.typeModal === 2 || this.typeModal === 5
+      return this.typeModal === 2 || this.typeModal === 5;
     },
     isModalAdd() {
-      return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
-    },
+      return (
+        this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+      );
+    }
   },
   methods: {
     /* PRELOADER */
     addPreloader() {
-      this.$store.commit('app/SET_LOADING', true)
+      this.$store.commit("app/SET_LOADING", true);
     },
     removePreloader() {
-      this.$store.commit('app/SET_LOADING', false)
+      this.$store.commit("app/SET_LOADING", false);
     },
 
     async saveRates() {
-      this.validateMoney = true
+      this.validateMoney = true;
       // Validate Money
-      const success = await this.$refs.form.validate()
+      const success = await this.$refs.form.validate();
       if (success) {
-        let message = ''
-        let route = ''
-        const typeADD = ''
-        const prices = []
+        let message = "";
+        let route = "";
+        const typeADD = "";
+        const prices = [];
         // Depends of the Modal type
         switch (this.typeModal) {
           case 1:
-            message = 'complete Rates'
-            route = '/attendend'
-            break
+            message = "complete Rates";
+            route = "/attendend";
+            break;
           case 3:
-            message = 'add new service'
-            route = '/attendendprogram'
-            this.typeADD = 1
-            break
+            message = "add new service";
+            route = "/attendendprogram";
+            this.typeADD = 1;
+            break;
           case 4:
-            message = 'change service'
-            route = '/attendendprogram'
-            this.typeADD = 2
-            break
+            message = "change service";
+            route = "/attendendprogram";
+            this.typeADD = 2;
+            break;
           case 6:
-            message = 'add new service'
-            route = '/leadattendend'
-            break
-          default: break
+            message = "add new service";
+            route = "/leadattendend";
+            break;
+          default:
+            break;
         }
         // Get the prices
         this.rates.map((rate, index) => {
           if (rate.quantity > 0) {
-            prices.push({ item: rate.id.toString(), cant: rate.quantity })
+            prices.push({ item: rate.id.toString(), cant: rate.quantity });
             this.add_json_ce.push({
               index,
               program: rate.id,
-              task: this.select_option[index],
-            })
+              task: this.select_option[index]
+            });
           } else {
-            prices.push({ item: '0', cant: 0 })
+            prices.push({ item: "0", cant: 0 });
           }
-        })
+        });
         const param = {
           prices,
           observation: this.observation,
@@ -401,30 +353,30 @@ export default {
           // Diferents to add change Services
           account: this.salesClient.account_id
             ? this.salesClient.account_id
-            : '',
+            : "",
           captured: this.headerS.captured,
           seller: this.headerS.seller,
           type: typeADD,
           user_id: this.currentUser.user_id,
           module: this.currentUser.modul_id,
           id_score: this.score_id,
-          json_ce: this.json_ce,
-        }
+          json_ce: this.json_ce
+        };
 
         const result = await this.$swal.fire({
           title: `Are you sure you want to ${message}?`,
           text: "You won't be able to revert this!",
-          type: 'warning',
+          type: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes',
-        })
+          confirmButtonColor: "#ab9220",
+          cancelButtonColor: "#8f9194",
+          confirmButtonText: "Yes"
+        });
         if (result.value) {
-          this.addPreloader()
-          const response = await amgApi.post(`${route}`, param)
+          this.addPreloader();
+          const response = await amgApi.post(`${route}`, param);
           if (response.status === 200) {
-            this.hideModal(true, this.program)
+            this.hideModal(true, this.program);
           }
         }
       }
@@ -432,73 +384,81 @@ export default {
 
     /* Changes */
     calculateSubtotal(index) {
-      this.rates[index].subtotal = this.rates[index].price * this.rates[index].quantity
+      this.rates[index].subtotal =
+        this.rates[index].price * this.rates[index].quantity;
     },
 
     /* Rates */
 
     async searchRate() {
       try {
-        const response = await amgApi.post('/searchprogram', { id: this.program })
+        const response = await amgApi.post("/searchprogram", {
+          id: this.program
+        });
         if (response.status === 200) {
-          this.rates = response.data
+          this.rates = response.data;
           if (!this.isModalShow) {
-            this.removePreloader()
+            this.removePreloader();
           }
           this.rates.forEach(rate => {
-            rate.disabled = false
-          })
+            rate.disabled = false;
+          });
 
           if (this.isModalShow) {
-            this.showRates()
+            this.showRates();
           }
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     },
 
     async showRates() {
       try {
-        const response = await amgApi.post('/searchprogramsalemade', { id: this.salesClient.id })
+        const response = await amgApi.post("/searchprogramsalemade", {
+          id: this.salesClient.id
+        });
         if (response.status === 200) {
-          this.fee = response.data[0].fee
-          this.rate_selected = JSON.parse(response.data[0].rate_selected)
+          this.fee = response.data[0].fee;
+          this.rate_selected = JSON.parse(response.data[0].rate_selected);
 
           for (let i = 0; i < this.rates.length; i++) {
             for (let y = 0; y < this.rate_selected.length; y++) {
               if (this.rates[i].id == this.rate_selected[y].rate_id) {
-                this.rates[i].quantity = this.rate_selected[y].quantity
-                this.rates[i].subtotal = this.rates[i].price * this.rates[i].quantity
+                this.rates[i].quantity = this.rate_selected[y].quantity;
+                this.rates[i].subtotal =
+                  this.rates[i].price * this.rates[i].quantity;
               }
             }
           }
 
-          this.removePreloader()
+          this.removePreloader();
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     },
 
     hideModal(refresh, programSelect) {
-      this.$emit('closeModal', refresh, programSelect)
+      this.$emit("closeModal", refresh, programSelect);
     },
     changeProgram(headerS) {
-      this.$emit('changeProgram', headerS)
+      this.$emit("changeProgram", headerS);
     },
     async getScore() {
       try {
-        const response = await amgApi.post('/getscoreattend', { lead_id: this.salesClient.lead_id })
+        const response = await amgApi.post("/getscoreattend", {
+          lead_id: this.salesClient.lead_id
+        });
         if (response.status == 200) {
-          this.score_id = response.data.score_id
+          this.score_id = response.data.score_id;
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style scoped>

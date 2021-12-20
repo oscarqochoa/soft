@@ -38,19 +38,20 @@
         <template v-slot:cell(client)="data">
           <h6>{{ data.item.client }}</h6>
           <p class="mb-0">
-            <small> {{ data.item.mobile }}</small>
+            <small>{{ data.item.mobile }}</small>
           </p>
           <p class="mb-0">
             <small>{{ data.item.state }}</small>
           </p>
-          <p> <small> {{ data.item.sourcesname }} </small></p>
+          <p>
+            <small>{{ data.item.sourcesname }}</small>
+          </p>
         </template>
         <template v-slot:cell(program)="data">
           <b-button
             :style="`color: ${data.item.program_color} !important; border-color: ${data.item.program_color} !important; background-color: transparent !important;`"
             size="sm"
             @click="openModalProgram(data.item)"
-
           >
             {{ data.item.program }}
             <b-icon
@@ -63,13 +64,15 @@
         <template v-slot:cell(captured)="data">
           <b-row>
             <b-col>
-              <p> {{ data.item.captured }}</p>
+              <p>{{ data.item.captured }}</p>
             </b-col>
           </b-row>
           <b-row>
             <b-col>
               <p v-if="data.item.commission">
-                <small class="text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[0].commission }} </small>
+                <small
+                  class="text-primary font-weight-bold"
+                >$ {{ JSON.parse(data.item.commission)[0].commission }}</small>
               </p>
             </b-col>
           </b-row>
@@ -85,13 +88,15 @@
         <template v-slot:cell(seller)="data">
           <b-row>
             <b-col>
-              <p> {{ data.item.seller }}</p>
+              <p>{{ data.item.seller }}</p>
             </b-col>
           </b-row>
           <b-row>
             <b-col>
               <p v-if="data.item.commission">
-                <small class="text-primary font-weight-bold"> $ {{ JSON.parse(data.item.commission)[1].commission }} </small>
+                <small
+                  class="text-primary font-weight-bold"
+                >$ {{ JSON.parse(data.item.commission)[1].commission }}</small>
               </p>
             </b-col>
           </b-row>
@@ -107,7 +112,7 @@
         <template v-slot:cell(fee)="data">
           <b-row>
             <b-col>
-              <p> $ {{ data.item.fee }} </p>
+              <p>$ {{ data.item.fee }}</p>
             </b-col>
           </b-row>
           <b-row v-if="data.item.status === 1 || data.item.status === 3">
@@ -120,11 +125,7 @@
           </b-row>
         </template>
         <template v-slot:cell(initial_amount)="data">
-          <b-icon
-            v-if="data.item.initial_payment_status === 1"
-            icon="wallet2"
-            variant="muted"
-          />
+          <b-icon v-if="data.item.initial_payment_status === 1" icon="wallet2" variant="muted" />
           <b-icon
             v-else-if="data.item.initial_payment_status === 3"
             icon="wallet2"
@@ -133,9 +134,7 @@
           <p
             v-else-if="data.item.initial_payment_status === 2"
             class="text-success font-weight-bold"
-          >
-            $ {{ data.item.initial_amount }}
-          </p>
+          >$ {{ data.item.initial_amount }}</p>
         </template>
         <template v-slot:cell(contract_fee_status)="data">
           <b-icon
@@ -152,6 +151,7 @@
           <b-icon
             v-if="data.item.creates > '2021-05-16 00:00:00' "
             icon="chat-square-text-fill"
+            class="cursor-pointer"
             :variant="
               (data.item.notes_status_new == null) ? 'muted':
               (data.item.notes_status_new == 0) ? 'success' :
@@ -174,18 +174,13 @@
           />
         </template>
         <template v-slot:cell(files)="data">
-          <b-icon
-            icon="folder-fill"
-            variant="warning"
-          />
+          <b-icon icon="folder-fill" variant="warning" />
         </template>
         <template v-slot:cell(status)="data">
           <b-button
             size="sm"
             :variant="status[data.item.status].variant"
-          >
-            {{ status[data.item.status].text }}
-          </b-button>
+          >{{ status[data.item.status].text }}</b-button>
         </template>
         <template v-slot:cell(creates)="data">
           <span>{{ new Date(Date.parse(data.item.creates)).toLocaleDateString("en-US") }}</span>
@@ -194,65 +189,48 @@
           <span
             v-if="data.item.approved"
             class="bg-warning py-1 px-1 rounded-pill text-white"
-          > {{ new Date(Date.parse(data.item.approved)).toLocaleDateString("en-US") }}</span>
+          >{{ new Date(Date.parse(data.item.approved)).toLocaleDateString("en-US") }}</span>
           <span v-else>-</span>
         </template>
         <template v-slot:cell(sms)="data">
-          <b-icon
-            icon="chat-text-fill"
-            variant="primary"
-          />
+          <b-icon icon="chat-text-fill" variant="primary" />
         </template>
         <template v-slot:cell(url)="data">
-          <b-icon
-            v-if="data.item.initial_payment_status === 1"
-            icon="link"
-            variant="primary"
-          />
+          <b-icon v-if="data.item.initial_payment_status === 1" icon="link" variant="primary" />
         </template>
         <template v-slot:cell(done)="data">
           <b-btn v-if="data.item.initial_payment_status == 2">
-            <b-icon
-              icon="arrow-left-square-fill"
-              variant="primary"
-            />
+            <b-icon icon="arrow-left-square-fill" variant="primary" />
           </b-btn>
         </template>
       </b-table>
     </filter-slot>
-    <tracking-modal
-      :modal="modal"
-      :tracking="modalData.tracking"
-    />
-    <detail-of-sail-modal
-      :modal="modal"
-      :boost_credit="modalData.boost_credit"
-    />
+    <tracking-modal :modal="modal" :tracking="modalData.tracking" />
+    <detail-of-sail-modal :modal="modal" :boost_credit="modalData.boost_credit" />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import FilterSlot
-from '@/views/crm/views/sales-made/components/new-client/components/FilterSlot.vue'
-import dataFields from '@/views/crm/views/sales-made/components/new-client/components/fields.data'
-import dataFilters from '@/views/crm/views/sales-made/components/new-client/components/filters.data'
-import CrmService from '@/views/crm/services/crm.service'
-import TrackingModal from '@/views/crm/views/sales-made/components/modals/TrackingModal.vue'
-import DetailOfSailModal from '@/views/crm/views/sales-made/components/modals/DetailOfSailModal.vue'
+import { mapState } from "vuex";
+import FilterSlot from "@/views/crm/views/sales-made/components/new-client/components/FilterSlot.vue";
+import dataFields from "@/views/crm/views/sales-made/components/new-client/components/fields.data";
+import dataFilters from "@/views/crm/views/sales-made/components/new-client/components/filters.data";
+import CrmService from "@/views/crm/services/crm.service";
+import TrackingModal from "@/views/crm/views/sales-made/components/modals/TrackingModal.vue";
+import DetailOfSailModal from "@/views/crm/views/sales-made/components/modals/DetailOfSailModal.vue";
 
 export default {
-  name: 'SalesMadeNewComponent',
+  name: "SalesMadeNewComponent",
   components: { DetailOfSailModal, TrackingModal, FilterSlot },
   props: {
     done: {
       required: true,
-      type: Number,
+      type: Number
     },
     inputFields: {
       required: true,
-      type: Array,
-    },
+      type: Array
+    }
   },
   data() {
     return {
@@ -261,7 +239,7 @@ export default {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 100,
+        perPage: 100
       },
       basicSearch: true,
       filter: dataFilters,
@@ -269,97 +247,109 @@ export default {
       toPage: null,
       modal: {
         tracking: false,
-        boost_credit: false,
+        boost_credit: false
       },
       modalData: {
         tracking: {
-          program: '',
-          client: '',
-          tabla: '',
+          program: "",
+          client: "",
+          tabla: ""
         },
         boost_credit: {
-          program: '',
-          client: '',
-          fee: null,
-        },
-      },
-    }
+          program: "",
+          client: "",
+          fee: null
+        }
+      }
+    };
   },
   computed: {
     ...mapState({
-      status: state => state['crm-store'].status,
+      status: state => state["crm-store"].status
     }),
     filteredFields() {
-      return this.fields.filter(field => this.inputFields.includes(field.key))
-    },
+      return this.fields.filter(field => this.inputFields.includes(field.key));
+    }
   },
   methods: {
     async myProvider(ctx) {
       try {
-        let sortBy = 11
-        let sortDirection = 'desc'
-        if (ctx.sortBy === 'client') {
-          sortBy = 0
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
-        } else if (ctx.sortBy === 'creates') {
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
-        } else if (ctx.sortBy === 'approved') {
-          sortBy = 12
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
+        let sortBy = 11;
+        let sortDirection = "desc";
+        if (ctx.sortBy === "client") {
+          sortBy = 0;
+          if (ctx.sortDesc) sortDirection = "desc";
+          else sortDirection = "asc";
+        } else if (ctx.sortBy === "creates") {
+          if (ctx.sortDesc) sortDirection = "desc";
+          else sortDirection = "asc";
+        } else if (ctx.sortBy === "approved") {
+          sortBy = 12;
+          if (ctx.sortDesc) sortDirection = "desc";
+          else sortDirection = "asc";
         }
-        const data = await CrmService.getSaleMade({
-          text: ctx.filter.text,
-          status: ctx.filter.status,
-          program: ctx.filter.program,
-          state_h: ctx.filter.state,
-          from: ctx.filter.from,
-          to: ctx.filter.to,
-          orderby: sortBy,
-          order: sortDirection,
-          captured: ctx.filter.captured,
-          seller: ctx.filter.seller,
-          salemade: 0,
-          rolsession: 1,
-          statusip: ctx.filter.stip,
-          sourcesname_id: ctx.filter.source,
-          done: this.done,
-          per_page: ctx.perPage,
-        },
-        ctx.currentPage)
-        this.startPage = data.from
-        this.toPage = data.to
-        if (this.totalRows !== data.total) this.totalRows = data.total
-        return data.data
+        const data = await CrmService.getSaleMade(
+          {
+            text: ctx.filter.text,
+            status: ctx.filter.status,
+            program: ctx.filter.program,
+            state_h: ctx.filter.state,
+            from: ctx.filter.from,
+            to: ctx.filter.to,
+            orderby: sortBy,
+            order: sortDirection,
+            captured: ctx.filter.captured,
+            seller: ctx.filter.seller,
+            salemade: 0,
+            rolsession: 1,
+            statusip: ctx.filter.stip,
+            sourcesname_id: ctx.filter.source,
+            done: this.done,
+            per_page: ctx.perPage
+          },
+          ctx.currentPage
+        );
+        this.startPage = data.from;
+        this.toPage = data.to;
+        if (this.totalRows !== data.total) this.totalRows = data.total;
+        return data.data;
       } catch (error) {
-        console.log('Something went wrong myProvider:', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-        return []
+        console.log("Something went wrong myProvider:", error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
+        return [];
       }
     },
     openTrackingModal(program, client, tabla) {
-      this.modalData.tracking.program = program
-      this.modalData.tracking.client = client
+      this.modalData.tracking.program = program;
+      this.modalData.tracking.client = client;
       if (tabla) {
-        this.modalData.tracking.tabla = JSON.parse(tabla)
-        this.modal.tracking = true
+        this.modalData.tracking.tabla = JSON.parse(tabla);
+        this.modal.tracking = true;
       }
     },
     openModalProgram(data) {
-      if (data.program_id === 2 || data.program_id === 7 || data.program_id === 6) this.openDetailOfSail(data.program, data.client, data.fee)
+      if (
+        data.program_id === 2 ||
+        data.program_id === 7 ||
+        data.program_id === 6
+      )
+        this.openDetailOfSail(data.program, data.client, data.fee);
     },
     openDetailOfSail(program, client, fee) {
-      this.modalData.boost_credit.program = program
-      this.modalData.boost_credit.client = client
-      this.modalData.boost_credit.fee = fee
-      this.modal.boost_credit = true
-    },
-  },
-}
+      this.modalData.boost_credit.program = program;
+      this.modalData.boost_credit.client = client;
+      this.modalData.boost_credit.fee = fee;
+      this.modal.boost_credit = true;
+    }
+  }
+};
 </script>
 
 <style scoped>
-
 </style>

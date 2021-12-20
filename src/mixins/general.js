@@ -1,6 +1,9 @@
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 
 export default {
+  data() {
+    return { baseUrl: process.env.VUE_APP_BASE_URL_ASSETS };
+  },
   methods: {
     convertProgramToModule(program) {
       let module = 0;
@@ -90,91 +93,6 @@ export default {
       }
       return module;
     },
-    createClass(name, rules) {
-      const style = document.createElement("style");
-      style.type = "text/css";
-      document.getElementsByTagName("head")[0].appendChild(style);
-      if (!(style.sheet || {}).insertRule)
-        (style.styleSheet || style.sheet).addRule(name, rules);
-      else style.sheet.insertRule(`${name}{${rules}}`, 0);
-    },
-    showToast(variant, position, title, icon, text) {
-      this.$toast(
-        {
-          component: ToastificationContent,
-          props: {
-            title,
-            icon,
-            text,
-            variant,
-          },
-        },
-        {
-          position,
-        }
-      );
-    },
-    showConfirmSwal(
-      title = "Are you sure?",
-      text = "You won't be able to revert this!",
-      icon = "warning"
-    ) {
-      return this.$swal({
-        title,
-        text,
-        icon,
-        showCancelButton: true,
-        reverseButtons: true,
-        buttonsStyling: false,
-        confirmButtonText: "Yes",
-        customClass: {
-          confirmButton: "btn btn-gradient-success  ml-3 ",
-          cancelButton: "btn btn-gradient-danger  ",
-        },
-      });
-    },
-
-    showSuccessSwal(text = "Successful process") {
-      this.$swal({
-        title: "Success!",
-        text,
-        icon: "success",
-        customClass: {
-          confirmButton: "btn btn-primary",
-        },
-        buttonsStyling: false,
-      });
-    },
-    showErrorSwal(
-      text = "Sorry, there was an error ... try again or contact support !!!"
-    ) {
-      this.$swal({
-        title: "Error!",
-        text,
-        icon: "error",
-        customClass: {
-          confirmButton: "btn btn-danger",
-        },
-        buttonsStyling: false,
-      });
-    },
-
-    showSwalGeneric(title, text, icon, config = {}) {
-      return this.$swal({
-        icon,
-        title,
-        text,
-        showCancelButton: true,
-        reverseButtons: true,
-        buttonsStyling: false,
-        confirmButtonText: "Yes",
-        customClass: {
-          confirmButton: "btn btn-gradient-success  ml-3 ",
-          cancelButton: "btn btn-gradient-danger  ",
-        },
-        ...config,
-      });
-    },
     getModuleName(module) {
       switch (module) {
         case 2:
@@ -205,6 +123,111 @@ export default {
           return "quality";
       }
     },
+    createClass(name, rules) {
+      const style = document.createElement("style");
+      style.type = "text/css";
+      document.getElementsByTagName("head")[0].appendChild(style);
+      if (!(style.sheet || {}).insertRule)
+        (style.styleSheet || style.sheet).addRule(name, rules);
+      else style.sheet.insertRule(`${name}{${rules}}`, 0);
+    },
+
+    /* TOAST */
+    showToast(variant, position, title, icon, text) {
+      this.$toast(
+        {
+          component: ToastificationContent,
+          props: {
+            title,
+            icon,
+            text,
+            variant,
+          },
+        },
+        {
+          position,
+        }
+      );
+    },
+
+    /***** SWALS *****/
+    showConfirmSwal(
+      title = "Are you sure?",
+      text = "You won't be able to revert this!"
+    ) {
+      return this.$swal({
+        title,
+        text,
+        imageUrl: "/assets/images/icons/swal/warning.svg",
+        imageWidth: 70,
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes",
+        customClass: {
+          confirmButton: "btn btn-primary mr-1",
+          cancelButton: "btn btn-outline-danger  ",
+        },
+      });
+    },
+
+    showSuccessSwal(text = "Successful Process") {
+      this.$swal({
+        title: "Success!",
+        text,
+        imageUrl: "/assets/images/icons/swal/success.svg",
+        imageWidth: 70,
+        confirmButtonText: "Ok",
+        customClass: {
+          confirmButton: "btn btn-primary",
+        },
+        buttonsStyling: false,
+      });
+    },
+    showInfoSwal(text = "Important Information", title = "Very Important!") {
+      this.$swal({
+        title,
+        text,
+        imageUrl: "/assets/images/icons/swal/info.svg",
+        imageWidth: 70,
+        confirmButtonText: "Ok",
+        customClass: {
+          confirmButton: "btn btn-primary",
+        },
+        buttonsStyling: false,
+      });
+    },
+    showErrorSwal(
+      text = "Sorry, there was an error ... try again or contact support !!!"
+    ) {
+      this.$swal({
+        title: "Error!",
+        text,
+        imageUrl: "/assets/images/icons/swal/error.svg",
+        imageWidth: 70,
+        confirmButtonText: "Ok",
+        customClass: {
+          confirmButton: "btn btn-danger",
+        },
+        buttonsStyling: false,
+      });
+    },
+
+    showSwalGeneric(title, text, icon, config = {}) {
+      return this.$swal({
+        icon,
+        title,
+        text,
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes",
+        customClass: {
+          confirmButton: "btn btn-primary  mr-1 ",
+          cancelButton: "btn btn-outline-danger  ",
+        },
+        ...config,
+      });
+    },
+
     isResponseSuccess(response) {
       return (
         response &&
