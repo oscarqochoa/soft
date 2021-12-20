@@ -224,7 +224,6 @@ export default {
     return {
       refFormObserver,
       getValidationState,
-      quicks: [],
       userId: null,
       roleId: null,
       required,
@@ -240,17 +239,9 @@ export default {
     }),
     async getAllQuicksSms() {
       try {
-        const response = await this.A_GET_SMS_QUICKS({
+        await this.A_GET_SMS_QUICKS({
           modul: this.modul
-        });
-        this.quicks = response.data
-          .map(el => ({
-            ...el,
-            value: el.sms,
-            label: el.title,
-            showMore: false
-          }))
-          .reverse();
+        })
       } catch (error) {
         console.log("Something wnet wrong getAllQuicksSms:", error);
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -263,14 +254,11 @@ export default {
         }
       }
       if (this.typesms == 0) {
-        console.log('this.smss',this.smss)
         const index = this.smss.indexOf(id)
-        console.log('index', index)
         if (index !== -1)
           this.smss.splice(index, 1)
       } else {
         const index = this.sms.indexOf(id)
-        console.log('index', index)
         if (index !== -1)
           this.sms.splice(index, 1)
       }
