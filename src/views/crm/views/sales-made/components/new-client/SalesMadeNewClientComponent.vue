@@ -588,8 +588,6 @@ export default {
     SpecialistModal,
     TaxResearchModal,
     DebtSolutionModal,
-
-    ModalNotesBoost
   },
   props: {
     done: {
