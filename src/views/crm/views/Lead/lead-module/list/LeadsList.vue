@@ -182,7 +182,6 @@
         :sms="leads_sms_o"
         :name-leads="name_leads_arr"
         :quicks="quicks"
-        @modalQuickOpen="modalQuickOpen"
       />
 
       <template #modal-footer>
@@ -211,43 +210,6 @@
       </template>
     </b-modal>
 
-    <!-- modal QUICK SMS -->
-    <b-modal
-      id="modal-quick-sms"
-      ok-only
-      modal-class="modal-primary"
-      centered
-      size="lg"
-      title="QUICK SMS"
-      hide-footer
-    >
-      <modal-quick-sms
-        :modul="modul"
-        :quicks="quicks"
-        @modalQuickCreateOpen="modalQuickCreateOpen"
-        @modalQuickEditOpen="modalQuickEditOpen"
-        @modalQuickDelete="modalQuickDelete"
-      />
-    </b-modal>
-
-    <!-- modal SAVE QUICK SMS -->
-    <b-modal
-      id="modal-quick-sms-save"
-      ok-only
-      modal-class="modal-primary"
-      centered
-      size="lg"
-      :title="(quickData.id) ? 'EDIT QUICK SMS' : 'NEW QUICK SMS'"
-      hide-footer
-    >
-      <modal-quick-sms-save
-        :modul="modul"
-        :quick-data="quickData"
-        @updateQuicks="updateQuicks"
-        @modalQuickCreateClose="$bvModal.hide('modal-quick-sms-save')"
-      />
-    </b-modal>
-
     <!-- modal HISTORY SMS -->
     <b-modal
       id="modal-history-sms"
@@ -272,10 +234,8 @@ import vSelect from "vue-select";
 import ActionsTable from "../../lead-table/ActionsTable.vue";
 import dataFields from "@/views/crm/views/Lead/lead-table/fields.data";
 import FiltersTable from "../../lead-table/FiltersTable.vue";
-import ModalSendSms from "../../lead-sms/ModalSendSms.vue";
-import ModalQuickSms from "../../lead-sms/ModalQuickSms.vue";
-import ModalQuickSmsSave from "../../lead-sms/ModalQuickSmsSave.vue";
 import ModalHistorySms from "../../lead-sms/ModalHistorySms.vue";
+import ModalSendSms from "../../lead-sms/ModalSendSms.vue";
 import PaginateTable from "@/views/crm/views/Lead/lead-table/PaginateTable.vue";
 
 export default {
@@ -286,6 +246,7 @@ export default {
     ModalQuickSms,
     ModalQuickSmsSave,
     ModalHistorySms,
+    ModalSendSms,
 
     BTable,
     BPagination,
@@ -345,12 +306,6 @@ export default {
       typesms: null,
       leads_sms_o: [],
       quicks: [],
-      quickData: {},
-      blankQuickData: {
-        id: null,
-        sms: "",
-        title: ""
-      },
 
       leadsSelecteds: []
     };
@@ -593,69 +548,9 @@ export default {
       }));
       this.$bvModal.show("modal-send-sms");
     },
-    modalQuickOpen() {
-      this.$bvModal.show("modal-quick-sms");
-    },
-    modalQuickCreateOpen() {
-      this.quickData = JSON.parse(JSON.stringify(this.blankQuickData));
-      this.$bvModal.show("modal-quick-sms-save");
-    },
-    modalQuickEditOpen(item) {
-      this.quickData = item;
-      this.$bvModal.show("modal-quick-sms-save");
-    },
-    updateQuicks(item) {
-      const index = this.quicks.map(el => el.id).indexOf(item.id);
-      if (index !== -1) {
-        this.quicks[index] = { ...item, value: item.sms, label: item.title };
-      } else {
-        this.quicks.unshift({ ...item, value: item.sms, label: item.title });
-      }
-    },
     resetQuickData(item) {
       this.quickData = item;
     },
-    async modalQuickDelete(id) {
-      this.showSwalGeneric(
-        "Are you sure?",
-        "You won't be able to revert this!",
-        "warning"
-      )
-        .then(async result => {
-          if (result.value) {
-            const response = await this.A_DELETE_SMS_QUICK({ id });
-            console.log("response postDeleteQuickSms", response);
-            if (response.status == 200) {
-              const index = this.quicks.map(el => el.id).indexOf(id);
-              if (index !== -1) this.quicks.splice(index, 1);
-              this.showToast(
-                "success",
-                "top-right",
-                "Success!",
-                "CheckIcon",
-                "Successful operation"
-              );
-            } else
-              this.showToast(
-                "warning",
-                "top-right",
-                "Warning!",
-                "AlertTriangleIcon",
-                response.message
-              );
-          }
-        })
-        .catch(error => {
-          console.log("Something went wrong modalQuickDelete", error);
-          this.showToast(
-            "danger",
-            "top-right",
-            "Oop!",
-            "AlertOctagonIcon",
-            this.getInternalErrors(error)
-          );
-        });
-    }
   }
 };
 </script>

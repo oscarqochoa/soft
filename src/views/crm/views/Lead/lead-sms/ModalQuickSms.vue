@@ -4,7 +4,7 @@
       <b-button
         variant="info"
         class="mb-2"
-        @click="$emit('modalQuickCreateOpen', true)"
+        @click="modalQuickCreateOpen"
       >
         CREATE
       </b-button>
@@ -59,9 +59,32 @@
 
       <!-- Column: Actions -->
       <template #cell(actions)="data">
-        <actions-table :options="[ 'edit', 'delete' ]" :row-data="data.item" @onRowEdit="onRowEdit($event, data.item)" @onRowDelete="onRowDelete" />
+        <actions-table :options="[ 'edit', 'delete' ]"
+          :row-data="data.item"
+          @onRowEdit="modalQuickEditOpen(data.item)"
+          @onRowDelete="modalQuickDelete(data.item.id)"
+        />
       </template>
     </b-table>
+
+    
+    <!-- modal SAVE QUICK SMS -->
+    <b-modal
+      id="modal-quick-sms-save"
+      ok-only
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      :title="(quickData.id) ? 'EDIT QUICK SMS' : 'NEW QUICK SMS'"
+      hide-footer
+    >
+      <modal-quick-sms-save
+        :modul="modul"
+        :quick-data="quickData"
+        @updateQuicks="updateQuicks"
+        @modalQuickCreateClose="$bvModal.hide('modal-quick-sms-save')"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -69,9 +92,12 @@ import { mapGetters } from 'vuex'
 
 import ActionsTable from '../lead-table/ActionsTable.vue'
 
+import ModalQuickSmsSave from "./ModalQuickSmsSave.vue";
+
 export default {
   components: {
-    ActionsTable
+    ActionsTable,
+    ModalQuickSmsSave
   },
   props: {
     modul: {
@@ -91,6 +117,12 @@ export default {
   },
   data() {
     return {
+      blankQuickData: {
+        id: null,
+        sms: "",
+        title: ""
+      },
+      quickData: new Object,
       userId: null,
       roleId: null,
       isBusy: true,
@@ -109,11 +141,54 @@ export default {
         this.quicks[index].showMore = !this.quicks[index].showMore
       }
     },
-    onRowEdit (id, item) {
-      this.$emit('modalQuickEditOpen', item)
+    modalQuickCreateOpen () {
+      this.quickData = JSON.parse(JSON.stringify(this.blankQuickData));
+      this.$bvModal.show("modal-quick-sms-save");
     },
-    onRowDelete (id) {
-      this.$emit('modalQuickDelete', id)
+    modalQuickEditOpen (item) {
+      this.quickData = item;
+      this.$bvModal.show("modal-quick-sms-save");
+    },
+    async modalQuickDelete (id) {
+      this.showSwalGeneric(
+        "Are you sure?",
+        "You won't be able to revert this!",
+        "warning"
+      )
+        .then(async result => {
+          if (result.value) {
+            const response = await this.A_DELETE_SMS_QUICK({ id });
+            console.log("response postDeleteQuickSms", response);
+            if (response.status == 200) {
+              const index = this.quicks.map(el => el.id).indexOf(id);
+              if (index !== -1) this.quicks.splice(index, 1);
+              this.showToast(
+                "success",
+                "top-right",
+                "Success!",
+                "CheckIcon",
+                "Successful operation"
+              );
+            } else
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                response.message
+              );
+          }
+        })
+        .catch(error => {
+          console.log("Something went wrong modalQuickDelete", error);
+          this.showToast(
+            "danger",
+            "top-right",
+            "Oop!",
+            "AlertOctagonIcon",
+            this.getInternalErrors(error)
+          );
+        });
     }
   },
   created() {
