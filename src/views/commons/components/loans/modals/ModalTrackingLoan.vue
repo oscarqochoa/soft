@@ -4,7 +4,7 @@
       v-model="modalUp"
       title-class="h2"
       size="lg"
-      title="LOAN TRACKING"
+      title="Loans Tracking"
       hide-footer
       modal-class="modal-primary"
       @hidden="hideModal()"
@@ -152,5 +152,8 @@ export default {
 <style scoped>
 .restart-font-size {
   font-size: 100% !important;
+}
+* {
+  font-size: 0.8rem !important;
 }
 </style>
