@@ -2,91 +2,91 @@ export default [
   {
     key: 'selected',
     label: '',
-    sortable: false,
+    sortable: false
   },
   {
     key: 'client',
     sortable: true,
-    label: 'Client',
+    label: 'Client'
   },
   {
     key: 'program',
     sortable: false,
-    label: 'Program',
+    label: 'Program'
   },
   {
     key: 'captured',
     sortable: false,
-    label: 'Captured By',
+    label: 'Captured By'
   },
   {
     key: 'seller',
     sortable: false,
-    label: 'Seller',
+    label: 'Seller'
   },
   {
     key: 'fee',
     sortable: false,
-    label: 'Fee ($)',
+    label: 'Fee ($)'
   },
   {
     key: 'initial_amount',
     sortable: false,
-    label: 'IP',
+    label: 'IP'
   },
   {
     key: 'contract_fee_status',
     sortable: false,
-    label: 'CF',
+    label: 'CF'
   },
   {
     key: 'notes_status',
     sortable: false,
-    label: 'NT',
+    label: 'NT'
   },
   {
     key: 'trackings',
     sortable: false,
-    label: 'TK',
+    label: 'TK'
   },
   {
     key: 'files',
     sortable: false,
-    label: 'FI',
+    label: 'FI'
   },
   {
     key: 'status',
     sortable: false,
-    label: 'ST',
+    label: 'ST'
   },
   {
     key: 'actions',
     sortable: false,
-    label: 'Action',
+    label: 'Action'
   },
   {
     key: 'creates',
     sortable: true,
-    label: 'Created',
+    label: 'Created'
   },
   {
     key: 'approved',
     sortable: true,
-    label: 'Approved',
+    label: 'Approved'
   },
   {
     key: 'sms',
     sortable: false,
-    label: 'SMS',
+    label: 'SMS'
   },
   {
     key: 'url',
     sortable: false,
-    label: 'Url',
+    label: 'Url'
   },
   {
     key: 'done',
     sortable: false,
-    label: 'Done',
+    label: 'Done'
   },
 ]

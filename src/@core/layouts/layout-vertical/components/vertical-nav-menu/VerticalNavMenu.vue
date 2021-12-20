@@ -19,25 +19,26 @@
         <ul class="nav navbar-nav flex-row">
           <!-- Logo & Text -->
           <li class="nav-item mr-auto">
-            <b-link class="navbar-brand" to="/">
-              <span class="brand-logo">
+            <b-link class="navbar-brand" to="/" >
+                  
+              <span class="brand-logo" >
                 <!-- <b-img
                   :src="appLogoImage"
                   alt="logo"
                 />-->
-                <custom-feather-icons
+                <amg-icon
                   icon="AmgIcon"
                   size="44"
-                  :class="skin=='dark'?'text-light':'text-dark'"
-                ></custom-feather-icons>
+                  :class="(skin=='dark' || skin == 'semi-dark')?'text-light':'text-dark'"
+                ></amg-icon>
               </span>
-              <h2 class="brand-text">{{ appName }}</h2>
+              <h2 class="brand-text" :class="(skin=='dark' || skin == 'semi-dark')?'text-light':'text-dark'">{{ appName }}</h2>
             </b-link>
           </li>
 
           <!-- Toggler Button -->
           <li class="nav-item nav-toggle">
-            <b-link class="nav-link modern-nav-toggle">
+            <b-link class="nav-link modern-nav-toggle" style="margin-top: 28px;" :class="(skin=='dark' || skin == 'semi-dark')?'text-light':'text-dark'"> 
               <feather-icon
                 icon="XIcon"
                 size="20"
@@ -67,7 +68,7 @@
       tagname="ul"
       @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
     >
-      <vertical-nav-menu-items :items="navMenuItems" class="navigation navigation-main" />
+      <vertical-nav-menu-items :items="navMenuItems" class="navigation navigation-main" style="font-size: 14px;" />
     </vue-perfect-scrollbar>
     <!-- /main menu content-->
   </div>

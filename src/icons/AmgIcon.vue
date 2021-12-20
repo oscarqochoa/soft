@@ -2,7 +2,7 @@
 import * as icons from "./icons";
 
 export default {
-  name: "CustomFeatherIcons",
+  name: "AmgIcon",
   functional: true,
   props: {
     icon: {

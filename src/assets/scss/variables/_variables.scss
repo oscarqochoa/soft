@@ -1,17 +1,26 @@
 //  ================================================================================================
 //  ? TIP:  It is recommended to use this file for overriding bootstrap variables.
 //  ================================================================================================
+// Custom.scss
+// Option A: Include all of Bootstrap
 
+// Custom.scss
+// Option B: Include parts of Bootstrap
 
-$primary: #FF9F43;
+// Required
 
+$primary: #3764FF;
+$info: #8E49FF;
+$danger: #FF3B19;
+$dark: #1D222E;
 //Background bg
-$theme-dark-body-bg: #141311 !default;
-$theme-dark-border-color: rgb(82 77 70 / 50%) !default;
-
+$theme-dark-body-bg: #1D222E !default;
+$theme-dark-body-color: #D8D8D8 !default;
+$theme-dark-border-color: rgba(80, 85, 99, 0.2) !default;
+//#3b4253
 //Card bg
 
-$theme-dark-card-bg: #22201d !default;
+$theme-dark-card-bg: #252B3B !default;
 $theme-dark-box-shadow: 0 5px 20px 0 rgb(20 23 26 / 10%);
 // Table color
 
@@ -23,17 +32,17 @@ $theme-dark-headings-color: #d0d2d6 !default;
 }
 $theme-dark-label-color: #d0d2d6 !default;
 // $theme-dark-text-muted-color: rgb(82 77 70 / 50%) !default;
-$theme-dark-text-muted-color: #818285 !default;
+$theme-dark-text-muted-color: rgb(145 153 163 / 65%) !default;
 
 //Table
-$theme-dark-table-bg: #22201d !default;
-$theme-dark-table-header-bg: #5F5850 !default;
-$theme-dark-table-row-bg: #22201d !default;
-$theme-dark-table-hover-bg: #141311 !default;
-$theme-dark-table-striped-bg: #141311 !default;
+$theme-dark-table-bg: #252B3B !default;
+$theme-dark-table-header-bg: #333B51 !default;
+$theme-dark-table-row-bg: #252B3B !default;
+$theme-dark-table-hover-bg: #1D222E !default;
+$theme-dark-table-striped-bg: #1D222E !default;
 
-$theme-dark-modal-header-bg: #141311 !default;
-$theme-dark-pagination-bg: #141311 !default;
+$theme-dark-modal-header-bg: #1D222E !default;
+$theme-dark-pagination-bg: #1D222E !default;
 $theme-dark-chart-bg: #384056 !default;
 $theme-dark-widget-bg: #384056 !default;
 
@@ -43,8 +52,22 @@ $theme-dark-switch-bg: #545a6a;
 $theme-dark-switch-bg-disabled: #1b2337;
 
 //Input
-$theme-dark-input-bg: #22201d !default;
-$theme-dark-input-placeholder-color: #818285 !default;
-$theme-dark-input-border-color: #818285 !default;
+$theme-dark-input-bg: #252B3B !default;
+$theme-dark-input-placeholder-color: rgb(145 153 163 / 65%) !default;
+$theme-dark-input-border-color: rgb(145 153 163 / 65%) !default;
 $theme-dark-input-disabled-bg: #24233a !default;
 $theme-dark-input-disabled-border-color: #444b60 !default;
+
+
+
+
+
+
+
+
+$base-font-size: 13.5px !default;
+
+
+
+$font-family-base: 'Rubik', sans-serif;
+

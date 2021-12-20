@@ -17,7 +17,7 @@
         sticky-header="70vh"
         small
         no-provider-filtering
-        class="font-small-3 text-center"
+        :class="['text-center']"
         :busy.sync="isBusy"
         :items="myProvider"
         :fields="filteredFields"
@@ -489,20 +489,18 @@
             >ANNUL</b-button>
           </b-row>
         </template>
-        <template v-slot:cell(creates)="data">
+        <template #cell(creates)="data">
           <span>{{ data.item.creates | myGlobal }}</span>
         </template>
-        <template v-slot:cell(approved)="data">
+        <template #cell(approved)="data">
           <span class="font-weight-bold text-info">{{ data.item.approved | myGlobal }}</span>
         </template>
-        <template v-slot:cell(sms)="data">
+        <template #cell(sms)="data">
           <b-icon
             icon="chat-text-fill"
             variant="primary"
           />
-        </template>
-
-        <template v-slot:cell(url)="data">
+        <template #cell(url)="data">
           <b-icon
             v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.role_id == 1 || currentUser.role_id == 2)"
             icon="link"
@@ -511,7 +509,7 @@
             @click="openUrlModal(data.item)"
           />
         </template>
-        <template v-slot:cell(done)="data">
+        <template #cell(done)="data">
           <b-btn v-if="data.item.initial_payment_status == 2">
             <b-icon
               icon="arrow-left-square-fill"
