@@ -52,12 +52,12 @@
               style="flex: 1 1 auto;"
               v-model="smsData.optionsms"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              label="label"
-              :options="quicks"
+              label="title"
+              :options="S_SMS_QUICKS"
               @input="onSelectSms()"
             />
             <b-input-group-append
-              
+              v-if="[ 1, 2 ].includes(userId) || modul == 15"
             >
               <b-button
                 variant="outline-info"
@@ -132,14 +132,14 @@
     >
       <modal-quick-sms
         :modul="modul"
-        :quicks="quicks"
+        :quicks="S_SMS_QUICKS"
       />
     </b-modal>
   </validation-observer>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -194,15 +194,14 @@ export default {
       type: Array,
       required: true
     },
-    quicks: {
-      type: Array,
-      required: true
-    }
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token'
+    }),
+    ...mapState({
+      S_SMS_QUICKS: state => state.CrmSmsStore.S_SMS_QUICKS
     }),
   },
   data() {
@@ -225,6 +224,7 @@ export default {
     return {
       refFormObserver,
       getValidationState,
+      quicks: [],
       userId: null,
       roleId: null,
       required,
@@ -235,8 +235,27 @@ export default {
   },
   methods: {
     ...mapActions({
+      A_GET_SMS_QUICKS: "CrmSmsStore/A_GET_SMS_QUICKS",
       A_SEND_MESSAGE_LEAD: 'CrmSmsStore/A_SEND_MESSAGE_LEAD',
     }),
+    async getAllQuicksSms() {
+      try {
+        const response = await this.A_GET_SMS_QUICKS({
+          modul: this.modul
+        });
+        this.quicks = response.data
+          .map(el => ({
+            ...el,
+            value: el.sms,
+            label: el.title,
+            showMore: false
+          }))
+          .reverse();
+      } catch (error) {
+        console.log("Something wnet wrong getAllQuicksSms:", error);
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
+    },
     deleteAccount (id) {
       for (let i = 0; i < this.nameLeads.length; i++) {
         if (this.nameLeads[i].id == id) {
@@ -257,9 +276,9 @@ export default {
       }
     },
     onSelectSms () {
-      const index = this.quicks.map(el => el.id).indexOf((this.smsData.optionsms) ? this.smsData.optionsms.id : null)
+      const index = this.S_SMS_QUICKS.map(el => el.id).indexOf((this.smsData.optionsms) ? this.smsData.optionsms.id : null)
       if (index !== -1) {
-        const format = this.quicks[index].sms ? this.quicks[index].sms.replace(/<br \/>/g, "\n") : ''
+        const format = this.S_SMS_QUICKS[index].sms ? this.S_SMS_QUICKS[index].sms.replace(/<br \/>/g, "\n") : ''
         this.smsData.contmessage = format
       } else {
         this.smsData.contmessage = ''
@@ -292,6 +311,7 @@ export default {
   created() {
     this.userId = this.currentUser.user_id
     this.roleId = this.currentUser.role_id
+    this.getAllQuicksSms()
   },
 }
 </script>

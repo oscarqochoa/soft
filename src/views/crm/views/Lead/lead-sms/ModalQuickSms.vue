@@ -81,14 +81,12 @@
       <modal-quick-sms-save
         :modul="modul"
         :quick-data="quickData"
-        @updateQuicks="updateQuicks"
-        @modalQuickCreateClose="$bvModal.hide('modal-quick-sms-save')"
       />
     </b-modal>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 import ActionsTable from '../lead-table/ActionsTable.vue'
 
@@ -125,7 +123,7 @@ export default {
       quickData: new Object,
       userId: null,
       roleId: null,
-      isBusy: true,
+      isBusy: false,
       fieldsQuicks: [
         { key: 'title' },
         { key: 'sms' },
@@ -135,6 +133,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      A_DELETE_SMS_QUICK: 'CrmSmsStore/A_DELETE_SMS_QUICK',
+    }),
     onShowMore (id) {
       const index = this.quicks.map(el => el.id).indexOf(id)
       if (index !== -1) {
@@ -160,8 +161,6 @@ export default {
             const response = await this.A_DELETE_SMS_QUICK({ id });
             console.log("response postDeleteQuickSms", response);
             if (response.status == 200) {
-              const index = this.quicks.map(el => el.id).indexOf(id);
-              if (index !== -1) this.quicks.splice(index, 1);
               this.showToast(
                 "success",
                 "top-right",
@@ -189,16 +188,13 @@ export default {
             this.getInternalErrors(error)
           );
         });
-    }
+    },
   },
   created() {
     this.userId = this.currentUser.user_id
     this.roleId = this.currentUser.role_id
-    /* if ([ 1, 2 ].includes(this.roleId) || this.modul == 15) */
+    if ([ 1, 2 ].includes(this.roleId) || this.modul == 15)
       this.fieldsQuicks.push({ key: 'actions' })
-    setTimeout(() => {
-      this.isBusy = !this.isBusy
-    }, 500)
   },
 }
 </script>
