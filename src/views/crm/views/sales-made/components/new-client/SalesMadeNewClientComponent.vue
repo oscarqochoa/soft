@@ -280,6 +280,7 @@
               ) ? 'muted' :
                 (data.item.contract_fee_status === 1 && data.item.initial_payment_status === 2) ? 'success' :
                 (data.item.contract_fee_status === 2) ? 'danger' : '' "
+            @click="openContractFeeModal(data.item)"
           />
         </template>
         <template v-slot:cell(notes_status)="data">
@@ -560,6 +561,11 @@
       :modal="modal"
       :url="modalData.url"
     />
+    <contract-fee-modal
+      v-if="modal.contract_fee"
+      :modal="modal"
+      :contract-fee="modalData.contractFee"
+    />
   </div>
 </template>
 
@@ -588,10 +594,12 @@ import DebtSolutionModal from '@/views/crm/views/sales-made/components/modals/se
 import RevissionModal from '@/views/crm/views/sales-made/components/modals/RevissionModal.vue'
 import UrlModal from '@/views/crm/views/sales-made/components/modals/UrlModal.vue'
 import { amgApi } from '@/service/axios'
+import ContractFeeModal from '@/views/crm/views/sales-made/components/modals/ContractFeeModal'
 
 export default {
   name: 'SalesMadeNewComponent',
   components: {
+    ContractFeeModal,
     UrlModal,
     RevissionModal,
     CreditExpertsModal,
@@ -645,6 +653,7 @@ export default {
         programs: false,
         revission: false,
         url: false,
+        contract_fee: false,
       },
       modalData: {
         url: {
@@ -691,6 +700,12 @@ export default {
           salesClient: {},
         },
         revission: {},
+        contractFee: {
+          programName: '',
+          clientName: '',
+          saleId: null,
+          id: null,
+        },
       },
       selectAll: false,
     }
@@ -721,18 +736,16 @@ export default {
       await this.$store.dispatch('crm-store/getPrograms')
       await this.$store.dispatch('crm-store/getSources')
       await this.$store.dispatch('crm-store/getStates')
+      this.filter[2].options = this.captured
+      this.filter[3].options = this.sellers
+      this.filter[4].options = this.sources
+      this.filter[5].options = this.status
+      this.filter[6].options = this.programs
+      this.filter[7].options = this.stip
+      this.filter[8].options = this.sts
     } catch (error) {
       console.error(error)
     }
-  },
-  mounted() {
-    this.filter[2].options = this.captured
-    this.filter[3].options = this.sellers
-    this.filter[4].options = this.sources
-    this.filter[5].options = this.status
-    this.filter[6].options = this.programs
-    this.filter[7].options = this.stip
-    this.filter[8].options = this.sts
   },
   methods: {
     async myProvider(ctx) {
@@ -792,6 +805,18 @@ export default {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', e)
         return []
       }
+    },
+    openContractFeeModal(data) {
+      if (data.id == this.currentUser.user_id || this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
+        this.modalData.editmodal = true
+      } else {
+        this.modalData.editmodal = false
+      }
+      this.modalData.contractFee.clientName = data.client
+      this.modalData.contractFee.programName = data.program
+      this.modalData.contractFee.id = data.lead_id
+      this.modalData.contractFee.saleId = data.id
+      this.modal.contract_fee = true
     },
     openUrlModal(data) {
       this.modalData.url.client = data.client

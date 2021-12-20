@@ -8,9 +8,9 @@
         <b-col md="6">
           <b-card
             header="Applicant personal data"
-            header-bg-variant="primary"
             header-text-variant="white"
-            header-class="font-weght"
+            header-bg-variant="info"
+            header-class="py-1"
             body-class="mt-1"
           >
             <b-row>
@@ -77,9 +77,9 @@
         <b-col md="6">
           <b-card
             header="Contact Data"
-            header-bg-variant="primary"
             header-text-variant="white"
-            header-class="font-weght"
+            header-bg-variant="info"
+            header-class="py-1"
             body-class="mt-1"
           >
             <b-row>
@@ -169,9 +169,9 @@
         >
           <b-card
             header="Co-Applicant personal data"
-            header-bg-variant="primary"
             header-text-variant="white"
-            header-class="font-weght"
+            header-bg-variant="info"
+            header-class="py-1"
             body-class="mt-1"
           >
             <b-row>
@@ -258,9 +258,9 @@
         <b-col>
           <b-card
             header="Aditional Information"
-            header-bg-variant="primary"
             header-text-variant="white"
-            header-class="font-weght"
+            header-bg-variant="info"
+            header-class="py-1"
             body-class="mt-1"
           >
             <b-row>
@@ -335,12 +335,12 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col md="">
+        <b-col>
           <b-card
             header="Incomes"
-            header-bg-variant="primary"
             header-text-variant="white"
-            header-class="font-weght"
+            header-bg-variant="info"
+            header-class="py-1"
             body-class="mt-1"
           >
             <b-row>
@@ -397,9 +397,9 @@
         <b-col md="4">
           <b-card
             header="Housing expenses"
-            header-bg-variant="primary"
             header-text-variant="white"
-            header-class="font-weght"
+            header-bg-variant="info"
+            header-class="py-1"
             body-class="mt-1"
           >
             <b-row>
@@ -449,9 +449,9 @@
         <b-col>
           <b-card
             header="Cost of living"
-            header-bg-variant="primary"
             header-text-variant="white"
-            header-class="font-weght"
+            header-bg-variant="info"
+            header-class="py-1"
             body-class="mt-1"
           >
             <b-row>
@@ -656,9 +656,9 @@
         <b-col>
           <b-card
             header="Goals"
-            header-bg-variant="primary"
             header-text-variant="white"
-            header-class="font-weght"
+            header-bg-variant="info"
+            header-class="py-1"
             body-class="mt-1"
           >
             <b-row>
