@@ -119,12 +119,10 @@ import formValidation from '@core/comp-functions/forms/form-validation'
 
 export default {
   components: {
-    BSidebar,
     BForm,
     BFormGroup,
     BFormInvalidFeedback,
     BButton,
-    vSelect,
 
     // Form Validation
     ValidationProvider,
@@ -141,7 +139,7 @@ export default {
     quickData: {
       type: Object,
       required: true
-    }
+    },
   },
   computed: {
     ...mapGetters({
