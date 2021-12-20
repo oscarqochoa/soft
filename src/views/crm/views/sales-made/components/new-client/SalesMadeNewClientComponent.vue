@@ -17,7 +17,7 @@
         sticky-header="70vh"
         small
         no-provider-filtering
-        class="font-small-3 text-center"
+        :class="['text-center']"
         :busy.sync="isBusy"
         :items="myProvider"
         :fields="filteredFields"
@@ -471,7 +471,7 @@
         <template v-slot:cell(approved)="data">
           <span class="font-weight-bold text-info">{{ data.item.approved | myGlobal }}</span>
         </template>
-        <template v-slot:cell(sms)="data">
+        <template v-slot:cell(sms)>
           <b-icon icon="chat-text-fill" variant="primary" />
         </template>
 

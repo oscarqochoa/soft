@@ -22,7 +22,7 @@
         <feather-icon
           v-if="!userData.fullName"
           icon="UserIcon"
-          size="22"
+          size="19"
         />
       </b-avatar>
     </template>

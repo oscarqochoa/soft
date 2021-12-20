@@ -90,14 +90,14 @@ export default {
       }
       return module;
     },
-    createClass(name, rules) {
-      const style = document.createElement("style");
-      style.type = "text/css";
-      document.getElementsByTagName("head")[0].appendChild(style);
-      if (!(style.sheet || {}).insertRule)
-        (style.styleSheet || style.sheet).addRule(name, rules);
-      else style.sheet.insertRule(`${name}{${rules}}`, 0);
-    },
+    // createClass(name, rules) {
+    //   const style = document.createElement("style");
+    //   style.type = "text/css";
+    //   document.getElementsByTagName("head")[0].appendChild(style);
+    //   if (!(style.sheet || {}).insertRule)
+    //     (style.styleSheet || style.sheet).addRule(name, rules);
+    //   else style.sheet.insertRule(`${name}{${rules}}`, 0);
+    // },
     showToast(variant, position, title, icon, text) {
       this.$toast(
         {

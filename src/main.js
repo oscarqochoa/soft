@@ -23,8 +23,6 @@ import VueMoment from "vue-moment";
 
 // import 'vue-loading-rx/dist/vue-loading.css';
 // global register
-
-import VueMask from "v-mask";
 // Global Components
 import './global-components'
 
@@ -56,7 +54,9 @@ window.amgApi = amgApi
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue, {
+  BModal: { headerBgVariant: "primary", titleClass: "text-light" },
+})
 Vue.use(BootstrapVueIcons)
 // Composition API
 Vue.use(VueCompositionAPI)

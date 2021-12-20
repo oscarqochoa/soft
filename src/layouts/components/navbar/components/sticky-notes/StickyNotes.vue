@@ -1,6 +1,6 @@
 <template>
   <b-nav-item @click="openStickyNotes" :id="`bookmark-sticky-notes`">
-    <feather-icon icon="EditIcon" size="21" />
+    <feather-icon icon="EditIcon" size="19" />
     <b-tooltip
       triggers="hover"
       :target="`bookmark-sticky-notes`"

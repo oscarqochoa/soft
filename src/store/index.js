@@ -14,6 +14,7 @@ import LoansStore from "@/views/commons/components/loans/store";
 import GlobalStore from "@/views/store";
 import stickyNotesStoreModule from "@/layouts/components/navbar/components/sticky-notes/store/sticky-notes.store";
 import TaskStore from '@/store/task'
+import NotificationStore from '@/store/notification'
 
 Vue.use(Vuex);
 
@@ -31,6 +32,7 @@ export default new Vuex.Store({
     "global-store": GlobalStore,
     TaskStore,
     "sticky-notes": stickyNotesStoreModule,
+    NotificationStore
   },
   strict: process.env.DEV,
 });

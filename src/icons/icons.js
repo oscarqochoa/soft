@@ -1,5 +1,5 @@
-"use strict";
 
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 function _interopDefault(ex) {
@@ -15,7 +15,7 @@ var ActivityIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -71,7 +71,7 @@ var AirplayIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -132,7 +132,7 @@ var AlertCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -206,7 +206,7 @@ var AlertOctagonIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -279,7 +279,7 @@ var AlertTriangleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -351,7 +351,7 @@ var AlignCenterIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -434,7 +434,7 @@ var AlignJustifyIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -517,7 +517,7 @@ var AlignLeftIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -600,7 +600,7 @@ var AlignRightIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -683,7 +683,7 @@ var AnchorIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -754,7 +754,7 @@ var ApertureIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -860,7 +860,7 @@ var ArchiveIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -932,7 +932,7 @@ var ArrowDownCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1003,7 +1003,7 @@ var ArrowDownLeftIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1067,7 +1067,7 @@ var ArrowDownRightIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1131,7 +1131,7 @@ var ArrowDownIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1195,7 +1195,7 @@ var ArrowLeftCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1266,7 +1266,7 @@ var ArrowLeftIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1330,7 +1330,7 @@ var ArrowRightCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1401,7 +1401,7 @@ var ArrowRightIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1465,7 +1465,7 @@ var ArrowUpCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1536,7 +1536,7 @@ var ArrowUpLeftIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1600,7 +1600,7 @@ var ArrowUpRightIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1664,7 +1664,7 @@ var ArrowUpIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1728,7 +1728,7 @@ var AtSignIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1791,7 +1791,7 @@ var AwardIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1854,7 +1854,7 @@ var BarChart2Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -1929,7 +1929,7 @@ var BarChartIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2004,7 +2004,7 @@ var BatteryChargingIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2073,7 +2073,7 @@ var BatteryIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2142,7 +2142,7 @@ var BellOffIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2221,7 +2221,7 @@ var BellIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2282,7 +2282,7 @@ var BluetoothIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2338,7 +2338,7 @@ var BoldIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2399,7 +2399,7 @@ var BookOpenIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2460,7 +2460,7 @@ var BookIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2521,7 +2521,7 @@ var BookmarkIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2577,7 +2577,7 @@ var BoxIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2646,7 +2646,7 @@ var BriefcaseIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2712,7 +2712,7 @@ var CalendarIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2797,7 +2797,7 @@ var CameraOffIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2861,7 +2861,7 @@ var CameraIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2924,7 +2924,7 @@ var CastIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -2988,7 +2988,7 @@ var CheckCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3049,7 +3049,7 @@ var CheckSquareIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3110,7 +3110,7 @@ var CheckIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3166,7 +3166,7 @@ var ChevronDownIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3222,7 +3222,7 @@ var ChevronLeftIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3278,7 +3278,7 @@ var ChevronRightIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3334,7 +3334,7 @@ var ChevronUpIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3390,7 +3390,7 @@ var ChevronsDownIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3451,7 +3451,7 @@ var ChevronsLeftIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3512,7 +3512,7 @@ var ChevronsRightIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3573,7 +3573,7 @@ var ChevronsUpIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3634,7 +3634,7 @@ var ChromeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3723,7 +3723,7 @@ var CircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3781,7 +3781,7 @@ var ClipboardIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3847,7 +3847,7 @@ var ClockIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -3910,7 +3910,7 @@ var CloudDrizzleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4014,7 +4014,7 @@ var CloudLightningIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4075,7 +4075,7 @@ var CloudOffIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4139,7 +4139,7 @@ var CloudRainIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4219,7 +4219,7 @@ var CloudSnowIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4323,7 +4323,7 @@ var CloudIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4379,7 +4379,7 @@ var CodeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4440,7 +4440,7 @@ var CodepenIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4522,7 +4522,7 @@ var CodesandboxIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4606,7 +4606,7 @@ var CoffeeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4691,7 +4691,7 @@ var ColumnsIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4747,7 +4747,7 @@ var CommandIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4803,7 +4803,7 @@ var CompassIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4866,7 +4866,7 @@ var CopyIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4932,7 +4932,7 @@ var CornerDownLeftIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -4993,7 +4993,7 @@ var CornerDownRightIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5054,7 +5054,7 @@ var CornerLeftDownIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5115,7 +5115,7 @@ var CornerLeftUpIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5176,7 +5176,7 @@ var CornerRightDownIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5237,7 +5237,7 @@ var CornerRightUpIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5298,7 +5298,7 @@ var CornerUpLeftIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5359,7 +5359,7 @@ var CornerUpRightIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5420,7 +5420,7 @@ var CpuIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5553,7 +5553,7 @@ var CreditCardIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5622,7 +5622,7 @@ var CropIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5683,7 +5683,7 @@ var CrosshairIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5773,7 +5773,7 @@ var DatabaseIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5842,7 +5842,7 @@ var DeleteIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5914,7 +5914,7 @@ var DiscIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -5979,7 +5979,7 @@ var DivideCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6061,7 +6061,7 @@ var DivideSquareIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6146,7 +6146,7 @@ var DivideIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6219,7 +6219,7 @@ var DollarSignIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6283,7 +6283,7 @@ var DownloadCloudIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6352,7 +6352,7 @@ var DownloadIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6421,7 +6421,7 @@ var DribbbleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6484,7 +6484,7 @@ var DropletIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6540,7 +6540,7 @@ var Edit2Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6596,7 +6596,7 @@ var Edit3Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6657,7 +6657,7 @@ var EditIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6718,7 +6718,7 @@ var ExternalLinkIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6787,7 +6787,7 @@ var EyeOffIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6851,7 +6851,7 @@ var EyeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6914,7 +6914,7 @@ var FacebookIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -6970,7 +6970,7 @@ var FastForwardIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7031,7 +7031,7 @@ var FeatherIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7103,7 +7103,7 @@ var FigmaIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7179,7 +7179,7 @@ var FileMinusIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7248,7 +7248,7 @@ var FilePlusIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7325,7 +7325,7 @@ var FileTextIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7407,7 +7407,7 @@ var FileIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7468,7 +7468,7 @@ var FilmIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7585,7 +7585,7 @@ var FilterIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7641,7 +7641,7 @@ var FlagIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7705,7 +7705,7 @@ var FolderMinusIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7769,7 +7769,7 @@ var FolderPlusIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7841,7 +7841,7 @@ var FolderIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7897,7 +7897,7 @@ var FramerIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -7953,7 +7953,7 @@ var FrownIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8032,7 +8032,7 @@ var GiftIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8114,7 +8114,7 @@ var GitBranchIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8192,7 +8192,7 @@ var GitCommitIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8266,7 +8266,7 @@ var GitMergeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8336,7 +8336,7 @@ var GitPullRequestIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8414,7 +8414,7 @@ var GithubIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8470,7 +8470,7 @@ var GitlabIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8526,7 +8526,7 @@ var GlobeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8597,7 +8597,7 @@ var GridIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8680,7 +8680,7 @@ var HardDriveIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8760,7 +8760,7 @@ var HashIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8843,7 +8843,7 @@ var HeadphonesIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8904,7 +8904,7 @@ var HeartIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -8960,7 +8960,7 @@ var HelpCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9031,7 +9031,7 @@ var HexagonIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9087,7 +9087,7 @@ var HomeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9148,7 +9148,7 @@ var ImageIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9221,7 +9221,7 @@ var InboxIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9282,7 +9282,7 @@ var InfoIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9356,7 +9356,7 @@ var InstagramIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9430,7 +9430,7 @@ var ItalicIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9505,7 +9505,7 @@ var KeyIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9561,7 +9561,7 @@ var LayersIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9627,7 +9627,7 @@ var LayoutIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9704,7 +9704,7 @@ var LifeBuoyIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9809,7 +9809,7 @@ var Link2Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9873,7 +9873,7 @@ var LinkIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -9934,7 +9934,7 @@ var LinkedinIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10005,7 +10005,7 @@ var ListIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10104,7 +10104,7 @@ var LoaderIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10219,7 +10219,7 @@ var LockIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10285,7 +10285,7 @@ var LogInIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10354,7 +10354,7 @@ var LogOutIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10423,7 +10423,7 @@ var MailIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10484,7 +10484,7 @@ var MapPinIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10547,7 +10547,7 @@ var MapIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10619,7 +10619,7 @@ var Maximize2Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10696,7 +10696,7 @@ var MaximizeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10752,7 +10752,7 @@ var MehIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10834,7 +10834,7 @@ var MenuIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10909,7 +10909,7 @@ var MessageCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -10965,7 +10965,7 @@ var MessageSquareIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11021,7 +11021,7 @@ var MicOffIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11106,7 +11106,7 @@ var MicIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11183,7 +11183,7 @@ var Minimize2Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11260,7 +11260,7 @@ var MinimizeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11316,7 +11316,7 @@ var MinusCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11382,7 +11382,7 @@ var MinusSquareIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11451,7 +11451,7 @@ var MinusIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11510,7 +11510,7 @@ var MonitorIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11587,7 +11587,7 @@ var MoonIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11643,7 +11643,7 @@ var MoreHorizontalIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11715,7 +11715,7 @@ var MoreVerticalIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11787,7 +11787,7 @@ var MousePointerIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11848,7 +11848,7 @@ var MoveIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -11935,7 +11935,7 @@ var MusicIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12005,7 +12005,7 @@ var Navigation2Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12061,7 +12061,7 @@ var NavigationIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12117,7 +12117,7 @@ var OctagonIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12174,7 +12174,7 @@ var PackageIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12251,7 +12251,7 @@ var PaperclipIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12307,7 +12307,7 @@ var PauseCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12381,7 +12381,7 @@ var PauseIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12448,7 +12448,7 @@ var PenToolIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12521,7 +12521,7 @@ var PercentIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12594,7 +12594,7 @@ var PhoneCallIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12650,7 +12650,7 @@ var PhoneForwardedIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12719,7 +12719,7 @@ var PhoneIncomingIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12788,7 +12788,7 @@ var PhoneMissedIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12860,7 +12860,7 @@ var PhoneOffIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12924,7 +12924,7 @@ var PhoneOutgoingIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -12993,7 +12993,7 @@ var PhoneIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13049,7 +13049,7 @@ var PieChartIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13110,7 +13110,7 @@ var PlayCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13173,7 +13173,7 @@ var PlayIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13229,7 +13229,7 @@ var PlusCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13303,7 +13303,7 @@ var PlusSquareIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13380,7 +13380,7 @@ var PlusIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13447,7 +13447,7 @@ var PocketIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13508,7 +13508,7 @@ var PowerIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13572,7 +13572,7 @@ var PrinterIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13641,7 +13641,7 @@ var RadioIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13704,7 +13704,7 @@ var RefreshCcwIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13770,7 +13770,7 @@ var RefreshCwIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13836,7 +13836,7 @@ var RepeatIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13907,7 +13907,7 @@ var RewindIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -13968,7 +13968,7 @@ var RotateCcwIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14029,7 +14029,7 @@ var RotateCwIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14090,7 +14090,7 @@ var RssIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14158,7 +14158,7 @@ var SaveIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14224,7 +14224,7 @@ var ScissorsIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14313,7 +14313,7 @@ var SearchIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14379,7 +14379,7 @@ var SendIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14443,7 +14443,7 @@ var ServerIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14530,7 +14530,7 @@ var SettingsIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14593,7 +14593,7 @@ var Share2Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14681,7 +14681,7 @@ var ShareIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14750,7 +14750,7 @@ var ShieldOffIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14819,7 +14819,7 @@ var ShieldIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14875,7 +14875,7 @@ var ShoppingBagIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -14944,7 +14944,7 @@ var ShoppingCartIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15014,7 +15014,7 @@ var ShuffleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15099,7 +15099,7 @@ var SidebarIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15168,7 +15168,7 @@ var SkipBackIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15232,7 +15232,7 @@ var SkipForwardIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15296,7 +15296,7 @@ var SlackIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15387,7 +15387,7 @@ var SlashIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15453,7 +15453,7 @@ var SlidersIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15576,7 +15576,7 @@ var SmartphoneIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15645,7 +15645,7 @@ var SmileIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15724,7 +15724,7 @@ var SpeakerIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15800,7 +15800,7 @@ var SquareIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15861,7 +15861,7 @@ var StarIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15918,7 +15918,7 @@ var StopCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -15984,7 +15984,7 @@ var SunIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16106,7 +16106,7 @@ var SunriseIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16215,7 +16215,7 @@ var SunsetIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16324,7 +16324,7 @@ var TabletIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16393,7 +16393,7 @@ var TagIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16457,7 +16457,7 @@ var TargetIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16529,7 +16529,7 @@ var TerminalIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16593,7 +16593,7 @@ var ThermometerIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16649,7 +16649,7 @@ var ThumbsDownIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16705,7 +16705,7 @@ var ThumbsUpIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16761,7 +16761,7 @@ var ToggleLeftIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16829,7 +16829,7 @@ var ToggleRightIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16897,7 +16897,7 @@ var ToolIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -16953,7 +16953,7 @@ var Trash2Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17030,7 +17030,7 @@ var TrashIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17091,7 +17091,7 @@ var TrelloIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17168,7 +17168,7 @@ var TrendingDownIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17229,7 +17229,7 @@ var TrendingUpIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17290,7 +17290,7 @@ var TriangleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17346,7 +17346,7 @@ var TruckIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17424,7 +17424,7 @@ var TvIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17490,7 +17490,7 @@ var TwitchIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17546,7 +17546,7 @@ var TwitterIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17602,7 +17602,7 @@ var TypeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17674,7 +17674,7 @@ var UmbrellaIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17730,7 +17730,7 @@ var UnderlineIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17794,7 +17794,7 @@ var UnlockIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17860,7 +17860,7 @@ var UploadCloudIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -17934,7 +17934,7 @@ var UploadIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18003,7 +18003,7 @@ var UserCheckIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18071,7 +18071,7 @@ var UserMinusIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18142,7 +18142,7 @@ var UserPlusIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18221,7 +18221,7 @@ var UserXIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18300,7 +18300,7 @@ var UserIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18363,7 +18363,7 @@ var UsersIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18436,7 +18436,7 @@ var VideoOffIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18500,7 +18500,7 @@ var VideoIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18566,7 +18566,7 @@ var VoicemailIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18639,7 +18639,7 @@ var Volume1Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18700,7 +18700,7 @@ var Volume2Icon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18761,7 +18761,7 @@ var VolumeXIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18833,7 +18833,7 @@ var VolumeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18889,7 +18889,7 @@ var WatchIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -18957,7 +18957,7 @@ var WifiOffIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19049,7 +19049,7 @@ var WifiIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19123,7 +19123,7 @@ var WindIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19179,7 +19179,7 @@ var XCircleIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19253,7 +19253,7 @@ var XOctagonIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19326,7 +19326,7 @@ var XSquareIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19403,7 +19403,7 @@ var XIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19470,7 +19470,7 @@ var YoutubeIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19531,7 +19531,7 @@ var ZapOffIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19605,7 +19605,7 @@ var ZapIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19661,7 +19661,7 @@ var ZoomInIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19743,7 +19743,7 @@ var ZoomOutIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19816,7 +19816,7 @@ var MessengerIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19873,7 +19873,7 @@ var ComissionsIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -19936,7 +19936,7 @@ var UsersAmgIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -20022,7 +20022,7 @@ var AmgIcon = {
   props: {
     size: {
       type: String,
-      default: "24",
+      default: "18",
       validator: function validator(s) {
         return (
           !isNaN(s) ||
@@ -20053,7 +20053,6 @@ var AmgIcon = {
             height: "54",
             viewBox: "0 0 44 54",
             fill: "none",
-            stroke: "currentColor",
             // "stroke-width": "2",
             // "stroke-linecap": "round",
             // "stroke-linejoin": "round",
@@ -20145,6 +20144,63 @@ var AmgIcon = {
     );
   },
 };
+var DashboardIcon = {
+  name: "DashboardIcon",
+  props: {
+      size: {
+          type: String,
+          default: "18",
+          validator: function validator(s) {
+              return (
+                  !isNaN(s) ||
+                  (s.length >= 2 &&
+                      !isNaN(s.slice(0, s.length - 1)) &&
+                      s.slice(-1) === "x")
+              );
+          },
+      },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+      var size =
+          ctx.props.size.slice(-1) === "x"
+              ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+              : parseInt(ctx.props.size) + "px";
+      var attrs = ctx.data.attrs || {};
+      attrs.width = attrs.width || size;
+      attrs.height = attrs.height || size;
+      ctx.data.attrs = attrs;
+      return h(
+          "svg",
+          _mergeJSXProps([
+              {
+                  attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 24 24",
+                      fill: "none",
+                      stroke: "currentColor",
+                      "stroke-width": "2",
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round",
+                  },
+                  class: "feather feather-dashboard",
+              },
+              ctx.data,
+          ]),
+          [
+              h("path", {
+                  attrs: {
+                      d: "M15.6505 13.9937H3.4141L5.16647 12.2082C5.34775 12.2583 5.5391 12.2884 5.73045 12.2884C6.98934 12.2884 8.00652 11.2752 8.00652 10.0213C8.00652 9.50972 7.82524 9.03825 7.53318 8.65705L8.8827 5.8884C9.35604 5.87837 9.7891 5.7279 10.1416 5.47712L12.4579 6.7511C12.4579 6.79122 12.4479 6.82132 12.4479 6.86144C12.4479 8.11536 13.465 9.12853 14.7239 9.12853C15.9828 9.12853 17 8.11536 17 6.86144C17 5.60752 15.9828 4.59436 14.7239 4.59436C14.2405 4.59436 13.7974 4.74483 13.4348 4.99561L11.1084 3.7116C11.1084 3.6815 11.1185 3.65141 11.1185 3.62132C11.1185 2.3674 10.1013 1.35423 8.84242 1.35423C7.58353 1.35423 6.57642 2.37743 6.57642 3.62132C6.57642 4.15298 6.76777 4.63448 7.06991 5.01567L5.74052 7.76426C4.48164 7.76426 3.46446 8.77743 3.46446 10.0313C3.46446 10.3423 3.52488 10.6332 3.64573 10.9041L2.01422 12.5492V1.00313C2.01422 0.451411 1.56102 0 1.00711 0C0.453199 0 0 0.451411 0 1.00313V16H15.6505C16.2044 16 16.6576 15.5486 16.6576 14.9969C16.6576 14.4451 16.2145 13.9937 15.6505 13.9937ZM14.7239 6.02884C15.1872 6.02884 15.5598 6.4 15.5598 6.86144C15.5598 7.32288 15.1872 7.69404 14.7239 7.69404C14.2607 7.69404 13.888 7.32288 13.888 6.86144C13.888 6.4 14.2607 6.02884 14.7239 6.02884ZM4.89455 10.0313C4.89455 9.56991 5.26718 9.19875 5.73045 9.19875C6.19372 9.19875 6.57642 9.56991 6.57642 10.0313C6.57642 10.4928 6.20379 10.864 5.74052 10.864C5.27725 10.864 4.89455 10.4928 4.89455 10.0313ZM8.85249 2.78871C9.31576 2.78871 9.68839 3.15987 9.68839 3.62132C9.68839 4.08276 9.31576 4.46395 8.85249 4.46395C8.38922 4.46395 8.00652 4.08276 8.00652 3.62132C8.00652 3.15987 8.38922 2.78871 8.85249 2.78871Z",
+                      fill: "currentColor"
+                  },
+              }),
+          ]
+      );
+  },
+};
+
 exports.ActivityIcon = ActivityIcon;
 exports.AirplayIcon = AirplayIcon;
 exports.AlertCircleIcon = AlertCircleIcon;
@@ -20435,3 +20491,4 @@ exports.MessengerIcon = MessengerIcon;
 exports.ComissionsIcon = ComissionsIcon;
 exports.UsersAmgIcon = UsersAmgIcon;
 exports.AmgIcon = AmgIcon;
+exports.DashboardIcon = DashboardIcon;
