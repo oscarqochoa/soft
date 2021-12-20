@@ -16,6 +16,15 @@ const mutations = {
   PUSH_DATA (state, params) {
     state[params.destination].push(params.data)
   },
+  UNSHIFT_DATA (state, params) {
+    state[params.destination].unshift(params.data)
+  },
+  UPDATE_DATA (state, params) {
+    const index = state[params.destination].map(el => el.id).indexOf(params.id)
+    if (index !== -1) {
+      state[params.destination][index] = params.data
+    }
+  },
   REMOVE_DATA (state, params) {
     const index = state[params.destination].map(el => el.id).indexOf(params.id)
     if (index !== -1) {
@@ -28,9 +37,10 @@ const actions = {
     try {
       const response = await crmSms.getAllQuicksSms(body)
       console.log('A_GET_SMS_QUICKS response', response)
+      if (mixins.methods.isResponseSuccess(response))
       commit('SET_DATA', {
         destination: 'S_SMS_QUICKS',
-        data: response.data
+        data: response.data.reverse()
       })
       return response
     } catch (error) {
@@ -58,12 +68,26 @@ const actions = {
     try {
       const response = await crmSms.postSaveQuickSms(body)
       console.log('A_SET_SMS_QUICK response', response)
+      const withId = body.id
       if (mixins.methods.isResponseSuccess(response)) {
         body.id = response.data.id
-        commit('PUSH_DATA', {
-          destination: 'S_SMS_QUICKS',
-          data: body
-        })
+        const data = JSON.parse(response.config.data)
+        body.created_by = data.user_created
+        body.created_at = data.created_at
+        body.updated_by = data.user_updated
+        body.updated_at = data.updated_at
+        body.showMore = false
+        if (withId) {
+          commit('UPDATE_DATA', {
+            destination: 'S_SMS_QUICKS',
+            data: body
+          })
+        } else {
+          commit('UNSHIFT_DATA', {
+            destination: 'S_SMS_QUICKS',
+            data: body
+          })
+        }
       }
       return response
     } catch (error) {

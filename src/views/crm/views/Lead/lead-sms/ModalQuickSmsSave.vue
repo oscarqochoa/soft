@@ -176,18 +176,10 @@ export default {
           user_id : this.userId,
           modul: this.modul
         })
-        if (response.status == 200) {
+        if (this.isResponseSuccess(response)) {
           this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          const data = JSON.parse(response.config.data)
-          this.quickData.id = data.id
-          this.quickData.created_by = data.user_created
-          this.quickData.created_at = data.created_at
-          this.quickData.updated_by = data.user_updated
-          this.quickData.updated_at = data.updated_at
-          this.quickData.showMore = false
           this.edited = true
-          this.$emit('updateQuicks', this.quickData)
-          this.$emit('modalQuickCreateClose', true)
+          this.$bvModal.hide('modal-quick-sms-save')
         } else
           this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong')
         this.isLoading = false

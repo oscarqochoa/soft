@@ -181,7 +181,6 @@
         :typesms="typesms"
         :sms="leads_sms_o"
         :name-leads="name_leads_arr"
-        :quicks="quicks"
       />
 
       <template #modal-footer>
@@ -243,8 +242,6 @@ export default {
     FiltersTable,
     ActionsTable,
     ModalSendSms,
-    ModalQuickSms,
-    ModalQuickSmsSave,
     ModalHistorySms,
     ModalSendSms,
 
@@ -305,23 +302,19 @@ export default {
       selectAll: false,
       typesms: null,
       leads_sms_o: [],
-      quicks: [],
 
       leadsSelecteds: []
     };
   },
   created() {
     this.myProvider();
-    this.getAllQuicksSms();
   },
   methods: {
     ...mapActions({
       A_GET_LEADS: "CrmLeadStore/A_GET_LEADS",
       A_SET_FILTERS_LEADS: "CrmLeadStore/A_SET_FILTERS_LEADS",
-      A_GET_SMS_QUICKS: "CrmSmsStore/A_GET_SMS_QUICKS",
       A_SET_SELECTED_LEADS: "CrmLeadStore/A_SET_SELECTED_LEADS",
       A_DELETE_LEADS: "CrmLeadStore/A_DELETE_LEADS",
-      A_DELETE_SMS_QUICK: "CrmSmsStore/A_DELETE_SMS_QUICK",
       A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS"
     }),
     resolveUserStatusVariant(status) {
@@ -502,30 +495,6 @@ export default {
           console.log("Something went wrong onRowProcess:", error);
           this.showErrorSwal(error);
         });
-    },
-    async getAllQuicksSms() {
-      try {
-        const response = await this.A_GET_SMS_QUICKS({
-          modul: this.modul
-        });
-        this.quicks = response.data
-          .map(el => ({
-            ...el,
-            value: el.sms,
-            label: el.title,
-            showMore: false
-          }))
-          .reverse();
-      } catch (error) {
-        console.log("Something wnet wrong getAllQuicksSms:", error);
-        this.showToast(
-          "danger",
-          "top-right",
-          "Oop!",
-          "AlertOctagonIcon",
-          this.getInternalErrors(error)
-        );
-      }
     },
     modalSmsOpen(item) {
       this.rowData = item;
