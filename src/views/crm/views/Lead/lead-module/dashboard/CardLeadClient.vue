@@ -1,6 +1,6 @@
 <template>
   <b-card>
-    <div class="card-header card-title p-0">
+    <template #header>
       <b-card-title>
         CLIENT&nbsp;&nbsp;&nbsp;
         <span>
@@ -60,7 +60,7 @@
           </svg>
         </b-button>
       </b-button-group>
-    </div>
+    </template>
     <b-row>
       <b-col cols="12">
         <table class="mt-2 mt-xl-0 w-100">

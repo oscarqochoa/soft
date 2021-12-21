@@ -120,6 +120,24 @@ class CrmLead {
     }
   }
 
+  async postSearchFileLead (body) {
+    try {
+      const data = await amgApi.post('/search-file-lead-sn', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postFileNameLead (body) {
+    try {
+      const data = await amgApi.post('/update-file-name', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
 }
 
 export default new CrmLead()
