@@ -19,7 +19,9 @@
           sm="6"
           class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
         >
-          <b-button variant="success"> REQUEST EQUIPMENT </b-button>
+          <b-button @click="openModalRequest()"
+          v-if="![1,19].includes($route.meta.module)"
+          variant="success"> REQUEST EQUIPMENT </b-button>
         </b-col>
       </b-row>
     </div>
@@ -44,16 +46,44 @@
         >To Assigned</b-nav-item
       >
     </b-nav>
+    <request-equipment
+      v-if="modalRequest"
+      :modalRequest="modalRequest"
+      :global="currentUser"
+      :module="$route.meta.module"
+      @closeModalRequest="closeModalRequest"
+    ></request-equipment>
     <router-view :key="$route.name"></router-view>
   </div>
 </template>
 
 <script>
 
+import RequestEquipment from './modal/RequestEquipment.vue'
+import { mapGetters } from "vuex";
 export default {
   components: {
-   
+   RequestEquipment,
   },
+  data(){
+    return{
+        modalRequest:false,
+    }
+  },
+  computed:{
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
+  },
+  methods:{
+    openModalRequest() {
+      this.modalRequest = true;
+    },
+    closeModalRequest() {
+      this.modalRequest = false;
+      // this.$refs.inventoryRequest?.resetSearch();
+    },
+  }
 };
 </script>
 

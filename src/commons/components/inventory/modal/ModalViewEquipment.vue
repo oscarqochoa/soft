@@ -536,7 +536,14 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
+          this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
         });
     },
     getSelectBrand() {
@@ -544,6 +551,15 @@ export default {
         if (response.status == 200) {
           this.optionsBrand = response.data;
         }
+      }).catch(error=>{
+        console.error(error)
+        this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
       });
     },
   },

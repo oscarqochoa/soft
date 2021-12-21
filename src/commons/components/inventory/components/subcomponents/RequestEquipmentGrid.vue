@@ -121,6 +121,7 @@
     </div>
     <b-table
       small
+      
       :api-url="'/inventory/search-request-equipments'"
       ref="refClientsList"
       :items="myProvider"
@@ -130,6 +131,7 @@
       responsive="sm"
       show-empty
       sticky-header="50vh"
+      :sort-desc.sync="sortDesc"
       :current-page="currentPage"
       :per-page="perPage"
     >
@@ -286,6 +288,7 @@ export default {
       ],
       modalTrackingRequest: false,
       requestId:"",
+      sortDesc: true,
     };
   },
   methods: {
@@ -309,13 +312,13 @@ export default {
       return promise.then((data) => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
-        this.start_page = data.data.from;
+        this.startPage = data.data.from;
         this.current_page = data.data.current_page;
         this.perpage = data.data.per_page;
-        this.next_page = this.start_page + 1;
+        this.next_page = this.startPage + 1;
         this.end_page = data.data.last_page;
-        this.total_data = data.data.total;
-        this.to_page = data.data.to;
+        this.totalData = data.data.total;
+        this.toPage = data.data.to;
         // Must return an array of items or an empty array if an error occurred
         return items || [];
       });

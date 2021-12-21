@@ -138,8 +138,18 @@ export default {
                       });
 
                       this.$emit("closeModalRepairEquipment", false);
-                      this.$emit("updateRepairEquipment",false)
+                      this.$emit("updateRepairEquipment", false);
                     }
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    this.showToast(
+                      "danger",
+                      "top-right",
+                      "Error",
+                      "XIcon",
+                      "Something went wrong!"
+                    );
                   });
               }
             });

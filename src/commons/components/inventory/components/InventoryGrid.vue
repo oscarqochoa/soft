@@ -271,16 +271,18 @@
       :assignedTo="assignedTo"
       :num="num"
       @updateRepairEquipment="updateRepairEquipment"
-      @closeModalRepairEquipment="closeModalRepairEquipment"></modal-repair-equipment>
+      @closeModalRepairEquipment="closeModalRepairEquipment"
+    ></modal-repair-equipment>
   </div>
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
+import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import vSelect from "vue-select";
 import ModalTrackingEquipment from "../modal/ModalTrackingEquipment.vue";
 import ModalViewEquipment from "../modal/ModalViewEquipment.vue";
-import ModalRepairEquipment from "../modal/ModalRepairEquipment.vue"
+import ModalRepairEquipment from "../modal/ModalRepairEquipment.vue";
 export default {
   props: {
     global: {
@@ -404,7 +406,7 @@ export default {
       edit: "",
       modalViewEquipment: false,
       idEquipment: "",
-      modalRepairEquipment:false,
+      modalRepairEquipment: false,
       statusNewEquipment: "",
       assignedTo: "",
       num: "",
@@ -414,8 +416,10 @@ export default {
     visibleFields() {
       return this.arrayColumns.filter((column) => column.visible);
     },
+    ...mapGetters("inventory-store", ["listCategoryAll"]),
   },
   methods: {
+    ...mapActions("inventory-store", ["LIST_CATEGORIES"]),
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perpage: ctx.perPage,
@@ -440,16 +444,30 @@ export default {
       });
     },
     getSelectCategory() {
-      amgApi
-        .get("/inventory/get-list-category", {})
-        .then((response) => {
-          if (response.status == 200) {
-            this.optionsCategory = response.data;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (this.listCategoryAll != null) {
+        this.optionsCategory = this.listCategoryAll;
+      } else {
+        amgApi
+          .get("/inventory/get-list-category", {})
+          .then((response) => {
+            if (response.status == 200) {
+              this.optionsCategory = response.data;
+              if (this.listCategoryAll == null) {
+                this.LIST_CATEGORIES(this.optionsCategory);
+              }
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            this.showToast(
+              "danger",
+              "top-right",
+              "Error",
+              "XIcon",
+              "Something went wrong!"
+            );
+          });
+      }
     },
     resetSearch() {
       this.categoryFilter = null;
@@ -544,15 +562,24 @@ export default {
             });
           } else {
             this.showToast(
-                  "success",
-                  "top-right",
-                  "Success",
-                  "CheckIcon",
-                  "Correct password"
-                );
+              "success",
+              "top-right",
+              "Success",
+              "CheckIcon",
+              "Correct password"
+            );
             this.openModalRepairEquipment(param1, param2, param3, num);
-            console.log("success") 
           }
+        })
+        .catch((error) => {
+          console.error(error);
+          this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
         });
     },
     openModalRepairEquipment(idEquipment, status, assignTo, num) {
@@ -566,9 +593,9 @@ export default {
       this.modalRepairEquipment = false;
       // this.resetSearch();
     },
-    updateRepairEquipment(){
+    updateRepairEquipment() {
       this.$refs.refClientsList.refresh();
-    }
+    },
   },
   created() {
     this.getSelectCategory();
