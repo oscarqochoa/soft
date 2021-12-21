@@ -20,7 +20,7 @@
       
       <template #cell(file_name)="data">
         <a v-if="data.item.isDisabled" :href="data.item.route" target="_blank">
-          <b-icon :icon="getIcon(data.item.extension)" />
+          <b-icon :variant="getIcon(data.item.extension).color" :icon="getIcon(data.item.extension).icon" />
           {{ data.item.file_name }}.{{ data.item.extension }}
         </a>
         <validation-observer
@@ -34,6 +34,7 @@
           >
             <b-input-group
               label-for="file-name"
+              class="input-group-sm"
             >
               <b-form-input
                 id="file-name"
@@ -78,7 +79,7 @@
             variant="flat-warning"
             class="button-little-size rounded-circle"
             :disabled="isLoading"
-            @click="data.item.isDisabled = false"
+            @click="data.item.isDisabled = !data.item.isDisabled; data.item.custom_file_name = data.item.file_name"
           >
             <feather-icon
               v-if="!isLoading"
@@ -90,7 +91,7 @@
             variant="flat-danger"
             class="button-little-size rounded-circle ml-1"
             :disabled="isLoading"
-            @click="onDeleteFile(data.index, data.item)"
+            @click="onDeleteFile(data.item)"
           >
             <feather-icon
               v-if="!isLoading"
@@ -107,6 +108,7 @@
       <b-button
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
         variant="outline-danger"
+        @click="$bvModal.show('modal-upload-file')"
       >
         <feather-icon
           icon="UploadCloudIcon"
@@ -115,6 +117,30 @@
         <span class="align-middle">Upload File</span>
       </b-button>
     </b-card-footer>
+
+    <b-modal
+      id="modal-upload-file"
+      title="Upload File"
+      modal-class="modal-primary"
+      button-size="sm"
+      ok-title="Ok"
+    >
+      <drag-and-drop v-model="files" :filesArray="files" />
+      <template #modal-footer>
+        <b-button
+          v-show="files.length"
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="primary"
+          @click="onUploadFile"
+        >
+          <amg-icon
+            icon="UploadIcon"
+            class="mr-50"
+          />
+          <span class="align-middle">Upload</span>
+        </b-button>
+      </template>
+    </b-modal>
   </b-card>
 </template>
 
@@ -126,8 +152,14 @@ import Ripple from 'vue-ripple-directive'
 
 import formValidation from '@core/comp-functions/forms/form-validation'
 
+import DragAndDrop from "@/views/commons/utilities/DragAndDrop.vue";
+import Button from '@/views/components/button/Button.vue';
+
 export default {
-  components: {},
+  components: {
+    DragAndDrop,
+    Button,
+  },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
@@ -150,6 +182,7 @@ export default {
         { key: 'created_by' },
         { key: 'actions' },
       ],
+      files: [],
       isBusy: false,
       isLoading: false,
     }
@@ -158,7 +191,9 @@ export default {
   methods: {
     ...mapActions({
       A_GET_FILES_LEADS: 'CrmLeadStore/A_GET_FILES_LEADS',
-      A_SET_FILE_LEAD: 'CrmLeadStore/A_SET_FILE_LEAD'
+      A_UPDATE_FILE_NAME_LEAD: 'CrmLeadStore/A_UPDATE_FILE_NAME_LEAD',
+      A_SET_FILE_LEAD: 'CrmLeadStore/A_SET_FILE_LEAD',
+      A_DELETE_FILES_LEADS: 'CrmLeadStore/A_DELETE_FILES_LEADS',
     }),
     async getFilesLeads (orderby, order) {
       try {
@@ -177,13 +212,13 @@ export default {
     },
     getIcon (extension) {
       switch (true) {
-        case (extension === 'pdf'): return 'file-pdf'
-        case (extension === 'pptx'): return 'file-ppt'
-        case (extension === 'xlsx' && extension === 'csv'): return 'file-excel'
-        case (extension === 'docx'): return 'file-word'
-        case (['png', 'jpg', 'jpeg', 'ico'].includes(extension)): return 'file-image'
+        case (extension === 'pdf'): return { icon: 'file-pdf', color: 'danger' }
+        case (['ppt', 'pptx'].includes(extension)): return { icon: 'file-ppt', color: 'warning' }
+        case (['xlsx', 'csv'].includes(extension)): return { icon: 'file-excel', color: 'success' }
+        case (extension === 'docx'): return { icon: 'file-word', color: '' }
+        case (['png', 'jpg', 'jpeg', 'ico'].includes(extension)): return { icon: 'file-image', color: 'info' }
       }
-      return 'file'
+      return { icon: 'file', color: 'defult' }
     },
     async onSubmit (index, item) {
       if (await this.$refs[`refFormObserver${ index }`].validate()) {
@@ -192,7 +227,7 @@ export default {
           if (result.value) {
             this.isLoading = true
             console.log('this.$refs[`fileName${ index }`].value', this.$refs[`fileName${ index }`])
-            const response = await this.A_SET_FILE_LEAD({
+            const response = await this.A_UPDATE_FILE_NAME_LEAD({
               file_id: item.id,
               name_file: item.custom_file_name,
               user_id: this.authUser.user_id
@@ -207,10 +242,58 @@ export default {
           }
         }).catch(error => {
           console.log('Something went wrong onSubmit', error)
-          this.showErroSwal()
+          this.showErrorSwal()
         })
       }
     },
+    async onUploadFile () {
+      try {
+        this.addPreloader()
+        const body = new FormData()
+        this.files.forEach((file) => {
+          console.log('file', file)
+          body.append('images[]', file, file.name)
+        })
+        body.append('user_id', this.authUser.user_id)
+        body.append('id_lead', this.lead.id)
+        body.append('module_id', this.modul)
+        const response = await this.A_SET_FILE_LEAD(body)
+        if (this.isResponseSuccess(response)) {
+          await this.getFilesLeads()
+          this.files = []
+          this.$bvModal.hide('modal-upload-file')
+          this.removePreloader()
+          this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+        } else
+          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.', response.message)
+        this.removePreloader()
+      } catch (error) {
+        console.log('Something went wrong onUploadFile', error)
+        this.showErrorSwal()
+        this.removePreloader()
+      }
+    },
+    onDeleteFile (item) {
+      this.showConfirmSwal()
+      .then(async result => {
+        if (result.value) {
+          this.addPreloader()
+          const response = await this.A_DELETE_FILES_LEADS({
+            file_id: item.id,
+            user_id: this.authUser.user_id
+          })
+          if (response)
+            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+          else
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.', response.message)
+          this.removePreloader()
+        }
+      }).catch(error => {
+        console.log('Something went wrong onDeleteFile', error)
+        this.showErrorSwal()
+        this.removePreloader()
+      })
+    }
   },
   mounted () {},
   props: {

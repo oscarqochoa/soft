@@ -220,11 +220,24 @@ const actions = {
   },
   async A_SET_FILE_LEAD ({ commit }, body) {
     try {
-      const response = await crmLead.postFileNameLead(body)
+      const response = await crmLead.postFileLead(body)
       console.log('A_SET_FILE_LEAD response', response)
       return response
     } catch (error) {
       console.log('ERROR_SET_FILE_LEAD [ACTION]', error)
+      throw error
+    }
+  },
+
+  /* UPDATE */
+
+  async A_UPDATE_FILE_NAME_LEAD ({ commit }, body) {
+    try {
+      const response = await crmLead.postFileNameLead(body)
+      console.log('A_UPDATE_FILE_NAME_LEAD response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_UPDATE_FILE_NAME_LEAD [ACTION]', error)
       throw error
     }
   },
@@ -243,6 +256,22 @@ const actions = {
       return response
     } catch (error) {
       console.log('ERROR_DELETE_LEADS [ACTION]', error)
+      throw error
+    }
+  },
+  
+  async A_DELETE_FILES_LEADS ({ commit }, body) {
+    try {
+      const response = await crmLead.deleteFileLead(body)
+      console.log('A_DELETE_FILES_LEADS response', response)
+      if (mixins.methods.isResponseSuccess(response))
+        commit('REMOVE_DATA', {
+          destination: 'S_FILES_LEADS',
+          id: body.file_id
+        })
+      return response
+    } catch (error) {
+      console.log('ERROR_DELETE_FILES_LEADS [ACTION]', error)
       throw error
     }
   },
