@@ -6,7 +6,7 @@
       v-model="mutableIfModalCard"
       size="lg"
       modal-class="modal-primary"
-     
+      title-tag="h3"
       hide-footer
       body-class="mb-2"
       @hidden="closeModal"

@@ -109,7 +109,7 @@
                 placeholder="Select Category"
                 label="name"
                 :options="optionsCategory"
-                :reduce="val => val.id"
+                :reduce="(val) => val.id"
               />
             </b-form-group>
             <b-button
@@ -130,8 +130,7 @@
       </b-row>
     </div>
     <b-table
-    small
-      v-scrollbar
+      small
       :api-url="'/inventory/search-equipments'"
       ref="refClientsList"
       :items="myProvider"
@@ -143,7 +142,6 @@
       sticky-header="50vh"
       :current-page="currentPage"
       :per-page="perPage"
-     
     >
       <template #table-busy>
         <div class="text-center text-primary my-2">
@@ -151,25 +149,138 @@
           <strong>Loading ...</strong>
         </div>
       </template>
+      <template #cell(selected)="data">
+        <div v-if="validateLocation(data.item.process)">
+          <b-form-checkbox v-model="data.item.selected"></b-form-checkbox>
+        </div>
+        <div v-else></div>
+      </template>
       <template #cell(url_image)="data">
-            <div class="image-upload">
-              <input type="file" id="file_input" hidden />
-              <!-- INPUT_FILE FIN -->
-              <div class="form-group">
-                <figure>
-                  <img v-if="data.item.url_image" width="80" height="80" :src="data.item.url_image" />
-                  <img v-else width="80" height="80" :src="assetsImg + '/images/inventory.jpg'" />
-                </figure>
-              </div>
-            </div>
+        <div class="image-upload">
+          <input type="file" id="file_input" hidden />
+          <!-- INPUT_FILE FIN -->
+          <div class="form-group">
+            <figure>
+              <img
+                v-if="data.item.url_image"
+                width="80"
+                height="80"
+                :src="data.item.url_image"
+              />
+              <img
+                v-else
+                width="80"
+                height="80"
+                :src="assetsImg + '/images/inventory.jpg'"
+              />
+            </figure>
+          </div>
+        </div>
+      </template>
+      <template #cell(price)="data"
+        >{{ data.item.price != null ? "$ " + data.item.price : "" }}
+      </template>
+      <template #cell(tracking)="data">
+        <div>
+          <b-button
+            variant="light"
+            @click="openModalTrackingEquipment(data.item.id)"
+          >
+            TRACKING
+          </b-button>
+        </div>
+      </template>
+      <template #cell(actions)="data">
+        <b-dropdown
+          variant="link"
+          no-caret
+          :right="$store.state.appConfig.isRTL"
+        >
+          <template #button-content>
+            <feather-icon
+              icon="MoreVerticalIcon"
+              size="16"
+              class="align-middle text-body"
+            />
           </template>
+          <b-dropdown-item
+            @click="viewEquipment(data.item.id, 2)"
+            v-if="module != 12"
+          >
+            <feather-icon icon="EyeIcon" />
+            <span class="align-middle ml-50"> INFORMATION</span>
+          </b-dropdown-item>
+
+          <b-dropdown-item
+            v-if="
+              data.item.assigned_to != null &&
+              module != 19 &&
+              statusEquipment == 2
+            "
+            @click="
+              openValidate(
+                data.item.id,
+                1,
+                data.item.assigned_to,
+                data.item.module_id
+              )
+            "
+          >
+            <feather-icon icon="CornerUpLeftIcon" />
+            <span class="align-middle ml-50">RETURN</span>
+          </b-dropdown-item>
+          <b-dropdown-item
+            v-if="[2].includes(data.item.status)"
+            @click="
+              openValidate(
+                data.item.id,
+                3,
+                data.item.assigned_to,
+                data.item.module_id
+              )
+            "
+          >
+            <feather-icon icon="ChevronsRightIcon" />
+            <span class="align-middle ml-50">TO REPAIR</span>
+          </b-dropdown-item>
+        </b-dropdown>
+      </template>
     </b-table>
+    <modal-tracking-equipment
+      v-if="modalTracking"
+      :modalTracking="modalTracking"
+      :equipmentId="equipmentId"
+      :global="global"
+      @close="closeModalTrackingEquipment"
+    ></modal-tracking-equipment>
+    <modal-view-equipment
+      v-if="modalViewEquipment"
+      :modalViewEquipment="modalViewEquipment"
+      :global="global"
+      :idEquipment="idEquipment"
+      :edit="edit"
+      :optionsCat="optionsCategory"
+      @close="closeModalViewEquipment"
+    ></modal-view-equipment>
+    <modal-repair-equipment
+      v-if="modalRepairEquipment"
+      :modalRepairEquipment="modalRepairEquipment"
+      :global="global"
+      :idEquipment="idEquipment"
+      :statusNewEquipment="statusNewEquipment"
+      :assignedTo="assignedTo"
+      :num="num"
+      @updateRepairEquipment="updateRepairEquipment"
+      @closeModalRepairEquipment="closeModalRepairEquipment"></modal-repair-equipment>
   </div>
 </template>
 
 <script>
 import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
+import ModalTrackingEquipment from "../modal/ModalTrackingEquipment.vue";
+import ModalViewEquipment from "../modal/ModalViewEquipment.vue";
+import ModalRepairEquipment from "../modal/ModalRepairEquipment.vue"
 export default {
   props: {
     global: {
@@ -184,11 +295,14 @@ export default {
   },
   components: {
     vSelect,
+    ModalTrackingEquipment,
+    ModalViewEquipment,
+    ModalRepairEquipment,
   },
   data() {
     return {
-      assetsImg:process.env.VUE_APP_BASE_URL_ASSETS,
-      categoryFilter:null,
+      assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
+      categoryFilter: null,
       startPage: "",
       toPage: "",
       totalData: "",
@@ -286,21 +400,29 @@ export default {
           visible: true,
         },
       ],
+      modalTracking: false,
+      edit: "",
+      modalViewEquipment: false,
+      idEquipment: "",
+      modalRepairEquipment:false,
+      statusNewEquipment: "",
+      assignedTo: "",
+      num: "",
     };
   },
-  computed:{
+  computed: {
     visibleFields() {
       return this.arrayColumns.filter((column) => column.visible);
     },
   },
   methods: {
-      myProvider(ctx) {
+    myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perpage: ctx.perPage,
         from: this.fromToObject.from,
         to: this.fromToObject.to,
         statusEquipment: this.statusEquipment,
-        idCategory:this.categoryFilter,
+        idCategory: this.categoryFilter,
         moduleId: this.module,
       });
       // Must return a promise that resolves to an array of items
@@ -330,11 +452,123 @@ export default {
         });
     },
     resetSearch() {
-        this.categoryFilter = null
-        this.fromToObject.from = null;
-        this.fromToObject.to = null;
-        this.$refs.refClientsList.refresh();
+      this.categoryFilter = null;
+      this.fromToObject.from = null;
+      this.fromToObject.to = null;
+      this.$refs.refClientsList.refresh();
     },
+    openModalTrackingEquipment(equipmentId) {
+      this.equipmentId = equipmentId;
+      this.modalTracking = true;
+    },
+    closeModalTrackingEquipment() {
+      this.modalTracking = false;
+    },
+    viewEquipment(idEquipment, edit) {
+      this.idEquipment = idEquipment;
+      this.edit = edit;
+      this.modalViewEquipment = true;
+    },
+    closeModalViewEquipment() {
+      this.modalViewEquipment = false;
+    },
+    validateLocation(current) {
+      if (current == this.$route.meta.module && this.$route.meta.module != 19) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    openValidate(param1, param2, param3, moduleId, num) {
+      if (num == 2) {
+        // this.openModalRepairEquipment(param1, param2, param3, num);
+        console.log("num==2");
+      } else {
+        this.$swal
+          .fire({
+            title: "Password",
+            allowOutsideClick: false,
+            input: "password",
+            showCancelButton: true,
+            confirmButtonText: "OK!",
+            customClass: {
+              confirmButton: "btn btn-primary",
+              cancelButton: "btn btn-danger",
+            },
+            inputValidator: (value) => {
+              if (!value) {
+                return "password is required!";
+              }
+            },
+          })
+          .then((result) => {
+            if (result.value) {
+              this.validatePassword(
+                result.value,
+                param1,
+                param2,
+                param3,
+                moduleId,
+                num
+              );
+            }
+          });
+      }
+    },
+    validatePassword(value, param1, param2, param3, moduleId, num) {
+      let module = 0;
+      if (num == 1) {
+        module = 19;
+      } else {
+        if (param2 == 3) {
+          module = 12;
+        } else if (param2 == 1) {
+          module = 19;
+        } else {
+          if (moduleId == null) {
+            module = 19;
+          } else {
+            module = moduleId;
+          }
+        }
+      }
+      const params = { module: module, pass: value };
+      amgApi
+        .post("/inventory/validate-return-equitment", params)
+        .then((res) => {
+          if (res.data == 0) {
+            this.$swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Password is incorrect",
+            });
+          } else {
+            this.showToast(
+                  "success",
+                  "top-right",
+                  "Success",
+                  "CheckIcon",
+                  "Correct password"
+                );
+            this.openModalRepairEquipment(param1, param2, param3, num);
+            console.log("success") 
+          }
+        });
+    },
+    openModalRepairEquipment(idEquipment, status, assignTo, num) {
+      this.idEquipment = idEquipment;
+      this.statusNewEquipment = status;
+      this.assignedTo = assignTo;
+      this.num = num;
+      this.modalRepairEquipment = true;
+    },
+    closeModalRepairEquipment() {
+      this.modalRepairEquipment = false;
+      // this.resetSearch();
+    },
+    updateRepairEquipment(){
+      this.$refs.refClientsList.refresh();
+    }
   },
   created() {
     this.getSelectCategory();
