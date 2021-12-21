@@ -1,6 +1,6 @@
 <template>
   <b-nav-item>
-    <feather-icon icon="GlobeIcon" size="19" />
+    <feather-icon icon="CalendarIcon" size="19" />
     <b-tooltip
       triggers="hover"
       :target="`bookmark-appointment`"

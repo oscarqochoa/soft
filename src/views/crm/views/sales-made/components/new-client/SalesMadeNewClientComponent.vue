@@ -280,7 +280,7 @@
             class="cursor-pointer"
             :variant="
               (data.item.notes_status === 0) ? 'muted': 'success' "
-            @click="openNotesModal(data.item.id, data.item.notes_status)"
+            @click="openNotesModal(data.item.id)"
           />
         </template>
         <template v-slot:cell(trackings)="data">
@@ -477,7 +477,7 @@
         <template #cell(approved)="data">
           <span class="font-weight-bold text-info">{{ data.item.approved | myGlobal }}</span>
         </template>
-        <template #cell(sms)="data">
+        <template #cell(sms)>
           <b-icon icon="chat-text-fill" variant="primary" />
         </template>
         <template #cell(url)="data">
@@ -532,6 +532,8 @@
       :modal="modal"
       :contract-fee="modalData.contractFee"
     />
+    <url-modal v-if="modal.url" :modal="modal" :url="modalData.url" />
+    <ModalNotesBoost v-if="modal.notes" @hide="closeModalNotes" :info="modalData.notes" />>>>>>>> NicoDev
   </div>
 </template>
 
@@ -670,6 +672,26 @@ export default {
           clientName: "",
           saleId: null,
           id: null
+        },
+        notes: {
+          roleId: this.G_USER_ROLE,
+          notesProgram: null,
+          nameProgram: null,
+          nameClient: null,
+          salesMades: null,
+          module: this.G_USER_SESSION,
+          type: null,
+          editModal: null,
+          statusSale: null,
+          sourcesName: null,
+          pack: null,
+          created: null,
+          originCountry: null,
+          idLead: null,
+          notSeller: null,
+          capturedName: null,
+          sellerName: null,
+          trackings: null
         }
       },
       selectAll: false
@@ -687,11 +709,19 @@ export default {
       status: state => state["crm-store"].status
     }),
     ...mapGetters({
-      currentUser: "auth/currentUser"
+      currentUser: "auth/currentUser",
+      G_IS_SUPERVISOR: "auth/isSupervisor",
+      G_IS_CEO: "auth/isCeo",
+      G_MODULE_ID: "auth/moduleId",
+      G_USER_ROLE: "auth/userRole",
+      G_USER_SESSION: "auth/userSession"
     }),
     filteredFields() {
       if (this.done === 0) return this.fields;
       return this.fields.filter(field => field.key !== "done");
+    },
+    isSeller() {
+      return this.G_USER_ROLE == 5;
     }
   },
   async created() {
@@ -786,6 +816,32 @@ export default {
       this.modalData.contractFee.id = data.lead_id;
       this.modalData.contractFee.saleId = data.id;
       this.modal.contract_fee = true;
+    },
+
+    //Notes
+    async openNotesModal(data) {
+      this.modalData.notes.capturedName = data.captured;
+      this.modalData.notes.sellerName = data.seller;
+      this.modalData.notes.trackings = data.trackings;
+      this.modalData.notes.nameProgram = data.program;
+      this.modalData.notes.nameClient = data.client;
+      this.modalData.notes.statusSale = data.status;
+      this.modalData.notes.sourcesName = data.sourcesname;
+      this.modalData.notes.pack = data.pack;
+      this.modalData.notes.originCountry = data.origin_country;
+      this.modalData.notes.idLead = data.lead_id;
+      this.modalData.notes.created = data.creates;
+      this.modalData.notes.saleId = data.id;
+      this.modalData.notes.notSeller =
+        data.user_id != this.G_USER_SESSION && this.isSeller;
+
+      this.modal.notes = true;
+
+      /*  this.modalData.notes.notesProgram =
+          this.modalData.notes.salesMades =
+          this.modalData.notes.type =
+          this.modalData.notes.editModal =
+          this.modalData.notes.created = */
     },
     closeModalNotes() {
       this.modal.notes = false;
