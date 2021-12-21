@@ -478,10 +478,7 @@
           <span class="font-weight-bold text-info">{{ data.item.approved | myGlobal }}</span>
         </template>
         <template #cell(sms)="data">
-          <b-icon
-            icon="chat-text-fill"
-            variant="primary"
-          />
+          <b-icon icon="chat-text-fill" variant="primary" />
         </template>
         <template #cell(url)="data">
           <b-icon
@@ -528,11 +525,8 @@
       @click="$refs['new-client-done-table'].refresh(); modal.revission = false"
       @response="$refs['new-client-done-table'].refresh(); modal.revission = false"
     />
-    <url-modal
-      v-if="modal.url"
-      :modal="modal"
-      :url="modalData.url"
-    />
+    <ModalNotesBoost v-if="modal.notes" @hide="closeModalNotes" :sales-notes="modalData.notes" />
+    <url-modal v-if="modal.url" :modal="modal" :url="modalData.url" />
     <contract-fee-modal
       v-if="modal.contract_fee"
       :modal="modal"
@@ -544,29 +538,28 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 
-import vSelect from 'vue-select'
-import FilterSlot
-from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
-import dataFields from '@/views/crm/views/sales-made/components/new-client/fields.data'
-import dataFilters from '@/views/crm/views/sales-made/components/new-client/filters.data'
-import CrmService from '@/views/crm/services/crm.service'
-import TrackingModal from '@/views/crm/views/sales-made/components/modals/TrackingModal.vue'
-import InitialPaymentModal from '@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue'
-import TrackingCapturedByModal from '@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue'
-import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
-import BusinessModal from '@/views/crm/views/sales-made/components/modals/services/BuisnessModal.vue'
-import CreditExpertsModal from '@/views/crm/views/sales-made/components/modals/services/CreditExpertsModal.vue'
-import BoostCreditModal from '@/views/crm/views/sales-made/components/modals/services/BoostCreditModal.vue'
-import GeneralSupportModal from '@/views/crm/views/sales-made/components/modals/services/GeneralSupportModal.vue'
-import KeyBookModal from '@/views/crm/views/sales-made/components/modals/services/KeyBookModal.vue'
-import ParagonModal from '@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue'
-import SpecialistModal from '@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue'
-import TaxResearchModal from '@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue'
-import DebtSolutionModal from '@/views/crm/views/sales-made/components/modals/services/DebtSolutionModal.vue'
-import RevissionModal from '@/views/crm/views/sales-made/components/modals/RevissionModal.vue'
-import UrlModal from '@/views/crm/views/sales-made/components/modals/UrlModal.vue'
-import { amgApi } from '@/service/axios'
-import ContractFeeModal from '@/views/crm/views/sales-made/components/modals/ContractFeeModal'
+import vSelect from "vue-select";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import dataFields from "@/views/crm/views/sales-made/components/new-client/fields.data";
+import dataFilters from "@/views/crm/views/sales-made/components/new-client/filters.data";
+import CrmService from "@/views/crm/services/crm.service";
+import TrackingModal from "@/views/crm/views/sales-made/components/modals/TrackingModal.vue";
+import InitialPaymentModal from "@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue";
+import TrackingCapturedByModal from "@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue";
+import FilesModal from "@/views/crm/views/sales-made/components/modals/FilesModal.vue";
+import BusinessModal from "@/views/crm/views/sales-made/components/modals/services/BuisnessModal.vue";
+import CreditExpertsModal from "@/views/crm/views/sales-made/components/modals/services/CreditExpertsModal.vue";
+import BoostCreditModal from "@/views/crm/views/sales-made/components/modals/services/BoostCreditModal.vue";
+import GeneralSupportModal from "@/views/crm/views/sales-made/components/modals/services/GeneralSupportModal.vue";
+import KeyBookModal from "@/views/crm/views/sales-made/components/modals/services/KeyBookModal.vue";
+import ParagonModal from "@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue";
+import SpecialistModal from "@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue";
+import TaxResearchModal from "@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue";
+import DebtSolutionModal from "@/views/crm/views/sales-made/components/modals/services/DebtSolutionModal.vue";
+import RevissionModal from "@/views/crm/views/sales-made/components/modals/RevissionModal.vue";
+import UrlModal from "@/views/crm/views/sales-made/components/modals/UrlModal.vue";
+import { amgApi } from "@/service/axios";
+import ContractFeeModal from "@/views/crm/views/sales-made/components/modals/ContractFeeModal";
 
 export default {
   name: "SalesMadeNewComponent",
@@ -588,7 +581,7 @@ export default {
     ParagonModal,
     SpecialistModal,
     TaxResearchModal,
-    DebtSolutionModal,
+    DebtSolutionModal
   },
   props: {
     done: {
@@ -625,7 +618,7 @@ export default {
         programs: false,
         revission: false,
         url: false,
-        contract_fee: false,
+        contract_fee: false
       },
       modalData: {
         url: {
@@ -673,11 +666,11 @@ export default {
         },
         revission: {},
         contractFee: {
-          programName: '',
-          clientName: '',
+          programName: "",
+          clientName: "",
           saleId: null,
-          id: null,
-        },
+          id: null
+        }
       },
       selectAll: false
     };
@@ -703,18 +696,18 @@ export default {
   },
   async created() {
     try {
-      await this.$store.dispatch('crm-store/getSellers')
-      await this.$store.dispatch('crm-store/getCaptured')
-      await this.$store.dispatch('crm-store/getPrograms')
-      await this.$store.dispatch('crm-store/getSources')
-      await this.$store.dispatch('crm-store/getStates')
-      this.filter[2].options = this.captured
-      this.filter[3].options = this.sellers
-      this.filter[4].options = this.sources
-      this.filter[5].options = this.status
-      this.filter[6].options = this.programs
-      this.filter[7].options = this.stip
-      this.filter[8].options = this.sts
+      await this.$store.dispatch("crm-store/getSellers");
+      await this.$store.dispatch("crm-store/getCaptured");
+      await this.$store.dispatch("crm-store/getPrograms");
+      await this.$store.dispatch("crm-store/getSources");
+      await this.$store.dispatch("crm-store/getStates");
+      this.filter[2].options = this.captured;
+      this.filter[3].options = this.sellers;
+      this.filter[4].options = this.sources;
+      this.filter[5].options = this.status;
+      this.filter[6].options = this.programs;
+      this.filter[7].options = this.stip;
+      this.filter[8].options = this.sts;
     } catch (error) {
       console.error(error);
     }
@@ -779,16 +772,23 @@ export default {
       }
     },
     openContractFeeModal(data) {
-      if (data.id == this.currentUser.user_id || this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
-        this.modalData.editmodal = true
+      if (
+        data.id == this.currentUser.user_id ||
+        this.currentUser.role_id == 1 ||
+        this.currentUser.role_id == 2
+      ) {
+        this.modalData.editmodal = true;
       } else {
-        this.modalData.editmodal = false
+        this.modalData.editmodal = false;
       }
-      this.modalData.contractFee.clientName = data.client
-      this.modalData.contractFee.programName = data.program
-      this.modalData.contractFee.id = data.lead_id
-      this.modalData.contractFee.saleId = data.id
-      this.modal.contract_fee = true
+      this.modalData.contractFee.clientName = data.client;
+      this.modalData.contractFee.programName = data.program;
+      this.modalData.contractFee.id = data.lead_id;
+      this.modalData.contractFee.saleId = data.id;
+      this.modal.contract_fee = true;
+    },
+    closeModalNotes() {
+      this.modal.notes = false;
     },
     openUrlModal(data) {
       this.modalData.url.client = data.client;
