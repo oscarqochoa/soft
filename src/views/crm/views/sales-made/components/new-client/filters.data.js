@@ -9,6 +9,7 @@ export default [
     model: null,
     locale: 'en',
     dateFormatOptions: { year: 'numeric', month: 'numeric', day: 'numeric' },
+    cols: 6,
   },
   {
     type: 'datepicker',
@@ -20,6 +21,7 @@ export default [
     model: null,
     locale: 'en',
     dateFormatOptions: { year: 'numeric', month: 'numeric', day: 'numeric' },
+    cols: 6,
   },
   {
     type: 'select',
@@ -30,6 +32,7 @@ export default [
     options: [],
     reduce: 'id',
     selectText: 'label',
+    cols: 12,
   },
   {
     type: 'select',
@@ -40,6 +43,7 @@ export default [
     options: [],
     reduce: 'id',
     selectText: 'label',
+    cols: 12,
   },
   {
     type: 'select',
@@ -50,6 +54,7 @@ export default [
     options: [],
     reduce: 'id',
     selectText: 'label',
+    cols: 12,
   },
   {
     type: 'select',
@@ -60,6 +65,7 @@ export default [
     options: [],
     reduce: 'id',
     selectText: 'label',
+    cols: 12,
   },
   {
     type: 'select',
@@ -70,6 +76,7 @@ export default [
     options: [],
     reduce: 'id',
     selectText: 'label',
+    cols: 12,
   },
   {
     type: 'select',
@@ -80,6 +87,7 @@ export default [
     options: [],
     reduce: 'id',
     selectText: 'label',
+    cols: 6,
   },
   {
     type: 'select',
@@ -90,5 +98,6 @@ export default [
     options: [],
     reduce: 'id',
     selectText: 'label',
+    cols: 6,
   },
 ]

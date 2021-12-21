@@ -12,6 +12,7 @@ const state = {
   S_STATE_LEADS: [],
   S_STATUS_LEADS: [],
   S_SOURCE_LEADS: [],
+  S_FILES_LEADS: [],
   S_USER_APPOINTEMENTS: [],
   S_LEAD: {},
   S_FILTERS_LEADS: {
@@ -158,6 +159,23 @@ const actions = {
       throw error
     }
   },
+  async A_GET_FILES_LEADS ({ commit }, body) {
+    try {
+      const response = await crmLead.postSearchFileLead(body)
+      console.log('A_GET_FILES_LEADS response', response)
+      if (mixins.methods.isResponseSuccess(response)) {
+        response.data.map(el => { el.isDisabled = true })
+        commit('SET_DATA', {
+          destination: 'S_FILES_LEADS',
+          data: response.data
+        })
+      }
+      return response
+    } catch (error) {
+      console.log('ERROR_GET_FILES_LEADS [ACTION]', error)
+      throw error
+    }
+  },
 
   /* SETS */
 
@@ -197,6 +215,16 @@ const actions = {
       return response
     } catch (error) {
       console.log('ERROR_SET_REQUEST_LEADS [ACTION]', error)
+      throw error
+    }
+  },
+  async A_SET_FILE_LEAD ({ commit }, body) {
+    try {
+      const response = await crmLead.postFileNameLead(body)
+      console.log('A_SET_FILE_LEAD response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_SET_FILE_LEAD [ACTION]', error)
       throw error
     }
   },

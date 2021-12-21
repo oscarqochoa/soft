@@ -2,121 +2,178 @@
   <div>
     <b-modal
       v-model="modalUp"
-      title-class="h2"
+      title-class="h2 text-light"
       size="lg"
       title="Boost Credit Note"
-      hide-footer
-      modal-class="modal-primary"
       @hidden="hideModal()"
     >
-      <b-row>
-        <b-col lg="4">
-          <ValidationProvider name="identification" rules="required" v-slot="{errors}">
-            <b-form-radio-group
-              v-model="note.identification"
-              :options="identificationOptions"
-              :state="state"
-              class="demo-inline-spacing"
-              name="identification"
-            >
-              <b-form-invalid-feedback v-if="errors[0]" :state="state">Please select one</b-form-invalid-feedback>
-              <b-form-valid-feedback :state="state">Thank you</b-form-valid-feedback>
-            </b-form-radio-group>
-          </ValidationProvider>
-        </b-col>
+      <ValidationObserver ref="form">
+        <b-row>
+          <b-col lg="4">
+            <ValidationProvider name="identification" rules="required" v-slot="{errors}">
+              <b-form-group label="Type of identification Number" label-class="font-weight-bolder">
+                <b-form-radio-group
+                  v-model="note.identification"
+                  :options="identificationOptions"
+                  name="identification"
+                  :class="{'border border-danger rounded': errors[0]}"
+                ></b-form-radio-group>
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+          <b-col lg="4">
+            <ValidationProvider name="agreement" rules="required" v-slot="{errors}">
+              <b-form-group label-class="font-weight-bolder" label="Type of Agreement">
+                <b-form-radio-group
+                  v-model="note.typeAgreement"
+                  :options="typeAgreementOptions"
+                  :class="{'border border-danger rounded': errors[0]}"
+                  name="typeAgreement"
+                ></b-form-radio-group>
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+          <b-col lg="4">
+            <ValidationProvider name="Work" rules="required" v-slot="{errors}">
+              <b-form-group label-class="font-weight-bolder" label="Work Status" label-for="work">
+                <b-form-input
+                  id="work"
+                  v-model="note.work"
+                  type="text"
+                  :state="errors[0] ? false :  null"
+                />
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col lg="4">
+            <ValidationProvider name="Credit" rules="required" v-slot="{errors}">
+              <b-form-group label-class="font-weight-bolder" label="Credit">
+                <b-form-radio-group
+                  v-model="note.credit"
+                  :options="creditOptions"
+                  :class="{'border border-danger rounded': errors[0]}"
+                  name="Credit"
+                ></b-form-radio-group>
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+          <b-col lg="3">
+            <ValidationProvider name="Hours" rules="required" v-slot="{errors}">
+              <b-form-group
+                label-class="font-weight-bolder"
+                label="Available Hours"
+                label-for="hours"
+              >
+                <b-form-input
+                  id="hours"
+                  v-model="note.hours"
+                  type="text"
+                  :state="errors[0] ? false :  null"
+                />
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+          <b-col lg="5">
+            <ValidationProvider name="TypeDays" rules="required" v-slot="{errors}">
+              <b-form-group
+                label-class="font-weight-bolder"
+                label="Available Days"
+                label-for="TypeDays"
+              >
+                <v-select
+                  v-model="note.typeDays"
+                  :dir="'ltr'"
+                  multiple
+                  transition="multiple"
+                  label="title"
+                  :options="dayOptions"
+                  :class="{'border-danger rounded': errors[0]}"
+                />
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+        </b-row>
 
-        <b-col lg="4">
-          <ValidationProvider name="agreement" rules="required" v-slot="{errors}">
-            <b-form-radio-group
-              v-model="note.typeAgreement"
-              :options="typeAgreementOptions"
-              :state="state"
-              class="demo-inline-spacing"
-              name="typeAgreement"
-            >
-              <b-form-invalid-feedback v-if="errors[0]" :state="state">Please select one</b-form-invalid-feedback>
-              <b-form-valid-feedback :state="state">Thank you</b-form-valid-feedback>
-            </b-form-radio-group>
-          </ValidationProvider>
-        </b-col>
-        <b-col lg="4">
-          <ValdationProvider name="Work" rules="required" v-slot="{valid, errors}">
-            <b-form-group label="Work Status" label-for="work">
-              <b-form-input
-                id="work"
-                v-model="note.work"
-                type="text"
-                :state="errors[0] ? false : (valid ? true : null)"
-              />
-            </b-form-group>
-          </ValdationProvider>
-        </b-col>
-      </b-row>
+        <b-row>
+          <b-col lg="6">
+            <ValidationProvider name="TypGoal" rules="required" v-slot="{errors}">
+              <b-form-group label-class="font-weight-bolder" label="Goal" label-for="TypGoal">
+                <v-select
+                  v-model="note.typeGoal"
+                  :dir="'ltr'"
+                  multiple
+                  transition="multiple"
+                  label="name"
+                  :options="goalOptions"
+                  :class="{'border-danger rounded': errors[0]}"
+                />
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+          <b-col lg="3">
+            <ValidationProvider name="Another" rules="required" v-slot="{errors}">
+              <b-form-group
+                label-class="font-weight-bolder"
+                label="Did you use another SSN or ITIN?"
+              >
+                <b-form-radio-group
+                  v-model="note.another"
+                  :options="anotherOptions"
+                  :class="{'border border-danger rounded': errors[0]}"
+                  name="Another"
+                ></b-form-radio-group>
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+          <b-col lg="3">
+            <ValidationProvider name="Pending" rules="required" v-slot="{errors}">
+              <b-form-group label-class="font-weight-bolder" label=" Pending">
+                <b-form-checkbox-group
+                  v-model="note.pending"
+                  :options="pendingOptions"
+                  :class="{'border border-danger rounded': errors[0]}"
+                  name="Pending"
+                  stacked
+                ></b-form-checkbox-group>
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+        </b-row>
+      </ValidationObserver>
 
-      <b-row>
-        <b-col lg="4">
-          <ValidationProvider name="Credit" rules="required" v-slot="{errors}">
-            <b-form-radio-group
-              v-model="note.credit"
-              :options="creditOptions"
-              :state="state"
-              class="demo-inline-spacing"
-              name="Credit"
-            >
-              <b-form-invalid-feedback v-if="errors[0]" :state="state">Please select one</b-form-invalid-feedback>
-              <b-form-valid-feedback :state="state">Thank you</b-form-valid-feedback>
-            </b-form-radio-group>
-          </ValidationProvider>
-        </b-col>
-        <b-col lg="3">
-          <ValdationProvider name="Hours" rules="required" v-slot="{valid, errors}">
-            <b-form-group label="Available Hours" label-for="hours">
-              <b-form-input
-                id="hours"
-                v-model="note.hours"
-                type="text"
-                :state="errors[0] ? false : (valid ? true : null)"
-              />
-            </b-form-group>
-          </ValdationProvider>
-        </b-col>
-        <b-col lg="5">
-          <ValdationProvider name="TypeDays" rules="required" v-slot="{errors}">
-            <b-form-group label="Available Days" label-for="TypeDays">
-              <v-select
-                v-model="note.typeDays"
-                :dir="'ltr'"
-                multiple
-                label="title"
-                :options="dayOptions"
-                :class="{'is-invalid': errors[0]}"
-              />
-            </b-form-group>
-          </ValdationProvider>
-        </b-col>
-      </b-row>
+      <template #modal-footer>
+        <b-button variant="info" @click="saveNotesIncomplete">Save</b-button>
+        <b-button variant="primary" @click="saveNotesCompleted">Save & Complete</b-button>
+        <b-button variant="primary" @click="updateNotas">Update</b-button>
+      </template>
     </b-modal>
   </div>
 </template>
 
 <script>
-import loansService from "@/views/commons/components/loans/services/loans.service";
 import { mapGetters, mapMutations } from "vuex";
 import vSelect from "vue-select";
+import NotesServices from "@/views/commons/components/first-notes/services/notes.service";
 export default {
-  name: "ModalTrackingLoan",
+  name: "ModalNotesBoost",
   components: {
     vSelect
   },
   props: {
-    info: {
+    salesNotes: {
       type: Object,
       required: true,
       default: () => ({})
     }
   },
-  created() {},
-  mounted() {},
+  created() {
+    this.getListTypeGoal();
+  },
+  mounted() {
+    this.modalUp = true;
+  },
   data() {
     return {
       modalUp: false,
@@ -127,51 +184,55 @@ export default {
         credit: null,
         hours: null,
         typeDays: [],
-        typeGoal: null,
+        typeGoal: [],
         another: null,
-        pending: null,
+        pending: [],
         originCountry: null,
         inconvenience: null,
         information: null,
         recommendations: null,
         file: null,
-        file_name: null
+        file_name: null,
+        disablebutton: {
+          save: false,
+          update: false
+        }
       },
       identificationOptions: [
         {
-          label: "INVENTED SSN",
+          text: "INVENTED SSN",
           value: "1"
         },
         {
-          label: "ITIN",
+          text: "ITIN",
           value: "2"
         },
         {
-          label: "SSN",
+          text: "SSN",
           value: "3"
         }
       ],
       typeAgreementOptions: [
         {
-          label: "Email",
+          text: "Email",
           value: "Email"
         },
         {
-          label: "Ups",
+          text: "Ups",
           value: "Ups"
         },
         {
-          label: "Voice",
+          text: "Voice",
           value: "Voice"
         }
       ],
       creditOptions: [
         {
-          label: "Increase",
+          text: "Increase",
           value: "1"
         },
         {
-          label: "Start",
+          text: "Start",
           value: "2"
         }
       ],
@@ -183,6 +244,31 @@ export default {
         { title: "Thursday", id: 5 },
         { title: "Friday", id: 6 },
         { title: "Saturday", id: 7 }
+      ],
+      goalOptions: [],
+      anotherOptions: [
+        {
+          text: "Yes",
+          value: "1"
+        },
+        {
+          text: "No",
+          value: "2"
+        }
+      ],
+      pendingOptions: [
+        {
+          text: "UB",
+          value: "1"
+        },
+        {
+          text: "ID",
+          value: "2"
+        },
+        {
+          text: "OTHER",
+          value: "3"
+        }
       ]
     };
   },
@@ -195,9 +281,27 @@ export default {
     })
   },
   methods: {
+    async saveNotesIncomplete() {
+      const validate = await this.$refs.form.validate();
+      if (validate) alert("validate");
+    },
+    async saveNotesCompleted() {
+      const validate = await this.$refs.form.validate();
+    },
+    async updateNotas() {
+      const validate = await this.$refs.form.validate();
+    },
     hideModal() {
       this.modalUp = false;
       this.$emit("hide");
+    },
+    async getListTypeGoal() {
+      try {
+        const response = await NotesServices.getListTypeGoal();
+        this.goalOptions = response;
+      } catch (error) {
+        this.showErrorSwal();
+      }
     },
     async getTracking() {
       try {
