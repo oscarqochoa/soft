@@ -4,6 +4,46 @@
       no-body
       class="mb-1"
     >
+      <b-sidebar
+        id="sidebar-right"
+        right
+        shadow
+        bg-variant="white"
+        sidebar-class="sidebar-lg"
+        no-header-close
+      >
+        <template #header>
+          <b-container>
+            <b-row>
+              <h3>Advanced Search</h3>
+            </b-row>
+          </b-container>
+        </template>
+        <b-container>
+          <filters-component
+            :filters="filter"
+          />
+        </b-container>
+        <template #footer>
+          <b-container>
+            <b-row class="d-flex align-items-center justify-content-between p-1">
+              <b-button
+                v-b-toggle.sidebar-right
+                variant="outline-danger"
+              >
+                Close
+              </b-button>
+              <b-button
+                v-b-toggle.sidebar-right
+                variant="primary"
+                @click="$emit('reload')"
+              >
+                Search
+              </b-button>
+            </b-row>
+          </b-container>
+        </template>
+      </b-sidebar>
       <div class="mx-2 mb-2 mt-2">
         <b-row>
           <b-col
@@ -97,8 +137,8 @@
               <b-input-group class="mr-1">
                 <b-form-input
                   v-if="filterPrincipal.type === 'input'"
-                  :type="filterPrincipal.inputType"
                   v-model="filterPrincipal.model"
+                  :type="filterPrincipal.inputType"
                   :placeholder="filterPrincipal.placeholder"
                   :class="filterPrincipal.class"
                   @keyup.enter="$emit('reload')"
@@ -113,30 +153,20 @@
                 </b-input-group-append>
               </b-input-group>
               <b-button
+                v-b-toggle.sidebar-right
                 variant="primary"
                 @click="basicSearch = !basicSearch"
               >
                 <div class="d-flex justify-content-between">
-                  <span
-                    class="mr-50"
-                  ><feather-icon
+                  <feather-icon
                     icon="FilterIcon"
                     size="15"
-                  /></span>
-
-                  <span class="text-nowrap">{{
-                    basicSearch ? "Advanced Search" : "Basic Search"
-                  }}</span>
+                  />
                 </div>
               </b-button>
             </div>
           </b-col>
         </b-row>
-      </div>
-      <div class="mr-2 ml-2 mb-2" v-if="!basicSearch">
-        <filters-component
-          :filters="filter"
-        />
       </div>
       <div class="table-responsive">
         <slot name="table" />
@@ -199,6 +229,7 @@
 
 <script>
 import vSelect from 'vue-select'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'SalesMadeNewClientComponent',
@@ -211,12 +242,17 @@ export default {
     paginate: { required: true, type: Object },
     startPage: { required: false, type: Number },
     toPage: { required: false, type: Number },
-    filterPrincipal: { required: true, type: Object, },
+    filterPrincipal: { required: true, type: Object },
   },
   data() {
     return {
       basicSearch: true,
     }
+  },
+  computed: {
+    ...mapGetters({
+      skin: 'appConfig/skin',
+    }),
   },
   methods: {
     resetFilter() {

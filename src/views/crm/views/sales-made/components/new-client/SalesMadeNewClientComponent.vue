@@ -8,6 +8,7 @@
       :start-page="startPage"
       :to-page="toPage"
       @reload="$refs['new-client-done-table'].refresh()"
+      v-scrollbar
     >
       <b-table
         id="new-client-done-table"

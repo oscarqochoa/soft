@@ -5,7 +5,6 @@
       :key="index"
       :cols="filter.cols ?  filter.cols : ''"
       :class="filter.margin === true ? 'mt-1' : ''"
-      class="px-0 p-1px"
     >
       <label v-if="filter.showLabel">{{ filter.label }}</label>
       <b-form-input
@@ -16,7 +15,7 @@
         :placeholder="filter.placeholder"
       />
       <b-form-datepicker
-        v-if="filter.type === 'datepicker'"
+        v-else-if="filter.type === 'datepicker'"
         v-model="filter.model"
         :class="filter.class"
         :locale="filter.locale"
@@ -24,7 +23,7 @@
         :placeholder="filter.placeholder"
       />
       <v-select
-        v-if="filter.type === 'select'"
+        v-else-if="filter.type === 'select'"
         v-model="filter.model"
         :class="filter.class"
         :options="filter.options"
