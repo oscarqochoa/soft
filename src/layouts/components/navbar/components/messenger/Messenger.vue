@@ -1,17 +1,23 @@
 <template>
-  <b-nav-item>
-    <feather-icon icon="MessageCircleIcon" size="21" />
-    <b-tooltip
-      triggers="hover"
-      :target="`bookmark-messenger`"
-      title="AMG Messenger"
-      :delay="{ show: 1000, hide: 50 }"
-    />
+  <b-nav-item @click="redirectToMessenger()" v-b-tooltip.hover.top="'AMG Messenger'">
+    <amg-icon icon="MessengerIcon" size="19" />
   </b-nav-item>
 </template>
 
 <script>
-export default {};
+import {mapGetters} from 'vuex'
+export default {
+  computed:{
+    ...mapGetters({
+      currentUser: 'auth/currentUser'
+    })
+  },
+  methods:{
+    redirectToMessenger(){
+      window.open(`${process.env.VUE_APP_API_SINGLESINGON}/api/autologin?user_id=${this.currentUser.id_enc}&api_key=key_cur_prod_fnPqT5xQEi5Vcb9wKwbCf65c3BjVGyBB`, '_blank')
+    }
+  }
+};
 </script>
 
 <style>

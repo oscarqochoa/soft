@@ -14,7 +14,7 @@
           v-if="lead.mobile != null"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           v-b-tooltip.hover.bottom="'Aadd To My List'"
-          variant="outline-primary"
+          variant="outline-important"
           class="btn-icon"
           @click="addMyList()"
         >
@@ -27,7 +27,7 @@
           v-if="lead.status_sn_id && modul === 2 && !potential"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           v-b-tooltip.hover.bottom="'Without Potential'"
-          variant="outline-primary"
+          variant="outline-important"
           class="btn-icon"
           @click="setPotential(lead.id)"
         >
@@ -39,7 +39,7 @@
           v-if="lead.status_sn_id && modul === 2"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           v-b-tooltip.hover.bottom="'Not Call'"
-          variant="outline-primary"
+          variant="outline-important"
           class="btn-icon"
           @click="notCall(lead.id)"
         >
@@ -51,7 +51,7 @@
           v-if="lead.status_sn_id && modul === 2 && notCallTracking.length"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           v-b-tooltip.hover.bottom="'Tracking Not Call'"
-          variant="outline-primary"
+          variant="outline-important"
           class="btn-icon"
           @click="/* *INTEGRATE* */"
         >

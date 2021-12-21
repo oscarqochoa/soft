@@ -63,11 +63,42 @@ class TaskService {
       throw error
     }
   }
-
+  async postCheckTask (body) {
+    try {
+      const data = await amgApi.post('/checktaskcredit', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+  async deleteTaskCredit (body) {
+    try {
+      const data = await amgApi.post('/deletetaskcredit', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
   async validateTaskFavorite (body) {
     try {
       const data = await amgApi.post('/validate-task-favorites', body)
       return data
+    } catch (error) {
+      throw error
+    }
+  }
+  async getTaskCounter (body) {
+    try {
+      const data = await amgApi.post('/counttasks', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+  async getAllTask (body) {
+    try {
+      const data = await amgApi.post(body.api_url, body)
+      return data.data
     } catch (error) {
       throw error
     }

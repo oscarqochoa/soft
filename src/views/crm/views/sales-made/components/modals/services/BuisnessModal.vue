@@ -6,6 +6,8 @@
         modal
         size="xl"
         scrollable
+        header-class="p-0"
+        :header-bg-variant="skin"
         @hidden="hideModal(false,0)"
       >
         <!-- HEADER START -->
@@ -34,17 +36,21 @@
                 <b-col
                   v-if="rate.type === '1'"
                   :key="index"
-                  :lg="(isModalShow) ? '3' : '4'"
                 >
                   <b-card
-                    :title="rate.description"
-                    :class="!(isModalShow) ? 'cursor-pointer' : ''"
-                    :bg-variant="(option === rate.id) ? 'success' : 'light'"
+                    class="font-weight-bolder"
+                    :class="{'cursor-pointer': !(isModalShow), 'border' : (skin === 'light' && option !== rate.id), 'text-white' : option === rate.id && skin === 'light'}"
+                    :bg-variant="(option === rate.id) ? 'primary' : (skin === 'dark') ? 'dark' : 'white'"
                     @click="!(isModalShow) && changeRate(rate)"
                   >
                     <b-row>
+                      <b-col>
+                        <p class="text-center">{{ rate.description }}</p>
+                      </b-col>
+                    </b-row>
+                    <b-row>
                       <b-col v-if="rate.id !== 63 && rate.id !== 34">
-                        <p>
+                        <p class="text-center">
                           $ {{ rate.price }}.00
                         </p>
                       </b-col>
@@ -53,11 +59,11 @@
                           v-slot="{errors}"
                           :rules="`${option === 63 ? 'required|money-1' : ''}`"
                         >
-                          <div class="d-flex align-items-center justify-content-start">
+                          <div class="d-flex align-items-center justify-content-center">
                             <money
                               v-model.lazy="businessCreditS"
                               v-bind="vMoney"
-                              class="text-center w-75 rounded-pill"
+                              class="text-center w-75 form-control"
                               :disabled="option !== 63 || isModalShow"
                               :class="{'border border-danger':errors[0] && validateMoney}"
                               @keyup.native="addPrice(businessCreditS)"
@@ -74,11 +80,11 @@
                           v-slot="{errors}"
                           :rules="`${ option == 34? 'required|money-1' : ''}`"
                         >
-                          <div class="d-flex align-items-center justify-content-start">
+                          <div class="d-flex align-items-center justify-content-center">
                             <money
                               v-model.lazy="otherTotalS"
                               v-bind="vMoney"
-                              class="input-money text-center w-75 rounded-pill"
+                              class="input-money text-center w-75 form-control"
                               :class="{'border border-danger':errors[0] && validateMoney}"
                               disabled
                             />
@@ -431,7 +437,7 @@ export default {
       vMoney: {
         decimal: '.',
         thousands: ',',
-        prefix: '',
+        prefix: '$  ',
         precision: 2,
         masked: false,
       },
@@ -443,6 +449,7 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
+      skin: 'appConfig/skin',
     }),
     isModalShow() {
       return this.typeModal === 2 || this.typeModal === 5

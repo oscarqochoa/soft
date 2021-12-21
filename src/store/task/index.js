@@ -7,8 +7,10 @@ const state = {
   S_TASKS: [],
   S_HISTORY_TASKS: [],
   S_TASK: {},
+  S_TASK_COUNTER: {overdue: 0, today: 0, upcoming: 0, done: 0}
 }
 const getters = {
+  taskCounter: state => state.S_TASK_COUNTER.overdue+state.S_TASK_COUNTER.today+state.S_TASK_COUNTER.upcoming,
 }
 const mutations = {
   SET_DATA (state, params) {
@@ -56,6 +58,19 @@ const actions = {
       return response
     } catch (error) {
       console.log('ERROR_GET_LEAD_HISTORY_TASKS [ACTION]', error)
+      throw error
+    }
+  },
+  async A_GET_TASK_COUNTER ({ commit }, body) {
+    try {
+      const response = await TaskService.getTaskCounter(body)
+      if (mixins.methods.isResponseSuccess(response))
+        commit('SET_DATA', {
+          destination: 'S_TASK_COUNTER',
+          data: response.data
+        })
+      return response
+    } catch (error) {
       throw error
     }
   },

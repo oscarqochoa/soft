@@ -8,7 +8,7 @@
     }"
   >
     <b-link v-bind="linkProps" class="d-flex align-items-center">
-      <custom-feather-icons :icon="item.icon || 'CircleIcon'" />
+      <amg-icon :icon="item.icon || 'CircleIcon'" />
       <span class="menu-title text-truncate">{{ t(item.title) }}</span>
       <b-badge
         v-if="item.tag"

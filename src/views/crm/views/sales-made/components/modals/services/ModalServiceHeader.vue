@@ -5,37 +5,23 @@
       @click="close"
     />
     <b-container fluid>
-      <b-row class="text-left">
-        <h3 class="font-weight-bold">
+        <b-row class="text-left bg-primary px-1 py-1">
+        <h3 class="font-weight-bolder text-white">
           {{ titleModal }}
         </h3>
       </b-row>
       <b-row class="mt-1">
-        <b-col v-if="!modalAddShow && !modalAddLead">
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                PROGRAM
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="sales.program"
-            />
-          </b-input-group>
+        <b-col v-if="!modalAddShow && !modalAddLead" cols="3">
+          <h5>Program</h5>
+          <p class="border-2 border-primary rounded text-primary text-center py-1">
+            {{ sales.program }}
+          </p>
         </b-col>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                CLIENT
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="sales.client"
-            />
-          </b-input-group>
+        <b-col cols="3">
+          <h5>Client</h5>
+          <p class="border-2 border-primary rounded text-primary text-center py-1">
+            {{ sales.client }}
+          </p>
         </b-col>
       </b-row>
       <b-row class="mt-1" v-if="modalAddShow">
