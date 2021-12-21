@@ -61,9 +61,6 @@
         </b-button>
       </b-button-group>
     </template>
-    <!-- <div class="card-header card-title p-0">
-      
-    </div> -->
     <b-row>
       <b-col cols="12">
         <table class="mt-2 mt-xl-0 w-100">

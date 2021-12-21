@@ -182,7 +182,7 @@
       modal-class="modal-primary"
       centered
       size="lg"
-      :title="`ALL TASKS -- ${ nameModule }`"
+      :title="`ALL TASKS - ${ nameModule }`"
       hide-footer
       no-close-on-backdrop
     >
