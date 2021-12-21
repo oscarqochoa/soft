@@ -2,13 +2,18 @@
   <div>
     <b-modal
       v-model="modalUp"
-      title-class="h2 text-light"
       size="lg"
-      title="Boost Credit Note"
+      header-class="p-0"
+      header-bg-variant="transparent"
+      footer-bg-variant
       @hidden="hideModal()"
+      scrollable
     >
+      <template #modal-header>
+        <HeaderModalNotes @close="hideModal" program="Boost Credit" :info="info" />
+      </template>
       <ValidationObserver ref="form">
-        <b-row>
+        <b-row class="mt-1 px-1">
           <b-col lg="4">
             <ValidationProvider name="identification" rules="required" v-slot="{errors}">
               <b-form-group label="Type of identification Number" label-class="font-weight-bolder">
@@ -22,6 +27,35 @@
             </ValidationProvider>
           </b-col>
           <b-col lg="4">
+            <ValidationProvider name="Another" rules="required" v-slot="{errors}">
+              <b-form-group
+                label-class="font-weight-bolder"
+                label="Did you use another SSN or ITIN?"
+              >
+                <b-form-radio-group
+                  v-model="note.another"
+                  :options="anotherOptions"
+                  :class="{'border border-danger rounded': errors[0]}"
+                  name="Another"
+                ></b-form-radio-group>
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+          <b-col lg="4">
+            <ValidationProvider name="Pending" rules="required" v-slot="{errors}">
+              <b-form-group label-class="font-weight-bolder" label=" Pending">
+                <b-form-checkbox-group
+                  v-model="note.pending"
+                  :options="pendingOptions"
+                  :class="{'border border-danger rounded': errors[0]}"
+                  name="Pending"
+                ></b-form-checkbox-group>
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+        </b-row>
+        <b-row class="mt-1 px-1">
+          <b-col lg="4">
             <ValidationProvider name="agreement" rules="required" v-slot="{errors}">
               <b-form-group label-class="font-weight-bolder" label="Type of Agreement">
                 <b-form-radio-group
@@ -34,20 +68,6 @@
             </ValidationProvider>
           </b-col>
           <b-col lg="4">
-            <ValidationProvider name="Work" rules="required" v-slot="{errors}">
-              <b-form-group label-class="font-weight-bolder" label="Work Status" label-for="work">
-                <b-form-input
-                  id="work"
-                  v-model="note.work"
-                  type="text"
-                  :state="errors[0] ? false :  null"
-                />
-              </b-form-group>
-            </ValidationProvider>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col lg="4">
             <ValidationProvider name="Credit" rules="required" v-slot="{errors}">
               <b-form-group label-class="font-weight-bolder" label="Credit">
                 <b-form-radio-group
@@ -59,7 +79,21 @@
               </b-form-group>
             </ValidationProvider>
           </b-col>
-          <b-col lg="3">
+        </b-row>
+        <b-row class="mt-1 px-1">
+          <b-col lg="4">
+            <ValidationProvider name="Work" rules="required" v-slot="{errors}">
+              <b-form-group label-class="font-weight-bolder" label="Work Status" label-for="work">
+                <b-form-input
+                  id="work"
+                  v-model="note.work"
+                  type="text"
+                  :state="errors[0] ? false :  null"
+                />
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+          <b-col lg="4">
             <ValidationProvider name="Hours" rules="required" v-slot="{errors}">
               <b-form-group
                 label-class="font-weight-bolder"
@@ -75,7 +109,7 @@
               </b-form-group>
             </ValidationProvider>
           </b-col>
-          <b-col lg="5">
+          <b-col lg="4">
             <ValidationProvider name="TypeDays" rules="required" v-slot="{errors}">
               <b-form-group
                 label-class="font-weight-bolder"
@@ -95,8 +129,7 @@
             </ValidationProvider>
           </b-col>
         </b-row>
-
-        <b-row>
+        <b-row class="mt-1 px-1">
           <b-col lg="6">
             <ValidationProvider name="TypGoal" rules="required" v-slot="{errors}">
               <b-form-group label-class="font-weight-bolder" label="Goal" label-for="TypGoal">
@@ -112,31 +145,77 @@
               </b-form-group>
             </ValidationProvider>
           </b-col>
-          <b-col lg="3">
-            <ValidationProvider name="Another" rules="required" v-slot="{errors}">
+          <b-col lg="6">
+            <ValidationProvider name="OriginCountry" rules="required" v-slot="{errors}">
               <b-form-group
                 label-class="font-weight-bolder"
-                label="Did you use another SSN or ITIN?"
+                label="Origin Country"
+                label-for="OriginCountry"
               >
-                <b-form-radio-group
-                  v-model="note.another"
-                  :options="anotherOptions"
-                  :class="{'border border-danger rounded': errors[0]}"
-                  name="Another"
-                ></b-form-radio-group>
+                <v-select
+                  v-model="note.originCountry"
+                  :dir="'ltr'"
+                  transition="multiple"
+                  label="name"
+                  :options="countryOptions"
+                  :class="{'border-danger rounded': errors[0]}"
+                />
               </b-form-group>
             </ValidationProvider>
           </b-col>
-          <b-col lg="3">
-            <ValidationProvider name="Pending" rules="required" v-slot="{errors}">
-              <b-form-group label-class="font-weight-bolder" label=" Pending">
-                <b-form-checkbox-group
-                  v-model="note.pending"
-                  :options="pendingOptions"
-                  :class="{'border border-danger rounded': errors[0]}"
-                  name="Pending"
-                  stacked
-                ></b-form-checkbox-group>
+        </b-row>
+
+        <b-row class="mt-1 px-1">
+          <b-col lg="12">
+            <ValidationProvider name="Inconvenience" rules="required" v-slot="{errors}">
+              <b-form-group
+                label-class="font-weight-bolder"
+                label="Inconvenience"
+                label-for="Inconvenience"
+              >
+                <b-form-textarea
+                  no-resize
+                  v-model="note.inconvenience"
+                  rows="3"
+                  :state="errors[0] ? false :  null"
+                />
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+        </b-row>
+
+        <b-row class="mt-1 px-1">
+          <b-col lg="12">
+            <ValidationProvider name="Information" rules="required" v-slot="{errors}">
+              <b-form-group
+                label-class="font-weight-bolder"
+                label="Information"
+                label-for="Information"
+              >
+                <b-form-textarea
+                  no-resize
+                  v-model="note.information"
+                  rows="3"
+                  :state="errors[0] ? false :  null"
+                />
+              </b-form-group>
+            </ValidationProvider>
+          </b-col>
+        </b-row>
+        <b-row class="mt-1 px-1">
+          <b-col lg="12">
+            <ValidationProvider name="Recommendations" rules="required" v-slot="{errors}">
+              <b-form-group
+                label-class="font-weight-bolder"
+                label="Recommendations"
+                label-for="Recommendations"
+              >
+                <b-form-textarea
+                  no-resize
+                  v-model="note.recommendations"
+                  rows="3"
+                  :state="errors[0] ? false :  null"
+                />
               </b-form-group>
             </ValidationProvider>
           </b-col>
@@ -156,13 +235,16 @@
 import { mapGetters, mapMutations } from "vuex";
 import vSelect from "vue-select";
 import NotesServices from "@/views/commons/components/first-notes/services/notes.service";
+import HeaderModalNotes from "./HeaderModalNotes.vue";
+import GlobalService from "@/views/services/global.service";
 export default {
   name: "ModalNotesBoost",
   components: {
-    vSelect
+    vSelect,
+    HeaderModalNotes
   },
   props: {
-    salesNotes: {
+    info: {
       type: Object,
       required: true,
       default: () => ({})
@@ -170,13 +252,16 @@ export default {
   },
   created() {
     this.getListTypeGoal();
+    this.getCountrys();
   },
   mounted() {
     this.modalUp = true;
+    console.log(this.info);
   },
   data() {
     return {
       modalUp: false,
+      disabledForm: false,
       note: {
         identification: null,
         typeAgreement: null,
@@ -192,11 +277,11 @@ export default {
         information: null,
         recommendations: null,
         file: null,
-        file_name: null,
-        disablebutton: {
-          save: false,
-          update: false
-        }
+        file_name: null
+      },
+      disablebutton: {
+        save: false,
+        update: false
       },
       identificationOptions: [
         {
@@ -269,7 +354,8 @@ export default {
           text: "OTHER",
           value: "3"
         }
-      ]
+      ],
+      countryOptions: []
     };
   },
   computed: {
@@ -277,7 +363,8 @@ export default {
       bigWindow: "app/bigWindow",
       currentUser: "auth/currentUser",
       moduleId: "auth/moduleId",
-      userSession: "auth/userSession"
+      userSession: "auth/userSession",
+      skin: "appConfig/skin"
     })
   },
   methods: {
@@ -292,13 +379,21 @@ export default {
       const validate = await this.$refs.form.validate();
     },
     hideModal() {
-      this.modalUp = false;
       this.$emit("hide");
+      this.modalUp = false;
     },
     async getListTypeGoal() {
       try {
         const response = await NotesServices.getListTypeGoal();
         this.goalOptions = response;
+      } catch (error) {
+        this.showErrorSwal();
+      }
+    },
+    async getCountrys() {
+      try {
+        const response = await GlobalService.getCountrys();
+        this.countryOptions = response;
       } catch (error) {
         this.showErrorSwal();
       }
