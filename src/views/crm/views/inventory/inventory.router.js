@@ -3,6 +3,10 @@ export default [
         path: '/inventory',
         name: 'inventory-crm',
         component: () => import("@/commons/components/inventory/InventoryMain.vue"),
+        meta:{
+            isClientsTab: true,
+            module: 2,
+        },
         children: [
             {
                 path: '',
