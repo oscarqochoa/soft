@@ -495,11 +495,12 @@
         <template #cell(approved)="data">
           <span class="font-weight-bold text-info">{{ data.item.approved | myGlobal }}</span>
         </template>
-        <template #cell(sms)="data">
+        <template #cell(sms)>
           <b-icon
             icon="chat-text-fill"
             variant="primary"
           />
+        </template>
         <template #cell(url)="data">
           <b-icon
             v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.role_id == 1 || currentUser.role_id == 2)"
