@@ -65,7 +65,7 @@ $borderamg: #efb911;
   .b-icon {
     vertical-align: initial !important;
     width: 14px;
-    height: 14px
+    height: 14px;
   }
 }
 
@@ -182,5 +182,10 @@ $borderamg: #efb911;
       padding: 2px 5px;
       margin-right: 10px;
     }
+  }
+
+  //Button x
+  .x-close-position {
+    transform: translate(-12px, 4px) !important;
   }
 }
