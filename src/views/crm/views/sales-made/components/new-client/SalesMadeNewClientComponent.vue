@@ -272,7 +272,7 @@
               (data.item.notes_status_new == null) ? 'muted':
               (data.item.notes_status_new == 0) ? 'success' :
               'warning' "
-            @click="openNotesModal(data.item)"
+            @click="notesModal(data.item)"
           />
           <b-icon
             v-else
@@ -280,7 +280,7 @@
             class="cursor-pointer"
             :variant="
               (data.item.notes_status === 0) ? 'muted': 'success' "
-            @click="openNotesModal(data.item.id)"
+            @click="notesModal(data.item)"
           />
         </template>
         <template v-slot:cell(trackings)="data">
@@ -525,15 +525,21 @@
       @click="$refs['new-client-done-table'].refresh(); modal.revission = false"
       @response="$refs['new-client-done-table'].refresh(); modal.revission = false"
     />
-    <ModalNotesBoost v-if="modal.notes" @hide="closeModalNotes" :sales-notes="modalData.notes" />
+
+    <!-- NOTES -->
+    <component
+      v-if="modal.notes"
+      @hide="closeModalNotes"
+      :noteInfo="modalData.notes"
+      :is="modalData.notes.programSelected"
+    />
+
     <url-modal v-if="modal.url" :modal="modal" :url="modalData.url" />
     <contract-fee-modal
       v-if="modal.contract_fee"
       :modal="modal"
       :contract-fee="modalData.contractFee"
     />
-    <url-modal v-if="modal.url" :modal="modal" :url="modalData.url" />
-    <ModalNotesBoost v-if="modal.notes" @hide="closeModalNotes" :info="modalData.notes" />>>>>>>> NicoDev
   </div>
 </template>
 
@@ -563,6 +569,8 @@ import UrlModal from "@/views/crm/views/sales-made/components/modals/UrlModal.vu
 import { amgApi } from "@/service/axios";
 import ContractFeeModal from "@/views/crm/views/sales-made/components/modals/ContractFeeModal";
 
+import ModalNotesBoost from "@/views/commons/components/first-notes/ModalNotesBoost.vue";
+
 export default {
   name: "SalesMadeNewComponent",
   components: {
@@ -583,7 +591,8 @@ export default {
     ParagonModal,
     SpecialistModal,
     TaxResearchModal,
-    DebtSolutionModal
+    DebtSolutionModal,
+    ModalNotesBoost
   },
   props: {
     done: {
@@ -620,7 +629,8 @@ export default {
         programs: false,
         revission: false,
         url: false,
-        contract_fee: false
+        contract_fee: false,
+        notes: false
       },
       modalData: {
         url: {
@@ -674,14 +684,15 @@ export default {
           id: null
         },
         notes: {
-          roleId: this.G_USER_ROLE,
+          programSelected: "",
+          roleId: null,
           notesProgram: null,
           nameProgram: null,
           nameClient: null,
           salesMades: null,
-          module: this.G_USER_SESSION,
+          module: null,
           type: null,
-          editModal: null,
+          editModal: false,
           statusSale: null,
           sourcesName: null,
           pack: null,
@@ -691,7 +702,9 @@ export default {
           notSeller: null,
           capturedName: null,
           sellerName: null,
-          trackings: null
+          trackings: null,
+          notes_status: null,
+          notes_status_new: null
         }
       },
       selectAll: false
@@ -711,26 +724,38 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
       G_IS_SUPERVISOR: "auth/isSupervisor",
+      G_IS_SELLER: "auth/isSeller",
       G_IS_CEO: "auth/isCeo",
       G_MODULE_ID: "auth/moduleId",
       G_USER_ROLE: "auth/userRole",
-      G_USER_SESSION: "auth/userSession"
+      G_USER_SESSION: "auth/userSession",
+      G_ROLE_ID: "auth/roleId"
     }),
     filteredFields() {
       if (this.done === 0) return this.fields;
       return this.fields.filter(field => field.key !== "done");
-    },
-    isSeller() {
-      return this.G_USER_ROLE == 5;
     }
+  },
+  mounted() {
+    console.log(this.G_MODULE_ID);
+    console.log(this.G_ROLE_ID);
+    console.log(this.currentUser.role_id);
+    console.log(this.G_IS_CEO);
   },
   async created() {
     try {
-      await this.$store.dispatch("crm-store/getSellers");
+      await Promise.all([
+        this.$store.dispatch("crm-store/getSellers"),
+        this.$store.dispatch("crm-store/getCaptured"),
+        this.$store.dispatch("crm-store/getPrograms"),
+        this.$store.dispatch("crm-store/getSources"),
+        this.$store.dispatch("crm-store/getStates")
+      ]);
+      /* await this.$store.dispatch("crm-store/getSellers");
       await this.$store.dispatch("crm-store/getCaptured");
       await this.$store.dispatch("crm-store/getPrograms");
       await this.$store.dispatch("crm-store/getSources");
-      await this.$store.dispatch("crm-store/getStates");
+      await this.$store.dispatch("crm-store/getStates"); */
       this.filter[2].options = this.captured;
       this.filter[3].options = this.sellers;
       this.filter[4].options = this.sources;
@@ -819,7 +844,7 @@ export default {
     },
 
     //Notes
-    async openNotesModal(data) {
+    async notesModal(data) {
       this.modalData.notes.capturedName = data.captured;
       this.modalData.notes.sellerName = data.seller;
       this.modalData.notes.trackings = data.trackings;
@@ -832,16 +857,62 @@ export default {
       this.modalData.notes.idLead = data.lead_id;
       this.modalData.notes.created = data.creates;
       this.modalData.notes.saleId = data.id;
+      this.modalData.notes.module = this.G_MODULE_ID;
+      this.modalData.notes.rolId = this.G_ROLE_ID;
+      this.modalData.notes.notes_status = data.notes_status;
+      this.modalData.notes.notes_status_new = data.notes_status_new;
+      this.modalData.notes.editModal =
+        this.G_IS_CEO ||
+        this.G_IS_SUPERVISOR ||
+        this.G_USER_SESSION == data.user_id;
       this.modalData.notes.notSeller =
-        data.user_id != this.G_USER_SESSION && this.isSeller;
+        data.user_id != this.G_USER_SESSION && this.G_IS_SELLER;
 
-      this.modal.notes = true;
+      this.openModalNotes(data.creates, data.program_id);
 
       /*  this.modalData.notes.notesProgram =
           this.modalData.notes.salesMades =
-          this.modalData.notes.type =
-          this.modalData.notes.editModal =
-          this.modalData.notes.created = */
+          this.modalData.notes.type =*/
+    },
+    openModalNotes(created, program) {
+      switch (true) {
+        case created >= "2020-05-28" && program == 1:
+          this.modalData.notes.programSelected = "ModalNotesFirst";
+          break;
+        case created >= "2020-10-29" && program == 2:
+          this.modalData.notes.programSelected = "ModalNotesBoost";
+          break;
+        case created >= "2021-03-04" && program == 3:
+          this.modalData.notes.programSelected = "ModalNotesCredit";
+          break;
+        case created >= "2020-09-24" && program == 5:
+          this.modalData.notes.programSelected = "ModalNotesTax";
+          break;
+        case created >= "2020-10-23" && program == 7:
+          this.modalData.notes.programSelected = "ModalNotesSpecialist";
+          break;
+        case program == 9:
+          this.modalData.notes.programSelected = "ModalNotesParagon";
+          break;
+        default:
+          this.modalData.notes.programSelected = "ModalNotesOld";
+          break;
+      }
+
+      this.modal.notes = true;
+    },
+
+    onAudioChange(e) {
+      var file = e.target.files[0];
+      var reader = new FileReader();
+      reader.onload = event => {
+        // El texto del archivo se mostrará por consola aquí
+        console.log(event.target.result);
+        this.file_audio = event.target.result;
+      };
+
+      reader.readAsDataURL(file);
+      this.audiolisto = true;
     },
     closeModalNotes() {
       this.modal.notes = false;
