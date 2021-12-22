@@ -403,13 +403,13 @@ export default {
             }
           }).catch(error => {
             console.log('Something went wrong onSubmit', error)
-            this.showErroSwal()
+            this.showErrorSwal()
             this.isLoading = false
           })
         }
       } catch (error) {
         console.log('Something went wrong onSubmit', error)
-        this.showErroSwal()
+        this.showErrorSwal()
         this.isLoading = false
       }
     },

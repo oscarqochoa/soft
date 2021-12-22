@@ -1,5 +1,8 @@
 <template>
-  <b-card title="PAYMENTS">
+  <b-card>
+    <template #header>
+      <b-card-title>Payments</b-card-title>
+    </template>
     <b-row>
       <b-col cols="12" sm="6" md="3">
         <card-lead-payment-section
@@ -9,7 +12,7 @@
           :is-busy="isBusyRealtor"
           :method="10"
           :is-loading="isLoading"
-          @onSubmit="onSubmit($event, 10)"
+          @onSubmit="onSubmit"
         />
       </b-col>
       <b-col cols="12" sm="6" md="3">
@@ -20,7 +23,7 @@
           :is-busy="isBusyRealtor"
           :method="41"
           :is-loading="isLoading"
-          @onSubmit="onSubmit($event, '')"
+          @onSubmit="onSubmit"
         />
       </b-col>
       <b-col cols="12" sm="6" md="3">
@@ -31,7 +34,7 @@
           :is-busy="isBusyRealtor"
           :method="42"
           :is-loading="isLoading"
-          @onSubmit="onSubmit($event, '')"
+          @onSubmit="onSubmit"
         />
       </b-col>
       <b-col cols="12" sm="6" md="3">
@@ -42,7 +45,7 @@
           :is-busy="isBusyRealtor"
           :method="12"
           :is-loading="isLoading"
-          @onSubmit="onSubmit($event, '')"
+          @onSubmit="onSubmit"
         />
       </b-col>
     </b-row>
@@ -90,11 +93,12 @@ export default {
     ...mapActions({
       A_LEAD_PAYMENT: 'CrmLeadStore/A_LEAD_PAYMENT'
     }),
-    async onSubmit () {
+    async onSubmit (item) {
       this.showConfirmSwal()
       .then(async result => {
         if (result.value) {
           this.isLoading = true
+          item.amount = item.amount.replaceAll(',', '')
           item.lead_id = this.lead.id
           item.user_id = this.authUser.user_id
           const response = await this.A_LEAD_PAYMENT(item)
@@ -106,7 +110,8 @@ export default {
         }
       }).catch(error => {
         console.log('Something went wrong onSubmit', error)
-        this.showErroSwal()
+        this.showErrorSwal()
+        this.isLoading = false
       })
     }
   },
