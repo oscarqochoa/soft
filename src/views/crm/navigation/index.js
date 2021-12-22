@@ -7,6 +7,7 @@ import leadNav from '../views/Lead/lead.nav'
 import ListsNavigation from '../views/lists/lists.nav'
 import GlossaryNavigation from '../views/glossary/glossary.nav'
 import InventoryNavigation from '../views/inventory/inventory.nav'
+import NcrNavigation from '../views/ncr/ncr.nav'
 export default [
 
   {
@@ -26,6 +27,7 @@ export default [
   ListsNavigation,
   GlossaryNavigation,
   InventoryNavigation,
+  NcrNavigation,
 
 ]
     

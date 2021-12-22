@@ -8,6 +8,7 @@ import PaymentsRoute from '../views/payments/payments.router'
 import ListsRoute from '../views/lists/lists.router'
 import GlossaryRoute from '../views/glossary/glossary.router'
 import InventoryRouter from '../views/inventory/inventory.router'
+import NcrRouter from '../views/ncr/ncr.router'
 export default [
   ...viewRoute,
   ...leadRoute,
@@ -19,6 +20,7 @@ export default [
   ...ListsRoute,
   ...GlossaryRoute,
   ...InventoryRouter,
+  ...NcrRouter,
 ]
 
 
