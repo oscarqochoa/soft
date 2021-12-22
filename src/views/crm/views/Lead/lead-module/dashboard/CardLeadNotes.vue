@@ -20,7 +20,7 @@
                 <b-form-textarea
                   v-model="note.text"
                   id="text"
-                  rows="7"
+                  rows="11"
                   :disabled="isDisabled || onlyRead"
                   :state="getValidationState(validationContext)"
                 />

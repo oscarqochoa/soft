@@ -106,6 +106,7 @@
 
     <b-card-footer class="text-right">
       <b-button
+        v-if="modul === 15"
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
         variant="outline-danger"
         @click="$bvModal.show('modal-upload-file')"
@@ -119,6 +120,7 @@
     </b-card-footer>
 
     <b-modal
+      v-if="modul === 15"
       id="modal-upload-file"
       title="Upload File"
       modal-class="modal-primary"
@@ -180,7 +182,7 @@ export default {
       fields: [
         { key: 'file_name' },
         { key: 'created_by' },
-        { key: 'actions' },
+        (this.modul === 15) ? { key: 'actions' } : null,
       ],
       files: [],
       isBusy: false,
@@ -299,10 +301,6 @@ export default {
   props: {
     modul: {
       type: Number,
-      required: true
-    },
-    onlyRead: {
-      type: Boolean,
       required: true
     },
     lead: {

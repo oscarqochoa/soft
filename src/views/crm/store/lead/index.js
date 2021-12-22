@@ -309,6 +309,16 @@ const actions = {
       throw error
     }
   },
+  async A_LEAD_PAYMENT ({ commit }, body) {
+    try {
+      const response = await crmLead.postLeadPayment(body)
+      console.log('A_LEAD_PAYMENT response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_LEAD_PAYMENT [ACTION]', error)
+      throw error
+    }
+  },
 }
 export default {
   namespaced: true,
