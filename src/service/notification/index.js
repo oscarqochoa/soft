@@ -17,6 +17,14 @@ class NotificationService {
       throw error
     }
   }
+  async updateNotification (body) {
+    try {
+      const data = await amgApi.post('/updatenotif', body)
+      return data.data;
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default new NotificationService()

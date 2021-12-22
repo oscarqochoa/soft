@@ -69,7 +69,7 @@
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import Ripple from "vue-ripple-directive";
-import { mapGetters, mapActions, mapState } from "vuex";
+import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
 import NotificationList from './components/notifications/NotificationList.vue';
 export default {
   mounted() {
@@ -104,6 +104,9 @@ export default {
     ...mapActions({
       A_GET_NOTIFICATIONS: "NotificationStore/A_GET_NOTIFICATIONS",
     }),
+    ...mapMutations({
+      DECREASE_NOTIFICATION_COUNTER: "NotificationStore/DECREASE_NOTIFICATION_COUNTER",
+    })
   },
 };
 </script>

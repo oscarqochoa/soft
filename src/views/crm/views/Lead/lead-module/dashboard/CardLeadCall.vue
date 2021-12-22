@@ -1,6 +1,6 @@
 <template>
   <b-card>
-    <div class="card-header card-title p-0">
+    <template #header>
       <b-card-title>CALL</b-card-title>
       <b-button-group class="btn-group-sm">
         <b-button
@@ -40,7 +40,7 @@
           <b-spinner v-else small/>
         </b-button>
       </b-button-group>
-    </div>
+    </template>
     <b-table
       show-empty
       sticky-header

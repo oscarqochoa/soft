@@ -120,6 +120,55 @@ class CrmLead {
     }
   }
 
+  async postSearchFileLead (body) {
+    try {
+      const data = await amgApi.post('/search-file-lead-sn', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postFileNameLead (body) {
+    try {
+      const data = await amgApi.post('/update-file-name', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postFileLead (body) {
+    try {
+      const data = await amgApi.post('/upload-file-lead-sn', body, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async deleteFileLead (body) {
+    try {
+      const data = await amgApi.post('/delete-file-sn', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postLeadPayment (body) {
+    try {
+      const data = await amgApi.post('/leadpayment', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
 }
 
 export default new CrmLead()

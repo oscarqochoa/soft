@@ -1,54 +1,151 @@
 <template>
-  <b-list-group>
-    <!-- :class="[ 'flex-column', 'align-items-start', notification.status == 1 ?
-    'list-group-item-selected' : '', ]" -->
-    <b-list-group-item
-      v-for="notification in S_ALL_USER_NOTIFICATIONS"
-      :key="notification.id"
-      :disabled="notification.status == 1"
-    >
-      <div class="d-flex w-100 justify-content-between">
-        <b-media no-body>
-          <b-media-aside class="mr-2">
-            <b-avatar size="30" variant="light-primary">
-              <feather-icon size="15" icon="XIcon" />
-            </b-avatar>
-          </b-media-aside>
-          <b-media-body class="my-auto">
-            <h5 class="font-weight-bold mb-0">
-              {{ notification.notification }}
-            </h5>
-          </b-media-body>
-        </b-media>
-        <!-- <div class="d-flex justify-content-between align-items-center">
-          <b-avatar size="30" variant="light-primary">
-            <feather-icon size="15" icon="XIcon" />
-          </b-avatar>
-          <span
-            ><h5 class="mb-1">{{ notification.notification }}</h5></span
+  <div>
+    <b-list-group>
+      <template v-if="!loading">
+        <b-list-group-item
+          v-for="notification in S_ALL_USER_NOTIFICATIONS"
+          :key="notification.id"
+          :disabled="notification.status == 1"
+          class="cursor-pointer"
+          @click="
+            notification.status == 1 ? null : updateNotification(notification)
+          "
+        >
+          <div class="d-flex w-100 justify-content-between">
+            <b-media no-body>
+              <b-media-aside class="mr-2">
+                <b-avatar
+                  size="30"
+                  :variant="
+                    notification.status == 1 ? 'light-primary' : 'primary'
+                  "
+                >
+                  <amg-icon
+                    size="15"
+                    :icon="
+                      notification.type == 0
+                        ? 'ClipboardIcon'
+                        : notification.type == 1
+                        ? 'PhoneIcon'
+                        : notification.type == 2
+                        ? 'DollarSignIcon'
+                        : notification.type == 3
+                        ? 'FileTextIcon'
+                        : 'PhoneForwardedIcon'
+                    "
+                  />
+                </b-avatar>
+              </b-media-aside>
+              <b-media-body
+                class="my-auto"
+                @click.stop="$log(notification, 'notification')"
+              >
+                <b-link
+                  :class="[
+                    'font-weight-bold mb-0 h5',
+                    notification.status == 0 ? (skin=='dark'?'text-light':'text-dark') : '',
+                  ]"
+                  class="d-flex"
+                >
+                  <p v-html="notification.notification"></p>
+                  <amg-icon
+                    style="margin-left: 4px;margin-top: 3px;"
+                    icon="ExternalLinkIcon"
+                  ></amg-icon>
+                </b-link>
+              </b-media-body>
+            </b-media>
+            <small>{{ notification.created_at | myDateGlobal }}</small>
+          </div>
+        </b-list-group-item>
+      </template>
+      <template v-else>
+        <b-list-group-item
+          :key="notification.id"
+          v-for="notification in S_ALL_USER_NOTIFICATIONS.length"
+        >
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <b-media no-body class="w-100">
+              <b-media-aside class="mr-2" width="100%">
+                <b-skeleton type="avatar" size="30px"></b-skeleton>
+              </b-media-aside>
+              <b-media-body class="my-auto" >
+                <b-skeleton style="margin-top: 9px;"></b-skeleton>
+              </b-media-body>
+            </b-media>
+            <small></small>
+          </div>
+        </b-list-group-item>
+      </template>
+    </b-list-group>
+    <div class="mx-2 mb-2 mt-2">
+      <b-row>
+        <b-col
+          cols="12"
+          sm="6"
+          class="
+            d-flex
+            align-items-center
+            justify-content-center justify-content-sm-start
+          "
+        >
+          <span class="text-muted">
+            Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries
+          </span>
+        </b-col>
+        <!-- Pagination -->
+        <b-col
+          cols="12"
+          sm="6"
+          class="
+            d-flex
+            align-items-center
+            justify-content-center justify-content-sm-end
+          "
+        >
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalData"
+            :per-page="perPage"
+            first-number
+            last-number
+            class="mb-0 mt-1 mt-sm-0"
+            prev-class="prev-item"
+            next-class="next-item"
           >
-        </div> -->
-        <small>{{ notification.created_at | myDateGlobal }}</small>
-      </div>
-      <!-- <b-card-text class="mb-1">
-        Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget
-        risus varius blandit.
-      </b-card-text> -->
-    </b-list-group-item>
-  </b-list-group>
+            <template #prev-text>
+              <feather-icon icon="ChevronLeftIcon" size="18" />
+            </template>
+            <template #next-text>
+              <feather-icon icon="ChevronRightIcon" size="18" />
+            </template>
+          </b-pagination>
+        </b-col>
+      </b-row>
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 export default {
-  mounted() {
-    this.A_GET_ALL_USER_NOTIFICATIONS({
-      id: this.currentUser.user_id,
-    });
+  async mounted() {
+    await this.getAllUserNotifications();
+  },
+  data() {
+    return {
+      currentPage: 1,
+      perPage: 7,
+      totalData: 0,
+      startPage: 0,
+      toPage: 0,
+      loading: false,
+    };
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
+      skin: "appConfig/skin"
     }),
     ...mapState({
       S_ALL_USER_NOTIFICATIONS: (state) =>
@@ -59,7 +156,45 @@ export default {
     ...mapActions({
       A_GET_ALL_USER_NOTIFICATIONS:
         "NotificationStore/A_GET_ALL_USER_NOTIFICATIONS",
+      A_UPDATE_NOTIFICATION: "NotificationStore/A_UPDATE_NOTIFICATION",
     }),
+    ...mapMutations({
+      DECREASE_NOTIFICATION_COUNTER: "NotificationStore/DECREASE_NOTIFICATION_COUNTER",
+    }),
+    async getAllUserNotifications(page = 1) {
+      this.loading = true;
+      try {
+        const data = await this.A_GET_ALL_USER_NOTIFICATIONS({
+          id: this.currentUser.user_id,
+          page,
+        });
+        this.currentPage = data.current_page;
+        this.perPage = data.per_page;
+        this.totalData = data.total;
+        this.startPage = data.from;
+        this.toPage = data.to;
+        this.loading = false
+      } catch (error) {
+        console.log(error);
+        this.loading = false
+      }
+    },
+    async updateNotification(notification) {
+      try {
+        await this.A_UPDATE_NOTIFICATION({
+          id: notification.id,
+        });
+        notification.status = 1;
+        this.DECREASE_NOTIFICATION_COUNTER();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  watch: {
+    currentPage(newVal, oldVal) {
+      this.getAllUserNotifications(newVal);
+    },
   },
 };
 </script>

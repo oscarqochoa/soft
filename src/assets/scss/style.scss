@@ -65,7 +65,7 @@ $borderamg: #efb911;
   .b-icon {
     vertical-align: initial !important;
     width: 14px;
-    height: 14px
+    height: 14px;
   }
 }
 
@@ -183,4 +183,25 @@ $borderamg: #efb911;
       margin-right: 10px;
     }
   }
+
+  //Button x
+  .x-close-position {
+    transform: translate(-12px, 4px) !important;
+  }
+}
+.dark-layout{
+  .modal-backdrop {
+    background-color: #0b1822 !important;
+  }
+}
+.modal-backdrop {
+  opacity: 85% !important;
+}
+
+
+//Modal XMD
+
+.modal .modal-xmd {
+  max-width: 1164px;
+  width: 1164px;
 }
