@@ -295,7 +295,7 @@ export default {
         this.isLoading = false
       }).catch(error => {
         console.log('Something went wrong onDoneTask', error)
-        this.showErroSwal(error)
+        this.showErrorSwal(error)
         this.isLoading = false
       })
     },
@@ -340,7 +340,7 @@ export default {
         this.isLoading = false
       }).catch (error => {
         console.log('Something went wrong onDeleteTask', error)
-        this.showErroSwal()
+        this.showErrorSwal()
         this.isLoading = false
       })
     },
@@ -365,7 +365,7 @@ export default {
         this.isLoading = false
       }).catch(error => {
         console.log('Something went wrong onMakeFavoriteTask', error)
-        this.showErroSwal()
+        this.showErrorSwal()
         this.isLoading = false
       })
     },

@@ -10,7 +10,7 @@
             <validation-provider
               #default="validationContext"
               :name="title"
-              rules="required"
+              :rules="title === 'Other' ? 'required' : null"
             >
               <b-form-group
                 :label="title"
@@ -42,7 +42,6 @@
               >
                 <b-form-input
                   id="amount"
-                  ref="amount"
                   v-model="item.amount"
                   :state="getValidationState(validationContext)"
                   @blur="refactorNumber"
@@ -73,8 +72,8 @@
           >
             <b-form-radio
               v-model="item.card"
-              :id="`yes-or-not-card-list${ data.index }`"
-              name="yes-or-not-card-list"
+              :id="`yes-or-not-card-list-${ method }-${ data.index }`"
+              :name="`yes-or-not-card-list-${ method }`"
               class="mt-0"
               :value="data.item.id"
             />
@@ -101,7 +100,7 @@
           :disabled="isLoading"
         >
           <span v-if="!isLoading">SUBMIT</span>
-          <b-spinner v-else />
+          <b-spinner v-else small />
         </b-button>
       </b-card-footer>
     </b-card>
@@ -165,23 +164,22 @@ export default {
       this.$refs.refFormObserver.reset()
     },
     refactorNumber () {
-      console.log('GSS', this.$refs.amount.value)
-      this.$refs.amount.value = this.globalFunction()
-      console.log('GSS2', this.$refs.amount.value)
+      this.item.amount = this.reformatToMoney()
     },
-    globalFunction () {
+    reformatToMoney () {
       const amount = this.item.amount
+      let number = '0.00'
       if (amount.indexOf('.') != -1) {
-        let numw = amount.replace(/,/gi, '')
-        let dec = numw.split('.')
-        let num = dec[0].split(/(?=(?:\d{3})+$)/).join(',')
-        num = num + '.' + dec[1]
+        let numberReplace = amount.replace(/,/gi, '')
+        const numberSplit = numberReplace.split('.')
+        number = numberSplit[0].split(/(?=(?:\d{3})+$)/).join(',')
+        number = number + '.' + numberSplit[1]
       } else {
-        let numw = amount.replace(/,/gi, '')
-        let num = numw.split(/(?=(?:\d{3})+$)/).join(',')
-        num = num + '.00'
+        let numberReplace = amount.replace(/,/gi, '')
+        number = numberReplace.split(/(?=(?:\d{3})+$)/).join(',')
+        number = number + '.00'
       }
-      return num
+      return number
     },
     async onSubmit () {
       if (await this.$refs.refFormObserver.validate())
