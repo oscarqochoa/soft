@@ -160,6 +160,15 @@ class CrmLead {
     }
   }
 
+  async postLeadPayment (body) {
+    try {
+      const data = await amgApi.post('/leadpayment', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
 }
 
 export default new CrmLead()

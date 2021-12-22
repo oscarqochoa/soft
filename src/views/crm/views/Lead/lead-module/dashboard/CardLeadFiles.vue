@@ -303,10 +303,6 @@ export default {
       type: Number,
       required: true
     },
-    onlyRead: {
-      type: Boolean,
-      required: true
-    },
     lead: {
       type: Object,
       required: true

@@ -65,6 +65,13 @@
       <card-lead-files
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"
+        :lead="S_LEAD"
+      />
+    </b-col>
+    <b-col cols="12">
+      <card-lead-payment
+        v-if="Object.keys(S_LEAD).length"
+        :modul="modul"
         :only-read="onlyRead"
         :lead="S_LEAD"
       />
@@ -83,6 +90,7 @@ import CardLeadCreditCard from './CardLeadCreditCard.vue'
 import CardLeadCreditReport from './CardLeadCreditReport.vue'
 import CardLeadFiles from './CardLeadFiles.vue'
 import CardLeadNotes from './CardLeadNotes.vue'
+import CardLeadPayment from './CardLeadPayment.vue'
 import CardLeadTask from './CardLeadTask.vue'
 
 export default {
@@ -94,6 +102,7 @@ export default {
     CardLeadCreditReport,
     CardLeadFiles,
     CardLeadNotes,
+    CardLeadPayment,
     CardLeadTask
   },
   props: {},
