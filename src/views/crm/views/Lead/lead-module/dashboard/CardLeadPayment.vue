@@ -1,5 +1,8 @@
 <template>
-  <b-card title="PAYMENTS">
+  <b-card>
+    <template #header>
+      <b-card-title>Payments</b-card-title>
+    </template>
     <b-row>
       <b-col cols="12" sm="6" md="3">
         <card-lead-payment-section

@@ -1,5 +1,8 @@
 <template>
-  <b-card title="CREDIT CARDS">
+  <b-card>
+    <template #header>
+      <b-card-title>Credit Cards</b-card-title>
+    </template>
     <b-table
       show-empty
       sticky-header
@@ -57,13 +60,9 @@
     <b-card-footer v-if="!onlyRead" class="text-right">
       <b-button
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="outline-primary"
+        variant="primary"
         @click="$bvModal.show('modal-card-create')"
       >
-        <feather-icon
-          icon="PlusIcon"
-          class="mr-50"
-        />
         <span class="align-middle">Add</span>
       </b-button>
     </b-card-footer>

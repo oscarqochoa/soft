@@ -2,24 +2,24 @@
   <b-card>
     <template #header>
       <b-card-title>
-        CLIENT&nbsp;&nbsp;&nbsp;
+        Client: &nbsp;
         <span>
           <a :href="leadName.url ? `*INTEGRATE*/${getModuleName(modul)}/leads/edit/${lead.id}` : '#'">
             {{ leadName.name }}
           </a>
         </span>
       </b-card-title>
-      <b-button-group>
+      <b-button-group class="btn-group-sm">
         <b-button
           v-if="lead.mobile != null"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           v-b-tooltip.hover.bottom="'Add To My List'"
-          variant="outline-important"
+          variant="default"
           class="btn-icon"
           @click="onAddMyList"
         >
           <feather-icon
-            icon="UserPlusIcon"
+            icon="ClipboardIcon"
             size="18"
           />
         </b-button>
@@ -27,7 +27,7 @@
           v-if="lead.status_sn_id && modul === 2 && !lead.potential"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           v-b-tooltip.hover.bottom="'Without Potential'"
-          variant="outline-important"
+          variant="default"
           class="btn-icon"
           @click="onSetPotential"
         >
@@ -39,7 +39,7 @@
           v-if="lead.status_sn_id && modul === 2"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           v-b-tooltip.hover.bottom="'Not Call'"
-          variant="outline-important"
+          variant="default"
           class="btn-icon"
           @click="onNotCall"
         >
@@ -51,7 +51,7 @@
           v-if="lead.status_sn_id && modul === 2 && (lead.not_call && lead.not_call.length)"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           v-b-tooltip.hover.bottom="'Tracking Not Call'"
-          variant="outline-important"
+          variant="default"
           class="btn-icon"
           @click="$bvModal.show('modal-trackin-not-call')"
         >
@@ -61,107 +61,7 @@
         </b-button>
       </b-button-group>
     </template>
-    <b-row>
-      <b-col cols="12">
-        <table class="mt-2 mt-xl-0 w-100">
-          <tr>
-            <th class="pb-50" colspan="2">
-              <feather-icon
-                icon="UserIcon"
-                class="mr-75"
-              />
-              <span v-if="lead.nickname && modul === 2">{{ lead.nickname }} (nickname)</span>
-            </th>
-          </tr>
-          <tr class="row">
-            <th class="col-12 col-md-6 pb-50">
-              <feather-icon
-                icon="PhoneIcon"
-                class="mr-75"
-              />
-              <span>{{ lead.mobile }}</span>
-            </th>
-            <th class="col-12 col-md-6 pb-50">
-              <feather-icon
-                icon="MailIcon"
-                class="mr-75"
-              />
-              <span>{{ lead.email }}</span>
-            </th>
-          </tr>
-          <tr class="row">
-            <th class="col-12 col-md-6 pb-50">
-              <feather-icon
-                icon="CalendarIcon"
-                class="mr-75"
-              />
-              <span v-if="modul !== 15">{{ lead.dob }}</span>
-            </th>
-            <th class="col-12 col-md-6 pb-50">
-              <span class="mr-75 font-weight-bold">SNN</span>
-              <span v-if="lead.snn">{{ `XXX-XX-${lead.snn}` }}</span>
-              <br>
-              <span class="mr-75 font-weight-bold" v-if="lead.itin">ITIN</span>
-              <span v-if="lead.itin">{{ `XXX-XX-${lead.itin}` }}</span>
-            </th>
-          </tr>
-          <tr class="row">
-            <th class="col-12 col-md-6 pb-50">
-              <feather-icon
-                icon="MapPinIcon"
-                class="mr-75"
-              />
-              <template v-if="modul !== 15">
-                <span v-if="lead.street">{{ lead.street }}, </span>
-                <span v-if="lead.city">{{ lead.city }}, </span>
-                <span>{{ lead.states_eeuu_slug }} {{ lead.zipcode }}</span>
-              </template>
-            </th>
-            <th class="col-12 col-md-6 pb-50">
-              <feather-icon
-                icon="FlagIcon"
-                class="mr-75"
-              />
-              <span>{{ lead.language == 'en' ? 'English' : 'Spanish' }}</span>
-              <br>
-              <span class="mr-75 font-weight-bold" v-if="lead.origin_country">ORIGIN COUNTRY</span>
-              <span v-if="lead.origin_country">{{ lead.origin_country }}</span>
-            </th>
-          </tr>
-          <tr class="row">
-            <th class="col-12 col-md-6 pb-50">
-              <span class="mr-75">STATUS</span>
-              <span v-if="modul !== 15">{{ lead.lead_status }}</span>
-              <span v-else>{{ lead.valuestatuslead }}</span>
-            </th>
-            <th class="col-12 col-md-6 pb-50">
-              <span class="mr-75">PROGRAMS</span>
-              <span>{{ lead.name_programs }}</span>
-            </th>
-          </tr>
-          <tr class="row">
-            <th class="col-12 col-md-6 pb-50">
-              <span class="mr-75">LEAD OWNER</span>
-              <span>{{ lead.user_owner }}</span>
-            </th>
-            <th class="col-12 col-md-6 pb-50">
-              <span class="mr-75">CATCHER</span>
-              <span v-if="modul === 15">{{ lead.user_catcher }}</span>
-            </th>
-          </tr>
-          <tr v-if="modul === 15" class="row">
-            <th class="col-12 col-md-6 pb-50">
-              <span class="mr-75">FAN PAGE</span>
-              <span>{{ lead.fanpage }}</span>
-            </th>
-            <th class="col-12 col-md-6 pb-50">
-              <span class="mr-75">CREATED DATE</span>
-              <span>{{ lead.created_at }}</span>
-            </th>
-          </tr>
-        </table>
-      </b-col>
-    </b-row>
+    <detail-component :modul="modul" :details="details" />
 
     <!-- modal NOT CALL -->
     <b-modal
@@ -188,10 +88,13 @@ import { mapActions, mapGetters } from 'vuex'
 
 import Ripple from 'vue-ripple-directive'
 
+import DetailComponent from '@/views/crm/views/Lead/components/DetailComponent.vue'
 import ModalTrackinNotCall from './ModalTrackinNotCall.vue'
 
 export default {
+  name: 'CardLeadClient',
   components: {
+    DetailComponent,
     ModalTrackinNotCall,
   },
   props: {
@@ -210,8 +113,68 @@ export default {
   },
   data () {
     return {
-      isLoading: false,
       blankLead: {},
+      isLoading: false,
+      details: [
+        {
+          label: 'Nickname:',
+          value: this.lead.nickname
+        },
+        {
+          label: 'E-mail:',
+          value: this.lead.email
+        },
+        {
+          label: 'Phone:',
+          value: this.lead.mobile
+        },
+        [
+          {
+            label: 'SNN:',
+            value: `XXX-XX-${ this.lead.snn }`
+          },
+          {
+            label: 'ITIN:',
+            value: `XXX-XX-${ this.lead.itin }`
+          },
+        ],
+        (this.modul !== 15) ? {
+          label: 'DOB:',
+          value: this.lead.dob
+        } : null,
+        {
+          label: 'Language:',
+          value: this.lead.language === 'en' ? 'English' : 'Spanish'
+        },
+        {
+          label: 'Origin Country:',
+          value: this.lead.origin_country
+        },
+        {
+          label: 'Programs:',
+          value: this.lead.name_programs.join(' / ')
+        },
+        (this.modul !== 15) ? {
+          label: 'Status:',
+          value: this.lead.valuestatuslead
+        } : null,
+        (this.modul !== 15) ? {
+          label: 'Address:',
+          value: `${ this.lead.street }${ this.lead.city ? `, ${ this.lead.city }, ${ this.lead.states_eeuu_slug } ${ this.lead.zipcode }` : '' }`
+        } : null,
+        (this.modul === 15) ? {
+          label: 'CATCHER:',
+          value: this.lead.user_catcher
+        } : null,
+        (this.modul === 15) ? {
+          label: 'FAN PAGE:',
+          value: this.lead.fanpage
+        } : null,
+        (this.modul === 15) ? {
+          label: 'CREATED DATE:',
+          value: this.lead.created_at
+        } : null,
+      ]
     }
   },
   mounted () {},
