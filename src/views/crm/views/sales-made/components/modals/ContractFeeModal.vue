@@ -1,11 +1,16 @@
 <template>
   <b-modal
     v-model="modal.contract_fee"
-    title-class="h3"
+    title-class="h3 text-white font-weight-bolder"
     size="lg"
     title="CONTRACT FEE"
     scrollable
+    :hide-footer="valorEdit"
   >
+    <program-client-header
+      :client="contractFee.clientName"
+      :program="contractFee.programName"
+    />
     <b-row>
       <b-col>
         <b-row>
@@ -28,7 +33,11 @@
           </b-col>
           <b-col class="d-flex align-items-center">
             <span>$</span>
+            <p v-if="contractFee.initialPaymentStatus != 2">
+              Pending
+            </p>
             <money
+              v-else
               v-model="initialPayment"
               class="form-control border-0 text-right"
               v-bind="{precision: 2}"
@@ -58,7 +67,7 @@
               v-model="monthlyAmount"
               class="form-control border-0 text-right"
               v-bind="{precision: 2}"
-              disabled
+              :disabled="contractSale.program_id == 2 || contractSale.program_id == 4"
             />
           </b-col>
         </b-row>
@@ -66,6 +75,8 @@
           <b-col>
             <b-form-checkbox
               v-model="charge"
+              :disabled="valorEdit"
+              @change="changeCharge"
             >
               Charge
             </b-form-checkbox>
@@ -79,7 +90,7 @@
           </b-col>
         </b-row>
       </b-col>
-      <b-col>
+      <b-col class="mt-1">
         <b-row>
           <b-col>
             <p>Method of Payment :</p>
@@ -88,6 +99,7 @@
             <b-form-radio
               v-model="methodPayment"
               value="0"
+              :disabled="valorEdit"
             >
               Credit Card
             </b-form-radio>
@@ -95,6 +107,7 @@
               v-model="methodPayment"
               value="1"
               class="mt-1"
+              :disabled="valorEdit"
             >
               Others
             </b-form-radio>
@@ -111,6 +124,7 @@
             <b-form-radio
               v-model="cardType"
               value="0"
+              :disabled="valorEdit"
             >
               Automatic
             </b-form-radio>
@@ -118,6 +132,7 @@
               v-model="cardType"
               value="1"
               class="mt-1"
+              :disabled="valorEdit"
             >
               Manual
             </b-form-radio>
@@ -140,32 +155,51 @@
     >
       <b-col>
         <b-row>
-          <b-table
-            :items="cards"
-            :fields="fieldsT1"
-            size="sm"
-          >
-            <template v-slot:cell(select)="data">
-              <b-form-radio
-                v-model="cardId"
-                :value="data.item.id"
-                plain
-              />
-            </template>
-          </b-table>
+          <b-col>
+            <b-table
+              :items="cards"
+              :fields="fieldsT1"
+              size="sm"
+            >
+              <template v-slot:cell(select)="data">
+                <b-form-radio
+                  v-model="cardId"
+                  :value="data.item.id"
+                  :disabled="valorEdit"
+                  plain
+                />
+              </template>
+            </b-table>
+          </b-col>
         </b-row>
         <b-row class="d-flex align-items-center justify-content-end mt-1">
-          <b-button
-            variant="primary"
-            @click="addCardModal = true"
-          >
-            <feather-icon icon="PlusIcon" />
-            ADD
-          </b-button>
+          <b-col class="d-flex align-items-center justify-content-end">
+            <b-button
+              v-if="!valorEdit"
+              variant="important"
+              size="sm"
+              @click="addCardModal = true"
+            >
+              <feather-icon icon="PlusIcon" />
+              Add
+            </b-button>
+          </b-col>
         </b-row>
       </b-col>
     </b-row>
-    <template #modal-footer />
+    <template #modal-footer>
+      <b-row class="w-100">
+        <b-col class="d-flex align-items-center justify-content-center">
+          <b-button
+            variant="primary"
+            size="sm"
+            @click="saveContract"
+          >
+            Save
+          </b-button>
+        </b-col>
+      </b-row>
+    </template>
     <modal-card-create
       v-if="addCardModal"
       :if-modal-card="addCardModal"
@@ -180,10 +214,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import ModalCardCreate from '@/views/crm/views/payments/components/ModalCardCreate.vue'
+import ProgramClientHeader from '@/views/crm/views/sales-made/components/modals/ProgramClientHeader'
 
 export default {
   name: 'ContractFeeModal',
   components: {
+    ProgramClientHeader,
     ModalCardCreate,
   },
   props: {
@@ -200,6 +236,9 @@ export default {
         clientName: '',
         saleId: null,
         id: null,
+        initialPaymentStatus: null,
+        editModal: false,
+        statusSale: null,
       }),
     },
   },
@@ -257,7 +296,7 @@ export default {
       currentUser: 'auth/currentUser',
     }),
     valorEdit() {
-      return this.contractFee.editmodal == false
+      return this.contractFee.editModal == false
           || this.contractFee.statusSale == 2
           || this.contractFee.statusSale == 4
           || this.contractSale.st == 1
@@ -269,6 +308,7 @@ export default {
       await this.getCards()
       await this.getPaymentsDays()
       await this.getContractSales()
+      console.log(this.contractFee, 'cfee')
       this.perPay = this.fee - this.initialPayment
       if (this.contractSale.program_id == 2) {
         this.monthlyAmount = 0
@@ -277,6 +317,7 @@ export default {
         this.months = Math.ceil(this.perPay / this.monthlyAmount)
         if (this.months < 1) this.months = 0
       }
+      this.cardId = this.contractSale.card_id
       this.removePreloader()
     } catch (error) {
       this.showErrorSwal(error)
@@ -331,6 +372,12 @@ export default {
     },
     closedModalCar() {
       this.addCardModal = false
+    },
+    async changeCharge(checked) {
+      if (checked === false) {
+        const response = await this.showConfirmSwal('Desactivate Charge', 'Are you sure to desactivate the charge?')
+        if (!response.isConfirmed) this.charge = !this.charge
+      }
     },
   },
 }

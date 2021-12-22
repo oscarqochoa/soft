@@ -1,112 +1,112 @@
 <template>
   <div class="d-inline-flex">
     <b-button
+      v-show="!editMode"
+      v-b-tooltip.hover.bottom="'Edit'"
       variant="gradient-warning"
       class="btn-icon button-little-size button-margin-l"
       title="'Edit'"
-      v-b-tooltip.hover.bottom="'Edit'"
-      v-show="!editMode"
       @click="edit()"
     >
-      <feather-icon icon="SettingsIcon"></feather-icon>
+      <feather-icon icon="SettingsIcon" />
     </b-button>
     <b-button
+      v-show="editMode"
+      v-b-tooltip.hover.bottom="'Cancel'"
       variant="gradient-danger"
       class="btn-icon button-little-size button-margin-l"
-      v-b-tooltip.hover.bottom="'Cancel'"
       @click="cancel()"
-      v-show="editMode"
     >
-      <feather-icon icon="Trash2Icon"></feather-icon>
+      <feather-icon icon="Trash2Icon" />
     </b-button>
     <b-button
+      v-show="editMode"
+      v-b-tooltip.hover.bottom="'Update'"
       variant="gradient-success"
       class="btn-icon button-little-size button-margin-l"
-      v-b-tooltip.hover.bottom="'Update'"
-      v-show="editMode"
       @click="update()"
     >
-      <feather-icon icon="CheckIcon"></feather-icon>
+      <feather-icon icon="CheckIcon" />
     </b-button>
   </div>
 </template>
 
 <script>
 export default {
-  emits: ["edit", "cancel", "update"],
+  emits: ['edit', 'cancel', 'update'],
   props: {
     editMode: {
       type: Boolean,
-      default: false
+      default: false,
     },
     data: {
       type: Object,
       default: () => ({
-        messageEdit: "Information",
-        messageUpdate: "Information"
-      })
-    }
+        messageEdit: 'Information',
+        messageUpdate: 'Information',
+      }),
+    },
   },
   methods: {
     edit() {
       this.$swal({
-        icon: "warning",
-        title: "Are you sure?",
+        icon: 'warning',
+        title: 'Are you sure?',
         text: `Do you want to edit the ${this.data.messageEdit}?`,
         showCancelButton: true,
         reverseButtons: true,
         buttonsStyling: false,
-        confirmButtonText: "Yes",
+        confirmButtonText: 'Yes',
         customClass: {
-          confirmButton: "btn btn-gradient-success  ml-3 ",
-          cancelButton: "btn btn-gradient-danger  "
-        }
+          confirmButton: 'btn btn-gradient-success  ml-3 ',
+          cancelButton: 'btn btn-gradient-danger  ',
+        },
       }).then(r => {
         if (r.value) {
-          this.$emit("edit");
+          this.$emit('edit')
         }
-      });
+      })
     },
     cancel() {
       this.$swal({
-        icon: "warning",
-        title: "Are you sure?",
-        text: "Changes will be lost",
+        icon: 'warning',
+        title: 'Are you sure?',
+        text: 'Changes will be lost',
         showCancelButton: true,
         reverseButtons: true,
         buttonsStyling: false,
-        confirmButtonText: "Yes",
+        confirmButtonText: 'Yes',
         customClass: {
-          confirmButton: "btn btn-gradient-success  ml-3 ",
-          cancelButton: "btn btn-gradient-danger  "
-        }
+          confirmButton: 'btn btn-gradient-success  ml-3 ',
+          cancelButton: 'btn btn-gradient-danger  ',
+        },
       }).then(r => {
         if (r.value) {
-          this.$emit("cancel");
+          this.$emit('cancel')
         }
-      });
+      })
     },
     update() {
       this.$swal({
-        icon: "warning",
-        title: "Are you sure?",
+        icon: 'warning',
+        title: 'Are you sure?',
         text: `The  ${this.data.messageUpdate} will be save!`,
         showCancelButton: true,
         reverseButtons: true,
         buttonsStyling: false,
-        confirmButtonText: "Yes",
+        confirmButtonText: 'Yes',
         customClass: {
-          confirmButton: "btn btn-gradient-success  ml-3",
-          cancelButton: "btn btn-gradient-danger"
-        }
+          confirmButton: 'btn btn-gradient-success  ml-3',
+          cancelButton: 'btn btn-gradient-danger',
+        },
       }).then(r => {
         if (r.value) {
-          this.$emit("update");
+          this.$emit('update')
         }
-      });
-    }
-  }
-};
+      })
+    },
+  },
+}
 </script>
 
 <style scoped>
@@ -115,5 +115,3 @@ export default {
   padding: 3px;
 }
 </style>
-
-
