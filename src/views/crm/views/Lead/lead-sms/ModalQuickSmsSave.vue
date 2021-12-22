@@ -49,12 +49,13 @@
             rows="3"
             v-model="quickData.sms"
             maxlength="1000"
+            :state="getValidationState(validationContext)"
           />
           <template #description>
             <small tabindex="-1" class="form-text text-danger">Max: 1000 characters</small>
           </template>
 
-          <b-form-invalid-feedback :state="getValidationState(validationContext)">
+          <b-form-invalid-feedback>
             {{ validationContext.errors[0] }}
           </b-form-invalid-feedback>
         </b-form-group>
@@ -118,12 +119,10 @@ import formValidation from '@core/comp-functions/forms/form-validation'
 
 export default {
   components: {
-    BSidebar,
     BForm,
     BFormGroup,
     BFormInvalidFeedback,
     BButton,
-    vSelect,
 
     // Form Validation
     ValidationProvider,
@@ -140,7 +139,7 @@ export default {
     quickData: {
       type: Object,
       required: true
-    }
+    },
   },
   computed: {
     ...mapGetters({
@@ -165,29 +164,23 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_SET_SMS_QUICK: 'CrmLeadStore/A_SET_SMS_QUICK'
+      A_SET_SMS_QUICK: 'CrmSmsStore/A_SET_SMS_QUICK'
     }),
     async onSubmit () {
       try {
+        this.isLoading = true
         const response = await this.A_SET_SMS_QUICK({
           ...this.quickData,
           user_id : this.userId,
           modul: this.modul
         })
-        if (response.status == 200) {
+        if (this.isResponseSuccess(response)) {
           this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          const data = JSON.parse(response.config.data)
-          this.quickData.id = data.id
-          this.quickData.created_by = data.user_created
-          this.quickData.created_at = data.created_at
-          this.quickData.updated_by = data.user_updated
-          this.quickData.updated_at = data.updated_at
-          this.quickData.showMore = false
           this.edited = true
-          this.$emit('updateQuicks', this.quickData)
-          this.$emit('modalQuickCreateClose', true)
+          this.$bvModal.hide('modal-quick-sms-save')
         } else
           this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong')
+        this.isLoading = false
       } catch (error) {
         console.log('Something went wrong onSubmit', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -195,8 +188,8 @@ export default {
     }
   },
   created() {
-    this.userId = this.currentUser.id
-    this.roleId = this.currentUser.id
+    this.userId = this.currentUser.user_id
+    this.roleId = this.currentUser.role_id
     this.quickData.sms = this.quickData.sms.replace(/\n/g, "<br \/>").replace(/<br \/>/g, "\n")
     this.blankQuickData = JSON.parse(JSON.stringify(this.quickData))
   },

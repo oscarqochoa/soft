@@ -1,76 +1,83 @@
 <template>
-  <b-nav-item-dropdown
-    class="dropdown-notification mr-25"
-    menu-class="dropdown-menu-media"
-    right
-  >
-    <template #button-content>
-      <feather-icon
-        badge="6"
-        badge-classes="bg-danger"
-        class="text-body"
-        icon="BellIcon"
-        size="21"
-      />
-    </template>
-
-    <!-- Header -->
-    <li class="dropdown-menu-header">
-      <div class="dropdown-header d-flex">
-        <h4 class="notification-title mb-0 mr-auto">Notifications</h4>
-        <b-badge pill variant="light-primary"> 6 New </b-badge>
-      </div>
-    </li>
-
-    <!-- Notifications -->
-    <vue-perfect-scrollbar
-      :settings="perfectScrollbarSettings"
-      class="scrollable-container media-list scroll-area"
-      tagname="li"
+  <div>
+    <b-nav-item-dropdown
+      class="dropdown-notification mr-25"
+      menu-class="dropdown-menu-media"
+      right
     >
-      <!-- Account Notification -->
-      <b-link v-for="notification in notifications" :key="notification.id">
-        <b-media>
-          <template #aside>
-            <b-avatar size="32" variant="light-secondary">
-              <feather-icon icon="InfoIcon" />
-            </b-avatar>
-          </template>
-          <p class="media-heading">
-            <span class="font-weight-bolder">
-              {{ notification.notification }}
-            </span>
-          </p>
-          <small class="notification-text">{{
-            notification.created_at | myDateGlobal
-          }}</small>
-        </b-media>
-      </b-link>
-    </vue-perfect-scrollbar>
+      <template #button-content>
+        <feather-icon
+          :badge="G_NOTIFICATION_COUNTER > 99 ? '+99' : G_NOTIFICATION_COUNTER"
+          badge-classes="bg-danger"
+          class="text-body"
+          icon="BellIcon"
+          size="19"
+        />
+      </template>
 
-    <!-- Cart Footer -->
-    <li class="dropdown-menu-footer">
-      <b-button
-        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-        variant="primary"
-        block
-        >Read all notifications</b-button
+      <!-- Header -->
+      <li class="dropdown-menu-header">
+        <div class="dropdown-header d-flex">
+          <h4 class="notification-title mb-0 mr-auto">Notifications</h4>
+          <b-badge pill variant="light-primary"> {{G_NOTIFICATION_COUNTER}} New </b-badge>
+        </div>
+      </li>
+
+      <!-- Notifications -->
+      <vue-perfect-scrollbar
+        :settings="perfectScrollbarSettings"
+        class="scrollable-container media-list scroll-area"
+        tagname="li"
       >
-    </li>
-  </b-nav-item-dropdown>
+        <!-- Account Notification -->
+        <b-link v-for="notification in S_NOTIFICATIONS" :key="notification.id">
+          <b-media>
+            <template #aside>
+              <b-avatar size="32" variant="light-secondary">
+                <feather-icon icon="InfoIcon" />
+              </b-avatar>
+            </template>
+            <p class="media-heading">
+              <span class="font-weight-bolder">
+                {{ notification.notification }}
+              </span>
+            </p>
+            <small class="notification-text">{{
+              notification.created_at | myDateGlobal
+            }}</small>
+          </b-media>
+        </b-link>
+      </vue-perfect-scrollbar>
+
+      <!-- Cart Footer -->
+      <li class="dropdown-menu-footer">
+        <b-button
+          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+          variant="primary"
+          block
+          @click="notificationModal = true"
+          >Read all notifications</b-button
+        >
+      </li>
+    </b-nav-item-dropdown>
+    <b-modal v-model="notificationModal" size="lg" centered title="NOTIFICATIONS" hide-footer>
+      <notification-list></notification-list>
+    </b-modal>
+  </div>
 </template>
 
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import Ripple from "vue-ripple-directive";
-import NavbarService from "./service/navbar.service";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
+import NotificationList from './components/notifications/NotificationList.vue';
 export default {
   mounted() {
-    this.getUserNotifications();
+    this.A_GET_NOTIFICATIONS({id: this.currentUser.user_id});
   },
   components: {
     VuePerfectScrollbar,
+    NotificationList
   },
   directives: {
     Ripple,
@@ -78,7 +85,11 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
+      G_NOTIFICATION_COUNTER: "NotificationStore/G_NOTIFICATION_COUNTER"
     }),
+    ...mapState({
+      S_NOTIFICATIONS: state => state.NotificationStore.S_NOTIFICATIONS,
+    })
   },
   data() {
     return {
@@ -86,16 +97,16 @@ export default {
         maxScrollbarLength: 60,
         wheelPropagation: false,
       },
-      notifications: [],
+      notificationModal: false
     };
   },
   methods: {
-    async getUserNotifications() {
-      let data = await NavbarService.getUserNotifications(
-        this.currentUser.user_id
-      );
-      this.notifications = data;
-    },
+    ...mapActions({
+      A_GET_NOTIFICATIONS: "NotificationStore/A_GET_NOTIFICATIONS",
+    }),
+    ...mapMutations({
+      DECREASE_NOTIFICATION_COUNTER: "NotificationStore/DECREASE_NOTIFICATION_COUNTER",
+    })
   },
 };
 </script>

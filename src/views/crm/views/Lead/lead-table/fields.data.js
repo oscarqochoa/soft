@@ -1,11 +1,11 @@
 import { title } from '@core/utils/filter'
 
 const leadFields = [
-  /* {
+  {
     key: 'selected',
     label: '',
     sortable: false,
-  }, */
+  },
   {
     key: 'date_even',
     label: '',

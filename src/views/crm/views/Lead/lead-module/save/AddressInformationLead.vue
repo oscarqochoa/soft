@@ -177,6 +177,7 @@
             <b-form-group
               label="Origin Country"
               label-for="originCountry"
+              :state="getValidationState(validationContext)"
             >
               <v-select
                 id="originCountry"
@@ -211,7 +212,7 @@ import VueGoogleAutocomplete from 'vue-google-autocomplete'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import countries from '@/@fake-db/data/other/countries'
 
-import AddressLead from './AddressLead.vue'
+import AddressLead from '@/views/crm/views/Lead/components/AddressComponent.vue'
 
 export default {
   components: {
@@ -291,7 +292,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_UNIQUE_MOBILE: 'CrmLeadStore/A_UNIQUE_MOBILE',
+      A_UNIQUE_MOBILE: 'CrmGlobalStore/A_UNIQUE_MOBILE',
       A_SET_REQUEST_LEADS: 'CrmLeadStore/A_SET_REQUEST_LEADS'
     }),
     security() {
@@ -362,12 +363,7 @@ export default {
           const response = await this.A_UNIQUE_MOBILE({ mobile: this.userData.mobile })
           if (response.status == 200) {
             if (response.data.code == 'mobile') {
-              this.$swal.fire({
-                type: 'warning',
-                title: `The phone number already exists: response.data.message`,
-                confirmButtonText: 'REQUEST LEAD TO SOCIAL NETWORK',
-                cancelButtonText: 'OK',
-              })
+              this.showSwalGeneric('Are you sure?', `The phone number already exists: ${response.data.message}`, 'warning', { confirmButtonText: 'REQUEST LEAD TO SOCIAL NETWORK' })
               .then(async (result) => {
                 if (result.value) {
                   await this.A_SET_REQUEST_LEADS({

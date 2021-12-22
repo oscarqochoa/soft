@@ -12,8 +12,11 @@
       :source-lead-options="G_SOURCE_LEADS"
       :user-creator-owner-options="G_SELLERS"
     />
-    <b-card-code title="LEADS" :actions="true">
-      <template #actions>
+    <b-card>
+      <div class="card-header">
+        <div>
+          <b-card-title>LEADS</b-card-title>
+        </div>
         <div>
           <b-button variant="success" class="mr-1" @click="isAddNewUserSidebarActive = true">
             <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />CREATE
@@ -32,27 +35,24 @@
             <b-dropdown-item @click="exportExcel(1, 3)">EXPORT SELECTION</b-dropdown-item>
           </b-dropdown>
         </div>
-      </template>
+      </div>
       <b-nav tabs>
         <b-nav-item :to="{ name: 'lead-crm-lead-list' }" @click="isOnlyLead = true" exact exact-active-class="active">LEADS</b-nav-item>
         <b-nav-item :to="{ name: 'lead-crm-lead-sn-list' }" @click="isOnlyLead = false" exact exact-active-class="active">LEADS SN</b-nav-item>
         <b-nav-item :to="{ name: 'lead-crm-lead-w-potential-list' }" @click="isOnlyLead = false" exact exact-active-class="active">LEADS W POTENTIAL</b-nav-item>
       </b-nav>
       <router-view/>
-    </b-card-code>
+    </b-card>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 
-import BCardCode from '@core/components/b-card-code'
-
 import LeadListAddNew from './lead-module/save/LeadListAddNew.vue'
 
 export default {
   components: {
-    BCardCode,
     LeadListAddNew
   },
   computed: {
@@ -62,12 +62,12 @@ export default {
       G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
       G_STATE_LEADS: 'CrmLeadStore/G_STATE_LEADS',
       G_SOURCE_LEADS: 'CrmLeadStore/G_SOURCE_LEADS',
-      G_PROGRAMS: 'CrmLeadStore/G_PROGRAMS',
-      G_SOURCE_NAMES: 'CrmLeadStore/G_SOURCE_NAMES',
-      G_EEUU_STATES: 'CrmLeadStore/G_EEUU_STATES',
-      G_LANGUAGES: 'CrmLeadStore/G_LANGUAGES',
-      G_COUNTRIES: 'CrmLeadStore/G_COUNTRIES',
-      G_SELLERS: 'CrmLeadStore/G_SELLERS',
+      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
+      G_SOURCE_NAMES: 'CrmGlobalStore/G_SOURCE_NAMES',
+      G_EEUU_STATES: 'CrmGlobalStore/G_EEUU_STATES',
+      G_LANGUAGES: 'CrmGlobalStore/G_LANGUAGES',
+      G_COUNTRIES: 'CrmGlobalStore/G_COUNTRIES',
+      G_SELLERS: 'CrmGlobalStore/G_SELLERS',
     }),
     ...mapState({
       S_SELECTED_LEADS: state => state.CrmLeadStore.S_SELECTED_LEADS,
@@ -100,13 +100,13 @@ export default {
       A_GET_STATE_LEADS: 'CrmLeadStore/A_GET_STATE_LEADS',
       A_GET_STATUS_LEADS: 'CrmLeadStore/A_GET_STATUS_LEADS',
       A_GET_SOURCE_LEADS: 'CrmLeadStore/A_GET_SOURCE_LEADS',
-      A_GET_OWNERS: 'CrmLeadStore/A_GET_OWNERS',
-      A_GET_PROGRAMS: 'CrmLeadStore/A_GET_PROGRAMS',
-      A_GET_SOURCE_NAMES: 'CrmLeadStore/A_GET_SOURCE_NAMES',
-      A_GET_STATES: 'CrmLeadStore/A_GET_STATES',
-      A_GET_EEUU_STATES: 'CrmLeadStore/A_GET_EEUU_STATES',
-      A_GET_COUNTRIES: 'CrmLeadStore/A_GET_COUNTRIES',
-      A_GET_SELLERS: 'CrmLeadStore/A_GET_SELLERS',
+      A_GET_OWNERS: 'CrmGlobalStore/A_GET_OWNERS',
+      A_GET_PROGRAMS: 'CrmGlobalStore/A_GET_PROGRAMS',
+      A_GET_SOURCE_NAMES: 'CrmGlobalStore/A_GET_SOURCE_NAMES',
+      A_GET_STATES: 'CrmGlobalStore/A_GET_STATES',
+      A_GET_EEUU_STATES: 'CrmGlobalStore/A_GET_EEUU_STATES',
+      A_GET_COUNTRIES: 'CrmGlobalStore/A_GET_COUNTRIES',
+      A_GET_SELLERS: 'CrmGlobalStore/A_GET_SELLERS',
     }),
     async getStateLeads () {
       try {
@@ -134,7 +134,7 @@ export default {
     },
     async getOwners () {
       try {
-        await this.A_GET_OWNERS({ roles: '[1,2,5]', type: '1' })
+        await this.A_GET_OWNERS({ modul: this.modul, body: { roles: '[1,2,5]', type: '1' } })
       } catch (error) {
         console.log('Something went wrong getOwners:', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -182,7 +182,7 @@ export default {
     },
     async getSellers () {
       try {
-        await this.A_GET_SELLERS({ modul: this.modul, roles: "[]", type: "1", })
+        await this.A_GET_SELLERS({ modul: this.modul, body: { roles: '[]', type: '1' } })
       } catch (error) {
         console.log('Something went wrong getSellers:', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -228,10 +228,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.per-page-selector {
-  width: 90px;
-}
-</style>
-
-<style lang="scss">
+  .per-page-selector {
+    width: 90px;
+  }
 </style>

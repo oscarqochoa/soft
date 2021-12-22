@@ -51,7 +51,7 @@
               icon="FilterIcon"
               class="mr-50 text-white"
             />
-            <span v-if="!advanceSearch">Advance Search</span>
+            <span v-if="!advanceSearch">Advanced Search</span>
             <span v-else>Basic Search</span>
           </span>
         </b-button>
@@ -73,13 +73,11 @@
               md="1"
             >
               <label>From:</label>
-              <b-form-datepicker
-                id="from-date-picker"
-                locale="en"
-                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                placeholder="From"
-                size="sm"
+              <flat-pickr
                 v-model="filter.from"
+                class="form-control-sm"
+                :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'Y-m-d', locale: 'en' }"
+                placeholder="From"
               />
             </b-col>
             <b-col
@@ -88,19 +86,17 @@
               md="1"
             >
               <label>To:</label>
-              <b-form-datepicker
-                id="to-date-picker"
-                locale="en"
-                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                placeholder="To"
-                size="sm"
+              <flat-pickr
                 v-model="filter.to"
+                class="form-control-sm"
+                :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'Y-m-d', locale: 'en' }"
+                placeholder="To"
               />
             </b-col>
             <b-col
               v-if="visibleFilters.includes('statusLead')"
               cols="6"
-              md="1"
+              md="2"
             >
               <label>Status Lead:</label>
               <v-select
@@ -114,7 +110,7 @@
             <b-col
               v-if="visibleFilters.includes('owner')"
               cols="6"
-              md="1"
+              md="2"
             >
               <label>Owner:</label>
               <v-select
@@ -128,7 +124,7 @@
             <b-col
               v-if="visibleFilters.includes('assignTo')"
               cols="6"
-              md="1"
+              md="2"
             >
               <label>Assign To:</label>
               <v-select
@@ -156,7 +152,7 @@
             <b-col
               v-if="visibleFilters.includes('program')"
               cols="6"
-              md="1"
+              md="2"
             >
               <label>Programs:</label>
               <v-select
@@ -168,9 +164,23 @@
               />
             </b-col>
             <b-col
-              v-if="visibleFilters.includes('sourceName')"
+              v-if="visibleFilters.includes('stAd')"
               cols="6"
               md="1"
+            >
+              <label>ST/AD:</label>
+              <v-select
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :options="stAdOptions"
+                class="w-100 sm"
+                :reduce="val => val.label"
+                v-model="filter.stAd"
+              />
+            </b-col>
+            <b-col
+              v-if="visibleFilters.includes('sourceName')"
+              cols="6"
+              md="2"
             >
               <label>Source Name:</label>
               <v-select
@@ -196,28 +206,14 @@
               />
             </b-col>
             <b-col
-              v-if="visibleFilters.includes('stAd')"
               cols="6"
               md="1"
-            >
-              <label>ST/AD:</label>
-              <v-select
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="stAdOptions"
-                class="w-100 sm"
-                :reduce="val => val.value"
-                v-model="filter.stAd"
-              />
-            </b-col>
-            <b-col
-              cols="6"
-              md="1"
-              class="pt-2 flexible text-right"
+              class="pt-2 flexible text-center"
             >
               <b-button
                 size="sm"
                 variant="warning"
-                class="btn-icon"
+                class="btn-icon mr-1"
                 v-b-tooltip.hover.bottom="'Search'"
                 @click="$emit('onSearch', true)"
               >
@@ -226,12 +222,6 @@
                   size="18"
                 />
               </b-button>
-            </b-col>
-            <b-col
-              cols="6"
-              md="1"
-              class="pt-2 flexible"
-            >
               <b-button
                 size="sm"
                 variant="warning"
@@ -256,6 +246,8 @@
 import {
   BCard, BCardHeader, BCardBody, BRow, BCol,
 } from 'bootstrap-vue'
+
+import flatPickr from 'vue-flatpickr-component'
 import vSelect from 'vue-select'
 
 export default {
@@ -265,6 +257,7 @@ export default {
     BCard,
     BCardHeader,
     BCardBody,
+    flatPickr,
     vSelect,
   },
   props: {
@@ -339,6 +332,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@core/scss/vue/libs/vue-flatpicker.scss';
 @import '@core/scss/vue/libs/vue-select.scss';
 
 .v-select {

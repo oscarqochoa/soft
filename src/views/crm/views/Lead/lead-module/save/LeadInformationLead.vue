@@ -14,6 +14,7 @@
           <b-form-group
             label="Lead Owner"
             label-for="userId"
+            :state="getValidationState(validationContext)"
           >
             <v-select
               id="userId"
@@ -36,6 +37,7 @@
           <b-form-group
             label="Lead Status"
             label-for="leadStatusId"
+            :state="getValidationState(validationContext)"
           >
             <v-select
               v-model="userData.leadStatusId"
@@ -59,6 +61,7 @@
           <b-form-group
             label="Lead Source"
             label-for="sourceId"
+            :state="getValidationState(validationContext)"
           >
             <v-select
               v-model="userData.sourceId"
@@ -80,6 +83,7 @@
           <b-form-group
             label="Source Name"
             label-for="sourceNameId"
+            :state="getValidationState(validationContext)"
           >
             <v-select
               v-model="userData.sourceNameId"

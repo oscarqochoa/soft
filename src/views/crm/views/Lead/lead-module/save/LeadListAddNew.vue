@@ -75,7 +75,7 @@
               v-ripple.400="'rgba(186, 191, 199, 0.15)'"
               type="button"
               variant="outline-secondary"
-              @click="hide"
+              @click="resetuserData(); $refs.refFormObserver.reset(); $emit('update:is-add-new-user-sidebar-active', false)"
             >
               Cancel
             </b-button>
@@ -273,7 +273,7 @@ export default {
       A_SET_LEADS: 'CrmLeadStore/A_SET_LEADS'
     }),
     resetuserData () {
-      this.blankUserData.userId = { value: this.currentUser.id, label: this.currentUser.fullName }
+      this.blankUserData.userId = { value: this.currentUser.user_id, label: this.currentUser.fullName }
       this.userData = JSON.parse(JSON.stringify(this.blankUserData))
     },
     getSelectValue (element) {
@@ -307,7 +307,7 @@ export default {
         } else {
           this.userData.ssn = this.userData.social.value
         }
-        const { id: role_id } = this.currentUser
+        const { role_id } = this.currentUser
         const { email, userId, firstName, lastName, middleName, sourceId, sourceNameId, programId, phone, mobile, work, creditReport, payment, ammount, programs, leadStatusId, address, description, cardExpiMonth, cardExpiYear, ssn, cardHoldername, cardNumber, cardSecurityCode, dob, cardAddress, typeCredit, dateOnline, plataform, usernameOnline, passwordOnline, memberNumberOnline, language, itin, other, stateLead, anotherAddress, otherAddress, originCountry } = this.userData
         console.log('preData', this.userData)
         const body = {
@@ -330,7 +330,7 @@ export default {
           leadstatus_id: this.getSelectValue(leadStatusId),
           street: address.street,
           city: address.city,
-          state: this.getSelectValue(address.state),
+          state: address.state,
           country: address.country,
           zipcode: address.zipcode,
           description,
@@ -340,7 +340,7 @@ export default {
           cardholdername: cardHoldername,
           cardnumber: cardNumber,
           cardsecuritycode: cardSecurityCode,
-          dob: (dob) ? this.$moment(dob, 'YYYY-MM-DD').format('MM/DD/YYYY') : '',
+          dob,
           super: role_id,
           created_by: this.getSelectValue(userId),
           usercreator: this.getSelectValue(userId),
@@ -348,7 +348,7 @@ export default {
           streetcard: cardAddress.street,
           citycard: cardAddress.city,
           zipcodecard: cardAddress.zipcode,
-          statecard: this.getSelectValue(cardAddress.state),
+          statecard: cardAddress.state,
           countrycard: cardAddress.country,
           type_credit: typeCredit,
           dateonline: dateOnline,
@@ -363,7 +363,7 @@ export default {
           another_address: anotherAddress,
           otherstreet: otherAddress.street,
           othercity: otherAddress.city,
-          otherstate: this.getSelectValue(otherAddress.state),
+          otherstate: otherAddress.state,
           othercountry: otherAddress.country,
           otherzipcode: otherAddress.zipcode,
           originCountry: this.getSelectValue(originCountry)
@@ -372,10 +372,11 @@ export default {
         console.log('response', response)
         if (response && (response.status == 200 || response.status == 201)) {
           this.isLoading = false
+          this.$refs.refFormObserver.reset()
           this.$emit('update:is-add-new-user-sidebar-active', false)
           this.resetuserData()
           const idUser = response.data.id
-          /* if (this.module == 2) {
+          /* *INTEGRATE* if (this.module == 2) {
             window.location.href = `${route}${idUser}`
           } else {
             window.location.href = `${route}`

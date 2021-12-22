@@ -9,7 +9,7 @@ export const $themeBreakpoints = {}
 // APP CONFIG
 export const $themeConfig = {
   app: {
-    appName: 'AMG SOFT', // Will update name in navigation menu (Branding)
+    appName: 'A.M.G - SOFT', // Will update name in navigation menu (Branding)
     // eslint-disable-next-line global-require
     appLogoImage: require('@/assets/images/logo/amg_logo.svg'), // Will update logo in navigation menu (Branding)
   },
@@ -29,7 +29,7 @@ export const $themeConfig = {
       backgroundColor: '', // BS color options [primary, success, etc]
     },
     footer: {
-      type: 'static', // static, sticky, hidden
+      type: 'hidden', // static, sticky, hidden
     },
     customizer: true,
     enableScrollToTop: true,

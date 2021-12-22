@@ -20,7 +20,7 @@ import useAppConfig from "@core/app-config/useAppConfig";
 import { useWindowSize, useCssVar } from "@vueuse/core";
 
 import store from "@/store";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 const LayoutVertical = () => import("@/layouts/vertical/LayoutVertical.vue");
 const LayoutHorizontal = () =>
@@ -54,6 +54,18 @@ export default {
     this.$root.$on("bv::modal::shown", bvEvent => {
       bvEvent.vueTarget.$refs.content.attributes.removeNamedItem("tabindex");
     });
+    // this.updateCurrentUserModuleRole(this.$route.meta.module)
+    
+  },
+  methods:{
+    ...mapActions({
+      updateCurrentUserModuleRole: 'auth/updateCurrentUserModuleRole'
+    })
+  },
+  watch:{
+    '$route'(){
+      this.updateCurrentUserModuleRole(this.$route.meta.module)
+    }
   },
   beforeCreate() {
     // Set colors in theme

@@ -2,6 +2,8 @@
 <div>
   <h1>{{message}}</h1>
   <pre>{{currentUser}}</pre>
+  <p>AAAAAAAAAAAAAAAA</p>
+  <pre>{{ userRole }}</pre>
 </div>
 
 </template>
@@ -35,7 +37,8 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token"
+      token: "auth/token",
+      userRole: "auth/userRole",
     }),
   },
 };

@@ -8,6 +8,7 @@
       :paginate="paginate"
       :start-page="startPage"
       :to-page="toPage"
+      @reload="$refs['annull-table'].refresh()"
     >
       <b-table
         id="annull-table"
@@ -17,6 +18,7 @@
         :has-provider="true"
         sticky-header="70vh"
         small
+        no-provider-filtering
         class="font-small-3 text-center"
         :busy.sync="isBusy"
         :items="myProvider"
@@ -204,19 +206,19 @@ export default {
         const sortBy = 30
         const sortDirection = 'desc'
         const data = await CrmService.getSaleAnnul({
-          captured: ctx.filter.captured,
-          from: ctx.filter.from,
+          captured: this.filter.captured,
+          from: this.filter.from,
           order: sortDirection,
           orderby: sortBy,
-          program: ctx.filter.program,
+          program: this.filter.program,
           rolsession: 1,
           salemade: 0,
-          seller: ctx.filter.seller,
-          status: ctx.filter.status,
-          statusip: ctx.filter.stip,
-          text: ctx.filter.text,
-          to: ctx.filter.to,
-          per_page: ctx.perPage,
+          seller: this.filter.seller,
+          status: this.filter.status,
+          statusip: this.filter.stip,
+          text: this.filter.text,
+          to: this.filter.to,
+          per_page: this.paginate.perPage,
         },
         ctx.currentPage)
         this.startPage = data.from

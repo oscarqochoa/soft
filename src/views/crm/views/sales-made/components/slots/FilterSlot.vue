@@ -4,6 +4,46 @@
       no-body
       class="mb-1"
     >
+      <b-sidebar
+        id="sidebar-right"
+        right
+        shadow
+        bg-variant="white"
+        sidebar-class="sidebar-lg"
+        no-header-close
+      >
+        <template #header>
+          <b-container>
+            <b-row>
+              <h3>Advanced Search</h3>
+            </b-row>
+          </b-container>
+        </template>
+        <b-container>
+          <filters-component
+            :filters="filter"
+          />
+        </b-container>
+        <template #footer>
+          <b-container>
+            <b-row class="d-flex align-items-center justify-content-between p-1">
+              <b-button
+                v-b-toggle.sidebar-right
+                variant="outline-danger"
+              >
+                Close
+              </b-button>
+              <b-button
+                v-b-toggle.sidebar-right
+                variant="primary"
+                @click="$emit('reload')"
+              >
+                Search
+              </b-button>
+            </b-row>
+          </b-container>
+        </template>
+      </b-sidebar>
       <div class="mx-2 mb-2 mt-2">
         <b-row>
           <b-col
@@ -94,125 +134,37 @@
                 align-items-center
               "
             >
-              <b-form-input
-                v-model="filter.text"
-                class="d-inline-block mr-1"
-                placeholder="Client..."
-                debounce="200"
-              />
+              <b-input-group class="mr-1">
+                <b-form-input
+                  v-if="filterPrincipal.type === 'input'"
+                  v-model="filterPrincipal.model"
+                  :type="filterPrincipal.inputType"
+                  :placeholder="filterPrincipal.placeholder"
+                  :class="filterPrincipal.class"
+                  @keyup.enter="$emit('reload')"
+                />
+                <b-input-group-append>
+                  <b-button
+                    variant="primary"
+                    @click="$emit('reload')"
+                  >
+                    <feather-icon icon="SearchIcon" />
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
               <b-button
+                v-b-toggle.sidebar-right
                 variant="primary"
                 @click="basicSearch = !basicSearch"
               >
                 <div class="d-flex justify-content-between">
-                  <span
-                    class="mr-50"
-                  ><feather-icon
+                  <feather-icon
                     icon="FilterIcon"
                     size="15"
-                  /></span>
-
-                  <span class="text-nowrap">{{
-                    basicSearch ? "Advanced Search" : "Basic Search"
-                  }}</span>
+                  />
                 </div>
               </b-button>
             </div>
-          </b-col>
-        </b-row>
-      </div>
-      <div class="mr-2 ml-2 mb-2">
-        <b-row>
-          <b-col>
-            <b-form-group v-if="!basicSearch">
-              <b-form-row>
-                <b-col>
-                  <label>From:</label>
-                  <b-form-datepicker
-                    id="from-date-picker"
-                    v-model="filter.from"
-                    locale="en"
-                    :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                    placeholder="From"
-                    size="sm"
-                  />
-                </b-col>
-                <b-col>
-                  <label>To:</label>
-                  <b-form-datepicker
-                    id="to-date-picker"
-                    v-model="filter.to"
-                    locale="en"
-                    :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                    placeholder="To"
-                    size="sm"
-                  />
-                </b-col>
-                <b-col>
-                  <label>Captured By:</label>
-                  <v-select
-                    v-model="filter.captured"
-                    :options="captured"
-                    size="sm"
-                    :reduce="(option) => option.id"
-                  />
-                </b-col>
-                <b-col>
-                  <label>Seller:</label>
-                  <v-select
-                    v-model="filter.seller"
-                    :options="sellers"
-                    size="sm"
-                    :reduce="(option) => option.id"
-                  />
-                </b-col>
-                <b-col v-if="!annulled">
-                  <label>Source name:</label>
-                  <v-select
-                    v-model="filter.source"
-                    :options="sources"
-                    size="sm"
-                    :reduce="(option) => option.id"
-                  />
-                </b-col>
-                <b-col>
-                  <label>Status:</label>
-                  <v-select
-                    v-model="filter.status"
-                    :options="status"
-                    size="sm"
-                    :reduce="(option) => option.id"
-                  />
-                </b-col>
-                <b-col>
-                  <label>Services:</label>
-                  <v-select
-                    v-model="filter.program"
-                    :options="programs"
-                    size="sm"
-                    :reduce="(option) => option.id"
-                  />
-                </b-col>
-                <b-col>
-                  <label>IP:</label>
-                  <v-select
-                    v-model="filter.stip"
-                    :options="stip"
-                    size="sm"
-                    :reduce="(option) => option.id"
-                  />
-                </b-col>
-                <b-col v-if="!annulled">
-                  <label>ST/AD:</label>
-                  <v-select
-                    v-model="filter.state"
-                    :options="sts"
-                    size="sm"
-                    :reduce="(option) => option.id"
-                  />
-                </b-col>
-              </b-form-row>
-            </b-form-group>
           </b-col>
         </b-row>
       </div>
@@ -276,8 +228,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import vSelect from 'vue-select'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'SalesMadeNewClientComponent',
@@ -285,53 +237,29 @@ export default {
     vSelect,
   },
   props: {
-    totalRows: { required: true, type: Number },
-    filter: { required: true, type: Object },
-    startPage: { required: true, type: Number },
-    toPage: { required: true, type: Number },
+    filter: { required: true, type: Array },
+    totalRows: { required: false, type: Number },
     paginate: { required: true, type: Object },
-    annulled: { required: false, type: Boolean, default: false },
+    startPage: { required: false, type: Number },
+    toPage: { required: false, type: Number },
+    filterPrincipal: { required: true, type: Object },
   },
   data() {
     return {
       basicSearch: true,
     }
   },
-  async created() {
-    try {
-      await this.$store.dispatch('crm-store/getSellers')
-      await this.$store.dispatch('crm-store/getCaptured')
-      await this.$store.dispatch('crm-store/getPrograms')
-      await this.$store.dispatch('crm-store/getSources')
-      await this.$store.dispatch('crm-store/getStates')
-    } catch (e) {
-      console.error(e)
-    }
-  },
   computed: {
-    ...mapState({
-      sellers: state => state['crm-store'].sellersCrm,
-      captured: state => state['crm-store'].capturedCrm,
-      // TODO HACERLO GLOBAL
-      programs: state => state['crm-store'].programs,
-      sources: state => state['crm-store'].sources,
-      sts: state => state['crm-store'].states,
-      stip: state => state['crm-store'].statusip,
-      status: state => state['crm-store'].status,
+    ...mapGetters({
+      skin: 'appConfig/skin',
     }),
   },
   methods: {
     resetFilter() {
-      this.filter.from = null
-      this.filter.to = null
-      this.filter.text = ''
-      this.filter.seller = null
-      this.filter.captured = null
-      this.filter.program = null
-      this.filter.source = ''
-      this.filter.state = null
-      this.filter.stip = null
-      this.filter.status = null
+      this.filter.map(fil => {
+        fil.model = null
+      })
+      this.$emit('reload')
     },
     swapSearch() {
       this.resetFilter()

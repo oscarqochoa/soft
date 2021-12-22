@@ -26,7 +26,7 @@
         @click="copyIconName(icon)"
       >
         <div class="icon-wrapper">
-          <feather-icon
+          <amg-icon
             :icon="icon"
             size="24"
           />
@@ -351,6 +351,12 @@ export default {
         'ZapIcon',
         'ZoomInIcon',
         'ZoomOutIcon',
+        'MessengerIcon',
+        'ComissionsIcon',
+        'UsersAmgIcon',
+        'AmgIcon',
+        'DashboardIcon',
+
       ],
     }
   },

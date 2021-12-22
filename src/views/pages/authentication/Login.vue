@@ -127,8 +127,13 @@
                 variant="primary"
                 block
                 :disabled="invalid"
+                v-if="!loading"
               >
                 Sign in
+              </b-button>
+              <b-button variant="primary" disabled v-else block>
+                <b-spinner small />
+                Loading...
               </b-button>
             </b-form>
           </validation-observer>
@@ -230,6 +235,7 @@ export default {
       // validation rules
       required,
       email,
+      loading: false,
     };
   },
   computed: {
@@ -249,6 +255,7 @@ export default {
     login() {
       this.$refs.loginForm.validate().then((success) => {
         if (success) {
+          this.loading = true;
           useJwt
             .login({
               email: this.userEmail,
@@ -284,9 +291,11 @@ export default {
                     },
                   });
                 });
+                this.loading = false;
             })
             .catch((error) => {
               this.$refs.loginForm.setErrors(error.response.data.error);
+              this.loading = false;
             });
         }
       });

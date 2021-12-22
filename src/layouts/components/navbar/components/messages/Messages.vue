@@ -1,6 +1,6 @@
 <template>
   <b-nav-item>
-    <feather-icon icon="SendIcon" size="21" />
+    <feather-icon icon="SendIcon" size="19" />
     <b-tooltip
       triggers="hover"
       :target="`bookmark-message`"

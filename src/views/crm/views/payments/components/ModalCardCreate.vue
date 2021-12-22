@@ -11,7 +11,7 @@
       body-class="mb-2"
       @hidden="closeModal"
     >
-      
+
       <ValidationObserver ref="form">
         <b-row class="font-bureau-style">
           <b-col cols="6">
@@ -42,7 +42,7 @@
                       @input="activeFocus(1, 4)"
                       v-model="cardnumber1"
                       type="text"
-                      
+
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -55,7 +55,7 @@
                       @input="activeFocus(2, 4)"
                       v-model="cardnumber2"
                       type="text"
-                    
+
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -68,7 +68,7 @@
                       @input="activeFocus(3, 4)"
                       v-model="cardnumber3"
                       type="text"
-                     
+
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -81,7 +81,7 @@
                       @input="activeFocus(4, 4)"
                       v-model="cardnumber4"
                       type="text"
-                     
+
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -99,7 +99,7 @@
                   id="card-expi-month"
                   ref="input-5"
                   @input="activeFocus(5, 2)"
-                  
+
                   v-model="form.card_expi_month"
                   :class="{'border border-danger':errors[0]}"
                 />
@@ -116,7 +116,7 @@
                   id="card-expi-year"
                   ref="input-6"
                   @input="activeFocus(6, 2)"
-                 
+
                   v-model="form.card_expi_year"
                   :class="{'border border-danger':errors[0]}"
                 />
@@ -132,7 +132,7 @@
                   v-model="form.cardsecuritycode"
                   ref="input-7"
                   id="card-cvv"
-                  
+
                   type="text"
                   maxlength="16"
                   :class="{'border border-danger':errors[0]}"
@@ -150,7 +150,7 @@
                     @click="moreInfo = 1"
                     class="btn rounded w-100 btn-gray-selector"
                     :variant="`${moreInfo == 1? 'primary':'' }`"
-                   
+
                   >Yes</b-button>
                 </b-col>
                 <b-col cols="6" class="px-1">
@@ -162,7 +162,7 @@
                 </b-col>
               </b-row>
             </div>
-           
+
           </b-col>
         </b-row>
         <b-row v-if="moreInfo == 0" class="font-bureau-style">
@@ -358,10 +358,9 @@ export default {
             confirmButtonText: "Yes, create it!",
           })
           .then((result) => {
-            if (result.value) {
-              
+            if (result.isConfirmed) {
               amgApi.post("/createcard", this.form).then((response) => {
-               
+                console.log("entre muy adentro")
                 this.cards = response.data;
                 this.$emit("new", this.cards);
                 this.$emit("click", false);

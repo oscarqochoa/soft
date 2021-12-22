@@ -45,20 +45,24 @@
           label="Add Quick SMS"
           label-for="first-name"
           label-cols-md="2"
+          :state="getValidationState(validationContext)"
         >
           <b-input-group>
             <v-select
               style="flex: 1 1 auto;"
               v-model="smsData.optionsms"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              label="label"
-              :options="quicks"
+              label="title"
+              :options="S_SMS_QUICKS"
               @input="onSelectSms()"
             />
             <b-input-group-append
               v-if="[ 1, 2 ].includes(userId) || modul == 15"
             >
-              <b-button variant="outline-info" @click="$emit('modalQuickOpen', true)">
+              <b-button
+                variant="outline-info"
+                @click="$bvModal.show('modal-quick-sms')"
+              >
                 <feather-icon
                   icon="AlignJustifyIcon"
                   class="cursor-pointer mr-1"
@@ -88,12 +92,13 @@
             rows="3"
             v-model="smsData.contmessage"
             maxlength="1000"
+            :state="getValidationState(validationContext)"
           />
           <template #description>
             <small tabindex="-1" class="form-text text-danger">Max: 1000 characters</small>
           </template>
 
-          <b-form-invalid-feedback :state="getValidationState(validationContext)">
+          <b-form-invalid-feedback>
             {{ validationContext.errors[0] }}
           </b-form-invalid-feedback>
         </b-form-group>
@@ -114,21 +119,38 @@
         </b-button>
       </div>
     </b-form>
+
+    <!-- modal QUICK SMS -->
+    <b-modal
+      id="modal-quick-sms"
+      ok-only
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      title="QUICK SMS"
+      hide-footer
+    >
+      <modal-quick-sms
+        :modul="modul"
+        :quicks="S_SMS_QUICKS"
+      />
+    </b-modal>
   </validation-observer>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
 import { required } from '@validations'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 
+import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 
-import formValidation from '@core/comp-functions/forms/form-validation'
+import ModalQuickSms from './ModalQuickSms.vue'
 
 export default {
   components: {
@@ -138,6 +160,7 @@ export default {
     BFormInvalidFeedback,
     BButton,
     vSelect,
+    ModalQuickSms,
 
     // Form Validation
     ValidationProvider,
@@ -171,15 +194,14 @@ export default {
       type: Array,
       required: true
     },
-    quicks: {
-      type: Array,
-      required: true
-    }
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token'
+    }),
+    ...mapState({
+      S_SMS_QUICKS: state => state.CrmSmsStore.S_SMS_QUICKS
     }),
   },
   data() {
@@ -212,8 +234,19 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_SEND_MESSAGE_LEAD: 'CrmLeadStore/A_SEND_MESSAGE_LEAD',
+      A_GET_SMS_QUICKS: "CrmSmsStore/A_GET_SMS_QUICKS",
+      A_SEND_MESSAGE_LEAD: 'CrmSmsStore/A_SEND_MESSAGE_LEAD',
     }),
+    async getAllQuicksSms() {
+      try {
+        await this.A_GET_SMS_QUICKS({
+          modul: this.modul
+        })
+      } catch (error) {
+        console.log("Something wnet wrong getAllQuicksSms:", error);
+        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
+    },
     deleteAccount (id) {
       for (let i = 0; i < this.nameLeads.length; i++) {
         if (this.nameLeads[i].id == id) {
@@ -221,38 +254,26 @@ export default {
         }
       }
       if (this.typesms == 0) {
-        console.log('this.smss',this.smss)
         const index = this.smss.indexOf(id)
-        console.log('index', index)
         if (index !== -1)
           this.smss.splice(index, 1)
       } else {
         const index = this.sms.indexOf(id)
-        console.log('index', index)
         if (index !== -1)
           this.sms.splice(index, 1)
       }
     },
     onSelectSms () {
-      const index = this.quicks.map(el => el.id).indexOf((this.smsData.optionsms) ? this.smsData.optionsms.id : null)
+      const index = this.S_SMS_QUICKS.map(el => el.id).indexOf((this.smsData.optionsms) ? this.smsData.optionsms.id : null)
       if (index !== -1) {
-        const format = this.quicks[index].sms ? this.quicks[index].sms.replace(/<br \/>/g, "\n") : ''
+        const format = this.S_SMS_QUICKS[index].sms ? this.S_SMS_QUICKS[index].sms.replace(/<br \/>/g, "\n") : ''
         this.smsData.contmessage = format
       } else {
         this.smsData.contmessage = ''
       }
     },
     async onSubmit () {
-      this.$swal.fire({
-        title: 'Are you Sure Send SMS',
-        icon: 'question',
-        text: 'You won\'t be able to revert this!',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ab9220',
-        cancelButtonColor: '#8f9194',
-        confirmButtonText: 'Yes, delete it!',
-      })
+      this.showSwalGeneric('Are you Sure Send SMS', 'You won\'t be able to revert this!', 'warning')
       .then(async (result) => {
         if (result.value) {
           const response = await this.A_SEND_MESSAGE_LEAD({
@@ -276,8 +297,9 @@ export default {
     }
   },
   created() {
-    this.userId = this.currentUser.id
-    this.roleId = this.currentUser.id
+    this.userId = this.currentUser.user_id
+    this.roleId = this.currentUser.role_id
+    this.getAllQuicksSms()
   },
 }
 </script>

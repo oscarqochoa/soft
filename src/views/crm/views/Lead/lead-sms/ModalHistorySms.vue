@@ -10,11 +10,13 @@
       />
     </b-form-group>
     <b-table
+      show-empty
+      sticky-header
+      small
       responsive="sm"
       :fields="fieldsQuicks"
       :items="items"
       :busy="isBusy"
-      sticky-header
     >
       <template #table-busy>
         <div class="text-center text-primary my-2">
@@ -72,7 +74,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_GET_HISTORY_SMS_LEADS: 'CrmLeadStore/A_GET_HISTORY_SMS_LEADS'
+      A_GET_HISTORY_SMS_LEADS: 'CrmSmsStore/A_GET_HISTORY_SMS_LEADS'
     }),
     async getHistorySms () {
       try {
@@ -90,8 +92,8 @@ export default {
     },
   },
   created() {
-    this.userId = this.currentUser.id
-    this.roleId = this.currentUser.id
+    this.userId = this.currentUser.user_id
+    this.roleId = this.currentUser.role_id
     this.getHistorySms()
   },
 }

@@ -7,6 +7,7 @@ export default [
     path: '/leads',
     name: 'lead-crm',
     component: () => import('./Lead.vue'),
+    redirect: { name: 'lead-crm-lead-list' },
     children: [
       {
         path: '',
@@ -15,7 +16,7 @@ export default [
       {
         path: '',
         component: LeadList,
-        name: 'lead-crm-lead-list'
+        name: 'lead-crm-lead-list',
       },
       {
         path: 'sn',
@@ -29,10 +30,15 @@ export default [
       },
     ],
     meta: {
-      pageTitle: 'Sales Made',
+      pageTitle: 'Leads',
       breadcrumb: [{
-        text: 'Sales Made',
+        text: 'Leads',
       }, ],
     },
+  },
+  {
+    path: '/leads/:id',
+    name: 'lead-show',
+    component: () => import('./lead-module/dashboard/default.vue')
   }
 ]
