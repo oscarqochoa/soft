@@ -33,26 +33,16 @@
           </div>
         </template>
         <template #head(selected)>
-          <b-form-checkbox
-            v-model="selectAll"
-            @input="selectedAll"
-          />
+          <b-form-checkbox v-model="selectAll" @input="selectedAll" />
         </template>
         <template v-slot:cell(selected)="row">
           <b-form-group>
-            <b-form-checkbox
-              v-model="row.item.selected"
-              @input="selectedRow(row.item)"
-            />
+            <b-form-checkbox v-model="row.item.selected" @input="selectedRow(row.item)" />
           </b-form-group>
         </template>
         <template v-slot:cell(client)="data">
-          <p class="mb-0 font-weight-bold">
-            {{ data.item.client }}
-          </p>
-          <p class="mb-0">
-            {{ data.item.mobile }}
-          </p>
+          <p class="mb-0 font-weight-bold">{{ data.item.client }}</p>
+          <p class="mb-0">{{ data.item.mobile }}</p>
           <p class="mb-0">
             <small>{{ data.item.state }}</small>
           </p>
@@ -198,15 +188,8 @@
           </b-row>
           <b-row v-else>
             <b-col>
-              <b-input-group
-                prepend="$"
-                size="sm"
-                class="mb-1"
-              >
-                <b-form-input
-                  v-model="data.item.feeNew"
-                  type="number"
-                />
+              <b-input-group prepend="$" size="sm" class="mb-1">
+                <b-form-input v-model="data.item.feeNew" type="number" />
               </b-input-group>
             </b-col>
           </b-row>
@@ -253,11 +236,7 @@
               currentUser.role_id == 2) &&
               openInitialPaymentModal(data.item)"
           >
-            <b-icon
-              v-if="data.item.initial_payment_status === 1"
-              icon="wallet2"
-              variant="muted"
-            />
+            <b-icon v-if="data.item.initial_payment_status === 1" icon="wallet2" variant="muted" />
             <b-icon
               v-else-if="data.item.initial_payment_status === 3"
               icon="wallet2"
@@ -293,7 +272,7 @@
               (data.item.notes_status_new == null) ? 'muted':
               (data.item.notes_status_new == 0) ? 'success' :
               'warning' "
-            @click="openNotesModal(data.item)"
+            @click="notesModal(data.item)"
           />
           <b-icon
             v-else
@@ -301,7 +280,7 @@
             class="cursor-pointer"
             :variant="
               (data.item.notes_status === 0) ? 'muted': 'success' "
-            @click="openNotesModal(data.item.id)"
+            @click="notesModal(data.item)"
           />
         </template>
         <template v-slot:cell(trackings)="data">
@@ -411,10 +390,7 @@
               @click="annulSale(data.item)"
             >ANNUL</b-button>
           </b-row>
-          <b-row
-            v-else
-            class="d-flex align-items-center justify-content-center"
-          >
+          <b-row v-else class="d-flex align-items-center justify-content-center">
             <b-button
               v-if="
                 (data.item.status == 1 || data.item.status == 7) &&
@@ -502,10 +478,7 @@
           <span class="font-weight-bold text-info">{{ data.item.approved | myGlobal }}</span>
         </template>
         <template #cell(sms)="data">
-          <b-icon
-            icon="chat-text-fill"
-            variant="primary"
-          />
+          <b-icon icon="chat-text-fill" variant="primary" />
         </template>
         <template #cell(url)="data">
           <b-icon
@@ -518,18 +491,12 @@
         </template>
         <template #cell(done)="data">
           <b-btn v-if="data.item.initial_payment_status == 2">
-            <b-icon
-              icon="arrow-left-square-fill"
-              variant="primary"
-            />
+            <b-icon icon="arrow-left-square-fill" variant="primary" />
           </b-btn>
         </template>
       </b-table>
     </filter-slot>
-    <tracking-modal
-      :modal="modal"
-      :tracking="modalData.tracking"
-    />
+    <tracking-modal :modal="modal" :tracking="modalData.tracking" />
     <component
       :is="modalData.programs.programSelected"
       v-if="modal.programs"
@@ -550,11 +517,7 @@
       :modal="modal"
       :captured-by-tracking="modalData.capturedByTracking"
     />
-    <files-modal
-      v-if="modal.files"
-      :modal="modal"
-      :files="modalData.files"
-    />
+    <files-modal v-if="modal.files" :modal="modal" :files="modalData.files" />
     <revission-modal
       v-if="modal.revission"
       :modal="modal"
@@ -562,54 +525,54 @@
       @click="$refs['new-client-done-table'].refresh(); modal.revission = false"
       @response="$refs['new-client-done-table'].refresh(); modal.revission = false"
     />
-    <ModalNotesBoost
+
+    <!-- NOTES -->
+    <component
       v-if="modal.notes"
-      :sales-notes="modalData.notes"
       @hide="closeModalNotes"
+      :noteInfo="modalData.notes"
+      :is="modalData.notes.programSelected"
     />
-    <url-modal
-      v-if="modal.url"
-      :modal="modal"
-      :url="modalData.url"
-    />
+
+    <url-modal v-if="modal.url" :modal="modal" :url="modalData.url" />
     <contract-fee-modal
       v-if="modal.contract_fee"
       :modal="modal"
       :contract-fee="modalData.contractFee"
     />
-    <url-modal v-if="modal.url" :modal="modal" :url="modalData.url" />
-    <ModalNotesBoost v-if="modal.notes" @hide="closeModalNotes" :info="modalData.notes" />>>>>>>> NicoDev
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters } from "vuex";
 
-import vSelect from 'vue-select'
-import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
-import dataFields from '@/views/crm/views/sales-made/components/new-client/fields.data'
-import dataFilters from '@/views/crm/views/sales-made/components/new-client/filters.data'
-import CrmService from '@/views/crm/services/crm.service'
-import TrackingModal from '@/views/crm/views/sales-made/components/modals/TrackingModal.vue'
-import InitialPaymentModal from '@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue'
-import TrackingCapturedByModal from '@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue'
-import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
-import BusinessModal from '@/views/crm/views/sales-made/components/modals/services/BuisnessModal.vue'
-import CreditExpertsModal from '@/views/crm/views/sales-made/components/modals/services/CreditExpertsModal.vue'
-import BoostCreditModal from '@/views/crm/views/sales-made/components/modals/services/BoostCreditModal.vue'
-import GeneralSupportModal from '@/views/crm/views/sales-made/components/modals/services/GeneralSupportModal.vue'
-import KeyBookModal from '@/views/crm/views/sales-made/components/modals/services/KeyBookModal.vue'
-import ParagonModal from '@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue'
-import SpecialistModal from '@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue'
-import TaxResearchModal from '@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue'
-import DebtSolutionModal from '@/views/crm/views/sales-made/components/modals/services/DebtSolutionModal.vue'
-import RevissionModal from '@/views/crm/views/sales-made/components/modals/RevissionModal.vue'
-import UrlModal from '@/views/crm/views/sales-made/components/modals/UrlModal.vue'
-import { amgApi } from '@/service/axios'
-import ContractFeeModal from '@/views/crm/views/sales-made/components/modals/ContractFeeModal.vue'
+import vSelect from "vue-select";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import dataFields from "@/views/crm/views/sales-made/components/new-client/fields.data";
+import dataFilters from "@/views/crm/views/sales-made/components/new-client/filters.data";
+import CrmService from "@/views/crm/services/crm.service";
+import TrackingModal from "@/views/crm/views/sales-made/components/modals/TrackingModal.vue";
+import InitialPaymentModal from "@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue";
+import TrackingCapturedByModal from "@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue";
+import FilesModal from "@/views/crm/views/sales-made/components/modals/FilesModal.vue";
+import BusinessModal from "@/views/crm/views/sales-made/components/modals/services/BuisnessModal.vue";
+import CreditExpertsModal from "@/views/crm/views/sales-made/components/modals/services/CreditExpertsModal.vue";
+import BoostCreditModal from "@/views/crm/views/sales-made/components/modals/services/BoostCreditModal.vue";
+import GeneralSupportModal from "@/views/crm/views/sales-made/components/modals/services/GeneralSupportModal.vue";
+import KeyBookModal from "@/views/crm/views/sales-made/components/modals/services/KeyBookModal.vue";
+import ParagonModal from "@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue";
+import SpecialistModal from "@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue";
+import TaxResearchModal from "@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue";
+import DebtSolutionModal from "@/views/crm/views/sales-made/components/modals/services/DebtSolutionModal.vue";
+import RevissionModal from "@/views/crm/views/sales-made/components/modals/RevissionModal.vue";
+import UrlModal from "@/views/crm/views/sales-made/components/modals/UrlModal.vue";
+import { amgApi } from "@/service/axios";
+import ContractFeeModal from "@/views/crm/views/sales-made/components/modals/ContractFeeModal.vue";
+
+import ModalNotesBoost from "@/views/commons/components/first-notes/ModalNotesBoost.vue";
 
 export default {
-  name: 'SalesMadeNewComponent',
+  name: "SalesMadeNewComponent",
   components: {
     ContractFeeModal,
     UrlModal,
@@ -629,12 +592,13 @@ export default {
     SpecialistModal,
     TaxResearchModal,
     DebtSolutionModal,
+    ModalNotesBoost
   },
   props: {
     done: {
       required: true,
-      type: Number,
-    },
+      type: Number
+    }
   },
   data() {
     return {
@@ -644,14 +608,14 @@ export default {
       fields: dataFields,
       totalRows: 0,
       filterPrincipal: {
-        type: 'input',
-        inputType: 'text',
-        placeholder: 'Client...',
-        model: '',
+        type: "input",
+        inputType: "text",
+        placeholder: "Client...",
+        model: ""
       },
       paginate: {
         currentPage: 1,
-        perPage: 10,
+        perPage: 10
       },
       basicSearch: true,
       filter: dataFilters,
@@ -666,17 +630,18 @@ export default {
         revission: false,
         url: false,
         contract_fee: false,
+        notes: false
       },
       modalData: {
         url: {
-          client: '',
-          program: '',
-          amount: 0.0,
+          client: "",
+          program: "",
+          amount: 0.0
         },
         tracking: {
-          program: '',
-          client: '',
-          tabla: '',
+          program: "",
+          client: "",
+          tabla: ""
         },
         initial_payment: {
           payments: null,
@@ -693,44 +658,45 @@ export default {
           idtransaction: null,
           programid: null,
           allcards: null,
-          role_id: null,
+          role_id: null
         },
         capturedByTracking: {
-          program: '',
-          client: '',
-          id: 0,
+          program: "",
+          client: "",
+          id: 0
         },
         files: {
           id: null,
-          program: '',
-          client: '',
-          sale_id: null,
+          program: "",
+          client: "",
+          sale_id: null
         },
         programs: {
-          programSelected: '',
+          programSelected: "",
           typeModal: 0,
-          salesClient: {},
+          salesClient: {}
         },
         revission: {},
         contractFee: {
-          programName: '',
-          clientName: '',
+          programName: "",
+          clientName: "",
           saleId: null,
           id: null,
           initialPaymentStatus: null,
           editModal: false,
           statusSale: null,
-          st: null,
+          st: null
         },
         notes: {
-          roleId: this.G_USER_ROLE,
+          programSelected: "",
+          roleId: null,
           notesProgram: null,
           nameProgram: null,
           nameClient: null,
           salesMades: null,
-          module: this.G_USER_SESSION,
+          module: null,
           type: null,
-          editModal: null,
+          editModal: false,
           statusSale: null,
           sourcesName: null,
           pack: null,
@@ -740,73 +706,87 @@ export default {
           notSeller: null,
           capturedName: null,
           sellerName: null,
-          trackings: null
+          trackings: null,
+          notes_status: null,
+          notes_status_new: null
         }
       },
-      selectAll: false,
-    }
+      selectAll: false
+    };
   },
   computed: {
     ...mapState({
-      sellers: state => state['crm-store'].sellersCrm,
-      captured: state => state['crm-store'].capturedCrm,
+      sellers: state => state["crm-store"].sellersCrm,
+      captured: state => state["crm-store"].capturedCrm,
       // TODO HACERLO GLOBAL
-      programs: state => state['crm-store'].programs,
-      sources: state => state['crm-store'].sources,
-      sts: state => state['crm-store'].states,
-      stip: state => state['crm-store'].statusip,
-      status: state => state['crm-store'].status,
+      programs: state => state["crm-store"].programs,
+      sources: state => state["crm-store"].sources,
+      sts: state => state["crm-store"].states,
+      stip: state => state["crm-store"].statusip,
+      status: state => state["crm-store"].status
     }),
     ...mapGetters({
       currentUser: "auth/currentUser",
       G_IS_SUPERVISOR: "auth/isSupervisor",
+      G_IS_SELLER: "auth/isSeller",
       G_IS_CEO: "auth/isCeo",
       G_MODULE_ID: "auth/moduleId",
       G_USER_ROLE: "auth/userRole",
-      G_USER_SESSION: "auth/userSession"
+      G_USER_SESSION: "auth/userSession",
+      G_ROLE_ID: "auth/roleId"
     }),
     filteredFields() {
       if (this.done === 0) return this.fields;
       return this.fields.filter(field => field.key !== "done");
-    },
-    isSeller() {
-      return this.G_USER_ROLE == 5;
     }
+  },
+  mounted() {
+    console.log(this.G_MODULE_ID);
+    console.log(this.G_ROLE_ID);
+    console.log(this.currentUser.role_id);
+    console.log(this.G_IS_CEO);
   },
   async created() {
     try {
-      await this.$store.dispatch('crm-store/getSellers')
-      await this.$store.dispatch('crm-store/getCaptured')
-      await this.$store.dispatch('crm-store/getPrograms')
-      await this.$store.dispatch('crm-store/getSources')
-      await this.$store.dispatch('crm-store/getStates')
-      this.filter[2].options = this.captured
-      this.filter[3].options = this.sellers
-      this.filter[4].options = this.sources
-      this.filter[5].options = this.status
-      this.filter[6].options = this.programs
-      this.filter[7].options = this.stip
-      this.filter[8].options = this.sts
+      await Promise.all([
+        this.$store.dispatch("crm-store/getSellers"),
+        this.$store.dispatch("crm-store/getCaptured"),
+        this.$store.dispatch("crm-store/getPrograms"),
+        this.$store.dispatch("crm-store/getSources"),
+        this.$store.dispatch("crm-store/getStates")
+      ]);
+      /* await this.$store.dispatch("crm-store/getSellers");
+      await this.$store.dispatch("crm-store/getCaptured");
+      await this.$store.dispatch("crm-store/getPrograms");
+      await this.$store.dispatch("crm-store/getSources");
+      await this.$store.dispatch("crm-store/getStates"); */
+      this.filter[2].options = this.captured;
+      this.filter[3].options = this.sellers;
+      this.filter[4].options = this.sources;
+      this.filter[5].options = this.status;
+      this.filter[6].options = this.programs;
+      this.filter[7].options = this.stip;
+      this.filter[8].options = this.sts;
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   },
   methods: {
     async myProvider(ctx) {
       try {
-        let sortBy = 11
-        let sortDirection = 'desc'
-        if (ctx.sortBy === 'client') {
-          sortBy = 0
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
-        } else if (ctx.sortBy === 'creates') {
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
-        } else if (ctx.sortBy === 'approved') {
-          sortBy = 12
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
+        let sortBy = 11;
+        let sortDirection = "desc";
+        if (ctx.sortBy === "client") {
+          sortBy = 0;
+          if (ctx.sortDesc) sortDirection = "desc";
+          else sortDirection = "asc";
+        } else if (ctx.sortBy === "creates") {
+          if (ctx.sortDesc) sortDirection = "desc";
+          else sortDirection = "asc";
+        } else if (ctx.sortBy === "approved") {
+          sortBy = 12;
+          if (ctx.sortDesc) sortDirection = "desc";
+          else sortDirection = "asc";
         }
         const data = await CrmService.getSaleMade(
           {
@@ -825,52 +805,53 @@ export default {
             statusip: this.filter[7].model,
             sourcesname_id: this.filter[4].model,
             done: this.done,
-            per_page: ctx.perPage,
+            per_page: ctx.perPage
           },
-          ctx.currentPage,
-        )
-        this.startPage = data.from
-        this.toPage = data.to
-        if (this.totalRows !== data.total) this.totalRows = data.total
-        const selectedIds = this.selected.map(s => s.id)
-        let index = 0
+          ctx.currentPage
+        );
+        this.startPage = data.from;
+        this.toPage = data.to;
+        if (this.totalRows !== data.total) this.totalRows = data.total;
+        const selectedIds = this.selected.map(s => s.id);
+        let index = 0;
         while (selectedIds.length > 0 && index < data.data.length) {
           if (selectedIds.includes(data.data[index].id)) {
-            const { id } = data.data[index]
-            data.data[index].selected = true
-            const deleted = selectedIds.findIndex(s => s === id)
-            if (deleted !== -1) selectedIds.splice(deleted, 1)
+            const { id } = data.data[index];
+            data.data[index].selected = true;
+            const deleted = selectedIds.findIndex(s => s === id);
+            if (deleted !== -1) selectedIds.splice(deleted, 1);
           }
-          index += 1
+          index += 1;
         }
-        this.items = data.data
-        return this.items
+        this.items = data.data;
+        return this.items;
       } catch (e) {
-        this.showToast('danger', 'top-right', 'Error', 'XIcon', e)
-        return []
+        this.showToast("danger", "top-right", "Error", "XIcon", e);
+        return [];
       }
     },
     openContractFeeModal(data) {
       if (
-        data.id == this.currentUser.user_id
-        || this.currentUser.role_id == 1
-        || this.currentUser.role_id == 2
+        data.id == this.currentUser.user_id ||
+        this.currentUser.role_id == 1 ||
+        this.currentUser.role_id == 2
       ) {
-        this.modalData.contractFee.editModal = true
+        this.modalData.contractFee.editModal = true;
       } else {
-        this.modalData.contractFee.editModal = false
+        this.modalData.contractFee.editModal = false;
       }
-      this.modalData.contractFee.statusSale = data.status
-      this.modalData.contractFee.clientName = data.client
-      this.modalData.contractFee.programName = data.program
-      this.modalData.contractFee.id = data.lead_id
-      this.modalData.contractFee.saleId = data.id
-      this.modalData.contractFee.initialPaymentStatus = data.initial_payment_status
-      this.modal.contract_fee = true
+      this.modalData.contractFee.statusSale = data.status;
+      this.modalData.contractFee.clientName = data.client;
+      this.modalData.contractFee.programName = data.program;
+      this.modalData.contractFee.id = data.lead_id;
+      this.modalData.contractFee.saleId = data.id;
+      this.modalData.contractFee.initialPaymentStatus =
+        data.initial_payment_status;
+      this.modal.contract_fee = true;
     },
 
     //Notes
-    async openNotesModal(data) {
+    async notesModal(data) {
       this.modalData.notes.capturedName = data.captured;
       this.modalData.notes.sellerName = data.seller;
       this.modalData.notes.trackings = data.trackings;
@@ -883,323 +864,372 @@ export default {
       this.modalData.notes.idLead = data.lead_id;
       this.modalData.notes.created = data.creates;
       this.modalData.notes.saleId = data.id;
+      this.modalData.notes.module = this.G_MODULE_ID;
+      this.modalData.notes.rolId = this.G_ROLE_ID;
+      this.modalData.notes.notes_status = data.notes_status;
+      this.modalData.notes.notes_status_new = data.notes_status_new;
+      this.modalData.notes.editModal =
+        this.G_IS_CEO ||
+        this.G_IS_SUPERVISOR ||
+        this.G_USER_SESSION == data.user_id;
       this.modalData.notes.notSeller =
-        data.user_id != this.G_USER_SESSION && this.isSeller;
+        data.user_id != this.G_USER_SESSION && this.G_IS_SELLER;
 
-      this.modal.notes = true;
+      this.openModalNotes(data.creates, data.program_id);
 
       /*  this.modalData.notes.notesProgram =
           this.modalData.notes.salesMades =
-          this.modalData.notes.type =
-          this.modalData.notes.editModal =
-          this.modalData.notes.created = */
+          this.modalData.notes.type =*/
+    },
+    openModalNotes(created, program) {
+      switch (true) {
+        case created >= "2020-05-28" && program == 1:
+          this.modalData.notes.programSelected = "ModalNotesFirst";
+          break;
+        case created >= "2020-10-29" && program == 2:
+          this.modalData.notes.programSelected = "ModalNotesBoost";
+          break;
+        case created >= "2021-03-04" && program == 3:
+          this.modalData.notes.programSelected = "ModalNotesCredit";
+          break;
+        case created >= "2020-09-24" && program == 5:
+          this.modalData.notes.programSelected = "ModalNotesTax";
+          break;
+        case created >= "2020-10-23" && program == 7:
+          this.modalData.notes.programSelected = "ModalNotesSpecialist";
+          break;
+        case program == 9:
+          this.modalData.notes.programSelected = "ModalNotesParagon";
+          break;
+        default:
+          this.modalData.notes.programSelected = "ModalNotesOld";
+          break;
+      }
+
+      this.modal.notes = true;
+    },
+
+    onAudioChange(e) {
+      var file = e.target.files[0];
+      var reader = new FileReader();
+      reader.onload = event => {
+        // El texto del archivo se mostrará por consola aquí
+        console.log(event.target.result);
+        this.file_audio = event.target.result;
+      };
+
+      reader.readAsDataURL(file);
+      this.audiolisto = true;
     },
     closeModalNotes() {
-      this.modal.notes = false
+      this.modal.notes = false;
     },
     openUrlModal(data) {
-      this.modalData.url.client = data.client
-      this.modalData.url.program = data.program
-      this.modalData.url.selectedLead = data
-      this.modal.url = true
+      this.modalData.url.client = data.client;
+      this.modalData.url.program = data.program;
+      this.modalData.url.selectedLead = data;
+      this.modal.url = true;
     },
     revisionSale(state, data) {
-      this.modalData.revission.nameProgram = data.program
-      this.modalData.revission.idProgram = data.program_id
-      this.modalData.revission.nameClient = data.client
-      this.modalData.revission.type = state
-      this.modalData.revission.idsales = data.id
-      this.modalData.revission.initialPayment = data.initial_payment_status
-      this.modalData.revission.account = data.account
-      this.modalData.revission.leadId = data.lead_id
-      this.modalData.revission.datevent = data.event_date
-      this.modalData.revission.sellerName = data.seller
-      this.modalData.revission.language = data.language
-      this.modalData.revission.user_id = this.currentUser.user_id
-      this.modalData.revission.last_name = data.last_name
-      this.modal.revission = true
+      this.modalData.revission.nameProgram = data.program;
+      this.modalData.revission.idProgram = data.program_id;
+      this.modalData.revission.nameClient = data.client;
+      this.modalData.revission.type = state;
+      this.modalData.revission.idsales = data.id;
+      this.modalData.revission.initialPayment = data.initial_payment_status;
+      this.modalData.revission.account = data.account;
+      this.modalData.revission.leadId = data.lead_id;
+      this.modalData.revission.datevent = data.event_date;
+      this.modalData.revission.sellerName = data.seller;
+      this.modalData.revission.language = data.language;
+      this.modalData.revission.user_id = this.currentUser.user_id;
+      this.modalData.revission.last_name = data.last_name;
+      this.modal.revission = true;
     },
     hideModalProgram(refresh) {
-      if (refresh) this.$refs['new-client-done-table'].refresh()
-      this.modalData.programs.programSelected = ''
-      this.modal.programs = false
-      this.$store.commit('app/SET_LOADING', false)
+      if (refresh) this.$refs["new-client-done-table"].refresh();
+      this.modalData.programs.programSelected = "";
+      this.modal.programs = false;
+      this.$store.commit("app/SET_LOADING", false);
     },
     openTrackingModal(program, client, tabla) {
-      this.modalData.tracking.program = program
-      this.modalData.tracking.client = client
+      this.modalData.tracking.program = program;
+      this.modalData.tracking.client = client;
       if (tabla) {
-        this.modalData.tracking.tabla = JSON.parse(tabla)
-        this.modal.tracking = true
+        this.modalData.tracking.tabla = JSON.parse(tabla);
+        this.modal.tracking = true;
       }
     },
     openTrackingCapturedByModal(program, client, id, type) {
-      this.modalData.capturedByTracking.client = client
-      this.modalData.capturedByTracking.program = program
-      this.modalData.capturedByTracking.id = id
-      this.modalData.capturedByTracking.type = type
-      if (type === 1) this.modalData.capturedByTracking.tittle = 'CAPTURED BY'
-      else if (type === 2) this.modalData.capturedByTracking.tittle = 'SELLER'
-      else if (type === 3) this.modalData.capturedByTracking.tittle = 'FEE'
-      this.modal.captuerd_by_tracking = true
+      this.modalData.capturedByTracking.client = client;
+      this.modalData.capturedByTracking.program = program;
+      this.modalData.capturedByTracking.id = id;
+      this.modalData.capturedByTracking.type = type;
+      if (type === 1) this.modalData.capturedByTracking.tittle = "CAPTURED BY";
+      else if (type === 2) this.modalData.capturedByTracking.tittle = "SELLER";
+      else if (type === 3) this.modalData.capturedByTracking.tittle = "FEE";
+      this.modal.captuerd_by_tracking = true;
     },
     async openInitialPaymentModal(data) {
       try {
-        this.modalData.initial_payment.programid = data.program_id
-        this.modalData.initial_payment.sessionId = this.currentUser.user_id
-        this.modalData.initial_payment.cfeestatus = data.contract_fee_status
-        this.modalData.initial_payment.id_transaction = data.transaction_id
-        this.modalData.initial_payment.editmodal = data.user_id === this.currentUser.user_id
-          || this.currentUser.role_id == 1
-          || this.currentUser.role_id == 2
-        this.modalData.initial_payment.statusSale = data.status
-        this.modalData.initial_payment.comissions = data.commission
-        this.modalData.initial_payment.nameProgram = data.program
-        this.modalData.initial_payment.nameClient = data.client
-        this.modalData.initial_payment.valorInitalPaymetn = data.initial_payment_status
-        this.modalData.initial_payment.feeprops = data.fee
-        const cards = await amgApi.post('/searchcards', { id: data.lead_id })
+        this.modalData.initial_payment.programid = data.program_id;
+        this.modalData.initial_payment.sessionId = this.currentUser.user_id;
+        this.modalData.initial_payment.cfeestatus = data.contract_fee_status;
+        this.modalData.initial_payment.id_transaction = data.transaction_id;
+        this.modalData.initial_payment.editmodal =
+          data.user_id === this.currentUser.user_id ||
+          this.currentUser.role_id == 1 ||
+          this.currentUser.role_id == 2;
+        this.modalData.initial_payment.statusSale = data.status;
+        this.modalData.initial_payment.comissions = data.commission;
+        this.modalData.initial_payment.nameProgram = data.program;
+        this.modalData.initial_payment.nameClient = data.client;
+        this.modalData.initial_payment.valorInitalPaymetn =
+          data.initial_payment_status;
+        this.modalData.initial_payment.feeprops = data.fee;
+        const cards = await amgApi.post("/searchcards", { id: data.lead_id });
         if (cards.status === 200) {
-          this.modalData.initial_payment.allcards = cards.data
+          this.modalData.initial_payment.allcards = cards.data;
         }
-        const response = await amgApi.post('/paymentsales', { id: data.id })
+        const response = await amgApi.post("/paymentsales", { id: data.id });
         if (response.status === 200) {
-          [this.modalData.initial_payment.payments] = response.data
+          [this.modalData.initial_payment.payments] = response.data;
         }
-        this.modalData.initial_payment.modul = 2
-        this.modalData.initial_payment.role_id = this.currentUser.role_id
-        this.modal.initial_payment = true
+        this.modalData.initial_payment.modul = 2;
+        this.modalData.initial_payment.role_id = this.currentUser.role_id;
+        this.modal.initial_payment = true;
       } catch (error) {
-        this.showErrorSwal()
+        this.showErrorSwal();
       }
     },
     openModalProgram(data) {
       switch (data.program_id) {
         case 1:
-          this.modalData.programs.programSelected = 'business-modal'
-          break
+          this.modalData.programs.programSelected = "business-modal";
+          break;
         case 2:
-          this.modalData.programs.programSelected = 'boost-credit-modal'
-          break
+          this.modalData.programs.programSelected = "boost-credit-modal";
+          break;
         case 3:
-          this.modalData.programs.programSelected = 'credit-experts-modal'
-          break
+          this.modalData.programs.programSelected = "credit-experts-modal";
+          break;
         case 4:
-          this.modalData.programs.programSelected = 'debt-solution-modal'
-          break
+          this.modalData.programs.programSelected = "debt-solution-modal";
+          break;
         case 5:
-          this.modalData.programs.programSelected = 'tax-research-modal'
-          break
+          this.modalData.programs.programSelected = "tax-research-modal";
+          break;
         case 6:
-          this.modalData.programs.programSelected = 'general-support-modal'
-          break
+          this.modalData.programs.programSelected = "general-support-modal";
+          break;
         case 7:
-          this.modalData.programs.programSelected = 'specialist-modal'
-          break
+          this.modalData.programs.programSelected = "specialist-modal";
+          break;
         case 8:
-          this.modalData.programs.programSelected = 'key-book-modal'
-          break
+          this.modalData.programs.programSelected = "key-book-modal";
+          break;
         case 9:
-          this.modalData.programs.programSelected = 'paragon-modal'
-          break
+          this.modalData.programs.programSelected = "paragon-modal";
+          break;
         default:
-          break
+          break;
       }
-      if (this.modalData.programs.programSelected !== '') {
-        this.modalData.programs.typeModal = data.haveRates == 1 ? 2 : 1
-        this.modalData.programs.salesClient = data
-        this.modal.programs = true
+      if (this.modalData.programs.programSelected !== "") {
+        this.modalData.programs.typeModal = data.haveRates == 1 ? 2 : 1;
+        this.modalData.programs.salesClient = data;
+        this.modal.programs = true;
       }
     },
     openFilesModal(id, program, client, saleId) {
-      this.modalData.files.id = id
-      this.modalData.files.program = program
-      this.modalData.files.client = client
-      this.modalData.files.sale_id = saleId
-      this.modal.files = true
+      this.modalData.files.id = id;
+      this.modalData.files.program = program;
+      this.modalData.files.client = client;
+      this.modalData.files.sale_id = saleId;
+      this.modal.files = true;
     },
     selectedRow(data) {
-      const index = this.selected.findIndex(select => select.id === data.id)
-      if (data.selected === true && index === -1) this.selected.push(data)
-      else if (data.selected === false && index !== -1) this.selected.splice(index, 1)
+      const index = this.selected.findIndex(select => select.id === data.id);
+      if (data.selected === true && index === -1) this.selected.push(data);
+      else if (data.selected === false && index !== -1)
+        this.selected.splice(index, 1);
     },
     selectedAll() {
-      if (this.selectAll) this.items.forEach(item => (item.selected = true))
-      else this.items.forEach(item => (item.selected = false))
+      if (this.selectAll) this.items.forEach(item => (item.selected = true));
+      else this.items.forEach(item => (item.selected = false));
     },
     async saveNewCaptured(captured, capturedNew, userId, user) {
       if (captured === capturedNew) {
         this.showToast(
-          'danger',
-          'top-right',
-          'Error',
-          'XIcon',
-          "You can't select the same captured",
-        )
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "You can't select the same captured"
+        );
       } else if (captured === capturedNew.label) {
         this.showToast(
-          'danger',
-          'top-right',
-          'Error',
-          'XIcon',
-          "You can't select the same captured",
-        )
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "You can't select the same captured"
+        );
       } else {
-        this.$store.commit('app/SET_LOADING', true)
+        this.$store.commit("app/SET_LOADING", true);
         try {
           const response = await CrmService.saveNewCaptured({
             capt: capturedNew.id,
             id: userId,
-            user: this.currentUser.user_id,
-          })
+            user: this.currentUser.user_id
+          });
           if (response.status === 200) {
             this.showToast(
-              'success',
-              'top-right',
-              'Success',
-              'CheckIcon',
-              'Se actualizo satisfactoriamente',
-            )
-          } else return
+              "success",
+              "top-right",
+              "Success",
+              "CheckIcon",
+              "Se actualizo satisfactoriamente"
+            );
+          } else return;
           // eslint-disable-next-line no-param-reassign
-          user.captured = user.capturedNew.label
+          user.captured = user.capturedNew.label;
           // eslint-disable-next-line no-param-reassign
-          user.capturedNew = user.captured
+          user.capturedNew = user.captured;
           // eslint-disable-next-line no-param-reassign
-          user.editCaptured = false
-          this.$store.commit('app/SET_LOADING', false)
+          user.editCaptured = false;
+          this.$store.commit("app/SET_LOADING", false);
         } catch (error) {
-          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
-          this.$store.commit('app/SET_LOADING', false)
+          this.showToast("danger", "top-right", "Error", "XIcon", error);
+          this.$store.commit("app/SET_LOADING", false);
         }
       }
     },
     async saveNewSeller(seller, sellerNew, userId, user) {
       if (seller === sellerNew) {
         this.showToast(
-          'danger',
-          'top-right',
-          'Error',
-          'XIcon',
-          "You can't select the same captured",
-        )
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "You can't select the same captured"
+        );
       } else if (seller === sellerNew.label) {
         this.showToast(
-          'danger',
-          'top-right',
-          'Error',
-          'XIcon',
-          "You can't select the same captured",
-        )
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "You can't select the same captured"
+        );
       } else {
-        this.$store.commit('app/SET_LOADING', true)
+        this.$store.commit("app/SET_LOADING", true);
         try {
           const response = await CrmService.saveNewSeller({
             sel: sellerNew.id,
             id: userId,
-            user: this.currentUser.user_id,
-          })
+            user: this.currentUser.user_id
+          });
           if (response.status === 200) {
             this.showToast(
-              'success',
-              'top-right',
-              'Success',
-              'CheckIcon',
-              'Se actualizo satisfactoriamente',
-            )
-          } else return
+              "success",
+              "top-right",
+              "Success",
+              "CheckIcon",
+              "Se actualizo satisfactoriamente"
+            );
+          } else return;
           // eslint-disable-next-line no-param-reassign
-          user.seller = user.sellerNew.label
+          user.seller = user.sellerNew.label;
           // eslint-disable-next-line no-param-reassign
-          user.sellerNew = user.seller
+          user.sellerNew = user.seller;
           // eslint-disable-next-line no-param-reassign
-          user.editSeller = false
-          this.$store.commit('app/SET_LOADING', false)
+          user.editSeller = false;
+          this.$store.commit("app/SET_LOADING", false);
         } catch (error) {
-          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
-          this.$store.commit('app/SET_LOADING', false)
+          this.showToast("danger", "top-right", "Error", "XIcon", error);
+          this.$store.commit("app/SET_LOADING", false);
         }
       }
     },
     async saveNewFee(fee, feeNew, userId, user) {
       if (fee === feeNew) {
         this.showToast(
-          'danger',
-          'top-right',
-          'Error',
-          'XIcon',
-          "You can't select the same captured",
-        )
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "You can't select the same captured"
+        );
       } else {
-        this.$store.commit('app/SET_LOADING', true)
+        this.$store.commit("app/SET_LOADING", true);
         try {
           const response = await CrmService.saveNewFee({
             fee: feeNew,
             id: userId,
-            user: this.currentUser.user_id,
-          })
+            user: this.currentUser.user_id
+          });
           if (response.status === 200) {
             this.showToast(
-              'success',
-              'top-right',
-              'Success',
-              'CheckIcon',
-              'Se actualizo satisfactoriamente',
-            )
-          } else return
+              "success",
+              "top-right",
+              "Success",
+              "CheckIcon",
+              "Se actualizo satisfactoriamente"
+            );
+          } else return;
           // eslint-disable-next-line no-param-reassign
-          user.fee = user.feeNew
+          user.fee = user.feeNew;
           // eslint-disable-next-line no-param-reassign
-          user.feeNew = user.fee
+          user.feeNew = user.fee;
           // eslint-disable-next-line no-param-reassign
-          user.editFee = false
-          this.$store.commit('app/SET_LOADING', false)
+          user.editFee = false;
+          this.$store.commit("app/SET_LOADING", false);
         } catch (error) {
-          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
-          this.$store.commit('app/SET_LOADING', false)
+          this.showToast("danger", "top-right", "Error", "XIcon", error);
+          this.$store.commit("app/SET_LOADING", false);
         }
       }
     },
     async annulSale(sale) {
       try {
         const swal = await this.$swal.fire({
-          title: 'Are you sure?',
-          text: 'Are you suere annuled this sale',
-          icon: 'danger',
-          showCancelButton: true,
-        })
+          title: "Are you sure?",
+          text: "Are you suere annuled this sale",
+          icon: "danger",
+          showCancelButton: true
+        });
         if (swal.isConfirmed) {
-          const response = await amgApi.post('/annulsale', {
+          const response = await amgApi.post("/annulsale", {
             id: sale.id,
             id_event: sale.event_id,
-            user: this.currentUser.user_id,
-          })
+            user: this.currentUser.user_id
+          });
           if (response.status === 200) {
             this.showToast(
-              'success',
-              'top-right',
-              'Success',
-              'CheckIcon',
-              'Your sale has been annulled successfully',
-            )
-            this.$refs['new-client-done-table'].refresh()
+              "success",
+              "top-right",
+              "Success",
+              "CheckIcon",
+              "Your sale has been annulled successfully"
+            );
+            this.$refs["new-client-done-table"].refresh();
           } else {
-            this.showErrorSwal()
+            this.showErrorSwal();
           }
         }
       } catch (error) {
         this.showToast(
-          'danger',
-          'top-right',
-          'Error',
-          'Error',
-          'XIcon',
-          'Some error, please try again or contact to support',
-        )
+          "danger",
+          "top-right",
+          "Error",
+          "Error",
+          "XIcon",
+          "Some error, please try again or contact to support"
+        );
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style scoped>
