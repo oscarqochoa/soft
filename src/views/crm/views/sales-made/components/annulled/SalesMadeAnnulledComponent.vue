@@ -8,6 +8,7 @@
       :paginate="paginate"
       :start-page="startPage"
       :to-page="toPage"
+      :filter-principal="filterPrincipal"
       @reload="$refs['annull-table'].refresh()"
     >
       <b-table
@@ -139,7 +140,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import FilterSlot
 from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
 import dataFields from './fields.data'
@@ -156,6 +157,12 @@ export default {
   },
   data() {
     return {
+      filterPrincipal: {
+        type: 'input',
+        inputType: 'text',
+        placeholder: 'Client...',
+        model: '',
+      },
       items: {},
       isBusy: false,
       fields: dataFields,
@@ -186,18 +193,41 @@ export default {
   },
   computed: {
     ...mapState({
+      sellers: state => state['crm-store'].sellersCrm,
+      captured: state => state['crm-store'].capturedCrm,
+      // TODO HACERLO GLOBAL
+      programs: state => state['crm-store'].programs,
+      stip: state => state['crm-store'].statusip,
       status: state => state['crm-store'].status,
+    }),
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
     }),
     filteredFields() {
       return this.fields
     },
   },
+  async created() {
+    try {
+      await this.$store.dispatch('crm-store/getSellers')
+      await this.$store.dispatch('crm-store/getCaptured')
+      await this.$store.dispatch('crm-store/getPrograms')
+      await this.$store.dispatch('crm-store/getStates')
+      this.filter[2].options = this.captured
+      this.filter[3].options = this.sellers
+      this.filter[4].options = this.status
+      this.filter[5].options = this.programs
+      this.filter[6].options = this.stip
+    } catch (error) {
+      console.error(error)
+    }
+  },
   methods: {
-    openFilesModal(id, program, client, sale_id) {
+    openFilesModal(id, program, client, saleId) {
       this.modalData.files.id = id
       this.modalData.files.program = program
       this.modalData.files.client = client
-      this.modalData.files.sale_id = sale_id
+      this.modalData.files.sale_id = saleId
       this.modal.files = true
       this.modalControllers.files = (this.modalControllers.files + 1) % 2
     },
@@ -206,18 +236,18 @@ export default {
         const sortBy = 30
         const sortDirection = 'desc'
         const data = await CrmService.getSaleAnnul({
-          captured: this.filter.captured,
-          from: this.filter.from,
+          captured: this.filter[2].model,
+          from: this.filter[0].model,
           order: sortDirection,
           orderby: sortBy,
-          program: this.filter.program,
-          rolsession: 1,
+          program: this.filter[5].model,
+          rolsession: this.currentUser.role_id,
           salemade: 0,
-          seller: this.filter.seller,
-          status: this.filter.status,
-          statusip: this.filter.stip,
-          text: this.filter.text,
-          to: this.filter.to,
+          seller: this.filter[3].model,
+          status: this.filter[4].model,
+          statusip: this.filter[6].model,
+          text: this.filterPrincipal.model,
+          to: this.filter[1].model,
           per_page: this.paginate.perPage,
         },
         ctx.currentPage)
@@ -225,7 +255,6 @@ export default {
         this.toPage = data.to
         if (this.totalRows !== data.total) this.totalRows = data.total
         this.items = data.data
-        console.log(this.items)
         return this.items
       } catch (e) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', e)

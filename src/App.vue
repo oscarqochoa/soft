@@ -55,16 +55,15 @@ export default {
       bvEvent.vueTarget.$refs.content.attributes.removeNamedItem("tabindex");
     });
     // this.updateCurrentUserModuleRole(this.$route.meta.module)
-    
   },
-  methods:{
+  methods: {
     ...mapActions({
-      updateCurrentUserModuleRole: 'auth/updateCurrentUserModuleRole'
+      updateCurrentUserModuleRole: "auth/updateCurrentUserModuleRole"
     })
   },
-  watch:{
-    '$route'(){
-      this.updateCurrentUserModuleRole(this.$route.meta.module)
+  watch: {
+    $route() {
+      this.updateCurrentUserModuleRole(this.$route.matched[0].meta.module);
     }
   },
   beforeCreate() {

@@ -7,10 +7,10 @@
       <b-sidebar
         id="sidebar-right"
         right
-        shadow
+        backdrop
         bg-variant="white"
         sidebar-class="sidebar-lg"
-        no-header-close
+        lazy
       >
         <template #header>
           <b-container>
