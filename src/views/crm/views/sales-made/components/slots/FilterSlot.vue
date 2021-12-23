@@ -30,13 +30,14 @@
               <b-button
                 v-b-toggle.sidebar-right
                 variant="outline-danger"
+                class="hover-close"
               >
                 Close
               </b-button>
               <b-button
                 v-b-toggle.sidebar-right
                 variant="primary"
-                @click="$emit('reload')"
+                @click="sideBarSearch"
               >
                 Search
               </b-button>
@@ -155,7 +156,6 @@
               <b-button
                 v-b-toggle.sidebar-right
                 variant="primary"
-                @click="basicSearch = !basicSearch"
               >
                 <div class="d-flex justify-content-between">
                   <feather-icon
@@ -244,11 +244,6 @@ export default {
     toPage: { required: false, type: Number },
     filterPrincipal: { required: true, type: Object },
   },
-  data() {
-    return {
-      basicSearch: true,
-    }
-  },
   computed: {
     ...mapGetters({
       skin: 'appConfig/skin',
@@ -259,11 +254,12 @@ export default {
       this.filter.map(fil => {
         fil.model = null
       })
+      this.filterPrincipal.model = ''
       this.$emit('reload')
     },
-    swapSearch() {
-      this.resetFilter()
-      this.basicSearch = !this.basicSearch
+    sideBarSearch() {
+      this.filterPrincipal.model = ''
+      this.$emit('reload')
     },
   },
 }
@@ -281,6 +277,13 @@ export default {
 }
 td.div {
   width: 100% !important;
+}
+.hover-close{
+  transition: 300ms;
+}
+.hover-close:hover{
+  background-color: #FF3B19 !important;
+  color: white !important;
 }
 @media (max-width: 960px) {
   .column-table {

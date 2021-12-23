@@ -5,7 +5,7 @@
       label-cols-md="2"
     >
       <b-form-input
-        v-model="rowData.lead_name"
+        v-model="leadName"
         readonly
       />
     </b-form-group>
@@ -47,17 +47,21 @@ export default {
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
-    rowData: {
-      type: Object,
-      required: true
+    id: {
+      type: Number,
+      required: true,
+    },
+    leadName: {
+      type: String,
+      required: true,
     },
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
     }),
   },
   data() {
@@ -69,21 +73,20 @@ export default {
         { key: 'send_by' },
         { key: 'content' },
       ],
-      items: []
+      items: [],
     }
   },
   methods: {
     ...mapActions({
-      A_GET_HISTORY_SMS_LEADS: 'CrmSmsStore/A_GET_HISTORY_SMS_LEADS'
+      A_GET_HISTORY_SMS_LEADS: 'CrmSmsStore/A_GET_HISTORY_SMS_LEADS',
     }),
-    async getHistorySms () {
+    async getHistorySms() {
       try {
         this.isBusy = true
-        const response = await this.A_GET_HISTORY_SMS_LEADS({ id: this.rowData.id })
+        const response = await this.A_GET_HISTORY_SMS_LEADS({ id: this.id })
         if (response.status == 200) {
           this.items = response.data
-        } else
-          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', response.message)
+        } else this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', response.message)
         this.isBusy = false
       } catch (error) {
         console.log('Something went wrong getHistorySms:', error)
