@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ ga }}
     <filter-slot
       v-scrollbar
       :filter="filter"
@@ -1018,21 +1017,14 @@ export default {
 
       this.modal.notes = true;
     },
-
-    onAudioChange(e) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = event => {
-        // El texto del archivo se mostrará por consola aquí
-        console.log(event.target.result);
-        this.file_audio = event.target.result;
-      };
-
-      reader.readAsDataURL(file);
-      this.audiolisto = true;
-    },
-    closeModalNotes() {
+    closeModalNotes(status) {
+      console.log(status);
       this.modal.notes = false;
+      if (status) {
+        this.$refs["new-client-done-table"].refresh();
+        this.removePreloader();
+        this.showSuccessSwal("OPERATION SUCCESSFULLY");
+      }
     },
     openUrlModal(data) {
       this.modalData.url.client = data.client;

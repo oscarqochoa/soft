@@ -6,11 +6,11 @@
       header-class="p-0"
       header-bg-variant="transparent"
       footer-bg-variant
-      @hide="hideModal()"
+      @hide="hideModal(false)"
       scrollable
     >
       <template #modal-header>
-        <HeaderModalNotes @close="hideModal" program="Boost Credit" :info="noteInfo" />
+        <HeaderModalNotes @close="hideModal(false)" program="Boost Credit" :info="noteInfo" />
       </template>
       <ValidationObserver ref="form">
         <b-row class="px-1 mt-1">
@@ -21,7 +21,7 @@
                   v-model="note.identification"
                   :options="identificationOptions"
                   name="identification"
-                  :class="{'border border-danger rounded': errors[0]}"
+                  :class="{'border-danger rounded': errors[0]}"
                   :disabled="disabledNote"
                 ></b-form-radio-group>
               </b-form-group>
@@ -36,7 +36,7 @@
                 <b-form-radio-group
                   v-model="note.another"
                   :options="anotherOptions"
-                  :class="{'border border-danger rounded': errors[0]}"
+                  :class="{'border-danger rounded': errors[0]}"
                   :disabled="disabledNote"
                   name="Another"
                 ></b-form-radio-group>
@@ -49,7 +49,7 @@
                 <b-form-checkbox-group
                   v-model="note.pending"
                   :options="pendingOptions"
-                  :class="{'border border-danger rounded': errors[0]}"
+                  :class="{'border-danger rounded': errors[0]}"
                   :disabled="disabledNote"
                   name="Pending"
                 ></b-form-checkbox-group>
@@ -64,7 +64,7 @@
                 <b-form-radio-group
                   v-model="note.typeAgreement"
                   :options="typeAgreementOptions"
-                  :class="{'border border-danger rounded': errors[0]}"
+                  :class="{'border-danger rounded': errors[0]}"
                   :disabled="disabledNote"
                   name="typeAgreement"
                 ></b-form-radio-group>
@@ -77,7 +77,7 @@
                 <b-form-radio-group
                   v-model="note.credit"
                   :options="creditOptions"
-                  :class="{'border border-danger rounded': errors[0]}"
+                  :class="{'border-danger rounded': errors[0]}"
                   :disabled="disabledNote"
                   name="Credit"
                 ></b-form-radio-group>
@@ -287,6 +287,8 @@
             @click="saveNotesIncomplete"
             class="font-medium-1"
           >Save</b-button>
+
+          <span>{{noteNull}}</span>
 
           <b-button
             variant="primary"
@@ -524,9 +526,25 @@ export default {
   methods: {
     //Save or Update
     async saveNotesIncomplete() {
-      if (this.noteNull) {
-        this.saveUpdate("save");
+      if (this.emptyNote) {
+        this.saveUpdate("insert");
       } else {
+        this.saveUpdate("update");
+      }
+    },
+    async saveNotesCompleted() {
+      const validate = await this.$refs.form.validate();
+      if (validate) {
+        if (this.emptyNote) {
+          this.saveUpdate("insert");
+        } else {
+          this.saveUpdate("update");
+        }
+      }
+    },
+    async updateNotesCompleted() {
+      const validate = await this.$refs.form.validate();
+      if (validate) {
         this.saveUpdate("update");
       }
     },
@@ -542,28 +560,16 @@ export default {
       };
       return params;
     },
-    async saveNotesCompleted() {
-      const validate = await this.$refs.form.validate();
-      if (validate) {
-        this.saveUpdate("save");
-      }
-    },
-    async updateNotesCompleted() {
-      const validate = await this.$refs.form.validate();
-      if (validate) {
-        this.saveUpdate("update");
-      }
-    },
+
     async saveUpdate(type) {
       const swal = await this.showConfirmSwal();
       if (swal.isConfirmed) {
         this.addPreloader();
         try {
-          const service = type == "save" ? "saveFirstNote" : "updateFirstNote";
+          const service =
+            type == "insert" ? "insertFirstNote" : "updateFirstNote";
           const response = await NotesServices[service](this.paramsNote());
-          this.hideModal();
-          this.removePreloader();
-          this.showSuccessSwal("OPERATION SUCCESSFULLY");
+          this.hideModal(true);
         } catch (error) {
           console.log(error);
           this.removePreloader();
@@ -594,7 +600,7 @@ export default {
           number: 1055,
           value: (this.note.file =
             this.note.file_name != ""
-              ? "SM/" + this.noteInfo.idLead + "/" + this.note.file_name
+              ? "SM/" + this.noteInfo.idLead + "/" + this.note.fileName
               : 0)
         }
       );
@@ -683,8 +689,10 @@ export default {
           if (answer.question_id == 1054)
             this.note.recommendations = answer.answer;
           if (answer.question_id == 1055) {
-            this.note.fileAudio = answer.answer;
-            this.note.fileName = answer.url.split("/")[2];
+            if (answer.answer != 0) {
+              this.note.fileAudio = answer.answer;
+              this.note.fileName = answer.url.split("/")[2];
+            }
           }
           if (answer.question_id == 1063)
             this.note.typeAgreement = answer.answer;
@@ -736,9 +744,9 @@ export default {
     },
 
     //Hide Modal
-    hideModal() {
+    hideModal(status) {
       this.modalUp = false;
-      this.$emit("hide");
+      this.$emit("hide", status);
     }
   },
   watch: {
@@ -757,5 +765,10 @@ export default {
 }
 * {
   font-size: 0.8rem !important;
+}
+
+.border-red {
+  border: 1px solid #ff3b19 !important;
+  border-radius: 0.357rem !important;
 }
 </style>
