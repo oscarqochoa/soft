@@ -261,6 +261,12 @@ export default {
       skin: 'appConfig/skin',
     }),
   },
+  created() {
+    this.filter.map(fil => {
+      fil.model = null
+    })
+    this.filterPrincipal.model = ''
+  },
   methods: {
     resetFilter() {
       this.filter.map(fil => {

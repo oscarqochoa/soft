@@ -350,8 +350,8 @@ export default {
       leadsSelecteds: [],
     }
   },
-  created() {
-    this.myProvider()
+  async created() {
+    await this.myProvider()
   },
   methods: {
     ...mapActions({
