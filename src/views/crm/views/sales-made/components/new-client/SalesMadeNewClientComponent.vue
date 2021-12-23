@@ -706,8 +706,9 @@ import { amgApi } from '@/service/axios'
 import ContractFeeModal from '@/views/crm/views/sales-made/components/modals/ContractFeeModal.vue'
 
 import ModalNotesBoost from '@/views/commons/components/first-notes/ModalNotesBoost.vue'
-import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms'
-import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms'
+import ModalNotesCreditExpert from '@/views/commons/components/first-notes/ModalNotesCreditExpert.vue'
+import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue'
+import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -733,6 +734,7 @@ export default {
     TaxResearchModal,
     DebtSolutionModal,
     ModalNotesBoost,
+    ModalNotesCreditExpert,
   },
   props: {
     done: {
@@ -1058,7 +1060,7 @@ export default {
           this.modalData.notes.programSelected = 'ModalNotesBoost'
           break
         case created >= '2021-03-04' && program == 3:
-          this.modalData.notes.programSelected = 'ModalNotesCredit'
+          this.modalData.notes.programSelected = 'ModalNotesCreditExpert'
           break
         case created >= '2020-09-24' && program == 5:
           this.modalData.notes.programSelected = 'ModalNotesTax'
