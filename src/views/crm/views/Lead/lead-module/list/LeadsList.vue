@@ -446,7 +446,6 @@ export default {
     },
     onRowSelected() {
       this.A_SET_SELECTED_LEADS(this.leadsSelecteds)
-      this.leads_sms = this.leadsSelecteds.map(el => el.id)
     },
     onRowDelete(id) {
       this.showSwalGeneric(
@@ -558,6 +557,7 @@ export default {
         name: el.lead_name,
         id: el.id,
       }))
+      this.leads_sms = this.leadsSelecteds.map(el => el.id)
       this.$bvModal.show('modal-send-sms')
     },
     resetQuickData(item) {
