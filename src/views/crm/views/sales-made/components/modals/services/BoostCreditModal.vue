@@ -6,6 +6,8 @@
         modal
         size="lg"
         scrollable
+        header-class="p-0"
+        header-bg-variant="transparent border-bottom border-bottom-2"
         :hide-footer="hideFooter"
         @hidden="hideModal(false,0)"
       >
@@ -100,8 +102,9 @@
 </template>
 
 <script>
-import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
 import { mapGetters } from 'vuex'
+import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+
 export default {
   components: {
     ModalServiceHeader,

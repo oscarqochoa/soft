@@ -192,7 +192,6 @@
       no-close-on-backdrop
     >
       <modal-send-sms
-        :row-data="rowData"
         :smss="leads_sms"
         :modul="modul"
         :typesms="typesms"

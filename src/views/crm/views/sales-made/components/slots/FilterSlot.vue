@@ -121,6 +121,17 @@
               size="20"
               @click="resetFilter"
             />
+            <b-button
+              v-if="sendMultipleSms"
+              variant="success"
+              class="ml-1"
+              @click="$emit('sendMultipleSms')"
+            >
+              <feather-icon
+                icon="MessageCircleIcon"
+                class="mr-50"
+              />Send SMS
+            </b-button>
           </b-col>
           <!-- Search -->
           <b-col
@@ -243,6 +254,7 @@ export default {
     startPage: { required: false, type: Number },
     toPage: { required: false, type: Number },
     filterPrincipal: { required: true, type: Object },
+    sendMultipleSms: { required: false, default: false },
   },
   computed: {
     ...mapGetters({

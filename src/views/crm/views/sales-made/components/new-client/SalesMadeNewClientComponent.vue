@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ ga }}
     <filter-slot
       v-scrollbar
       :filter="filter"
@@ -8,7 +9,9 @@
       :paginate="paginate"
       :start-page="startPage"
       :to-page="toPage"
+      :send-multiple-sms="true"
       @reload="$refs['new-client-done-table'].refresh()"
+      @sendMultipleSms="modalSmssOpen"
     >
       <b-table
         id="new-client-done-table"
@@ -515,7 +518,7 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item>
+            <b-dropdown-item @click="modalSmsOpen(data.item)">
               <feather-icon icon="MessageSquareIcon" />
               SMS
             </b-dropdown-item>
@@ -558,6 +561,69 @@
         :modul="currentUser.modul_id"
         :lead-name="modalData.historySms.leadName"
       />
+    </b-modal>
+    <b-modal
+      id="modal-send-sms"
+      ok-only
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      title="SEND SMS"
+      no-close-on-backdrop
+    >
+      <modal-send-sms
+        :smss="modalData.sendSms.leads_sms"
+        :modul="currentUser.modul_id"
+        :typesms="modalData.sendSms.typesms"
+        :sms="modalData.sendSms.leads_sms_o"
+        :name-leads="modalData.sendSms.name_leads_arr"
+      />
+
+      <template #modal-footer>
+        <b-form-group
+          label="VARS"
+          class="w-100"
+        >
+          <b-row>
+            <b-col sm="3">
+              <b-input-group size="sm">
+                <b-input-group-prepend is-text>
+                  @1
+                </b-input-group-prepend>
+                <b-form-input
+                  placeholder="FIRST NAME"
+                  readonly
+                />
+              </b-input-group>
+            </b-col>
+            <b-col sm="3">
+              <b-input-group size="sm">
+                <b-input-group-prepend is-text>
+                  @2
+                </b-input-group-prepend>
+                <b-form-input
+                  placeholder="LAST NAME"
+                  readonly
+                />
+              </b-input-group>
+            </b-col>
+            <b-col
+              v-if="currentUser.modul_id == 15"
+              sm="3"
+            >
+              <b-input-group size="sm">
+                <b-input-group-prepend is-text>
+                  @3
+                </b-input-group-prepend>
+                <b-form-input
+                  placeholder="LAST NAME"
+                  readonly
+                />
+              </b-input-group>
+            </b-col>
+          </b-row>
+        </b-form-group>
+      </template>
     </b-modal>
     <tracking-modal
       :modal="modal"
@@ -647,10 +713,12 @@ import ContractFeeModal from '@/views/crm/views/sales-made/components/modals/Con
 
 import ModalNotesBoost from '@/views/commons/components/first-notes/ModalNotesBoost.vue'
 import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms'
+import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms'
 
 export default {
   name: 'SalesMadeNewComponent',
   components: {
+    ModalSendSms,
     ModalHistorySms,
     ContractFeeModal,
     UrlModal,
@@ -714,6 +782,13 @@ export default {
         historySms: {
           id: null,
           leadName: '',
+        },
+        sendSms: {
+          leads_sms: [],
+          typesms: null,
+          leads_sms_o: [],
+          name_leads_arr: [],
+
         },
         url: {
           client: '',
@@ -854,6 +929,24 @@ export default {
     }
   },
   methods: {
+    modalSmsOpen(item) {
+      this.modalData.sendSms.leads_sms = []
+      this.modalData.sendSms.typesms = 1
+      this.modalData.sendSms.leads_sms_o = []
+      this.modalData.sendSms.leads_sms_o.push(item.lead_id)
+      this.modalData.sendSms.name_leads_arr = [{ name: item.client, id: item.lead_id }]
+      this.$bvModal.show('modal-send-sms')
+    },
+    modalSmssOpen() {
+      this.modalData.sendSms.typesms = 0
+      this.modalData.sendSms.name_leads_arr = this.selected.map(el => ({
+        name: el.client,
+        id: el.lead_id,
+      }))
+      this.modalData.sendSms.leads_sms = this.selected.map(el => el.lead_id)
+      console.log(this.modalData.sendSms.name_leads_arr)
+      this.$bvModal.show('modal-send-sms')
+    },
     modalHistorySmsOpen(item) {
       this.modalData.historySms.leadName = item.client
       this.modalData.historySms.id = item.lead_id

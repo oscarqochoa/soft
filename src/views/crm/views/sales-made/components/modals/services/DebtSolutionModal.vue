@@ -2,6 +2,8 @@
   <b-modal
     v-model="modalServices"
     modal
+    header-class="p-0"
+    header-bg-variant="transparent border-bottom border-bottom-2"
     size="xl"
     hide-footer
   >

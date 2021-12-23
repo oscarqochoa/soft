@@ -5,6 +5,8 @@
         v-model="modalServices"
         size="xl"
         scrollable
+        header-class="p-0"
+        header-bg-variant="transparent border-bottom border-bottom-2"
         @hidden="hideModal(false,0)"
       >
         <!-- HEADER START -->
@@ -62,14 +64,14 @@
                   <!-- Fee -->
                   <b-row class="d-flex justify-content-start align-items-center">
                     <ValidationProvider
-                        v-slot="{errors}"
-                        rules="required|money-1"
+                      v-slot="{errors}"
+                      rules="required|money-1"
                     >
                       <b-col class="p-2 rounded">
                         <b-row class="w-100 d-flex align-items-center">
                           <b-col
-                              cols="4"
-                              class="text-right font-weight-bold font-medium-2"
+                            cols="4"
+                            class="text-right font-weight-bold font-medium-2"
                           >
                             <div>
                               FEE $
@@ -77,19 +79,19 @@
                           </b-col>
                           <b-col cols="8">
                             <money
-                                v-model="fee"
-                                v-bind="vMoney"
-                                class="text-center font-weight-bolder gold-text p-fee rounded-pill"
-                                :style="errors[0] && validateMoney? 'color:red !important':''"
-                                :class="{'border border-danger':errors[0] && validateMoney}"
-                                :disabled="isModalShow || !option"
+                              v-model="fee"
+                              v-bind="vMoney"
+                              class="text-center font-weight-bolder gold-text p-fee rounded-pill"
+                              :style="errors[0] && validateMoney? 'color:red !important':''"
+                              :class="{'border border-danger':errors[0] && validateMoney}"
+                              :disabled="isModalShow || !option"
                             />
                           </b-col>
                         </b-row>
                       </b-col>
                       <b-col
-                          v-if="errors[0] && validateMoney"
-                          class="invalid-feedback ml-4"
+                        v-if="errors[0] && validateMoney"
+                        class="invalid-feedback ml-4"
                       >
                         Fee is {{ errors[0] }}
                       </b-col>
@@ -99,40 +101,40 @@
               </b-row>
             </b-col>
             <b-col
-                v-if="!isModalShow"
-                cols="4"
+              v-if="!isModalShow"
+              cols="4"
             >
               <b-col>
                 <b-row>
                   <b-col
-                      v-if="!isModalAdd"
-                      class="d-flex justify-content-center align-items-center"
+                    v-if="!isModalAdd"
+                    class="d-flex justify-content-center align-items-center"
                   >
                     <b-button
-                        class="rounded mr-1"
-                        variant="danger"
-                        size="sm"
-                        @click="hideModal(false,0)"
+                      class="rounded mr-1"
+                      variant="danger"
+                      size="sm"
+                      @click="hideModal(false,0)"
                     >
                       <feather-icon icon="PowerIcon" /> CANCEL
                     </b-button>
                     <b-button
-                        class="rounded"
-                        variant="success"
-                        size="sm"
-                        @click="saveRates()"
+                      class="rounded"
+                      variant="success"
+                      size="sm"
+                      @click="saveRates()"
                     >
                       <feather-icon icon="SaveIcon" /> SAVE
                     </b-button>
                   </b-col>
                   <b-col
-                      v-else
-                      class="d-flex justify-content-center align-items-center"
+                    v-else
+                    class="d-flex justify-content-center align-items-center"
                   >
                     <b-button
-                        class="rounded text-uppercase"
-                        variant="success"
-                        @click="saveRates()"
+                      class="rounded text-uppercase"
+                      variant="success"
+                      @click="saveRates()"
                     >
                       Continue
                       <feather-icon icon="ChevronsRightIcon" />

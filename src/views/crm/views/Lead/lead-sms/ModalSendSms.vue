@@ -25,9 +25,9 @@
                   {{ item.name }}
                 </span>
                 <feather-icon
+                  v-if="nameLeads.length > 1"
                   class="text-danger cursor-pointer"
                   icon="MinusCircleIcon"
-                  v-if="nameLeads.length > 1"
                   @click="deleteAccount(item.id)"
                 />
               </span>
@@ -49,8 +49,8 @@
         >
           <b-input-group>
             <v-select
-              style="flex: 1 1 auto;"
               v-model="smsData.optionsms"
+              style="flex: 1 1 auto;"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="title"
               :options="S_SMS_QUICKS"
@@ -88,14 +88,17 @@
         >
           <b-form-textarea
             id="message"
+            v-model="smsData.contmessage"
             placeholder="Write new message"
             rows="3"
-            v-model="smsData.contmessage"
             maxlength="1000"
             :state="getValidationState(validationContext)"
           />
           <template #description>
-            <small tabindex="-1" class="form-text text-danger">Max: 1000 characters</small>
+            <small
+              tabindex="-1"
+              class="form-text text-danger"
+            >Max: 1000 characters</small>
           </template>
 
           <b-form-invalid-feedback>
@@ -170,38 +173,34 @@ export default {
     Ripple,
   },
   props: {
-    rowData: {
-      type: Object,
-      required: true
-    },
     smss: {
       type: Array,
-      required: true
+      required: true,
     },
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     typesms: {
       type: Number,
-      required: true
+      required: true,
     },
     sms: {
       type: Array,
-      required: true
+      required: true,
     },
     nameLeads: {
       type: Array,
-      required: true
+      required: true,
     },
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
     }),
     ...mapState({
-      S_SMS_QUICKS: state => state.CrmSmsStore.S_SMS_QUICKS
+      S_SMS_QUICKS: state => state.CrmSmsStore.S_SMS_QUICKS,
     }),
   },
   data() {
@@ -234,20 +233,20 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_GET_SMS_QUICKS: "CrmSmsStore/A_GET_SMS_QUICKS",
+      A_GET_SMS_QUICKS: 'CrmSmsStore/A_GET_SMS_QUICKS',
       A_SEND_MESSAGE_LEAD: 'CrmSmsStore/A_SEND_MESSAGE_LEAD',
     }),
     async getAllQuicksSms() {
       try {
         await this.A_GET_SMS_QUICKS({
-          modul: this.modul
+          modul: this.modul,
         })
       } catch (error) {
-        console.log("Something wnet wrong getAllQuicksSms:", error);
+        console.log('Something wnet wrong getAllQuicksSms:', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    deleteAccount (id) {
+    deleteAccount(id) {
       for (let i = 0; i < this.nameLeads.length; i++) {
         if (this.nameLeads[i].id == id) {
           this.nameLeads.splice(i, 1)
@@ -255,46 +254,43 @@ export default {
       }
       if (this.typesms == 0) {
         const index = this.smss.indexOf(id)
-        if (index !== -1)
-          this.smss.splice(index, 1)
+        if (index !== -1) this.smss.splice(index, 1)
       } else {
         const index = this.sms.indexOf(id)
-        if (index !== -1)
-          this.sms.splice(index, 1)
+        if (index !== -1) this.sms.splice(index, 1)
       }
     },
-    onSelectSms () {
+    onSelectSms() {
       const index = this.S_SMS_QUICKS.map(el => el.id).indexOf((this.smsData.optionsms) ? this.smsData.optionsms.id : null)
       if (index !== -1) {
-        const format = this.S_SMS_QUICKS[index].sms ? this.S_SMS_QUICKS[index].sms.replace(/<br \/>/g, "\n") : ''
+        const format = this.S_SMS_QUICKS[index].sms ? this.S_SMS_QUICKS[index].sms.replace(/<br \/>/g, '\n') : ''
         this.smsData.contmessage = format
       } else {
         this.smsData.contmessage = ''
       }
     },
-    async onSubmit () {
+    async onSubmit() {
       this.showSwalGeneric('Are you Sure Send SMS', 'You won\'t be able to revert this!', 'warning')
-      .then(async (result) => {
-        if (result.value) {
-          const response = await this.A_SEND_MESSAGE_LEAD({
-            contmessage: this.smsData.contmessage,
-            user: this.userId,
-            sms: this.typesms == 0 ? this.smss : this.sms,
-            savenote: this.savenote == true ? 1 : 0,
-            modul: this.modul,
-          })
-          console.log('response', response)
-          if (response.status == 200) {
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          } else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', response.message)
-        }
-      })
-      .catch(error => {
-        console.log('Something went wrong onSubmit:', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-      })
-    }
+        .then(async result => {
+          if (result.value) {
+            const response = await this.A_SEND_MESSAGE_LEAD({
+              contmessage: this.smsData.contmessage,
+              user: this.userId,
+              sms: this.typesms == 0 ? this.smss : this.sms,
+              savenote: this.savenote == true ? 1 : 0,
+              modul: this.modul,
+            })
+            console.log('response', response)
+            if (response.status == 200) {
+              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+            } else this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', response.message)
+          }
+        })
+        .catch(error => {
+          console.log('Something went wrong onSubmit:', error)
+          this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        })
+    },
   },
   created() {
     this.userId = this.currentUser.user_id

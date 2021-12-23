@@ -3,6 +3,7 @@
     <b-modal
       v-model="ifModalCard"
       title="Delete Credit Card"
+      title-class="h3 text-white font-weight-bolder"
       hide-footer
       @hidden="closeModal"
     >
@@ -29,7 +30,7 @@
                   variant="danger"
                   @click="deletecard"
                 >
-                  <feather-icon icon="Trash2Icon"/> Delete
+                  <feather-icon icon="Trash2Icon" /> Delete
                 </b-button>
               </b-col>
             </b-row>
@@ -42,59 +43,58 @@
 
 <script>
 export default {
-  props: ["card_id", "lead_id", "session", "ifModalCard"],
+  props: ['card_id', 'lead_id', 'session', 'ifModalCard'],
   data() {
     return {
-      commentary: "",
-      cards: []
-    };
+      commentary: '',
+      cards: [],
+    }
   },
   mounted() {},
   methods: {
     async deletecard() {
       try {
-        const success = await this.$refs.form.validate();
+        const success = await this.$refs.form.validate()
         if (success) {
           const result = await this.$swal.fire({
-            title: "Are you sure?",
+            title: 'Are you sure?',
             text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true
-          });
+            icon: 'warning',
+            showCancelButton: true,
+          })
           if (result.value) {
             const params = {
               cardid: this.card_id,
               leadid: this.lead_id,
               user_id: this.session,
-              comment: this.commentary
-            };
-            this.addPreloader();
-            const response = await amgApi.post("/deletecard", params);
+              comment: this.commentary,
+            }
+            this.addPreloader()
+            const response = await amgApi.post('/deletecard', params)
             if (response.status === 200) {
-              this.removePreloader();
-              this.cards = response.data;
-              this.$emit("new", this.cards);
-              this.closeModal();
+              this.removePreloader()
+              this.cards = response.data
+              this.$emit('new', this.cards)
+              this.closeModal()
               this.showToast(
-                "success",
-                "top-right",
-                "Deleted",
-                "CheckIcon",
-                "The credit card has been deleted."
-              );
+                'success',
+                'top-right',
+                'Deleted',
+                'CheckIcon',
+                'The credit card has been deleted.',
+              )
             }
           }
-        }
-        else {
+        } else {
           this.showToast('danger', 'top-right', 'Validation Error', 'XIcon', 'Comentary required')
         }
       } catch (error) {
-        this.showErrorSwal();
+        this.showErrorSwal()
       }
     },
     closeModal() {
-      this.$emit("click", false);
-    }
-  }
-};
+      this.$emit('click', false)
+    },
+  },
+}
 </script>

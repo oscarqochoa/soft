@@ -3,41 +3,18 @@
     v-model="modal.captuerd_by_tracking"
     lazy
     centered
-    title-class="h3"
+    title-class="h3 text-white font-weight-bolder"
     size="lg"
     :title="'TRACKING ' + capturedByTracking.tittle"
     hide-footer
     scrollable
   >
     <b-container>
-      <b-row>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                PROGRAM
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="capturedByTracking.program"
-            />
-          </b-input-group>
-        </b-col>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                CLIENT
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="capturedByTracking.client"
-            />
-          </b-input-group>
-        </b-col>
-      </b-row>
+      <program-client-header
+        :client="capturedByTracking.client"
+        :program="capturedByTracking.program"
+        class="sticky-top"
+      />
       <b-row class="mt-2">
         <b-table
           class="font-small-2"
@@ -45,9 +22,7 @@
           :items="table"
           small
         >
-          <template>
-
-          </template>
+          <template />
         </b-table>
       </b-row>
     </b-container>
@@ -57,9 +32,11 @@
 
 <script>
 import CrmService from '@/views/crm/services/crm.service'
+import ProgramClientHeader from '@/views/crm/views/sales-made/components/modals/ProgramClientHeader'
 
 export default {
   name: 'TrackingCapturedByModal',
+  components: { ProgramClientHeader },
   props: {
     modal: {
       type: Object,
@@ -120,8 +97,8 @@ export default {
   async created() {
     try {
       if (this.capturedByTracking.type === 1) this.table = await CrmService.getCapturedByTracking({ id: this.capturedByTracking.id })
-      else if(this.capturedByTracking.type === 2) this.table = await CrmService.getSellerTracking({ id: this.capturedByTracking.id })
-      else if(this.capturedByTracking.type === 3) this.table = await CrmService.getFeeTracking({ id: this.capturedByTracking.id })
+      else if (this.capturedByTracking.type === 2) this.table = await CrmService.getSellerTracking({ id: this.capturedByTracking.id })
+      else if (this.capturedByTracking.type === 3) this.table = await CrmService.getFeeTracking({ id: this.capturedByTracking.id })
     } catch (error) {
       this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
     }

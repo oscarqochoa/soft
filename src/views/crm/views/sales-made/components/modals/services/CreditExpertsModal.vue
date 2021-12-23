@@ -6,6 +6,8 @@
         modal
         size="xl"
         scrollable
+        header-class="p-0"
+        header-bg-variant="transparent border-bottom border-bottom-2"
         @hidden="hideModal(false,0)"
       >
         <!-- HEADER START -->
