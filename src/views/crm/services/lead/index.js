@@ -169,6 +169,33 @@ class CrmLead {
     }
   }
 
+  async postMyListCreate (body) {
+    try {
+      const data = await amgApi.post('/my-list-create', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postSetPotential (body) {
+    try {
+      const data = await amgApi.post('/set-potential', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postChangeStatusSn (body) {
+    try {
+      const data = await amgApi.post('/change-status-sn', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
 }
 
 export default new CrmLead()

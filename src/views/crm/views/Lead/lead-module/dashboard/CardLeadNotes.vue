@@ -1,5 +1,8 @@
 <template>
-  <b-card title="NOTES">
+  <b-card>
+    <template #header>
+      <b-card-title>Notes</b-card-title>
+    </template>
     <validation-observer
       #default="{ handleSubmit }"
       ref="refFormObserver"
@@ -73,13 +76,9 @@
             <b-button
               v-if="lead.count_notes && !onlyRead"
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-              variant="outline-primary"
+              variant="primary"
               @click="$bvModal.show('modal-notes-save')"
             >
-              <feather-icon
-                icon="PlusIcon"
-                class="mr-50"
-              />
               <span class="align-middle">Add</span>
             </b-button>
             <b-button

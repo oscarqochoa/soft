@@ -68,7 +68,7 @@
         :lead="S_LEAD"
       />
     </b-col>
-    <b-col cols="12">
+    <b-col v-if="modul !== 15" cols="12">
       <card-lead-payment
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"

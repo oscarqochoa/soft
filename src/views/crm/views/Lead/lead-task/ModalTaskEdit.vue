@@ -446,7 +446,7 @@ export default {
         }
       } catch (error) {
         console.log('Something went wrong onGetTask', error)
-        this.showErroSwal()
+        this.showErrorSwal()
         this.isLoading = false
       }
     },

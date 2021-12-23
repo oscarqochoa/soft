@@ -1,5 +1,8 @@
 <template>
-  <b-card title="FILES">
+  <b-card>
+    <template #header>
+      <b-card-title>Files</b-card-title>
+    </template>
     <b-table
       show-empty
       sticky-header
@@ -108,13 +111,9 @@
       <b-button
         v-if="modul === 15"
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="outline-danger"
+        variant="primary"
         @click="$bvModal.show('modal-upload-file')"
       >
-        <feather-icon
-          icon="UploadCloudIcon"
-          class="mr-50"
-        />
         <span class="align-middle">Upload File</span>
       </b-button>
     </b-card-footer>

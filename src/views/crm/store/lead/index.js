@@ -319,6 +319,36 @@ const actions = {
       throw error
     }
   },
+  async A_MY_LIST_CREATE ({ commit }, body) {
+    try {
+      const response = await crmLead.postMyListCreate(body)
+      console.log('A_MY_LIST_CREATE response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_MY_LIST_CREATE [ACTION]', error)
+      throw error
+    }
+  },
+  async A_SET_POTENTIAL ({ commit }, body) {
+    try {
+      const response = await crmLead.postSetPotential(body)
+      console.log('A_SET_POTENTIAL response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_SET_POTENTIAL [ACTION]', error)
+      throw error
+    }
+  },
+  async A_CHANGE_STATUS_SN ({ commit }, body) {
+    try {
+      const response = await crmLead.postChangeStatusSn(body)
+      console.log('A_CHANGE_STATUS_SN response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_CHANGE_STATUS_SN [ACTION]', error)
+      throw error
+    }
+  },
 }
 export default {
   namespaced: true,
