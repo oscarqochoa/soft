@@ -852,6 +852,7 @@ export default {
 
     //Notes
     async notesModal(data) {
+      this.addPreloader();
       this.modalData.notes.capturedName = data.captured;
       this.modalData.notes.sellerName = data.seller;
       this.modalData.notes.trackings = data.trackings;

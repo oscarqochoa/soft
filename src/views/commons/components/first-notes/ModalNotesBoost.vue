@@ -184,30 +184,34 @@
                   <b-button
                     variant="info"
                     class="btn-icon"
-                    :disabled="!audioCall || disabledFile"
+                    :disabled="disabledFile"
                     title="Delete File"
-                    @click="audioCall = null"
+                    @click="deleteAudio"
                   >
                     <feather-icon icon="Trash2Icon" class="text-white"></feather-icon>
                   </b-button>
                 </b-input-group-prepend>
 
+                <b-form-input
+                  v-if="note.fileName"
+                  type="text"
+                  v-model="note.fileName"
+                  class="bg-transparent text-info"
+                  disabled
+                ></b-form-input>
                 <b-form-file
+                  v-else
                   placeholder="Choose a file or drop it here..."
                   browse-text="Audio"
                   accept="audio/*"
                   v-model="audioCall"
                   :disabled="disabledFile"
-                >
-                  <template slot="file-name" slot-scope="{ names }">
-                    <b-badge variant="primary">{{ names[0] }}</b-badge>
-                  </template>
-                </b-form-file>
+                ></b-form-file>
               </b-input-group>
             </b-form-group>
           </b-col>
 
-          <b-col lg="6" v-if="audioCall">
+          <b-col lg="6" v-if="note.fileAudio">
             <audio :src="note.fileAudio" controls class="mt-1 w-100" type="audio/mp3"></audio>
           </b-col>
         </b-row>
@@ -245,6 +249,11 @@
                   rows="3"
                   :state="errors[0] ? false :  null"
                 />
+                <quill-editor
+                  v-model="note.information"
+                  :options="editorOption"
+                  class="font-small-1"
+                />
               </b-form-group>
             </ValidationProvider>
           </b-col>
@@ -263,6 +272,7 @@
                   rows="3"
                   :state="errors[0] ? false :  null"
                 />
+                <quill-editor v-model="note.recommendations" :options="editorOption" class />
               </b-form-group>
             </ValidationProvider>
           </b-col>
@@ -270,24 +280,41 @@
       </ValidationObserver>
 
       <template #modal-footer>
-        <template v-if="noteInfo.created > '2021-05-16 00:00:00' ">
-          <b-button variant="info" v-if="showButtonSave" @click="saveNotesIncomplete">Save</b-button>
+        <template v-if="newNote">
+          <b-button
+            variant="info"
+            v-if="showButtonSave"
+            @click="saveNotesIncomplete"
+            class="font-medium-1"
+          >Save</b-button>
 
           <b-button
             variant="primary"
             v-if="showButtonSave"
             @click="saveNotesCompleted"
+            class="font-medium-1"
           >Save & Complete</b-button>
 
           <b-button
             variant="primary"
             v-if="showNewButtonUpdate || showNewButtonUpdateAdmin"
-            @click="updateNotas"
+            @click="updateNotesCompleted"
+            class="font-medium-1"
           >Update</b-button>
         </template>
         <template v-else>
-          <b-button variant="info" v-if="showButtonSave" @click="saveNotesIncomplete">Save</b-button>
-          <b-button variant="primary" v-if="showButtonUpdate" @click="updateNotas">Update</b-button>
+          <b-button
+            variant="info"
+            v-if="showButtonSave"
+            @click="saveNotesIncomplete"
+            class="font-medium-1"
+          >Save</b-button>
+          <b-button
+            variant="primary"
+            v-if="showButtonUpdate"
+            @click="updateNotesCompleted"
+            class="font-medium-1"
+          >Update</b-button>
         </template>
       </template>
     </b-modal>
@@ -301,12 +328,23 @@ import NotesServices from "@/views/commons/components/first-notes/services/notes
 import HeaderModalNotes from "./HeaderModalNotes.vue";
 import GlobalService from "@/views/services/global.service";
 import CommissionsModulesVue from "../commissions/CommissionsModules.vue";
+
+// eslint-disable-next-line
+import "quill/dist/quill.core.css";
+// eslint-disable-next-line
+import "quill/dist/quill.snow.css";
+// eslint-disable-next-line
+import "quill/dist/quill.bubble.css";
+import { quillEditor } from "vue-quill-editor";
 export default {
   name: "ModalNotesBoost",
+
   components: {
     vSelect,
-    HeaderModalNotes
+    HeaderModalNotes,
+    quillEditor
   },
+
   props: {
     noteInfo: {
       type: Object,
@@ -314,20 +352,26 @@ export default {
       default: () => ({})
     }
   },
+
   created() {
     this.getFirstNote();
     this.getListTypeGoal();
     this.getCountrys();
     this.getOriginCountry();
   },
+
   mounted() {
     console.log(this.emptyNote);
     console.log(this.noteInfo);
   },
+
   data() {
     return {
       modalUp: false,
       disabledForm: false,
+      editorOption: {
+        modules: { toolbar: false }
+      },
       note: {
         identification: null,
         typeAgreement: null,
@@ -430,6 +474,7 @@ export default {
       countryOptions: []
     };
   },
+
   computed: {
     ...mapGetters({
       bigWindow: "app/bigWindow",
@@ -475,23 +520,59 @@ export default {
       return this.noteInfo.created > "2021-08-05";
     }
   },
+
   methods: {
     //Save or Update
     async saveNotesIncomplete() {
-      const validate = await this.$refs.form.validate();
-      console.log(this.note.typeGoal);
-      console.log(this.note.typeDays);
+      if (this.noteNull) {
+        this.saveUpdate("save");
+      } else {
+        this.saveUpdate("update");
+      }
+    },
+    paramsNote() {
+      const params = {
+        sale_id: this.noteInfo.saleId,
+        note: this.answersNote(),
+        file_audio: this.note.fileAudio,
+        file_name: this.note.fileName,
+        lead_id: this.noteInfo.idLead,
+        originCountry: this.note.originCountry,
+        idLead: this.noteInfo.idLead
+      };
+      return params;
     },
     async saveNotesCompleted() {
       const validate = await this.$refs.form.validate();
+      if (validate) {
+        this.saveUpdate("save");
+      }
     },
-    async updateNotas() {
+    async updateNotesCompleted() {
       const validate = await this.$refs.form.validate();
-      console.log(this.note.typeGoal);
-      console.log(this.note.typeDays);
+      if (validate) {
+        this.saveUpdate("update");
+      }
+    },
+    async saveUpdate(type) {
+      const swal = await this.showConfirmSwal();
+      if (swal.isConfirmed) {
+        this.addPreloader();
+        try {
+          const service = type == "save" ? "saveFirstNote" : "updateFirstNote";
+          const response = await NotesServices[service](this.paramsNote());
+          this.hideModal();
+          this.removePreloader();
+          this.showSuccessSwal("OPERATION SUCCESSFULLY");
+        } catch (error) {
+          console.log(error);
+          this.removePreloader();
+          this.showErrorSwal(error);
+        }
+      }
     },
 
-    pushAnswersNote() {
+    answersNote() {
       let note = [];
       note.push(
         { number: 1044, value: this.note.identification },
@@ -522,13 +603,11 @@ export default {
 
     //Get Answers Note
     async getFirstNote() {
-      this.addPreloader();
       try {
         const params = { sale_id: this.noteInfo.saleId };
         const response = await NotesServices.getFirstNote(params);
-        await this.cleanAnswers(response);
-        await this.initialValidationNote(response);
         await this.getDetailsAnswers(response);
+        await this.initialValidationNote(response);
         this.modalUp = true;
         this.removePreloader();
       } catch (error) {
@@ -536,18 +615,6 @@ export default {
         this.showErrorSwal(error);
         this.removePreloader();
       }
-      return;
-
-      this.modalUp = true;
-    },
-
-    cleanAnswers(answers) {
-      answers.forEach(answer => {
-        if (answer == "null") {
-          answer = "";
-          this.noteNull = true;
-        }
-      });
     },
     initialValidationNote(note) {
       if (note.length != 0 && this.noteInfo.statusSale == 2) {
@@ -597,27 +664,35 @@ export default {
     },
     getDetailsAnswers(note) {
       note.forEach(answer => {
-        if (answer.question_id == 1044)
-          this.note.identification = answer.answer;
-        if (answer.question_id == 1045) this.note.work = answer.answer;
-        if (answer.question_id == 1046) this.note.credit = answer.answer;
-        if (answer.question_id == 1047) this.note.hours = answer.answer;
-        if (answer.question_id == 1048)
-          this.note.typeDays = JSON.parse(answer.answer);
-        if (answer.question_id == 1049)
-          this.note.typeGoal = JSON.parse(answer.answer);
-        if (answer.question_id == 1050) this.note.another = answer.answer;
-        if (answer.question_id == 1051)
-          this.note.pending = JSON.parse(answer.answer);
-        if (answer.question_id == 1052) this.note.inconvenience = answer.answer;
-        if (answer.question_id == 1053) this.note.information = answer.answer;
-        if (answer.question_id == 1054)
-          this.note.recommendations = answer.answer;
-        if (answer.question_id == 1055) {
-          this.note.fileAudio = answer.answer;
-          this.audioCall = answer.url;
+        if (answer.answer != "null") {
+          if (answer.question_id == 1044)
+            this.note.identification = answer.answer;
+          if (answer.question_id == 1045) this.note.work = answer.answer;
+          if (answer.question_id == 1046) this.note.credit = answer.answer;
+          if (answer.question_id == 1047) this.note.hours = answer.answer;
+          if (answer.question_id == 1048)
+            this.note.typeDays = JSON.parse(answer.answer);
+          if (answer.question_id == 1049)
+            this.note.typeGoal = JSON.parse(answer.answer);
+          if (answer.question_id == 1050) this.note.another = answer.answer;
+          if (answer.question_id == 1051)
+            this.note.pending = JSON.parse(answer.answer);
+          if (answer.question_id == 1052)
+            this.note.inconvenience = answer.answer;
+          if (answer.question_id == 1053) this.note.information = answer.answer;
+          if (answer.question_id == 1054)
+            this.note.recommendations = answer.answer;
+          if (answer.question_id == 1055) {
+            this.note.fileAudio = answer.answer;
+            this.note.fileName = answer.url.split("/")[2];
+          }
+          if (answer.question_id == 1063)
+            this.note.typeAgreement = answer.answer;
         }
-        if (answer.question_id == 1063) this.note.typeAgreement = answer.answer;
+
+        if (answer.answer == "null") {
+          this.noteNull = true;
+        }
       });
     },
 
@@ -653,6 +728,11 @@ export default {
       };
       this.note.fileName = file.name;
       reader.readAsDataURL(file);
+    },
+
+    deleteAudio() {
+      this.note.fileAudio = null;
+      this.note.fileName = null;
     },
 
     //Hide Modal
