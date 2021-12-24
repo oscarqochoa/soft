@@ -19,7 +19,7 @@ export default {
       component: AddChangeComponent,
       name: 'sales-made-crm-add-change',
       meta: {
-        rolesPermitidos: [1, 2],
+        permittedRoles: [1, 2],
       },
     },
     {
@@ -27,7 +27,7 @@ export default {
       component: AnnuledComponent,
       name: 'sales-made-crm-annulled',
       meta: {
-        rolesPermitidos: [1, 2],
+        permittedRoles: [1, 2],
       },
     },
 
