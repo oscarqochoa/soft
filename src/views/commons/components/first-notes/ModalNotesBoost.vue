@@ -419,20 +419,16 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
+import { quillEditor } from 'vue-quill-editor'
 import vSelect from 'vue-select'
 import NotesServices from '@/views/commons/components/first-notes/services/notes.service'
 import HeaderModalNotes from './HeaderModalNotes.vue'
 import GlobalService from '@/views/services/global.service'
-import CommissionsModulesVue from '../commissions/CommissionsModules.vue'
 
-// eslint-disable-next-line
-import "quill/dist/quill.core.css";
-// eslint-disable-next-line
-import "quill/dist/quill.snow.css";
-// eslint-disable-next-line
-import "quill/dist/quill.bubble.css";
-import { quillEditor } from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
 export default {
   name: 'ModalNotesBoost',

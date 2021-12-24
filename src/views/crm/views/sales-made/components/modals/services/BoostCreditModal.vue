@@ -4,11 +4,12 @@
       <b-modal
         v-model="modalServices"
         modal
-        size="lg"
+        size="sm"
         scrollable
         header-class="p-0"
         header-bg-variant="transparent border-bottom border-bottom-2"
         :hide-footer="hideFooter"
+        centered
         @hidden="hideModal(false,0)"
       >
         <!-- HEADER START -->
@@ -28,28 +29,32 @@
         <!-- BODY START -->
         <b-container v-if="hideBody">
           <b-row class="d-flex align-items-center justify-content-center">
-            <b-col lg="4">
+            <b-col>
               <ValidationProvider
                 v-slot="{errors}"
                 rules="required"
               >
                 <b-card
                   header="FEE"
-                  header-bg-variant="secondary"
-                  header-tag="h3"
-                  header-class="d-flex align-items-center justify-content-center text-white py-1"
+                  header-bg-variant="important"
+                  header-class="text-white"
                 >
-                  <b-input-group
-                    prepend="$"
-                    class="mt-1"
-                  >
-                    <b-form-select
-                      v-model="fee"
-                      class="w-75"
-                      :disabled="isModalShow"
-                      :options="[19.99,24.99,29.99,34.99,39.99,44.99, 49.99, 54.99, 59.99]"
-                    />
-                  </b-input-group>
+                  <b-row class="mt-1">
+                    <b-col
+                      cols="2"
+                      class="d-flex align-items-center justify-content-center text-success font-medium-5"
+                    >
+                      $
+                    </b-col>
+                    <b-col>
+                      <v-select
+                        v-model="fee"
+                        :disabled="isModalShow"
+                        :options="[19.99,24.99,29.99,34.99,39.99,44.99, 49.99, 54.99, 59.99]"
+                        :clearable="false"
+                      />
+                    </b-col>
+                  </b-row>
                 </b-card>
                 <div
                   v-if="errors[0]"
@@ -103,11 +108,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import vSelect from 'vue-select'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
 
 export default {
   components: {
     ModalServiceHeader,
+    vSelect,
   },
   props: {
     modalServices: {
