@@ -309,11 +309,11 @@
                 label="Inconvenience"
                 label-for="Inconvenience"
               >
-                <b-form-textarea
+                <quill-editor
+                  ref="editor"
                   v-model="note.inconvenience"
-                  no-resize
-                  rows="3"
-                  :state="errors[0] ? false : null"
+                  :options="editorOption"
+                  class="font-small-1"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -332,13 +332,8 @@
                 label="Information"
                 label-for="Information"
               >
-                <b-form-textarea
-                  v-model="note.information"
-                  no-resize
-                  rows="3"
-                  :state="errors[0] ? false : null"
-                />
                 <quill-editor
+                  ref="editor"
                   v-model="note.information"
                   :options="editorOption"
                   class="font-small-1"
@@ -359,16 +354,9 @@
                 label="Recommendations"
                 label-for="Recommendations"
               >
-                <b-form-textarea
-                  v-model="note.recommendations"
-                  no-resize
-                  rows="3"
-                  :state="errors[0] ? false : null"
-                />
                 <quill-editor
                   v-model="note.recommendations"
                   :options="editorOption"
-                  class
                 />
               </b-form-group>
             </ValidationProvider>
@@ -841,6 +829,9 @@ export default {
 </script>
 
 <style scoped>
+.quill-editor {
+  height: 150px;
+}
 .restart-font-size {
   font-size: 100% !important;
 }

@@ -4,20 +4,16 @@
       <b-col class="d-flex align-items-center justify-content-end">
         <b-button
           v-if="!isModalShow"
-          variant="primary"
+          variant="outline-secondary"
           class="mr-1"
           @click="addNewCreditor"
         >
-          <feather-icon icon="PlusIcon" />
-          ADD CREDITOR
+          Add Creditor
         </b-button>
-        <b-button
+        <button-export-pdf
           :disabled="creditors.length === 0"
-          variant="success"
           @click="salesClient.account_id?downloadPdf():downloadPdfEvent()"
-        >
-          <feather-icon icon="DownloadIcon" />EXPORT TO PDF
-        </b-button>
+        />
       </b-col>
     </b-row>
     <b-row>
@@ -150,9 +146,11 @@
 
 <script>
 import ModalAddCreditorNew from '@/views/crm/views/sales-made/components/modals/services/debt-solution/ModalAddCreditorNew.vue'
+import ButtonExportPdf from '@/views/commons/utilities/ButtonExportPdf'
 
 export default {
   components: {
+    ButtonExportPdf,
     ModalAddCreditorNew,
   },
   props: {
@@ -350,21 +348,19 @@ export default {
         if (this.isModalShow) return true
         if (type == 1 || type == 2) {
           return await this.axiosNext(id, type)
-        } else if (type == 4) {
+        } if (type == 4) {
           return await this.saveant(id, type)
-        } else if (this.dato12 == null || this.dato12 == '') {
+        } if (this.dato12 == null || this.dato12 == '') {
           this.errorGoal = true
           return false
-        } else {
-          this.errorGoal = false
-          if (this.date3 == null || this.date3 == '') {
-            this.errorDate = true
-            return false
-          } else {
-            this.errorDate = false
-            return await this.axiosNext(id, type)
-          }
         }
+        this.errorGoal = false
+        if (this.date3 == null || this.date3 == '') {
+          this.errorDate = true
+          return false
+        }
+        this.errorDate = false
+        return await this.axiosNext(id, type)
       } catch (error) {
         throw error
       }

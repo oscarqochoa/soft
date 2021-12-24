@@ -130,23 +130,29 @@
               <b-col
                 lg="6"
               >
-                <div class="text-center d-flex align-items-center justify-content-center">
-                  <span>TOTAL $</span>
-                  <money
-                    v-if="isModalShow"
-                    v-model.lazy="totalSuggeste"
-                    v-bind="vMoney"
-                    class="input-total text-center"
-                    disabled
-                  />
-                  <money
-                    v-else
-                    v-model.lazy="totalAmount"
-                    v-bind="vMoney"
-                    class="input-total text-center"
-                    disabled
-                  />
-                </div>
+                <b-row class="text-center d-flex align-items-center justify-content-end">
+                  <b-col
+                    cols="2"
+                  >
+                    TOTAL $
+                  </b-col>
+                  <b-col cols="3">
+                    <money
+                      v-if="isModalShow"
+                      v-model.lazy="totalSuggeste"
+                      v-bind="vMoney2"
+                      class="text-center font-weight-bolder form-control text-primary"
+                      disabled
+                    />
+                    <money
+                      v-else
+                      v-model.lazy="totalAmount"
+                      v-bind="vMoney2"
+                      class="text-center font-weight-bolder form-control text-primary"
+                      disabled
+                    />
+                  </b-col>
+                </b-row>
               </b-col>
               <!-- Fee -->
 
@@ -155,17 +161,21 @@
                   v-slot="{errors}"
                   rules="required|money-1"
                 >
-                  <div class="text-center d-flex align-items-center justify-content-center">
-                    <span>FEE $</span>
-                    <money
-                      v-model="fee"
-                      v-bind="vMoney"
-                      class="input-total text-center font-weight-bolder gold-text"
-                      :style="errors[0] && validateMoney? 'color:red !important':''"
-                      :class="{'border border-danger':errors[0] && validateMoney}"
-                      :disabled="isModalShow"
-                    />
-                  </div>
+                  <b-row class="text-center d-flex align-items-center justify-content-end">
+                    <b-col cols="2">
+                      FEE $
+                    </b-col>
+                    <b-col cols="3">
+                      <money
+                        v-model="fee"
+                        v-bind="vMoney2"
+                        class="text-center font-weight-bolder form-control text-primary"
+                        :style="errors[0] && validateMoney? 'color:red !important':''"
+                        :class="{'border border-danger':errors[0] && validateMoney}"
+                        :disabled="isModalShow"
+                      />
+                    </b-col>
+                  </b-row>
                   <div
                     v-if="errors[0] && validateMoney"
                     class="invalid-feedback ml-4"
@@ -176,16 +186,18 @@
             <b-row v-if="!isModalShow">
               <b-col
                 v-if="!isModalAdd"
-                class="d-flex align-items-center justify-content-center"
+                class="d-flex align-items-center justify-content-end"
               >
-                <button-cancel @click="hideModal(false, 0)" />
+                <button-cancel
+                  class="mr-1"
+                  @click="hideModal(false, 0)"
+                />
                 <button-save @click="saveRates" />
               </b-col>
               <b-col v-else>
                 <b-button
                   v-if="isModalAdd"
                   variant="info"
-                  size="sm"
                   @click="saveRates"
                 >
                   Continue
@@ -264,6 +276,13 @@ export default {
         decimal: '.',
         thousands: ',',
         prefix: '$ ',
+        precision: 2,
+        masked: false,
+      },
+      vMoney2: {
+        decimal: '.',
+        thousands: ',',
+        prefix: '',
         precision: 2,
         masked: false,
       },
@@ -573,7 +592,7 @@ export default {
 </script>
 
 <style>
-select:disabled {
+select:disabled, input:disabled {
   background-color: transparent !important;
 }
 </style>
