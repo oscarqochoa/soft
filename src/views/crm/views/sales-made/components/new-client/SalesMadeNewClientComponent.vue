@@ -704,11 +704,11 @@ import RevissionModal from '@/views/crm/views/sales-made/components/modals/Revis
 import UrlModal from '@/views/crm/views/sales-made/components/modals/UrlModal.vue'
 import { amgApi } from '@/service/axios'
 import ContractFeeModal from '@/views/crm/views/sales-made/components/modals/ContractFeeModal.vue'
-
+import ModalNotesFirst from '@/views/commons/components/first-notes/ModalNotesFirst.vue'
 import ModalNotesBoost from '@/views/commons/components/first-notes/ModalNotesBoost.vue'
 import ModalNotesParagon from '@/views/commons/components/first-notes/ModalNotesParagon.vue'
-import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms'
-import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms'
+import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue'
+import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -735,6 +735,7 @@ export default {
     DebtSolutionModal,
     ModalNotesBoost,
     ModalNotesParagon,
+    ModalNotesFirst,
   },
   props: {
     done: {
@@ -1393,4 +1394,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

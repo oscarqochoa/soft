@@ -9,48 +9,243 @@
   >
     <template #modal-header>
       <header-modal-notes
-        program="Paragon"
+        program="Boost Credit"
         :info="noteInfo"
         @close="hideModal(false)"
       />
     </template>
-    <validation-observer ref="form">
-      <b-row>
-        <b-col>
-          <b-form-group
-            label="Type of Business"
-            label-class="font-weight-bolder"
-          >
-            <v-select
-              v-model="note.typeOfBuisiness.value"
-              :disabled="disabled"
-              :options="note.typeOfBuisiness.options"
-              label="name"
-              multiple
-            />
-          </b-form-group>
-        </b-col>
-      </b-row>
+    <validation-observer
+      ref="form"
+    >
       <b-row>
         <b-col>
           <validation-provider
             v-slot="{ errors }"
-            name="contactTime"
+            name="ein"
             rules="required"
           >
             <b-form-group
-              label="Contact time"
+              label="EIN"
               label-class="font-weight-bolder"
             >
-              <b-form-input
-                v-model="note.contactTime.value"
-                :disabled="disabled"
+              <b-form-radio-group
+                v-model="note.ein.value"
+                :options="note.ein.options"
                 :class="{'border-danger rounded': errors[0]}"
               />
             </b-form-group>
           </validation-provider>
         </b-col>
         <b-col>
+          <validation-provider
+            v-slot="{ errors }"
+            name="businessIdentification"
+            rules="required"
+          >
+            <b-form-group
+              label="Business Identification"
+              label-class="font-weight-bolder"
+            >
+              <b-form-radio-group
+                v-model="note.businessIdentification.value"
+                :options="note.businessIdentification.options"
+                :class="{'border-danger rounded': errors[0]}"
+              />
+              <b-form-input
+                v-if="note.businessIdentification.value === 'N/A'"
+                v-model="note.businessIdentification.otherValue"
+                class="mt-50"
+                size="sm"
+                :class="{'border-danger rounded': errors[0]}"
+              />
+            </b-form-group>
+          </validation-provider>
+        </b-col>
+        <b-col>
+          <validation-provider
+            v-slot="{ errors }"
+            name="typeOfAgreement"
+            rules="required"
+          >
+            <b-form-group
+              label="Type of Agreement"
+              label-class="font-weight-bolder"
+            >
+              <b-form-radio-group
+                v-model="note.typeOfAgreement.value"
+                :options="note.typeOfAgreement.options"
+                :class="{'border-danger rounded': errors[0]}"
+              />
+            </b-form-group>
+          </validation-provider>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <validation-provider
+            v-slot="{ errors }"
+            name="typeOfBusiness"
+            rules="required"
+          >
+            <b-form-group
+              label="Type of Business"
+              label-class="font-weight-bolder"
+            >
+              <v-select
+                v-model="note.typeOfBuisiness.value"
+                :disabled="disabled"
+                :options="note.typeOfBuisiness.options"
+                :class="{'border-danger rounded': errors[0]}"
+                label="name"
+                multiple
+              />
+            </b-form-group>
+          </validation-provider>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <validation-provider
+            v-slot="{ errors }"
+            name="numberOfEmployees"
+            rules="required"
+          >
+            <b-form-group
+              label="Number of Employees"
+              label-class="font-weight-bolder"
+            >
+              <v-select
+                v-model="note.numberOfEmployees.value"
+                :options="note.numberOfEmployees.options"
+                :reduce="value => value.value"
+                :class="{'border-danger rounded': errors[0]}"
+              />
+            </b-form-group>
+          </validation-provider>
+        </b-col>
+        <b-col>
+          <validation-provider
+            v-slot="{ errors }"
+            name="annualIncome"
+            rules="required"
+          >
+            <b-form-group
+              label="Annual Income"
+              label-class="font-weight-bolder"
+            >
+              <v-select
+                v-model="note.annualIncome.value"
+                :options="note.annualIncome.options"
+                :reduce="value => value.value"
+                :class="{'border-danger rounded': errors[0]}"
+              />
+            </b-form-group>
+          </validation-provider>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col
+          md="6"
+        >
+          <validation-provider
+            v-slot="{ errors }"
+            name="newBusiness"
+            rules="required"
+          >
+            <b-form-group
+              label-class="font-weight-bolder"
+              label="It a New Business?"
+            >
+              <b-form-radio-group
+                v-model="note.newBusiness.value"
+                :options="note.newBusiness.options"
+              />
+            </b-form-group>
+          </validation-provider>
+        </b-col>
+        <transition name="fade">
+          <b-col
+            v-if="note.newBusiness.value === 'No'"
+            md="6"
+          >
+            <validation-provider
+              v-slot="{ errors }"
+              name="startBusiness"
+              rules="required"
+            >
+              <b-form-group
+                label="When did you start your business?"
+                label-class="font-weight-bolder"
+              >
+                <b-form-input
+                  v-model="note.newBusiness.startBusiness"
+                  :class="{'border-danger' : errors[0]}"
+                />
+              </b-form-group>
+            </validation-provider>
+          </b-col>
+        </transition>
+        <transition name="fade">
+          <b-col
+            v-if="note.newBusiness.value === 'No'"
+            md="6"
+          >
+            <validation-provider
+              v-slot="{ errors }"
+              name="businessRegistration"
+              rules="required"
+            >
+              <b-form-group
+                label="Have you ever did any registration of your business in the city or county?"
+                label-class="font-weight-bolder"
+              >
+                <b-form-radio-group
+                  v-model="note.newBusiness.registration.value"
+                  :options="note.newBusiness.registration.options"
+                  :class="{'border-danger' : errors[0]}"
+                />
+              </b-form-group>
+            </validation-provider>
+          </b-col>
+        </transition>
+        <transition name="fade">
+          <b-col
+            v-if="note.newBusiness.value === 'No' && note.newBusiness.registration.value === 'Yes'"
+            md="6"
+          >
+            <validation-provider
+              v-slot="{ errors }"
+              name="registerBusiness"
+              rules="required"
+            >
+              <b-form-group
+                label="How did you register your business?"
+                label-class="font-weight-bolder"
+              >
+                <b-form-radio-group
+                  v-model="note.newBusiness.registerBusiness.value"
+                  :options="note.newBusiness.registerBusiness.options"
+                  :class="{'border-danger' : errors[0]}"
+                />
+              </b-form-group>
+            </validation-provider>
+            <validation-provider
+              v-slot="{ errors }"
+              name="registerBusinessText"
+              rules="required"
+            >
+              <quill-editor
+                v-model="note.newBusiness.registerBusiness.text"
+                :disabled="disabled"
+                :options="editorOption"
+                :class="{'border-danger' : errors[0]}"
+              />
+            </validation-provider>
+          </b-col>
+        </transition>
+        <b-col
+          md="6"
+        >
           <validation-provider
             v-slot="{ errors }"
             name="originCountry"
@@ -72,276 +267,6 @@
           </validation-provider>
         </b-col>
       </b-row>
-      <b-row>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="facebook"
-            rules="required"
-          >
-            <b-form-group
-              label="Facebook"
-              label-class="font-weight-bolder"
-            >
-              <b-form-radio-group
-                v-model="note.facebook.value"
-                :options="note.facebook.options"
-                name="facebook"
-                :class="{'border-danger rounded': errors[0]}"
-                :disabled="disabled"
-              />
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="logo"
-            rules="required"
-          >
-            <b-form-group
-              label="Logo"
-              label-class="font-weight-bolder"
-            >
-              <b-form-radio-group
-                v-model="note.logo.value"
-                :disabled="disabled"
-                :options="note.logo.options"
-                name="identification"
-                :class="{'border-danger rounded': errors[0]}"
-              />
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="instagram"
-            rules="required"
-          >
-            <b-form-group
-              label="Instagram"
-              label-class="font-weight-bolder"
-            >
-              <b-form-radio-group
-                v-model="note.instagram.value"
-                :options="note.instagram.options"
-                name="instagram"
-                :class="{'border-danger rounded': errors[0]}"
-                :disabled="disabled"
-              />
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-        <transition name="fade">
-          <b-col
-            v-if="note.facebook.value === 'Yes' || note.instagram.value === 'Yes'"
-            cols="12"
-          >
-            <b-row
-              class="d-flex align-items-center justify-content-between"
-            >
-              <b-col
-                class="d-flex"
-                :class="{'aaa' : note.facebook.value !== 'Yes'}"
-                cols="4"
-              >
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Facebook Link"
-                  class="mr-1"
-                >
-                  <b-form-input
-                    v-model="note.facebook.link"
-                    :disabled="disabled"
-                  />
-                </b-form-group>
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Facebook Likes"
-                >
-                  <b-form-input
-                    v-model="note.facebook.likes"
-                    :disabled="disabled"
-                  />
-                </b-form-group>
-
-              </b-col>
-              <b-col
-                v-if="note.instagram.value === 'Yes'"
-                cols="4"
-                class="d-flex"
-              >
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Instagram Link"
-                  class="mr-1"
-                >
-                  <b-form-input
-                    v-model="note.instagram.link"
-                    :disabled="disabled"
-                  />
-                </b-form-group>
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Instagram Likes"
-                >
-                  <b-form-input
-                    v-model="note.instagram.likes"
-                    :disabled="disabled"
-                  />
-                </b-form-group>
-              </b-col>
-            </b-row>
-          </b-col>
-        </transition>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="website"
-            rules="required"
-          >
-            <b-form-group
-              label="Website"
-              label-class="font-weight-bolder"
-            >
-              <b-form-radio-group
-                v-model="note.website.value"
-                :options="note.website.options"
-                name="website"
-                :class="{'border-danger rounded': errors[0]}"
-                :disabled="disabled"
-              />
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="socialMediaServices"
-            rules="required"
-          >
-            <b-form-group
-              label="Experience with Social Media Services"
-              label-class="font-weight-bolder"
-            >
-              <b-form-radio-group
-                v-model="note.experience.value"
-                :options="note.experience.options"
-                name="experience"
-                :class="{'border-danger rounded': errors[0]}"
-                :disabled="disabled"
-              />
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="newBusiness"
-            rules="required"
-          >
-            <b-form-group
-              label="It a New Business?"
-              label-class="font-weight-bolder"
-            >
-              <b-form-radio-group
-                v-model="note.newBusiness.value"
-                :options="note.newBusiness.options"
-                name="newBusiness"
-                :class="{'border-danger rounded': errors[0]}"
-                :disabled="disabled"
-              />
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-        <transition name="fade">
-          <b-col
-            v-if="note.website.value === 'Yes' || note.newBusiness.value === 'No'"
-            cols="12"
-          >
-            <b-row
-              class="d-flex align-items-center justify-content-between"
-            >
-              <b-col
-                cols="6"
-                class="d-flex"
-                :class="{'aaa' : note.website.value !== 'Yes'}"
-              >
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Website Link"
-                  class="mr-1"
-                >
-                  <b-form-input
-                    v-model="note.website.link"
-                    :disabled="disabled"
-                  />
-                </b-form-group>
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Website Type"
-                >
-                  <b-form-select
-                    v-model="note.website.type"
-                    :disabled="disabled"
-                    :options="['STANDAR', 'PROFESSIONAL', 'ECOMMERCE']"
-                  />
-                </b-form-group>
-
-              </b-col>
-              <b-col
-                v-if="note.newBusiness.value === 'No'"
-                cols="4"
-              >
-                <b-form-group
-                  label="Years?"
-                  label-class="font-weight-bolder"
-                >
-                  <b-form-input
-                    v-model="note.newBusiness.years"
-                  />
-                </b-form-group>
-              </b-col>
-            </b-row>
-          </b-col>
-        </transition>
-      </b-row>
-      <transition name="fade">
-        <b-row v-if="note.experience.value === 'Yes'">
-          <b-col>
-            <validation-provider
-              v-slot="{ errors }"
-              name="experience"
-              rules="required"
-            >
-              <b-form-group
-                label="Details"
-                label-class="font-weight-bolder"
-              >
-                <quill-editor
-                  v-model="note.details.value"
-                  :disabled="disabled"
-                  :options="editorOption"
-                  :class="{'border-danger' : errors[0]}"
-                />
-              </b-form-group>
-            </validation-provider>
-          </b-col>
-        </b-row>
-      </transition>
       <b-row>
         <b-col>
           <validation-provider
@@ -388,7 +313,7 @@
         <b-col>
           <validation-provider
             v-slot="{ errors }"
-            name="suggestion"
+            name="suggestions"
             rules="required"
           >
             <b-form-group
@@ -447,8 +372,8 @@
 <script>
 import { quillEditor } from 'vue-quill-editor'
 import vSelect from 'vue-select'
-import NotesServices from '@/views/commons/components/first-notes/services/notes.service'
 import HeaderModalNotes from '@/views/commons/components/first-notes/HeaderModalNotes.vue'
+import NotesServices from '@/views/commons/components/first-notes/services/notes.service'
 
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -458,14 +383,14 @@ import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComple
 import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate'
 
 export default {
-  name: 'ModalNotesParagon',
+  name: 'ModalNotesFirst',
   components: {
     ButtonUpdate,
     ButtonSaveAndComplete,
     ButtonSave,
     HeaderModalNotes,
-    quillEditor,
     vSelect,
+    quillEditor,
   },
   props: {
     noteInfo: {
@@ -498,11 +423,15 @@ export default {
   },
   data() {
     return {
-      noteNull: false,
+      showSave: false,
+      showUpdate: false,
       modalUp: false,
+      editorOption: {
+        modules: { toolbar: false },
+      },
       note: {
-        logo: {
-          value: null,
+        ein: {
+          value: '',
           options: [
             {
               text: 'Yes',
@@ -513,93 +442,152 @@ export default {
               value: 'No',
             },
           ],
-          disabled: false,
         },
-        facebook: {
-          value: null,
+        businessIdentification: {
+          value: '',
+          otherValue: '',
           options: [
             {
-              text: 'Yes',
-              value: 'Yes',
+              text: 'ITIN',
+              value: 'ITIN',
             },
             {
-              text: 'No',
-              value: 'No',
+              text: 'SSN',
+              value: 'SSN',
+            },
+            {
+              text: 'N/A',
+              value: 'N/A',
             },
           ],
-          disabled: false,
-          link: 0,
-          likes: 0,
         },
-        experience: {
-          value: null,
+        typeOfAgreement: {
+          value: '',
           options: [
             {
-              text: 'Yes',
-              value: 'Yes',
+              text: 'Email',
+              value: 'Email',
             },
             {
-              text: 'No',
-              value: 'No',
+              text: 'Ups',
+              value: 'Ups',
+            },
+            {
+              text: 'Voice',
+              value: 'Voice ',
             },
           ],
-          disabled: false,
-        },
-        newBusiness: {
-          value: null,
-          options: [
-            {
-              text: 'Yes',
-              value: 'Yes',
-            },
-            {
-              text: 'No',
-              value: 'No',
-            },
-          ],
-          disabled: false,
-          years: 0,
-        },
-        website: {
-          value: null,
-          options: [
-            {
-              text: 'Yes',
-              value: 'Yes',
-            },
-            {
-              text: 'No',
-              value: 'No',
-            },
-          ],
-          disabled: false,
-          link: 0,
-          type: 0,
-        },
-        instagram: {
-          value: null,
-          options: [
-            {
-              text: 'Yes',
-              value: 'Yes',
-            },
-            {
-              text: 'No',
-              value: 'No',
-            },
-          ],
-          disabled: false,
-          link: 0,
-          likes: 0,
         },
         typeOfBuisiness: {
           value: [],
-          disabled: false,
           options: [],
         },
-        contactTime: {
+        numberOfEmployees: {
           value: '',
-          disabled: false,
+          options: [
+            {
+              label: '0 - 5',
+              value: '0-5',
+            },
+            {
+              label: '6 - 10',
+              value: '6-10',
+            },
+            {
+              label: '10 - 20',
+              value: '10-20',
+            },
+            {
+              label: '20 - 30',
+              value: '20-30',
+            },
+            {
+              label: '30 - 50',
+              value: '30-50',
+            },
+            {
+              label: 'More than 50 employees',
+              value: 'more than 50 employees',
+            },
+          ],
+        },
+        annualIncome: {
+          value: '',
+          options: [
+            {
+              label: '$0 - $10,000',
+              value: '$0-$10,000',
+            },
+            {
+              label: '$10,000 - $20,000',
+              value: '$10,000-$20,000',
+            },
+            {
+              label: '$20,000 - $30,000',
+              value: '$20,000-$30,000',
+            },
+            {
+              label: '$50,000 - $100,000',
+              value: '$50,000-$100,000',
+            },
+            {
+              label: '$100,000 - $500,000',
+              value: '$100,000-$500,000',
+            },
+            {
+              label: '$500,000 - $1´000,000',
+              value: '$500,000-$1´000,000',
+            },
+            {
+              label: 'More $1´000,000',
+              value: 'more $1´000,000',
+            },
+          ],
+        },
+        newBusiness: {
+          value: '',
+          options: [
+            {
+              text: 'Yes',
+              value: 'Yes',
+            },
+            {
+              text: 'No',
+              value: 'No',
+            },
+          ],
+          startBusiness: '',
+          registration: {
+            value: '',
+            options: [
+              {
+                text: 'Yes',
+                value: 'Yes',
+              },
+              {
+                text: 'No',
+                value: 'No',
+              },
+            ],
+          },
+          registerBusiness: {
+            value: '',
+            options: [
+              {
+                text: 'FBN',
+                value: 'FBN',
+              },
+              {
+                text: 'LLC',
+                value: 'LLC',
+              },
+              {
+                text: 'INC',
+                value: 'INC',
+              },
+            ],
+            text: '',
+          },
         },
         country: {
           value: null,
@@ -622,17 +610,7 @@ export default {
           value: '',
           disabled: false,
         },
-        details: {
-          value: '',
-          disabled: false,
-        },
       },
-      showSave: false,
-      showUpdate: false,
-      editorOption: {
-        modules: { toolbar: false },
-      },
-
     }
   },
   computed: {
@@ -747,18 +725,12 @@ export default {
         this.showErrorSwal(error)
       }
     },
-    initialValidationNote(note) {
-      if (
-        note.length != 0
-          && this.noteInfo.statusSale != 4
-          && !this.noteNull
-      ) {
-        this.showUpdate = true
-      } else if (this.noteInfo.editmodal == false) {
-        this.showSave = false
-        this.showUpdate = false
-      } else if (note.length == 0 || this.noteNull) {
-        this.showSave = true
+    async listTypeBusiness() {
+      try {
+        const response = await amgApi.get('/listtypebusiness')
+        this.note.typeOfBuisiness.options = response.data
+      } catch (error) {
+        this.showErrorSwal(error)
       }
     },
     getDetailsAnswers(note) {
@@ -788,12 +760,18 @@ export default {
         } else this.noteNull = true
       })
     },
-    async listTypeBusiness() {
-      try {
-        const response = await amgApi.get('/listtypebusiness')
-        this.note.typeOfBuisiness.options = response.data
-      } catch (error) {
-        this.showErrorSwal(error)
+    initialValidationNote(note) {
+      if (
+        note.length != 0
+          && this.noteInfo.statusSale != 4
+          && !this.noteNull
+      ) {
+        this.showUpdate = true
+      } else if (this.noteInfo.editmodal == false) {
+        this.showSave = false
+        this.showUpdate = false
+      } else if (note.length == 0 || this.noteNull) {
+        this.showSave = true
       }
     },
     async getFirstNote() {
@@ -802,7 +780,6 @@ export default {
         const response = await NotesServices.getFirstNote(params)
         await this.getDetailsAnswers(response)
         await this.initialValidationNote(response)
-        console.log(response)
         this.modalUp = true
         this.removePreloader()
       } catch (error) {
@@ -816,7 +793,7 @@ export default {
 </script>
 
 <style scoped>
-.quill-editor{
+.quill-editor {
   height: 100px;
 }
 .fade-enter-active, .fade-leave-active {
@@ -824,8 +801,5 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0
-}
-.aaa{
-  visibility: hidden !important;
 }
 </style>

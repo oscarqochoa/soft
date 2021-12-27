@@ -5,7 +5,6 @@
       size="xmd"
       header-class="p-0"
       header-bg-variant="transparent"
-      footer-bg-variant
       scrollable
       @hide="hideModal(false)"
     >
@@ -314,6 +313,7 @@
                   v-model="note.inconvenience"
                   :options="editorOption"
                   class="font-small-1"
+                  :class="{'border-danger' : errors[0]}"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -337,6 +337,7 @@
                   v-model="note.information"
                   :options="editorOption"
                   class="font-small-1"
+                  :class="{'border-danger' : errors[0]}"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -357,6 +358,7 @@
                 <quill-editor
                   v-model="note.recommendations"
                   :options="editorOption"
+                  :class="{'border-danger' : errors[0]}"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -366,40 +368,28 @@
 
       <template #modal-footer>
         <template v-if="newNote">
-          <b-button
+          <button-save
             v-if="showButtonSave"
-            variant="info"
-            class="font-medium-1"
             @click="saveNotesIncomplete"
-          >Save</b-button>
-
-          <b-button
+          />
+          <button-save-and-complete
             v-if="showButtonSave"
-            variant="primary"
-            class="font-medium-1"
             @click="saveNotesCompleted"
-          >Save & Complete</b-button>
-
-          <b-button
+          />
+          <button-update
             v-if="showNewButtonUpdate || showNewButtonUpdateAdmin"
-            variant="primary"
-            class="font-medium-1"
             @click="updateNotesCompleted"
-          >Update</b-button>
+          />
         </template>
         <template v-else>
-          <b-button
+          <button-save
             v-if="showButtonSave"
-            variant="info"
-            class="font-medium-1"
             @click="saveNotesIncomplete"
-          >Save</b-button>
-          <b-button
+          />
+          <button-update
             v-if="showButtonUpdate"
-            variant="primary"
-            class="font-medium-1"
             @click="updateNotesCompleted"
-          >Update</b-button>
+          />
         </template>
       </template>
     </b-modal>
@@ -417,11 +407,17 @@ import GlobalService from '@/views/services/global.service'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
+import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete'
+import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate'
 
 export default {
   name: 'ModalNotesBoost',
 
   components: {
+    ButtonUpdate,
+    ButtonSaveAndComplete,
+    ButtonSave,
     vSelect,
     HeaderModalNotes,
     quillEditor,
