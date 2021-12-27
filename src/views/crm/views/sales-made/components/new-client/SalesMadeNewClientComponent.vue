@@ -704,6 +704,7 @@ import RevissionModal from '@/views/crm/views/sales-made/components/modals/Revis
 import UrlModal from '@/views/crm/views/sales-made/components/modals/UrlModal.vue'
 import { amgApi } from '@/service/axios'
 import ContractFeeModal from '@/views/crm/views/sales-made/components/modals/ContractFeeModal.vue'
+import ModalNotesTax from '@/views/commons/components/first-notes/ModalNotesTax.vue'
 import ModalNotesFirst from '@/views/commons/components/first-notes/ModalNotesFirst.vue'
 import ModalNotesBoost from '@/views/commons/components/first-notes/ModalNotesBoost.vue'
 import ModalNotesParagon from '@/views/commons/components/first-notes/ModalNotesParagon.vue'
@@ -736,6 +737,7 @@ export default {
     ModalNotesBoost,
     ModalNotesParagon,
     ModalNotesFirst,
+    ModalNotesTax,
   },
   props: {
     done: {
@@ -893,12 +895,6 @@ export default {
       return this.fields.filter(field => field.key !== 'done')
     },
   },
-  mounted() {
-    console.log(this.G_MODULE_ID)
-    console.log(this.G_ROLE_ID)
-    console.log(this.currentUser.role_id)
-    console.log(this.G_IS_CEO)
-  },
   async created() {
     try {
       await Promise.all([
@@ -1055,25 +1051,25 @@ export default {
     openModalNotes(created, program) {
       switch (true) {
         case created >= '2020-05-28' && program == 1:
-          this.modalData.notes.programSelected = 'ModalNotesFirst'
+          this.modalData.notes.programSelected = 'ModalNotesFirst' // ready
           break
         case created >= '2020-10-29' && program == 2:
-          this.modalData.notes.programSelected = 'ModalNotesBoost'
+          this.modalData.notes.programSelected = 'ModalNotesBoost' // ready
           break
         case created >= '2021-03-04' && program == 3:
-          this.modalData.notes.programSelected = 'ModalNotesCredit'
+          this.modalData.notes.programSelected = 'ModalNotesCredit' // next next
           break
         case created >= '2020-09-24' && program == 5:
-          this.modalData.notes.programSelected = 'ModalNotesTax'
+          this.modalData.notes.programSelected = 'ModalNotesTax' // ready
           break
         case created >= '2020-10-23' && program == 7:
-          this.modalData.notes.programSelected = 'ModalNotesSpecialist'
+          this.modalData.notes.programSelected = 'ModalNotesSpecialist' // next
           break
         case program == 9:
-          this.modalData.notes.programSelected = 'ModalNotesParagon'
+          this.modalData.notes.programSelected = 'ModalNotesParagon' // ready
           break
         default:
-          this.modalData.notes.programSelected = 'ModalNotesOld'
+          this.modalData.notes.programSelected = 'ModalNotesOld' // next next next
           break
       }
 
@@ -1394,5 +1390,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

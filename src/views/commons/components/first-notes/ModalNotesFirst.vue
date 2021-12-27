@@ -61,7 +61,9 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col>
+        <b-col
+          v-if="dateTypeAgreement"
+        >
           <validation-provider
             v-slot="{ errors }"
             name="typeOfAgreement"
@@ -159,6 +161,7 @@
               <b-form-radio-group
                 v-model="note.newBusiness.value"
                 :options="note.newBusiness.options"
+                :class="{'border-danger' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -445,7 +448,7 @@ export default {
         },
         businessIdentification: {
           value: '',
-          otherValue: '',
+          otherValue: '0',
           options: [
             {
               text: 'ITIN',
@@ -556,9 +559,9 @@ export default {
               value: 'No',
             },
           ],
-          startBusiness: '',
+          startBusiness: '0',
           registration: {
-            value: '',
+            value: '0',
             options: [
               {
                 text: 'Yes',
@@ -571,7 +574,7 @@ export default {
             ],
           },
           registerBusiness: {
-            value: '',
+            value: '0',
             options: [
               {
                 text: 'FBN',
@@ -586,7 +589,7 @@ export default {
                 value: 'INC',
               },
             ],
-            text: '',
+            text: '0',
           },
         },
         country: {
@@ -614,6 +617,9 @@ export default {
     }
   },
   computed: {
+    dateTypeAgreement() {
+      return this.noteInfo.created > '2021-08-05'
+    },
     disabled() {
       return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller
     },
@@ -691,26 +697,23 @@ export default {
 
     answersNote() {
       return [
-        { number: 1075, value: this.note.facebook.value },
-        { number: 1072, value: this.note.website.value },
-        { number: 1078, value: this.note.instagram.value },
-        { number: 1083, value: this.note.logo.value },
-        { number: 1081, value: this.note.experience.value },
-        { number: 1066, value: this.note.newBusiness.value },
-        { number: 1064, value: this.note.typeOfBuisiness.value },
-        { number: 1071, value: this.note.contactTime.value },
-        { number: 1067, value: this.note.information.value },
+        { number: 1002, value: this.note.businessIdentification.value },
+        { number: 1012, value: this.note.information.value },
+        { number: 1013, value: this.note.indications.value },
+        { number: 1014, value: this.note.suggestion.value },
+        { number: 1015, value: this.note.pending.value },
+        { number: 1063, value: this.dateTypeAgreement ? this.note.typeOfAgreement.value : 1 },
+        { number: 1004, value: this.note.typeOfBuisiness.value },
+        { number: 1005, value: this.note.numberOfEmployees.value },
+        { number: 1006, value: this.note.annualIncome.value },
         { number: 1068, value: this.note.indications.value },
-        { number: 1069, value: this.note.suggestion.value },
-        { number: 1070, value: this.note.pending.value },
-        { number: 1082, value: this.note.details.value },
-        { number: 1076, value: this.note.facebook.link },
-        { number: 1077, value: this.note.facebook.likes },
-        { number: 1079, value: this.note.instagram.link },
-        { number: 1080, value: this.note.instagram.likes },
-        { number: 1073, value: this.note.website.link },
-        { number: 1074, value: this.note.website.type },
-        { number: 1065, value: this.note.newBusiness.years },
+        { number: 1001, value: this.note.ein.value },
+        { number: 1007, value: this.note.newBusiness.value },
+        { number: 1008, value: this.note.newBusiness.startBusiness },
+        { number: 1009, value: this.note.newBusiness.registration.value },
+        { number: 1010, value: this.note.newBusiness.registerBusiness.value },
+        { number: 1011, value: this.note.newBusiness.registerBusiness.text },
+        { number: 1003, value: this.note.businessIdentification.otherValue },
       ]
     },
     hideModal(status) {
@@ -737,26 +740,23 @@ export default {
       note.forEach(answer => {
         console.log(answer)
         if (answer.answer != 'null') {
-          if (answer.question_id === 1075) this.note.facebook.value = answer.answer
-          if (answer.question_id === 1072) this.note.website.value = answer.answer
-          if (answer.question_id === 1078) this.note.instagram.value = answer.answer
-          if (answer.question_id === 1083) this.note.logo.value = answer.answer
-          if (answer.question_id === 1081) this.note.experience.value = answer.answer
-          if (answer.question_id === 1066) this.note.newBusiness.value = answer.answer
-          if (answer.question_id === 1064) this.note.typeOfBuisiness.value = JSON.parse(answer.answer)
-          if (answer.question_id === 1071) this.note.contactTime.value = answer.answer
-          if (answer.question_id === 1067) this.note.information.value = answer.answer
+          if (answer.question_id === 1002) this.note.businessIdentification.value = answer.answer
+          if (answer.question_id === 1003) this.note.businessIdentification.otherValue = answer.answer
+          if (answer.question_id === 1012) this.note.information.value = answer.answer
+          if (answer.question_id === 1013) this.note.indications.value = answer.answer
+          if (answer.question_id === 1014) this.note.suggestion.value = answer.answer
+          if (answer.question_id === 1015) this.note.pending.value = answer.answer
+          if (answer.question_id === 1063) this.note.typeOfAgreement.value = answer.answer
+          if (answer.question_id === 1004) this.note.typeOfBuisiness.value = JSON.parse(answer.answer)
+          if (answer.question_id === 1005) this.note.numberOfEmployees.value = answer.answer
+          if (answer.question_id === 1006) this.note.annualIncome.value = answer.answer
           if (answer.question_id === 1068) this.note.indications.value = answer.answer
-          if (answer.question_id === 1069) this.note.suggestion.value = answer.answer
-          if (answer.question_id === 1070) this.note.pending.value = answer.answer
-          if (answer.question_id === 1082) this.note.details.value = answer.answer
-          if (answer.question_id === 1076) this.note.facebook.link = answer.answer
-          if (answer.question_id === 1077) this.note.facebook.likes = answer.answer
-          if (answer.question_id === 1079) this.note.instagram.link = answer.answer
-          if (answer.question_id === 1080) this.note.instagram.likes = answer.answer
-          if (answer.question_id === 1073) this.note.website.link = answer.answer
-          if (answer.question_id === 1074) this.note.website.type = answer.answer
-          if (answer.question_id === 1065) this.note.newBusiness.years = answer.answer
+          if (answer.question_id === 1001) this.note.ein.value = answer.answer
+          if (answer.question_id === 1007) this.note.newBusiness.value = answer.answer
+          if (answer.question_id === 1008) this.note.newBusiness.startBusiness = answer.answer
+          if (answer.question_id === 1009) this.note.newBusiness.registration.value = answer.answer
+          if (answer.question_id === 1010) this.note.newBusiness.registerBusiness.value = answer.answer
+          if (answer.question_id === 1011) this.note.newBusiness.registerBusiness.text = answer.answer
         } else this.noteNull = true
       })
     },
@@ -778,7 +778,7 @@ export default {
       try {
         const params = { sale_id: this.noteInfo.saleId }
         const response = await NotesServices.getFirstNote(params)
-        await this.getDetailsAnswers(response)
+        this.getDetailsAnswers(response)
         await this.initialValidationNote(response)
         this.modalUp = true
         this.removePreloader()
