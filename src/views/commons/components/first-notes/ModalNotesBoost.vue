@@ -759,15 +759,4 @@ export default {
 </script>
 
 <style scoped>
-.restart-font-size {
-  font-size: 100% !important;
-}
-* {
-  font-size: 0.8rem !important;
-}
-
-.border-red {
-  border: 1px solid #ff3b19 !important;
-  border-radius: 0.357rem !important;
-}
 </style>
