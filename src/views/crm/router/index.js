@@ -8,6 +8,7 @@ import PaymentsRoute from '../views/payments/payments.router'
 import ListsRoute from '../views/lists/lists.router'
 import GlossaryRoute from '../views/glossary/glossary.router'
 import loansRoute from '../views/loans/loans.router'
+import FileManangerRoute from '@/views/crm/views/file-mananger/file-mananger.router.js'
 
 const routes = [
   ...viewRoute,
@@ -20,6 +21,7 @@ const routes = [
   ...PaymentsRoute,
   ...ListsRoute,
   ...GlossaryRoute,
+  FileManangerRoute,
 ]
 
 routes.map(route => {

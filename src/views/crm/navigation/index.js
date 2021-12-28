@@ -7,6 +7,7 @@ import leadNav from '../views/Lead/lead.nav'
 import ListsNavigation from '../views/lists/lists.nav'
 import GlossaryNavigation from '../views/glossary/glossary.nav'
 import LoansNavigation from '../views/loans/loans.nav'
+import FileManangerNavigation from '@/views/crm/views/file-mananger/file-mananger.nav'
 
 export default [
   {
@@ -26,4 +27,5 @@ export default [
   ClientsNavigation,
   ...leadNav,
   GlossaryNavigation,
+  FileManangerNavigation,
 ]
