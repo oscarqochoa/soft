@@ -274,6 +274,7 @@
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           variant="success"
           type="submit"
+          :disabled="isLoading"
         >
           <template v-if="isLoading">
             <b-spinner small />
@@ -282,7 +283,7 @@
           <template v-else>
             <feather-icon
               icon="ArrowUpIcon"
-              class="mr-1"
+              class="ml-1"
             />
             <span>{{ textButtonSubmit }}</span>
           </template>
@@ -370,11 +371,11 @@ export default {
     },
     async onSubmit () {
       try {
-        this.isLoading = true
         if (await this.validateTaskFavorites()) {
           this.showSwalGeneric('Are you sure?', 'You won\'t be able to revert this!', 'warning')
           .then(async result => {
             if (result.value) {
+              this.isLoading = true
               const response = await this.A_SET_LEAD_TASK({
                 task_id: '',
                 user_id: this.authUser.user_id,
@@ -403,13 +404,13 @@ export default {
             }
           }).catch(error => {
             console.log('Something went wrong onSubmit', error)
-            this.showErroSwal()
+            this.showErrorSwal()
             this.isLoading = false
           })
         }
       } catch (error) {
         console.log('Something went wrong onSubmit', error)
-        this.showErroSwal()
+        this.showErrorSwal()
         this.isLoading = false
       }
     },

@@ -1,30 +1,36 @@
 <template>
   <div class="w-100">
     <b-button-close
-      class=""
+      style="transform: translate(-12px, 4px)"
       @click="close"
     />
     <b-container fluid>
-        <b-row class="text-left bg-primary px-1 py-1">
+      <b-row class="text-left bg-primary px-3 py-1">
         <h3 class="font-weight-bolder text-white">
           {{ titleModal }}
         </h3>
       </b-row>
-      <b-row class="mt-1">
-        <b-col v-if="!modalAddShow && !modalAddLead" cols="3">
+      <b-row class="mt-1 px-2">
+        <b-col
+          v-if="!modalAddShow && !modalAddLead"
+          cols="3"
+        >
           <h5>Program</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py-1">
+          <p class="border-2 border-primary rounded text-primary text-center py10">
             {{ sales.program }}
           </p>
         </b-col>
         <b-col cols="3">
           <h5>Client</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py-1">
+          <p class="border-2 border-primary rounded text-primary text-center py10">
             {{ sales.client }}
           </p>
         </b-col>
       </b-row>
-      <b-row class="mt-1" v-if="modalAddShow">
+      <b-row
+        v-if="modalAddShow"
+        class="mt-1"
+      >
         <b-col md="6">
           <b-input-group>
             <b-input-group-prepend>
@@ -265,4 +271,8 @@ export default {
 </script>
 
 <style>
+.py10{
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
 </style>

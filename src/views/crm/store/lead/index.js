@@ -14,7 +14,8 @@ const state = {
   S_SOURCE_LEADS: [],
   S_FILES_LEADS: [],
   S_USER_APPOINTEMENTS: [],
-  S_LEAD: {},
+  S_LEAD: new Object,
+  S_LEAD_EDIT: new Object,
   S_FILTERS_LEADS: {
     searchQuery: '',
     assignTo: null,
@@ -34,15 +35,15 @@ const state = {
 }
 const getters = {
   G_STATE_LEADS () {
-    const stateLeads = state.S_STATE_LEADS.map(el => ({ label: el.name, value: el.id }))
+    const stateLeads = state.S_STATE_LEADS.map(el => ({ label: el.name, id: el.id }))
     return stateLeads
   },
   G_STATUS_LEADS () {
-    const statusLeads = state.S_STATUS_LEADS.map(el => ({ label: el.value, value: el.id }))
+    const statusLeads = state.S_STATUS_LEADS.map(el => ({ label: el.value, id: el.id }))
     return statusLeads
   },
   G_SOURCE_LEADS () {
-    const sourceLeads = state.S_SOURCE_LEADS.map(el => ({ label: el.value, value: el.id }))
+    const sourceLeads = state.S_SOURCE_LEADS.map(el => ({ label: el.value, id: el.id }))
     return sourceLeads
   },
 }
@@ -57,6 +58,13 @@ const mutations = {
     const index = state[params.destination].map(el => el.id).indexOf(params.id)
     if (index !== -1) {
       state[params.destination].splice(index, 1)
+    }
+  },
+  UPDATE_DATA (state, params) {
+    for (let key in state[params.destination]) {
+      if (params.data[key] && key !== 'id') {
+        state[params.destination][key] = params.data[key]
+      }
     }
   }
 }
@@ -81,11 +89,25 @@ const actions = {
       console.log('A_GET_LEAD response', response)
       commit('SET_DATA', {
         destination: 'S_LEAD',
-        data: response.data
+        data: response[0]
       })
       return response
     } catch (error) {
       console.log('ERROR_GET_LEAD [ACTION]', error)
+      throw error
+    }
+  },
+  async A_GET_LEAD_EDIT ({ commit }, { id, params}) {
+    try {
+      const response = await crmLead.getLeadEdit(id, params)
+      console.log('A_GET_LEAD_EDIT response', response)
+      commit('SET_DATA', {
+        destination: 'S_LEAD_EDIT',
+        data: response[0]
+      })
+      return response
+    } catch (error) {
+      console.log('ERROR_GET_LEAD_EDIT [ACTION]', error)
       throw error
     }
   },
@@ -241,6 +263,30 @@ const actions = {
       throw error
     }
   },
+  async A_UPDATE_FIELDS_LEAD ({ commit }, body) {
+    try {
+      const response = await crmLead.putFieldsLead(body)
+      console.log('A_UPDATE_FIELDS_LEAD response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_UPDATE_FIELDS_LEAD [ACTION]', error)
+      throw error
+    }
+  },
+  async A_UPDATE_LEAD ({ commit }, { id, body }) {
+    try {
+      const response = await crmLead.putLead(id, body)
+      console.log('A_UPDATE_LEAD response', response)
+      commit('UPDATE_DATA', {
+        destination: 'S_LEAD',
+        data: body
+      })
+      return response
+    } catch (error) {
+      console.log('ERROR_UPDATE_LEAD [ACTION]', error)
+      throw error
+    }
+  },
 
   /* DELETES */
   
@@ -306,6 +352,86 @@ const actions = {
       return response
     } catch (error) {
       console.log('ERROR_GET_USER_APPOINTMENT_SN [ACTION]', error)
+      throw error
+    }
+  },
+  async A_LEAD_PAYMENT ({ commit }, body) {
+    try {
+      const response = await crmLead.postLeadPayment(body)
+      console.log('A_LEAD_PAYMENT response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_LEAD_PAYMENT [ACTION]', error)
+      throw error
+    }
+  },
+  async A_MY_LIST_CREATE ({ commit }, body) {
+    try {
+      const response = await crmLead.postMyListCreate(body)
+      console.log('A_MY_LIST_CREATE response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_MY_LIST_CREATE [ACTION]', error)
+      throw error
+    }
+  },
+  async A_SET_POTENTIAL ({ commit }, body) {
+    try {
+      const response = await crmLead.postSetPotential(body)
+      console.log('A_SET_POTENTIAL response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_SET_POTENTIAL [ACTION]', error)
+      throw error
+    }
+  },
+  async A_CHANGE_STATUS_SN ({ commit }, body) {
+    try {
+      const response = await crmLead.postChangeStatusSn(body)
+      console.log('A_CHANGE_STATUS_SN response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_CHANGE_STATUS_SN [ACTION]', error)
+      throw error
+    }
+  },
+  async A_VALID_UNIQUE_SSN ({ commit }, body) {
+    try {
+      const response = await crmLead.postUniquesSsn(body)
+      console.log('A_VALID_UNIQUE_SSN response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_VALID_UNIQUE_SSN [ACTION]', error)
+      throw error
+    }
+  },
+  async A_VALID_UNIQUE_ITIN ({ commit }, body) {
+    try {
+      const response = await crmLead.postUniquesItin(body)
+      console.log('A_VALID_UNIQUE_ITIN response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_VALID_UNIQUE_ITIN [ACTION]', error)
+      throw error
+    }
+  },
+  async A_VALID_UNIQUE_CPN ({ commit }, body) {
+    try {
+      const response = await crmLead.postUniquesCpn(body)
+      console.log('A_VALID_UNIQUE_CPN response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_VALID_UNIQUE_CPN [ACTION]', error)
+      throw error
+    }
+  },
+  async A_GET_ALL_TRAKING_FIELDS_LEAD ({ commit }, body) {
+    try {
+      const response = await crmLead.postAllTrackingChangeLeads(body)
+      console.log('A_GET_ALL_TRAKING_FIELDS_LEAD response', response)
+      return response
+    } catch (error) {
+      console.log('ERROR_GET_ALL_TRAKING_FIELDS_LEAD [ACTION]', error)
       throw error
     }
   },

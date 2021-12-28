@@ -356,10 +356,13 @@ export default {
         'UsersAmgIcon',
         'AmgIcon',
         'DashboardIcon',
+        'QuestionIcon',
+        'PhoneSlashIcon',
+        'ThListIcon',
+        'Edit2SlashIcon',
         'OtherSourcesIcon',
         'ValidationInformationIcon',
         'CRInvalidIcon'
-
       ],
     }
   },

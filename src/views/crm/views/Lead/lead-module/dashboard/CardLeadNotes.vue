@@ -1,12 +1,13 @@
 <template>
-  <b-card title="NOTES">
+  <b-card>
+    <template #header>
+      <b-card-title>Notes</b-card-title>
+    </template>
     <validation-observer
-      #default="{ handleSubmit }"
       ref="refFormObserver"
     >
       <!-- Form -->
       <b-form
-        @submit.prevent="handleSubmit(onSubmit)"
         @reset.prevent="resetForm"
       >
         <b-row>
@@ -20,7 +21,7 @@
                 <b-form-textarea
                   v-model="note.text"
                   id="text"
-                  rows="7"
+                  rows="11"
                   :disabled="isDisabled || onlyRead"
                   :state="getValidationState(validationContext)"
                 />
@@ -47,57 +48,53 @@
             </validation-provider>
           </b-col>
         </b-row>
-
-        <b-card-footer
-          class="d-flex" :class="!isDisabled && !onlyRead ? 'justify-content-between' : 'justify-content-end'"
-        >
-          <div v-if="!isDisabled && !onlyRead">
-            <b-button
-              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-              type="submit"
-              variant="outline-success"
-              class="btn-icon rounded-circle"
-            >
-              <feather-icon icon="CheckIcon" />
-            </b-button>
-            <b-button
-              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-              variant="outline-danger"
-              class="btn-icon rounded-circle ml-50"
-              @click="isDisabled = true"
-            >
-              <feather-icon icon="XIcon" />
-            </b-button>
-          </div>
-          <div>
-            <b-button
-              v-if="lead.count_notes && !onlyRead"
-              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-              variant="outline-primary"
-              @click="$bvModal.show('modal-notes-save')"
-            >
-              <feather-icon
-                icon="PlusIcon"
-                class="mr-50"
-              />
-              <span class="align-middle">Add</span>
-            </b-button>
-            <b-button
-              v-if="lead.count_notes"
-              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-              variant="outline-secondary"
-              class="btn-icon ml-1"
-              @click="$bvModal.show('modal-notes-history')"
-            >
-              <feather-icon
-                icon="ListIcon"
-                size="18"
-              />
-            </b-button>
-          </div>
-        </b-card-footer>
       </b-form>
     </validation-observer>
+
+    <template v-if="(!isDisabled && !onlyRead) || (lead.count_notes && !onlyRead) || lead.count_notes" #footer>
+      <div class="d-flex" :class="!isDisabled && !onlyRead ? 'justify-content-between' : 'justify-content-end'">
+        <div v-if="!isDisabled && !onlyRead">
+          <b-button
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="outline-success"
+            class="btn-icon rounded-circle"
+            @click="onSubmit"
+          >
+            <feather-icon icon="CheckIcon" />
+          </b-button>
+          <b-button
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="outline-danger"
+            class="btn-icon rounded-circle ml-50"
+            @click="isDisabled = true"
+          >
+            <feather-icon icon="XIcon" />
+          </b-button>
+        </div>
+        <div>
+          <b-button
+            v-if="lead.count_notes && !onlyRead"
+            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+            variant="primary"
+            @click="$bvModal.show('modal-notes-save')"
+          >
+            <span class="align-middle">Add</span>
+          </b-button>
+          <b-button
+            v-if="lead.count_notes"
+            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+            variant="outline-secondary"
+            class="btn-icon ml-1"
+            @click="$bvModal.show('modal-notes-history')"
+          >
+            <feather-icon
+              icon="ListIcon"
+              size="18"
+            />
+          </b-button>
+        </div>
+      </div>
+    </template>
 
     <!-- modal NOTES SAVE -->
     <b-modal
@@ -199,32 +196,33 @@ export default {
     myNote () {
       this.isMyNote = this.note.user_id == this.authUser.user_id
     },
-    onSubmit () {
-      this.isLoading = true
-      this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          this.addPreloader()
-          const response = await this.A_UPDATE_LEAD_NOTE(this.note)
-          if (this.isResponseSuccess(response)) {
-            this.reloadNote(response.data)
-            this.setDataBlank('note')
-            this.isDisabled = true
-            this.removePreloader()
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          } else {
-            this.removePreloader()
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong. ' + response.message)
+    async onSubmit () {
+      if (await this.$refs.refFormObserver.validate()) {
+        this.showConfirmSwal()
+        .then(async result => {
+          if (result.value) {
+            this.isLoading = true
+            this.addPreloader()
+            const response = await this.A_UPDATE_LEAD_NOTE(this.note)
+            if (this.isResponseSuccess(response)) {
+              this.reloadNote(response.data)
+              this.setDataBlank('note')
+              this.isDisabled = true
+              this.removePreloader()
+              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+            } else {
+              this.removePreloader()
+              this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong. ' + response.message)
+            }
+            this.isLoading = false
           }
+        }).catch(error => {
+          console.log('Something went wrong onSubmit', error)
+          this.removePreloader()
+          this.showErrorSwal()
           this.isLoading = false
-        }
-        this.isLoading = false
-      }).catch(error => {
-        console.log('Something went wrong onSubmit', error)
-        this.removePreloader()
-        this.showErrorSwal()
-        this.isLoading = false
-      })
+        })
+      }
     }
   },
   mounted () {

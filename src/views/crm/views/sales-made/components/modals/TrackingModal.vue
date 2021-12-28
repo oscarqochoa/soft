@@ -1,44 +1,21 @@
 <template>
   <b-modal
-    lazy
     v-model="modal.tracking"
+    lazy
     centered
     header-bg-variant="primary"
-    title-class="text-white h3"
+    title-class="h3 text-white font-weight-bolder"
     size="lg"
     title="TRACKING"
     hide-footer
     scrollable
   >
     <b-container fluid>
-      <b-row>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                PROGRAM
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="tracking.program"
-            />
-          </b-input-group>
-        </b-col>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                CLIENT
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="tracking.client"
-            />
-          </b-input-group>
-        </b-col>
-      </b-row>
+      <program-client-header
+        :client="tracking.client"
+        :program="tracking.program"
+        class="sticky-top"
+      />
       <b-row class="mt-2">
         <b-table
           :fields="fields"
@@ -46,7 +23,7 @@
           small
         >
           <template v-slot:cell(date)="data">
-            {{data.item.date | myGlobalWithHour}}
+            {{ data.item.date | myGlobalWithHour }}
           </template>
           <template v-slot:cell(type)="data">
             <p
@@ -66,8 +43,11 @@
 
 <script>
 
+import ProgramClientHeader from '@/views/crm/views/sales-made/components/modals/ProgramClientHeader'
+
 export default {
   name: 'TrackingModal',
+  components: { ProgramClientHeader },
   props: {
     modal: {
       type: Object,

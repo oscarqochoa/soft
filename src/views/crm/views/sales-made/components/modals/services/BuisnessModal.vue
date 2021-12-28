@@ -4,10 +4,10 @@
       <b-modal
         v-model="modalServices"
         modal
-        size="xl"
+        size="lg"
         scrollable
         header-class="p-0"
-        :header-bg-variant="skin"
+        header-bg-variant="transparent border-bottom border-bottom-2"
         @hidden="hideModal(false,0)"
       >
         <!-- HEADER START -->
@@ -26,259 +26,268 @@
         <!-- BODY START -->
         <!-- rates -->
         <b-container fluid>
-          <b-card
-            header="SINGLE PAYMENT"
-            header-bg-variant="info"
-            header-class="font-medium-3 font-weight-bold text-white"
-          >
-            <b-row class="mt-2">
-              <template v-for="(rate, index) in rates">
-                <b-col
-                  v-if="rate.type === '1'"
-                  :key="index"
-                >
-                  <b-card
-                    class="font-weight-bolder"
-                    :class="{'cursor-pointer': !(isModalShow), 'border' : (skin === 'light' && option !== rate.id), 'text-white' : option === rate.id && skin === 'light'}"
-                    :bg-variant="(option === rate.id) ? 'primary' : (skin === 'dark') ? 'dark' : 'white'"
-                    @click="!(isModalShow) && changeRate(rate)"
-                  >
-                    <b-row>
-                      <b-col>
-                        <p class="text-center">{{ rate.description }}</p>
-                      </b-col>
-                    </b-row>
-                    <b-row>
-                      <b-col v-if="rate.id !== 63 && rate.id !== 34">
-                        <p class="text-center">
-                          $ {{ rate.price }}.00
-                        </p>
-                      </b-col>
-                      <b-col v-if="rate.id === 63">
-                        <ValidationProvider
-                          v-slot="{errors}"
-                          :rules="`${option === 63 ? 'required|money-1' : ''}`"
-                        >
-                          <div class="d-flex align-items-center justify-content-center">
-                            <money
-                              v-model.lazy="businessCreditS"
-                              v-bind="vMoney"
-                              class="text-center w-75 form-control"
-                              :disabled="option !== 63 || isModalShow"
-                              :class="{'border border-danger':errors[0] && validateMoney}"
-                              @keyup.native="addPrice(businessCreditS)"
-                            />
-                            <span
-                              v-if="errors[0] && validateMoney"
-                              class="invalid-feedback"
-                            >{{ errors[0] }}</span>
-                          </div>
-                        </ValidationProvider>
-                      </b-col>
-                      <b-col v-if="rate.id === 34">
-                        <ValidationProvider
-                          v-slot="{errors}"
-                          :rules="`${ option == 34? 'required|money-1' : ''}`"
-                        >
-                          <div class="d-flex align-items-center justify-content-center">
-                            <money
-                              v-model.lazy="otherTotalS"
-                              v-bind="vMoney"
-                              class="input-money text-center w-75 form-control"
-                              :class="{'border border-danger':errors[0] && validateMoney}"
-                              disabled
-                            />
-                            <span
-                              v-if="errors[0] && validateMoney"
-                              class="invalid-feedback"
-                            >{{ errors[0] }}</span>
-                          </div>
-                        </ValidationProvider>
-                      </b-col>
-                    </b-row>
-                  </b-card>
-                </b-col>
-              </template>
-
-              <!-- Only to Show, Old leads, before Paragon -->
-              <template v-if="isModalShow">
-                <template v-for="(rate, index) in rates">
-                  <b-col
-                    v-if="rate.id === 42 || rate.id === 44"
-                    :key="index"
-                    lg="3"
-                  >
-                    <b-card
-                      :title="rate.description"
-                      :bg-variant="(option === rate.id) ? 'success' : 'light'"
-                    >
-                      <b-row>
-                        <b-col>
-                          <p>
-                            $ {{ rate.price }}.00
-                          </p>
-                        </b-col>
-                      </b-row>
-                    </b-card>
-                  </b-col>
-                </template>
-              </template>
-            </b-row>
-            <!-- Others Single Payments -->
-            <b-row
-              v-if="option === 34"
-              class="mt-1"
-            >
-              <template v-for="(rate, index) in rates_others">
-                <b-col
-                  :key="index"
-                  lg="6"
-                  class="py-1 px-1 border"
-                >
-                  <b-row>
-                    <b-col class="d-flex align-items-center justify-content-between">
-                      <div>
-                        <b-form-checkbox
-                          v-model="s_payments"
-                          :value="rate.id"
-                          :disabled="isModalShow"
-                          @change="sumOfPrices()"
-                        />
-                      </div>
-                      <div class="text-center">
-                        {{ rate.description }}
-                      </div>
-                      <div> ${{ rate.price }}.00 </div>
-                    </b-col>
-                  </b-row>
-                </b-col>
-              </template>
-            </b-row>
-          </b-card>
-        </b-container>
-
-        <b-row>
-          <b-col>
-            <b-card
-              header="MONTHLY PAYMENT"
-              header-bg-variant="info"
-              header-class="font-medium-3 font-weight-bold text-white"
-            >
-              <b-row class="mt-2">
-                <template v-for="(rate, index) in rates">
-                  <b-col
-                    v-if="rate.type==2"
-                    :key="index"
-                    :lg="(isModalShow) ? '3' : '4'"
-                  >
-                    <b-card
-                      :title="rate.description"
-                      :class="!(isModalShow) ? 'cursor-pointer' : ''"
-                      :bg-variant="(option === rate.id) ? 'success' : 'light'"
-                      @click="!(isModalShow) && changeRate(rate)"
-                    >
-                      <b-row>
-                        <b-col v-if="rate.id !== 64 && rate.id !== 35">
-                          <p>
-                            $ {{ rate.price }}.00
-                          </p>
-                        </b-col>
-                        <b-col v-if="rate.id === 64">
-                          <ValidationProvider
-                            v-slot="{errors}"
-                            :rules="`${ option === 64? 'required|money-1' : ''}`"
-                          >
-                            <money
-                              v-model.lazy="businessCreditM"
-                              v-bind="vMoney"
-                              class="text-center w-75 rounded-pill"
-                              :disabled="option !== 64 || isModalShow"
-                              :class="{'border border-danger':errors[0] && validateMoney}"
-                              @keyup.native="addPrice(businessCreditM)"
-                            />
-                            <span
-                              v-if="errors[0] && validateMoney"
-                              class="invalid-feedback"
-                            >{{ errors[0] }}</span>
-                          </ValidationProvider>
-                        </b-col>
-                        <b-col v-if="rate.id === 35">
-                          <ValidationProvider
-                            v-slot="{errors}"
-                            :rules="`${ option == 35? 'required|money-1' : ''}`"
-                          >
-                            <money
-                              v-model.lazy="otherTotalM"
-                              v-bind="vMoney"
-                              class="text-center w-75 rounded-pill"
-                              disabled
-                              :class="{'border border-danger':errors[0] && validateMoney}"
-                            />
-                            <span
-                              v-if="errors[0] && validateMoney"
-                              class="invalid-feedback"
-                            >{{ errors[0] }}</span>
-                          </ValidationProvider>
-                        </b-col>
-                      </b-row>
-                    </b-card>
-                  </b-col>
-                </template>
-
-                <!-- Only to Show, Old leads, before Paragon -->
-                <template v-if="isModalShow">
+          <b-row>
+            <b-col>
+              <b-card
+                header="Single payment"
+                header-bg-variant="info"
+                header-class="font-weight-bolder text-white py-1"
+              >
+                <b-row class="mt-2">
                   <template v-for="(rate, index) in rates">
                     <b-col
-                      v-if="rate.id==43 || rate.id == 45"
+                      v-if="rate.type === '1'"
                       :key="index"
-                      lg="3"
+                      lg="4"
+                      md="6"
+                      xs="12"
                     >
                       <b-card
-                        :title="rate.description"
-                        :bg-variant="(option === rate.id) ? 'success' : 'light'"
+                        class="font-weight-bolder hover-card"
+                        :class="{'cursor-pointer': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
+                        bg-variant="transparent"
+                        @click="!(isModalShow) && changeRate(rate)"
                       >
                         <b-row>
                           <b-col>
-                            <p>
+                            <p class="text-center">
+                              {{ rate.description }}
+                            </p>
+                          </b-col>
+                        </b-row>
+                        <b-row>
+                          <b-col v-if="rate.id !== 63 && rate.id !== 34">
+                            <p class="text-center">
                               $ {{ rate.price }}.00
+                            </p>
+                          </b-col>
+                          <b-col v-if="rate.id === 63">
+                            <ValidationProvider
+                              v-slot="{errors}"
+                              :rules="`${option === 63 ? 'required|money-1' : ''}`"
+                            >
+                              <div class="d-flex align-items-center justify-content-center">
+                                <money
+                                  v-model.lazy="businessCreditS"
+                                  v-bind="vMoney"
+                                  class="text-center w-75 form-control form-control-sm"
+                                  :disabled="isModalShow"
+                                  :class="{'border border-danger':errors[0] && validateMoney}"
+                                  @keyup.native="addPrice(businessCreditS)"
+                                />
+                                <span
+                                  v-if="errors[0] && validateMoney"
+                                  class="invalid-feedback"
+                                >{{ errors[0] }}</span>
+                              </div>
+                            </ValidationProvider>
+                          </b-col>
+                          <b-col v-if="rate.id === 34">
+                            <p class="text-center">
+                              $ {{ otherTotalS }}
                             </p>
                           </b-col>
                         </b-row>
                       </b-card>
                     </b-col>
                   </template>
-                </template>
-              </b-row>
-              <!-- Others Monthly Payments -->
-              <b-row v-if="option === 35">
-                <template v-for="(rate, index) in rates">
-                  <b-col
-                    v-if="rate.type == 3"
-                    :key="index"
-                    cols="6"
-                  >
-                    <b-row>
-                      <b-col class="d-flex align-items-center justify-content-between">
-                        <div>
-                          <b-form-checkbox
-                            v-model="m_payments"
-                            :value="rate.id"
-                            :disabled="isModalShow"
-                            @change="sumOfPrices()"
-                          />
-                        </div>
-                        <div class="text-center">
-                          {{ rate.description }}
-                        </div>
-                        <div> ${{ rate.price }}.00 </div>
+
+                  <!-- Only to Show, Old leads, before Paragon -->
+                  <template v-if="isModalShow">
+                    <template v-for="(rate, index) in rates">
+                      <b-col
+                        v-if="rate.id === 42 || rate.id === 44"
+                        :key="index"
+                        lg="3"
+                      >
+                        <b-card
+                          class="font-weight-bolder hover-card"
+                          :class="{'cursor-pointer': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
+                          bg-variant="transparent"
+                          @click="!(isModalShow) && changeRate(rate)"
+                        >
+                          <b-row>
+                            <b-col>
+                              <p class="text-center">
+                                {{ rate.description }}
+                              </p>
+                            </b-col>
+                          </b-row>
+                          <b-row>
+                            <b-col v-if="rate.id !== 63 && rate.id !== 34">
+                              <p class="text-center">
+                                $ {{ rate.price }}.00
+                              </p>
+                            </b-col>
+                          </b-row>
+                        </b-card>
                       </b-col>
-                    </b-row>
-                  </b-col>
-                </template>
-              </b-row>
-            </b-card>
-          </b-col>
-        </b-row>
+                    </template>
+                  </template>
+                </b-row>
+                <!-- Others Single Payments -->
+                <transition name="fade">
+                  <b-row
+                    v-if="option === 34"
+                    class="mt-1 options"
+                  >
+                    <template v-for="(rate, index) in rates_others">
+                      <b-col
+                        :key="index"
+                        lg="4"
+                        class="py-1 px-1"
+                        :class="{'border-right border-right-2': (index + 1) % 3 !== 0}"
+                      >
+                        <b-row>
+                          <b-col class="d-flex align-items-center justify-content-between">
+                            <div>
+                              <b-form-checkbox
+                                v-model="s_payments"
+                                :value="rate.id"
+                                :disabled="isModalShow"
+                                @change="sumOfPrices()"
+                              />
+                            </div>
+                            <div class="text-center">
+                              {{ rate.description }}
+                            </div>
+                            <div> ${{ rate.price }}.00 </div>
+                          </b-col>
+                        </b-row>
+                      </b-col>
+                    </template>
+                  </b-row>
+                </transition>
+              </b-card>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-card
+                header="Monthly payment"
+                header-bg-variant="info"
+                header-class="font-weight-bolder text-white py-1"
+              >
+                <b-row class="mt-2">
+                  <template v-for="(rate, index) in rates">
+                    <b-col
+                      v-if="rate.type==2"
+                      :key="index"
+                      lg="4"
+                      md="6"
+                      xs="12"
+                    >
+                      <b-card
+                        class="font-weight-bolder hover-card"
+                        :class="{'cursor-pointer': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
+                        bg-variant="transparent"
+                        @click="!(isModalShow) && changeRate(rate)"
+                      >
+                        <b-row>
+                          <b-col>
+                            <p class="text-center">
+                              {{ rate.description }}
+                            </p>
+                          </b-col>
+                        </b-row>
+                        <b-row>
+                          <b-col v-if="rate.id !== 64 && rate.id !== 35">
+                            <p class="text-center">
+                              $ {{ rate.price }}.00
+                            </p>
+                          </b-col>
+                          <b-col v-if="rate.id === 64">
+                            <ValidationProvider
+                              v-slot="{errors}"
+                              :rules="`${option === 64 ? 'required|money-1' : ''}`"
+                            >
+                              <div class="d-flex align-items-center justify-content-center">
+                                <money
+                                  v-model.lazy="businessCreditM"
+                                  v-bind="vMoney"
+                                  class="text-center w-75 form-control form-control-sm"
+                                  :disabled="isModalShow"
+                                  :class="{'border border-danger':errors[0] && validateMoney}"
+                                  @keyup.native="addPrice(businessCreditM)"
+                                />
+                                <span
+                                  v-if="errors[0] && validateMoney"
+                                  class="invalid-feedback"
+                                >{{ errors[0] }}</span>
+                              </div>
+                            </ValidationProvider>
+                          </b-col>
+                          <b-col v-if="rate.id === 35">
+                            <p class="text-center">
+                              $ {{ otherTotalM }}
+                            </p>
+                          </b-col>
+                        </b-row>
+                      </b-card>
+                    </b-col>
+                  </template>
+
+                  <!-- Only to Show, Old leads, before Paragon -->
+                  <template v-if="isModalShow">
+                    <template v-for="(rate, index) in rates">
+                      <b-col
+                        v-if="rate.id == 43 || rate.id == 45"
+                        :key="index"
+                        lg="4"
+                        md="6"
+                        xs="12"
+                      >
+                        <b-card
+                          :title="rate.description"
+                          :bg-variant="(option === rate.id) ? 'success' : 'light'"
+                        >
+                          <b-row>
+                            <b-col>
+                              <p>
+                                $ {{ rate.price }}.00
+                              </p>
+                            </b-col>
+                          </b-row>
+                        </b-card>
+                      </b-col>
+                    </template>
+                  </template>
+                </b-row>
+                <!-- Others Monthly Payments -->
+                <transition name="fade">
+                  <b-row v-if="option === 35">
+                    <template v-for="(rate, index) in rates">
+                      <b-col
+                        v-if="rate.type == 3"
+                        :key="index"
+                        lg="4"
+                        md="12"
+                        class="py-1 px-1"
+                      >
+                        <b-row>
+                          <b-col class="d-flex align-items-center justify-content-between">
+                            <div>
+                              <b-form-checkbox
+                                v-model="m_payments"
+                                :value="rate.id"
+                                :disabled="isModalShow"
+                                @change="sumOfPrices()"
+                              />
+                            </div>
+                            <div class="text-center">
+                              {{ rate.description }}
+                            </div>
+                            <div> ${{ rate.price }}.00 </div>
+                          </b-col>
+                        </b-row>
+                      </b-col>
+                    </template>
+                  </b-row>
+                </transition>
+              </b-card>
+            </b-col>
+          </b-row>
+        </b-container>
         <!-- BODY END -->
 
         <!--  FOOTER START -->
@@ -307,8 +316,8 @@
                           <b-col cols="8">
                             <money
                               v-model="fee"
-                              v-bind="vMoney"
-                              class="text-center font-weight-bolder gold-text p-fee rounded-pill"
+                              v-bind="{decimal: '.', thousands: ',', prefix: '', precision: 2 }"
+                              class="text-center font-weight-bolder form-control form-control-sm"
                               :style="errors[0] && validateMoney? 'color:red !important':''"
                               :class="{'border border-danger':errors[0] && validateMoney}"
                               :disabled="isModalShow || !option"
@@ -335,24 +344,10 @@
                 <b-row>
                   <b-col
                     v-if="!isModalAdd"
-                    class="d-flex justify-content-center align-items-center"
+                    class="d-flex justify-content-end align-items-center"
                   >
-                    <b-button
-                      class="rounded mr-1"
-                      variant="danger"
-                      size="sm"
-                      @click="hideModal(false,0)"
-                    >
-                      <feather-icon icon="PowerIcon" /> CANCEL
-                    </b-button>
-                    <b-button
-                      class="rounded"
-                      variant="success"
-                      size="sm"
-                      @click="saveRates()"
-                    >
-                      <feather-icon icon="SaveIcon" /> SAVE
-                    </b-button>
+                    <button-save @click="saveRates()" />
+                    <button-cancel @click="hideModal(false,0)" />
                   </b-col>
                   <b-col
                     v-else
@@ -381,9 +376,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
   components: {
+    ButtonSave,
+    ButtonCancel,
     ModalServiceHeader,
   },
   props: {
@@ -463,14 +462,18 @@ export default {
       let totalSelected = []
       const that = this
       totalSelected = this.rates_others.filter(item => that.s_payments.includes(item.id))
-      return totalSelected.reduce((sum, rate) => sum + rate.price, 0)
+      const number = totalSelected.reduce((sum, rate) => sum + rate.price, 0)
+      if (number) return (Math.round(number * 100) / 100).toFixed(2).toString()
+      return '0.00'
     },
     otherTotalM() {
       // Bring only Selected Others
       let totalSelected = []
       const that = this
       totalSelected = this.rates.filter(item => that.m_payments.includes(item.id))
-      return totalSelected.reduce((sum, rate) => sum + rate.price, 0)
+      const number = totalSelected.reduce((sum, rate) => sum + rate.price, 0)
+      if (number) return (Math.round(number * 100) / 100).toFixed(2).toString()
+      return '0.00'
     },
   },
   async mounted() {
@@ -665,5 +668,25 @@ export default {
 </script>
 
 <style scoped>
-
+.bg-click {
+  background-color: #6100FF !important;
+}
+.hover-card, .cancel{
+  transition: 300ms;
+}
+.hover-card:hover{
+  background-color: #6100FF !important;
+  color: white;
+  border: none !important;
+}
+.cancel:hover{
+  background-color: #FF3B19 !important;
+  color: white !important;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0
+}
 </style>

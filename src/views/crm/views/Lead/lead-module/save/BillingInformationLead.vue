@@ -1,9 +1,9 @@
 <template>
   <b-card>
+    <template #header>
+      <b-card-title>BILLING INFORMATION</b-card-title>
+    </template>
     <b-row>
-      <b-col class="col-12 mb-1">
-        <span class="title-card">BILLING INFORMATION</span>
-      </b-col>
       <b-col md="6">
         <!-- Card Holder Name -->
         <validation-provider
@@ -171,7 +171,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <address-lead v-if="otherinfo" :addressData="userData.cardAddress" :state-options="stateOptions"></address-lead>
+    <address-lead v-if="otherinfo" :addressData="userData.cardAddress"></address-lead>
   </b-card>
 </template>
 
@@ -218,10 +218,6 @@ export default {
     userData: {
       required: true
     },
-    stateOptions: {
-      type: Array,
-      required: true,
-    },
   },
   data() {
     return {
@@ -233,6 +229,7 @@ export default {
       otherinfo: false,
     }
   },
+  computed: {},
   setup(props, { emit }) {
     const blankUserData = {
       firstName: '',

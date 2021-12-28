@@ -4,7 +4,7 @@ class CrmLead {
   
   async getLead (id, params) {
     try {
-      const { data } = await amgApiFake.get(`/lead`, params)
+      const { data } = await amgApi.get(`/lead/${ id }`, params)
       return data
     } catch (error) {
       console.log('Something went wrong on getLead:', error)
@@ -154,6 +154,106 @@ class CrmLead {
   async deleteFileLead (body) {
     try {
       const data = await amgApi.post('/delete-file-sn', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postLeadPayment (body) {
+    try {
+      const data = await amgApi.post('/leadpayment', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postMyListCreate (body) {
+    try {
+      const data = await amgApi.post('/my-list-create', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postSetPotential (body) {
+    try {
+      const data = await amgApi.post('/set-potential', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postChangeStatusSn (body) {
+    try {
+      const data = await amgApi.post('/change-status-sn', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getLeadEdit (id, params) {
+    try {
+      const { data } = await amgApi.get(`/lead/edit/${ id }`, params)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getLead:', error)
+      throw error
+    }
+  }
+
+  async postUniquesSsn (body) {
+    try {
+      const data = await amgApi.post('/uniquessn', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postUniquesItin (body) {
+    try {
+      const data = await amgApi.post('/uniqueitin', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postUniquesCpn (body) {
+    try {
+      const data = await amgApi.post('/uniquecpn', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async putFieldsLead (body) {
+    try {
+      const data = await amgApi.post('/savefieldslead', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async postAllTrackingChangeLeads (body) {
+    try {
+      const data = await amgApi.post('/alltrackingfieldslead', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async putLead (id, body) {
+    try {
+      const data = await amgApi.post(`/leads/update/${ id }`, body)
       return data
     } catch (error) {
       throw error

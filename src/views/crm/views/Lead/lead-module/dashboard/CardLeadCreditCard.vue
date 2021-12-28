@@ -1,11 +1,13 @@
 <template>
-  <b-card title="CREDIT CARDS">
+  <b-card>
+    <template #header>
+      <b-card-title>{{ title ? title : `Credit Cards` }}</b-card-title>
+    </template>
     <b-table
       show-empty
       sticky-header
       striped
       responsive="sm"
-      small
       :fields="fieldsTask"
       :items="lead.cards"
       class="mb-0"
@@ -54,23 +56,21 @@
 
     </b-table>
     
-    <b-card-footer v-if="!onlyRead" class="text-right">
-      <b-button
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="outline-primary"
-        @click="$bvModal.show('modal-card-create')"
-      >
-        <feather-icon
-          icon="PlusIcon"
-          class="mr-50"
-        />
-        <span class="align-middle">Add</span>
-      </b-button>
-    </b-card-footer>
+    <template v-if="!onlyRead" #footer>
+      <div class="text-right">
+        <b-button
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="primary"
+          @click="$bvModal.show(`modal-card-create-${ key }`)"
+        >
+          <span class="align-middle">Add</span>
+        </b-button>
+      </div>
+    </template>
 
     <!-- modal CARD CREATE -->
     <b-modal
-      id="modal-card-create"
+      :id="`modal-card-create-${ key }`"
       modal-class="modal-warning"
       centered
       size="lg"
@@ -88,7 +88,7 @@
 
     <!-- modal CARD SHOW -->
     <b-modal
-      id="modal-card-show"
+      :id="`modal-card-show-${ key }`"
       ok-only
       modal-class="modal-warning"
       centered
@@ -137,6 +137,7 @@ export default {
   },
   data () {
     return {
+      key: Math.random(),
       authUser: new Object,
       card: new Object,
       fieldsTask: [
@@ -179,7 +180,7 @@ export default {
         const response = await this.A_GET_CREDIT_CARD({ id })
         if (this.isResponseSuccess(response)) {
           this.card = response.data[0]
-          this.$bvModal.show('modal-card-show')
+          this.$bvModal.show(`modal-card-show-${ key }`)
         } else
           this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
         this.isActionButtonLoading = false
@@ -243,6 +244,10 @@ export default {
     lead: {
       type: Object,
       required: true
+    },
+    title: {
+      type: String,
+      required: false
     }
   },
   setup() {},

@@ -1,10 +1,12 @@
 <template>
-  <b-card title="FILES">
+  <b-card>
+    <template #header>
+      <b-card-title>Files</b-card-title>
+    </template>
     <b-table
       show-empty
       sticky-header
       striped
-      small
       responsive="sm"
       :fields="fields"
       :items="S_FILES_LEADS"
@@ -68,9 +70,11 @@
       </template>
       
       <template #cell(created_by)="data">
-        <span>{{ data.item.user_upload }}</span>
-        <br />
-        <span>{{ data.item.created_at | myGlobalWithHour }}</span>
+        <div style="white-space: nowrap;">
+          {{ data.item.user_upload }}
+          <br />
+          <span>{{ data.item.created_at | myGlobalWithHour }}</span>
+        </div>
       </template>
       
       <template #cell(actions)="data">
@@ -104,21 +108,20 @@
 
     </b-table>
 
-    <b-card-footer class="text-right">
-      <b-button
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="outline-danger"
-        @click="$bvModal.show('modal-upload-file')"
-      >
-        <feather-icon
-          icon="UploadCloudIcon"
-          class="mr-50"
-        />
-        <span class="align-middle">Upload File</span>
-      </b-button>
-    </b-card-footer>
+    <template v-if="modul === 15" #footer>
+      <div class="text-right">
+        <b-button
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="primary"
+          @click="$bvModal.show('modal-upload-file')"
+        >
+          <span class="align-middle">Upload File</span>
+        </b-button>
+      </div>
+    </template>
 
     <b-modal
+      v-if="modul === 15"
       id="modal-upload-file"
       title="Upload File"
       modal-class="modal-primary"
@@ -180,7 +183,7 @@ export default {
       fields: [
         { key: 'file_name' },
         { key: 'created_by' },
-        { key: 'actions' },
+        (this.modul === 15) ? { key: 'actions' } : null,
       ],
       files: [],
       isBusy: false,
@@ -299,10 +302,6 @@ export default {
   props: {
     modul: {
       type: Number,
-      required: true
-    },
-    onlyRead: {
-      type: Boolean,
       required: true
     },
     lead: {

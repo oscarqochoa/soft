@@ -6,7 +6,6 @@
         sticky-header
         striped
         responsive="sm"
-        small
         :fields="fieldsEvent"
         :items="S_CREDIT_REPORTS"
         :busy.sync="isBusy"

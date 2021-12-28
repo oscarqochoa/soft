@@ -1,68 +1,32 @@
 <template>
   <b-modal
-      v-model="modal.revission"
-      :title="title"
-      size="lg"
+    v-model="modal.revission"
+    :title="title"
+    title-class="h3 text-white font-weight-bolder"
+    size="lg"
   >
     <b-container fluid>
+      <program-client-header
+        :client="revission.nameClient"
+        :program="revission.nameProgram"
+        class="sticky-top"
+      />
       <b-row>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                PROGRAM
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-                disabled
-                :value="revission.nameProgram"
-            />
-          </b-input-group>
-        </b-col>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                CLIENT
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-                disabled
-                :value="revission.nameClient"
-            />
-          </b-input-group>
-        </b-col>
-        <b-col v-if="type === 4">
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                Advisor
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-select
-                v-model="advisorId"
-                disabled
-                :value="advisor"
-                value-field="id"
-                text-field="user_name"
-            />
-          </b-input-group>
-        </b-col>
-      </b-row>
-      <b-row>
-        <h3 class="mt-2">Observation</h3>
+        <h3 class="mt-2">
+          Observation
+        </h3>
         <b-form-textarea
-            id="textarea-1"
-            v-model="observation"
-            placeholder="Enter observation..."
-            rows="5"
-            max-rows="6"
+          id="textarea-1"
+          v-model="observation"
+          placeholder="Enter observation..."
+          rows="5"
+          max-rows="6"
         />
       </b-row>
       <b-row v-if="type === 2">
         <b-form-checkbox
-            v-model="sendSms"
-            switch
+          v-model="sendSms"
+          switch
         >
           Send sms
         </b-form-checkbox>
@@ -70,9 +34,9 @@
     </b-container>
     <template #modal-footer>
       <b-button
-          :disabled="disabledButton"
-          :variant="type === 3 ? 'danger' : 'success'"
-          @click="revision"
+        :disabled="disabledButton"
+        :variant="type === 3 ? 'danger' : 'success'"
+        @click="revision"
       >
         {{ buttonText }}
       </b-button>
@@ -81,8 +45,11 @@
 </template>
 
 <script>
+import ProgramClientHeader from '@/views/crm/views/sales-made/components/modals/ProgramClientHeader'
+
 export default {
   name: 'RevissionModal',
+  components: { ProgramClientHeader },
   props: {
     modal: {
       required: true,

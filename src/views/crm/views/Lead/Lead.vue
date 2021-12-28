@@ -1,17 +1,6 @@
 <template>
   <div>
-    <lead-list-add-new
-      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
-      :state-lead-options="G_STATE_LEADS"
-      :status-lead-options="G_STATUS_LEADS"
-      :program-options="G_PROGRAMS"
-      :language-options="G_LANGUAGES"
-      :state-options="G_EEUU_STATES"
-      :country-options="G_COUNTRIES"
-      :source-name-options="G_SOURCE_NAMES"
-      :source-lead-options="G_SOURCE_LEADS"
-      :user-creator-owner-options="G_SELLERS"
-    />
+    <lead-list-add-new :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive" />
     <b-card>
       <div class="card-header">
         <div>
@@ -59,15 +48,6 @@ export default {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
-      G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
-      G_STATE_LEADS: 'CrmLeadStore/G_STATE_LEADS',
-      G_SOURCE_LEADS: 'CrmLeadStore/G_SOURCE_LEADS',
-      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
-      G_SOURCE_NAMES: 'CrmGlobalStore/G_SOURCE_NAMES',
-      G_EEUU_STATES: 'CrmGlobalStore/G_EEUU_STATES',
-      G_LANGUAGES: 'CrmGlobalStore/G_LANGUAGES',
-      G_COUNTRIES: 'CrmGlobalStore/G_COUNTRIES',
-      G_SELLERS: 'CrmGlobalStore/G_SELLERS',
     }),
     ...mapState({
       S_SELECTED_LEADS: state => state.CrmLeadStore.S_SELECTED_LEADS,

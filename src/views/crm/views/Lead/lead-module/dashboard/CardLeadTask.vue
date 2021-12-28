@@ -1,11 +1,13 @@
 <template>
-  <b-card title="TASKS">
+  <b-card>
+    <template #header>
+      <b-card-title>Tasks</b-card-title>
+    </template>
     <b-table
       show-empty
       sticky-header
       striped
       responsive="sm"
-      small
       :fields="fieldsTask"
       :items="lead.lead_tasks"
       class="mb-0"
@@ -16,13 +18,15 @@
       </template>
 
       <template #cell(date)="data">
-        <span>{{ data.item.due_date | myGlobalDay }}</span>
-        <template v-if="lead.state && lead.state !== 'UNK' && data.item.real_time">
-          <br />
-          <span class="font-weight-bold">
-            {{ data.item.real_time | myGlobalDay }} ({{ lead.state }})
-          </span>
-        </template>
+        <div style="white-space: nowrap;">
+          {{ data.item.due_date | myGlobalDay }}
+          <template v-if="lead.state && lead.state !== 'UNK' && data.item.real_time">
+            <br />
+            <span class="font-weight-bold">
+              {{ data.item.real_time | myGlobalDay }} ({{ lead.state }})
+            </span>
+          </template>
+        </div>
       </template>
 
       <template #cell(sms)="data">
@@ -108,31 +112,29 @@
 
     </b-table>
     
-    <b-card-footer v-if="!onlyRead" class="text-right">
-      <b-button
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="outline-primary"
-        @click="onModalCreateTaskOpen"
-      >
-        <feather-icon
-          icon="PlusIcon"
-          class="mr-50"
-        />
-        <span class="align-middle">Add</span>
-      </b-button>
-      <b-button
-        v-if="lead.count_task !== 0"
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="outline-secondary"
-        class="btn-icon ml-1"
-        @click="$bvModal.show('modal-task-history')"
-      >
-        <feather-icon
-          icon="ListIcon"
-          size="18"
-        />
-      </b-button>
-    </b-card-footer>
+    <template v-if="!onlyRead" #footer>
+      <div class="text-right">
+        <b-button
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="primary"
+          @click="onModalCreateTaskOpen"
+        >
+          <span class="align-middle">Add</span>
+        </b-button>
+        <b-button
+          v-if="lead.count_task !== 0"
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="outline-secondary"
+          class="btn-icon ml-1"
+          @click="$bvModal.show('modal-task-history')"
+        >
+          <feather-icon
+            icon="ListIcon"
+            size="18"
+          />
+        </b-button>
+      </div>
+    </template>
     
     <!-- modal TASK CREATE -->
     <b-modal
@@ -295,7 +297,7 @@ export default {
         this.isLoading = false
       }).catch(error => {
         console.log('Something went wrong onDoneTask', error)
-        this.showErroSwal(error)
+        this.showErrorSwal(error)
         this.isLoading = false
       })
     },
@@ -340,7 +342,7 @@ export default {
         this.isLoading = false
       }).catch (error => {
         console.log('Something went wrong onDeleteTask', error)
-        this.showErroSwal()
+        this.showErrorSwal()
         this.isLoading = false
       })
     },
@@ -365,7 +367,7 @@ export default {
         this.isLoading = false
       }).catch(error => {
         console.log('Something went wrong onMakeFavoriteTask', error)
-        this.showErroSwal()
+        this.showErrorSwal()
         this.isLoading = false
       })
     },
