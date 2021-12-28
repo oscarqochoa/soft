@@ -1,5 +1,23 @@
 <template>
   <b-container fluid>
+    <b-row>
+      <b-col />
+      <b-col class="d-flex align-items-center justify-content-end">
+        <b-button
+          class="mr-1"
+          variant="important"
+          @click="openModalNewFolder"
+        >
+          New Folder
+        </b-button>
+        <b-button
+          variant="info"
+          @click="openUploadFileMoadl"
+        >
+          Add Files
+        </b-button>
+      </b-col>
+    </b-row>
     <b-row class="mb-1">
       <template v-for="(route, index) in history">
         <div
@@ -18,44 +36,20 @@
       </template>
     </b-row>
     <b-row>
-      <template v-for="(content, index) in currentFiles">
-        <b-col
-          :key="index"
-          cols="2"
-        >
-          <b-dropdown
-            :ref="'dropdown' + index"
-            variant="transparent"
-            toggle-class="text-decoration-none"
-            no-caret
-          >
-            <template #button-content />
-            <b-dropdown-item
-              v-b-toggle.sidebar-right
-              @click="selectedFile = content"
-            >
-              <feather-icon
-                icon="InfoIcon"
-                class="mr-50"
-              />  Details
-            </b-dropdown-item>
-          </b-dropdown>
-          <div
-            class="d-flex flex-column align-items-center justify-content-center cursor-pointer mt-50"
-            @click="contentClicked(content)"
-            @contextmenu.prevent="contentRightClicked(content, 'dropdown' + index)"
-          >
-            <amg-icon
-              :icon="content.type === 'Folder' ? 'FolderIcon' : 'FileIcon'"
-              class="font-large-4"
-              :class="{'text-warning' : content.type === 'Folder'}"
-            />
-            <h5 class="mt-1 text-center">
-              {{ content.file_name }}
-            </h5>
-          </div>
-        </b-col>
-      </template>
+      <b-col
+        v-for="(content) in currentFiles"
+        cols="1"
+      >
+        <file-component
+          :current-user="currentUser"
+          :content="content"
+          @contentClicked="contentClicked"
+          @details="openFileDetail"
+          @deleteFile="deleteFile"
+          @shareFile="openShareFileModal"
+        />
+
+      </b-col>
     </b-row>
     <b-sidebar
       id="sidebar-right"
@@ -97,7 +91,7 @@
         >
           <b-col>
             <p class="font-medium-1">
-              Updated: {{ selectedFile.updated_at | myGlobal }} by {{ selectedFile.user_modified }}
+              Updated: {{ selectedFile.updated_at | myGlobal }}
             </p>
           </b-col>
         </b-row>
@@ -157,13 +151,61 @@
         </b-row>
       </b-container>
     </b-sidebar>
+    <share-file-modal
+      v-if="shareFileModal"
+      :selected-file="selectedFile"
+      :show-modal="shareFileModal"
+      @closeModal="closeShareFileModal"
+    />
+    <new-folder-modal
+      v-if="newFolderModal"
+      :current-user="currentUser"
+      :show-modal="newFolderModal"
+      :current-folder="currentFolder"
+      :current-folder-module="currentFolderModule"
+      @closeModal="closeModalNewFolder"
+      @closeModalAndRefresh="closeModalNewFolderAndRefresh"
+    />
+    <b-modal
+      v-model="uploadFileModal"
+      title="Upload File"
+      modal-class="modal-primary"
+      button-size="sm"
+      ok-title="Ok"
+      @hidden="actionOnHideUploadFileModal"
+    >
+      <drag-and-drop
+        v-model="files"
+        :files-array="files"
+      />
+      <template #modal-footer>
+        <b-button
+          v-show="files.length"
+          variant="primary"
+          @click="onUploadFile"
+        >
+          Upload
+        </b-button>
+      </template>
+    </b-modal>
   </b-container>
 </template>
 
 <script>
+import { VBTooltip } from 'bootstrap-vue'
+import FileComponent from '@/views/commons/components/file-mananger/components/FileComponent'
+import ShareFileModal from '@/views/commons/components/file-mananger/modals/ShareFileModal'
+import NewFolderModal from '@/views/commons/components/file-mananger/modals/NewFolderModal'
+import DragAndDrop from '@/views/commons/utilities/DragAndDrop'
 
 export default {
   name: 'FileManangerGeneral',
+  components: {
+    DragAndDrop, NewFolderModal, ShareFileModal, FileComponent,
+  },
+  directives: {
+    'b-tooltip': VBTooltip,
+  },
   props: {
     currentUser: {
       type: Object,
@@ -175,6 +217,9 @@ export default {
       fileModel: {
         model: false,
       },
+      shareFileModal: false,
+      newFolderModal: false,
+      uploadFileModal: false,
       selectedFile: {},
       history: [
         {
@@ -186,6 +231,8 @@ export default {
       ],
       currentFiles: [],
       currentFolder: '',
+      currentFolderModule: '',
+      files: [],
     }
   },
   computed: {
@@ -201,6 +248,44 @@ export default {
     await this.getFilesFromFolder(null)
   },
   methods: {
+    actionOnHideUploadFileModal() {
+      this.files = []
+    },
+    async onUploadFile() {
+      try {
+        const result = await this.showConfirmSwal()
+        if (result.isConfirmed) {
+          const formData = new FormData()
+          this.files.forEach(file => {
+            formData.append('images[]', file, file.name)
+          })
+          formData.append('module_id', this.currentFolderModule)
+          formData.append('folder_name', '')
+          formData.append('user_id', this.currentUser.user_id)
+          formData.append('idfolder', this.currentFolder)
+          const headers = {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+            // eslint-disable-next-line func-names
+            onUploadProgress: function (progressEvent) {
+              this.uploadPercentage = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            }.bind(this),
+          }
+          const response = await amgApi.post('/filemoduledragdrop', formData, headers)
+          if (response.status === 200) {
+            this.uploadFileModal = false
+            this.showSuccessSwal()
+            await this.getFilesFromFolder(this.currentFolder, this.currentFolderModule)
+          }
+        }
+      } catch (error) {
+        this.showErrorSwal(error)
+      }
+    },
+    openUploadFileMoadl() {
+      this.uploadFileModal = true
+    },
     async getFilesFromFolder(folderId, folderModule = this.currentUser.modul_id) {
       try {
         this.addPreloader()
@@ -211,16 +296,15 @@ export default {
           parent: folderId,
           typee: null,
         })
+        this.currentFiles = []
         this.currentFiles = response.data.data
         this.currentFolder = folderId
+        this.currentFolderModule = folderModule
         this.removePreloader()
       } catch (error) {
         this.showErrorSwal(error)
         this.removePreloader()
       }
-    },
-    contentRightClicked(content, ref) {
-      console.log(this.$refs[ref][0].show(), content)
     },
     async contentClicked(content) {
       if (content.type === 'Folder') {
@@ -238,10 +322,34 @@ export default {
         )
       }
     },
+    openModalNewFolder() {
+      this.newFolderModal = true
+    },
+    closeModalNewFolder() {
+      this.newFolderModal = false
+    },
+    closeModalNewFolderAndRefresh() {
+      this.newFolderModal = false
+      this.getFilesFromFolder(this.currentFolder, this.currentFolderModule)
+    },
+    openShareFileModal(content) {
+      this.selectedFile = content
+      this.shareFileModal = true
+    },
+    closeShareFileModal() {
+      this.shareFileModal = false
+    },
     async historyClicked(index) {
       const route = this.history[index]
       await this.getFilesFromFolder(route.folderId, route.folderModule)
       this.history = this.history.slice(0, index + 1)
+    },
+    openFileDetail(content) {
+      this.selectedFile = content
+    },
+    deleteFile(content) {
+      const index = this.currentFiles.indexOf(content)
+      if (index > -1) this.currentFiles.splice(index, 1)
     },
   },
 }
