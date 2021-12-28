@@ -60,6 +60,14 @@ class EventService {
       throw error
     }
   }
+  async postEvent (body) {
+    try {
+      const data = await amgApi.post('/crm/crm-events', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default new EventService()

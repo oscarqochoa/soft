@@ -1,9 +1,9 @@
 <template>
   <b-card>
+    <template #header>
+      <b-card-title>LEAD INFORMATION</b-card-title>
+    </template>
     <b-row>
-      <b-col class="col-12 mb-1">
-        <span class="title-card">LEAD INFORMATION</span>
-      </b-col>
       <b-col md="6">
         <!-- Lead Owner -->
         <validation-provider
@@ -18,10 +18,11 @@
           >
             <v-select
               id="userId"
-              v-model="userData.userId"
+              v-model="userData.user_id"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="label"
-              :options="userCreatorOwnerOptions"
+              :options="G_SELLERS"
+              :reduce="el => el.id"
             />
             <b-form-invalid-feedback :state="getValidationState(validationContext)">
               {{ validationContext.errors[0] }}
@@ -39,12 +40,53 @@
             label-for="leadStatusId"
             :state="getValidationState(validationContext)"
           >
-            <v-select
-              v-model="userData.leadStatusId"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              label="label"
-              :options="statusLeadOptions"
-            />
+            <b-input-group>
+              <v-select
+                v-model="userData.leadstatus_id"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                label="label"
+                :options="G_STATUS_LEADS"
+                style="width: 1%; flex: 1 1 auto;"
+                :reduce="el => el.id"
+                :disabled="userData.id && disabled.leadstatus_id"
+              />
+              <template v-if="userData.id">
+                <b-input-group-append v-if="!disabled.leadstatus_id" class="border-right">
+                  <b-button
+                    variant="outline-primary"
+                    class="btn-sm"
+                    @click="onSubmitFields"
+                  >
+                    <amg-icon
+                      icon="SaveIcon"
+                      class="cursor-pointer"
+                    />
+                  </b-button>
+                </b-input-group-append>
+                <b-input-group-append class="border-right">
+                  <b-button
+                    variant="outline-warning"
+                    class="btn-sm"
+                    @click="toggleElement('leadstatus_id')"
+                  >
+                    <amg-icon
+                      :icon="disabled.leadstatus_id ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                      class="cursor-pointer"
+                    />
+                  </b-button>
+                </b-input-group-append>
+                <b-input-group-append
+                  class="cursor-pointer"
+                  @click="onModalTrackingChangeOpen(9, 'STATUS(LEAD)')"
+                >
+                  <b-input-group-text>
+                    <amg-icon
+                      icon="ListIcon"
+                    />
+                  </b-input-group-text>
+                </b-input-group-append>
+              </template>
+            </b-input-group>
             <b-form-invalid-feedback :state="getValidationState(validationContext)">
               {{ validationContext.errors[0] }}
             </b-form-invalid-feedback>
@@ -64,10 +106,11 @@
             :state="getValidationState(validationContext)"
           >
             <v-select
-              v-model="userData.sourceId"
+              v-model="userData.source_id"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="label"
-              :options="sourceLeadOptions"
+              :options="G_SOURCE_LEADS"
+              :reduce="el => el.id"
             />
             <b-form-invalid-feedback :state="getValidationState(validationContext)">
               {{ validationContext.errors[0] }}
@@ -86,10 +129,11 @@
             :state="getValidationState(validationContext)"
           >
             <v-select
-              v-model="userData.sourceNameId"
+              v-model="userData.sourcesname_id"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="label"
-              :options="sourceNameOptions"
+              :options="G_SOURCE_NAMES"
+              :reduce="el => el.id"
             />
             <b-form-invalid-feedback :state="getValidationState(validationContext)">
               {{ validationContext.errors[0] }}
@@ -102,6 +146,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -134,60 +179,112 @@ export default {
     userData: {
       required: true
     },
-    statusLeadOptions: {
-      type: Array,
-      required: true,
-    },
-    sourceNameOptions: {
-      type: Array,
-      required: true,
-    },
-    sourceLeadOptions: {
-      type: Array,
-      required: true,
-    },
-    userCreatorOwnerOptions: {
-      type: Array,
-      required: true,
-    },
   },
   data() {
     return {
-      required,
       alphaNum,
+      blankUserData: new Object,
+      disabled: {
+        leadstatus_id: true,
+      },
       email,
+      required,
     }
   },
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+      token: 'auth/token',
+      G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
+      G_SELLERS: 'CrmGlobalStore/G_SELLERS',
+      G_SOURCE_LEADS: 'CrmLeadStore/G_SOURCE_LEADS',
+      G_SOURCE_NAMES: 'CrmGlobalStore/G_SOURCE_NAMES',
+    }),
+  },
+  created () {
+    this.setDataBlank('userData')
+  },
   setup(props, { emit }) {
-    const blankUserData = {
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      email: '',
-      programs: '',
-      dob: '',
-      language: '',
-      stateLead: '',
-    }
-
-    const resetuserData = () => {
-      userData.value = JSON.parse(JSON.stringify(blankUserData))
-    }
     const {
       refFormObserver,
       getValidationState,
-    } = formValidation(resetuserData)
+    } = formValidation(() => {})
 
     return {
       refFormObserver,
-      getValidationState,
+      getValidationState
     }
   },
   methods: {
+    ...mapActions({
+      A_UPDATE_FIELDS_LEAD: 'CrmLeadStore/A_UPDATE_FIELDS_LEAD',
+    }),
+    setDataBlank (key) {
+      this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`] = Object.assign({}, this[key])
+    },
+    resetElement (key, subkey) {
+      const object = this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`]
+      this[key][subkey] = object[subkey]
+    },
     capitalize (el) {
       const element = this.userData[el]
       this.userData[el] = element.substr(0, 1).toUpperCase() + element.substr(1)
-    }
+    },
+    toggleElement (key) {
+      this.disabled[key] = !this.disabled[key]
+      if (this.disabled[key])
+        this.resetElement('userData', key)
+    },
+    async onSubmitFields () {
+      this.showConfirmSwal()
+      .then(async result => {
+        if (result.value) {
+          this.isPreloading(true)
+          const response = await this.A_UPDATE_FIELDS_LEAD({
+            id: this.currentUser.user_id,
+            id_lead: this.userData.id,
+            id_user: this.currentUser.user_id,
+            typee: 9,
+            street: null,
+            city: null,
+            state: null,
+            zipcode: null,
+            country: null,
+            other_street: null,
+            other_city: null,
+            other_state: null,
+            other_zipcode: null,
+            other_country: null,
+            phoneh: null,
+            phonem: null,
+            ssn: null,
+            itin: null,
+            other: null,
+            statusLead: this.userData.leadstatus_id,
+          })
+          this.isPreloading(false)
+          if (this.isResponseSuccess(response)) {
+            this.blankUserData.leadstatus_id = this.userData.leadstatus_id
+            this.toggleElement('leadstatus_id')
+            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+          } else
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
+        }
+      }).catch(error => {
+        console.log('spmething went wrong onSubmitFields: ', error)
+        this.isPreloading(false)
+        this.showErrorSwal()
+      })
+    },
+    onModalTrackingChangeOpen (type, name) {
+      this.$emit('onModalTrackingChangeOpen', { type, name, mapFunction: (el) => ({
+          ...el,
+          main_row: el.fields,
+          main_row_hide: el.fields_secret,
+          seeHideCell: false,
+        })
+      })
+    },
   },
 }
 </script>

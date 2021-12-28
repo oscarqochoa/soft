@@ -20206,6 +20206,237 @@ var DashboardIcon = {
       );
   },
 };
+var QuestionIcon = {
+  name: "QuestionIcon",
+  props: {
+      size: {
+          type: String,
+          default: "18",
+          validator: function validator(s) {
+              return (
+                  !isNaN(s) ||
+                  (s.length >= 2 &&
+                      !isNaN(s.slice(0, s.length - 1)) &&
+                      s.slice(-1) === "x")
+              );
+          },
+      },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+      var size =
+          ctx.props.size.slice(-1) === "x"
+              ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+              : parseInt(ctx.props.size) + "px";
+      var attrs = ctx.data.attrs || {};
+      attrs.width = attrs.width || size;
+      attrs.height = attrs.height || size;
+      ctx.data.attrs = attrs;
+      return h(
+          "svg",
+          _mergeJSXProps([
+              {
+                  attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 384 512",
+                      fill: "none",
+                      stroke: "currentColor",
+                      "stroke-width": "2",
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round",
+                  },
+                  class: "feather feather-question",
+              },
+              ctx.data,
+          ]),
+          [
+              h("path", {
+                  attrs: {
+                      d: "M202.021 0C122.202 0 70.503 32.703 29.914 91.026c-7.363 10.58-5.093 25.086 5.178 32.874l43.138 32.709c10.373 7.865 25.132 6.026 33.253-4.148 25.049-31.381 43.63-49.449 82.757-49.449 30.764 0 68.816 19.799 68.816 49.631 0 22.552-18.617 34.134-48.993 51.164-35.423 19.86-82.299 44.576-82.299 106.405V320c0 13.255 10.745 24 24 24h72.471c13.255 0 24-10.745 24-24v-5.773c0-42.86 125.268-44.645 125.268-160.627C377.504 66.256 286.902 0 202.021 0zM192 373.459c-38.196 0-69.271 31.075-69.271 69.271 0 38.195 31.075 69.27 69.271 69.27s69.271-31.075 69.271-69.271-31.075-69.27-69.271-69.27z",
+                      fill: "currentColor"
+                  },
+              }),
+          ]
+      );
+  },
+};
+var PhoneSlashIcon = {
+  name: "PhoneSlashIcon",
+  props: {
+      size: {
+          type: String,
+          default: "18",
+          validator: function validator(s) {
+              return (
+                  !isNaN(s) ||
+                  (s.length >= 2 &&
+                      !isNaN(s.slice(0, s.length - 1)) &&
+                      s.slice(-1) === "x")
+              );
+          },
+      },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+      var size =
+          ctx.props.size.slice(-1) === "x"
+              ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+              : parseInt(ctx.props.size) + "px";
+      var attrs = ctx.data.attrs || {};
+      attrs.width = attrs.width || size;
+      attrs.height = attrs.height || size;
+      ctx.data.attrs = attrs;
+      return h(
+          "svg",
+          _mergeJSXProps([
+              {
+                  attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 640 512",
+                      fill: "none",
+                      stroke: "currentColor",
+                      "stroke-width": "2",
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round",
+                  },
+                  class: "feather feather-phone-slash",
+              },
+              ctx.data,
+          ]),
+          [
+              h("path", {
+                  attrs: {
+                      d: "M268.2 381.4l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48c-10.7 4.6-16.5 16.1-13.9 27.5l24 104c2.5 10.8 12.1 18.6 23.4 18.6 100.7 0 193.7-32.4 269.7-86.9l-80-61.8c-10.9 6.5-22.1 12.7-33.6 18.1zm365.6 76.7L475.1 335.5C537.9 256.4 576 156.9 576 48c0-11.2-7.7-20.9-18.6-23.4l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-12.2 26.1-27.9 50.3-46 72.8L45.5 3.4C38.5-2 28.5-.8 23 6.2L3.4 31.4c-5.4 7-4.2 17 2.8 22.4l588.4 454.7c7 5.4 17 4.2 22.5-2.8l19.6-25.3c5.4-6.8 4.1-16.9-2.9-22.3z",
+                      fill: "currentColor"
+                  },
+              }),
+          ]
+      );
+  },
+};
+var ThListIcon = {
+  name: "ThListIcon",
+  props: {
+      size: {
+          type: String,
+          default: "18",
+          validator: function validator(s) {
+              return (
+                  !isNaN(s) ||
+                  (s.length >= 2 &&
+                      !isNaN(s.slice(0, s.length - 1)) &&
+                      s.slice(-1) === "x")
+              );
+          },
+      },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+      var size =
+          ctx.props.size.slice(-1) === "x"
+              ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+              : parseInt(ctx.props.size) + "px";
+      var attrs = ctx.data.attrs || {};
+      attrs.width = attrs.width || size;
+      attrs.height = attrs.height || size;
+      ctx.data.attrs = attrs;
+      return h(
+          "svg",
+          _mergeJSXProps([
+              {
+                  attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 512 512",
+                      fill: "none",
+                      stroke: "currentColor",
+                      "stroke-width": "2",
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round",
+                  },
+                  class: "feather feather-th-list",
+              },
+              ctx.data,
+          ]),
+          [
+              h("path", {
+                  attrs: {
+                      d: "M149.333 216v80c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-80c0-13.255 10.745-24 24-24h101.333c13.255 0 24 10.745 24 24zM0 376v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H24c-13.255 0-24 10.745-24 24zM125.333 32H24C10.745 32 0 42.745 0 56v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24zm80 448H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zm-24-424v80c0 13.255 10.745 24 24 24H488c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24zm24 264H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24z",
+                      fill: "currentColor"
+                  },
+              }),
+          ]
+      );
+  },
+};
+var Edit2SlashIcon = {
+  name: "Edit2SlashIcon",
+  props: {
+      size: {
+          type: String,
+          default: "18",
+          validator: function validator(s) {
+              return (
+                  !isNaN(s) ||
+                  (s.length >= 2 &&
+                      !isNaN(s.slice(0, s.length - 1)) &&
+                      s.slice(-1) === "x")
+              );
+          },
+      },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+      var size =
+          ctx.props.size.slice(-1) === "x"
+              ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+              : parseInt(ctx.props.size) + "px";
+      var attrs = ctx.data.attrs || {};
+      attrs.width = attrs.width || size;
+      attrs.height = attrs.height || size;
+      ctx.data.attrs = attrs;
+      return h(
+          "svg",
+          _mergeJSXProps([
+              {
+                  attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      width: "24",
+                      height: "24",
+                      viewBox: "0 0 24 24",
+                      fill: "none",
+                      stroke: "currentColor",
+                      "stroke-width": "2",
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round",
+                  },
+                  class: "feather feather-edit2-slash",
+              },
+              ctx.data,
+          ]),
+          [
+              h("line", {
+                  attrs: {
+                      xl: "1",
+                      yl: "1",
+                      x2: "23",
+                      y2: "23",
+                  },
+              }),
+              h("path", {
+                  attrs: {
+                      d: "M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z",
+                  },
+              }),
+          ]
+      );
+  },
+};
 
 exports.ActivityIcon = ActivityIcon;
 exports.AirplayIcon = AirplayIcon;
@@ -20498,3 +20729,7 @@ exports.ComissionsIcon = ComissionsIcon;
 exports.UsersAmgIcon = UsersAmgIcon;
 exports.AmgIcon = AmgIcon;
 exports.DashboardIcon = DashboardIcon;
+exports.QuestionIcon = QuestionIcon;
+exports.PhoneSlashIcon = PhoneSlashIcon;
+exports.ThListIcon = ThListIcon;
+exports.Edit2SlashIcon = Edit2SlashIcon;

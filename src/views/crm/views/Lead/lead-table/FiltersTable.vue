@@ -103,7 +103,7 @@
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="statusLeadOptions"
                 class="w-100 sm"
-                :reduce="val => val.value"
+                :reduce="val => val.id"
                 v-model="filter.statusLead"
               />
             </b-col>
@@ -159,7 +159,7 @@
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="programOptions"
                 class="w-100 sm"
-                :reduce="val => val.value"
+                :reduce="val => val.id"
                 v-model="filter.program"
               />
             </b-col>
@@ -187,7 +187,7 @@
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="sourceNameOptions"
                 class="w-100 sm"
-                :reduce="val => val.value"
+                :reduce="val => val.id"
                 v-model="filter.sourceName"
               />
             </b-col>
