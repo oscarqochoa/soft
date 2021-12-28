@@ -3,41 +3,18 @@
     v-model="modal.files"
     lazy
     centered
-    title-class="h3"
+    title-class="h3 text-white font-weight-bolder"
     size="xl"
     title="Files"
     hide-footer
     scrollable
   >
     <b-container fluid>
-      <b-row>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                PROGRAM
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="files.program"
-            />
-          </b-input-group>
-        </b-col>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                CLIENT
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="files.client"
-            />
-          </b-input-group>
-        </b-col>
-      </b-row>
+      <program-client-header
+        :client="files.client"
+        :program="files.program"
+        class="sticky-top"
+      />
       <b-row class="mt-2 d-flex align-items-center justify-content-end mr-1">
         <b-btn
           variant="info"
@@ -220,10 +197,11 @@
 <script>
 import vSelect from 'vue-select'
 import CrmService from '@/views/crm/services/crm.service'
+import ProgramClientHeader from '@/views/crm/views/sales-made/components/modals/ProgramClientHeader'
 
 export default {
   name: 'FilesModal',
-  components: { vSelect },
+  components: { ProgramClientHeader, vSelect },
   props: {
     modal: {
       type: Object,
@@ -319,7 +297,7 @@ export default {
             lead_id,
             program,
             sale_id,
-            typee
+            typee,
           })
           this.$store.commit('app/SET_LOADING', false)
           if (response === 'ok') this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Tu archivo se genero correctamente')

@@ -45,7 +45,6 @@
       show-empty
       sticky-header
       striped
-      small
       responsive="sm"
       :fields="fieldsTask"
       :items="S_CALLS"

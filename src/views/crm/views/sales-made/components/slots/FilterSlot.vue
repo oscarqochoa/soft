@@ -30,13 +30,14 @@
               <b-button
                 v-b-toggle.sidebar-right
                 variant="outline-danger"
+                class="hover-close"
               >
                 Close
               </b-button>
               <b-button
                 v-b-toggle.sidebar-right
                 variant="primary"
-                @click="$emit('reload')"
+                @click="sideBarSearch"
               >
                 Search
               </b-button>
@@ -120,6 +121,17 @@
               size="20"
               @click="resetFilter"
             />
+            <b-button
+              v-if="sendMultipleSms"
+              variant="success"
+              class="ml-1"
+              @click="$emit('sendMultipleSms')"
+            >
+              <feather-icon
+                icon="MessageCircleIcon"
+                class="mr-50"
+              />Send SMS
+            </b-button>
           </b-col>
           <!-- Search -->
           <b-col
@@ -155,7 +167,6 @@
               <b-button
                 v-b-toggle.sidebar-right
                 variant="primary"
-                @click="basicSearch = !basicSearch"
               >
                 <div class="d-flex justify-content-between">
                   <feather-icon
@@ -243,27 +254,30 @@ export default {
     startPage: { required: false, type: Number },
     toPage: { required: false, type: Number },
     filterPrincipal: { required: true, type: Object },
-  },
-  data() {
-    return {
-      basicSearch: true,
-    }
+    sendMultipleSms: { required: false, default: false },
   },
   computed: {
     ...mapGetters({
       skin: 'appConfig/skin',
     }),
   },
+  created() {
+    this.filter.map(fil => {
+      fil.model = null
+    })
+    this.filterPrincipal.model = ''
+  },
   methods: {
     resetFilter() {
       this.filter.map(fil => {
         fil.model = null
       })
+      this.filterPrincipal.model = ''
       this.$emit('reload')
     },
-    swapSearch() {
-      this.resetFilter()
-      this.basicSearch = !this.basicSearch
+    sideBarSearch() {
+      this.filterPrincipal.model = ''
+      this.$emit('reload')
     },
   },
 }
@@ -281,6 +295,13 @@ export default {
 }
 td.div {
   width: 100% !important;
+}
+.hover-close{
+  transition: 300ms;
+}
+.hover-close:hover{
+  background-color: #FF3B19 !important;
+  color: white !important;
 }
 @media (max-width: 960px) {
   .column-table {

@@ -2,6 +2,8 @@
   <b-modal
     v-model="modalServices"
     modal
+    header-class="p-0"
+    header-bg-variant="transparent border-bottom border-bottom-2"
     size="xl"
     hide-footer
   >
@@ -177,7 +179,8 @@ export default {
     },
     validationFirstStep() {
       return new Promise((resolve, reject) => {
-        if (!this.passwordIsCorrect && this.state1 === 1) {
+        if (this.isModalShow) resolve(true)
+        else if (!this.passwordIsCorrect && this.state1 === 1) {
           this.showToast('danger', 'top-right', 'Validate error', 'XIcon', 'Please validate password')
           reject()
         } else {
@@ -241,6 +244,9 @@ export default {
 .wizard-tab-content {
     overflow: auto;
     height: 300px;
+}
+.wizard-card-footer{
+  padding-top: 15px !important;
 }
 //.wizard-nav{
 //  position: sticky !important;

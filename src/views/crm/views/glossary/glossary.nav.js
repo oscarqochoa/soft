@@ -1,5 +1,5 @@
 export default {
-    title: 'Glossary',
-    icon: 'BookIcon',
-    route: 'glossary-crm',
-  }
+  title: 'Glossary',
+  icon: 'BookIcon',
+  route: 'glossary-crm',
+}

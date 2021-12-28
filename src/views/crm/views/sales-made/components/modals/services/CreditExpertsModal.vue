@@ -4,8 +4,10 @@
       <b-modal
         v-model="modalServices"
         modal
-        size="xl"
+        size="xlg"
         scrollable
+        header-class="p-0"
+        header-bg-variant="transparent border-bottom border-bottom-2"
         @hidden="hideModal(false,0)"
       >
         <!-- HEADER START -->
@@ -35,15 +37,15 @@
               <template v-slot:cell(task)="data">
                 <b-row>
                   <b-col>
-                    <v-select
+                    <b-form-select
                       v-model="select_option[data.item.index]"
-                      :filterable="false"
-                      :options=" options_ce[data.item.index]._data"
-                      label="task"
-                      :reduce="task => task.id_task"
+                      class="text-dark"
+                      :options="[{task: '', id_task: null}, ...options_ce[data.item.index]._data]"
+                      size="sm"
+                      text-field="task"
+                      value-field="id_task"
                       :disabled="isModalShow || data.item.index == 0 || data.item.index == 1"
-                      :clearable="!(isModalShow || data.item.index == 0 || data.item.index == 1)"
-                      @input="changeOption(data.item.index)"
+                      @change="changeOption(data.item.index)"
                     />
                   </b-col>
                 </b-row>
@@ -52,6 +54,7 @@
                 <b-form-spinbutton
                   v-model.number="data.item.quantity"
                   :disabled="data.item.disabled"
+                  class="square"
                   min="1"
                   max="99"
                   size="sm"
@@ -59,12 +62,11 @@
                 />
               </template>
               <template v-slot:cell(subtotal)="data">
-                <div class="d-flex align-items-center justify-content-center gold-text">
-                  <span>$</span>
+                <div class="d-flex align-items-center justify-content-center text-primary">
                   <money
                     v-model.lazy="data.item.subtotal"
                     v-bind="vMoney"
-                    class="gold-text bg-transparent border-0 p-0 ancho"
+                    class="text-primary text-left form-control bg-transparent border-0"
                     disabled
                   />
                 </div>
@@ -82,15 +84,15 @@
               <template v-slot:cell(task)="data">
                 <b-row>
                   <b-col>
-                    <v-select
+                    <b-form-select
                       v-model="select_option[data.item.index]"
-                      :filterable="false"
-                      :options=" options_ce[data.item.index]._data"
-                      label="task"
-                      :reduce="task => task.id_task"
+                      class="text-dark"
+                      :options="[{task: '', id_task: null}, ...options_ce[data.item.index]._data]"
+                      size="sm"
+                      text-field="task"
+                      value-field="id_task"
                       :disabled="isModalShow || data.item.index == 0 || data.item.index == 1"
-                      :clearable="!(isModalShow || data.item.index == 0 || data.item.index == 1)"
-                      @input="changeOption(data.item.index)"
+                      @change="changeOption(data.item.index)"
                     />
                   </b-col>
                 </b-row>
@@ -99,6 +101,7 @@
                 <b-form-spinbutton
                   v-model.number="data.item.quantity"
                   :disabled="data.item.disabled"
+                  class="square"
                   min="1"
                   max="99"
                   size="sm"
@@ -106,12 +109,11 @@
                 />
               </template>
               <template v-slot:cell(subtotal)="data">
-                <div class="d-flex align-items-center justify-content-center gold-text">
-                  <span>$</span>
+                <div class="d-flex align-items-center justify-content-center text-primary">
                   <money
                     v-model.lazy="data.item.subtotal"
                     v-bind="vMoney"
-                    class="gold-text bg-transparent border-0 p-0 ancho"
+                    class="text-primary text-left form-control bg-transparent border-0"
                     disabled
                   />
                 </div>
@@ -128,23 +130,29 @@
               <b-col
                 lg="6"
               >
-                <div class="text-center d-flex align-items-center justify-content-center">
-                  <span>TOTAL $</span>
-                  <money
-                    v-if="isModalShow"
-                    v-model.lazy="totalSuggeste"
-                    v-bind="vMoney"
-                    class="input-total text-center"
-                    disabled
-                  />
-                  <money
-                    v-else
-                    v-model.lazy="totalAmount"
-                    v-bind="vMoney"
-                    class="input-total text-center"
-                    disabled
-                  />
-                </div>
+                <b-row class="text-center d-flex align-items-center justify-content-end">
+                  <b-col
+                    cols="2"
+                  >
+                    TOTAL $
+                  </b-col>
+                  <b-col cols="3">
+                    <money
+                      v-if="isModalShow"
+                      v-model.lazy="totalSuggeste"
+                      v-bind="vMoney2"
+                      class="text-center font-weight-bolder form-control text-primary"
+                      disabled
+                    />
+                    <money
+                      v-else
+                      v-model.lazy="totalAmount"
+                      v-bind="vMoney2"
+                      class="text-center font-weight-bolder form-control text-primary"
+                      disabled
+                    />
+                  </b-col>
+                </b-row>
               </b-col>
               <!-- Fee -->
 
@@ -153,17 +161,21 @@
                   v-slot="{errors}"
                   rules="required|money-1"
                 >
-                  <div class="text-center d-flex align-items-center justify-content-center">
-                    <span>FEE $</span>
-                    <money
-                      v-model="fee"
-                      v-bind="vMoney"
-                      class="input-total text-center font-weight-bolder gold-text"
-                      :style="errors[0] && validateMoney? 'color:red !important':''"
-                      :class="{'border border-danger':errors[0] && validateMoney}"
-                      :disabled="isModalShow"
-                    />
-                  </div>
+                  <b-row class="text-center d-flex align-items-center justify-content-end">
+                    <b-col cols="2">
+                      FEE $
+                    </b-col>
+                    <b-col cols="3">
+                      <money
+                        v-model="fee"
+                        v-bind="vMoney2"
+                        class="text-center font-weight-bolder form-control text-primary"
+                        :style="errors[0] && validateMoney? 'color:red !important':''"
+                        :class="{'border border-danger':errors[0] && validateMoney}"
+                        :disabled="isModalShow"
+                      />
+                    </b-col>
+                  </b-row>
                   <div
                     v-if="errors[0] && validateMoney"
                     class="invalid-feedback ml-4"
@@ -174,30 +186,18 @@
             <b-row v-if="!isModalShow">
               <b-col
                 v-if="!isModalAdd"
-                class="d-flex align-items-center justify-content-center"
+                class="d-flex align-items-center justify-content-end"
               >
-                <b-button
-                  variant="danger"
-                  class="rounded mr-1"
-                  size="sm"
+                <button-cancel
+                  class="mr-1"
                   @click="hideModal(false, 0)"
-                >
-                  <feather-icon icon="PowerIcon" /> CANCEL
-                </b-button>
-                <b-button
-                  variant="success"
-                  class="rounded"
-                  size="sm"
-                  @click="saveRates"
-                >
-                  <feather-icon icon="SaveIcon" /> SAVE
-                </b-button>
+                />
+                <button-save @click="saveRates" />
               </b-col>
               <b-col v-else>
                 <b-button
                   v-if="isModalAdd"
                   variant="info"
-                  size="sm"
                   @click="saveRates"
                 >
                   Continue
@@ -215,13 +215,15 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import vSelect from 'vue-select'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel.vue'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
   components: {
-    vSelect,
+    ButtonSave,
     ModalServiceHeader,
+    ButtonCancel,
   },
   props: {
     modalServices: {
@@ -271,6 +273,13 @@ export default {
       states_leads: [],
       rate_selected: [],
       vMoney: {
+        decimal: '.',
+        thousands: ',',
+        prefix: '$ ',
+        precision: 2,
+        masked: false,
+      },
+      vMoney2: {
         decimal: '.',
         thousands: ',',
         prefix: '',
@@ -582,40 +591,8 @@ export default {
 }
 </script>
 
-<style scoped>
-.select-task {
-  text-align: center;
-  width: 100%;
-  border: 2px solid #ffffff;
-  border-radius: 5px;
-  outline: none;
-  background: #e8e8e8;
-  font-size: 14px;
-  color: black;
-}
-
-.sub-total {
-  text-align: center;
-  width: 80px;
-  color: #baa345;
-  border-radius: 5px;
-}
-
-.description-price {
-  font-size: 11px;
-  color: #666666;
-  text-transform: uppercase;
-}
-.gold-text {
-  color: #baa345 !important;
-}
-
-.input-total {
-  width: 100px;
-  border-radius: 5px;
-  outline: none;
-  background: white;
-  margin-left: 5px;
-  color: #212529;
+<style>
+select:disabled, input:disabled {
+  background-color: transparent !important;
 }
 </style>

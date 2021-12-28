@@ -8,7 +8,6 @@
       sticky-header
       striped
       responsive="sm"
-      small
       :fields="fieldsTask"
       :items="lead.lead_tasks"
       class="mb-0"
@@ -19,13 +18,15 @@
       </template>
 
       <template #cell(date)="data">
-        <span>{{ data.item.due_date | myGlobalDay }}</span>
-        <template v-if="lead.state && lead.state !== 'UNK' && data.item.real_time">
-          <br />
-          <span class="font-weight-bold">
-            {{ data.item.real_time | myGlobalDay }} ({{ lead.state }})
-          </span>
-        </template>
+        <div style="white-space: nowrap;">
+          {{ data.item.due_date | myGlobalDay }}
+          <template v-if="lead.state && lead.state !== 'UNK' && data.item.real_time">
+            <br />
+            <span class="font-weight-bold">
+              {{ data.item.real_time | myGlobalDay }} ({{ lead.state }})
+            </span>
+          </template>
+        </div>
       </template>
 
       <template #cell(sms)="data">

@@ -346,20 +346,8 @@
                     v-if="!isModalAdd"
                     class="d-flex justify-content-end align-items-center"
                   >
-                    <b-button
-                      class="rounded mr-1 font-weight-bolder"
-                      variant="primary"
-                      @click="saveRates()"
-                    >
-                      Save
-                    </b-button>
-                    <b-button
-                      class="rounded font-weight-bolder cancel"
-                      variant="outline-danger"
-                      @click="hideModal(false,0)"
-                    >
-                      Cancel
-                    </b-button>
+                    <button-save @click="saveRates()" />
+                    <button-cancel @click="hideModal(false,0)" />
                   </b-col>
                   <b-col
                     v-else
@@ -388,9 +376,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
   components: {
+    ButtonSave,
+    ButtonCancel,
     ModalServiceHeader,
   },
   props: {

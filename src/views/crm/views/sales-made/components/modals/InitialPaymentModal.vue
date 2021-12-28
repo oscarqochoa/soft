@@ -2,41 +2,17 @@
   <b-modal
     v-model="modal.initial_payment"
     centered
-    title-class="h3"
+    title-class="h3 text-white font-weight-bolder"
     size="lg"
     title="INITIAL PAYMENT"
     scrollable
-
   >
     <b-container fluid>
-      <b-row>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                PROGRAM
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="initial_payment.nameProgram"
-            />
-          </b-input-group>
-        </b-col>
-        <b-col>
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                CLIENT
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="initial_payment.nameClient"
-            />
-          </b-input-group>
-        </b-col>
-      </b-row>
+      <program-client-header
+        :client="initial_payment.nameClient"
+        :program="initial_payment.nameProgram"
+        class="sticky-top"
+      />
       <b-row>
         <b-col>
           <label>Amount</label>
@@ -234,10 +210,13 @@ import vSelect from 'vue-select'
 import CrmService from '@/views/crm/services/crm.service'
 import ModalCardCreate from '@/views/crm/views/payments/components/ModalCardCreate.vue'
 import DeleteCardModal from '@/views/crm/views/sales-made/components/modals/DeleteCardModal.vue'
+import ProgramClientHeader from '@/views/crm/views/sales-made/components/modals/ProgramClientHeader'
 
 export default {
   name: 'InitialPaymentModal',
-  components: { DeleteCardModal, ModalCardCreate, vSelect },
+  components: {
+    ProgramClientHeader, DeleteCardModal, ModalCardCreate, vSelect,
+  },
   props: {
     modal: {
       type: Object,
@@ -475,7 +454,7 @@ export default {
           if (this.initial_payment.programid != 2) {
             sms = this.$refs[`sms${cardId}`].isChecked
           } else {
-            sms = this.$refs['smsgeneral'].isChecked
+            sms = this.$refs.smsgeneral.isChecked
           }
         }
         if (type == 0) {

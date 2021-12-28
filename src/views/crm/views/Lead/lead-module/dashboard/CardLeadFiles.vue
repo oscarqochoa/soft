@@ -7,7 +7,6 @@
       show-empty
       sticky-header
       striped
-      small
       responsive="sm"
       :fields="fields"
       :items="S_FILES_LEADS"
@@ -71,9 +70,11 @@
       </template>
       
       <template #cell(created_by)="data">
-        <span>{{ data.item.user_upload }}</span>
-        <br />
-        <span>{{ data.item.created_at | myGlobalWithHour }}</span>
+        <div style="white-space: nowrap;">
+          {{ data.item.user_upload }}
+          <br />
+          <span>{{ data.item.created_at | myGlobalWithHour }}</span>
+        </div>
       </template>
       
       <template #cell(actions)="data">

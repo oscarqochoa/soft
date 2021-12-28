@@ -2,701 +2,232 @@
   <ValidationObserver ref="form">
     <b-container fluid>
       <b-row class="d-flex align-items-center justify-content-end">
-        <b-button
+        <button-export-pdf
           :disabled="exportPdfDisabled"
-          variant="success"
           @click="nextfirst(idleyend, 4)"
-        >
-          <feather-icon icon="DownloadIcon" /> EXPORT TO PDF
-        </b-button>
+        />
       </b-row>
       <b-row class="mt-1">
-        <b-col md="5">
-          <div
-            style="
-                            background: #f1f1f1;
-                            padding: 5px;
-                            position: absolute;
-                            top: 0;
-                            width: 100%;
-                            left: 0;
-                            height: 32px;
-                            padding-left: 15px;
-                          "
+        <b-col class="mr-1">
+          <b-row
+            :class="'bg-'+skin"
+            class="px-1 py-50 text-uppercase"
           >
-            <label for>Current Situation with current payments</label>
-          </div>
-          <br>
-          <br>
-          <div class="row">
-            <div class="col-md-6">
-              <table class="table table-striped">
-                <tr>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                  >Current balance owing</td>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                    font-weight: bold;
-                                  "
-                  >
-                    <span>{{ "$ " + this.total_balance }}</span>
-                  </td>
-                </tr>
-                <tr style="background: #f1f1f1">
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                  >Annual interest rate</td>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                    font-weight: bold;
-                                  "
-                  >
-                    <span>{{ this.total_interest + " %" }}</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                  >Annual interest charged</td>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                    font-weight: bold;
-                                  "
-                  >
-                    <span>{{ "$ " + this.mont3 }}</span>
-                  </td>
-                </tr>
-                <tr style="background: #f1f1f1">
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                  >Monthly Interest Charged</td>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                    font-weight: bold;
-                                  "
-                  >
-                    <span>{{ "$ " + this.mont4 }}</span>
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <div class="col-md-6">
-              <table class="table table-striped">
-                <tr>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                  >Mothly credit to principal</td>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                    font-weight: bold;
-                                  "
-                  >
-                    <span>{{ "$ " + this.mont5 }}</span>
-                  </td>
-                </tr>
-                <tr style="background: #f1f1f1">
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                  >Current Payment</td>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                    font-weight: bold;
-                                  "
-                  >
-                    <span>{{ "$ " + this.total_monthly }}</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                  >Daily interest charge</td>
-                  <td
-                    style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                    font-weight: bold;
-                                  "
-                  >
-                    <span>{{ "$ " + this.mont7 }}</span>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-md-3">
+            Current Situation with current payments
+          </b-row>
+          <b-row>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+              <span>Current balance owing</span>
+              <span class="font-weight-bolder">{{ "$ " + this.total_balance }}</span>
+            </b-col>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+              <span>Mothly credit to principal</span>
+              <span class="font-weight-bolder"> {{ "$ " + this.mont5 }} </span>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+              <span>Annual interest rate</span>
+              <span class="font-weight-bolder">{{ this.total_interest + " %" }}</span>
+            </b-col>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+              <span>Current Payment</span>
+              <span class="font-weight-bolder">{{ "$ " + this.total_monthly }} </span>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+              <span>Annual interest charged</span>
+              <span class="font-weight-bolder">{{ "$ " + this.mont3 }}</span>
+            </b-col>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+              <span>Daily interest charge</span>
+              <span class="font-weight-bolder"> {{ "$ " + this.mont7 }} </span>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+              <span>Monthly Interest Charged</span>
+              <span class="font-weight-bolder">{{ "$ " + this.mont4 }}</span>
+            </b-col>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0" />
+          </b-row>
+          <b-row class="mt-1">
+            <b-col md="3">
+              <p class="text-center font-weight-bolder">
+                Monthly payment
+              </p>
               <div
-                class="class-inline row"
-                style="margin-top: 0px"
+                :class="'bg-'+skin"
+                class="py-1 px-1 font-weight-bolder text-center rounded"
               >
-                <div
-                  class="class-campo-icon-hori col-md-12"
-                  style="
-                                  font-size: 10px;
-                                  display: flex;
-                                  justify-content: center;
-                                  align-items: center;
-                                  height: 30px;
-                                  padding: 0;
-                                  text-align: center;
-                                  background: #f1f1f1;
-                                  color: #999;
-                                  font-weight: bold;
-                                "
-                >Monthly payment</div>
-                <div
-                  class="class-campo-text-hori col-md-12"
-                  style="
-                                  padding: 4px 2px 5px 2px;
-                                  height: 35px;
-                                  text-align: center;
-                                  border: 1px solid #f1f1f1;
-                                  font-weight: bold;
-                                  color: #999;
-                                "
-                >
-                  <span>{{ "$ " + this.total_monthly }}</span>
-                </div>
+                {{ "$ " + this.total_monthly }}
               </div>
-            </div>
-            <div class="col-md-3">
+            </b-col>
+            <b-col md="3">
+              <p class="text-center font-weight-bolder">
+                Months
+              </p>
               <div
-                class="class-inline row"
-                style="margin-top: 0px"
+                :class="'bg-'+skin"
+                class="py-1 px-1 font-weight-bolder text-center rounded"
               >
-                <div
-                  class="class-campo-icon-hori col-md-12"
-                  style="
-                                  font-size: 10px;
-                                  display: flex;
-                                  justify-content: center;
-                                  align-items: center;
-                                  height: 30px;
-                                  padding: 0;
-                                  text-align: center;
-                                  background: #f1f1f1;
-                                  color: #999;
-                                  font-weight: bold;
-                                "
-                >Months</div>
-                <div
-                  class="class-campo-text-hori col-md-12"
-                  style="
-                                  padding: 4px 2px 5px 2px;
-                                  height: 35px;
-                                  text-align: center;
-                                  border: 1px solid #f1f1f1;
-                                  font-weight: bold;
-                                  color: #999;
-                                "
-                >
-                  <span>{{ this.mont9 }}</span>
-                </div>
+                {{ this.mont9 }}
               </div>
-            </div>
-            <div class="col-md-3">
+            </b-col>
+            <b-col md="3">
+              <p class="text-center font-weight-bolder">
+                Years
+              </p>
               <div
-                class="class-inline row"
-                style="margin-top: 0px"
+                :class="'bg-'+skin"
+                class="py-1 px-1 font-weight-bolder text-center rounded"
               >
-                <div
-                  class="class-campo-icon-hori col-md-12"
-                  style="
-                                  font-size: 10px;
-                                  display: flex;
-                                  justify-content: center;
-                                  align-items: center;
-                                  height: 30px;
-                                  padding: 0;
-                                  text-align: center;
-                                  background: #f1f1f1;
-                                  color: #999;
-                                  font-weight: bold;
-                                "
-                >Years</div>
-                <div
-                  class="class-campo-text-hori col-md-12"
-                  style="
-                                  padding: 4px 2px 5px 2px;
-                                  height: 35px;
-                                  text-align: center;
-                                  border: 1px solid #f1f1f1;
-                                  font-weight: bold;
-                                  color: #999;
-                                "
-                >
-                  <span>{{ this.mont10 }}</span>
-                </div>
+                {{ this.mont10 }}
               </div>
-            </div>
-            <div class="col-md-3">
+            </b-col>
+            <b-col md="3">
+              <p class="text-center font-weight-bolder">
+                Total to paid
+              </p>
               <div
-                class="class-inline row"
-                style="margin-top: 0px"
+                :class="'bg-'+skin"
+                class="py-1 px-1 font-weight-bolder text-center rounded"
               >
-                <div
-                  class="class-campo-icon-hori col-md-12"
-                  style="
-                                  font-size: 10px;
-                                  display: flex;
-                                  justify-content: center;
-                                  align-items: center;
-                                  height: 30px;
-                                  padding: 0;
-                                  text-align: center;
-                                  background: #f1f1f1;
-                                  color: #999;
-                                  font-weight: bold;
-                                "
-                >Total to paid</div>
-                <div
-                  class="class-campo-text-hori col-md-12"
-                  style="
-                                  padding: 4px 2px 5px 2px;
-                                  height: 35px;
-                                  text-align: center;
-                                  border: 1px solid #f1f1f1;
-                                  font-weight: bold;
-                                  color: #999;
-                                "
-                >
-                  <span>{{ "$ " + this.mont11 }}</span>
-                </div>
+                {{ "$ " + this.mont11 }}
               </div>
-            </div>
-          </div>
+            </b-col>
+          </b-row>
         </b-col>
-        <b-col
-          md="2"
-          class="d-flex align-items-center justify-content-center"
-        >
-          <h3
-            class="d-flex align-items-center justify-content-center border border-3 rounded-circle"
-            style="width: 4vw; height: 4vw"
+        <b-col class="ml-1">
+          <b-row
+            class="px-1 bg-info text-white py-50 text-uppercase"
           >
-            VS
-          </h3>
-        </b-col>
-        <b-col md="5">
-          <div>
-            <div
-              style="
-                            background: #baa345;
-                            padding: 5px;
-                            position: absolute;
-                            top: 0;
-                            width: 100%;
-                            left: 0;
-                            height: 32px;
-                            padding-left: 15px;
-                          "
-            >
-              <label
-                for
-                style="color: white"
-              >Situation with A.M.G. Debt Solution</label>
-            </div>
-            <br>
-            <br>
-            <div class="row">
-              <div class="col-md-6">
-                <table class="table table-striped">
-                  <tr>
-                    <td
-                      style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                    >Total due</td>
-                    <td
-                      style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #baa345;
-                                    font-weight: bold;
-                                  "
-                    >
-                      <span>{{ "$ " + this.mont12 }}</span>
-                    </td>
-                  </tr>
-                  <tr style="background: #f1f1f1">
-                    <td
-                      style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                    >Estimated annual interes rate</td>
-                    <td
-                      style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #baa345;
-                                    font-weight: bold;
-                                  "
-                    >
-                      <span>0.00 %</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                    >Annual interest charged</td>
-                    <td
-                      style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #baa345;
-                                    font-weight: bold;
-                                  "
-                    >
-                      <span>$ 0.00</span>
-                    </td>
-                  </tr>
-                  <tr style="background: #f1f1f1">
-                    <td
-                      style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                    >Settlement cost</td>
-                    <td
-                      style="
-                                    padding: 0.1rem;
-                                    border: none;
-                                    color: #baa345;
-                                    font-weight: bold;
-                                  "
-                    >
-                      <select
-                        id="mont13"
-                        v-model="mont13"
-                        name="mont13"
-                        class="input-form"
-                        :disabled="isModalShow"
-                        style="color: #baa345; padding-left: 0"
-                      >
-                        <option
-                          v-for="(item, index) in arraySettlementCost"
-                          :key="index"
-                          :value="item"
-                        >{{ item + ".00 %" }}</option>
-                      </select>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-              <div class="col-md-6">
-                <table class="table table-striped">
-                  <tr>
-                    <td
-                      style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                    >Monthly payment</td>
-                    <td
-                      style="
-                                    padding: 0.2rem;
-                                    border: none;
-                                  "
-                    >
-                      <ValidationProvider
-                        v-slot="{errors}"
-                        rules="money-required"
-                      >
-                        <money
-                          v-model="mont14"
-                          v-bind="vMoney"
-                          :disabled="isModalShow"
-                          class="form-control"
-                        />
-                        <div
-                          v-if="errors[0] && validateMoney"
-                          class="invalid-feedback"
-                        >Monthly payment is {{ errors[0] }}</div>
-                      </ValidationProvider>
-                    </td>
-                  </tr>
-                  <tr style="background: #f1f1f1">
-                    <td
-                      style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #999;
-                                  "
-                    >Retainer Fee</td>
-                    <td
-                      style="
-                                    padding: 0.4rem;
-                                    border: none;
-                                    color: #baa345;
-                                    font-weight: bold;
-                                  "
-                    >
-                      <span>{{ "$ " + this.mont15 }}</span>
-                      <select
-                        id
-                        v-model="porctrf"
-                        :disabled="
-                          (currentUser.role_id == 1 ||
-                            currentUser.role_id == 2) && isModalShow
-                        "
-                        class="input-form"
-                        name
-                        style="color: #baa345; padding-left: 0"
-                      >
-                        <option
-                          v-for="percentaje in percentajes"
-                          :key="percentaje.id"
-                          :value="percentaje.value"
-                        >{{ percentaje.label }}</option>
-                      </select>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <br>
-            <div class="row">
-              <div class="col-md-3">
-                <div
-                  class="class-inline row"
-                  style="margin-top: 0px"
+            Situation with AMG DEBT SOLUTION
+          </b-row>
+          <b-row>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+              <span>Total due</span>
+              <span class="font-weight-bolder">{{ "$ " + this.mont12 }}</span>
+            </b-col>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+              <span>Monthly payment</span>
+              <span>
+                <ValidationProvider
+                  v-slot="{errors}"
+                  rules="money-required"
                 >
+                  <money
+                    v-model="mont14"
+                    v-bind="vMoney"
+                    :disabled="isModalShow"
+                    class="form-control form-control-sm font-weight-bolder text-center"
+                    style="width: 120px"
+                  />
                   <div
-                    class="class-campo-icon-hori col-md-12"
-                    style="
-                                  font-size: 10px;
-                                  display: flex;
-                                  justify-content: center;
-                                  align-items: center;
-                                  height: 30px;
-                                  padding: 0;
-                                  text-align: center;
-                                  background: #f1f1f1;
-                                  color: #999;
-                                  font-weight: bold;
-                                "
-                  >Monthly payment</div>
-                  <div
-                    class="class-campo-text-hori col-md-12"
-                    style="
-                                  padding: 4px 2px 5px 2px;
-                                  height: 35px;
-                                  text-align: center;
-                                  border: 1px solid #f1f1f1;
-                                  font-weight: bold;
-                                  color: #999;
-                                "
+                    v-if="errors[0] && validateMoney"
+                    class="invalid-feedback"
                   >
-                    <span>{{ "$ " + this.mont14 }}</span>
+                    Monthly payment is {{ errors[0] }}
                   </div>
-                </div>
+                </ValidationProvider>
+              </span>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+              <span>Estimated annual interes rate</span>
+              <span class="font-weight-bolder">0.00 %</span>
+            </b-col>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+              <span>Retainer Fee</span>
+              <span class="font-weight-bolder">{{ "$ " + this.mont15 }} </span>
+              <b-form-select
+                v-model="porctrf"
+                class="w-25 font-weight-bolder"
+                :disabled="
+                  (currentUser.role_id == 1 ||
+                    currentUser.role_id == 2) && isModalShow
+                "
+              >
+                <b-form-select-option
+                  v-for="percentaje in percentajes"
+                  :key="percentaje.id"
+                  :value="percentaje.value"
+                >{{ percentaje.label }}</b-form-select-option>
+              </b-form-select>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+              <span>Annual interest charged</span>
+              <span class="font-weight-bolder">$ 0.00</span>
+            </b-col>
+            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+              <span>Settlement cost</span>
+              <b-form-select
+                id="mont13"
+                v-model="mont13"
+                name="mont13"
+                class="font-weight-bolder"
+                style="width: 140px"
+                :disabled="isModalShow"
+              >
+                <b-form-select-option
+                  v-for="(item, index) in arraySettlementCost"
+                  :key="index"
+                  :value="item"
+                >{{ item + ".00 %" }}</b-form-select-option>
+              </b-form-select>
+            </b-col>
+          </b-row>
+          <b-row class="mt-1">
+            <b-col md="3">
+              <p class="text-center font-weight-bolder">
+                Monthly payment
+              </p>
+              <div class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded">
+                {{ "$ " + this.mont14 }}
               </div>
-              <div class="col-md-3">
-                <div
-                  class="class-inline row"
-                  style="margin-top: 0px"
-                >
-                  <div
-                    class="class-campo-icon-hori col-md-12"
-                    style="
-                                  font-size: 10px;
-                                  display: flex;
-                                  justify-content: center;
-                                  align-items: center;
-                                  height: 30px;
-                                  padding: 0;
-                                  text-align: center;
-                                  background: #f1f1f1;
-                                  color: #999;
-                                  font-weight: bold;
-                                "
-                  >Months</div>
-                  <div
-                    class="class-campo-text-hori col-md-12"
-                    style="
-                                  padding: 4px 2px 5px 2px;
-                                  height: 35px;
-                                  text-align: center;
-                                  border: 1px solid #f1f1f1;
-                                  font-weight: bold;
-                                  color: #999;
-                                "
-                  >
-                    <span>
-                      {{
-                        this.mont16 == "Infinity" ? "" : this.mont16
-                      }}
-                    </span>
-                  </div>
-                </div>
+            </b-col>
+            <b-col md="3">
+              <p class="text-center font-weight-bolder">
+                Months
+              </p>
+              <div class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded">
+                {{
+                  this.mont16 == "Infinity" ? "" : this.mont16
+                }}
               </div>
-              <div class="col-md-3">
-                <div
-                  class="class-inline row"
-                  style="margin-top: 0px"
-                >
-                  <div
-                    class="class-campo-icon-hori col-md-12"
-                    style="
-                                  font-size: 10px;
-                                  display: flex;
-                                  justify-content: center;
-                                  align-items: center;
-                                  height: 30px;
-                                  padding: 0;
-                                  text-align: center;
-                                  background: #f1f1f1;
-                                  color: #999;
-                                  font-weight: bold;
-                                "
-                  >Years</div>
-                  <div
-                    class="class-campo-text-hori col-md-12"
-                    style="
-                                  padding: 4px 2px 5px 2px;
-                                  height: 35px;
-                                  text-align: center;
-                                  border: 1px solid #f1f1f1;
-                                  font-weight: bold;
-                                  color: #999;
-                                "
-                  >
-                    <span>
-                      {{
-                        this.mont17 == "Infinity" ? "" : this.mont17
-                      }}
-                    </span>
-                  </div>
-                </div>
+            </b-col>
+            <b-col md="3">
+              <p class="text-center font-weight-bolder">
+                Years
+              </p>
+              <div class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded">
+                {{
+                  this.mont17 == "Infinity" ? "" : this.mont17
+                }}
               </div>
-              <div class="col-md-3">
-                <div
-                  class="class-inline row"
-                  style="margin-top: 0px"
-                >
-                  <div
-                    class="class-campo-icon-hori col-md-12"
-                    style="
-                                  font-size: 10px;
-                                  display: flex;
-                                  justify-content: center;
-                                  align-items: center;
-                                  height: 30px;
-                                  padding: 0;
-                                  text-align: center;
-                                  background: #f1f1f1;
-                                  color: #999;
-                                  font-weight: bold;
-                                "
-                  >By estimated savings</div>
-                  <div
-                    class="class-campo-text-hori col-md-12"
-                    style="
-                                  padding: 4px 2px 5px 2px;
-                                  height: 35px;
-                                  text-align: center;
-                                  border: 1px solid #f1f1f1;
-                                  font-weight: bold;
-                                  color: #999;
-                                "
-                  >
-                    <span>{{ "$ " + this.mont18 }}</span>
-                  </div>
-                </div>
+            </b-col>
+            <b-col md="3">
+              <p class="text-center font-weight-bolder font-small-3">
+                Estimated Savings
+              </p>
+              <div class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded">
+                {{ "$ " + this.mont18 }}
               </div>
-            </div>
-          </div>
-          <div class="mt-1">
-            <table style="width: 100%">
-              <tr>
-                <td
-                  style="
-                                color: #b59200;
-                                text-align: center;
-                                width: 140px;
-                                font-weight: bold;
-                              "
-                >FEE</td>
-                <td style="text-align: center; width: 150px">
-                  <b-input-group prepend="$">
-                    <b-form-input
-                      v-model="fee"
-                      disabled
-                      placeholder="$ 0.00"
-                    />
-                  </b-input-group>
-                </td>
-                <td
-                  style="
-                                color: #b59200;
-                                text-align: center;
-                                width: 120px;
-                                font-weight: bold;
-                              "
-                />
-                <td style="text-align: center; width: 140px" />
-              </tr>
-            </table>
-          </div>
+            </b-col>
+          </b-row>
+          <b-row class="mt-1 d-flex align-items-center">
+            <span>Fee $</span>
+            <money
+              v-model="fee"
+              disabled
+              v-bind="vMoney2"
+              class="form-control text-primary font-weight-bolder w-50 ml-1"
+            />
+          </b-row>
         </b-col>
       </b-row>
     </b-container>
@@ -705,8 +236,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ButtonExportPdf from '@/views/commons/utilities/ButtonExportPdf'
 
 export default {
+  components: { ButtonExportPdf },
   props: {
     salesClient: Object,
     idleyend: String,
@@ -763,6 +296,13 @@ export default {
         precision: 2,
         masked: false,
       },
+      vMoney2: {
+        decimal: '.',
+        thousands: ',',
+        prefix: '',
+        precision: 2,
+        masked: false,
+      },
       porctrf: '0.1',
       fee: '',
       validatenext1: false,
@@ -773,6 +313,7 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
+      skin: 'appConfig/skin',
     }),
   },
   watch: {
@@ -812,10 +353,19 @@ export default {
     },
     async nextfirst(id, type) {
       try {
-        if (this.isModalShow) return true
+        if (this.isModalShow) {
+          if (type === 4) {
+            if (this.salesClient.account_id) {
+              this.downloadPdfAnalysis()
+            } else {
+              this.downloadPdfAnalysisEvent()
+            }
+          }
+          return true
+        }
         if (type == 1 || type == 2) {
           return await this.axiosNext(id, type)
-        } else if (type == 4) {
+        } if (type == 4) {
           await this.saveant(id, type)
         } else if (this.dato12 == null || this.dato12 == '') {
           this.errorGoal = true
@@ -825,10 +375,9 @@ export default {
           if (this.date3 == null || this.date3 == '') {
             this.errorDate = true
             return false
-          } else {
-            this.errorDate = false
-            return await this.axiosNext(id, type)
           }
+          this.errorDate = false
+          return await this.axiosNext(id, type)
         }
       } catch (error) {
         console.error(error)
@@ -998,4 +547,7 @@ export default {
 </script>
 
 <style>
+select:disabled{
+  background-color: transparent !important;
+}
 </style>

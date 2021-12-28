@@ -6,6 +6,8 @@
         modal
         size="lg"
         scrollable
+        header-class="p-0"
+        header-bg-variant="transparent border-bottom border-bottom-2"
         :hide-footer="isModalShow"
         @hidden="hideModal(false,0)"
       >

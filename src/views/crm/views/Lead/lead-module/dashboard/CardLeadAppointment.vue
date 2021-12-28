@@ -8,7 +8,6 @@
       sticky-header
       striped
       responsive="sm"
-      small
       :fields="fieldsEvent"
       :items="S_EVENTS"
       :busy.sync="isBusy"
@@ -35,27 +34,33 @@
       </template>
 
       <template #cell(date)="data">
-        {{ data.item.date | myDateGlobal }}
-        <template v-if="data.item.state !== 'CA'">
-          <br>
-          <span class="font-weight-bold">{{ data.item.real_time | myDateGlobal }}</span>
-        </template>
+        <div style="white-space: nowrap;">
+          {{ data.item.date | myDateGlobal }}
+          <template v-if="data.item.state !== 'CA'">
+            <br>
+            <span class="font-weight-bold">{{ data.item.real_time | myDateGlobal }}</span>
+          </template>
+        </div>
       </template>
 
       <template #cell(from)="data">
-        {{ data.item.from | myTime }}
-        <template v-if="data.item.state !== 'CA'">
-          <br>
-          <span class="font-weight-bold">{{ data.item.real_time | myDateGlobal }}</span>
-        </template>
+        <div style="white-space: nowrap;">
+          {{ data.item.from | myTime }}
+          <template v-if="data.item.state !== 'CA'">
+            <br>
+            <span class="font-weight-bold">{{ data.item.real_time | myDateGlobal }}</span>
+          </template>
+        </div>
       </template>
 
       <template #cell(to)="data">
-        {{ data.item.to | myTime }}
-        <template v-if="data.item.state !== 'CA'">
-          <br>
-          <span class="font-weight-bold">-</span>
-        </template>
+        <div style="white-space: nowrap;">
+          {{ data.item.to | myTime }}
+          <template v-if="data.item.state !== 'CA'">
+            <br>
+            <span class="font-weight-bold">-</span>
+          </template>
+        </div>
       </template>
 
       <template #cell(actions)="data">

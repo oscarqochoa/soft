@@ -8,7 +8,6 @@
       sticky-header
       striped
       responsive="sm"
-      small
       :fields="fieldsTask"
       :items="lead.cards"
       class="mb-0"
