@@ -185,8 +185,7 @@
       <div class="mx-2 mb-2 mt-2">
         <b-row>
           <b-col
-            cols="12"
-            sm="6"
+           
             class="
                 d-flex
                 align-items-center
@@ -199,9 +198,10 @@
               {{ totalRows }} entries</span>
           </b-col>
           <!-- Pagination -->
+          <slot name="footer"></slot>
           <b-col
-            cols="12"
-            sm="6"
+            
+            
             class="
                 d-flex
                 align-items-center

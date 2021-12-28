@@ -1,290 +1,157 @@
-
 <template>
-  <div>
-    <b-card no-body class="mb-1">
-      <div class="mx-2 mb-2 mt-2">
-        <b-row>
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            "
-          >
-            <span class="text-muted"
-              >Showing {{ startPage }} to {{ toPage }} of
-              {{ totalData }} entries</span
+    <div>
+      <filter-slot
+        v-scrollbar
+        :filter="filter"
+        :filter-principal="filterPrincipal"
+        :total-rows="totalRows"
+        :paginate="paginate"
+        :start-page="startPage"
+        :to-page="toPage"
+        :send-multiple-sms="false"
+        @reload="$refs['refClientsList'].refresh()"
+      >
+        <b-table
+          small
+          slot="table"
+          no-provider-filtering
+          :api-url="clientRoute"
+          ref="refClientsList"
+          :items="myProvider"
+          :fields="visibleFields"
+          primary-key="id"
+          table-class="text-nowrap"
+          responsive="sm"
+          show-empty
+          sticky-header="50vh"
+          :busy="isBusy"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
+          :current-page="paginate.currentPage"
+          :per-page="paginate.perPage"
+        >
+          <template #table-busy>
+            <div class="text-center text-primary my-2">
+              <b-spinner class="align-middle mr-1"></b-spinner>
+              <strong>Loading ...</strong>
+            </div>
+          </template>
+          <template #cell(lead_name)="data">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
             >
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-end
-            "
-          >
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
+              <a
+                href="www.google.com"
+                target="_blank"
+                style="text-decoration-line: underline"
+              >
+                {{ data.item.lead_name }}</a
+              >
+            </div>
+          </template>
+          <template #cell(amount)="data">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
             >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
-          </b-col>
-        </b-row>
-      </div>
-      <div class="m-2">
-        <!-- Table Top -->
-        <b-row>
-          <!-- Per Page -->
-          <b-col
-            cols="12"
-            md="6"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Show</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label class="mr-2">entries</label>
-            <feather-icon
-              class="cursor-pointer"
-              icon="RefreshCcwIcon"
-              size="20"
-              @click="resetSearch"
-            />
-          </b-col>
-          <!-- Search -->
-          <b-col cols="12" md="6">
+              <span> $ {{ data.item.amount }} </span>
+            </div>
+          </template>
+          <template #cell(charge)="data">
             <div
               class="
                 d-flex
-                align-items-center
-                justify-content-end
+                flex-column
+                justify-content-center
                 align-items-center
               "
             >
-              <b-form-input
-                v-model="searchInput"
-                class="d-inline-block mr-1"
-                placeholder="Client..."
-                debounce="300"
-              />
-              <b-button
-                variant="primary"
-                @click="filterController = !filterController"
+              <b-icon
+                v-if="data.item.charge"
+                icon="check-circle-fill"
+                variant="success"
               >
-                <div class="d-flex justify-content-between">
-                  <span class="mr-50"
-                    ><feather-icon icon="FilterIcon" size="15"
-                  /></span>
-
-                  <span class="text-nowrap">{{
-                    filterController ? "BASIC SEARCH" : "ADVANCED SEARCH"
-                  }}</span>
-                </div>
-              </b-button>
+              </b-icon>
+              <feather-icon v-else icon="XCircleIcon" class="text-danger" />
             </div>
-          </b-col>
-        </b-row>
-      </div>
-      <transition name="fade">
-        <filters-component
-          class="mr-2 ml-2 mb-2"
-          :filters="filters"
-          v-if="filterController"
-          fromToFilter
-          :fromToObject="fromToObject"
-          @onChangeFilter="$refs.refClientsList.refresh()"
-        ></filters-component>
-      </transition>
-      <b-table
-        small
-        v-scrollbar
-        :api-url="clientRoute"
-        ref="refClientsList"
-        :items="myProvider"
-        :fields="visibleFields"
-        primary-key="id"
-        table-class="text-nowrap"
-        responsive="sm"
-        show-empty
-        sticky-header="50vh"
-        :busy="isBusy"
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
-        :current-page="currentPage"
-        :per-page="perPage"
-        :filter="searchInput"
-      >
-        <template #table-busy>
-          <div class="text-center text-primary my-2">
-            <b-spinner class="align-middle mr-1"></b-spinner>
-            <strong>Loading ...</strong>
-          </div>
-        </template>
-        <template #cell(lead_name)="data" >
+          </template>
+          <template #cell(result)="data">
             <div
-            class="d-flex flex-column justify-content-start align-items-start"
-            
-          >  
-            <a href="www.google.com" target="_blank"
-            style="text-decoration-line: underline;"> {{data.item.lead_name}} link</a>
-            <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
-          </div>
-        </template>
-        <template #cell(amount)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <span> $ {{ data.item.amount }} </span>
-          </div>
-        </template>
-        <template #cell(charge)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
-            <b-icon
-              v-if="data.item.charge"
-              icon="check-circle-fill"
-              variant="success"
+              class="
+                d-flex
+                flex-column
+                justify-content-center
+                align-items-center
+              "
             >
-            </b-icon>
-            <feather-icon v-else icon="XCircleIcon" class="text-danger" />
-          </div>
-        </template>
-        <template #cell(result)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
-            <b-icon
-              v-if="data.item.result == 'Approved'"
-              icon="check-circle-fill"
-              variant="success"
+              <b-icon
+                v-if="data.item.result == 'Approved'"
+                icon="check-circle-fill"
+                variant="success"
+              >
+              </b-icon>
+              <feather-icon
+                v-else-if="data.item.result == 'Unverified'"
+                icon="ClockIcon"
+                class="text-warning"
+              />
+              <feather-icon v-else icon="XCircleIcon" class="text-danger" />
+            </div>
+          </template>
+          <template #cell(user_name)="data">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
             >
-            </b-icon>
-            <feather-icon
-              v-else-if="data.item.result == 'Unverified'"
-              icon="ClockIcon"
-              class="text-warning"
-            />
-            <feather-icon v-else icon="XCircleIcon" class="text-danger" />
-          </div>
-        </template>
-        <!-- <template #cell(created_at)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <span>
-              {{ data.item.created_at | myGlobalDay }}
-            </span>
-          </div>
-        </template> -->
-        <template #cell(user_name)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <span>
-             {{data.item.user_name}} - {{ data.item.created_at | myGlobalDay }}
-            </span>
-          </div>
-        </template>
-      </b-table>
-      <div class="mx-2 mb-2">
-        <b-row>
+              <span>
+                {{ data.item.user_name }} -
+                {{ data.item.created_at | myGlobalDay }}
+              </span>
+            </div>
+          </template>
+        </b-table>
+        <template #footer>
           <b-col
-            cols="12"
-            sm="4"
             class="
               d-flex
               align-items-center
               justify-content-center justify-content-sm-start
             "
           >
-            <span class="text-muted"
-              >Showing {{ startPage }} to {{ toPage }} of
-              {{ totalData }} entries</span
+            <div
+              style="
+                background-color: #3764ff !important;
+                padding: 5px;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;
+              "
             >
-          </b-col>
-          <b-col
-            cols="12"
-            sm="4"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            "
-          >
-            <div style=" background-color:#3764FF !important;padding:5px;
-                          border-radius: 30px;
-                          padding-left:15px;padding-right:15px">
-              <span class="text-nowrap"
-              style="color:#fff"> Total Amount {{ totalAmount==0? "$"+totalAmount : totalAmount }} </span>
-             
+              <span class="text-nowrap" style="color: #fff">
+                Total Amount
+                {{ totalAmount == 0 ? "$" + totalAmount : totalAmount }}
+              </span>
             </div>
           </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="4"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-end
-            "
-          >
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
-          </b-col>
-        </b-row>
-      </div>
-    </b-card>
-  </div>
+        </template>
+      </filter-slot>
+    </div>
 </template>
 
 <script>
 import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 export default {
   components: {
     vSelect,
+    FilterSlot,
   },
   data() {
     return {
+      totalRows: 0,
+      paginate: {
+        currentPage: 1,
+        perPage: 10,
+      },
       totalAmount: 0,
       sortBy: "created_at",
       sortDesc: true,
@@ -292,7 +159,7 @@ export default {
         {
           key: "lead_name",
           label: "Name",
-         
+
           visible: true,
         },
         {
@@ -351,23 +218,28 @@ export default {
       searchInput: "",
       orderby: "",
       order: "",
-      startPage: "",
+      startPage: null,
       endPage: "",
       totalData: "",
-      perPage: 10,
+      // perPage: 10,
       nextPage: "",
-      currentPage: 1,
-      toPage: "",
+      // currentPage: 1,
+      toPage: null,
       isBusy: false,
       perPageOptions: [10, 25, 50, 100],
-
-      fromToObject: {
-        from: null,
-        to: null,
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Client...",
+        model: "",
       },
-      filters: [
+      filter: [
         {
+          type: "select",
+          margin: true,
+          showLabel: true,
           label: "Type",
+          model: null,
           options: [
             { value: 0, label: "All" },
             { value: 1, label: "Realtor" },
@@ -375,37 +247,68 @@ export default {
             { value: 3, label: "Inital Payment" },
             { value: 4, label: "Others" },
           ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
+          reduce: "value",
+          selectText: "label",
           cols: 12,
-          md: 2,
-          visible: true,
         },
         {
+          type: "select",
+          margin: true,
+          showLabel: true,
           label: "Result",
+          model: null,
           options: [
             { value: 0, label: "All" },
             { value: 1, label: "Approved" },
             { value: 2, label: "Declined" },
             { value: 3, label: "Underview" },
           ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
+          reduce: "value",
+          selectText: "label",
           cols: 12,
-          md: 2,
-          visible: true,
         },
         {
+          type: "select",
+          margin: true,
+          showLabel: true,
           label: "User",
-          options: [],
           model: null,
-          primaryKey: "id",
-          labelSelect: "user_name",
+          options: [],
+          reduce: "id",
+          selectText: "user_name",
           cols: 12,
-          md: 2,
-          visible: true,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
         },
       ],
       filterController: false,
@@ -421,33 +324,24 @@ export default {
     visibleFields() {
       return this.arrayColumns.filter((column) => column.visible);
     },
-    type() {
-      return this.filters[0].model;
-    },
-    user() {
-      return this.filters[2].model;
-    },
-    result() {
-      return this.filters[1].model;
-    },
   },
   methods: {
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         per_page: ctx.perPage,
-        text: ctx.filter,
-        from: this.fromToObject.from,
-        to: this.fromToObject.to,
-        result: this.result,
-        type: this.type,
-        user: this.user,
+        text: this.filterPrincipal.model,
+        from: this.filter[3].model,
+        to: this.filter[4].model,
+        result: this.filter[1].model,
+        type: this.filter[0].model,
+        user: this.filter[2].model,
       });
 
       // Must return a promise that resolves to an array of items
       return promise.then((data) => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
-        let value = 0
+        let value = 0;
         if (items) {
           items.forEach((element) => {
             value += parseFloat(element.amount);
@@ -457,18 +351,18 @@ export default {
             currency: "USD",
           });
 
-          
           this.totalAmount = formatter.format(value);
         } else {
-          this.totalAmount = 0.00;
+          this.totalAmount = 0.0;
         }
 
         this.startPage = data.data.from;
-        this.currentPage = data.data.current_page;
-        this.perPage = data.data.per_page;
+        this.paginate.currentPage = data.data.current_page;
+        this.paginate.perPage = data.data.per_page;
         this.nextPage = this.startPage + 1;
         this.endPage = data.data.last_page;
         this.totalData = data.data.total;
+        this.totalRows = data.data.total;
         this.toPage = data.data.to;
         // Must return an array of items or an empty array if an error occurred
         return items || [];
@@ -489,12 +383,12 @@ export default {
       };
       let newData = data.data;
       newData.unshift(firstOption);
-      this.filters[2].options = newData;
+      this.filter[2].options = newData;
     },
     resetSearch() {
       this.searchInput = "";
-      this.fromToObject.from = null
-      this.fromToObject.to = null
+      this.fromToObject.from = null;
+      this.fromToObject.to = null;
       this.$refs.refClientsList.refresh();
     },
   },
@@ -515,7 +409,7 @@ td.div {
   }
 }
 // b-table{
-//    width: 100%;;  
+//    width: 100%;;
 // }
 </style>
 
