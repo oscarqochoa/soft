@@ -1,7 +1,13 @@
 <template>
   <div>
-    <b-tabs lazy>
-      <b-tab title="Done">
+    <b-tabs
+      pills
+      lazy
+      active-nav-item-class="bg-important border-0 shadow-none"
+    >
+      <b-tab
+        title="Done"
+      >
         <sales-made-new-client-component
           :done="1"
         />
@@ -27,5 +33,7 @@ export default {
 </script>
 
 <style scoped>
-
+.nav-item {
+  border: 1px solid black !important;
+}
 </style>

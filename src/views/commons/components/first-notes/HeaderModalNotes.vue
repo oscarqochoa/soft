@@ -1,18 +1,35 @@
 <template>
   <div class="w-100">
-    <b-button-close @click="closeModal()" class="x-close-position"></b-button-close>
+    <b-button-close
+      class="x-close-position"
+      @click="closeModal()"
+    />
     <b-container fluid>
       <b-row class="bg-primary px-1 py-1 rounded-top">
-        <h3 class="text-white mb-0 ml-1">{{ program }} Note</h3>
+        <h3 class="text-white mb-0 ml-1">
+          {{ program }} Note
+        </h3>
       </b-row>
       <b-row class="pt-1 px-1 border-bottom">
-        <b-col lg="4">
-          <TitlesModals :title="info.nameClient" label-title="Client" />
+        <b-col>
+          <TitlesModals
+            :title="info.nameClient"
+            label-title="Client"
+          />
         </b-col>
-        <b-col lg="4">
-          <TitlesModals :title="info.sourcesName" label-title="Source" />
+        <b-col>
+          <TitlesModals
+            :title="info.sourcesName"
+            label-title="Source"
+          />
         </b-col>
-        <b-col lg="4">
+        <b-col v-if="info.pack">
+          <TitlesModals
+            :title="info.pack"
+            label-title="Kind of Pack"
+          />
+        </b-col>
+        <b-col>
           <TitlesModals
             :title="`${info.capturedName} | ${info.sellerName}`"
             label-title="Catcher | Seller"
@@ -24,26 +41,27 @@
 </template>
 
 <script>
-import TitlesModals from "@/views/commons/utilities/TitlesModals";
+import TitlesModals from '@/views/commons/utilities/TitlesModals'
+
 export default {
-  name: "HeaderModalNotes",
+  name: 'HeaderModalNotes',
   components: { TitlesModals },
   props: {
     info: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     program: {
       type: String,
-      default: ""
-    }
+      default: '',
+    },
   },
   methods: {
     closeModal() {
-      this.$emit("close");
-    }
-  }
-};
+      this.$emit('close')
+    },
+  },
+}
 </script>
 
 <style>

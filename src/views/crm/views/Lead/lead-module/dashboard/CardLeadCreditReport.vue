@@ -49,32 +49,34 @@
       </b-tab>
     </b-tabs>
     
-    <b-card-footer class="text-right">
-      <b-button
-        v-if="modul === 4"
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="primary"
-        @click="/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 241 */"
-      >
-        <span>Add</span>
-      </b-button>
-      <b-button
-        v-if="modul === 2"
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="primary"
-        @click="/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 246 */"
-      >
-        <span>Request CR</span>
-      </b-button>
-      <b-button
-        v-if="lead.typecredits"
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="primary"
-        @click="/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 254 */"
-      >
-        Old Credentials
-      </b-button>
-    </b-card-footer>
+    <template #footer>
+      <div class="text-right">
+        <b-button
+          v-if="modul === 4"
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="primary"
+          @click="/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 241 */"
+        >
+          <span>Add</span>
+        </b-button>
+        <b-button
+          v-if="modul === 2"
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="primary"
+          @click="/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 246 */"
+        >
+          <span>Request CR</span>
+        </b-button>
+        <b-button
+          v-if="lead.typecredits"
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="primary"
+          @click="/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 254 */"
+        >
+          Old Credentials
+        </b-button>
+      </div>
+    </template>
   </b-card>
 </template>
 
@@ -100,9 +102,11 @@ export default {
   },
   created () {
     this.countCreditReportPendings()
-    this.score.equifax = this.lead.score[0].equifax
-    this.score.experian = this.lead.score[0].experian
-    this.score.transunion = this.lead.score[0].transunion
+    if (this.lead.score && this.lead.score.length) {
+      this.score.equifax = this.lead.score[0].equifax
+      this.score.experian = this.lead.score[0].experian
+      this.score.transunion = this.lead.score[0].transunion
+    }
   },
   data () {
     return {

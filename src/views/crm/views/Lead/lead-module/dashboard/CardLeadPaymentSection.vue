@@ -60,7 +60,7 @@
         small
         responsive
         :fields="fields"
-        :items="cards"
+        :items="cards || []"
         :busy="isBusy"
       >
 
@@ -92,17 +92,19 @@
         </template>
       </b-table>
 
-      <b-card-footer class="text-center">
-        <b-button
-          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-          variant="primary"
-          @click="onSubmit"
-          :disabled="isLoading"
-        >
-          <span v-if="!isLoading">Submit</span>
-          <b-spinner v-else small />
-        </b-button>
-      </b-card-footer>
+      <template #footer>
+        <div class="text-center">
+          <b-button
+            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+            variant="primary"
+            @click="onSubmit"
+            :disabled="isLoading"
+          >
+            <span v-if="!isLoading">Submit</span>
+            <b-spinner v-else small />
+          </b-button>
+        </div>
+      </template>
     </b-card>
 	</validation-observer>
 </template>
@@ -197,7 +199,7 @@ export default {
       required: true
     },
     cards: {
-      type: Array,
+      type: Array | null,
       required: true
     },
     isBusy: {

@@ -18,11 +18,11 @@ const getters = {
     return owners
   },
   G_SOURCE_NAMES () {
-    const sourceNames = state.S_SOURCE_NAMES.map(el => ({ label: el.name, value: el.id }))
+    const sourceNames = state.S_SOURCE_NAMES.map(el => ({ label: el.name, id: el.id }))
     return sourceNames
   },
   G_PROGRAMS () {
-    const programs = state.S_PROGRAMS.map(el => ({ label: el.value, value: el.id }))
+    const programs = state.S_PROGRAMS.map(el => ({ label: el.value, id: el.id }))
     return programs
   },
   G_STATES () {
@@ -30,7 +30,7 @@ const getters = {
     return states
   },
   G_EEUU_STATES () {
-    const eeuuStates = state.S_EEUU_STATES.map(el => ({ label: el.state, value: el.slug }))
+    const eeuuStates = state.S_EEUU_STATES.map(el => ({ state: el.state, value: el.slug }))
     return eeuuStates
   },
   G_CRS () {
@@ -55,11 +55,11 @@ const getters = {
     ]
   },
   G_COUNTRIES () {
-    const countries = state.S_COUNTRIES.map(el => ({ label: el.name, value: el.id }))
+    const countries = state.S_COUNTRIES.map(el => ({ label: el.name, id: el.id }))
     return countries
   },
   G_SELLERS () {
-    const sellers = state.S_SELLERS.map(el => ({ label: el.user_name, value: el.id }))
+    const sellers = state.S_SELLERS.map(el => ({ label: el.user_name, id: el.id }))
     return sellers
   },
 }

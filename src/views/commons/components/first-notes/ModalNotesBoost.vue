@@ -5,12 +5,11 @@
       size="xmd"
       header-class="p-0"
       header-bg-variant="transparent"
-      footer-bg-variant
-      @hide="hideModal(false)"
       scrollable
+      @hide="hideModal(false)"
     >
       <template #modal-header>
-        <HeaderModalNotes @close="hideModal(false)" program="Boost Credit" :info="noteInfo" />
+        <HeaderModalNotes program="Boost Credit" :info="noteInfo" @close="hideModal(false)" />
       </template>
       <ValidationObserver ref="form">
         <b-row class="px-1 mt-1">
@@ -224,11 +223,12 @@
                 label="Inconvenience"
                 label-for="Inconvenience"
               >
-                <b-form-textarea
+                <quill-editor
+                  ref="editor"
                   v-model="note.inconvenience"
-                  no-resize
-                  rows="3"
-                  :state="errors[0] ? false : null"
+                  :options="editorOption"
+                  class="font-small-1"
+                  :class="{'border-danger' : errors[0]}"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -243,16 +243,12 @@
                 label="Information"
                 label-for="Information"
               >
-                <b-form-textarea
-                  v-model="note.information"
-                  no-resize
-                  rows="3"
-                  :state="errors[0] ? false : null"
-                />
                 <quill-editor
+                  ref="editor"
                   v-model="note.information"
                   :options="editorOption"
                   class="font-small-1"
+                  :class="{'border-danger' : errors[0]}"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -266,13 +262,11 @@
                 label="Recommendations"
                 label-for="Recommendations"
               >
-                <b-form-textarea
+                <quill-editor
                   v-model="note.recommendations"
-                  no-resize
-                  rows="3"
-                  :state="errors[0] ? false : null"
+                  :options="editorOption"
+                  :class="{'border-danger' : errors[0]}"
                 />
-                <quill-editor v-model="note.recommendations" :options="editorOption" class />
               </b-form-group>
             </ValidationProvider>
           </b-col>
@@ -281,42 +275,16 @@
 
       <template #modal-footer>
         <template v-if="newNote">
-          <b-button
-            v-if="showButtonSave"
-            variant="info"
-            class="font-medium-1"
-            @click="saveNotesIncomplete"
-          >Save</b-button>
-
-          <span>{{noteNull}}</span>
-
-          <b-button
-            v-if="showButtonSave"
-            variant="primary"
-            class="font-medium-1"
-            @click="saveNotesCompleted"
-          >Save & Complete</b-button>
-
-          <b-button
+          <button-save v-if="showButtonSave" @click="saveNotesIncomplete" />
+          <button-save-and-complete v-if="showButtonSave" @click="saveNotesCompleted" />
+          <button-update
             v-if="showNewButtonUpdate || showNewButtonUpdateAdmin"
-            variant="primary"
-            class="font-medium-1"
             @click="updateNotesCompleted"
-          >Update</b-button>
+          />
         </template>
         <template v-else>
-          <b-button
-            v-if="showButtonSave"
-            variant="info"
-            class="font-medium-1"
-            @click="saveNotesIncomplete"
-          >Save</b-button>
-          <b-button
-            v-if="showButtonUpdate"
-            variant="primary"
-            class="font-medium-1"
-            @click="updateNotesCompleted"
-          >Update</b-button>
+          <button-save v-if="showButtonSave" @click="saveNotesIncomplete" />
+          <button-update v-if="showButtonUpdate" @click="updateNotesCompleted" />
         </template>
       </template>
     </b-modal>
@@ -324,25 +292,27 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters } from "vuex";
+import { quillEditor } from "vue-quill-editor";
 import vSelect from "vue-select";
 import NotesServices from "@/views/commons/components/first-notes/services/notes.service";
 import HeaderModalNotes from "./HeaderModalNotes.vue";
 import GlobalService from "@/views/services/global.service";
-import CommissionsModulesVue from "../commissions/CommissionsModules.vue";
 
-// eslint-disable-next-line
 import "quill/dist/quill.core.css";
-// eslint-disable-next-line
 import "quill/dist/quill.snow.css";
-// eslint-disable-next-line
 import "quill/dist/quill.bubble.css";
-import { quillEditor } from "vue-quill-editor";
+import ButtonSave from "@/views/commons/utilities/ButtonSave";
+import ButtonSaveAndComplete from "@/views/commons/utilities/ButtonSaveAndComplete";
+import ButtonUpdate from "@/views/commons/utilities/ButtonUpdate";
 
 export default {
   name: "ModalNotesBoost",
 
   components: {
+    ButtonUpdate,
+    ButtonSaveAndComplete,
+    ButtonSave,
     vSelect,
     HeaderModalNotes,
     quillEditor
@@ -600,7 +570,7 @@ export default {
           number: 1055,
           value: (this.note.file =
             this.note.file_name != ""
-              ? "SM/" + this.noteInfo.idLead + "/" + this.note.fileName
+              ? `SM/${this.noteInfo.idLead}/${this.note.fileName}`
               : 0)
         }
       );
@@ -742,7 +712,7 @@ export default {
       this.note.fileName = null;
     },
 
-    //Hide Modal
+    // Hide Modal
     hideModal(status) {
       this.modalUp = false;
       this.$emit("hide", status);
@@ -759,4 +729,18 @@ export default {
 </script>
 
 <style scoped>
+.quill-editor {
+  height: 150px;
+}
+.restart-font-size {
+  font-size: 100% !important;
+}
+* {
+  font-size: 0.8rem !important;
+}
+
+.border-red {
+  border: 1px solid #ff3b19 !important;
+  border-radius: 0.357rem !important;
+}
 </style>

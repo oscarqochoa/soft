@@ -1,9 +1,9 @@
 <template>
   <b-card>
+    <template #header>
+      <b-card-title>PERSONAL INFORMATION</b-card-title>
+    </template>
     <b-row>
-      <b-col class="col-12 mb-1">
-        <span class="title-card">PERSONAL INFORMATION</span>
-      </b-col>
       <b-col md="6">
         <!-- First Name -->
         <validation-provider
@@ -17,11 +17,11 @@
           >
             <b-form-input
               id="first-name"
-              v-model="userData.firstName"
+              v-model="userData.first_name"
               autofocus
               :state="getValidationState(validationContext)"
               trim
-              @keyup="capitalize('firstName')"
+              @keyup="capitalize('first_name')"
             />
 
             <b-form-invalid-feedback>
@@ -40,7 +40,7 @@
           >
             <b-form-input
               id="middle-name"
-              v-model="userData.middleName"
+              v-model="userData.middle_name"
               :state="getValidationState(validationContext)"
               trim
             />
@@ -62,10 +62,10 @@
           >
             <b-form-input
               id="last-name"
-              v-model="userData.lastName"
+              v-model="userData.last_name"
               :state="getValidationState(validationContext)"
               trim
-              @keyup="capitalize('lastName')"
+              @keyup="capitalize('last_name')"
             />
 
             <b-form-invalid-feedback>
@@ -120,10 +120,11 @@
           >
             <v-select
               v-model="userData.programs"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               multiple
               label="label"
-              :options="programOptions"
+              input-id="programs"
+              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+              :options="G_PROGRAMS"
             />
             <b-form-invalid-feedback :state="getValidationState(validationContext)">
               {{ validationContext.errors[0] }}
@@ -134,7 +135,6 @@
         <validation-provider
           #default="validationContext"
           name="DOB"
-          rules="required"
         >
           <b-form-group
             label="DOB"
@@ -168,9 +168,10 @@
             <v-select
               v-model="userData.language"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="languageOptions"
+              :options="G_LANGUAGES"
               :clearable="false"
               input-id="language"
+              :reduce="el => el.value"
             />
             <b-form-invalid-feedback :state="getValidationState(validationContext)">
               {{ validationContext.errors[0] }}
@@ -188,13 +189,14 @@
             :state="getValidationState(validationContext)"
           >
             <v-select
-              v-model="userData.stateLead"
+              v-model="userData.state_lead"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="stateLeadOptions"
-              :reduce="val => val.value"
+              :options="G_STATE_LEADS"
               :clearable="false"
               input-id="state-lead"
+              :reduce="el => el.id"
             />
+            
             <b-form-invalid-feedback :state="getValidationState(validationContext)">
               {{ validationContext.errors[0] }}
             </b-form-invalid-feedback>
@@ -202,17 +204,12 @@
         </validation-provider>
       </b-col>
     </b-row>
-    <address-information-lead
-      :user-data="userData"
-      :status-lead-options="statusLeadOptions"
-      :language-options="languageOptions"
-      :state-options="stateOptions"
-      :country-options="countryOptions"
-    />
+    <address-information-lead :user-data="userData" :blank-user-fields="blankUserFields" @onModalTrackingChangeOpen="$emit('onModalTrackingChangeOpen', $event)" />
   </b-card>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -247,30 +244,11 @@ export default {
   },
   props: {
     userData: {
+      type: Object,
       required: true
     },
-    stateLeadOptions: {
-      type: Array,
-      required: true,
-    },
-    statusLeadOptions: {
-      type: Array,
-      required: true,
-    },
-    programOptions: {
-      type: Array,
-      required: true,
-    },
-    languageOptions: {
-      type: Array,
-      required: true,
-    },
-    stateOptions: {
-      type: Array,
-      required: true,
-    },
-    countryOptions: {
-      type: Array,
+    blankUserFields: {
+      type: Object,
       required: true,
     }
   },
@@ -282,28 +260,24 @@ export default {
       disabledemail: false,
     }
   },
-  setup(props, { emit }) {
-    const blankUserData = {
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      email: '',
-      programs: '',
-      dob: '',
-      language: '',
-      stateLead: '',
-    }
-    const resetuserData = () => {
-      userData.value = JSON.parse(JSON.stringify(blankUserData))
-    }
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+      token: 'auth/token',
+      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
+      G_LANGUAGES: 'CrmGlobalStore/G_LANGUAGES',
+      G_STATE_LEADS: 'CrmLeadStore/G_STATE_LEADS',
+    }),
+  },
+  setup () {
     const {
       refFormObserver,
       getValidationState,
-    } = formValidation(resetuserData)
+    } = formValidation(() => {})
 
     return {
       refFormObserver,
-      getValidationState,
+      getValidationState
     }
   },
   methods: {

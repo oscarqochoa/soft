@@ -31,7 +31,7 @@
                   label="label"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   :options="G_PROGRAMS"
-                  :reduce="val => val.value"
+                  :reduce="val => val.id"
                   placeholder="Select Program"
                 />
                 <b-form-invalid-feedback :state="getValidationState(validationContext)">
