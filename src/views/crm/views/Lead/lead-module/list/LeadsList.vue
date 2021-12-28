@@ -271,12 +271,12 @@ import { BTable, BPagination, BModal } from 'bootstrap-vue'
 
 import vSelect from 'vue-select'
 
-import ActionsTable from '../../lead-table/ActionsTable.vue'
-import dataFields from '@/views/crm/views/Lead/lead-table/fields.data'
-import FiltersTable from '../../lead-table/FiltersTable.vue'
-import ModalHistorySms from '../../lead-sms/ModalHistorySms.vue'
-import ModalSendSms from '../../lead-sms/ModalSendSms.vue'
-import PaginateTable from '@/views/crm/views/Lead/lead-table/PaginateTable.vue'
+import ActionsTable from "../../lead-table/ActionsTable.vue";
+import dataFields from "@/views/crm/views/Lead/lead-table/fields.data";
+import FiltersTable from "../../lead-table/FiltersTable.vue";
+import ModalHistorySms from "../../lead-sms/ModalHistorySms.vue";
+import ModalSendSms from "../../lead-sms/ModalSendSms.vue";
+import PaginateTable from "@/views/crm/views/Lead/lead-table/PaginateTable.vue";
 
 export default {
   components: {

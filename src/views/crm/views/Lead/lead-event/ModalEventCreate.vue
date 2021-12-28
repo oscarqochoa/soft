@@ -369,7 +369,7 @@ export default {
         if (this.modul !== 15) {
           event.lead_name = this.lead.lead_name
           event.language = this.lead.language
-          event.date = (this.event.date) ? this.$moment(this.event.date, 'YYYY-MM-DD').format('MM/DD/YYYYevent.') : ''
+          event.date = (this.event.date) ? this.$moment(this.event.date, 'YYYY-MM-DD').format('MM/DD/YYYY') : ''
           event.dateSp = this.dateSp
           event.dateEn = this.dateEn
           event.hourMsn = this.hourMsn
