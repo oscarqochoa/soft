@@ -5,180 +5,147 @@
       no-body
       class="mb-0"
     >
-      <!-- Paginate -->
-      <paginate-table
-        :current-page="currentPage"
+      <filter-slot
+        v-scrollbar
+        :filter="filter"
+        :filter-principal="filterPrincipal"
         :total-rows="totalLeads"
-        :per-page="perPage"
-        :from-page="fromPage"
+        :paginate="paginate"
+        :start-page="fromPage"
         :to-page="toPage"
+        :send-multiple-sms="true"
+        @reload="myProvider"
         @onChangeCurrentPage="onChangeCurrentPage"
-      />
-
-      <div class="m-2">
-        <!-- Filters -->
-        <filters-table
-          :filter="optionFilters"
-          :per-page="perPage"
-          :per-page-options="perPageOptions"
-          :status-lead-options="G_STATUS_LEADS"
-          :owner-options="G_OWNERS"
-          :assign-to-options="G_OWNERS"
-          :cr-options="G_CRS"
-          :program-options="G_PROGRAMS"
-          :source-name-options="G_SOURCE_NAMES"
-          :type-doc-options="G_TYPE_DOCS"
-          :st-ad-options="G_STATES"
-          @onSearch="myProvider"
-        >
-          <template #actions>
-            <b-button
-              variant="success"
-              class="ml-50"
-              :disabled="!leadsSelecteds.length"
-              @click="modalSmssOpen"
-            >
-              <feather-icon icon="MessageCircleIcon" />Send SMS
-            </b-button>
-          </template>
-        </filters-table>
-      </div>
-
-      <b-table
-        ref="refUserListTable"
-        class="position-relative"
-        :fields="fields"
-        :items="items"
-        responsive
-        small
-        primary-key="id"
-        :sort-by.sync="sortBy"
-        show-empty
-        empty-text="No matching records found"
-        :sort-desc.sync="isSortDirDesc"
-        select-mode="multi"
-        :busy.sync="isBusy"
-        @row-selected="onRowSelected"
       >
-        <!-- Head: Check -->
-        <template #head(selected)>
-          <b-form-checkbox
-            v-model="selectAll"
-            @input="selectedAll"
-          />
-        </template>
 
-        <template #table-busy>
-          <div class="text-center text-primary my-2">
-            <b-spinner class="align-middle mr-1" />
-            <strong>Loading ...</strong>
-          </div>
-        </template>
-
-        <!-- Column: Selected -->
-        <template #cell(selected)="data">
-          <b-form-group>
+        <b-table
+          slot="table"
+          ref="refUserListTable"
+          class="position-relative"
+          :fields="fields"
+          :items="items"
+          responsive
+          small
+          primary-key="id"
+          :sort-by.sync="sortBy"
+          show-empty
+          empty-text="No matching records found"
+          :sort-desc.sync="isSortDirDesc"
+          select-mode="multi"
+          :busy.sync="isBusy"
+          @row-selected="onRowSelected"
+        >
+          <!-- Head: Check -->
+          <template #head(selected)>
             <b-form-checkbox
-              v-model="data.item.selected"
-              @input="onSelectedRow(data.item)"
+              v-model="selectAll"
+              @input="selectedAll"
             />
-          </b-form-group>
-        </template>
+          </template>
 
-        <!-- Column: Date Even -->
-        <template #cell(date_even)="data">
-          <b-badge
-            v-if="data.item.date_even"
-            pill
-            variant="light-danger"
-            class="text-capitalize"
-          >
-            <feather-icon
-              v-if="data.item.date_even"
-              icon="CalendarIcon"
-              size="18"
-              class="mr-50 text-danger"
-            />
-            <span class="align-text-top text-capitalize">{{ data.item.date_even }}</span>
-          </b-badge>
-        </template>
+          <template #table-busy>
+            <div class="text-center text-primary my-2">
+              <b-spinner class="align-middle mr-1" />
+              <strong>Loading ...</strong>
+            </div>
+          </template>
 
-        <!-- Column: Name -->
-        <template #cell(lead_name)="data">
-          <router-link
-            :to="{ name: 'lead-show', params: { id: data.item.id } }"
-            target="_blank"
-          >{{ data.item.lead_name }}</router-link>
-        </template>
-
-        <!-- Column: Status -->
-        <template #cell(status)="data">
-          <b-badge
-            pill
-            :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
-            class="text-capitalize"
-          >{{ data.item.status }}</b-badge>
-        </template>
-
-        <!-- Column: Status -->
-        <template #cell(credit_report)="data">
-          <strong
-            :class="`text-${ (data.item.credit_report == 1) ? 'danger' : 'success' }`"
-          >{{ (data.item.credit_report == 1) ? 'NO' : 'YES' }}</strong>
-        </template>
-
-        <!-- Column: Programs -->
-        <template #cell(programs)="data">
-          <div
-            class="d-flex"
-            style="gap: .5rem"
-          >
-            <template v-for="(program, key) in JSON.parse(data.item.programs)">
-              <div
-                :key="key"
-                style="width: 50px;height: 50px;background-position: center;background-repeat: no-repeat;background-size: contain;"
-                :style="{ backgroundImage: `url(${baseUrl + program.logo})` }"
+          <!-- Column: Selected -->
+          <template #cell(selected)="data">
+            <b-form-group>
+              <b-form-checkbox
+                v-model="data.item.selected"
+                @input="onSelectedRow(data.item)"
               />
-            </template>
-          </div>
-        </template>
+            </b-form-group>
+          </template>
 
-        <!-- Column: Created By -->
-        <template #cell(created_by)="data">
-          <small>{{ data.item.owner }}</small>
-          <br>
-          <small>{{ data.item.created_at | myDateGlobalWithHour }}</small>
-        </template>
+          <!-- Column: Date Even -->
+          <template #cell(date_even)="data">
+            <b-badge
+              v-if="data.item.date_even"
+              pill
+              variant="light-danger"
+              class="text-capitalize"
+            >
+              <feather-icon
+                v-if="data.item.date_even"
+                icon="CalendarIcon"
+                size="18"
+                class="mr-50 text-danger"
+              />
+              <span class="align-text-top text-capitalize">{{ data.item.date_even }}</span>
+            </b-badge>
+          </template>
 
-        <!-- Column: Assign To -->
-        <template #cell(assign_to)="data">
-          <small>{{ data.item.assign_to }}</small>
-          <br>
-          <small v-if="data.item.assign_date">{{ data.item.assign_date | myDateGlobal }}</small>
-        </template>
+          <!-- Column: Name -->
+          <template #cell(lead_name)="data">
+            <router-link
+              :to="{ name: 'lead-show', params: { id: data.item.id } }"
+              target="_blank"
+            >{{ data.item.lead_name }}</router-link>
+          </template>
 
-        <!-- Column: Actions -->
-        <template #cell(actions)="data">
-          <actions-table
-            :options="[ 'returnToSocialNetwork', 'sendSMS', 'historySMS', 'delete' ]"
-            :row-data="data.item"
-            @onRowDelete="onRowDelete"
-            @onRowProcess="onRowProcess"
-            @modalSmsOpen="modalSmsOpen"
-            @modalHistorySmsOpen="modalHistorySmsOpen"
-          />
-        </template>
-      </b-table>
+          <!-- Column: Status -->
+          <template #cell(status)="data">
+            <b-badge
+              pill
+              :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
+              class="text-capitalize"
+            >{{ data.item.status }}</b-badge>
+          </template>
 
-      <!-- Paginate -->
-      <paginate-table
-        :current-page="currentPage"
-        :total-rows="totalLeads"
-        :per-page="perPage"
-        :from-page="fromPage"
-        :to-page="toPage"
-        @onChangeCurrentPage="onChangeCurrentPage"
-      />
+          <!-- Column: Status -->
+          <template #cell(credit_report)="data">
+            <strong
+              :class="`text-${ (data.item.credit_report == 1) ? 'danger' : 'success' }`"
+            >{{ (data.item.credit_report == 1) ? 'NO' : 'YES' }}</strong>
+          </template>
+
+          <!-- Column: Programs -->
+          <template #cell(programs)="data">
+            <div
+              class="d-flex"
+              style="gap: .5rem"
+            >
+              <template v-for="(program, key) in JSON.parse(data.item.programs)">
+                <div
+                  :key="key"
+                  style="width: 50px;height: 50px;background-position: center;background-repeat: no-repeat;background-size: contain;"
+                  :style="{ backgroundImage: `url(${baseUrl + program.logo})` }"
+                />
+              </template>
+            </div>
+          </template>
+
+          <!-- Column: Created By -->
+          <template #cell(created_by)="data">
+            <small>{{ data.item.owner }}</small>
+            <br>
+            <small>{{ data.item.created_at | myDateGlobalWithHour }}</small>
+          </template>
+
+          <!-- Column: Assign To -->
+          <template #cell(assign_to)="data">
+            <small>{{ data.item.assign_to }}</small>
+            <br>
+            <small v-if="data.item.assign_date">{{ data.item.assign_date | myDateGlobal }}</small>
+          </template>
+
+          <!-- Column: Actions -->
+          <template #cell(actions)="data">
+            <actions-table
+              :options="[ 'returnToSocialNetwork', 'sendSMS', 'historySMS', 'delete' ]"
+              :row-data="data.item"
+              @onRowDelete="onRowDelete"
+              @onRowProcess="onRowProcess"
+              @modalSmsOpen="modalSmsOpen"
+              @modalHistorySmsOpen="modalHistorySmsOpen"
+            />
+          </template>
+        </b-table>
+      </filter-slot>
+
     </b-card>
 
     <!-- modal SEND SMS -->
@@ -273,6 +240,8 @@ import vSelect from 'vue-select'
 
 import ActionsTable from "../../lead-table/ActionsTable.vue";
 import dataFields from "@/views/crm/views/Lead/lead-table/fields.data";
+import dataFilters from '@/views/crm/views/Lead/lead-table/filtersLead.data'
+import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
 import FiltersTable from "../../lead-table/FiltersTable.vue";
 import ModalHistorySms from "../../lead-sms/ModalHistorySms.vue";
 import ModalSendSms from "../../lead-sms/ModalSendSms.vue";
@@ -280,6 +249,7 @@ import PaginateTable from "@/views/crm/views/Lead/lead-table/PaginateTable.vue";
 
 export default {
   components: {
+    FilterSlot,
     FiltersTable,
     ActionsTable,
     ModalSendSms,
@@ -314,23 +284,18 @@ export default {
       fields: dataFields.leadFields,
       items: [],
       totalLeads: 0,
-      perPage: 10,
+      filter: dataFilters,
+      filterPrincipal: {
+        type: 'input',
+        inputType: 'text',
+        placeholder: 'Search...',
+        model: '',
+      },
       fromPage: 0,
       toPage: 0,
-      currentPage: 1,
-      optionFilters: {
-        searchQuery: '',
-        assignTo: null,
-        from: null,
-        to: null,
-        statusLead: null,
-        owner: null,
-        assignTo: null,
-        cr: null,
-        program: null,
-        sourceName: null,
-        typeDoc: null,
-        stAd: null,
+      paginate: {
+        currentPage: 1,
+        perPage: 10,
       },
       perPageOptions: [10, 25, 50, 100],
       sortBy: 'id',
@@ -350,8 +315,9 @@ export default {
       leadsSelecteds: [],
     }
   },
-  async created() {
-    await this.myProvider()
+  created() {
+    this.myProvider()
+    this.setOptionsOnFilters()
   },
   methods: {
     ...mapActions({
@@ -386,23 +352,23 @@ export default {
         this.setFilters()
         this.isBusy = true
         const response = await this.A_GET_LEADS({
-          assign_to: this.optionFilters.assignTo,
-          cr: this.optionFilters.cr,
-          date_from: this.optionFilters.from,
-          date_to: this.optionFilters.to,
+          assign_to: this.filter[4].model,
+          cr: this.filter[5].model,
+          date_from: this.filter[0].model,
+          date_to: this.filter[1].model,
           idrole: 1,
           iduser: 1,
-          lead_status: this.optionFilters.statusLead,
-          name_text: this.optionFilters.searchQuery,
+          lead_status: this.filter[2].model,
+          name_text: this.filterPrincipal.model,
           order: 'desc',
           orderby: 10,
-          program: this.optionFilters.program,
-          sourcename: this.optionFilters.sourceName,
-          state_h: this.optionFilters.stAd,
-          typedoc: this.optionFilters.typeDoc,
-          user_owner: this.optionFilters.owner,
-          perpage: this.perPage,
-          page: this.currentPage,
+          program: this.filter[6].model,
+          sourcename: this.filter[8].model,
+          state_h: this.filter[7].model,
+          typedoc: this.filter[9].model,
+          user_owner: this.filter[3].model,
+          perpage: this.paginate.perPage,
+          page: this.paginate.currentPage,
         })
         this.totalLeads = response.total
         this.fromPage = response.from || 0
@@ -422,6 +388,7 @@ export default {
 
         this.items = response.data
         this.isBusy = false
+        return this.items
       } catch (error) {
         console.log('Somtehing went wrong myProvider', error)
         this.showToast(
@@ -433,15 +400,34 @@ export default {
         )
       }
     },
+    setOptionsOnFilters () {
+      this.filter[2].options = this.G_STATUS_LEADS
+      this.filter[3].options = this.G_OWNERS
+      this.filter[4].options = this.G_OWNERS
+      this.filter[5].options = this.G_CRS
+      this.filter[6].options = this.G_PROGRAMS
+      this.filter[7].options = this.G_STATES
+      this.filter[8].options = this.G_SOURCE_NAMES
+      this.filter[9].options = this.G_TYPE_DOCS
+    },
     onChangeCurrentPage(e) {
-      this.currentPage = e
+      this.paginate.currentPage = e
       this.myProvider()
     },
     setFilters() {
       this.A_SET_FILTERS_LEADS({
-        ...this.optionFilters,
-        perPage: this.perPage,
-        currentPage: this.currentPage,
+        from: this.filter[0].model,
+        to: this.filter[1].model,
+        statusLead: this.filter[2].model,
+        owner: this.filter[3].model,
+        assignTo: this.filter[4].model,
+        cr: this.filter[5].model,
+        program: this.filter[6].model,
+        stAd: this.filter[7].model,
+        sourceName: this.filter[8].model,
+        typeDoc: this.filter[9].model,
+        perPage: this.paginate.perPage,
+        currentPage: this.paginate.currentPage,
       })
     },
     onRowSelected() {
