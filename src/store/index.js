@@ -15,7 +15,7 @@ import GlobalStore from "@/views/store";
 import stickyNotesStoreModule from "@/layouts/components/navbar/components/sticky-notes/store/sticky-notes.store";
 import TaskStore from '@/store/task'
 import NotificationStore from '@/store/notification'
-import InventoryStore from '@/commons/components/inventory/store'
+import InventoryStore from '@/views/commons/components/inventory/store'
 Vue.use(Vuex);
 
 export default new Vuex.Store({

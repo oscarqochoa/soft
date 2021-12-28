@@ -645,7 +645,7 @@ export default {
 }
 
 .autocomplete-result:hover {
-  background-color: #ff9f43;
+  background-color: #5f95e7 !important;
 }
 
 .box {

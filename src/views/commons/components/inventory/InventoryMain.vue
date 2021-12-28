@@ -23,7 +23,7 @@
         </b-col>
       </b-row>
     </div>
-    <b-nav tabs>
+    <b-nav pills>
       <b-nav-item
         :to="{ name: 'inventory-crm-equipment' }"
         exact

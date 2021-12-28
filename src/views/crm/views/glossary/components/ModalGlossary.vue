@@ -1,15 +1,15 @@
 <template>
   <div>
     <b-modal
-      id="modal-xs"
-      title-class="h3"
-      size="lg"
-      v-model="mutableIfModalCard"
-      modal-class="modal-primary"
-      top
+      modal
       :title="titleView"
-      @hidden="closeModal"
+      v-model="mutableIfModalCard"
+      size="lg"
+      modal-class="modal-primary"
       hide-footer
+      body-class="mb-2"
+      @hidden="closeModal"
+      title-tag="h3"
     >
       <ValidationObserver ref="form">
         <div class="row" v-if="statusModal != '3'">
@@ -71,7 +71,7 @@
               >
                 <b-form-textarea
                   :disabled="statusDescription"
-                  class="textarea-style wysiwyg-notes w-100"
+                  
                   :class="{ 'border border-danger': errors[0] }"
                   style="border-radius: 0px 10px 10px 10px; height: 120px"
                   v-model="description"

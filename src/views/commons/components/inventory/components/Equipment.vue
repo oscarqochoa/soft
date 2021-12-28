@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-tabs lazy>
+    <b-tabs pills lazy>
       <b-tab title="Available" v-if="[19, 16, 12].includes($route.meta.module)">
         <!-- <pending-done active
          :status="1"

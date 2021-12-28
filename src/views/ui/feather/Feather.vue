@@ -356,6 +356,9 @@ export default {
         'UsersAmgIcon',
         'AmgIcon',
         'DashboardIcon',
+        'OtherSourcesIcon',
+        'ValidationInformationIcon',
+        'CRInvalidIcon'
 
       ],
     }

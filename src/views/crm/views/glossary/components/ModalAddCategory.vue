@@ -1,15 +1,15 @@
 <template>
   <div>
     <b-modal
-      id="modal-xs"
-      title-class="h3"
-      size="sm"
+      modal
+       title="CREATE CATEGORY"
       v-model="ifModalCardCategory"
+      size="sm"
       modal-class="modal-primary"
-      top
-      title="CREATE CATEGORY"
-      @hidden="closeModalCategory"
       hide-footer
+      body-class="mb-2"
+      @hidden="closeModalCategory"
+      title-tag="h3"
     >
       <ValidationObserver ref="form">
         <div class="row">

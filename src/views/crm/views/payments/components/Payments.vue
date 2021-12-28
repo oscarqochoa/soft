@@ -142,20 +142,14 @@
             <strong>Loading ...</strong>
           </div>
         </template>
-        <template #cell(lead_name)="data">
-          <div
+        <template #cell(lead_name)="data" >
+            <div
             class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <b-button
-              variant="flat-primary"
-              style="
-                padding-left: 2px;
-                padding-right: 2px;
-                padding-top: 5px;
-                padding-bottom: 5px;
-              "
-              >{{ data.item.lead_name }}</b-button
-            >
+            
+          >  
+            <a href="www.google.com" target="_blank"
+            style="text-decoration-line: underline;"> {{data.item.lead_name}} link</a>
+            <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
           </div>
         </template>
         <template #cell(amount)="data">
@@ -240,7 +234,7 @@
               justify-content-center justify-content-sm-start
             "
           >
-            <div style=" background-color:#FF9F43 !important;padding:5px;
+            <div style=" background-color:#3764FF !important;padding:5px;
                           border-radius: 30px;
                           padding-left:15px;padding-right:15px">
               <span class="text-nowrap"

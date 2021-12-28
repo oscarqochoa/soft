@@ -1,17 +1,18 @@
 export default [
     {
-        path: '/inventory',
+        path: '/crm/inventory',
         name: 'inventory-crm',
-        component: () => import("@/commons/components/inventory/InventoryMain.vue"),
+        component: () => import("@/views/commons/components/inventory/InventoryMain.vue"),
         meta:{
             isClientsTab: true,
             module: 2,
+            
         },
         children: [
             {
                 path: '',
                 name: 'inventory-crm-equipment',
-                component: () => import('@/commons/components/inventory/components/Equipment.vue'),
+                component: () => import('@/views/commons/components/inventory/components/Equipment.vue'),
                 meta:{
                     isClientsTab: true,
                     module: 2,
@@ -21,7 +22,7 @@ export default [
             {
                 path: ' ',
                 name: 'inventory-crm-equipment-request',
-                component: () => import('@/commons/components/inventory/components/EquipmentRequest.vue'),
+                component: () => import('@/views/commons/components/inventory/components/EquipmentRequest.vue'),
                 meta:{
                     isClientsTab: false,
                     module: 2,
@@ -30,7 +31,7 @@ export default [
             {
                 path: '  ',
                 name: 'inventory-crm-assign',
-                component: () => import('@/commons/components/inventory/components/Assign.vue'),
+                component: () => import('@/views/commons/components/inventory/components/Assign.vue'),
                 meta:{
                     isClientsTab: false,
                     module: 2,

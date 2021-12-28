@@ -140,6 +140,7 @@
       responsive="sm"
       show-empty
       sticky-header="50vh"
+      :sort-by.sync="sortBy"
       :current-page="currentPage"
       :per-page="perPage"
     >
@@ -410,6 +411,7 @@ export default {
       statusNewEquipment: "",
       assignedTo: "",
       num: "",
+      sortBy: "created_at",
     };
   },
   computed: {
@@ -426,6 +428,8 @@ export default {
         from: this.fromToObject.from,
         to: this.fromToObject.to,
         statusEquipment: this.statusEquipment,
+        order: ctx.sortBy == "" ? "created_at" : ctx.sortBy,
+        orderby: ctx.sortDesc == 1 ? "desc" : "asc",
         idCategory: this.categoryFilter,
         moduleId: this.module,
       });
