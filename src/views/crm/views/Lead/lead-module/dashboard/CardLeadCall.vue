@@ -83,15 +83,17 @@
 
     </b-table>
     
-    <b-card-footer v-if="S_CALLS.length > 9" class="text-right">
-      <b-button
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="primary"
-        @click="$bvModal.show('modal-call-history')"
-      >
-        <span class="align-middle">See More</span>
-      </b-button>
-    </b-card-footer>
+    <template v-if="S_CALLS.length > 9" #footer>
+      <div class="text-right">
+        <b-button
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="primary"
+          @click="$bvModal.show('modal-call-history')"
+        >
+          <span class="align-middle">See More</span>
+        </b-button>
+      </div>
+    </template>
 
     <!-- modal CALL HISTORY -->
     <b-modal

@@ -195,6 +195,19 @@ export default {
         buttonsStyling: false,
       });
     },
+    showWarningSwal(title = "Very Important!", text = "Important Information") {
+      this.$swal({
+        title,
+        text,
+        imageUrl: "/assets/images/icons/swal/warning.svg",
+        imageWidth: 70,
+        confirmButtonText: "Ok",
+        customClass: {
+          confirmButton: "btn btn-primary",
+        },
+        buttonsStyling: false,
+      });
+    },
     showErrorSwal(
       text = "Sorry, there was an error ... try again or contact support !!!"
     ) {
@@ -274,5 +287,8 @@ export default {
     removePreloader() {
       this.$store.commit("app/SET_LOADING", false);
     },
+    isPreloading (status = true) {
+      this.$store.commit("app/SET_LOADING", status)
+    }
   },
 };

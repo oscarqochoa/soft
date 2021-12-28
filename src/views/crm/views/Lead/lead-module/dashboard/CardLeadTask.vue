@@ -111,27 +111,29 @@
 
     </b-table>
     
-    <b-card-footer v-if="!onlyRead" class="text-right">
-      <b-button
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="primary"
-        @click="onModalCreateTaskOpen"
-      >
-        <span class="align-middle">Add</span>
-      </b-button>
-      <b-button
-        v-if="lead.count_task !== 0"
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="outline-secondary"
-        class="btn-icon ml-1"
-        @click="$bvModal.show('modal-task-history')"
-      >
-        <feather-icon
-          icon="ListIcon"
-          size="18"
-        />
-      </b-button>
-    </b-card-footer>
+    <template v-if="!onlyRead" #footer>
+      <div class="text-right">
+        <b-button
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="primary"
+          @click="onModalCreateTaskOpen"
+        >
+          <span class="align-middle">Add</span>
+        </b-button>
+        <b-button
+          v-if="lead.count_task !== 0"
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="outline-secondary"
+          class="btn-icon ml-1"
+          @click="$bvModal.show('modal-task-history')"
+        >
+          <feather-icon
+            icon="ListIcon"
+            size="18"
+          />
+        </b-button>
+      </div>
+    </template>
     
     <!-- modal TASK CREATE -->
     <b-modal

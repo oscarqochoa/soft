@@ -37,26 +37,9 @@
           @submit.prevent="handleSubmit(onSubmit)"
           @reset.prevent="resetForm"
         >
-          <basic-information-lead
-            :user-data="userData"
-            :state-lead-options="stateLeadOptions"
-            :status-lead-options="statusLeadOptions"
-            :program-options="programOptions"
-            :language-options="languageOptions"
-            :state-options="stateOptions"
-            :country-options="countryOptions"
-          />
-          <lead-information-lead
-            :user-data="userData"
-            :status-lead-options="statusLeadOptions"
-            :source-name-options="sourceNameOptions"
-            :source-lead-options="sourceLeadOptions"
-            :user-creator-owner-options="userCreatorOwnerOptions"
-          />
-          <billing-information-lead
-            :user-data="userData"
-            :state-options="stateOptions"
-          />
+          <basic-information-lead :user-data="userData" />
+          <lead-information-lead :user-data="userData" />
+          <billing-information-lead :user-data="userData" />
           <!-- Form Actions -->
           <div class="d-flex mt-2">
             <b-button
@@ -135,42 +118,6 @@ export default {
       type: Boolean,
       required: true,
     },
-    stateLeadOptions: {
-      type: Array,
-      required: true,
-    },
-    statusLeadOptions: {
-      type: Array,
-      required: true,
-    },
-    programOptions: {
-      type: Array,
-      required: true,
-    },
-    languageOptions: {
-      type: Array,
-      required: true,
-    },
-    stateOptions: {
-      type: Array,
-      required: true,
-    },
-    countryOptions: {
-      type: Array,
-      required: true,
-    },
-    sourceNameOptions: {
-      type: Array,
-      required: true,
-    },
-    sourceLeadOptions: {
-      type: Array,
-      required: true,
-    },
-    userCreatorOwnerOptions: {
-      type: Array,
-      required: true,
-    },
   },
   data() {
     const resetRowData = () => {}
@@ -183,17 +130,15 @@ export default {
       resetForm,
       modul: 2,
       blankUserData: {
-        firstName: '',
-        middleName: '',
-        lastName: '',
+        first_name: '',
+        middle_name: '',
+        last_name: '',
         email: '',
         programs: [],
         dob: '',
         language: '',
         stateLead: null,
-        social: {
-          value: ''
-        },
+        social: '',
         ssn: '',
         itin: '',
         other: '',
@@ -202,35 +147,39 @@ export default {
         other: '',
         address: {
           prename: 'main',
+          streetReal: '',
           street: '',
           city: '',
           state: 'CA',
           zipcode: '',
           country: 'United States',
         },
-        originCountry: { value: 146, label: 'México' },
-        anotherAddress: '',
+        origin_country: 146,
+        another_address: '',
         otherAddress: {
           prename: 'origin',
+          streetReal: '',
           street: '',
           city: '',
           state: '',
           zipcode: '',
           country: 'United States',
         },
-        userId: {},
-        sourceId: '',
-        leadStatusId: '',
-        sourceNameId: '',
+        user_id: null,
+        source_id: '',
+        leadstatus_id: '',
+        sourcesname_id: '',
         cardNumber1: '',
         cardNumber2: '',
         cardNumber3: '',
         cardNumber4: '',
         cardExpiMonth: '',
         cardExpiYear: '',
+        cardHoldername: '',
         cardSecurityCode: '',
         cardAddress: {
           prename: 'card',
+          streetReal: '',
           street: '',
           city: '',
           state: '',
@@ -248,7 +197,7 @@ export default {
         dateOnline: '',
         plataform: null,
         usernameOnline: '',
-        passwordOnline: '',
+        passwordonline: '',
         memberNumberOnline: '',
       },
       userData: {},
@@ -273,7 +222,7 @@ export default {
       A_SET_LEADS: 'CrmLeadStore/A_SET_LEADS'
     }),
     resetuserData () {
-      this.blankUserData.userId = { value: this.currentUser.user_id, label: this.currentUser.fullName }
+      this.blankUserData.user_id = this.currentUser.user_id
       this.userData = JSON.parse(JSON.stringify(this.blankUserData))
     },
     getSelectValue (element) {
@@ -301,24 +250,24 @@ export default {
           this.userData.cardNumber = `${this.userData.cardNumber1}-${this.userData.cardNumber2}-${this.userData.cardNumber3}-${this.userData.cardNumber4}`
         }
         //VALIDATION ITIN & SSN
-        const val = this.userData.social.value.substr(0, 1)
+        const val = this.userData.social.substr(0, 1)
         if (val == 9) {
-          this.userData.itin = this.userData.social.value
+          this.userData.itin = this.userData.social
         } else {
-          this.userData.ssn = this.userData.social.value
+          this.userData.ssn = this.userData.social
         }
         const { role_id } = this.currentUser
-        const { email, userId, firstName, lastName, middleName, sourceId, sourceNameId, programId, phone, mobile, work, creditReport, payment, ammount, programs, leadStatusId, address, description, cardExpiMonth, cardExpiYear, ssn, cardHoldername, cardNumber, cardSecurityCode, dob, cardAddress, typeCredit, dateOnline, plataform, usernameOnline, passwordOnline, memberNumberOnline, language, itin, other, stateLead, anotherAddress, otherAddress, originCountry } = this.userData
+        const { email, user_id, first_name, last_name, middle_name, source_id, sourcesname_id, programId, phone, mobile, work, creditReport, payment, ammount, programs, leadstatus_id, address, description, cardExpiMonth, cardExpiYear, ssn, cardHoldername, cardNumber, cardSecurityCode, dob, cardAddress, typeCredit, dateOnline, plataform, usernameOnline, passwordonline, memberNumberOnline, language, itin, other, state_lead, another_address, otherAddress, origin_country } = this.userData
         console.log('preData', this.userData)
         const body = {
           id: '',
           email,
-          user_id: this.getSelectValue(userId),
-          first_name: firstName,
-          last_name: lastName,
-          middle_name: middleName,
-          source_id: this.getSelectValue(sourceId),
-          sourcesname_id: this.getSelectValue(sourceNameId),
+          user_id,
+          first_name,
+          last_name,
+          middle_name,
+          source_id,
+          sourcesname_id,
           program_id: programId,
           phone,
           mobile,
@@ -326,8 +275,8 @@ export default {
           credit_report: creditReport,
           payment,
           ammount,
-          program: programs.map(el => ({ id: el.value, value: el.label, name: el.label })),
-          leadstatus_id: this.getSelectValue(leadStatusId),
+          program: programs.map(el => ({ id: el.id, value: el.label, name: el.label })),
+          leadstatus_id,
           street: address.street,
           city: address.city,
           state: address.state,
@@ -342,8 +291,8 @@ export default {
           cardsecuritycode: cardSecurityCode,
           dob,
           super: role_id,
-          created_by: this.getSelectValue(userId),
-          usercreator: this.getSelectValue(userId),
+          created_by: user_id,
+          usercreator: user_id,
           datecreator: this.$moment(dob, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DD'),
           streetcard: cardAddress.street,
           citycard: cardAddress.city,
@@ -354,19 +303,19 @@ export default {
           dateonline: dateOnline,
           plataform,
           usernameonline: usernameOnline,
-          passwordonline: passwordOnline,
+          passwordonline,
           membernumberonline: memberNumberOnline,
-          language: this.getSelectValue(language),
+          language,
           itin,
           other,
-          state_lead: stateLead,
-          another_address: anotherAddress,
+          state_lead,
+          another_address,
           otherstreet: otherAddress.street,
           othercity: otherAddress.city,
           otherstate: otherAddress.state,
           othercountry: otherAddress.country,
           otherzipcode: otherAddress.zipcode,
-          originCountry: this.getSelectValue(originCountry)
+          originCountry: origin_country
         }
         const response = await this.A_SET_LEADS(body)
         console.log('response', response)

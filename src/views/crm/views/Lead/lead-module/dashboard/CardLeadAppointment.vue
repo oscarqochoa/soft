@@ -74,15 +74,17 @@
 
     </b-table>
     
-    <b-card-footer v-if="!onlyRead" class="text-right">
-      <b-button
-        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-        variant="primary"
-        @click="isInfo = false, $bvModal.show('modal-event-create')"
-      >
-        <span class="align-middle">Add</span>
-      </b-button>
-    </b-card-footer>
+    <template v-if="!onlyRead" #footer>
+      <div class="text-right">
+        <b-button
+          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+          variant="primary"
+          @click="isInfo = false, $bvModal.show('modal-event-create')"
+        >
+          <span class="align-middle">Add</span>
+        </b-button>
+      </div>
+    </template>
 
     <!-- modal EVENT CREATE -->
     <b-modal

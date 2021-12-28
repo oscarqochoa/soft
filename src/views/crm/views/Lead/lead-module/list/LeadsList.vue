@@ -233,9 +233,7 @@ import vSelect from "vue-select";
 import ActionsTable from "../../lead-table/ActionsTable.vue";
 import dataFields from "@/views/crm/views/Lead/lead-table/fields.data";
 import FiltersTable from "../../lead-table/FiltersTable.vue";
-import ModalQuickSms from "../../lead-sms/ModalQuickSms.vue";
 import ModalHistorySms from "../../lead-sms/ModalHistorySms.vue";
-import ModalQuickSmsSave from "../../lead-sms/ModalQuickSmsSave.vue";
 import ModalSendSms from "../../lead-sms/ModalSendSms.vue";
 import PaginateTable from "@/views/crm/views/Lead/lead-table/PaginateTable.vue";
 
