@@ -526,7 +526,7 @@ export default {
     },
     blankUserFields: {
       type: Object,
-      required: true,
+      required: false,
     }
   },
   data() {
