@@ -1,16 +1,17 @@
 <template>
   <div>
     <b-modal
-      id="modal-xs"
-      title-class="h3"
-      size="lg"
-      v-model="mutableIfModalCard"
-      modal-class="modal-primary"
+      
+
+      modal
       centered
       :title="`${objectLead.leadname}`"
-      @hidden="closeModal"
+      v-model="mutableIfModalCard"
+      size="lg"
+      modal-class="modal-primary"
       hide-footer
-        scrollable
+      @hidden="closeModal"
+      title-tag="h3"
     >
       <div>
         <ValidationObserver ref="form">

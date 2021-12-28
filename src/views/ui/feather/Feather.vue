@@ -360,7 +360,9 @@ export default {
         'PhoneSlashIcon',
         'ThListIcon',
         'Edit2SlashIcon',
-
+        'OtherSourcesIcon',
+        'ValidationInformationIcon',
+        'CRInvalidIcon'
       ],
     }
   },

@@ -1,124 +1,19 @@
 <template>
   <div>
-    <b-card no-body class="mb-1">
-      <div class="mx-2 mb-2 mt-2">
-        <b-row>
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            "
-          >
-            <span class="text-muted"
-              >Showing {{ startPage }} to {{ toPage }} of
-              {{ totalData }} entries</span
-            >
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-end
-            "
-          >
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
-          </b-col>
-        </b-row>
-      </div>
-      <div class="m-2">
-        <!-- Table Top -->
-        <b-row>
-          <!-- Per Page -->
-          <b-col
-            cols="12"
-            md="6"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Show</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label class="mr-2">entries</label>
-            <feather-icon
-              class="cursor-pointer"
-              icon="RefreshCcwIcon"
-              size="20"
-              @click="resetSearch"
-            />
-          </b-col>
-          <!-- Search -->
-          <b-col cols="12" md="6">
-            <div
-              class="
-                d-flex
-                align-items-center
-                justify-content-end
-                align-items-center
-              "
-            >
-              <b-form-input
-                v-model="searchInput"
-                class="d-inline-block mr-1"
-                placeholder="Client..."
-                debounce="300"
-                v-on:keyup.enter="onEnter"
-              />
-              <b-button
-                variant="primary"
-                @click="filterController = !filterController"
-              >
-                <div class="d-flex justify-content-between">
-                  <span class="mr-50"
-                    ><feather-icon icon="FilterIcon" size="15"
-                  /></span>
-
-                  <span class="text-nowrap">{{
-                    filterController ? "Basic Search" : "Advanced Search"
-                  }}</span>
-                </div>
-              </b-button>
-            </div>
-          </b-col>
-        </b-row>
-      </div>
-      <transition name="fade">
-        <filters-component
-          class="mr-2 ml-2 mb-2"
-          :filters="filters"
-          v-if="filterController"
-          fromToFilter
-          :fromToObject="fromToObject"
-          @onChangeFilter="$refs.refClientsList.refresh()"
-        ></filters-component>
-      </transition>
-      <b-table 
-          v-scrollbar
+    <filter-slot
+        v-scrollbar
+        :filter="filter"
+        :filter-principal="filterPrincipal"
+        :total-rows="totalData"
+        :paginate="paginate"
+        :start-page="startPage"
+        :to-page="toPage"
+        :send-multiple-sms="false"
+        @reload="$refs['refClientsList'].refresh()"
+      >
+        <b-table 
+          slot="table"
+          no-provider-filtering
          :api-url="clientRoute"
           ref="refClientsList"
           :items="myProvider"
@@ -131,8 +26,8 @@
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
-          :current-page="currentPage"
-          :per-page="perPage"
+          :current-page="paginate.currentPage"
+          :per-page="paginate.perPage"
           :filter="searchInput"
           >
             <template #table-busy>
@@ -187,7 +82,7 @@
             </div>
           </template>
         </b-table>
-    </b-card>
+    </filter-slot>
     <modal-pending 
       v-if="modalChanging"
       :ifModalCard="modalChanging"
@@ -203,11 +98,12 @@ import { amgApi } from '@/service/axios';
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
 import ModalPending from './ModalGeneral.vue';
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 export default {
     components: {
     vSelect,
     ModalPending,
-    
+    FilterSlot,
   },
   props:{
     status:{
@@ -217,6 +113,11 @@ export default {
   },
   data() {
     return {
+      totalRows: 0,
+      paginate: {
+        currentPage: 1,
+        perPage: 10,
+      },
       objectLead:null,
       sortBy: "created_at",
       sortDesc: true,
@@ -226,9 +127,9 @@ export default {
       startPage: "",
       endPage: "",
       totalData: "",
-      perPage: 10,
+      // perPage: 10,
       nextPage: "",
-      currentPage: 1,
+      // currentPage: 1,
       toPage: "",
       isBusy: false,
       perPageOptions: [10, 25, 50, 100],
@@ -270,7 +171,47 @@ export default {
         from: null,
         to: null,
       },
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Client...",
+        model: "",
+      },
       filters:[],
+      filter: [
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+      ],
       filterController: false,
       modalChanging:false,
     };
@@ -320,9 +261,9 @@ export default {
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         page: ctx.currentPage,
-        leadname: ctx.filter,
-        startdate: this.fromToObject.from,
-        enddate: this.fromToObject.to,
+        leadname: this.filterPrincipal.model,
+        startdate: this.filter[0].model,
+        enddate: this.filter[1].model,
         status: this.status == '1'? 1: 2 ,
         user_id:this.currentUser.user_id,
       });

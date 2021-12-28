@@ -1,3 +1,4 @@
+
 import SalesMadeNavigation from '../views/sales-made/sales-made.nav'
 import CommissionsNavigation from '../views/commissions/commissions.nav'
 import DashboardNavigation from '../views/dashboard/dashboard.nav'
@@ -8,6 +9,8 @@ import ListsNavigation from '../views/lists/lists.nav'
 import GlossaryNavigation from '../views/glossary/glossary.nav'
 import LoansNavigation from '../views/loans/loans.nav'
 import FileManangerNavigation from '@/views/crm/views/file-mananger/file-mananger.nav'
+import InventoryNavigation from '../views/inventory/inventory.nav'
+import NcrNavigation from '../views/ncr/ncr.nav'
 
 export default [
   {
@@ -27,5 +30,8 @@ export default [
   ClientsNavigation,
   ...leadNav,
   GlossaryNavigation,
+  InventoryNavigation,
+  NcrNavigation,
   FileManangerNavigation,
 ]
+    
