@@ -168,6 +168,7 @@
                 <b-form-datepicker
                   class="per-page-datepicker d-inline-block mx-50"
                   id="from"
+                  placeholder="Date"
                   :date-format-options="{
                     year: 'numeric',
                     month: 'numeric',
@@ -182,6 +183,7 @@
                 <b-form-datepicker
                   class="per-page-datepicker d-inline-block mx-50"
                   id="to"
+                  placeholder="Date"
                   :date-format-options="{
                     year: 'numeric',
                     month: 'numeric',

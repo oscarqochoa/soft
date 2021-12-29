@@ -148,7 +148,7 @@
                 align-items-center
               "
             >
-              <b-input-group class="mr-1">
+              <b-input-group v-if="!noVisiblePrincipalFilter" class="mr-1">
                 <b-form-input
                   v-if="filterPrincipal.type === 'input'"
                   v-model="filterPrincipal.model"
@@ -258,6 +258,7 @@ export default {
     toPage: { required: false, type: Number },
     filterPrincipal: { required: true, type: Object },
     sendMultipleSms: { required: false, default: false },
+    noVisiblePrincipalFilter:{ required: false, default: false },
   },
   computed: {
     ...mapGetters({

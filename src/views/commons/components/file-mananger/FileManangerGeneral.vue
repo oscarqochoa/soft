@@ -37,7 +37,7 @@
     </b-row>
     <b-row>
       <b-col
-        v-for="(content) in currentFiles"
+        v-for="(content,index) in currentFiles" :key="index"
         cols="1"
       >
         <file-component
