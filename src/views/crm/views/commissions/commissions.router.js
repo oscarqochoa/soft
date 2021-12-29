@@ -5,12 +5,12 @@ export default [
     component: () =>
       import("@/views/commons/components/commissions/CommissionsModules.vue"),
     meta: {
-      pageTitle: "Commissions",
+      /* pageTitle: "Commissions",
       breadcrumb: [
         {
           text: "Commissions",
         },
-      ],
+      ], */
       module: 2,
       tab: "crm",
     },

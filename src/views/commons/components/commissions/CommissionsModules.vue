@@ -1,15 +1,20 @@
 <template>
   <div>
-    <!-- Tabs for Supervisor CRM -->
-    <b-tabs v-if="isSupervisorCrm">
-      <b-tab lazy title="CRM">
-        <CommissionsComponent :module="$route.meta.module" tab="crm" />
-      </b-tab>
-      <b-tab lazy title="DEPARTMENTS">
-        <CommissionsComponent :module="$route.meta.module" tab="supervisorCrm" />
-      </b-tab>
-    </b-tabs>
-    <commissions-component v-else :module="$route.meta.module" :tab="$route.meta.tab"></commissions-component>
+    <b-card>
+      <h2>Commissions</h2>
+    </b-card>
+    <b-card>
+      <!-- Tabs for Supervisor CRM -->
+      <b-tabs v-if="isSupervisorCrm" pills active-nav-item-class="border-primary-i">
+        <b-tab lazy title="CRM" title-link-class="border-secondary hover-primary">
+          <CommissionsComponent :module="$route.meta.module" tab="crm" />
+        </b-tab>
+        <b-tab lazy title="Departments" title-link-class="border-secondary ml-1 hover-primary">
+          <CommissionsComponent :module="$route.meta.module" tab="supervisorCrm" />
+        </b-tab>
+      </b-tabs>
+      <commissions-component v-else :module="$route.meta.module" :tab="$route.meta.tab"></commissions-component>
+    </b-card>
   </div>
 </template>
 <script>

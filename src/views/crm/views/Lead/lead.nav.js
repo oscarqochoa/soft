@@ -1,7 +1,7 @@
 export default [
   {
-    title: 'Lead',
-    icon: 'UserIcon',
-    route: 'lead-crm',
-  }
-]
+    title: "Leads",
+    icon: "UserPlusIcon",
+    route: "lead-crm",
+  },
+];

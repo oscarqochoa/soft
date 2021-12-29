@@ -2,7 +2,7 @@
   <div>
     <b-modal
       v-model="modalUp"
-      title-class="h2"
+      title-class="h2 text-white"
       size="lg"
       title="Loan Register Pay"
       modal-class="modal-primary"
