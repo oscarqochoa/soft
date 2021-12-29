@@ -30,6 +30,7 @@
                 v-model="note.typeOfServices.value"
                 :options="note.typeOfServices.options"
                 :class="{'border-danger rounded': errors[0]}"
+                @change="changeTypeService"
               />
             </validation-provider>
           </b-form-group>
@@ -58,7 +59,7 @@
         </b-col>
       </b-row>
       <b-row
-        v-if="note.typeOfServices.value === 1"
+        v-if="note.typeOfServices.value === '1'"
         class="mt-1"
       >
         <b-col cols="5">
@@ -143,7 +144,7 @@
         </b-col>
       </b-row>
       <b-row
-        v-else-if="note.typeOfServices.value === 2"
+        v-else-if="note.typeOfServices.value === '2'"
         class="mt-1"
       >
         <b-col cols="5">
@@ -519,11 +520,11 @@ export default {
           options: [
             {
               text: 'TRANSFER INFORMATION',
-              value: 1,
+              value: '1',
             },
             {
               text: 'STUDENT LOAN',
-              value: 2,
+              value: '2',
             },
           ],
         },
@@ -584,37 +585,32 @@ export default {
       return this.showUpdateAdmin && this.noteInfo.module == 4
     },
   },
-  watch: {
-    'note.typeOfServices.value': {
-      handler(newValue) {
-        if (newValue === 2) {
-          this.note.idTypeNumber.value = ''
-          this.note.studentLoanType.value = ''
-          this.note.amountOwed.value = ''
-          this.note.previousIdNumbers.value = '0'
-          this.note.previousIdNumbers.time = '0'
-          this.note.currentIdNumbers.value = '0'
-          this.note.currentIdNumbers.time = '0'
-        }
-        if (newValue === 1) {
-          this.note.idTypeNumber.value = '0'
-          this.note.studentLoanType.value = '0'
-          this.note.amountOwed.value = '0'
-          this.note.previousIdNumbers.value = ''
-          this.note.previousIdNumbers.time = ''
-          this.note.currentIdNumbers.value = ''
-          this.note.currentIdNumbers.time = ''
-        }
-      },
-      deep: true,
-    },
-  },
   async created() {
     await this.getFirstNote()
     await this.getCountries()
     this.note.country.value = this.noteInfo.originCountry
   },
   methods: {
+    changeTypeService(newValue) {
+      if (newValue === '2') {
+        this.note.idTypeNumber.value = ''
+        this.note.studentLoanType.value = ''
+        this.note.amountOwed.value = ''
+        this.note.previousIdNumbers.value = '0'
+        this.note.previousIdNumbers.time = '0'
+        this.note.currentIdNumbers.value = '0'
+        this.note.currentIdNumbers.time = '0'
+      }
+      if (newValue === '1') {
+        this.note.idTypeNumber.value = '0'
+        this.note.studentLoanType.value = '0'
+        this.note.amountOwed.value = '0'
+        this.note.previousIdNumbers.value = ''
+        this.note.previousIdNumbers.time = ''
+        this.note.currentIdNumbers.value = ''
+        this.note.currentIdNumbers.time = ''
+      }
+    },
     async saveNotesIncomplete() {
       if (this.emptyNote) {
         await this.saveUpdate('insert')
@@ -665,26 +661,20 @@ export default {
 
     answersNote() {
       return [
-        { number: 1075, value: this.note.facebook.value },
-        { number: 1072, value: this.note.website.value },
-        { number: 1078, value: this.note.instagram.value },
-        { number: 1083, value: this.note.logo.value },
-        { number: 1081, value: this.note.experience.value },
-        { number: 1066, value: this.note.newBusiness.value },
-        { number: 1064, value: this.note.typeOfBuisiness.value },
-        { number: 1071, value: this.note.contactTime.value },
-        { number: 1067, value: this.note.information.value },
-        { number: 1068, value: this.note.indications.value },
-        { number: 1069, value: this.note.suggestion.value },
-        { number: 1070, value: this.note.pending.value },
-        { number: 1082, value: this.note.details.value },
-        { number: 1076, value: this.note.facebook.link },
-        { number: 1077, value: this.note.facebook.likes },
-        { number: 1079, value: this.note.instagram.link },
-        { number: 1080, value: this.note.instagram.likes },
-        { number: 1073, value: this.note.website.link },
-        { number: 1074, value: this.note.website.type },
-        { number: 1065, value: this.note.newBusiness.years },
+        { number: 1039, value: this.note.inconvenience.value },
+        { number: 1040, value: this.note.information.value },
+        { number: 1041, value: this.note.recommendations.value },
+        { number: 1042, value: this.note.pending.value },
+        { number: 1043, value: this.note.goal.value },
+        { number: 1063, value: this.note.typeOfAgreement.value },
+        { number: 1031, value: this.note.typeOfServices.value },
+        { number: 1032, value: this.note.previousIdNumbers.value },
+        { number: 1033, value: this.note.previousIdNumbers.time },
+        { number: 1034, value: this.note.currentIdNumbers.value },
+        { number: 1035, value: this.note.currentIdNumbers.time },
+        { number: 1036, value: this.note.idTypeNumber.value },
+        { number: 1037, value: this.note.studentLoanType.value },
+        { number: 1038, value: this.note.amountOwed.value },
       ]
     },
     hideModal(status) {
@@ -732,28 +722,21 @@ export default {
     },
     getDetailsAnswers(note) {
       note.forEach(answer => {
-        console.log(answer)
         if (answer.answer != 'null') {
-          if (answer.question_id === 1075) this.note.facebook.value = answer.answer
-          if (answer.question_id === 1072) this.note.website.value = answer.answer
-          if (answer.question_id === 1078) this.note.instagram.value = answer.answer
-          if (answer.question_id === 1083) this.note.logo.value = answer.answer
-          if (answer.question_id === 1081) this.note.experience.value = answer.answer
-          if (answer.question_id === 1066) this.note.newBusiness.value = answer.answer
-          if (answer.question_id === 1064) this.note.typeOfBuisiness.value = JSON.parse(answer.answer)
-          if (answer.question_id === 1071) this.note.contactTime.value = answer.answer
-          if (answer.question_id === 1067) this.note.information.value = answer.answer
-          if (answer.question_id === 1068) this.note.indications.value = answer.answer
-          if (answer.question_id === 1069) this.note.suggestion.value = answer.answer
-          if (answer.question_id === 1070) this.note.pending.value = answer.answer
-          if (answer.question_id === 1082) this.note.details.value = answer.answer
-          if (answer.question_id === 1076) this.note.facebook.link = answer.answer
-          if (answer.question_id === 1077) this.note.facebook.likes = answer.answer
-          if (answer.question_id === 1079) this.note.instagram.link = answer.answer
-          if (answer.question_id === 1080) this.note.instagram.likes = answer.answer
-          if (answer.question_id === 1073) this.note.website.link = answer.answer
-          if (answer.question_id === 1074) this.note.website.type = answer.answer
-          if (answer.question_id === 1065) this.note.newBusiness.years = answer.answer
+          if (answer.question_id === 1039) this.note.inconvenience.value = answer.answer
+          if (answer.question_id === 1040) this.note.information.value = answer.answer
+          if (answer.question_id === 1041) this.note.recommendations.value = answer.answer
+          if (answer.question_id === 1042) this.note.pending.value = answer.answer
+          if (answer.question_id === 1043) this.note.goal.value = answer.answer
+          if (answer.question_id === 1063) this.note.typeOfAgreement.value = answer.answer
+          if (answer.question_id === 1031) this.note.typeOfServices.value = answer.answer
+          if (answer.question_id === 1032) this.note.previousIdNumbers.value = answer.answer
+          if (answer.question_id === 1033) this.note.previousIdNumbers.time = answer.answer
+          if (answer.question_id === 1034) this.note.currentIdNumbers.value = answer.answer
+          if (answer.question_id === 1035) this.note.currentIdNumbers.time = answer.answer
+          if (answer.question_id === 1036) this.note.idTypeNumber.value = answer.answer
+          if (answer.question_id === 1037) this.note.studentLoanType.value = answer.answer
+          if (answer.question_id === 1038) this.note.amountOwed.value = answer.answer
         } else this.noteNull = true
       })
     },
