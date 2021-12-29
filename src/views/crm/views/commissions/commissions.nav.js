@@ -1,5 +1,5 @@
 export default {
   title: "Commissions",
-  icon: "ComissionsIcon",
+  icon: "PieChartIcon",
   route: "commissions-crm",
 };
