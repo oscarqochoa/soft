@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-tabs lazy>
+    <b-tabs pills lazy>
       <b-tab title="Pending">
         <pending-done active
          :status="1"

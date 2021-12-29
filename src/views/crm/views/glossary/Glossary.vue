@@ -21,10 +21,9 @@
             sm="6"
             class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
           >
-            <b-button variant="success" @click="modalopen" >
+            <b-button variant="success" @click="modalopen(1)">
               CREATE GLOSSARY
             </b-button>
-            
           </b-col>
         </b-row>
       </div>
@@ -162,7 +161,6 @@
         </b-row>
       </div>
       <b-table
-        v-scrollbar
         :api-url="clientRoute"
         ref="refClientsList"
         :items="myProvider"
@@ -182,6 +180,23 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <template #cell(title)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <b-button
+              variant="flat-primary"
+              @click="modalopenEdit(3, data.item)"
+              style="
+                padding-left: 2px;
+                padding-right: 2px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+              "
+              >{{ data.item.title }}</b-button
+            >
+          </div>
+        </template>
         <template #cell(created_at)="data">
           <div
             class="d-flex flex-column justify-content-start align-items-start"
@@ -191,21 +206,50 @@
             </span>
           </div>
         </template>
+        <template #cell(action)="data">
+          <b-dropdown
+            variant="link"
+            no-caret
+            :right="$store.state.appConfig.isRTL"
+          >
+            <template #button-content>
+              <feather-icon
+                icon="MoreVerticalIcon"
+                size="16"
+                class="align-middle text-body"
+              />
+            </template>
+            <b-dropdown-item @click="modalopenEdit(2, data.item)">
+              <feather-icon icon="EditIcon" />
+              <span class="align-middle ml-50"> EDIT</span>
+            </b-dropdown-item>
+
+            <b-dropdown-item @click="deleteGlossary(data.item)">
+              <feather-icon icon="TrashIcon" />
+              <span class="align-middle ml-50">DELETE</span>
+            </b-dropdown-item>
+          </b-dropdown>
+        </template>
       </b-table>
     </b-card>
     <modal-glossary
-       v-if="modalChanging"
+      v-if="modalChanging"
       :ifModalCard="modalChanging"
       :categories="categories"
       @close="closeModal"
-      ></modal-glossary>
+      @updateCategory="updateCategory"
+      @updateGlossary="updateGlossary"
+      :statusModal="statusModal"
+      :objectGlossary="objectGlossary"
+    ></modal-glossary>
   </div>
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
+import { mapGetters } from "vuex";
 import vSelect from "vue-select";
-import ModalGlossary from './components/ModalGlossary.vue';
+import ModalGlossary from "./components/ModalGlossary.vue";
+import { amgApi } from "@/service/axios";
 export default {
   components: {
     vSelect,
@@ -257,7 +301,9 @@ export default {
         to: null,
       },
       categories: [],
-      modalChanging:false,
+      modalChanging: false,
+      statusModal: "",
+      objectGlossary: null,
     };
   },
   computed: {
@@ -267,10 +313,70 @@ export default {
     visibleFields() {
       return this.arrayColumns.filter((column) => column.visible);
     },
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
-    modalopen() {
-        console.log(this.modalChanging)
+    deleteGlossary(item) {
+      this.$swal
+        .fire({
+          title: "DELETE",
+          text: "Are you sure?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, delete it!",
+          customClass: {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-danger",
+          },
+        })
+        .then((result) => {
+          if (result.value) {
+            const params = { user_id: this.currentUser.id, id: item.id };
+            amgApi
+              .post("/glossary/delete-glossary", params)
+              .then((res) => {
+                this.showToast(
+                  "success",
+                  "top-right",
+                  "Success",
+                  "CheckIcon",
+                  "Glossary Deleted"
+                );
+                this.resetSearch();
+              })
+              .catch((error) => {
+                console.log(error);
+                this.showToast(
+                  "danger",
+                  "top-right",
+                  "Error",
+                  "XIcon",
+                  "Something went wrong!"
+                );
+              });
+          }
+        });
+    },
+    updateGlossary() {
+      this.modalChanging = false;
+      this.$refs.refClientsList.refresh();
+    },
+    updateCategory() {
+      this.getCategories();
+    },
+    modalopen(num) {
+      this.statusModal = num;
+      if (this.modalChanging == false) {
+        this.modalChanging = true;
+      } else {
+        this.modalChanging = false;
+      }
+    },
+    modalopenEdit(num, objectGlossary) {
+      this.statusModal = num;
+      this.objectGlossary = objectGlossary;
       if (this.modalChanging == false) {
         this.modalChanging = true;
       } else {
@@ -279,6 +385,7 @@ export default {
     },
     closeModal() {
       this.modalChanging = false;
+      this.objectGlossary = null;
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}`, {
@@ -304,43 +411,32 @@ export default {
         return items || [];
       });
     },
-    search() {
-      const params = {
-        page: 1,
-        created_by: this.created_by,
-        category: this.categorySearch,
-        startdate: this.startdate,
-        enddate: this.enddate,
-      };
-      amgApi.post("/glossary/get-glossaries", params).then((response) => {
-        console.log(response.data);
-        // if (response.status == 200) {
-        //   this.glossaries = response.data.data;
-        //   this.start_page = response.data.current_page; --
-        //   this.perpage = response.data.per_page; ---
-        //   this.next_page = this.start_page + 1;  ---
-        //   this.last_page = response.data.last_page; ---
-        //   this.total_data = response.data.total;
-        //   this.spinner = false;
-        //   this.isNoRefresh = false;
-        // }
-      });
-    },
     resetSearch() {
-      //   this.searchInput = "";
-      //   this.fromToObject.from = null
-      //   this.fromToObject.to = null
-      //   this.$refs.refClientsList.refresh();
-      console.log(this.categorySearch);
+      this.categorySearch = null;
+      this.searchInput = "";
+      this.fromToObject.from = null;
+      this.fromToObject.to = null;
+      this.$refs.refClientsList.refresh();
     },
     getCategories() {
-      amgApi.get("/glossary/get-categories").then((res) => {
-        this.categories = res.data;
-      });
+      amgApi
+        .get("/glossary/get-categories")
+        .then((res) => {
+          this.categories = res.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
+        });
     },
   },
   created() {
-    // this.search();
     this.getCategories();
   },
 };
@@ -349,6 +445,7 @@ export default {
 <style lang="scss" scoped>
 .per-page-selector {
   width: 90px;
+  height: 40px;
 }
 .per-page-datepicker {
   width: 180px;
@@ -361,6 +458,10 @@ td.div {
     display: flex;
     flex-direction: column;
   }
+  .per-page-selector {
+    width: 100px;
+    height: 40px;
+  }
 }
 @media (max-width: 740px) {
   .per-page-datepicker {
@@ -368,6 +469,10 @@ td.div {
   }
   .button-top {
     margin-bottom: 22px;
+  }
+  .per-page-selector {
+    width: 100px;
+    height: 40px;
   }
 }
 // b-table{

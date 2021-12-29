@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-nav tabs>
+    <b-nav pills>
       <b-nav-item
         :to="{ name: 'payments-crm-list' }"
         exact

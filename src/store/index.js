@@ -15,7 +15,7 @@ import GlobalStore from "@/views/store";
 import stickyNotesStoreModule from "@/layouts/components/navbar/components/sticky-notes/store/sticky-notes.store";
 import TaskStore from '@/store/task'
 import NotificationStore from '@/store/notification'
-
+import InventoryStore from '@/views/commons/components/inventory/store'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -23,7 +23,8 @@ export default new Vuex.Store({
     app,
     appConfig,
     verticalMenu,
-    "app-ecommerce": ecommerceStoreModule,
+    
+    'app-ecommerce': ecommerceStoreModule,
     auth,
     "crm-store": saleMade,
     ...CrmStore,
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     "global-store": GlobalStore,
     TaskStore,
     "sticky-notes": stickyNotesStoreModule,
+    "inventory-store":InventoryStore,
     NotificationStore
   },
   strict: process.env.DEV,
