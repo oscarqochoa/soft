@@ -710,6 +710,7 @@ import ModalNotesBoost from '@/views/commons/components/first-notes/ModalNotesBo
 import ModalNotesParagon from '@/views/commons/components/first-notes/ModalNotesParagon.vue'
 import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue'
 import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms.vue'
+import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasCredit.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -738,6 +739,7 @@ export default {
     ModalNotesParagon,
     ModalNotesFirst,
     ModalNotesTax,
+    ModalNotesCredit,
   },
   props: {
     done: {
