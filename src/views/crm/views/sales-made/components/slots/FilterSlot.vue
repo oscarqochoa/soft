@@ -80,6 +80,7 @@
               class="mb-0 mt-1 mt-sm-0"
               prev-class="prev-item"
               next-class="next-item"
+              @input="$emit('onChangeCurrentPage', $event)"
             >
               <template #prev-text>
                 <feather-icon
@@ -113,6 +114,7 @@
               :options="[10, 25, 50, 100]"
               :clearable="false"
               class="per-page-selector d-inline-block mx-50"
+              @input="$emit('reload', false)"
             />
             <label class="mr-2">entries</label>
             <feather-icon
@@ -185,8 +187,7 @@
       <div class="mx-2 mb-2 mt-2">
         <b-row>
           <b-col
-            cols="12"
-            sm="6"
+           
             class="
                 d-flex
                 align-items-center
@@ -199,9 +200,10 @@
               {{ totalRows }} entries</span>
           </b-col>
           <!-- Pagination -->
+          <slot name="footer"></slot>
           <b-col
-            cols="12"
-            sm="6"
+            
+            
             class="
                 d-flex
                 align-items-center
@@ -217,6 +219,7 @@
               class="mb-0 mt-1 mt-sm-0"
               prev-class="prev-item"
               next-class="next-item"
+              @input="$emit('onChangeCurrentPage', $event)"
             >
               <template #prev-text>
                 <feather-icon

@@ -195,6 +195,19 @@ export default {
         buttonsStyling: false,
       })
     },
+    showWarningSwal(title = "Very Important!", text = "Important Information") {
+      this.$swal({
+        title,
+        text,
+        imageUrl: "/assets/images/icons/swal/warning.svg",
+        imageWidth: 70,
+        confirmButtonText: "Ok",
+        customClass: {
+          confirmButton: "btn btn-primary",
+        },
+        buttonsStyling: false,
+      });
+    },
     showErrorSwal(error) {
       this.$swal({
         html: `<h4><b>Sorry, there was an error... try again or contact support !!!</b></h4> <br/> <span class="font-small-3">${error}</span>`,
@@ -277,5 +290,8 @@ export default {
       }
       return arr
     },
+    isPreloading (status = true) {
+      this.$store.commit("app/SET_LOADING", status)
+    }
   },
 }

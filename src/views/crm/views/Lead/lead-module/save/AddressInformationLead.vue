@@ -3,103 +3,312 @@
     <b-col>
       <b-row>
         <b-col md="6">
-          <!-- SNN? -->
-          <validation-provider
-            #default="validationContext"
-            name="SNN?"
-          >
-            <b-form-group
-              :label="`${!labssn && !labitin ? 'SNN' : statusLabs}`"
-              label-for="snn?"
-              label-cols-md="2"
+          <template v-if="userData.id">
+            <!-- SSN -->
+            <validation-provider
+              v-if="hideSSN || userData.ssn || (!userData.ssn && !userData.itin)"
+              #default="validationContext"
+              name="SSN"
             >
-              <b-input-group>
+              <b-form-group
+                label="SSN"
+                label-for="ssn"
+                label-cols-md="2"
+              >
+                <b-input-group>
+                  <b-form-input
+                    id="ssn"
+                    ref="ssn"
+                    v-model="userData.ssn"
+                    autofocus
+                    :state="getValidationState(validationContext)"
+                    :disabled="disabled.ssn"
+                    trim
+                    maxlength="11"
+                    v-mask="'###-##-####'"
+                    @keyup="onValidSsn"
+                  />
+                  <b-input-group-append v-if="!disabled.ssn" class="border-right">
+                    <b-button
+                      variant="outline-primary"
+                      class="btn-sm"
+                      :disabled="disabled.saveSSN"
+                      @click="onSubmitFields('ssn', 4)"
+                    >
+                      <amg-icon
+                        icon="SaveIcon"
+                        class="cursor-pointer"
+                      />
+                    </b-button>
+                  </b-input-group-append>
+                  <b-input-group-append class="border-right">
+                    <b-button
+                      variant="outline-warning"
+                      class="btn-sm"
+                      @click="toggleElement('ssn')"
+                    >
+                      <amg-icon
+                        :icon="disabled.ssn ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                      />
+                    </b-button>
+                  </b-input-group-append>
+                  <b-input-group-append
+                    class="cursor-pointer"
+                    @click="onModalTrackingChangeOpen(4, 'SSN')"
+                  >
+                    <b-input-group-text>
+                      <amg-icon
+                        icon="ListIcon"
+                      />
+                    </b-input-group-text>
+                  </b-input-group-append>
+                  <b-input-group-append
+                    is-text
+                    class="border-left cursor-pointer"
+                    @click="onAddSocial"
+                  >
+                    <amg-icon
+                      :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
+                    />
+                  </b-input-group-append>
+                </b-input-group>
+              </b-form-group>
+            </validation-provider>
+            <!-- ITIN -->
+            <validation-provider
+              v-if="hideITIN || userData.itin"
+              #default="validationContext"
+              name="ITIN"
+            >
+              <b-form-group
+                label="ITIN"
+                label-for="itin"
+                label-cols-md="2"
+              >
+                <b-input-group>
+                  <b-form-input
+                    id="itin"
+                    ref="itin"
+                    v-model="userData.itin"
+                    autofocus
+                    :state="getValidationState(validationContext)"
+                    :disabled="disabled.itin"
+                    trim
+                    maxlength="11"
+                    v-mask="'###-##-####'"
+                    @keyup="onValidItin"
+                  />
+                  <b-input-group-append v-if="!disabled.itin" class="border-right">
+                    <b-button
+                      variant="outline-primary"
+                      class="btn-sm"
+                      :disabled="disabled.saveITIN"
+                      @click="onSubmitFields('itin', 5)"
+                    >
+                      <amg-icon
+                        icon="SaveIcon"
+                        class="cursor-pointer"
+                      />
+                    </b-button>
+                  </b-input-group-append>
+                  <b-input-group-append class="border-right">
+                    <b-button
+                      variant="outline-warning"
+                      class="btn-sm"
+                      @click="toggleElement('itin')"
+                    >
+                      <amg-icon
+                        :icon="disabled.itin ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                        class="cursor-pointer"
+                      />
+                    </b-button>
+                  </b-input-group-append>
+                  <b-input-group-append
+                    class="cursor-pointer"
+                    @click="onModalTrackingChangeOpen(5, 'ITIN')"
+                  >
+                    <b-input-group-text>
+                      <amg-icon
+                        icon="ListIcon"
+                      />
+                    </b-input-group-text>
+                  </b-input-group-append>
+                  <b-input-group-append
+                    v-if="!hideSSN && !userData.ssn"
+                    is-text
+                    class="cursor-pointer"
+                    variant="warning"
+                    @click="onAddSocial"
+                  >
+                    <amg-icon
+                      :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
+                    />
+                  </b-input-group-append>
+                </b-input-group>
+              </b-form-group>
+            </validation-provider>
+            <!-- CPN -->
+            <validation-provider
+              v-if="hideSSN || (userData.ssn && userData.itin)"
+              #default="validationContext"
+              name="CPN"
+            >
+              <b-form-group
+                label="CPN"
+                label-for="cpn"
+                label-cols-md="2"
+              >
+                <b-input-group>
+                  <b-form-input
+                    id="cpn"
+                    ref="cpn"
+                    v-model="userData.other"
+                    autofocus
+                    :state="getValidationState(validationContext)"
+                    :disabled="disabled.other"
+                    trim
+                    maxlength="11"
+                    v-mask="'###-##-####'"
+                    @keyup="onValidCpn"
+                  />
+                  <b-input-group-append v-if="!disabled.other" class="border-right">
+                    <b-button
+                      variant="outline-primary"
+                      class="btn-sm"
+                      :disabled="disabled.saveCPN"
+                      @click="onSubmitFields('cpn', 6, 'other')"
+                    >
+                      <amg-icon
+                        icon="SaveIcon"
+                        class="cursor-pointer"
+                      />
+                    </b-button>
+                  </b-input-group-append>
+                  <b-input-group-append class="border-right">
+                    <b-button
+                      variant="outline-warning"
+                      class="btn-sm"
+                      @click="toggleElement('other')"
+                    >
+                      <amg-icon
+                        :icon="disabled.other ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                        class="cursor-pointer"
+                      />
+                    </b-button>
+                  </b-input-group-append>
+                  <b-input-group-append
+                    class="cursor-pointer"
+                    @click="onModalTrackingChangeOpen(6, 'CPN')"
+                  >
+                    <b-input-group-text>
+                      <amg-icon
+                        icon="ListIcon"
+                      />
+                    </b-input-group-text>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-form-group>
+            </validation-provider>
+          </template>
+          <template v-else>
+            <!-- SSN? -->
+            <validation-provider
+              #default="validationContext"
+              name="SSN?"
+            >
+              <b-form-group
+                :label="`${!labssn && !labitin ? 'SSN' : statusLabs}`"
+                label-for="ssn?"
+                label-cols-md="2"
+              >
+                <b-input-group>
+                  <b-form-input
+                    id="ssn?"
+                    v-model="userData.social"
+                    autofocus
+                    :state="getValidationState(validationContext)"
+                    trim
+                    maxlength="11"
+                    v-mask="'###-##-####'"
+                    @input="security"
+                  />
+                  <b-input-group-append is-text variant="warning">
+                    <amg-icon
+                      :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
+                      class="cursor-pointer"
+                      @click="toggleSocial"
+                    />
+                  </b-input-group-append>
+                </b-input-group>
+              </b-form-group>
+            </validation-provider>
+            <!-- SSN -->
+            <validation-provider
+              v-if="hideSSN"
+              #default="validationContext"
+              name="SSN"
+            >
+              <b-form-group
+                label="SSN"
+                label-for="ssn"
+                label-cols-md="2"
+              >
                 <b-form-input
-                  id="snn?"
-                  v-model="userData.social.value"
+                  id="ssn"
+                  v-model="userData.ssn"
                   autofocus
                   :state="getValidationState(validationContext)"
                   trim
                   maxlength="11"
                   v-mask="'###-##-####'"
-                  @input="security"
                 />
-                <b-input-group-append is-text variant="warning">
-                  <feather-icon
-                    :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
-                    class="cursor-pointer"
-                    @click="toggleSocial"
-                  />
-                </b-input-group-append>
-              </b-input-group>
-            </b-form-group>
-          </validation-provider>
-          <!-- SNN -->
-          <validation-provider
-            v-if="hideSSN"
-            #default="validationContext"
-            name="SNN"
-          >
-            <b-form-group
-              label="SNN"
-              label-for="snn"
-              label-cols-md="2"
+              </b-form-group>
+            </validation-provider>
+            <!-- ITIN -->
+            <validation-provider
+              v-if="hideITIN"
+              #default="validationContext"
+              name="ITIN"
             >
-              <b-form-input
-                id="snn"
-                v-model="userData.ssn"
-                autofocus
-                :state="getValidationState(validationContext)"
-                trim
-                maxlength="11"
-                v-mask="'###-##-####'"
-              />
-            </b-form-group>
-          </validation-provider>
-          <!-- ITIN -->
-          <validation-provider
-            v-if="hideITIN"
-            #default="validationContext"
-            name="ITIN"
-          >
-            <b-form-group
-              label="ITIN"
-              label-for="itin"
-              label-cols-md="2"
+              <b-form-group
+                label="ITIN"
+                label-for="itin"
+                label-cols-md="2"
+              >
+                <b-form-input
+                  id="itin"
+                  v-model="userData.itin"
+                  autofocus
+                  :state="getValidationState(validationContext)"
+                  trim
+                  maxlength="11"
+                  v-mask="'###-##-####'"
+                />
+              </b-form-group>
+            </validation-provider>
+            <!-- CPN -->
+            <validation-provider
+              v-if="hideCPN"
+              #default="validationContext"
+              name="CPN"
             >
-              <b-form-input
-                id="itin"
-                v-model="userData.itin"
-                autofocus
-                :state="getValidationState(validationContext)"
-                trim
-                maxlength="11"
-                v-mask="'###-##-####'"
-              />
-            </b-form-group>
-          </validation-provider>
-          <!-- CPN -->
-          <validation-provider
-            v-if="hideCPN"
-            #default="validationContext"
-            name="CPN"
-          >
-            <b-form-group
-              label="CPN"
-              label-for="cpn"
-              label-cols-md="2"
-            >
-              <b-form-input
-                id="cpn"
-                v-model="userData.other"
-                autofocus
-                :state="getValidationState(validationContext)"
-                trim
-                maxlength="11"
-                v-mask="'###-##-####'"
-              />
-            </b-form-group>
-          </validation-provider>
+              <b-form-group
+                label="CPN"
+                label-for="cpn"
+                label-cols-md="2"
+              >
+                <b-form-input
+                  id="cpn"
+                  v-model="userData.other"
+                  autofocus
+                  :state="getValidationState(validationContext)"
+                  trim
+                  maxlength="11"
+                  v-mask="'###-##-####'"
+                />
+              </b-form-group>
+            </validation-provider>
+          </template>
         </b-col>
         <b-col md="6">
           <!-- Phone -->
@@ -111,14 +320,53 @@
               label="Phone (H)"
               label-for="phone"
             >
-              <b-form-input
-                id="phone"
-                v-model="userData.phone"
-                :state="getValidationState(validationContext)"
-                trim
-                maxlength="14"
-                @keyup.native="phone()"
-              />
+              <b-input-group>
+                <b-form-input
+                  id="phone"
+                  v-model="userData.phone"
+                  :state="getValidationState(validationContext)"
+                  trim
+                  maxlength="14"
+                  :disabled="userData.id && disabled.phone"
+                  @keyup.native="phone()"
+                />
+                <template v-if="userData.id">
+                  <b-input-group-append v-if="!disabled.phone" class="border-right">
+                    <b-button
+                      variant="outline-primary"
+                      class="btn-sm"
+                      @click="onSubmitFields('phoneh', 2, 'phone')"
+                    >
+                      <amg-icon
+                        icon="SaveIcon"
+                        class="cursor-pointer"
+                      />
+                    </b-button>
+                  </b-input-group-append>
+                  <b-input-group-append class="border-right">
+                    <b-button
+                      variant="outline-warning"
+                      class="btn-sm"
+                      @click="toggleElement('phone')"
+                    >
+                      <amg-icon
+                        :icon="disabled.phone ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                        class="cursor-pointer"
+                      />
+                    </b-button>
+                  </b-input-group-append>
+                  <b-input-group-append
+                    class="cursor-pointer"
+                    @click="onModalTrackingChangeOpen(2, 'PHONE (H)')"
+                  >
+                    <b-input-group-text>
+                      <amg-icon
+                        icon="ListIcon"
+                      />
+                    </b-input-group-text>
+                  </b-input-group-append>
+                </template>
+              </b-input-group>
 
               <b-form-invalid-feedback>
                 {{ validationContext.errors[0] }}
@@ -135,14 +383,53 @@
               label="Phone (M)"
               label-for="mobile"
             >
-              <b-form-input
-                id="mobile"
-                v-model="userData.mobile"
-                :state="getValidationState(validationContext)"
-                trim
-                maxlength="14"
-                @keyup.native="mobile()"
-              />
+              <b-input-group>
+                <b-form-input
+                  id="mobile"
+                  v-model="userData.mobile"
+                  :state="getValidationState(validationContext)"
+                  trim
+                  maxlength="14"
+                  :disabled="userData.id && disabled.mobile"
+                  @keyup.native="mobile()"
+                />
+                <template v-if="userData.id">
+                  <b-input-group-append v-if="!disabled.mobile" class="border-right">
+                    <b-button
+                      variant="outline-primary"
+                      class="btn-sm"
+                      @click="onSubmitFields('phonem', 3, 'mobile')"
+                    >
+                      <amg-icon
+                        icon="SaveIcon"
+                        class="cursor-pointer"
+                      />
+                    </b-button>
+                  </b-input-group-append>
+                  <b-input-group-append class="border-right">
+                    <b-button
+                      variant="outline-warning"
+                      class="btn-sm"
+                      @click="toggleElement('mobile')"
+                    >
+                      <amg-icon
+                        :icon="disabled.mobile ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                        class="cursor-pointer"
+                      />
+                    </b-button>
+                  </b-input-group-append>
+                  <b-input-group-append
+                    class="cursor-pointer"
+                    @click="onModalTrackingChangeOpen(3, 'PHONE (M)')"
+                  >
+                    <b-input-group-text>
+                      <amg-icon
+                        icon="ListIcon"
+                      />
+                    </b-input-group-text>
+                  </b-input-group-append>
+                </template>
+              </b-input-group>
 
               <b-form-invalid-feedback>
                 {{ validationContext.errors[0] }}
@@ -151,15 +438,14 @@
           </validation-provider>
         </b-col>
       </b-row>
-      <address-lead :addressData="userData.address" :state-options="stateOptions"></address-lead>
+      <address-component :address-data="userData.address" @onSubmitAddress="onSubmitAddress" @onModalTrackingChangeOpen="onModalTrackingChangeOpen(1, 'ADDRESS')" />
       <b-row>
         <b-col md="6">
           <b-form-group>
             <b-form-checkbox
               id="another-address"
               name="another-address"
-              value="another-address"
-              @input="withotheraddress"
+              v-model="hideWithOtherAddress"
               class="mt-2"
             >
               Another address?
@@ -181,10 +467,11 @@
             >
               <v-select
                 id="originCountry"
-                v-model="userData.originCountry"
+                v-model="userData.origin_country"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 label="label"
-                :options="countryOptions"
+                :options="G_COUNTRIES"
+                :reduce="el => el.id"
               />
               <b-form-invalid-feedback :state="getValidationState(validationContext)">
                 {{ validationContext.errors[0] }}
@@ -193,13 +480,13 @@
           </validation-provider>
         </b-col>
       </b-row>
-      <address-lead v-if="hideWithOtherAddress" :addressData="userData.otherAddress" :state-options="stateOptions"></address-lead>
+      <address-component v-if="hideWithOtherAddress" :address-data="userData.otherAddress" @onSubmitAddress="onSubmitAnotherAddress" @onModalTrackingChangeOpen="onModalTrackingChangeOpen(8, 'OTHER ADDRESS')" />
     </b-col>
   </b-row>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import {
   BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
 } from 'bootstrap-vue'
@@ -212,11 +499,11 @@ import VueGoogleAutocomplete from 'vue-google-autocomplete'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import countries from '@/@fake-db/data/other/countries'
 
-import AddressLead from '@/views/crm/views/Lead/components/AddressComponent.vue'
+import AddressComponent from '@/views/crm/views/Lead/components/AddressComponent.vue'
 
 export default {
   components: {
-    AddressLead,
+    AddressComponent,
     BSidebar,
     BForm,
     BFormGroup,
@@ -234,69 +521,86 @@ export default {
   },
   props: {
     userData: {
+      type: Object,
       required: true
     },
-    statusLeadOptions: {
-      type: Array,
-      required: true,
-    },
-    stateOptions: {
-      type: Array,
-      required: true,
-    },
-    countryOptions: {
-      type: Array,
-      required: true,
+    blankUserFields: {
+      type: Object,
+      required: false,
     }
   },
   data() {
     return {
-      required,
+      addSocial: false,
       alphaNum,
-      email,
+      blankUserData: new Object,
       countries,
-      labssn: false,
-      labitin: false,
+      disabled: {
+        ssn: true,
+        itin: true,
+        other: true,
+        phone: true,
+        mobile: true,
+        saveSSN: false,
+        saveITIN: false,
+      },
+      email,
       hideSSN: false,
       hideITIN: false,
       hideCPN: false,
-      addSocial: false,
+      hideWithOtherAddress: false,
+      labssn: false,
+      labitin: false,
       location: null,
-      hideWithOtherAddress: false
+      required,
     }
   },
-  setup(props, { emit }) {
-    const blankUserData = {
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      email: '',
-      programs: '',
-      dob: '',
-      language: '',
-      stateLead: '',
-    }
-
-    const resetuserData = () => {
-      userData.value = JSON.parse(JSON.stringify(blankUserData))
-    }
+  computed: {
+    statusLabs () {
+      return this.labssn ? 'SSN' : 'ITIN'
+    },
+    ...mapGetters({
+      G_COUNTRIES: 'CrmGlobalStore/G_COUNTRIES',
+    }),
+  },
+  created () {
+    this.setDataBlank('userData')
+  },
+  setup () {
     const {
       refFormObserver,
       getValidationState,
-    } = formValidation(resetuserData)
+    } = formValidation(() => {})
 
     return {
       refFormObserver,
-      getValidationState,
+      getValidationState
     }
   },
   methods: {
     ...mapActions({
       A_UNIQUE_MOBILE: 'CrmGlobalStore/A_UNIQUE_MOBILE',
-      A_SET_REQUEST_LEADS: 'CrmLeadStore/A_SET_REQUEST_LEADS'
+      A_SET_REQUEST_LEADS: 'CrmLeadStore/A_SET_REQUEST_LEADS',
+      A_VALID_UNIQUE_SSN: 'CrmLeadStore/A_VALID_UNIQUE_SSN',
+      A_VALID_UNIQUE_ITIN: 'CrmLeadStore/A_VALID_UNIQUE_ITIN',
+      A_VALID_UNIQUE_CPN: 'CrmLeadStore/A_VALID_UNIQUE_CPN',
+      A_UPDATE_FIELDS_LEAD: 'CrmLeadStore/A_UPDATE_FIELDS_LEAD',
     }),
+    setDataBlank (key) {
+      this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`] = Object.assign({}, this[key])
+    },
+    resetData (key) {
+      const object = this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`]
+      for (let subkey in object) {
+        this[key][subkey] = object[subkey]
+      }
+    },
+    resetElement (key, subkey) {
+      const object = this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`]
+      this[key][subkey] = object[subkey]
+    },
     security() {
-      const val = this.userData.social.value.substr(0, 1)
+      const val = this.userData.social.substr(0, 1)
       if ([ '', '0', '1', '2', '3', '4', '5', '6', '7', '8' ].includes(val)) {
         this.labssn = true
         this.labitin = false
@@ -317,12 +621,12 @@ export default {
       }
     },
     toggleSocial () {
-      const val = this.userData.social.value.substr(0, 1)
+      const val = this.userData.social.substr(0, 1)
       if (!this.addSocial) {
         this.hideSSN = false
         this.hideITIN = true
         this.hideCPN = true
-        if (val == 9) {
+        if (val === '9') {
           this.hideSSN = true
           this.hideITIN = false
         }
@@ -333,14 +637,17 @@ export default {
       }
       this.addSocial = !this.addSocial
     },
-    withotheraddress () {
-      if (!this.hideWithOtherAddress) {
-        this.hideWithOtherAddress = true
-        this.userData.anotherAddress = 1
+    onAddSocial () {
+      if (!this.addSocial) {
+        this.hideSSN = true
+        this.hideITIN = true
+        this.hideCPN = true
       } else {
-        this.hideWithOtherAddress = false
-        this.userData.anotherAddress = 0
+        this.hideSSN = false
+        this.hideITIN = false
+        this.hideCPN = false
       }
+      this.addSocial = !this.addSocial
     },
     phone () {
       var x = this.userData.phone
@@ -380,12 +687,178 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-  },
-  computed: {
-    statusLabs () {
-      return this.labssn ? 'SNN' : 'ITIN'
+    toggleElement (key) {
+      this.disabled[key] = !this.disabled[key]
+      if (this.disabled[key])
+        this.resetElement('userData', key)
+    },
+    async onValidSsn () {
+      try {
+        this.$refs.ssn.$el.classList.remove('is-invalid')
+        this.disabled.saveSSN = false
+        if (this.userData.ssn.length === 11) {
+          this.isPreloading()
+          const response = await this.A_VALID_UNIQUE_SSN({ ssn: this.userData.ssn })
+          if (this.isResponseSuccess(response)) {
+            if (response.data.code === 'ssn') {
+              this.disabled.saveSSN = true
+              this.$refs.ssn.$el.classList.remove('is-valid')
+              this.$refs.ssn.$el.classList.add('is-invalid')
+              this.showWarningSwal('Alert!', 'The ssn number already exists: ' + response.data.message)
+            }
+          }
+          this.isPreloading(false)
+        }
+      } catch (error) {
+        console.log('spmething went wrong onValidSsn: ', error)
+        this.isPreloading(false)
+        this.showErrorSwal()
+      }
+    },
+    async onValidItin () {
+      try {
+        this.$refs.itin.$el.classList.remove('is-invalid')
+        this.disabled.saveITIN = false
+        if (this.userData.itin.length === 11) {
+          this.isPreloading(true)
+          const response = await this.A_VALID_UNIQUE_ITIN({ itin: this.userData.itin })
+          if (this.isResponseSuccess(response)) {
+            if (response.data.code === 'itin') {
+              this.disabled.saveITIN = true
+              this.$refs.itin.$el.classList.remove('is-valid')
+              this.$refs.itin.$el.classList.add('is-invalid')
+              this.showWarningSwal('Alert!', 'The itin number already exists: ' + response.data.message)
+            }
+          }
+          this.isPreloading(false)
+        }
+      } catch (error) {
+        console.log('spmething went wrong onValidSsn: ', error)
+        this.isPreloading(false)
+        this.showErrorSwal()
+      }
+    },
+    async onValidCpn () {
+      try {
+        this.$refs.cpn.$el.classList.remove('is-invalid')
+        this.disabled.saveITIN = false
+        if (this.userData.other.length === 11) {
+          this.isPreloading(true)
+          const response = await this.A_VALID_UNIQUE_CPN({ other: this.userData.other })
+          if (this.isResponseSuccess(response)) {
+            if (response.data.code === 'cpn') {
+              this.disabled.saveITIN = true
+              this.$refs.cpn.$el.classList.remove('is-valid')
+              this.$refs.cpn.$el.classList.add('is-invalid')
+              this.showWarningSwal('Alert!', 'The cpn number already exists: ' + response.data.message)
+            }
+          }
+          this.isPreloading(false)
+        }
+      } catch (error) {
+        console.log('spmething went wrong onValidSsn: ', error)
+        this.isPreloading(false)
+        this.showErrorSwal()
+      }
+    },
+    async onSubmitFields (key, typee, subkey) {
+      this.showConfirmSwal()
+      .then(async result => {
+        if (result.value) {
+          this.isPreloading(true)
+          const response = await this.A_UPDATE_FIELDS_LEAD({
+            ...this.blankUserFields,
+            typee,
+            [key]: (this.userData[subkey]) ? this.userData[subkey] : this.userData[key]
+          })
+          if (this.userData[subkey]) { key = subkey }
+          this.isPreloading(false)
+          if (this.isResponseSuccess(response)) {
+            this.blankUserData[key] = this.userData[key]
+            this.toggleElement(key)
+            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+          } else
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
+        }
+      }).catch(error => {
+        console.log('spmething went wrong onSubmitFields: ', error)
+        this.isPreloading(false)
+        this.showErrorSwal()
+      })
+    },
+    async onSubmitAddress () {
+      this.showConfirmSwal()
+      .then(async result => {
+        if (result.value) {
+          this.isPreloading(true)
+          const response = await this.A_UPDATE_FIELDS_LEAD({
+            ...this.blankUserFields,
+            typee: 1,
+            street: this.userData.address.street,
+            city: this.userData.address.city,
+            state: this.userData.address.state,
+            zipcode: this.userData.address.zipcode,
+            country: this.userData.address.country,
+          })
+          this.isPreloading(false)
+          if (this.isResponseSuccess(response)) {
+            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+          } else
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
+        }
+      }).catch(error => {
+        console.log('spmething went wrong onSubmitAddress: ', error)
+        this.isPreloading(false)
+        this.showErrorSwal()
+      })
+    },
+    async onSubmitAnotherAddress () {
+      this.showConfirmSwal()
+      .then(async result => {
+        if (result.value) {
+          this.isPreloading(true)
+          const response = await this.A_UPDATE_FIELDS_LEAD({
+            ...this.blankUserFields,
+            typee: 8,
+            other_street: this.userData.otherAddress.street,
+            other_city: this.userData.otherAddress.city,
+            other_state: this.userData.otherAddress.state,
+            other_zipcode: this.userData.otherAddress.zipcode,
+            other_country: this.userData.otherAddress.country,
+          })
+          this.isPreloading(false)
+          if (this.isResponseSuccess(response)) {
+            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+          } else
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
+        }
+      }).catch(error => {
+        console.log('spmething went wrong onSubmitAnotherAddress: ', error)
+        this.isPreloading(false)
+        this.showErrorSwal()
+      })
+    },
+    onModalTrackingChangeOpen (type, name) {
+      this.$emit('onModalTrackingChangeOpen', { type, name, mapFunction: (el) => ({
+          ...el,
+          main_row: el.fields,
+          main_row_hide: el.fields_secret,
+          seeHideCell: false,
+        })
+      })
     },
   },
+  mounted () {
+    this.hideWithOtherAddress = this.userData.otherAddress.street !== null
+  },
+  watch: {
+    hideWithOtherAddress (current, old) {
+      if (current)
+        this.userData.another_address = 1
+      else
+        this.userData.another_address = 0
+    }
+  }
 }
 </script>
 

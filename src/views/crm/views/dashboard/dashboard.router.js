@@ -4,7 +4,8 @@ export default [
         name: 'dashboard-crm',
         component: () => import('@/views/crm/views/dashboard/Dashboard.vue'),
         meta:{
-            isClientsTab: true
+            isClientsTab: true,
+            module: 2,
         },
     }
 ]

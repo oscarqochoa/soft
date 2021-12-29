@@ -9,7 +9,8 @@ import ListsRoute from '../views/lists/lists.router'
 import GlossaryRoute from '../views/glossary/glossary.router'
 import loansRoute from '../views/loans/loans.router'
 import FileManangerRoute from '@/views/crm/views/file-mananger/file-mananger.router.js'
-
+import InventoryRouter from '../views/inventory/inventory.router'
+import NcrRouter from '../views/ncr/ncr.router'
 const routes = [
   ...viewRoute,
   ...leadRoute,
@@ -21,8 +22,11 @@ const routes = [
   ...PaymentsRoute,
   ...ListsRoute,
   ...GlossaryRoute,
+  ...InventoryRouter,
+  ...NcrRouter,
   FileManangerRoute,
 ]
+
 
 routes.map(route => {
   if (route.meta) {
