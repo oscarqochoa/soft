@@ -1,136 +1,19 @@
 <template>
   <div>
-    <b-card no-body class="mb-1">
-      <div class="mx-2 mb-2 mt-2">
-        <b-row>
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            "
-          >
-            <span class="text-muted"
-              >Showing {{ startPage }} to {{ toPage }} of
-              {{ totalData }} entries</span
-            >
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-end
-            "
-          >
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
-          </b-col>
-        </b-row>
-      </div>
-      <div class="m-2">
-        <!-- Table Top -->
-        <b-row>
-          <!-- Per Page -->
-          <b-col
-            cols="12"
-            md="4"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Show</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label class="mr-2">entries</label>
-            <feather-icon
-              class="cursor-pointer"
-              icon="RefreshCcwIcon"
-              size="20"
-              @click="resetSearch"
-            />
-          </b-col>
-          <!-- Search -->
-          <b-col cols="12" md="8">
-            <div class="d-flex align-items-end justify-content-end">
-              <b-form-group label="From" label-for="from" class="mb-md-0 mb-2">
-                <b-form-datepicker
-                  class="per-page-datepicker d-inline-block mx-50"
-                  id="from"
-                  :date-format-options="{
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                  }"
-                  v-model="fromToObject.from"
-                />
-              </b-form-group>
-              <!-- <label>{{filter.label}}</label> -->
-
-              <b-form-group label="To" label-for="to" class="mb-md-0 mb-2">
-                <b-form-datepicker
-                  class="per-page-datepicker d-inline-block mx-50"
-                  id="to"
-                  :date-format-options="{
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                  }"
-                  v-model="fromToObject.to"
-                />
-              </b-form-group>
-              <!-- <label>{{filter.label}}</label> -->
-              <b-form-group class="mb-md-0 mb-2">
-                <v-select
-                  v-model="seller"
-                  class="per-page-datepicker d-inline-block mx-50"
-                  style="font-size: 15px"
-                  placeholder="Select Seller"
-                  label="user_name"
-                  :options="sellers"
-                  :reduce="(val) => val.id"
-                />
-              </b-form-group>
-              <b-button
-                variant="primary"
-                class="button-top"
-                @click="$refs.refClientsList.refresh()"
-              >
-                <div class="d-flex">
-                  <span class="mr-50"
-                    ><feather-icon icon="FilterIcon" size="15"
-                  /></span>
-
-                  <span class="text-nowrap">{{ "Search" }}</span>
-                </div>
-              </b-button>
-            </div>
-          </b-col>
-        </b-row>
-      </div>
+    <filter-slot
+        v-scrollbar
+        :filter="filter"
+        :filter-principal="filterPrincipal"
+        :total-rows="totalRows"
+        :paginate="paginate"
+        :start-page="startPage"
+        :to-page="toPage"
+        :send-multiple-sms="false"
+        @reload="$refs['refClientsList'].refresh()"
+      >
       <b-table
+        slot="table"
+        no-provider-filtering
         :api-url="clientRoute"
         ref="refClientsList"
         :items="myProvider"
@@ -140,8 +23,8 @@
         responsive="sm"
         show-empty
         sticky-header="50vh"
-        :current-page="currentPage"
-        :per-page="perPage"
+        :current-page="paginate.currentPage"
+        :per-page="paginate.perPage"
       >
         <template #table-busy>
           <div class="text-center text-primary my-2">
@@ -155,7 +38,7 @@
             
           >  
             <a href="www.google.com" target="_blank"
-            style="text-decoration-line: underline;"> {{data.item.lead_name}} link</a>
+            class="select-lead-name"> {{data.item.lead_name}} link</a>
             <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
           </div>
         </template>
@@ -418,7 +301,7 @@
           </div>
         </template>
       </b-table>
-    </b-card>
+    </filter-slot>
     <modal-tracking-status
       v-if="modalTrackingStatus"
       :modalTrackingStatus="modalTrackingStatus"
@@ -446,11 +329,15 @@ import { mapGetters } from "vuex";
 import vSelect from "vue-select";
 import ModalQuestionnaire from "../../modal/ModalQuestionnaire.vue";
 import ModalTrackingStatus from "../../modal/ModalTrackingStatus.vue";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import ncrmixin from '../../mixin'
 export default {
+  mixins: [ncrmixin],
   components: {
     vSelect,
     ModalQuestionnaire,
     ModalTrackingStatus,
+    FilterSlot,
   },
   props: {
     status: {
@@ -459,16 +346,21 @@ export default {
   },
   data() {
     return {
+      totalRows: 0,
+      paginate: {
+        currentPage: 1,
+        perPage: 10,
+      },
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
-      startPage: "",
-      toPage: "",
+      startPage:null,
+      toPage: null,
       totalData: "",
-      currentPage: 1,
-      perPage: 10,
       perPageOptions: [10, 25, 50, 100],
-      fromToObject: {
-        from: null,
-        to: null,
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Client...",
+        model: "",
       },
       arrayColumns: [
         {
@@ -551,6 +443,51 @@ export default {
       status_id: "",
       score_id: "",
       lead_name: "",
+      filter: [
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Seller",
+          model: null,
+          options: [],
+          reduce: "id",
+          selectText: "user_name",
+          cols: 12,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+      ],
     };
   },
   computed: {
@@ -569,19 +506,17 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        name_text: "",
-        date_from: this.fromToObject.from,
-        date_to: this.fromToObject.to,
+        name_text: this.filterPrincipal.model,
+        date_from: this.filter[1].model,
+        date_to: this.filter[2].model,
         orderby: this.dato2 == null ? 4 : this.dato2,
         order: this.dato1 == null ? "desc" : this.dato1,
         user_id: this.currentUser.user_id,
         role_id: this.currentUser.role_id,
-        seller: this.seller,
+        seller: this.filter[0].model,
         modul: this.$route.meta.module,
       });
-      // Must return a promise that resolves to an array of items
       return promise.then((data) => {
-        // Pluck the array of items off our axios response
         const items = data.data.data;
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
@@ -589,6 +524,7 @@ export default {
         this.nextPage = this.startPage + 1;
         this.endPage = data.data.last_page;
         this.totalData = data.data.total;
+        this.totalRows = data.data.total;
         this.toPage = data.data.to;
         if (items != null) {
           items.map((item) => {
@@ -599,13 +535,7 @@ export default {
         return items || [];
       });
     },
-    openModalQuestionnaire(score_id, lead_name, status_id, question_id) {
-      this.status_id = status_id;
-      this.question_id = question_id;
-      this.score_id = score_id;
-      this.lead_name = lead_name;
-      this.modalQuestionnaire = true;
-    },
+    
     closeModalQuestionnaire() {
       this.modalQuestionnaire = false;
     },
@@ -621,5 +551,12 @@ export default {
       this.modalTrackingStatus = false;
     },
   },
+  
 };
 </script>
+
+<style scoped>
+  .select-lead-name:hover {
+    text-decoration-line: underline
+}
+</style>

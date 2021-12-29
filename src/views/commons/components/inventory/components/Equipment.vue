@@ -1,6 +1,7 @@
 <template>
   <div>
-    <b-tabs pills lazy>
+    <b-tabs pills lazy
+    active-nav-item-class="bg-important border-0 shadow-none">
       <b-tab title="Available" v-if="[19, 16, 12].includes($route.meta.module)">
         <!-- <pending-done active
          :status="1"

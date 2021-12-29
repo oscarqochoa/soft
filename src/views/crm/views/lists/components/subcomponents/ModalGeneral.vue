@@ -1,8 +1,6 @@
 <template>
   <div>
     <b-modal
-      
-
       modal
       centered
       :title="`${objectLead.leadname}`"

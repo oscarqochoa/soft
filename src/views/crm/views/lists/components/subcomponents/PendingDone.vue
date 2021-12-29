@@ -4,7 +4,7 @@
         v-scrollbar
         :filter="filter"
         :filter-principal="filterPrincipal"
-        :total-rows="totalData"
+        :total-rows="totalRows"
         :paginate="paginate"
         :start-page="startPage"
         :to-page="toPage"
@@ -124,13 +124,11 @@ export default {
       searchInput: "",
       orderby: "",
       order: "",
-      startPage: "",
+      startPage: null,
       endPage: "",
       totalData: "",
-      // perPage: 10,
       nextPage: "",
-      // currentPage: 1,
-      toPage: "",
+      toPage: null,
       isBusy: false,
       perPageOptions: [10, 25, 50, 100],
       arrayColumns: [
@@ -278,6 +276,7 @@ export default {
         this.nextPage = this.startPage + 1;
         this.endPage = data.data.last_page;
         this.totalData = data.data.total;
+        this.totalRows = data.data.total;
         this.toPage = data.data.to;
         // Must return an array of items or an empty array if an error occurred
         return items || [];
