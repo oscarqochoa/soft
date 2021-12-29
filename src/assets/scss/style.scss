@@ -208,3 +208,21 @@ $borderamg: #efb911;
 .x-close-position {
   transform: translate(-12px, 4px) !important;
 }
+
+.hover-primary:hover {
+  background: #3764ff;
+  border-color: #3764ff !important;
+  color: #fff !important;
+}
+
+.border-primary-i {
+  border-color: #3764ff !important;
+}
+.border-important {
+  border-color: #ff3d60 !important;
+}
+
+.box-shadow-important {
+  box-shadow: 0 4px 8px 0 rgba($important, 0.12),
+    0 2px 4px 0 rgba($important, 0.08) !important;
+}

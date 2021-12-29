@@ -1,5 +1,5 @@
 export default {
-  title: 'Sales Made',
-  icon: 'DollarSignIcon',
-  route: 'sales-made-crm-new-client',
-}
+  title: "Sales Made",
+  icon: "FileTextIcon",
+  route: "sales-made-crm-new-client",
+};
