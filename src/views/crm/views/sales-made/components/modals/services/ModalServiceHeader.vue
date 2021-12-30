@@ -13,129 +13,111 @@
       <b-row class="mt-1 px-2">
         <b-col
           v-if="!modalAddShow && !modalAddLead"
-          cols="3"
+          :cols="twoPerRow ? 6 : 3"
         >
           <h5>Program</h5>
           <p class="border-2 border-primary rounded text-primary text-center py10">
             {{ sales.program }}
           </p>
         </b-col>
-        <b-col cols="3">
+        <b-col :cols="twoPerRow ? 6 : 3">
           <h5>Client</h5>
           <p class="border-2 border-primary rounded text-primary text-center py10">
             {{ sales.client }}
           </p>
         </b-col>
-      </b-row>
-      <b-row
-        v-if="modalAddShow"
-        class="mt-1"
-      >
-        <b-col md="6">
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                TYPE
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="typeAddChange + 'SERVICES'"
-            />
-          </b-input-group>
+        <b-col
+          v-if="modalAddShow"
+          :cols="twoPerRow ? 6 : 3"
+        >
+          <h5>Type</h5>
+          <p class="border-2 border-primary rounded text-primary text-center py10">
+            {{ typeAddChange }} SERVICES
+          </p>
         </b-col>
-        <b-col md="6">
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                ORIGIN
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="sales.program_first"
-            />
-          </b-input-group>
+        <b-col
+          v-if="modalAddShow"
+          :cols="twoPerRow ? 6 : 3"
+        >
+          <h5>Origin</h5>
+          <p class="border-2 border-primary rounded text-primary text-center py10">
+            {{ sales.program_first }}
+          </p>
         </b-col>
-        <b-col md="6">
-          <b-input-group>
-            <b-input-group-prepend>
-              <b-btn variant="secondary">
-                DESTINATION
-              </b-btn>
-            </b-input-group-prepend>
-            <b-form-input
-              disabled
-              :value="sales.program"
-            />
-          </b-input-group>
+        <b-col
+          v-if="modalAddShow"
+          :cols="twoPerRow ? 6 : 3"
+        >
+          <h5>Destination</h5>
+          <p class="border-2 border-primary rounded text-primary text-center py10">
+            {{ sales.program }}
+          </p>
         </b-col>
-      </b-row>
 
-      <b-row
-        v-if="modalAddService || modalAddLead"
-        class="mt-1"
-      >
         <div
-          class="form-group"
-          style="margin: 0px 10px;"
+          v-if="modalAddService || modalAddLead"
         >
-          <label class="mb-0">Select Program</label>
-          <select
-            v-model="program"
-            class="input-form"
-            style="color: #666666 !important"
-            @change="changeProgram()"
+          <div
+            class="form-group"
+            style="margin: 0px 10px;"
           >
-            <option
-              v-for="(item, index) in programsAll"
-              :key="index"
-              :value="item.id"
-            >{{ item.value }}</option>
-          </select>
-        </div>
-        <div
-          class="form-group"
-          style="margin: 0px 10px;"
-        >
-          <label class="mb-0">Catcher:</label>
-          <select
-            id
-            v-model="captured"
-            name
-            class="input-form"
+            <label class="mb-0">Select Program</label>
+            <select
+              v-model="program"
+              class="input-form"
+              style="color: #666666 !important"
+              @change="changeProgram()"
+            >
+              <option
+                v-for="(item, index) in programsAll"
+                :key="index"
+                :value="item.id"
+              >{{ item.value }}</option>
+            </select>
+          </div>
+          <div
+            class="form-group"
+            style="margin: 0px 10px;"
           >
-            <option value="1">
-              CEO
-            </option>
-            <option
-              v-for="(item, index) in usersServices"
-              :key="index"
-              :value="item.id"
-            >{{ item.user_name }}</option>
-          </select>
-        </div>
-        <div
-          class="form-group"
-          style="margin: 0px 10px;"
-        >
-          <label class="mb-0">Seller:</label>
-          <select
-            id
-            v-model="seller"
-            name
-            class="input-form"
-            :disabled="rolAdvisor"
+            <label class="mb-0">Catcher:</label>
+            <select
+              id
+              v-model="captured"
+              name
+              class="input-form"
+            >
+              <option value="1">
+                CEO
+              </option>
+              <option
+                v-for="(item, index) in usersServices"
+                :key="index"
+                :value="item.id"
+              >{{ item.user_name }}</option>
+            </select>
+          </div>
+          <div
+            class="form-group"
+            style="margin: 0px 10px;"
           >
-            <option value="1">
-              CEO
-            </option>
-            <option
-              v-for="(item, index) in usersServices"
-              :key="index"
-              :value="item.id"
-            >{{ item.user_name }}</option>
-          </select>
+            <label class="mb-0">Seller:</label>
+            <select
+              id
+              v-model="seller"
+              name
+              class="input-form"
+              :disabled="rolAdvisor"
+            >
+              <option value="1">
+                CEO
+              </option>
+              <option
+                v-for="(item, index) in usersServices"
+                :key="index"
+                :value="item.id"
+              >{{ item.user_name }}</option>
+            </select>
+          </div>
         </div>
       </b-row>
     </b-container>
@@ -177,6 +159,11 @@ export default {
         program_first: '',
         typeAdd: '',
       }),
+    },
+    twoPerRow: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   data() {
@@ -242,6 +229,9 @@ export default {
         this.changeProgram()
       }
     },
+  },
+  created() {
+    if (!this.sales.program_first) this.sales.program_first = this.sales.first_program
   },
   mounted() {
     if (this.modalAddService || this.modalAddLead) {

@@ -10,9 +10,19 @@ export default [
     label: 'Client',
   },
   {
-    key: 'program',
+    key: 'type',
+    label: 'TY',
     sortable: false,
-    label: 'Program',
+  },
+  {
+    key: 'first_program',
+    label: 'OR',
+    sortable: false,
+  },
+  {
+    key: 'program',
+    label: 'DE',
+    sortable: false,
   },
   {
     key: 'captured',

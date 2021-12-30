@@ -108,6 +108,7 @@
         </template>
         <template v-slot:cell(status)="data">
           <p
+            v-if="data.item.status >= 0 && data.item.status <= 4"
             class="m-0 font-weight-bold font-small-3"
             :class="'color: text-' + status[data.item.status].variant"
           >
@@ -198,7 +199,8 @@ export default {
       // TODO HACERLO GLOBAL
       programs: state => state['crm-store'].programs,
       stip: state => state['crm-store'].statusip,
-      status: state => state['crm-store'].status,
+      status: state => state['crm-store'].statusAnnuled,
+      statusFilter: state => state['crm-store'].statusFilter,
     }),
     ...mapGetters({
       currentUser: 'auth/currentUser',
@@ -209,13 +211,15 @@ export default {
   },
   async created() {
     try {
-      await this.$store.dispatch('crm-store/getSellers')
-      await this.$store.dispatch('crm-store/getCaptured')
-      await this.$store.dispatch('crm-store/getPrograms')
-      await this.$store.dispatch('crm-store/getStates')
+      await Promise.all([
+        this.$store.dispatch('crm-store/getSellers'),
+        this.$store.dispatch('crm-store/getCaptured'),
+        this.$store.dispatch('crm-store/getPrograms'),
+        this.$store.dispatch('crm-store/getStates'),
+      ])
       this.filter[2].options = this.captured
       this.filter[3].options = this.sellers
-      this.filter[4].options = this.status
+      this.filter[4].options = this.statusFilter
       this.filter[5].options = this.programs
       this.filter[6].options = this.stip
     } catch (error) {

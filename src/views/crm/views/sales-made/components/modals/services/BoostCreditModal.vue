@@ -20,6 +20,7 @@
             :programs-all="programsAll"
             :header-s="headerS"
             :sales="salesClient"
+            :two-per-row="true"
             @changeProgram="changeProgram"
             @close="hideModal(false,0)"
           />

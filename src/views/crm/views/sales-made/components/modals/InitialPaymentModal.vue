@@ -27,23 +27,11 @@
         </b-col>
         <b-col>
           <label class="mt-1">Method of Payment</label>
-          <b-form-radio-group class="d-flex">
-            <b-form-radio
-              v-model="method"
-              name="some-radios"
-              value="credit-card"
-              :disabled="valorEdit"
-            >
-              Credit Card
-            </b-form-radio>
-            <b-form-radio
-              v-model="method"
-              name="some-radios"
-              value="others"
-              :disabled="valorEdit"
-            >
-              Others
-            </b-form-radio>
+          <b-form-radio-group
+            v-model="method"
+            :options="[{text: 'Credit Card', value: 'credit-card'}, {text: 'Others', value: 'others'}]"
+            class="d-flex"
+          >
             <b-checkbox
               v-if="method === 'credit-card'"
               v-model="charge"
@@ -55,7 +43,7 @@
         </b-col>
       </b-row>
       <b-row
-        v-if="(method === 'credit-card' && listCards.length === 0 && initial_payment.idtransaction != null) || (method === 'credit-card' && this.initial_payment.programid == 2)"
+        v-if="(method === 'credit-card' && listCards.length === 0 && initial_payment.id_transaction != null) || (method === 'credit-card' && this.initial_payment.programid == 2)"
         class="mt-1"
       >
         <b-table
@@ -94,11 +82,11 @@
           :items="initial_payment.allcards"
         >
           <template v-slot:cell(amount)="data">
-            <b-input-group prepend="$">
+            <b-input-group>
               <money
                 :ref="'campo'+data.item.id"
                 class="form-control"
-                v-bind="{decimal: '.', thousands: ',', precision: 2}"
+                v-bind="{decimal: '.', thousands: ',', precision: 2, prefix: '$  '}"
                 :disabled="initial_payment.cfeestatus == 0 ? false : true"
               />
               <b-input-group-append>
@@ -147,7 +135,7 @@
         </b-button>
       </b-row>
       <b-row
-        v-if="method === 'credit-card' && listCards.length > 0 "
+        v-if="method === 'credit-card' && listCards.length > 0"
         class="mt-1"
       >
         <b-table
@@ -375,6 +363,7 @@ export default {
           formatter: value => this.$options.filters.myGlobalDay(value),
         },
       ],
+      notApiCards: false,
     }
   },
   computed: {
@@ -395,6 +384,7 @@ export default {
   async mounted() {
     this.method = (this.initial_payment.payments.type_payment == null || this.initial_payment.payments.type_payment == 0) ? 'credit-card' : 'others'
     await this.getListCards()
+    console.log(this.initial_payment)
   },
   methods: {
     createCard() {
@@ -410,10 +400,6 @@ export default {
     async getListCards() {
       try {
         this.listCards = await CrmService.getListCards({ sale_id: this.initial_payment.payments.sale_id })
-        this.amount = 0
-        this.listCards.forEach(card => {
-          this.amount += parseInt(card.amount)
-        })
       } catch (error) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
         this.modal.initial_payment = false

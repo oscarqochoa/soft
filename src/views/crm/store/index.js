@@ -8,7 +8,7 @@ import Event from './event'
 import Global from './global'
 import Lead from './lead'
 import Notes from './notes'
-import SaleMade from './saleMade.store'
+import SaleMade from '../views/sales-made/saleMade.store'
 import Sms from './sms'
 
 Vue.use(Vuex)

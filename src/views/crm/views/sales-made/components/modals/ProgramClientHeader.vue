@@ -1,8 +1,6 @@
 <template>
   <b-row>
-    <b-col
-      v-if="!modalAddShow && !modalAddLead"
-    >
+    <b-col>
       <h5>Program</h5>
       <p class="bg-info rounded text-white font-medium-1 text-center py-1s">
         {{ program }}
