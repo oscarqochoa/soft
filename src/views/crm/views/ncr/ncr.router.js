@@ -32,6 +32,7 @@ export default [
                 path: 'completed',
                 name: 'ncr-completed',
                 component: () => import('@/views/commons/components/ncr/components/ContentCompleted.vue'),
+                
                 meta:{
                     isClientsTab: true,
                     module: 2,
@@ -39,6 +40,18 @@ export default [
                 
             },
             
+            
         ],
-      }
+      },
+      {
+        path: '/crm/ncr/reportLead',
+        name: 'report-lead',
+        component: () => import('@/views/commons/components/ncr/components/ReportLead.vue'),
+        props:true,
+        meta:{
+            isClientsTab: true,
+            module: 2,
+        },
+        
+    },
   ]

@@ -38,7 +38,7 @@
             
           >  
             <a href="www.google.com" target="_blank"
-            class="select-lead-name"> {{data.item.lead_name}} link</a>
+            class="select-lead-name"> {{data.item.lead_name}} </a>
             <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
           </div>
         </template>
@@ -224,19 +224,9 @@
         </template>
         <template #cell(cr)="data">
           <div v-if="status == 1">
-            <a
-              v-if="data.item.cr == 1"
-              :href="
-                'http://127.0.0.1:8000/crm/leads/report/' +
-                data.item.lead_id +
-                '/' +
-                data.item.score_id
-              "
-              target="_blanck"
-              style="cursor: pointer"
-            >
-              <img :src="assetsImg + '/images/icons/report2.ico'" />
-            </a>
+            <b-button variant="transparent" 
+                  :to="{name:'report-lead',params:{idFile:data.item.score_id,idLead:data.item.lead_id}}">
+                  <img :src="assetsImg + '/images/icons/report2.ico'" /></b-button>
           </div>
           <div v-if="status == 2">
             <a :href="data.item.route_html" v-if="!data.item.route_html" target="_blanck">
@@ -321,6 +311,7 @@
       @closeModalQuestionnaire="closeModalQuestionnaire"
       @updateGrid="updateGrid"
     ></modal-questionnaire>
+    
   </div>
 </template>
 
