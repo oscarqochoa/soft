@@ -274,6 +274,12 @@ export default {
         return 'Something went wrong'
       }
     },
+    toggleModal (tagId, state = true) {
+      if (tagId && state)
+        this.$bvModal.show(tagId)
+      if (tagId && !state)
+        this.$bvModal.hide(tagId)
+    },
     getCurrentMonth() {
       return this.$moment().format('MMM')
     },
@@ -290,8 +296,8 @@ export default {
       }
       return arr
     },
-    isPreloading (status = true) {
-      this.$store.commit("app/SET_LOADING", status)
+    isPreloading (state = true) {
+      this.$store.commit("app/SET_LOADING", state)
     }
   },
 }
