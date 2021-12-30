@@ -1,6 +1,7 @@
 <template>
   <div>
-    <b-tabs pills lazy>
+    <b-tabs pills lazy
+    active-nav-item-class="bg-important border-0 shadow-none">
       <b-tab title="Pending">
         <pending-done active
          :status="1"

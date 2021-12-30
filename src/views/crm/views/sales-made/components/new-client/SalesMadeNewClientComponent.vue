@@ -22,7 +22,7 @@
         no-provider-filtering
         :class="['text-center']"
         :busy.sync="isBusy"
-        :items="myProvider"
+        :items="search"
         :fields="filteredFields"
         :per-page="paginate.perPage"
         :current-page="paginate.currentPage"
@@ -710,6 +710,8 @@ import ModalNotesBoost from '@/views/commons/components/first-notes/ModalNotesBo
 import ModalNotesParagon from '@/views/commons/components/first-notes/ModalNotesParagon.vue'
 import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue'
 import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms.vue'
+import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasCredit.vue'
+import ModalNotesSpecialist from '@/views/commons/components/first-notes/ModalNotesSpecialist.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -738,6 +740,8 @@ export default {
     ModalNotesParagon,
     ModalNotesFirst,
     ModalNotesTax,
+    ModalNotesCredit,
+    ModalNotesSpecialist,
   },
   props: {
     done: {
@@ -941,7 +945,7 @@ export default {
       this.modalData.historySms.id = item.lead_id
       this.$bvModal.show('modal-history-sms')
     },
-    async myProvider(ctx) {
+    async search(ctx) {
       try {
         let sortBy = 11
         let sortDirection = 'desc'
@@ -1057,7 +1061,7 @@ export default {
           this.modalData.notes.programSelected = 'ModalNotesBoost' // ready
           break
         case created >= '2021-03-04' && program == 3:
-          this.modalData.notes.programSelected = 'ModalNotesCredit' // next next
+          this.modalData.notes.programSelected = 'ModalNotesCredit' // ready
           break
         case created >= '2020-09-24' && program == 5:
           this.modalData.notes.programSelected = 'ModalNotesTax' // ready
@@ -1069,7 +1073,7 @@ export default {
           this.modalData.notes.programSelected = 'ModalNotesParagon' // ready
           break
         default:
-          this.modalData.notes.programSelected = 'ModalNotesOld' // next next next
+          this.modalData.notes.programSelected = 'ModalNotesOld' // next next
           break
       }
 

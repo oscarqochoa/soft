@@ -43,7 +43,7 @@
               <a
                 href="www.google.com"
                 target="_blank"
-                style="text-decoration-line: underline"
+                class="select-lead-name"
               >
                 {{ data.item.lead_name }}</a
               >
@@ -396,6 +396,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.select-lead-name:hover {
+    text-decoration-line: underline
+}
 .per-page-selector {
   width: 90px;
 }

@@ -3,7 +3,7 @@
     <b-card>
       <b-row>
         <b-col lg="6">
-          <h2>LOANS</h2>
+          <h2>Loans</h2>
         </b-col>
         <b-col lg="6" :class="[positionResponsive]">
           <b-button
@@ -24,7 +24,8 @@
           v-if="isManagement"
           :to="`/${route}/loans/general`"
           exact
-          exact-active-class="active"
+          exact-active-class="active "
+          link-classes="ml-1 border-secondary hover-primary"
         >
           Loans
           <span class="ml-1" v-if="counterTab.management>0">
@@ -39,7 +40,8 @@
           v-if="isSupervisor"
           :to="`/${route}/loans/loans-module/`"
           exact
-          exact-active-class="active"
+          exact-active-class="active border-primary-i"
+          link-classes="ml-1 border-secondary hover-primary"
         >
           Loans by Module
           <span class="ml-1" v-if="counterTab.supervisor>0">
@@ -50,7 +52,12 @@
             />
           </span>
         </b-nav-item>
-        <b-nav-item :to="`/${route}/loans/my-loans`" exact exact-active-class="active">
+        <b-nav-item
+          :to="`/${route}/loans/my-loans`"
+          exact
+          exact-active-class="active border-primary-i"
+          link-classes="ml-1 border-secondary hover-primary"
+        >
           My Loans
           <span class="ml-1" v-if="counterTab.my_loan>0">
             <feather-icon

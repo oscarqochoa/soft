@@ -1,6 +1,5 @@
-export default  {
-    title: 'Lists',
-    icon: 'FileTextIcon',
-    route: 'lists-crm-mylist',
-    
-}
+export default {
+  title: "Lists",
+  icon: "ClipboardIcon",
+  route: "lists-crm-mylist",
+};

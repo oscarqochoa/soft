@@ -2,11 +2,11 @@
   <div>
     <b-modal
       v-model="modalUp"
-      title-class="h2"
+      title-class="h2 text-white "
       size="lg"
       :title="requestTitle"
       :hide-footer="hideFooter"
-      modal-class="modal-primary"
+      modal-class="modal-primary "
       @hidden="hideModal(false)"
     >
       <div>
@@ -117,7 +117,7 @@
                               v-bind="vMoney"
                               class="form-control"
                               :disabled="isLoanActive"
-                              :class="{'border border-danger':(errors[0] && vmoneyValidate) || (isOverProvision && !isSupervisorLoan)}"
+                              :class="{'border-danger':(errors[0] && vmoneyValidate) || (isOverProvision && !isSupervisorLoan)}"
                             ></money>
                             <span
                               v-if="isOverProvision && !isSupervisorLoan"
@@ -186,7 +186,7 @@
                           v-model="loan.payment"
                           class="form-control text-center bg-transparent"
                           :style="bigWindow? '' : 'height: 4rem;'"
-                          :class="{'border border-danger':errors[0]}"
+                          :class="{'border-danger':errors[0]}"
                         >
                           <b-form-radio
                             value="20"
@@ -243,7 +243,7 @@
                         <b-input-group>
                           <b-input-group-prepend class="w-35">
                             <b-input-group-text class="w-100">
-                              <span>PROVISION</span>
+                              <span>Provision</span>
                             </b-input-group-text>
                           </b-input-group-prepend>
                           <money
@@ -281,7 +281,7 @@
                         v-model="loan.motive"
                         class="textarea-style form-control bg-transparent"
                         style="border-radius: 0px 10px 10px 10px"
-                        :class="{'border border-danger':errors[0]}"
+                        :class="{'border-danger':errors[0]}"
                         :disabled="isLoanActive"
                       ></textarea>
                     </div>
@@ -304,7 +304,7 @@
                       disabled
                     >
                       <ul>
-                        <li>The loan have a rate {{userData.interest_real}}%</li>
+                        <li>The Loan have a rate {{userData.interest_real}}%</li>
                         <li>If there is no payment on the 25th, a daily charge of $ 1 is generated</li>
                       </ul>
                     </div>
@@ -319,9 +319,7 @@
       <template #modal-footer>
         <b-row v-if="!isLoanActive">
           <b-col lg="12" style="text-align: center;">
-            <b-button variant="success" @click="sendLoan" :disabled="noSend">
-              <feather-icon icon="SaveIcon" class="mr-50" size="17.5" />Send Loan
-            </b-button>
+            <b-button variant="success" @click="sendLoan" :disabled="noSend">Send Loan</b-button>
           </b-col>
         </b-row>
         <b-row v-if="isNotUserLoan && (isShowSupervisor || isShowRrhh || isShowManagement)">
@@ -350,7 +348,7 @@
               v-model="acceptOrDeny.comment"
               class="textarea-style form-control"
               style="border-radius: 0px 10px 10px 10px"
-              :class="{'border border-danger':errors[0]}"
+              :class="{'border-danger':errors[0]}"
             ></textarea>
           </ValidationProvider>
         </div>
@@ -433,7 +431,7 @@ export default {
       isCeo: "auth/isCeo"
     }),
     requestTitle() {
-      return this.info.idLoan ? "SHOW LOAN REQUEST" : "REQUEST NEW LOAN";
+      return this.info.idLoan ? "Show Loan Request" : "Request New Loan";
     },
     isDataComplete() {
       return (
@@ -670,5 +668,8 @@ export default {
 .border-title-text {
   border-radius: 10px 10px 0px 0px;
   border: 1px solid #d8d6de;
+}
+margin-l-5 {
+  margin-left: 5px !important;
 }
 </style>

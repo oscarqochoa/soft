@@ -1,6 +1,10 @@
 <template>
   <div>
-    <b-tabs pills lazy>
+    <b-tabs
+      pills
+      lazy
+      active-nav-item-class="bg-important border-0 shadow-none"
+    >
       <b-tab title="Successfull">
         <content-sub-completed :status="1"></content-sub-completed>
       </b-tab>
@@ -12,23 +16,16 @@
 </template>
 
 <script>
-import ContentSubCompleted from './subcomponents/ContentSubCompleted.vue'
+import ContentSubCompleted from "./subcomponents/ContentSubCompleted.vue";
 export default {
-    props:{
-
-    },
-    components:{
-        ContentSubCompleted,
-    },
-    data(){
-        return {
-
-        }
-    },
-    methods:{
-
-    },
-    
-
-}
+  props: {},
+  components: {
+    ContentSubCompleted,
+  },
+  data() {
+    return {};
+  },
+  methods: {},
+};
 </script>
+

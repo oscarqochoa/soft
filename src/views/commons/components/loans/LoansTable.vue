@@ -1,129 +1,37 @@
 <template>
   <div>
-    <b-card no-body class="mb-1">
-      <div class="mx-2 mb-2 mt-2">
-        <b-row>
-          <b-col
-            cols="12"
-            sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-start"
-          >
-            <span class="text-muted">
-              Showing {{ startPage }} to {{ toPage }} of
-              {{ totalData }} entries
-            </span>
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-end"
-          >
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
-          </b-col>
-        </b-row>
-      </div>
-      <div class="m-2">
-        <!-- Table Top -->
-        <b-row>
-          <!-- Per Page -->
-          <b-col
-            cols="12"
-            md="6"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Show</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label class="mr-2">entries</label>
-            <feather-icon
-              class="cursor-pointer"
-              icon="RefreshCcwIcon"
-              size="20"
-              @click="resetSearch"
-            />
-          </b-col>
-          <!-- Search -->
-          <b-col cols="12" md="6">
-            <div class="d-flex align-items-center justify-content-end align-items-center">
-              <b-form-input
-                v-model="searchInput"
-                class="d-inline-block mr-1"
-                placeholder="User..."
-                debounce="300"
-              />
-              <b-button
-                variant="primary"
-                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-                @click="filterController = !filterController"
-              >
-                <div class="d-flex justify-content-between">
-                  <span class="mr-50">
-                    <feather-icon icon="FilterIcon" size="15" />
-                  </span>
-
-                  <span class="text-nowrap">
-                    {{
-                    filterController ? "Basic Search" : "Advanced Search"
-                    }}
-                  </span>
-                </div>
-              </b-button>
-            </div>
-          </b-col>
-        </b-row>
-      </div>
-      <transition name="fade">
-        <filters-component
-          v-if="filterController"
-          class="mr-2 ml-2 mb-2"
-          :filters="filters"
-          from-to-filter
-          :from-to-object="fromToObject"
-          @onChangeFilter="$refs.refClientsList.refresh()"
-        />
-      </transition>
-      <div class="table-responsive">
+    <filter-slot
+      :filter="filters"
+      :filter-principal="filterPrincipal"
+      :total-rows="totalData"
+      :paginate="paginate"
+      :start-page="startPage"
+      :to-page="toPage"
+      :send-multiple-sms="false"
+      @reload="$refs.refLoansList.refresh()"
+    >
+      <template #table>
         <b-table
-          ref="refClientsList"
+          ref="refLoansList"
           class="position-relative"
-          :items="loans"
+          :items="search"
+          :has-provider="true"
           :fields="arrayColumns"
           primary-key="id"
           table-class="text-nowrap"
           responsive="sm"
           show-empty
           small
-          striped
+          hover
           no-border-collapse
           sticky-header="65vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
-          :current-page="currentPage"
-          :per-page="perPage"
+          :current-page="paginate.currentPage"
+          :per-page="paginate.perPage"
           :filter="searchInput"
+          no-provider-filtering
           thead-class="text-center"
           tbody-class="text-center"
         >
@@ -195,7 +103,7 @@
 
           <template #cell(status)="data">
             <b-badge
-              class="fs100"
+              class="fs100 w-100"
               :variant="data.item.status_loan ==4? 'dark' : data.item.status_tracking == 2?'danger': data.item.rol_tracking == 4 &&  data.item.status_tracking ==1? 'success': 'warning'"
             >{{ data.value }}</b-badge>
           </template>
@@ -267,46 +175,8 @@
             </b-button>
           </template>
         </b-table>
-      </div>
-      <div class="mx-2 mb-2">
-        <b-row>
-          <b-col
-            cols="12"
-            sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-start"
-          >
-            <span class="text-muted">
-              Showing {{ startPage }} to {{ toPage }} of
-              {{ totalData }} entries
-            </span>
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-end"
-          >
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
-          </b-col>
-        </b-row>
-      </div>
-    </b-card>
+      </template>
+    </filter-slot>
 
     <ModalTrackingLoan v-if="modalsInfo.tracking" :info="modalsInfo" @hide="closeModals" />
     <ModalNewPay v-if="modalsInfo.newPay" :info="modalsInfo" @hide="closeModals" />
@@ -324,6 +194,7 @@ import ModalTrackingLoan from "./modals/ModalTrackingLoan.vue";
 import ModalNewPay from "./modals/ModalNewPay.vue";
 import ModalRevisionPayment from "./modals/ModalRevisionPayment.vue";
 import ModalInvoice from "./modals/ModalInvoice.vue";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 import { mapGetters, mapMutations } from "vuex";
 import moment from "moment";
 import loansService from "@/views/commons/components/loans/services/loans.service";
@@ -339,7 +210,8 @@ export default {
     ModalTrackingLoan,
     ModalNewPay,
     ModalRevisionPayment,
-    ModalInvoice
+    ModalInvoice,
+    FilterSlot
   },
   props: {
     tab: {
@@ -368,7 +240,6 @@ export default {
       startdate: "",
       enddate: "",
       start_page: "",
-      perpage: "",
       next_page: "",
       last_page: "",
       total_data: "",
@@ -387,74 +258,89 @@ export default {
       },
       loanSelected: [],
       dateNow: moment().format("YYYY-MM-DD"),
-
       sortBy: "created_at",
       sortDesc: true,
+      paginate: {
+        currentPage: 1,
+        perPage: 10
+      },
       arrayColumns: [
         {
           key: "username",
           label: "User",
-          tdClass: "font-weight-bolder"
+          tdClass: "font-weight-bolder py-1",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "amount_loan",
           label: "Amount Loan",
-          tdClass: "font-weight-bolder"
+          tdClass: "font-weight-bolder",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "balance",
           label: "Balance Loan",
-          tdClass: "font-weight-bolder"
+          tdClass: "font-weight-bolder",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "due_payment",
           label: "Monthly Payment",
-          tdClass: "font-weight-bolder"
+          tdClass: "font-weight-bolder",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "due_date",
-          label: "Pay day"
+          label: "Pay day",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "payment_time",
-          label: "Dues"
+          label: "Dues",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "due_id",
           label: "Current Due",
-          tdClass: "text-center"
+          tdClass: "text-center",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "created_at",
-          label: "Creation Date"
+          label: "Creation Date",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "process",
-          label: "Status Location"
+          label: "Status Location",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "status",
-          label: "Status"
+          label: "Status",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "id_loan",
-          label: "Tracking"
+          label: "Tracking",
+          thClass: "font-weight-bolder py-1"
         },
         {
           key: "status_loan",
-          label: "Actions"
+          label: "Actions",
+          thClass: "font-weight-bolder py-1"
         }
       ],
       searchInput: "",
       orderby: "",
       order: "",
-      startPage: "",
-      endPage: "",
-      totalData: "",
+      startPage: null,
+      endPage: null,
+      totalData: null,
       perPage: 10,
       nextPage: "",
       currentPage: 1,
-      toPage: "",
+      toPage: null,
       isBusy: false,
       perPageOptions: [10, 25, 50, 100],
       isClientsTab: false,
@@ -462,9 +348,54 @@ export default {
         from: null,
         to: null
       },
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Search User...",
+        model: ""
+      },
       filters: [
         {
+          type: "datepicker",
+          cols: 6,
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          }
+        },
+        {
+          type: "datepicker",
+          cols: 6,
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          }
+        },
+        {
+          type: "select",
+          cols: 12,
+          margin: true,
+          showLabel: true,
           label: "Status",
+          placeholder: "",
+          class: "font-small-3",
+          model: null,
           options: [
             { value: 0, label: "All" },
             { value: 1, label: "Pending" },
@@ -472,21 +403,14 @@ export default {
             { value: 6, label: "Approved" },
             { value: 2, label: "Finished" }
           ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
-          cols: 12,
-          md: 2,
-          visible: true
+          reduce: "value",
+          selectText: "label"
         }
       ],
-      filterController: false,
       programs: []
     };
   },
-  created() {
-    this.search();
-  },
+  created() {},
   mounted() {},
   computed: {
     ...mapGetters({
@@ -506,36 +430,39 @@ export default {
     }),
 
     //Searching Table
-    async search() {
+    async search(ctx) {
       try {
-        this.setLoading(true);
+        this.isBusy = true;
         const params = {
-          page: 1,
+          page: ctx.currentPage,
           type: this.tab,
-          nameUser: this.nameUser,
+          nameUser: this.filterPrincipal.model,
           user_id: this.currentUser.user_id,
           role_id: this.currentUser.role_id,
           id_module: this.module,
-          startdate: this.startdate,
-          enddate: this.enddate,
+          startdate: this.filters[0].model,
+          enddate: this.filters[1].model,
           status: this.status,
-          status_search: this.status_search
+          status_search: this.filters[2].model,
+          perPage: ctx.perPage
         };
+
+        console.log(this.paginate);
         const response = await loansService.getLoans(params);
         this.loans = response.data;
         this.startPage = response.from;
-        this.currentPage = response.current_page;
-        this.perPage = response.per_page;
+        this.paginate.currentPage = response.current_page;
+        this.paginate.perPage = response.per_page;
         this.nextPage = this.startPage + 1;
         this.endPage = response.last_page;
         this.totalData = response.total;
         this.toPage = response.to;
-
-        this.setLoading(false);
-        console.log(this.loans);
+        this.isBusy = false;
+        return this.loans;
       } catch (error) {
         this.showErrorSwal();
-        this.setLoading(false);
+        this.isBusy = false;
+        return [];
       }
     },
     resetSearch() {

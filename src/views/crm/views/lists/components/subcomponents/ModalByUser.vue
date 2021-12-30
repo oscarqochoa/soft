@@ -1,15 +1,15 @@
 <template>
   <div>
     <b-modal
-      id="modal-xs"
-      title-class="h3"
-      size="lg"
-      v-model="mutableIfModalCard"
-      modal-class="modal-primary"
-      top
+      modal
+      centered
       :title="`${nameUser}`"
-      @hidden="closeModal"
+      v-model="mutableIfModalCard"
+      size="lg"
+      modal-class="modal-primary"
       hide-footer
+      @hidden="closeModal"
+      title-tag="h3"
     >
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6">

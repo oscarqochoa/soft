@@ -1,5 +1,5 @@
 export default {
   title: "Loans",
-  icon: "ShoppingBagIcon",
+  icon: "RepeatIcon",
   route: "loans-crm",
 };

@@ -16,6 +16,7 @@ import stickyNotesStoreModule from "@/layouts/components/navbar/components/stick
 import TaskStore from '@/store/task'
 import NotificationStore from '@/store/notification'
 import InventoryStore from '@/views/commons/components/inventory/store'
+import NCRStore from '@/views/commons/components/ncr/store'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     TaskStore,
     "sticky-notes": stickyNotesStoreModule,
     "inventory-store":InventoryStore,
+    "ncr-store":NCRStore,
     NotificationStore
   },
   strict: process.env.DEV,
