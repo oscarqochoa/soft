@@ -37,8 +37,9 @@
     </b-row>
     <b-row>
       <b-col
-        v-for="(content) in currentFiles"
+        v-for="(content, index) in currentFiles"
         cols="1"
+        :key="index"
       >
         <file-component
           :current-user="currentUser"

@@ -1,3 +1,4 @@
+import calendarRoute from '../views/calendar/calendar.router'
 import viewRoute from '../views/test/view.router'
 import leadRoute from '../views/Lead/lead.route'
 import SalesMadeRoute from '../views/sales-made/sales-made.router'
@@ -12,6 +13,7 @@ import FileManangerRoute from '@/views/crm/views/file-mananger/file-mananger.rou
 import InventoryRouter from '../views/inventory/inventory.router'
 import NcrRouter from '../views/ncr/ncr.router'
 const routes = [
+  ...calendarRoute,
   ...viewRoute,
   ...leadRoute,
   ...clientsRoute,

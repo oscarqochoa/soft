@@ -1,7 +1,7 @@
 // IMPORT LIBRARIES
 import Vue from 'vue'
 
-import eventService from '@/views/crm/services/event.service'
+import eventService from '@/views/crm/services/event'
 import mixins from '@/mixins/general'
 
 const state = {
