@@ -484,6 +484,7 @@ export default {
               this.setDataBlank('event')
               this.onToggleEdit()
               this.isLoading = false
+              this.$emit('updated', body)
             } else {
               this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
             }

@@ -1,4 +1,5 @@
 
+import calendarNav from '../views/calendar/calendar.nav'
 import SalesMadeNavigation from '../views/sales-made/sales-made.nav'
 import CommissionsNavigation from '../views/commissions/commissions.nav'
 import DashboardNavigation from '../views/dashboard/dashboard.nav'
@@ -29,6 +30,7 @@ export default [
   ListsNavigation,
   ClientsNavigation,
   ...leadNav,
+  ...calendarNav,
   GlossaryNavigation,
   InventoryNavigation,
   NcrNavigation,
