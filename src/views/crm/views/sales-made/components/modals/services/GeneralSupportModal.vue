@@ -36,8 +36,8 @@
               >
                 <b-card
                   header="FEE"
-                  header-bg-variant="important"
-                  header-class="text-white"
+                  header-bg-variant="info"
+                  header-class="text-white py-1 font-weight-bolder"
                 >
                   <b-row class="mt-1">
                     <b-col
@@ -51,19 +51,12 @@
                         v-model="fee"
                         v-bind="vMoney"
                         class="form-control text-center"
-                        :style="errors[0] && validateMoney? 'color:red !important':''"
-                        :class="{'border border-danger':errors[0] && validateMoney}"
+                        :class="{'border-danger':errors[0] && validateMoney}"
                         :disabled="isModalShow"
                       />
                     </b-col>
                   </b-row>
                 </b-card>
-                <div
-                  v-if="errors[0]"
-                  class="fee-error"
-                >
-                  Fee {{ errors[0] }}
-                </div>
               </ValidationProvider>
             </b-col>
           </b-row>
@@ -72,29 +65,26 @@
 
         <!--  FOOTER START -->
         <template #modal-footer="{ }">
-          <b-row v-if="!isModalShow">
-            <b-col v-if="!isModalAdd">
-              <b-button
-                variant="danger"
-                @click="hideModal(false,0)"
-              >
-                <feather-icon icon="PowerIcon" /> CANCEL
-              </b-button>
-              <b-button
-                variant="success"
+          <b-row
+            v-if="!isModalShow"
+            class="w-100"
+          >
+            <b-col
+              v-if="!isModalAdd"
+              class="d-flex align-items-center justify-content-end"
+            >
+              <button-save
+                class="mr-1"
                 @click="saveRates()"
-              >
-                <feather-icon icon="SaveIcon" /> SAVE
-              </b-button>
+              />
+              <button-cancel @click="hideModal(false,0)" />
             </b-col>
-            <b-col>
+            <b-col v-if="isModalAdd">
               <b-button
-                v-if="isModalAdd"
                 variant="info"
                 @click="saveRates()"
               >
                 Continue
-                <feather-icon icon="ChevronsRightIcon" />
               </b-button>
             </b-col>
           </b-row>
@@ -108,9 +98,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
-  components: { ModalServiceHeader },
+  components: { ButtonSave, ButtonCancel, ModalServiceHeader },
   props: {
     modalServices: {
       type: Boolean,
@@ -254,12 +246,7 @@ export default {
             json_ce: this.json_ce,
           }
 
-          const result = await this.$swal.fire({
-            title: `Are you sure you want to ${message}?`,
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-          })
+          const result = await this.showConfirmSwal()
           if (result.value) {
             this.addPreloader()
             const response = await amgApi.post(`${route}`, param)

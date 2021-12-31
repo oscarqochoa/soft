@@ -196,7 +196,7 @@
               </p>
               <div class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded">
                 {{
-                  this.mont16 == "Infinity" ? "" : this.mont16
+                  this.mont16 == "Infinity" ? "-" : this.mont16
                 }}
               </div>
             </b-col>
@@ -206,7 +206,7 @@
               </p>
               <div class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded">
                 {{
-                  this.mont17 == "Infinity" ? "" : this.mont17
+                  this.mont17 == "Infinity" ? "-" : this.mont17
                 }}
               </div>
             </b-col>

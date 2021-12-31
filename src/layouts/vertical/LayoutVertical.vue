@@ -2,6 +2,7 @@
   <layout-vertical>
     <router-view />
     <template #navbar>
+
       <navbar />
     </template>
     <app-customizer

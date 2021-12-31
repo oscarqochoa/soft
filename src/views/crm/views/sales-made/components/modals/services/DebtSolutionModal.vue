@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    v-model="modalServices"
+    v-model="ownShow"
     modal
     header-class="p-0"
     header-bg-variant="transparent border-bottom border-bottom-2"
@@ -24,6 +24,7 @@
       :title="null"
       :subtitle="null"
       shape="square"
+      :start-index="startIndex"
       :finish-button-text="(isModalShow)? 'Close' : 'Submit'"
       back-button-text="Previous"
       class="mb-3"
@@ -134,6 +135,7 @@ export default {
     return {
       show: false,
       passwordIsCorrect: false,
+      ownShow: false,
       state1: 0,
       state2: 0,
       state3: 0,
@@ -141,6 +143,7 @@ export default {
       leyend: '',
       key2: 0,
       key3: 100,
+      startIndex: -1,
     }
   },
   computed: {
@@ -160,12 +163,10 @@ export default {
       return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
     },
   },
-  mounted() {
-    console.log(this.$refs, 'wizard')
-  },
-  created() {
+  async created() {
     if (!this.salesClient.account_id) this.salesClient.account_id = this.salesClient.client_account_id
-    this.leyendDebtsolution()
+    await this.leyendDebtsolution()
+    this.ownShow = true
   },
   methods: {
     isLastStep() {
@@ -230,6 +231,11 @@ export default {
             this.state3 = response.data[0].state3
             this.removePreloader()
           }
+        }
+        if (this.startIndex === -1) {
+          if (this.state1 === 1) this.startIndex = 0
+          if (this.state2 === 1) this.startIndex = 1
+          if (this.state3 === 1) this.startIndex = 2
         }
       } catch (error) {
         console.error(error)

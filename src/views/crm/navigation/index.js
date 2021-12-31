@@ -1,4 +1,3 @@
-
 import calendarNav from '../views/calendar/calendar.nav'
 import SalesMadeNavigation from '../views/sales-made/sales-made.nav'
 import CommissionsNavigation from '../views/commissions/commissions.nav'
@@ -13,7 +12,7 @@ import FileManangerNavigation from '@/views/crm/views/file-mananger/file-manange
 import InventoryNavigation from '../views/inventory/inventory.nav'
 import NcrNavigation from '../views/ncr/ncr.nav'
 
-export default [
+const navigation = [
   {
     header: 'CRM',
   },
@@ -36,4 +35,4 @@ export default [
   NcrNavigation,
   FileManangerNavigation,
 ]
-    
+export default navigation

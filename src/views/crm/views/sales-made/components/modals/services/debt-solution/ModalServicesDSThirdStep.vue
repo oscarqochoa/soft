@@ -640,13 +640,9 @@
                 md="4"
               >
                 <label>Total monthly living cost</label>
-                <money
-                  id="sum3"
-                  v-model="totalDato7"
-                  disabled
-                  v-bind="vMoney"
-                  class="form-control"
-                />
+                <div class="form-control w-75">
+                  $ {{ totalDato7 }}
+                </div>
               </b-col>
             </b-row>
           </b-card>
@@ -934,11 +930,10 @@ export default {
       }
       if (type == 1 || type == 2) {
         return await this.axiosNext(id, type)
-      } else if (type == 4) {
+      } if (type == 4) {
         return await this.saveant(id, type)
-      } else {
-        return await this.axiosNext(id, type)
       }
+      return await this.axiosNext(id, type)
     },
     async axiosNext(id, type) {
       try {
