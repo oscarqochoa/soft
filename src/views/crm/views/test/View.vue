@@ -2,7 +2,6 @@
 <div>
   <h1>{{message}}</h1>
   <pre>{{currentUser}}</pre>
-  <p>AAAAAAAAAAAAAAAA</p>
   <pre>{{ userRole }}</pre>
 </div>
 

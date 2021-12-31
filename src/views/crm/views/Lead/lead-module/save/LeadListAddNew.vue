@@ -6,66 +6,48 @@
     sidebar-class="sidebar-xl"
     shadow
     backdrop
-    no-header
     right
     @change="(val) => $emit('update:is-add-new-user-sidebar-active', val)"
+    title="Create Lead"
   >
-    <template #default="{ hide }">
-      <!-- Header -->
-      <div class="d-flex justify-content-between align-items-center content-sidebar-header px-2 py-1">
-        <h5 class="mb-0">
-          Create Lead
-        </h5>
-
-        <feather-icon
-          class="ml-1 cursor-pointer"
-          icon="XIcon"
-          size="16"
-          @click="hide"
-        />
-
-      </div>
-
+    <template #default>
       <!-- BODY -->
       <validation-observer
-        #default="{ handleSubmit }"
         ref="refFormObserver"
       >
         <!-- Form -->
-        <b-form
-          class="p-2"
-          @submit.prevent="handleSubmit(onSubmit)"
-          @reset.prevent="resetForm"
-        >
+        <b-form class="p-2">
           <basic-information-lead :user-data="userData" />
           <lead-information-lead :user-data="userData" />
           <billing-information-lead :user-data="userData" />
-          <!-- Form Actions -->
-          <div class="d-flex mt-2">
-            <b-button
-              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-              variant="primary"
-              class="mr-2"
-              type="submit"
-            >
-              <template v-if="isLoading">
-                <b-spinner small />
-                <span>Loading...</span>
-              </template>
-              <span v-else>Save</span>
-            </b-button>
-            <b-button
-              v-ripple.400="'rgba(186, 191, 199, 0.15)'"
-              type="button"
-              variant="outline-secondary"
-              @click="resetuserData(); $refs.refFormObserver.reset(); $emit('update:is-add-new-user-sidebar-active', false)"
-            >
-              Cancel
-            </b-button>
-          </div>
-
         </b-form>
       </validation-observer>
+
+    </template>
+
+    <template #footer>
+      <div class="d-flex justify-content-end px-3 py-2">
+        <b-button
+          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+          variant="primary"
+          class="mr-2"
+          @click="onSubmit"
+        >
+          <template v-if="isLoading">
+            <b-spinner small />
+            <span>Loading...</span>
+          </template>
+          <span v-else>Save</span>
+        </b-button>
+        <b-button
+          v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+          type="button"
+          variant="outline-secondary"
+          @click="resetuserData(); $refs.refFormObserver.reset(); $emit('update:is-add-new-user-sidebar-active', false)"
+        >
+          Cancel
+        </b-button>
+      </div>
     </template>
   </b-sidebar>
 </template>
@@ -128,7 +110,6 @@ export default {
     return {
       getValidationState,
       resetForm,
-      modul: 2,
       blankUserData: {
         first_name: '',
         middle_name: '',
@@ -214,7 +195,11 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
+      G_STATE_LEADS: 'CrmLeadStore/G_STATE_LEADS',
+      G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
+      G_SOURCE_NAMES: 'CrmGlobalStore/G_SOURCE_NAMES',
+      G_SELLERS: 'CrmGlobalStore/G_SELLERS',
     }),
   },
   methods: {
@@ -225,114 +210,116 @@ export default {
       this.blankUserData.user_id = this.currentUser.user_id
       this.userData = JSON.parse(JSON.stringify(this.blankUserData))
     },
-    getSelectValue (element) {
-      if (typeof element === 'string')
-        return (element) ? element : ''
-      else
-        return (element) ? element.value : ''
+    getSelectValue (element, state) {
+      if (element && state && this[state] && this[state].length) {
+        const index = this[state].map(el => el.id).indexOf(element)
+        if (index !== -1) return this[state][index]
+      }
+      return new Object
     },
     async onSubmit () {
       try {
-        this.isLoading = true
-        let route = '';
-        switch (this.modul) {
-          case (2) : route = 'show/'; break
-          case (3) : route = '/bussiness/leads'; break
-          case (4) : route = '/administration/leads'; break
-          case (5) : route = '/debtsolution/leads'; break
-          case (6) : route = '/creditexperts/leads'; break
-          case (7) : route = '/boostcredit/leads'; break
-          case (8) : route = '/taxresearch/leads'; break
-          case (10) : route = '/claimdepartment/leads'; break
-          case (11) : route = '/specialists/leads'; break
-        }
-        if ( ![ this.userData.cardNumber1, this.userData.cardNumber2, this.userData.cardNumber3, this.userData.cardNumber4 ].includes('')) {
-          this.userData.cardNumber = `${this.userData.cardNumber1}-${this.userData.cardNumber2}-${this.userData.cardNumber3}-${this.userData.cardNumber4}`
-        }
-        //VALIDATION ITIN & SSN
-        const val = this.userData.social.substr(0, 1)
-        if (val == 9) {
-          this.userData.itin = this.userData.social
-        } else {
-          this.userData.ssn = this.userData.social
-        }
-        const { role_id } = this.currentUser
-        const { email, user_id, first_name, last_name, middle_name, source_id, sourcesname_id, programId, phone, mobile, work, creditReport, payment, ammount, programs, leadstatus_id, address, description, cardExpiMonth, cardExpiYear, ssn, cardHoldername, cardNumber, cardSecurityCode, dob, cardAddress, typeCredit, dateOnline, plataform, usernameOnline, passwordonline, memberNumberOnline, language, itin, other, state_lead, another_address, otherAddress, origin_country } = this.userData
-        console.log('preData', this.userData)
-        const body = {
-          id: '',
-          email,
-          user_id,
-          first_name,
-          last_name,
-          middle_name,
-          source_id,
-          sourcesname_id,
-          program_id: programId,
-          phone,
-          mobile,
-          work,
-          credit_report: creditReport,
-          payment,
-          ammount,
-          program: programs.map(el => ({ id: el.id, value: el.label, name: el.label })),
-          leadstatus_id,
-          street: address.street,
-          city: address.city,
-          state: address.state,
-          country: address.country,
-          zipcode: address.zipcode,
-          description,
-          card_expi_month: cardExpiMonth,
-          card_expi_year: cardExpiYear,
-          ssn,
-          cardholdername: cardHoldername,
-          cardnumber: cardNumber,
-          cardsecuritycode: cardSecurityCode,
-          dob,
-          super: role_id,
-          created_by: user_id,
-          usercreator: user_id,
-          datecreator: this.$moment(dob, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DD'),
-          streetcard: cardAddress.street,
-          citycard: cardAddress.city,
-          zipcodecard: cardAddress.zipcode,
-          statecard: cardAddress.state,
-          countrycard: cardAddress.country,
-          type_credit: typeCredit,
-          dateonline: dateOnline,
-          plataform,
-          usernameonline: usernameOnline,
-          passwordonline,
-          membernumberonline: memberNumberOnline,
-          language,
-          itin,
-          other,
-          state_lead,
-          another_address,
-          otherstreet: otherAddress.street,
-          othercity: otherAddress.city,
-          otherstate: otherAddress.state,
-          othercountry: otherAddress.country,
-          otherzipcode: otherAddress.zipcode,
-          originCountry: origin_country
-        }
-        const response = await this.A_SET_LEADS(body)
-        console.log('response', response)
-        if (response && (response.status == 200 || response.status == 201)) {
-          this.isLoading = false
-          this.$refs.refFormObserver.reset()
-          this.$emit('update:is-add-new-user-sidebar-active', false)
-          this.resetuserData()
-          const idUser = response.data.id
-          /* *INTEGRATE* if (this.module == 2) {
-            window.location.href = `${route}${idUser}`
+        if (await this.$refs.refFormObserver.validate()) {
+          this.isLoading = true
+          let route = '';
+          switch (this.currentUser.modul_id) {
+            case (2) : route = 'show/'; break
+            case (3) : route = '/bussiness/leads'; break
+            case (4) : route = '/administration/leads'; break
+            case (5) : route = '/debtsolution/leads'; break
+            case (6) : route = '/creditexperts/leads'; break
+            case (7) : route = '/boostcredit/leads'; break
+            case (8) : route = '/taxresearch/leads'; break
+            case (10) : route = '/claimdepartment/leads'; break
+            case (11) : route = '/specialists/leads'; break
+          }
+          route = 'lead-show'
+          if ( ![ this.userData.cardNumber1, this.userData.cardNumber2, this.userData.cardNumber3, this.userData.cardNumber4 ].includes('')) {
+            this.userData.cardNumber = `${this.userData.cardNumber1}-${this.userData.cardNumber2}-${this.userData.cardNumber3}-${this.userData.cardNumber4}`
+          }
+          //VALIDATION ITIN & SSN
+          const val = this.userData.social.substr(0, 1)
+          if (val == 9) {
+            this.userData.itin = this.userData.social
           } else {
-            window.location.href = `${route}`
-          } */
-          this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-        } else
-          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong.`)
+            this.userData.ssn = this.userData.social
+          }
+          const { role_id } = this.currentUser
+          const { email, user_id, first_name, last_name, middle_name, source_id, sourcesname_id, programId, phone, mobile, work, creditReport, payment, ammount, programs, leadstatus_id, address, description, cardExpiMonth, cardExpiYear, ssn, cardHoldername, cardNumber, cardSecurityCode, dob, cardAddress, typeCredit, dateOnline, plataform, usernameOnline, passwordonline, memberNumberOnline, language, itin, other, state_lead, another_address, otherAddress, origin_country } = this.userData
+          const body = {
+            id: '',
+            email,
+            user_id,
+            first_name,
+            last_name,
+            middle_name,
+            source_id,
+            sourcesname_id,
+            program_id: programId,
+            phone,
+            mobile,
+            work,
+            credit_report: creditReport,
+            payment,
+            ammount,
+            program: programs.map(el => ({ id: el.id, value: el.label, name: el.label })),
+            leadstatus_id,
+            street: address.street,
+            city: address.city,
+            state: address.state,
+            country: address.country,
+            zipcode: address.zipcode,
+            description,
+            card_expi_month: cardExpiMonth,
+            card_expi_year: cardExpiYear,
+            ssn,
+            cardholdername: cardHoldername,
+            cardnumber: cardNumber,
+            cardsecuritycode: cardSecurityCode,
+            dob,
+            super: role_id,
+            created_by: user_id,
+            usercreator: user_id,
+            datecreator: this.$moment(dob, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DD'),
+            streetcard: cardAddress.street,
+            citycard: cardAddress.city,
+            zipcodecard: cardAddress.zipcode,
+            statecard: cardAddress.state,
+            countrycard: cardAddress.country,
+            type_credit: typeCredit,
+            dateonline: dateOnline,
+            plataform,
+            usernameonline: usernameOnline,
+            passwordonline,
+            membernumberonline: memberNumberOnline,
+            language,
+            itin,
+            other,
+            state_lead,
+            another_address,
+            otherstreet: otherAddress.street,
+            othercity: otherAddress.city,
+            otherstate: otherAddress.state,
+            othercountry: otherAddress.country,
+            otherzipcode: otherAddress.zipcode,
+            originCountry: origin_country,
+            lead_name: `${ first_name } ${ last_name }`, // fot table leads
+            state_hour: this.getSelectValue(state_lead, 'G_STATE_LEADS').label, // fot table leads
+            status: this.getSelectValue(leadstatus_id, 'G_STATUS_LEADS').label, // fot table leads
+            source_name: this.getSelectValue(sourcesname_id, 'G_SOURCE_NAMES').label, // fot table leads
+            owner: this.getSelectValue(user_id, 'G_SELLERS').label, // fot table leads
+          }
+          const response = await this.A_SET_LEADS(body)
+          if (response && (response.status == 200 || response.status == 201)) {
+            this.isLoading = false
+            this.$refs.refFormObserver.reset()
+            this.$emit('update:is-add-new-user-sidebar-active', false)
+            this.resetuserData()
+            /* this.$router.push({ name: route, params: { id: response.data.id } }) */
+            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+          } else
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong.`)
+        }
       } catch (error) {
         console.log('spmething went wrong onSubmit: ', error)
         this.isLoading = false
@@ -344,14 +331,21 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
+  @import '@core/scss/vue/libs/vue-select.scss';
 
-#add-new-user-sidebar {
-  .vs__dropdown-menu {
-    max-height: 200px !important;
+  #add-new-user-sidebar {
+    .vs__dropdown-menu {
+      max-height: 200px !important;
+    }
   }
-}
-.sidebar-xl {
-  width: 90rem !important;
-}
+  .sidebar-xl {
+    width: 90rem !important;
+  }
+  .b-sidebar-header {
+    flex-direction: row-reverse !important;
+    justify-content: space-between !important;
+    .close {
+      margin-right: revert !important;
+    }
+  }
 </style>

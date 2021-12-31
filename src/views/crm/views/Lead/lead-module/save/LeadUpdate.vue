@@ -7,37 +7,17 @@
       sidebar-class="sidebar-xl"
       shadow
       backdrop
-      no-header
       right
       @change="(val) => $emit('update:is-add-new-user-sidebar-active', val)"
+      title="Edit Lead"
     >
-      <template #default="{ hide }">
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center content-sidebar-header px-2 py-1">
-          <h5 class="mb-0">
-            Create Lead
-          </h5>
-
-          <feather-icon
-            class="ml-1 cursor-pointer"
-            icon="XIcon"
-            size="16"
-            @click="hide"
-          />
-
-        </div>
-
+      <template #default>
         <!-- BODY -->
         <validation-observer
-          #default="{ handleSubmit }"
           ref="refFormObserver"
         >
           <!-- Form -->
-          <b-form
-            class="p-2"
-            @submit.prevent="handleSubmit(onSubmit)"
-            @reset.prevent="resetForm"
-          >
+          <div class="p-2">
             <basic-information-lead :user-data="lead" :blank-user-fields="blankUserFields" @onModalTrackingChangeOpen="onModalTrackingChangeOpen" />
             <lead-information-lead :user-data="lead" @onModalTrackingChangeOpen="onModalTrackingChangeOpen" />
             <card-lead-credit-card
@@ -46,33 +26,35 @@
               :lead="lead"
               title="CREDIT CARDS"
             />
-            <!-- Form Actions -->
-            <div class="d-flex mt-2">
-              <b-button
-                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-                variant="primary"
-                class="mr-2"
-                type="submit"
-              >
-                <template v-if="isLoading">
-                  <b-spinner small />
-                  <span>Loading...</span>
-                </template>
-                <span v-else>Save</span>
-              </b-button>
-              <b-button
-                v-ripple.400="'rgba(186, 191, 199, 0.15)'"
-                type="button"
-                variant="outline-secondary"
-                @click="$refs.refFormObserver.reset(); $emit('update:is-add-new-user-sidebar-active', false)"
-              >
-                Cancel
-              </b-button>
-            </div>
-
-          </b-form>
+          </div>
         </validation-observer>
       </template>
+      
+      <template #footer>
+        <div class="d-flex justify-content-end px-3 py-2">
+          <b-button
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="primary"
+            class="mr-2"
+            @click="onSubmit"
+          >
+            <template v-if="isLoading">
+              <b-spinner small />
+              <span>Loading...</span>
+            </template>
+            <span v-else>Save</span>
+          </b-button>
+          <b-button
+            v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+            type="button"
+            variant="outline-secondary"
+            @click="$refs.refFormObserver.reset(); $emit('update:is-add-new-user-sidebar-active', false)"
+          >
+            Cancel
+          </b-button>
+        </div>
+      </template>
+
     </b-sidebar>
     
     <!-- modal TRACKING CHANGE -->
@@ -244,50 +226,52 @@ export default {
     },
     async onSubmit () {
       try {
-        this.isLoading = true
-        let route = '';
-        switch (this.modul) {
-          case (2) : route = 'show/'; break
-          case (3) : route = '/bussiness/leads'; break
-          case (4) : route = '/administration/leads'; break
-          case (5) : route = '/debtsolution/leads'; break
-          case (6) : route = '/creditexperts/leads'; break
-          case (7) : route = '/boostcredit/leads'; break
-          case (8) : route = '/taxresearch/leads'; break
-          case (10) : route = '/claimdepartment/leads'; break
-          case (11) : route = '/specialists/leads'; break
+        if (await this.$refs.refFormObserver.validate()) {
+          this.isLoading = true
+          let route = '';
+          switch (this.modul) {
+            case (2) : route = 'show/'; break
+            case (3) : route = '/bussiness/leads'; break
+            case (4) : route = '/administration/leads'; break
+            case (5) : route = '/debtsolution/leads'; break
+            case (6) : route = '/creditexperts/leads'; break
+            case (7) : route = '/boostcredit/leads'; break
+            case (8) : route = '/taxresearch/leads'; break
+            case (10) : route = '/claimdepartment/leads'; break
+            case (11) : route = '/specialists/leads'; break
+          }
+          const body = {
+            ...this.lead,
+            datecreator: this.$moment(this.lead.created_at).format('YYYY-MM-DD'),
+            mobile_count: 0,
+            modul: this.modul,
+            creatorname: this.lead.creator_name,
+            type: 0,
+            originCountry: this.lead.origin_country,
+            otherstreet: this.lead.otherAddress.street,
+            othercity: this.lead.otherAddress.city,
+            otherstate: this.lead.otherAddress.state,
+            othercountry: this.lead.otherAddress.country,
+            otherzipcode: this.lead.otherAddress.zipcode,
+            street: this.lead.address.street,
+            city: this.lead.address.city,
+            state: this.lead.address.state,
+            country: this.lead.address.country,
+            zipcode: this.lead.address.zipcode,
+            super: this.currentUser.role_id,
+            type_credit: this.lead.type_credit_report,
+            usercreator: this.lead.created_by,
+            programs: this.lead.programs.map(el => ({ id: el.id, name: el.label })),
+          }
+          const response = await this.A_UPDATE_LEAD({ id: this.lead.id, body })
+          console.log('response', response)
+          if (this.isResponseSuccess(response)) {
+            this.isLoading = false
+            this.$refs.refFormObserver.reset()
+            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+          } else
+            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong.`)
         }
-        const body = {
-          ...this.lead,
-          datecreator: this.$moment(this.lead.created_at).format('YYYY-MM-DD'),
-          mobile_count: 0,
-          modul: this.modul,
-          creatorname: this.lead.creator_name,
-          type: 0,
-          originCountry: this.lead.origin_country,
-          otherstreet: this.lead.otherAddress.street,
-          othercity: this.lead.otherAddress.city,
-          otherstate: this.lead.otherAddress.state,
-          othercountry: this.lead.otherAddress.country,
-          otherzipcode: this.lead.otherAddress.zipcode,
-          street: this.lead.address.street,
-          city: this.lead.address.city,
-          state: this.lead.address.state,
-          country: this.lead.address.country,
-          zipcode: this.lead.address.zipcode,
-          super: this.currentUser.role_id,
-          type_credit: this.lead.type_credit_report,
-          usercreator: this.lead.created_by,
-          programs: this.lead.programs.map(el => ({ id: el.id, name: el.label })),
-        }
-        const response = await this.A_UPDATE_LEAD({ id: this.lead.id, body })
-        console.log('response', response)
-        if (this.isResponseSuccess(response)) {
-          this.isLoading = false
-          this.$refs.refFormObserver.reset()
-          this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-        } else
-          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong.`)
       } catch (error) {
         console.log('spmething went wrong onSubmit: ', error)
         this.isLoading = false
@@ -326,14 +310,21 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
+  @import '@core/scss/vue/libs/vue-select.scss';
 
-#add-new-user-sidebar {
-  .vs__dropdown-menu {
-    max-height: 200px !important;
+  #add-new-user-sidebar {
+    .vs__dropdown-menu {
+      max-height: 200px !important;
+    }
   }
-}
-.sidebar-xl {
-  width: 90rem !important;
-}
+  .sidebar-xl {
+    width: 90rem !important;
+  }
+  .b-sidebar-header {
+    flex-direction: row-reverse !important;
+    justify-content: space-between !important;
+    .close {
+      margin-right: revert !important;
+    }
+  }
 </style>

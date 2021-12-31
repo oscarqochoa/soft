@@ -7,11 +7,11 @@
           <b-card-title>LEADS</b-card-title>
         </div>
         <div>
-          <b-button variant="success" class="mr-1" @click="isAddNewUserSidebarActive = true">
+          <b-button v-if="!isOnlyLead" variant="success" class="mr-1" @click="isAddNewUserSidebarActive = true">
             <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />CREATE
           </b-button>
           <b-dropdown
-            v-if="isOnlyLead"
+            v-if="[1, 2].includes(currentUser.role_id)"
             id="dropdown-6"
             variant="info"
           >
@@ -25,10 +25,26 @@
           </b-dropdown>
         </div>
       </div>
-      <b-nav tabs>
-        <b-nav-item :to="{ name: 'lead-crm-lead-list' }" @click="isOnlyLead = true" exact exact-active-class="active">LEADS</b-nav-item>
-        <b-nav-item :to="{ name: 'lead-crm-lead-sn-list' }" @click="isOnlyLead = false" exact exact-active-class="active">LEADS SN</b-nav-item>
-        <b-nav-item :to="{ name: 'lead-crm-lead-w-potential-list' }" @click="isOnlyLead = false" exact exact-active-class="active">LEADS W POTENTIAL</b-nav-item>
+      <b-nav pills>
+        <b-nav-item
+          exact-active-class="active"
+          link-classes="border-secondary hover-primary"
+          exact
+          :to="{ name: 'lead-crm-lead-list' }"
+        >LEADS</b-nav-item>
+        <b-nav-item
+          exact-active-class="active"
+          link-classes="border-secondary hover-primary"
+          exact
+          :to="{ name: 'lead-crm-lead-sn-list' }"
+        >LEADS SN</b-nav-item>
+        <b-nav-item
+          v-if="[1, 2].includes(currentUser.role_id) || isOnlyLead"
+          exact-active-class="active"
+          link-classes="border-secondary hover-primary"
+          exact
+          :to="{ name: 'lead-crm-lead-w-potential-list' }"
+        >LEADS W POTENTIAL</b-nav-item>
       </b-nav>
       <router-view/>
     </b-card>
@@ -56,7 +72,7 @@ export default {
   },
   data() {
     return {
-      isOnlyLead: true,
+      isOnlyLead: false,
       isAddNewUserSidebarActive: false,
       modul: 2,
       dato1: 'desc',
