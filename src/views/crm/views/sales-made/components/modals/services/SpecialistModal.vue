@@ -4,7 +4,7 @@
       <b-modal
         v-model="modalServices"
         modal
-        size="lg"
+        size="sm"
         scrollable
         header-class="p-0"
         header-bg-variant="transparent border-bottom border-bottom-2"
@@ -17,6 +17,7 @@
             :type-modal="typeModal"
             :users-services="usersServices"
             :programs-all="programsAll"
+            :two-per-row="true"
             :header-s="headerS"
             :sales="salesClient"
             @changeProgram="changeProgram"
@@ -24,54 +25,48 @@
           />
         </template>
         <!-- HEADER END -->
-
-        <!-- BODY START -->
-        <div>
-          <div class="row">
-            <div class="col-lg-4" />
-            <div class="col-lg-4">
+        <b-container>
+          <b-row class="d-flex align-items-center justify-content-center">
+            <b-col>
               <ValidationProvider
                 v-slot="{errors}"
-                rules="required|money-1"
+                rules="required"
               >
-                <table class="table table-striped mb-0">
-                  <tbody style="border: 1px solid #ccc">
-                    <tr class="tr-style">
-                      <td
-                        colspan="1"
-                        class="td-style"
-                      >
-                        FEE
-                      </td>
-                    </tr>
-                    <tr class="text-center">
-                      <td class="text-center bg-gray">
-                        <div class="div-style">
-                          $
-                          <money
-                            v-model="fee"
-                            v-bind="vMoney"
-                            class="input-total text-center"
-                            :style="errors[0] && validateMoney? 'color:red !important':''"
-                            :class="{'border border-danger':errors[0] && validateMoney}"
-                            :disabled="isModalShow"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <b-card
+                  header="FEE"
+                  header-bg-variant="important"
+                  header-class="text-white"
+                >
+                  <b-row class="mt-1">
+                    <b-col
+                      cols="2"
+                      class="d-flex align-items-center justify-content-center text-success font-medium-5"
+                    >
+                      $
+                    </b-col>
+                    <b-col>
+                      <money
+                        v-model="fee"
+                        v-bind="vMoney"
+                        class="form-control text-center"
+                        :style="errors[0] && validateMoney? 'color:red !important':''"
+                        :class="{'border border-danger':errors[0] && validateMoney}"
+                        :disabled="isModalShow"
+                      />
+                    </b-col>
+                  </b-row>
+                </b-card>
                 <div
-                  v-if="errors[0] && validateMoney"
+                  v-if="errors[0]"
                   class="fee-error"
                 >
                   Fee {{ errors[0] }}
                 </div>
               </ValidationProvider>
-            </div>
-            <div class="col-lg-4" />
-          </div>
-        </div>
+            </b-col>
+          </b-row>
+        </b-container>
+        <!-- BODY START -->
         <!-- BODY END -->
 
         <!--  FOOTER START -->
@@ -81,19 +76,13 @@
               v-if="!isModalAdd"
               class="d-flex align-items-center justify-content-center"
             >
-              <b-button
-                variant="danger"
+              <button-cancel
                 class="mr-1"
                 @click="hideModal(false,0)"
-              >
-                <feather-icon icon="PowerIcon" /> CANCEL
-              </b-button>
-              <b-button
-                variant="success"
+              />
+              <button-save
                 @click="saveRates()"
-              >
-                <feather-icon icon="SaveIcon" /> SAVE
-              </b-button>
+              />
             </b-col>
             <b-col v-if="isModalAdd">
               <b-button
@@ -101,7 +90,6 @@
                 @click="saveRates()"
               >
                 Continue
-                <feather-icon icon="ChevronsRightIcon" />
               </b-button>
             </b-col>
           </b-row>
@@ -115,9 +103,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
   components: {
+    ButtonSave,
+    ButtonCancel,
     ModalServiceHeader,
   },
   props: {

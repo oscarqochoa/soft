@@ -15,7 +15,10 @@
         :program="files.program"
         class="sticky-top"
       />
-      <b-row class="mt-2 d-flex align-items-center justify-content-end mr-1">
+      <b-row
+        v-if="files.valorEdit"
+        class="mt-2 d-flex align-items-center justify-content-end mr-1"
+      >
         <b-btn
           variant="info"
           @click="loadFile = !loadFile"
@@ -210,6 +213,11 @@ export default {
     files: {
       type: Object,
       required: true,
+    },
+    mode: {
+      type: Number,
+      required: false,
+      default: 1,
     },
   },
   data() {

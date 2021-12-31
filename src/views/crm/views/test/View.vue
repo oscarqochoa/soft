@@ -8,24 +8,24 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import CrmService from '../../services/crm.service'
-import { mapGetters } from 'vuex';
+
 export default {
-  name: "Test",
-  mounted() {
-    amgApi
-      .get("/welcome")
-      .then((response) => {
-        console.log(response);
-      });
-  },
+  name: 'Test',
   data() {
     return {
-      message: "Hello World 2!",
-    };
+      message: 'Hello World 2!',
+    }
   },
-  async created()
-  {
+  mounted() {
+    amgApi
+      .get('/welcome')
+      .then(response => {
+        console.log(response)
+      })
+  },
+  async created() {
     try {
       await CrmService.getAlgo()
     } catch (error) {
@@ -35,12 +35,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-      token: "auth/token",
-      userRole: "auth/userRole",
+      currentUser: 'auth/currentUser',
+      token: 'auth/token',
+      userRole: 'auth/userRole',
     }),
   },
-};
+}
 </script>
 
 <style>

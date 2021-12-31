@@ -164,6 +164,7 @@ export default {
     console.log(this.$refs, 'wizard')
   },
   created() {
+    if (!this.salesClient.account_id) this.salesClient.account_id = this.salesClient.client_account_id
     this.leyendDebtsolution()
   },
   methods: {

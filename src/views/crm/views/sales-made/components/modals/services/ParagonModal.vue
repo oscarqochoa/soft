@@ -81,7 +81,7 @@
                             <money
                               v-model="fee"
                               v-bind="vMoney"
-                              class="text-center font-weight-bolder gold-text p-fee rounded-pill"
+                              class="text-center font-weight-bolder form-control"
                               :style="errors[0] && validateMoney? 'color:red !important':''"
                               :class="{'border border-danger':errors[0] && validateMoney}"
                               :disabled="isModalShow || !option"
@@ -110,34 +110,22 @@
                     v-if="!isModalAdd"
                     class="d-flex justify-content-center align-items-center"
                   >
-                    <b-button
-                      class="rounded mr-1"
-                      variant="danger"
-                      size="sm"
+                    <button-cancel
+                      class="mr-1"
                       @click="hideModal(false,0)"
-                    >
-                      <feather-icon icon="PowerIcon" /> CANCEL
-                    </b-button>
-                    <b-button
-                      class="rounded"
-                      variant="success"
-                      size="sm"
-                      @click="saveRates()"
-                    >
-                      <feather-icon icon="SaveIcon" /> SAVE
-                    </b-button>
+                    />
+                    <button-save @click="saveRates()" />
                   </b-col>
                   <b-col
                     v-else
                     class="d-flex justify-content-center align-items-center"
                   >
                     <b-button
-                      class="rounded text-uppercase"
+                      class="rounded"
                       variant="success"
                       @click="saveRates()"
                     >
                       Continue
-                      <feather-icon icon="ChevronsRightIcon" />
                     </b-button>
                   </b-col>
                 </b-row>
@@ -154,9 +142,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
-  components: { ModalServiceHeader },
+  components: { ButtonSave, ButtonCancel, ModalServiceHeader },
   props: {
     modalServices: {
       type: Boolean,
