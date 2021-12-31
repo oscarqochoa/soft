@@ -9,29 +9,55 @@
         v-scrollbar
         :filter="filter"
         :filter-principal="filterPrincipal"
-        :total-rows="totalLeads"
+        :total-rows="S_LEADS.total"
         :paginate="paginate"
-        :start-page="fromPage"
-        :to-page="toPage"
-        :send-multiple-sms="true"
+        :start-page="S_LEADS.fromPage"
+        :to-page="S_LEADS.toPage"
         @reload="myProvider"
         @onChangeCurrentPage="onChangeCurrentPage"
       >
+        <template #buttons>
+          <b-button
+            variant="success"
+            class="ml-1"
+            :disabled="!leadsSelecteds.length"
+            @click="modalSmssOpen"
+          >
+            <feather-icon
+              icon="MessageCircleIcon"
+              class="mr-50"
+            />Send SMS
+          </b-button>
+          <b-button
+            v-if="[5].includes(currentUser.role_id)"
+            variant="success"
+            class="ml-1"
+            :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.user_id).includes(currentUser.user_id))"
+            @click="showToast('warning', 'top-right', 'In maintenance', 'AlertIcon', 'This action is under maintenance')"
+          >
+            <feather-icon
+              icon="ListIcon"
+              class="mr-50"
+            />ADD LIST
+          </b-button>
+        </template>
 
         <b-table
           slot="table"
           ref="refUserListTable"
           class="position-relative"
-          :fields="fields"
-          :items="items"
-          responsive
-          small
           primary-key="id"
-          :sort-by.sync="sortBy"
-          show-empty
           empty-text="No matching records found"
-          :sort-desc.sync="isSortDirDesc"
           select-mode="multi"
+          responsive="sm"
+          table-class="text-nowrap"
+          sticky-header="50vh"
+          small
+          show-empty
+          :sort-by.sync="sortBy"
+          :fields="fields"
+          :items="S_LEADS.items"
+          :sort-desc.sync="isSortDirDesc"
           :busy.sync="isBusy"
           @row-selected="onRowSelected"
         >
@@ -95,7 +121,7 @@
             >{{ data.item.status }}</b-badge>
           </template>
 
-          <!-- Column: Status -->
+          <!-- Column: Credit Report -->
           <template #cell(credit_report)="data">
             <strong
               :class="`text-${ (data.item.credit_report == 1) ? 'danger' : 'success' }`"
@@ -105,6 +131,7 @@
           <!-- Column: Programs -->
           <template #cell(programs)="data">
             <div
+              v-if="data.item.programs"
               class="d-flex"
               style="gap: .5rem"
             >
@@ -135,7 +162,7 @@
           <!-- Column: Actions -->
           <template #cell(actions)="data">
             <actions-table
-              :options="[ 'returnToSocialNetwork', 'sendSMS', 'historySMS', 'delete' ]"
+              :options="actionsOptions"
               :row-data="data.item"
               @onRowDelete="onRowDelete"
               @onRowProcess="onRowProcess"
@@ -160,7 +187,7 @@
     >
       <modal-send-sms
         :smss="leads_sms"
-        :modul="modul"
+        :modul="currentUser.modul_id"
         :typesms="typesms"
         :sms="leads_sms_o"
         :name-leads="name_leads_arr"
@@ -195,7 +222,7 @@
               </b-input-group>
             </b-col>
             <b-col
-              v-if="modul == 15"
+              v-if="currentUser.modul_id == 15"
               sm="3"
             >
               <b-input-group size="sm">
@@ -225,7 +252,7 @@
     >
       <modal-history-sms
         :id="historySms.id"
-        :modul="modul"
+        :modul="currentUser.modul_id"
         :lead-name="historySms.leadName"
       />
     </b-modal>
@@ -233,7 +260,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { BTable, BPagination, BModal } from 'bootstrap-vue'
 
 import vSelect from 'vue-select'
@@ -274,16 +301,18 @@ export default {
       G_CRS: 'CrmGlobalStore/G_CRS',
       G_TYPE_DOCS: 'CrmGlobalStore/G_TYPE_DOCS',
     }),
+    ...mapState({
+      S_LEADS: state => state.CrmLeadStore.S_LEADS
+    })
   },
   data() {
     return {
-      modul: 2,
+      isOnlyLead: false,
+      type: 0,
+      actionsOptions: [ 'returnToSocialNetwork', 'sendSMS', 'historySMS' ],
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
-
       isBusy: false,
       fields: dataFields.leadFields,
-      items: [],
-      totalLeads: 0,
       filter: dataFilters,
       filterPrincipal: {
         type: 'input',
@@ -291,8 +320,6 @@ export default {
         placeholder: 'Search...',
         model: '',
       },
-      fromPage: 0,
-      toPage: 0,
       paginate: {
         currentPage: 1,
         perPage: 10,
@@ -300,7 +327,6 @@ export default {
       perPageOptions: [10, 25, 50, 100],
       sortBy: 'id',
       isSortDirDesc: true,
-
       rowData: {},
       historySms: {
         leadName: '',
@@ -335,8 +361,8 @@ export default {
       return 'primary'
     },
     selectedAll() {
-      if (this.selectAll) this.items.forEach(item => (item.selected = true))
-      else this.items.forEach(item => (item.selected = false))
+      if (this.selectAll) this.S_LEADS.items.forEach(item => (item.selected = true))
+      else this.S_LEADS.items.forEach(item => (item.selected = false))
       this.onRowSelected()
     },
     onSelectedRow(data) {
@@ -351,7 +377,7 @@ export default {
       try {
         this.setFilters()
         this.isBusy = true
-        const response = await this.A_GET_LEADS({
+        await this.A_GET_LEADS({
           assign_to: this.filter[4].model,
           cr: this.filter[5].model,
           date_from: this.filter[0].model,
@@ -370,25 +396,9 @@ export default {
           perpage: this.paginate.perPage,
           page: this.paginate.currentPage,
         })
-        this.totalLeads = response.total
-        this.fromPage = response.from || 0
-        this.toPage = response.to || 0
-
-        const selectedIds = this.leadsSelecteds.map(s => s.id)
-        let index = 0
-        while (selectedIds.length > 0 && index < response.data.length) {
-          if (selectedIds.includes(response.data[index].id)) {
-            const { id } = response.data[index]
-            response.data[index].selected = true
-            const deleted = selectedIds.findIndex(s => s === id)
-            if (deleted !== -1) selectedIds.splice(deleted, 1)
-          }
-          index += 1
-        }
-
-        this.items = response.data
-        this.isBusy = false
-        return this.items
+        setTimeout(() => {
+          this.isBusy = false
+        }, 500)
       } catch (error) {
         console.log('Somtehing went wrong myProvider', error)
         this.showToast(
@@ -448,9 +458,7 @@ export default {
               iduser: user_id,
               idrole: role_id,
             })
-            if (response.status == 200) {
-              const index = this.items.map(el => el.id).indexOf(id)
-              if (index !== -1) this.items.splice(index, 1)
+            if (this.isResponseSuccess(response)) {
               this.showToast(
                 'success',
                 'top-right',
@@ -497,9 +505,7 @@ export default {
               user_id,
               description: result.value,
             })
-            if (response.status == 200) {
-              const index = this.items.map(el => el.id).indexOf(id)
-              if (index !== -1) this.items[index].status_sn_id = 3
+            if (this.isResponseSuccess(response)) {
               this.showToast(
                 'success',
                 'top-right',
@@ -550,11 +556,21 @@ export default {
       this.quickData = item
     },
   },
+  mounted() {
+    if (![4].includes(this.currentUser.role_id) && !this.isOnlyLead)
+      this.fields.unshift({
+        key: 'selected',
+        label: '',
+        sortable: false,
+      })
+    if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
+      this.actionsOptions.push('delete')
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.table-responsive {
+.table-responsive > div {
   min-height: 15rem;
 }
 </style>

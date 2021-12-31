@@ -8,10 +8,22 @@
       :paginate="paginate"
       :start-page="startPage"
       :to-page="toPage"
-      :send-multiple-sms="true"
       @reload="$refs['new-client-done-table'].refresh()"
-      @sendMultipleSms="modalSmssOpen"
     >
+      <template #buttons>
+        <b-button
+          variant="success"
+          class="ml-1"
+          :disabled="!selected.length"
+          @click="modalSmssOpen"
+        >
+          <feather-icon
+            icon="MessageCircleIcon"
+            class="mr-50"
+          />Send SMS
+        </b-button>
+      </template>
+
       <b-table
         id="new-client-done-table"
         slot="table"

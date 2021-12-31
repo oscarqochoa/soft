@@ -23,13 +23,15 @@
           slot="table"
           ref="refUserListTable"
           class="position-relative"
+          responsive="sm"
+          table-class="text-nowrap"
+          sticky-header="50vh"
+          primary-key="id"
+          empty-text="No matching records found"
+          show-empty
           :fields="fields"
           :items="items"
-          responsive
-          primary-key="id"
           :sort-by.sync="sortBy"
-          show-empty
-          empty-text="No matching records found"
           :busy.sync="isBusy"
           :sort-desc.sync="isSortDirDesc"
         >
@@ -241,9 +243,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-  .table-responsive {
-    min-height: 15rem;
-  }
-</style>

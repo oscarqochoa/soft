@@ -3,14 +3,14 @@
     <b-col sm="12">
       <!-- Street -->
       <validation-provider
-        #default="validationContext"
+        v-slot="{errors}"
         :name="`Mailing address (${addressData.prename})`"
+        :rules="isRequired ? 'required' : null"
       >
         <b-form-group
           label="Mailing address"
           :label-for="`${addressData.prename}-street`"
-          :state="getValidationState(validationContext)"
-          :rules="isRequired ? 'required' : null"
+          :state="errors[0] ? false : null"
         >
           <b-input-group>
             <vue-google-autocomplete
@@ -21,7 +21,7 @@
               v-on:placechanged="getAddressData"
               country="us"
               v-model="addressData.street"
-              :class="{ 'border border-danger' : validationContext.errors[0] }"
+              :class="{ 'border border-danger' : errors[0] }"
               :readonly="addressData.id && disabled.street || isDisabled"
             />
             <template v-if="addressData.id">
@@ -61,17 +61,13 @@
               </b-input-group-append>
             </template>
           </b-input-group>
-
-          <b-form-invalid-feedback :state="getValidationState(validationContext)">
-            {{ validationContext.errors[0] }}
-          </b-form-invalid-feedback>
         </b-form-group>
       </validation-provider>
     </b-col>
     <b-col md="6">
       <!-- City -->
       <validation-provider
-        #default="validationContext"
+        v-slot="{errors}"
         :name="`City (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
@@ -82,19 +78,15 @@
           <b-form-input
             id="city"
             v-model="addressData.city"
-            :state="getValidationState(validationContext)"
             trim
             :disabled="isDisabled || disabled.street"
+            :state="errors[0] ? false : null"
           />
-
-          <b-form-invalid-feedback>
-            {{ validationContext.errors[0] }}
-          </b-form-invalid-feedback>
         </b-form-group>
       </validation-provider>
       <!-- Zip Code -->
       <validation-provider
-        #default="validationContext"
+        v-slot="{errors}"
         :name="`Zip Code (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
@@ -105,28 +97,24 @@
           <b-form-input
             id="zipcode"
             v-model="addressData.zipcode"
-            :state="getValidationState(validationContext)"
             trim
             :disabled="isDisabled || disabled.street"
+            :state="errors[0] ? false : null"
           />
-
-          <b-form-invalid-feedback>
-            {{ validationContext.errors[0] }}
-          </b-form-invalid-feedback>
         </b-form-group>
       </validation-provider>
     </b-col>
     <b-col md="6">
       <!-- State -->
       <validation-provider
-        #default="validationContext"
+        v-slot="{errors}"
         :name="`State (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
         <b-form-group
           label="State"
           label-for="country"
-          :state="getValidationState(validationContext)"
+          :state="errors[0] ? false : null"
         >
           <v-select
             id="country"
@@ -137,15 +125,11 @@
             :disabled="isDisabled || disabled.street"
             :reduce="el => el.value"
           />
-
-          <b-form-invalid-feedback :state="getValidationState(validationContext)">
-            {{ validationContext.errors[0] }}
-          </b-form-invalid-feedback>
         </b-form-group>
       </validation-provider>
       <!-- Country -->
       <validation-provider
-        #default="validationContext"
+        v-slot="{errors}"
         :name="`Country (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
@@ -156,14 +140,10 @@
           <b-form-input
             id="country"
             v-model="addressData.country"
-            :state="getValidationState(validationContext)"
             trim
             :disabled="isDisabled || disabled.street"
+            :state="errors[0] ? false : null"
           />
-
-          <b-form-invalid-feedback>
-            {{ validationContext.errors[0] }}
-          </b-form-invalid-feedback>
         </b-form-group>
       </validation-provider>
     </b-col>

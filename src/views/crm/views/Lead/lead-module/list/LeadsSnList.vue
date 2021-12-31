@@ -22,13 +22,15 @@
           slot="table"
           ref="refUserListTable"
           class="position-relative"
-          :fields="fields"
-          responsive
-          :items="items"
-          primary-key="id"
-          :sort-by.sync="sortBy"
-          show-empty
           empty-text="No matching records found"
+          primary-key="id"
+          responsive="sm"
+          table-class="text-nowrap"
+          sticky-header="50vh"
+          show-empty
+          :fields="fields"
+          :items="items"
+          :sort-by.sync="sortBy"
           :sort-desc.sync="isSortDirDesc"
           :busy.sync="isBusy"
         >
@@ -181,7 +183,7 @@ export default {
     }),
     resolveLeadSnStatusVariant (status) {
       if (status === 2) return 'success'
-      if ([3, 4].includes(status)) return 'dark'
+      if ([3, 4].includes(status)) return 'primary'
       if (status === 5) return 'secondary'
       if (status === 6) return 'warning'
       if (status === 7) return 'danger'
@@ -226,9 +228,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .table-responsive {
-    min-height: 15rem;
-  }
-</style>

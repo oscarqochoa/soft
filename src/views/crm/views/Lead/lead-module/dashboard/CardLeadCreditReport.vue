@@ -25,8 +25,8 @@
         </b-col>
       </b-row>
     </b-card-body>
-    <b-tabs>
-      <b-tab active>
+    <b-tabs pills>
+      <b-tab active title-link-class="border-secondary hover-primary">
         <template #title>
           <span>Obtained</span>
         </template>
@@ -34,7 +34,7 @@
         <card-lead-credit-report-obtained :modul="modul" :is-busy="isBusyCreditReportObtained" />
 
       </b-tab>
-      <b-tab>
+      <b-tab title-link-class="border-secondary hover-primary">
         <template #title>
           <span>Pending</span>
           <div class="ml-50 number-circle">
@@ -186,15 +186,14 @@ export default {
     padding: 10px 7px;
   }
   .number-circle {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1rem;
+    height: 1rem;
     text-align: center;
     border: 0.5px solid #fff;
     border-radius: 50%;
   }
-  .active {
-    .number-circle {
-      border: 0.5px solid #FF9F43;
-    }
+  .number-circle {
+    border: 0.5px solid #FF9F43;
+    font-size: 8pt;
   }
 </style>

@@ -7,7 +7,6 @@
       <b-col md="6">
         <!-- Card Holder Name -->
         <validation-provider
-          #default="validationContext"
           name="Card Holder Name"
         >
           <b-form-group
@@ -18,145 +17,161 @@
               id="card-holdername"
               v-model="userData.cardHoldername"
               autofocus
-              :state="getValidationState(validationContext)"
               trim
               @keyup="capitalize('cardHoldername')"
             />
-
-            <b-form-invalid-feedback>
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
         <!-- Card -->
-        <validation-provider
-          #default="validationContext"
-          name="Card"
-          rules="alpha-num"
-        >
-          <b-form-group>
-            <label for="card-number-1" class="d-block">Card</label>
-            <b-row class="mx-0" style="gap: .25rem;">
-              <b-col xs="6" md="2" class="px-0">
+        <b-form-group>
+          <label class="d-block">Card</label>
+          <b-row class="mx-0" style="gap: .25rem;">
+            <b-col xs="6" md="2" class="px-0">
+              <validation-provider
+                v-slot="{errors}"
+                name="card-number-1"
+                rules="integer"
+              >
                 <b-form-input
                   id="card-number-1"
                   ref="input-1"
                   v-model="userData.cardNumber1"
                   autofocus
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="4"
+                  :class="{'border-danger rounded': errors[0]}"
                   @input="activeFocus(1, 4)"
                   @keyup.native="activefocus(2)"
                 />
-              </b-col>
-              <b-col xs="6" md="2" class="px-0">
+              </validation-provider>
+            </b-col>
+            <b-col xs="6" md="2" class="px-0">
+              <validation-provider
+                v-slot="{errors}"
+                name="card-number-2"
+                rules="integer"
+              >
                 <b-form-input
                   id="card-number-2"
                   ref="input-2"
                   v-model="userData.cardNumber2"
                   autofocus
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="4"
+                  :class="{'border-danger rounded': errors[0]}"
                   @input="activeFocus(2, 4)"
                   @keyup.native="activefocus(3)"
                 />
-              </b-col>
-              <b-col xs="6" md="2" class="px-0">
+              </validation-provider>
+            </b-col>
+            <b-col xs="6" md="2" class="px-0">
+              <validation-provider
+                v-slot="{errors}"
+                name="card-number-3"
+                rules="integer"
+              >
                 <b-form-input
                   id="card-number-3"
                   ref="input-3"
                   v-model="userData.cardNumber3"
                   autofocus
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="4"
+                  :class="{'border-danger rounded': errors[0]}"
                   @input="activeFocus(3, 4)"
                   @keyup.native="activefocus(4)"
                 />
-              </b-col>
-              <b-col xs="6" md="2" class="px-0">
+              </validation-provider>
+            </b-col>
+            <b-col xs="6" md="2" class="px-0">
+              <validation-provider
+                v-slot="{errors}"
+                name="card-number-4"
+                rules="integer"
+              >
                 <b-form-input
                   id="card-number-4"
                   ref="input-4"
                   v-model="userData.cardNumber4"
                   autofocus
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="4"
+                  :class="{'border-danger rounded': errors[0]}"
                   @input="activeFocus(4, 4)"
                   @keyup.native="activefocus(5)"
                 />
-              </b-col>
-              <b-col xs="12" md="3" class="text-center">
-                <img
-                  :src="imgcard"
-                  :style="`${!imgCardChange ? 'display:none':'display:block'}height:30px;width:70px;`"
-                />
-              </b-col>
-            </b-row>
-
-            <b-form-invalid-feedback>
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </validation-provider>
+              </validation-provider>
+            </b-col>
+            <b-col xs="12" md="3" class="text-center">
+              <img
+                :src="imgcard"
+                :style="`${!imgCardChange ? 'display:none':'display:block'}height:30px;width:70px;`"
+              />
+            </b-col>
+          </b-row>
+        </b-form-group>
         <!-- Expired Date -->
-        <validation-provider
-          #default="validationContext"
-          name="Expired Date"
-          rules="alpha-num"
-        >
-          <b-form-group>
-            <label for="card-expi-month" class="d-block">Expired Date</label>
-            <b-row>
-              <b-col sm="4">
+        <b-form-group>
+          <label for="card-expi-month" class="d-block">Expired Date</label>
+          <b-row>
+            <b-col sm="4">
+              <validation-provider
+                v-slot="{errors}"
+                name="card-expi-month"
+                rules="integer"
+              >
                 <b-form-input
                   id="card-expi-month"
                   ref="input-5"
                   placeholder="MM"
                   v-model="userData.cardExpiMonth"
                   autofocus
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="2"
+                  :state="errors[0] ? false : null"
                   @keyup.native="activeFocus(5, 3)"
                 />
-              </b-col>
-              <b-col sm="4">
+              </validation-provider>
+            </b-col>
+            <b-col sm="4">
+              <validation-provider
+                v-slot="{errors}"
+                name="card-expi-year"
+                rules="integer"
+              >
                 <b-form-input
                   id="card-expi-year"
                   ref="input-6"
                   placeholder="YY"
                   v-model="userData.cardExpiYear"
                   autofocus
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="2"
+                  :state="errors[0] ? false : null"
                   @keyup.native="activeFocus(6, 3)"
                 />
-              </b-col>
-              <b-col sm="4">
+              </validation-provider>
+            </b-col>
+            <b-col sm="4">
+              <validation-provider
+                v-slot="{errors}"
+                name="card-security-code"
+                rules="integer"
+              >
                 <b-form-input
                   id="card-security-code"
                   ref="input-7"
-                  type="number"
                   placeholder="CVV"
                   v-model="userData.cardSecurityCode"
                   autofocus
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="4"
+                  :state="errors[0] ? false : null"
                 />
-              </b-col>
-            </b-row>
-
-            <b-form-invalid-feedback>
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </validation-provider>
+              </validation-provider>
+            </b-col>
+          </b-row>
+        </b-form-group>
         <b-form-group>
           <b-form-checkbox
             id="yes-or-not-address"

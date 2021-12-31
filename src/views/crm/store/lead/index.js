@@ -5,7 +5,12 @@ import crmLead from '@/views/crm/services/lead'
 import mixins from '@/mixins/general'
 
 const state = {
-  S_LEADS: [],
+  S_LEADS: {
+    items: [],
+    total: 0,
+    fromPage: 0,
+    toPage: 0,
+  },
   S_SN_LEADS: [],
   S_W_POTENTIAL_LEADS: [],
   S_SELECTED_LEADS: [],
@@ -54,10 +59,27 @@ const mutations = {
   PUSH_DATA (state, params) {
     state[params.destination].push(params.data)
   },
+  UNSHIFT_LEADS_DATA (state, params) {
+    state[params.destination].items.unshift(params.data)
+    state[params.destination].total++
+  },
   REMOVE_DATA (state, params) {
     const index = state[params.destination].map(el => el.id).indexOf(params.id)
     if (index !== -1) {
       state[params.destination].splice(index, 1)
+    }
+  },
+  REMOVE_LEAD_DATA (state, params) {
+    const index = state[params.destination].items.map(el => el.id).indexOf(params.id)
+    if (index !== -1) {
+      state[params.destination].items.splice(index, 1)
+      state[params.destination].total--
+    }
+  },
+  PROCESS_DATA (state, params) {
+    const index = state[params.destination].items.map(el => el.id).indexOf(params.id)
+    if (index !== -1) {
+      state[params.destination].items[index].status_sn_id = 3
     }
   },
   UPDATE_DATA (state, params) {
@@ -73,11 +95,30 @@ const actions = {
     try {
       const response = await crmLead.getLeads(body)
       console.log('A_GET_LEADS response', response)
-      commit('SET_DATA', {
-        destination: 'S_LEADS',
-        data: response.data
-      })
-      return response
+      if (mixins.methods.isResponseSuccess(response)) {
+        const selectedIds = state.S_SELECTED_LEADS.map(el => el.id)
+        let index = 0
+        while (selectedIds.length > 0 && index < response.data.data.length) {
+          if (selectedIds.includes(response.data.data[index].id)) {
+            const { id } = response.data.data[index]
+            response.data.data[index].selected = true
+            const deleted = selectedIds.findIndex(s => s === id)
+            if (deleted !== -1) selectedIds.splice(deleted, 1)
+          }
+          index += 1
+        }
+        const data = {
+          items: response.data.data,
+          total: response.data.total,
+          fromPage: response.data.from,
+          toPage: response.data.to,
+        }
+        commit('SET_DATA', {
+          destination: 'S_LEADS',
+          data
+        })
+      }
+      return response.data
     } catch (error) {
       console.log('ERROR_GET_LEADS [ACTION]', error)
       throw error
@@ -219,7 +260,7 @@ const actions = {
       console.log('A_SET_LEADS response', response)
       if (mixins.methods.isResponseSuccess(response)) {
         body.id = response.data.id
-        commit('PUSH_DATA', {
+        commit('UNSHIFT_LEADS_DATA', {
           destination: 'S_LEADS',
           data: body
         })
@@ -295,7 +336,7 @@ const actions = {
       const response = await crmLead.postDeleteLead(body)
       console.log('A_DELETE_LEADS response', response)
       if (mixins.methods.isResponseSuccess(response))
-        commit('REMOVE_DATA', {
+        commit('REMOVE_LEAD_DATA', {
           destination: 'S_LEADS',
           id: body.leadid
         })
@@ -328,6 +369,11 @@ const actions = {
     try {
       const response = await crmLead.postProcessLead(body)
       console.log('A_PROCESS_LEADS response', response)
+      if (mixins.methods.isResponseSuccess(response))
+        commit('PROCESS_DATA', {
+          destination: 'S_LEADS',
+          id: body.lead_id
+        })
       return response
     } catch (error) {
       console.log('ERROR_PROCESS_LEADS [ACTION]', error)
