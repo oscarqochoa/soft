@@ -54,6 +54,7 @@ export default {
     this.$root.$on("bv::modal::shown", bvEvent => {
       bvEvent.vueTarget.$refs.content.attributes.removeNamedItem("tabindex");
     });
+    console.log(this.$route);
     // this.updateCurrentUserModuleRole(this.$route.meta.module)
     
   },
@@ -64,7 +65,7 @@ export default {
   },
   watch:{
     '$route'(){
-      this.updateCurrentUserModuleRole(this.$route.meta.module)
+      this.updateCurrentUserModuleRole(this.$route.matched[0].meta.module)
     }
   },
   beforeCreate() {

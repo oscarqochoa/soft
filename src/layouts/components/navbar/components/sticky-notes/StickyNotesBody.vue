@@ -2,7 +2,7 @@
   <div>
     <b-row v-if="view == 'grid-view'">
       <template v-for="note in notes">
-        <b-col cols="12" md="2" :key="note.id" class="mt-1">
+        <b-col cols="6" md="2" :key="note.id" class="mt-1">
           <sticky-notes-card :note="note" @onCardClicked="onCardClicked">
           </sticky-notes-card>
         </b-col>

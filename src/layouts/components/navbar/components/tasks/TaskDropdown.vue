@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-nav-item-dropdown
+      right
       class="dropdown-notification mr-25"
       menu-class="dropdown-menu-media"
     >
@@ -49,8 +50,12 @@
                       {{ task.subject }}
                     </span>
                   </p>
-                  <div class="d-flex justify-content-between  align-items-center">
-                    <small class="notification-text" style="width: calc(100% - 115px);"
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <small
+                      class="notification-text"
+                      style="width: calc(100% - 115px)"
                       >{{ task.client_name }} | {{ task.date | myHourTime }} |
                       {{ task.real_time | myHourTime }}</small
                     >
@@ -58,7 +63,7 @@
                       v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                       variant="outline-primary"
                       size="sm"
-                      style="width: 105px;"
+                      style="width: 105px"
                       block
                     >
                       {{ notification.type == "today" ? "" : task.cant }}
@@ -84,7 +89,7 @@
       </li>
     </b-nav-item-dropdown>
     <b-modal size="lg" v-model="taskModal" hide-footer centered title="TASKS">
-      <task-modal></task-modal> 
+      <task-modal></task-modal>
     </b-modal>
   </div>
 </template>
@@ -92,16 +97,16 @@
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import Ripple from "vue-ripple-directive";
-import TaskModal from './components/TaskModal.vue'
+import TaskModal from "./components/TaskModal.vue";
 import { mapActions, mapGetters, mapState } from "vuex";
 export default {
   mounted() {
-    this.getFirstFiveUserTasks()
-    this.getTaskCounter()
+    this.getFirstFiveUserTasks();
+    this.getTaskCounter();
   },
   components: {
     VuePerfectScrollbar,
-    TaskModal
+    TaskModal,
   },
   directives: {
     Ripple,
@@ -109,11 +114,11 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      taskCounter: "TaskStore/taskCounter"
+      taskCounter: "TaskStore/taskCounter",
     }),
     ...mapState({
-      S_TASKS: state => state.TaskStore.S_TASKS
-    })
+      S_TASKS: (state) => state.TaskStore.S_TASKS,
+    }),
   },
   data() {
     return {
@@ -121,27 +126,23 @@ export default {
         maxScrollbarLength: 60,
         wheelPropagation: false,
       },
-      taskModal: false
+      taskModal: false,
     };
   },
   methods: {
     ...mapActions({
-      A_GET_TASKS: 'TaskStore/A_GET_TASKS',
-      A_GET_TASK_COUNTER: 'TaskStore/A_GET_TASK_COUNTER'
+      A_GET_TASKS: "TaskStore/A_GET_TASKS",
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
     }),
-    async getFirstFiveUserTasks () {
+    async getFirstFiveUserTasks() {
       try {
-        await this.A_GET_TASKS({ id: this.currentUser.user_id })
-      } catch (error) {
-
-      }
+        await this.A_GET_TASKS({ id: this.currentUser.user_id });
+      } catch (error) {}
     },
-    async getTaskCounter () {
+    async getTaskCounter() {
       try {
-        await this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id })
-      } catch (error) {
-
-      }
+        await this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
+      } catch (error) {}
     },
   },
 };

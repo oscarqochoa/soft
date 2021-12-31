@@ -127,7 +127,6 @@
             :profile-user-avatar="profileUserDataMinimal.avatar"
           />
         </vue-perfect-scrollbar>
-
         <!-- Message Input -->
         <b-form
           class="chat-app-form"

@@ -21,7 +21,6 @@ const routes = [
   ...ListsRoute,
   ...GlossaryRoute,
 ];
-
 routes.map((route) => {
   if (route.meta) {
     route.meta.module = 2;

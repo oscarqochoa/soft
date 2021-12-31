@@ -132,7 +132,7 @@ export default {
     //   else style.sheet.insertRule(`${name}{${rules}}`, 0);
     // },
     /* TOAST */
-    showToast(variant, position, title, icon, text) {
+    showToast(variant = "success", position = "top-right", title = "Congratulations", icon = "CheckIcon", text = "You've successfully done it!") {
       this.$toast(
         {
           component: ToastificationContent,

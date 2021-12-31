@@ -1,7 +1,5 @@
 <template>
-  <b-nav-item @click="redirectToMessenger()" v-b-tooltip.hover.top="'AMG Messenger'">
-    <amg-icon icon="MessengerIcon" size="19" />
-  </b-nav-item>
+  <amg-icon icon="MessengerIcon" size="19" />
 </template>
 
 <script>

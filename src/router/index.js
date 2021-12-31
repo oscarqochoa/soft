@@ -5,12 +5,14 @@ import VueRouter from 'vue-router'
 import { canNavigate } from '@/libs/acl/routeProtection'
 import { isUserLoggedIn, getUserData, getHomeRouteForLoggedInUser } from '@/auth/utils'
 import crm from '@/views/crm/router'
+import users from './routes/amg/users'
 import apps from './routes/apps'
 import dashboard from './routes/dashboard'
 import uiElements from './routes/ui-elements/index'
 import pages from './routes/pages'
 import chartsMaps from './routes/charts-maps'
 import formsTable from './routes/forms-tables'
+import messages from '@/commons/messages/messages.router';
 import others from './routes/others'
 
 Vue.use(VueRouter)
@@ -24,6 +26,8 @@ const router = new VueRouter({
   routes: [
     { path: '/', redirect: { name: 'dashboard-ecommerce' } },
     ...crm,
+    ...users,
+    ...messages,
     ...apps,
     ...dashboard,
     ...pages,
