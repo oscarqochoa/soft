@@ -1,8 +1,9 @@
 <template>
-  <div>
-    <pre>{{ currentUser }}</pre>
-
-  </div>
+<div>
+  <h1>{{message}}</h1>
+  <pre>{{currentUser}}</pre>
+  <pre>{{ userRole }}</pre>
+</div>
 
 </template>
 

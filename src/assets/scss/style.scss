@@ -204,6 +204,13 @@ $borderamg: #efb911;
   width: 100%;
 }
 
+.nav-pills {
+  gap: 1rem;
+  .active {
+    border: 1px solid transparent !important;
+  }
+}
+
 //Button x
 .x-close-position {
   transform: translate(-12px, 4px) !important;

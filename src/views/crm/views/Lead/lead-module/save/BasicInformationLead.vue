@@ -7,7 +7,7 @@
       <b-col md="6">
         <!-- First Name -->
         <validation-provider
-          #default="validationContext"
+          v-slot="{errors}"
           name="First Name"
           rules="required"
         >
@@ -17,21 +17,17 @@
           >
             <b-form-input
               id="first-name"
+              name="first-name"
               v-model="userData.first_name"
               autofocus
-              :state="getValidationState(validationContext)"
+              :state="errors[0] ? false : null"
               trim
               @keyup="capitalize('first_name')"
             />
-
-            <b-form-invalid-feedback>
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
         <!-- MiddleName -->
         <validation-provider
-          #default="validationContext"
           name="MiddleName"
         >
           <b-form-group
@@ -41,18 +37,13 @@
             <b-form-input
               id="middle-name"
               v-model="userData.middle_name"
-              :state="getValidationState(validationContext)"
               trim
             />
-
-            <b-form-invalid-feedback>
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
         <!-- LastName -->
         <validation-provider
-          #default="validationContext"
+          v-slot="{errors}"
           name="LastName"
           rules="required"
         >
@@ -63,19 +54,15 @@
             <b-form-input
               id="last-name"
               v-model="userData.last_name"
-              :state="getValidationState(validationContext)"
               trim
+              :state="errors[0] ? false : null"
               @keyup="capitalize('last_name')"
             />
-
-            <b-form-invalid-feedback>
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
         <!-- Email -->
         <validation-provider
-          #default="validationContext"
+          v-slot="{errors}"
           name="Email"
           :rules="`${!disabledemail ? 'required|' : ''}email`"
         >
@@ -86,13 +73,9 @@
             <b-form-input
               id="email"
               v-model="userData.email"
-              :state="getValidationState(validationContext)"
               trim
+              :state="errors[0] ? false : null"
             />
-
-            <b-form-invalid-feedback>
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
         <b-form-group>
@@ -110,13 +93,11 @@
       <b-col md="6">
         <!-- Programs -->
         <validation-provider
-          #default="validationContext"
           name="Programs"
         >
           <b-form-group
             label="Programs"
             label-for="programs"
-            :state="getValidationState(validationContext)"
           >
             <v-select
               v-model="userData.programs"
@@ -126,20 +107,15 @@
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="G_PROGRAMS"
             />
-            <b-form-invalid-feedback :state="getValidationState(validationContext)">
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
         <!-- Dob -->
         <validation-provider
-          #default="validationContext"
           name="DOB"
         >
           <b-form-group
             label="DOB"
             label-for="dob"
-            :state="getValidationState(validationContext)"
           >
             <flat-pickr
               id="dob"
@@ -148,22 +124,19 @@
               :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'm/d/Y', locale: 'en' }"
               placeholder="From"
             />
-            <b-form-invalid-feedback :state="getValidationState(validationContext)">
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
 
           </b-form-group>
         </validation-provider>
         <!-- Language -->
         <validation-provider
-          #default="validationContext"
+          v-slot="{errors}"
           name="Language"
           rules="required"
         >
           <b-form-group
             label="Language"
             label-for="language"
-            :state="getValidationState(validationContext)"
+            :state="errors[0] ? false : null"
           >
             <v-select
               v-model="userData.language"
@@ -173,20 +146,15 @@
               input-id="language"
               :reduce="el => el.value"
             />
-            <b-form-invalid-feedback :state="getValidationState(validationContext)">
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
         <!-- Lead State -->
         <validation-provider
-          #default="validationContext"
           name="Lead State"
         >
           <b-form-group
             label="Status"
             label-for="state-lead"
-            :state="getValidationState(validationContext)"
           >
             <v-select
               v-model="userData.state_lead"
@@ -196,10 +164,6 @@
               input-id="state-lead"
               :reduce="el => el.id"
             />
-            
-            <b-form-invalid-feedback :state="getValidationState(validationContext)">
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
       </b-col>

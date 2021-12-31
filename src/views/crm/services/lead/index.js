@@ -14,7 +14,7 @@ class CrmLead {
   
   async getLeads (body) {
     try {
-      const { data } = await amgApi.post('/searchleads', body)
+      const data = await amgApi.post('/searchleads', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getLeads:', error)

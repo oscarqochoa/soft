@@ -7,14 +7,14 @@
       <b-col md="6">
         <!-- Lead Owner -->
         <validation-provider
-          #default="validationContext"
+          v-slot="{errors}"
           name="Lead Owner"
           rules="required"
         >
           <b-form-group
             label="Lead Owner"
             label-for="userId"
-            :state="getValidationState(validationContext)"
+            :state="errors[0] ? false : null"
           >
             <v-select
               id="userId"
@@ -24,21 +24,18 @@
               :options="G_SELLERS"
               :reduce="el => el.id"
             />
-            <b-form-invalid-feedback :state="getValidationState(validationContext)">
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
         <!-- Lead Status -->
         <validation-provider
-          #default="validationContext"
+          v-slot="{errors}"
           name="Lead Status"
           rules="required"
         >
           <b-form-group
             label="Lead Status"
             label-for="leadStatusId"
-            :state="getValidationState(validationContext)"
+            :state="errors[0] ? false : null"
           >
             <b-input-group>
               <v-select
@@ -87,23 +84,20 @@
                 </b-input-group-append>
               </template>
             </b-input-group>
-            <b-form-invalid-feedback :state="getValidationState(validationContext)">
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
       </b-col>
       <b-col md="6">
         <!-- Lead Source -->
         <validation-provider
-          #default="validationContext"
+          v-slot="{errors}"
           name="Lead Source"
           rules="required"
         >
           <b-form-group
             label="Lead Source"
             label-for="sourceId"
-            :state="getValidationState(validationContext)"
+            :state="errors[0] ? false : null"
           >
             <v-select
               v-model="userData.source_id"
@@ -112,21 +106,18 @@
               :options="G_SOURCE_LEADS"
               :reduce="el => el.id"
             />
-            <b-form-invalid-feedback :state="getValidationState(validationContext)">
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
         <!-- Source Name -->
         <validation-provider
-          #default="validationContext"
+          v-slot="{errors}"
           name="Source Name"
           rules="required"
         >
           <b-form-group
             label="Source Name"
             label-for="sourceNameId"
-            :state="getValidationState(validationContext)"
+            :state="errors[0] ? false : null"
           >
             <v-select
               v-model="userData.sourcesname_id"
@@ -135,9 +126,6 @@
               :options="G_SOURCE_NAMES"
               :reduce="el => el.id"
             />
-            <b-form-invalid-feedback :state="getValidationState(validationContext)">
-              {{ validationContext.errors[0] }}
-            </b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
       </b-col>
