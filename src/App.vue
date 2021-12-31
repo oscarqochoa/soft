@@ -54,21 +54,15 @@ export default {
       loading: 'app/loading',
     }),
   },
-  mounted() {
-    this.$root.$on('bv::modal::shown', bvEvent => {
-      bvEvent.vueTarget.$refs.content.attributes.removeNamedItem('tabindex')
-    })
-    // this.updateCurrentUserModuleRole(this.$route.meta.module)
-  },
   methods: {
     ...mapActions({
       updateCurrentUserModuleRole: 'auth/updateCurrentUserModuleRole',
     }),
   },
-  watch: {
-    $route() {
+  watch:{
+    '$route'(){
       this.updateCurrentUserModuleRole(this.$route.matched[0].meta.module)
-    },
+    }
   },
   beforeCreate() {
     // Set colors in theme

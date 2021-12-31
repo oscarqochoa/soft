@@ -16,12 +16,12 @@ $dark: #1D222E;
 //Background bg
 $theme-dark-body-bg: #1D222E !default;
 $theme-dark-body-color: #D8D8D8 !default;
-$theme-dark-border-color: rgba(80, 85, 99, 0.2) !default;
+$theme-dark-border-color: rgb(146 151 165 / 20%) !default;
 //#3b4253
 //Card bg
 
 $theme-dark-card-bg: #252B3B !default;
-$theme-dark-box-shadow: 0 5px 20px 0 rgb(20 23 26 / 10%);
+$theme-dark-box-shadow: 0 4px 24px 0 rgb(57 67 76 / 24%) !default;
 // Table color
 
 
@@ -54,7 +54,7 @@ $theme-dark-switch-bg-disabled: #1b2337;
 //Input
 $theme-dark-input-bg: #252B3B !default;
 $theme-dark-input-placeholder-color: rgb(145 153 163 / 65%) !default;
-$theme-dark-input-border-color: rgb(145 153 163 / 65%) !default;
+$theme-dark-input-border-color: rgb(146 151 165 / 20%) !default;
 $theme-dark-input-disabled-bg: #24233a !default;
 $theme-dark-input-disabled-border-color: #444b60 !default;
 
