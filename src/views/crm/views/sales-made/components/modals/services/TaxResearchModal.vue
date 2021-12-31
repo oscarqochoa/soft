@@ -2,7 +2,7 @@
   <div>
     <ValidationObserver ref="form">
       <b-modal
-        v-model="modalServices"
+        v-model="ownControl"
         modal
         size="xl"
         scrollable
@@ -27,124 +27,66 @@
         <!-- BODY START -->
         <!-- rates -->
         <b-row>
-          <div class="col-lg-6">
-            <div class="form-group">
-              <table
-                v-if="rates.length>0"
-                class="table table-bordered table-striped"
-              >
-                <tbody>
-                  <tr class="description-price">
-                    <th style="font-weight: 100">
-                      Description
-                    </th>
-                    <th style="font-weight: 100; width: 15%">
-                      Price
-                    </th>
-                    <th style="font-weight: 100">
-                      Quantity
-                    </th>
-                    <th style="font-weight: 100">
-                      SubTotal
-                    </th>
-                  </tr>
-                  <template v-for="(prices, index) in rates">
-                    <tr
-                      v-if="index < 9"
-                      :key="prices.id"
-                    >
-                      <td class="description-price">
-                        <span>{{ prices.description }}</span>
-                      </td>
-                      <td style="color: #666666">
-                        $
-                        <span>{{ prices.price }}</span>.00
-                      </td>
-                      <td>
-                        <input
-                          v-model.number="prices.quantity"
-                          :disabled="prices.disabled || isModalShow"
-                          class="input-form-cant text-center bg-white rounded"
-                          type="number"
-                          min="1"
-                          max="99"
-                          @change="calculateSubtotal(index)"
-                        >
-                      </td>
-                      <td style="color: #baa345">
-                        $
-                        <money
-                          v-model.lazy="prices.subtotal"
-                          v-bind="vMoney"
-                          class="campo-input-color-palceholder sub-total"
-                          disabled
-                        />
-                      </td>
-                    </tr>
-                  </template>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="form-group">
-              <table
-                v-if="rates.length>0"
-                class="table table-bordered table-striped"
-              >
-                <tbody>
-                  <tr class="description-price">
-                    <th style="font-weight: 100">
-                      Description
-                    </th>
-                    <th style="font-weight: 100; width: 15%">
-                      Price
-                    </th>
-                    <th style="font-weight: 100">
-                      Quantity
-                    </th>
-                    <th style="font-weight: 100">
-                      SubTotal
-                    </th>
-                  </tr>
-                  <template v-for="(pdata2, index) in rates">
-                    <tr
-                      v-if="index > 8"
-                      :key="pdata2.id"
-                    >
-                      <td class="description-price">
-                        <span>{{ pdata2.description }}</span>
-                      </td>
-                      <td style="color: #666666">
-                        $
-                        <span>{{ pdata2.price }}</span>.00
-                      </td>
-                      <td>
-                        <input
-                          v-model.number="pdata2.quantity"
-                          :disabled="pdata2.disabled || isModalShow"
-                          class="input-form-cant text-center bg-white rounded"
-                          type="number"
-                          min="1"
-                          max="99"
-                          @change="calculateSubtotal(index)"
-                        >
-                      </td>
-                      <td style="color: #baa345">
-                        $
-                        <money
-                          v-model.lazy="pdata2.subtotal"
-                          v-bind="vMoney"
-                          class="campo-input-color-palceholder sub-total"
-                          disabled
-                        />
-                      </td>
-                    </tr>
-                  </template>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <b-col lg="6">
+            <b-table
+              :fields="fields"
+              :items="table1"
+              small
+              class="font-small-3"
+            >
+              <template v-slot:cell(quantity)="data">
+                <b-form-spinbutton
+                  v-model.number="data.item.quantity"
+                  :disabled="isModalShow"
+                  class="square"
+                  min="0"
+                  max="99"
+                  size="sm"
+                  @change="calculateSubtotal(data.item.index)"
+                />
+              </template>
+              <template v-slot:cell(subtotal)="data">
+                <div class="d-flex align-items-center justify-content-center text-primary">
+                  <div
+                    style="width: 80px"
+                    class="text-center"
+                  >
+                    $ {{ data.item.subtotal.toFixed(2) }}
+                  </div>
+                </div>
+              </template>
+            </b-table>
+          </b-col>
+          <b-col lg="6">
+            <b-table
+              :fields="fields"
+              :items="table2"
+              small
+              class="font-small-3"
+            >
+              <template v-slot:cell(quantity)="data">
+                <b-form-spinbutton
+                  v-model.number="data.item.quantity"
+                  class="square"
+                  :disabled="isModalShow"
+                  min="0"
+                  max="99"
+                  size="sm"
+                  @change="calculateSubtotal(data.item.index)"
+                />
+              </template>
+              <template v-slot:cell(subtotal)="data">
+                <div class="d-flex align-items-center justify-content-center text-primary">
+                  <div
+                    style="width: 80px"
+                    class="text-center"
+                  >
+                    $ {{ data.item.subtotal.toFixed(2) }}
+                  </div>
+                </div>
+              </template>
+            </b-table>
+          </b-col>
         </b-row>
         <!-- BODY END -->
 
@@ -158,23 +100,25 @@
                   v-slot="{errors}"
                   rules="required|money-1"
                 >
-                  <div>
-                    <div class="text-center">
+                  <b-row class="text-center d-flex align-items-center justify-content-end">
+                    <b-col
+                      cols="2"
+                      class="d-flex align-items-center justify-content-end pr-0"
+                    >
                       TOTAL $
+                    </b-col>
+                    <b-col
+                      cols="3"
+                    >
                       <money
                         v-model.lazy="totalAmount"
                         v-bind="vMoney"
-                        class="input-total text-center"
-                        :style="errors[0] && validateMoney? 'color:red !important':''"
-                        :class="{'border border-danger':errors[0] && validateMoney}"
+                        class="form-control text-center form-control-sm"
+                        :class="{'border-danger':errors[0] && validateMoney}"
                         disabled
                       />
-                    </div>
-                  </div>
-                  <div
-                    v-if="errors[0] && validateMoney"
-                    class="invalid-feedback ml-4"
-                  >Total is {{ errors[0] }}</div>
+                    </b-col>
+                  </b-row>
                 </ValidationProvider>
               </b-col>
               <!-- Fee -->
@@ -184,47 +128,41 @@
                   v-slot="{errors}"
                   rules="required|money-1"
                 >
-                  <div>
-                    <div class="text-center">
+                  <b-row class="text-center d-flex align-items-center justify-content-end">
+                    <b-col
+                      cols="2"
+                      class="d-flex align-items-center justify-content-end pr-0"
+                    >
                       FEE $
+                    </b-col>
+                    <b-col
+                      cols="3"
+                    >
                       <money
                         v-model="fee"
                         v-bind="vMoney"
-                        class="input-total text-center font-weight-bolder gold-text"
-                        :style="errors[0] && validateMoney? 'color:red !important':''"
-                        :class="{'border border-danger':errors[0] && validateMoney}"
+                        class="form-control form-control-sm text-center"
+                        :class="{'border-danger':errors[0] && validateMoney}"
                         :disabled="isModalShow"
                       />
-                    </div>
-                  </div>
-                  <div
-                    v-if="errors[0] && validateMoney"
-                    class="invalid-feedback ml-4"
-                  >Fee is {{ errors[0] }}</div>
+                    </b-col>
+                  </b-row>
                 </ValidationProvider>
               </b-col>
             </b-row>
-            <b-row v-if="!isModalShow">
+            <b-row
+              v-if="!isModalShow"
+              class="mt-2"
+            >
               <b-col
                 v-if="!isModalAdd"
-                class="d-flex align-items-center justify-content-center"
+                class="d-flex align-items-center justify-content-end"
               >
-                <b-button
-                  variant="danger"
-                  class="rounded mr-1"
-                  size="sm"
+                <button-save @click="saveRates" />
+                <button-cancel
+                  class="rounded ml-1"
                   @click="hideModal(false, 0)"
-                >
-                  <feather-icon icon="PowerIcon" />CANCEL
-                </b-button>
-                <b-button
-                  variant="success"
-                  class="rounded"
-                  size="sm"
-                  @click="saveRates"
-                >
-                  <feather-icon icon="SaveIcon" />SAVE
-                </b-button>
+                />
               </b-col>
               <b-col v-else>
                 <b-button
@@ -234,7 +172,6 @@
                   @click="saveRates"
                 >
                   Continue
-                  <feather-icon icon="ChevronsRightIcon" />
                 </b-button>
               </b-col>
             </b-row>
@@ -249,9 +186,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
   components: {
+    ButtonSave,
+    ButtonCancel,
     ModalServiceHeader,
   },
   props: {
@@ -288,9 +229,9 @@ export default {
   },
   data() {
     return {
+      ownControl: false,
       client: null,
       program: 5,
-      options_ce: [],
       rates: [],
       lead: null,
       fee: 0,
@@ -304,16 +245,35 @@ export default {
       vMoney: {
         decimal: '.',
         thousands: ',',
-        prefix: '',
         precision: 2,
         masked: false,
       },
       validateMoney: false,
       score_id: null,
       json_ce: null,
+      fields: [
+        {
+          key: 'description',
+          label: 'DESCRIPTION',
+        },
+        {
+          key: 'price',
+          label: 'PRICE',
+          formatter: value => `$ ${value}`,
+        },
+        {
+          key: 'quantity',
+          label: 'QUANTITY',
+        },
+        {
+          key: 'subtotal',
+          label: 'SUBTOTAL',
+          class: 'text-center',
+        },
+      ],
+      totalAmount: 0,
     }
   },
-  created() {},
   async mounted() {
     this.client = this.salesClient
     if (this.program) {
@@ -322,14 +282,13 @@ export default {
     if (this.isModalAdd) {
       await this.getScore()
     }
+    this.totalAmount = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
+    this.ownControl = true
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
     }),
-    totalAmount() {
-      return this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
-    },
     isModalShow() {
       return this.typeModal === 2 || this.typeModal === 5
     },
@@ -337,6 +296,12 @@ export default {
       return (
         this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
       )
+    },
+    table1() {
+      return this.rates.filter((rate, index) => index < 9)
+    },
+    table2() {
+      return this.rates.filter((rate, index) => index >= 9)
     },
   },
   methods: {
@@ -418,15 +383,7 @@ export default {
           json_ce: this.json_ce,
         }
 
-        const result = await this.$swal.fire({
-          title: `Are you sure you want to ${message}?`,
-          text: "You won't be able to revert this!",
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes',
-        })
+        const result = await this.showConfirmSwal()
         if (result.value) {
           this.addPreloader()
           const response = await amgApi.post(`${route}`, param)
@@ -440,6 +397,7 @@ export default {
     /* Changes */
     calculateSubtotal(index) {
       this.rates[index].subtotal = this.rates[index].price * this.rates[index].quantity
+      this.totalAmount = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
     },
 
     /* Rates */
@@ -451,6 +409,9 @@ export default {
         })
         if (response.status === 200) {
           this.rates = response.data
+          this.rates.forEach((value, index) => {
+            this.rates[index].index = index
+          })
           if (!this.isModalShow) {
             this.removePreloader()
           }
@@ -459,7 +420,7 @@ export default {
           })
 
           if (this.isModalShow) {
-            this.showRates()
+            await this.showRates()
           }
         }
       } catch (error) {
@@ -515,39 +476,4 @@ export default {
 </script>
 
 <style scoped>
-.select-task {
-  text-align: center;
-  width: 100%;
-  border: 2px solid #ffffff;
-  border-radius: 5px;
-  outline: none;
-  background: #e8e8e8;
-  font-size: 14px;
-  color: black;
-}
-
-.sub-total {
-  text-align: center;
-  width: 80px;
-  color: #baa345;
-  border-radius: 5px;
-}
-
-.description-price {
-  font-size: 11px;
-  color: #666666;
-  text-transform: uppercase;
-}
-.gold-text {
-  color: #baa345 !important;
-}
-
-.input-total {
-  width: 100px;
-  border-radius: 5px;
-  outline: none;
-  background: white;
-  margin-left: 5px;
-  color: #212529;
-}
 </style>

@@ -2,7 +2,7 @@
   <div>
     <ValidationObserver ref="form">
       <b-modal
-        v-model="modalServices"
+        v-model="ownControl"
         modal
         size="xlg"
         scrollable
@@ -53,7 +53,7 @@
               <template v-slot:cell(quantity)="data">
                 <b-form-spinbutton
                   v-model.number="data.item.quantity"
-                  :disabled="data.item.disabled"
+                  :disabled="!select_option[data.item.index]"
                   class="square"
                   min="1"
                   max="99"
@@ -100,7 +100,7 @@
               <template v-slot:cell(quantity)="data">
                 <b-form-spinbutton
                   v-model.number="data.item.quantity"
-                  :disabled="data.item.disabled"
+                  :disabled="!select_option[data.item.index]"
                   class="square"
                   min="1"
                   max="99"
@@ -270,6 +270,7 @@ export default {
       add_json_ce: [],
       json_ce_new: null,
       json_disabled: [],
+      totalAmount: 0,
       states_leads: [],
       rate_selected: [],
       vMoney: {
@@ -289,6 +290,7 @@ export default {
       validateMoney: false,
       score_id: null,
       json_ce: null,
+      ownControl: false,
       totalSuggeste: 0,
       fields: [
         {
@@ -319,9 +321,6 @@ export default {
     ...mapGetters({
       currentUser: 'auth/currentUser',
     }),
-    totalAmount() {
-      return this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
-    },
     isModalShow() {
       return this.typeModal == 2 || this.typeModal == 5
     },
@@ -347,16 +346,16 @@ export default {
       return table
     },
   },
-  created() {
-    this.getSelects()
-  },
-  mounted() {
+  async mounted() {
+    await this.getSelects()
     if (this.program) {
-      this.searchRate()
+      await this.searchRate()
     }
     if (this.isModalAdd) {
-      this.getScore()
+      await this.getScore()
     }
+    this.ownControl = true
+    this.totalAmount = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
   },
   methods: {
     /* PRELOADER */
@@ -436,13 +435,7 @@ export default {
             json_ce: this.json_ce,
           }
 
-          const result = await this.$swal.fire({
-            title: `Are you sure you want to ${message}?`,
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-          })
+          const result = await this.showConfirmSwal()
           if (result.value) {
             this.addPreloader()
             const response = await amgApi.post(`${route}`, param)
@@ -470,9 +463,11 @@ export default {
         this.rates[index].subtotal = 0
         this.rates[index].disabled = true
       }
+      this.totalAmount = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
     },
     calculateSubtotal(index) {
       this.rates[index].subtotal = this.rates[index].price * this.rates[index].quantity
+      this.totalAmount = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
     },
 
     /* Rates */

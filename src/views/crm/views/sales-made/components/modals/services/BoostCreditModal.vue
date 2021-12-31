@@ -2,7 +2,7 @@
   <div>
     <ValidationObserver ref="form">
       <b-modal
-        v-model="modalServices"
+        v-model="ownControl"
         modal
         size="sm"
         scrollable
@@ -37,8 +37,8 @@
               >
                 <b-card
                   header="FEE"
-                  header-bg-variant="important"
-                  header-class="text-white"
+                  header-bg-variant="info"
+                  header-class="text-white py-1 font-weight-bolder"
                 >
                   <b-row class="mt-1">
                     <b-col
@@ -48,21 +48,15 @@
                       $
                     </b-col>
                     <b-col>
-                      <v-select
+                      <b-form-select
                         v-model="fee"
                         :disabled="isModalShow"
                         :options="[19.99,24.99,29.99,34.99,39.99,44.99, 49.99, 54.99, 59.99]"
-                        :clearable="false"
+                        :class="{'border-danger': errors[0]}"
                       />
                     </b-col>
                   </b-row>
                 </b-card>
-                <div
-                  v-if="errors[0]"
-                  class="fee-error"
-                >
-                  Fee {{ errors[0] }}
-                </div>
               </ValidationProvider>
             </b-col>
           </b-row>
@@ -74,21 +68,15 @@
           <b-row class="w-100">
             <b-col
               v-if="!isModalAdd"
-              class="d-flex align-items-center justify-content-center"
+              class="d-flex align-items-center justify-content-end"
             >
-              <b-button
-                variant="danger"
+              <button-save
                 class="mr-1"
-                @click="hideModal(false,0)"
-              >
-                <feather-icon icon="PowerIcon" /> CANCEL
-              </b-button>
-              <b-button
-                variant="success"
                 @click="saveRates()"
-              >
-                <feather-icon icon="SaveIcon" /> SAVE
-              </b-button>
+              />
+              <button-cancel
+                @click="hideModal(false,0)"
+              />
             </b-col>
             <b-col v-if="isModalAdd">
               <b-button
@@ -96,7 +84,6 @@
                 @click="saveRates()"
               >
                 Continue
-                <feather-icon icon="ChevronsRightIcon" />
               </b-button>
             </b-col>
           </b-row>
@@ -111,9 +98,13 @@
 import { mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
   components: {
+    ButtonSave,
+    ButtonCancel,
     ModalServiceHeader,
     vSelect,
   },
@@ -169,6 +160,7 @@ export default {
       selectService: true,
       score_id: null,
       json_ce: null,
+      ownControl: false,
     }
   },
   computed: {
@@ -189,11 +181,11 @@ export default {
     },
   },
   created() {},
-  mounted() {
+  async mounted() {
     this.client = this.salesClient
     if (this.program) {
       if (this.isModalShow) {
-        this.showRates()
+        await this.showRates()
       } else if (!this.isModalAdd) {
         this.removePreloader()
       }
@@ -203,8 +195,9 @@ export default {
       }
     }
     if (this.isModalAdd) {
-      this.getScore()
+      await this.getScore()
     }
+    this.ownControl = true
   },
   methods: {
     /* PRELOADER */
@@ -219,6 +212,7 @@ export default {
       try {
         const success = await this.$refs.form.validate()
         if (success) {
+          alert(this.typeModal)
           let message = ''
           let route = ''
           let typeADD = ''
@@ -270,12 +264,7 @@ export default {
             json_ce: this.json_ce,
           }
 
-          const result = this.$swal.fire({
-            title: `Are you sure you want to ${message}?`,
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-          })
+          const result = await this.showConfirmSwal()
           if (result.value) {
             this.addPreloader()
             const response = await amgApi.post(`${route}`, param)
