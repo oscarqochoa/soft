@@ -29,7 +29,7 @@ const actions = {
   async A_GET_CREDIT_CARD ({ commit }, body) {
     try {
       const response = await CreditCardService.getCreditCard(body)
-      console.log('A_GET_CREDIT_CARD response', response)
+      /* console.log('A_GET_CREDIT_CARD response', response) */
       return response
     } catch (error) {
       console.log('ERROR_GET_CREDIT_CARD [ACTION]', error)
@@ -40,7 +40,7 @@ const actions = {
   async A_GET_ORIGINAL_TARGET ({ commit }, body) {
     try {
       const response = await CreditCardService.getOriginalTarget(body)
-      console.log('A_GET_ORIGINAL_TARGET response', response)
+      /* console.log('A_GET_ORIGINAL_TARGET response', response) */
       return response
     } catch (error) {
       console.log('ERROR_GET_ORIGINAL_TARGET [ACTION]', error)
@@ -51,7 +51,7 @@ const actions = {
   async A_SET_CREDIT_CARD ({ commit }, body) {
     try {
       const response = await CreditCardService.createCreditCard(body)
-      console.log('A_SET_CREDIT_CARD response', response)
+      /* console.log('A_SET_CREDIT_CARD response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         body.id = response.data.id
         commit('UNSHIFT_DATA', {
@@ -69,7 +69,7 @@ const actions = {
   async A_DELETE_CREDIT_CARD ({ commit }, body) {
     try {
       const response = await CreditCardService.deleteCreditCard(body)
-      console.log('A_DELETE_CREDIT_CARD response', response)
+      /* console.log('A_DELETE_CREDIT_CARD response', response) */
       return response
     } catch (error) {
       console.log('ERROR_DELETE_CREDIT_CARD [ACTION]', error)

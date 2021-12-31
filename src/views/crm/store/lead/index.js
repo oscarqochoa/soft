@@ -94,7 +94,7 @@ const actions = {
   async A_GET_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.getLeads(body)
-      console.log('A_GET_LEADS response', response)
+      /* console.log('A_GET_LEADS response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         const selectedIds = state.S_SELECTED_LEADS.map(el => el.id)
         let index = 0
@@ -127,7 +127,7 @@ const actions = {
   async A_GET_LEAD ({ commit }, { id, params}) {
     try {
       const response = await crmLead.getLead(id, params)
-      console.log('A_GET_LEAD response', response)
+      /* console.log('A_GET_LEAD response', response) */
       commit('SET_DATA', {
         destination: 'S_LEAD',
         data: response[0]
@@ -141,7 +141,7 @@ const actions = {
   async A_GET_LEAD_EDIT ({ commit }, { id, params}) {
     try {
       const response = await crmLead.getLeadEdit(id, params)
-      console.log('A_GET_LEAD_EDIT response', response)
+      /* console.log('A_GET_LEAD_EDIT response', response) */
       commit('SET_DATA', {
         destination: 'S_LEAD_EDIT',
         data: response[0]
@@ -155,7 +155,7 @@ const actions = {
   async A_GET_SN_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.getLeadsSn(body)
-      console.log('A_GET_SN_LEADS response', response)
+      /* console.log('A_GET_SN_LEADS response', response) */
       commit('SET_DATA', {
         destination: 'S_SN_LEADS',
         data: response.data
@@ -169,7 +169,7 @@ const actions = {
   async A_GET_W_POTENTIAL_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.getLeadsWPotential(body)
-      console.log('A_GET_W_POTENTIAL_LEADS response', response)
+      /* console.log('A_GET_W_POTENTIAL_LEADS response', response) */
       commit('SET_DATA', {
         destination: 'S_W_POTENTIAL_LEADS',
         data: response.data
@@ -183,7 +183,7 @@ const actions = {
   async A_GET_STATE_LEADS ({ commit }, params) {
     try {
       const response = await crmLead.getStateLeads(params)
-      console.log('A_GET_STATE_LEADS response', response)
+      /* console.log('A_GET_STATE_LEADS response', response) */
       commit('SET_DATA', {
         destination: 'S_STATE_LEADS',
         data: response.data
@@ -197,7 +197,7 @@ const actions = {
   async A_GET_STATUS_LEADS ({ commit }, params) {
     try {
       const response = await crmLead.getStatusLeads(params)
-      console.log('A_GET_STATUS_LEADS response', response)
+      /* console.log('A_GET_STATUS_LEADS response', response) */
       commit('SET_DATA', {
         destination: 'S_STATUS_LEADS',
         data: response.data
@@ -211,7 +211,7 @@ const actions = {
   async A_GET_SOURCE_LEADS ({ commit }, params) {
     try {
       const response = await crmLead.getSourceLeads(params)
-      console.log('A_GET_SOURCE_LEADS response', response)
+      /* console.log('A_GET_SOURCE_LEADS response', response) */
       commit('SET_DATA', {
         destination: 'S_SOURCE_LEADS',
         data: response.data
@@ -225,7 +225,7 @@ const actions = {
   async A_GET_FILES_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.postSearchFileLead(body)
-      console.log('A_GET_FILES_LEADS response', response)
+      /* console.log('A_GET_FILES_LEADS response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         response.data.map(el => { el.isDisabled = true })
         commit('SET_DATA', {
@@ -257,7 +257,7 @@ const actions = {
   async A_SET_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.postCreateLead(body)
-      console.log('A_SET_LEADS response', response)
+      /* console.log('A_SET_LEADS response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         body.id = response.data.id
         commit('UNSHIFT_LEADS_DATA', {
@@ -274,7 +274,7 @@ const actions = {
   async A_SET_REQUEST_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.postRequestLead(body)
-      console.log('A_SET_REQUEST_LEADS response', response)
+      /* console.log('A_SET_REQUEST_LEADS response', response) */
       return response
     } catch (error) {
       console.log('ERROR_SET_REQUEST_LEADS [ACTION]', error)
@@ -284,7 +284,7 @@ const actions = {
   async A_SET_FILE_LEAD ({ commit }, body) {
     try {
       const response = await crmLead.postFileLead(body)
-      console.log('A_SET_FILE_LEAD response', response)
+      /* console.log('A_SET_FILE_LEAD response', response) */
       return response
     } catch (error) {
       console.log('ERROR_SET_FILE_LEAD [ACTION]', error)
@@ -297,7 +297,7 @@ const actions = {
   async A_UPDATE_FILE_NAME_LEAD ({ commit }, body) {
     try {
       const response = await crmLead.postFileNameLead(body)
-      console.log('A_UPDATE_FILE_NAME_LEAD response', response)
+      /* console.log('A_UPDATE_FILE_NAME_LEAD response', response) */
       return response
     } catch (error) {
       console.log('ERROR_UPDATE_FILE_NAME_LEAD [ACTION]', error)
@@ -307,7 +307,7 @@ const actions = {
   async A_UPDATE_FIELDS_LEAD ({ commit }, body) {
     try {
       const response = await crmLead.putFieldsLead(body)
-      console.log('A_UPDATE_FIELDS_LEAD response', response)
+      /* console.log('A_UPDATE_FIELDS_LEAD response', response) */
       return response
     } catch (error) {
       console.log('ERROR_UPDATE_FIELDS_LEAD [ACTION]', error)
@@ -317,7 +317,7 @@ const actions = {
   async A_UPDATE_LEAD ({ commit }, { id, body }) {
     try {
       const response = await crmLead.putLead(id, body)
-      console.log('A_UPDATE_LEAD response', response)
+      /* console.log('A_UPDATE_LEAD response', response) */
       commit('UPDATE_DATA', {
         destination: 'S_LEAD',
         data: body
@@ -334,7 +334,7 @@ const actions = {
   async A_DELETE_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.postDeleteLead(body)
-      console.log('A_DELETE_LEADS response', response)
+      /* console.log('A_DELETE_LEADS response', response) */
       if (mixins.methods.isResponseSuccess(response))
         commit('REMOVE_LEAD_DATA', {
           destination: 'S_LEADS',
@@ -350,7 +350,7 @@ const actions = {
   async A_DELETE_FILES_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.deleteFileLead(body)
-      console.log('A_DELETE_FILES_LEADS response', response)
+      /* console.log('A_DELETE_FILES_LEADS response', response) */
       if (mixins.methods.isResponseSuccess(response))
         commit('REMOVE_DATA', {
           destination: 'S_FILES_LEADS',
@@ -368,7 +368,7 @@ const actions = {
   async A_PROCESS_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.postProcessLead(body)
-      console.log('A_PROCESS_LEADS response', response)
+      /* console.log('A_PROCESS_LEADS response', response) */
       if (mixins.methods.isResponseSuccess(response))
         commit('PROCESS_DATA', {
           destination: 'S_LEADS',
@@ -383,7 +383,7 @@ const actions = {
   async A_GET_USER_APPOINTMENT_SN ({ commit }, body) {
     try {
       const response = await crmLead.postUserAppointmentSn(body)
-      console.log('A_GET_USER_APPOINTMENT_SN response', response)
+      /* console.log('A_GET_USER_APPOINTMENT_SN response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         response.data.map(el => {
           el.label = body.taskForSn ? el.user_name : `${ el.user_name } (${ el.count_task }) ${ ( el.disabled > 0 ? '(Not Available)' : '') }`,
@@ -404,7 +404,7 @@ const actions = {
   async A_LEAD_PAYMENT ({ commit }, body) {
     try {
       const response = await crmLead.postLeadPayment(body)
-      console.log('A_LEAD_PAYMENT response', response)
+      /* console.log('A_LEAD_PAYMENT response', response) */
       return response
     } catch (error) {
       console.log('ERROR_LEAD_PAYMENT [ACTION]', error)
@@ -414,7 +414,7 @@ const actions = {
   async A_MY_LIST_CREATE ({ commit }, body) {
     try {
       const response = await crmLead.postMyListCreate(body)
-      console.log('A_MY_LIST_CREATE response', response)
+      /* console.log('A_MY_LIST_CREATE response', response) */
       return response
     } catch (error) {
       console.log('ERROR_MY_LIST_CREATE [ACTION]', error)
@@ -424,7 +424,7 @@ const actions = {
   async A_SET_POTENTIAL ({ commit }, body) {
     try {
       const response = await crmLead.postSetPotential(body)
-      console.log('A_SET_POTENTIAL response', response)
+      /* console.log('A_SET_POTENTIAL response', response) */
       return response
     } catch (error) {
       console.log('ERROR_SET_POTENTIAL [ACTION]', error)
@@ -434,7 +434,7 @@ const actions = {
   async A_CHANGE_STATUS_SN ({ commit }, body) {
     try {
       const response = await crmLead.postChangeStatusSn(body)
-      console.log('A_CHANGE_STATUS_SN response', response)
+      /* console.log('A_CHANGE_STATUS_SN response', response) */
       return response
     } catch (error) {
       console.log('ERROR_CHANGE_STATUS_SN [ACTION]', error)
@@ -444,7 +444,7 @@ const actions = {
   async A_VALID_UNIQUE_SSN ({ commit }, body) {
     try {
       const response = await crmLead.postUniquesSsn(body)
-      console.log('A_VALID_UNIQUE_SSN response', response)
+      /* console.log('A_VALID_UNIQUE_SSN response', response) */
       return response
     } catch (error) {
       console.log('ERROR_VALID_UNIQUE_SSN [ACTION]', error)
@@ -454,7 +454,7 @@ const actions = {
   async A_VALID_UNIQUE_ITIN ({ commit }, body) {
     try {
       const response = await crmLead.postUniquesItin(body)
-      console.log('A_VALID_UNIQUE_ITIN response', response)
+      /* console.log('A_VALID_UNIQUE_ITIN response', response) */
       return response
     } catch (error) {
       console.log('ERROR_VALID_UNIQUE_ITIN [ACTION]', error)
@@ -464,7 +464,7 @@ const actions = {
   async A_VALID_UNIQUE_CPN ({ commit }, body) {
     try {
       const response = await crmLead.postUniquesCpn(body)
-      console.log('A_VALID_UNIQUE_CPN response', response)
+      /* console.log('A_VALID_UNIQUE_CPN response', response) */
       return response
     } catch (error) {
       console.log('ERROR_VALID_UNIQUE_CPN [ACTION]', error)
@@ -474,7 +474,7 @@ const actions = {
   async A_GET_ALL_TRAKING_FIELDS_LEAD ({ commit }, body) {
     try {
       const response = await crmLead.postAllTrackingChangeLeads(body)
-      console.log('A_GET_ALL_TRAKING_FIELDS_LEAD response', response)
+      /* console.log('A_GET_ALL_TRAKING_FIELDS_LEAD response', response) */
       return response
     } catch (error) {
       console.log('ERROR_GET_ALL_TRAKING_FIELDS_LEAD [ACTION]', error)

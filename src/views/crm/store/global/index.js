@@ -81,7 +81,7 @@ const actions = {
   async A_GET_OWNERS ({ commit }, { modul, body }) {
     try {
       const response = await crmGlobal.getOwners({ modul, body })
-      console.log('A_GET_OWNERS response', response)
+      /* console.log('A_GET_OWNERS response', response) */
       commit('SET_DATA', {
         destination: 'S_OWNERS',
         data: response.data
@@ -95,7 +95,7 @@ const actions = {
   async A_GET_PROGRAMS ({ commit }, params) {
     try {
       const response = await crmGlobal.getPrograms(params)
-      console.log('A_GET_PROGRAMS response', response)
+      /* console.log('A_GET_PROGRAMS response', response) */
       commit('SET_DATA', {
         destination: 'S_PROGRAMS',
         data: response.data
@@ -109,7 +109,7 @@ const actions = {
   async A_GET_SOURCE_NAMES ({ commit }, params) {
     try {
       const response = await crmGlobal.getSourceNames(params)
-      console.log('A_GET_SOURCE_NAMES response', response)
+      /* console.log('A_GET_SOURCE_NAMES response', response) */
       commit('SET_DATA', {
         destination: 'S_SOURCE_NAMES',
         data: response.data
@@ -123,7 +123,7 @@ const actions = {
   async A_GET_STATES ({ commit }, params) {
     try {
       const response = await crmGlobal.getStates(params)
-      console.log('A_GET_STATES response', response)
+      /* console.log('A_GET_STATES response', response) */
       commit('SET_DATA', {
         destination: 'S_STATES',
         data: response.data
@@ -137,7 +137,7 @@ const actions = {
   async A_GET_EEUU_STATES ({ commit }, params) {
     try {
       const response = await crmGlobal.getStatesEeuu(params)
-      console.log('A_GET_EEUU_STATES response', response)
+      /* console.log('A_GET_EEUU_STATES response', response) */
       commit('SET_DATA', {
         destination: 'S_EEUU_STATES',
         data: response.data
@@ -151,7 +151,7 @@ const actions = {
   async A_GET_COUNTRIES ({ commit }, params) {
     try {
       const response = await crmGlobal.getCountries(params)
-      console.log('A_GET_COUNTRIES response', response)
+      /* console.log('A_GET_COUNTRIES response', response) */
       commit('SET_DATA', {
         destination: 'S_COUNTRIES',
         data: response.data
@@ -165,7 +165,7 @@ const actions = {
   async A_GET_SELLERS ({ commit }, { modul, body }) {
     try {
       const response = await crmGlobal.getSellers({ modul, body })
-      console.log('A_GET_SELLERS response', response)
+      /* console.log('A_GET_SELLERS response', response) */
       commit('SET_DATA', {
         destination: 'S_SELLERS',
         data: response.data
@@ -187,7 +187,7 @@ const actions = {
   async A_UNIQUE_MOBILE ({ commit }, body) {
     try {
       const response = await crmGlobal.postUniqueMobile(body)
-      console.log('A_UNIQUE_MOBILE response', response)
+      /* console.log('A_UNIQUE_MOBILE response', response) */
       return response
     } catch (error) {
       console.log('ERROR_UNIQUE_MOBILE [ACTION]', error)

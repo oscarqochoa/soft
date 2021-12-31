@@ -36,7 +36,7 @@ const actions = {
   async A_GET_SMS_QUICKS ({ commit }, body) {
     try {
       const response = await crmSms.getAllQuicksSms(body)
-      console.log('A_GET_SMS_QUICKS response', response)
+      /* console.log('A_GET_SMS_QUICKS response', response) */
       if (mixins.methods.isResponseSuccess(response))
       commit('SET_DATA', {
         destination: 'S_SMS_QUICKS',
@@ -51,7 +51,7 @@ const actions = {
   async A_GET_HISTORY_SMS_LEADS ({ commit }, body) {
     try {
       const response = await crmSms.postHistorySmsLead(body)
-      console.log('A_GET_HISTORY_SMS_LEADS response', response)
+      /* console.log('A_GET_HISTORY_SMS_LEADS response', response) */
       commit('SET_DATA', {
         destination: 'S_SMS_HISTORY_QUICKS',
         data: response.data
@@ -67,7 +67,7 @@ const actions = {
   async A_SET_SMS_QUICK ({ commit }, body) {
     try {
       const response = await crmSms.postSaveQuickSms(body)
-      console.log('A_SET_SMS_QUICK response', response)
+      /* console.log('A_SET_SMS_QUICK response', response) */
       const withId = body.id
       if (mixins.methods.isResponseSuccess(response)) {
         body.id = response.data.id
@@ -101,7 +101,7 @@ const actions = {
   async A_DELETE_SMS_QUICK ({ commit }, body) {
     try {
       const response = await crmSms.postDeleteQuickSms(body)
-      console.log('A_DELETE_SMS_QUICK response', response)
+      /* console.log('A_DELETE_SMS_QUICK response', response) */
       if (mixins.methods.isResponseSuccess(response))
         commit('REMOVE_DATA', {
           destination: 'S_SMS_QUICKS',
@@ -119,7 +119,7 @@ const actions = {
   async A_SEND_MESSAGE_LEAD ({ commit }, body) {
     try {
       const response = await crmSms.postSendMessageLead(body)
-      console.log('A_SEND_MESSAGE_LEAD response', response)
+      /* console.log('A_SEND_MESSAGE_LEAD response', response) */
       return response
     } catch (error) {
       console.log('ERROR_UNIQUE_MOBILE [ACTION]', error)
