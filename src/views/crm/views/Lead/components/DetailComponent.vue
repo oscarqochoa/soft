@@ -1,11 +1,11 @@
 <template>
   <div class="details">
-    <b-row>
+    <b-row v-if="details">
       <template v-for="(detail, key) in details">
-        <b-col sm="6" v-bind:key="key" v-if="detail && detail.length">
+        <b-col sm="6" v-bind:key="key" v-if="detail && detail.length && includeElements(detail)">
           <detail-component :modul="modul" :details="detail" />
         </b-col>
-        <template v-else-if="detail">
+        <template v-else-if="detail && !detail.length">
           <b-col sm="6" v-bind:key="key">
             <b-form-group
               :label="detail.label"
@@ -54,7 +54,15 @@ export default {
   methods: {
     ...mapActions({
       /* A_GET_TEMPLATES: 'CrmTemplateStore/A_GET_TEMPLATES' */
-    })
+    }),
+    includeElements (detail) {
+      let result = 0
+      detail.forEach(element => {
+        if (element !== null)
+          result++
+      })
+      return result
+    }
   },
   mounted () {},
   props: {
@@ -77,6 +85,9 @@ export default {
       padding-bottom: 1rem;
       border-bottom: 1px solid rgba(80, 85, 99, 0.2);
       height: calc(100% - 1rem);
+      > div {
+        min-height: 19.56px;
+      }
     }
     .col-form-label {
       font-weight: 600;

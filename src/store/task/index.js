@@ -21,7 +21,7 @@ const actions = {
   async A_GET_TASK ({ commit }, body) {
     try {
       const response = await TaskService.getTask(body)
-      console.log('A_GET_TASK response', response)
+      /* console.log('A_GET_TASK response', response) */
       return response
     } catch (error) {
       console.log('ERROR_GET_TASK [ACTION]', error)
@@ -49,7 +49,7 @@ const actions = {
   async A_GET_LEAD_HISTORY_TASKS ({ commit }, body) {
     try {
       const response = await TaskService.getHistoryTasks(body)
-      console.log('A_GET_LEAD_HISTORY_TASKS response', response)
+      /* console.log('A_GET_LEAD_HISTORY_TASKS response', response) */
       if (mixins.methods.isResponseSuccess(response))
         commit('SET_DATA', {
           destination: 'S_HISTORY_TASKS',
@@ -77,7 +77,7 @@ const actions = {
   async A_DONE_LEAD_TASK ({ commit }, body) {
     try {
       const response = await TaskService.postDoneLeadTask(body)
-      console.log('A_DONE_LEAD_TASK response', response)
+      /* console.log('A_DONE_LEAD_TASK response', response) */
       return response
     } catch (error) {
       console.log('ERROR_DONE_LEAD_TASK [ACTION]', error)
@@ -87,7 +87,7 @@ const actions = {
   async A_VALIDATE_TASK_FAVORITE ({ commit }, body) {
     try {
       const response = await TaskService.validateTaskFavorite(body)
-      console.log('A_VALIDATE_TASK_FAVORITE response', response)
+      /* console.log('A_VALIDATE_TASK_FAVORITE response', response) */
       return response
     } catch (error) {
       console.log('ERROR_VALIDATE_TASK_FAVORITE [ACTION]', error)
@@ -97,7 +97,7 @@ const actions = {
   async A_SET_LEAD_TASK ({ commit }, body) {
     try {
       const response = await TaskService.postCreateLeadTask(body)
-      console.log('A_SET_LEAD_TASK response', response)
+      /* console.log('A_SET_LEAD_TASK response', response) */
       /* if (mixins.methods.isResponseSuccess(response)) {
         body.id = response.data.id
         commit('PUSH_DATA', {
@@ -114,7 +114,7 @@ const actions = {
   async A_DELETE_LEAD_TASK ({ commit }, body) {
     try {
       const response = await TaskService.postDeleteLeadTask(body)
-      console.log('A_DELETE_LEAD_TASK response', response)
+      /* console.log('A_DELETE_LEAD_TASK response', response) */
       return response
     } catch (error) {
       console.log('ERROR_DELETE_LEAD_TASK [ACTION]', error)
@@ -124,7 +124,7 @@ const actions = {
   async A_MAKE_FAVORITE_LEAD_TASK ({ commit }, body) {
     try {
       const response = await TaskService.makeFavoriteTask(body)
-      console.log('A_MAKE_FAVORITE_LEAD_TASK response', response)
+      /* console.log('A_MAKE_FAVORITE_LEAD_TASK response', response) */
       return response
     } catch (error) {
       console.log('ERROR_MAKE_FAVORITE_LEAD_TASK [ACTION]', error)

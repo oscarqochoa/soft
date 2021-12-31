@@ -46,7 +46,7 @@
           :to="{ name: 'lead-crm-lead-w-potential-list' }"
         >LEADS W POTENTIAL</b-nav-item>
       </b-nav>
-      <router-view/>
+      <router-view v-if="preloading" />
     </b-card>
   </div>
 </template>
@@ -64,6 +64,7 @@ export default {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
+      G_STATE_LEADS: 'CrmLeadStore/G_STATE_LEADS',
     }),
     ...mapState({
       S_SELECTED_LEADS: state => state.CrmLeadStore.S_SELECTED_LEADS,
@@ -74,22 +75,24 @@ export default {
     return {
       isOnlyLead: false,
       isAddNewUserSidebarActive: false,
-      modul: 2,
+      preloading: true,
       dato1: 'desc',
       dato2: 10,
     }
   },
-  created() {
-    this.getStateLeads()
-    this.getStatusLeads()
-    this.getSourceLeads()
-    this.getOwners()
-    this.getPrograms()
-    this.getSourceNames()
-    this.getStates()
-    this.getEeuuStates()
-    this.getCountries()
-    this.getSellers()
+  async created() {
+    this.preloading = false
+    await this.getStateLeads()
+    await this.getStatusLeads()
+    await this.getSourceLeads()
+    await this.getOwners()
+    await this.getPrograms()
+    await this.getSourceNames()
+    await this.getStates()
+    await this.getEeuuStates()
+    await this.getCountries()
+    await this.getSellers()
+    this.preloading = true
   },
   methods: {
     ...mapActions({
@@ -130,7 +133,7 @@ export default {
     },
     async getOwners () {
       try {
-        await this.A_GET_OWNERS({ modul: this.modul, body: { roles: '[1,2,5]', type: '1' } })
+        await this.A_GET_OWNERS({ modul: this.currentUser.modul_id, body: { roles: '[1,2,5]', type: '1' } })
       } catch (error) {
         console.log('Something went wrong getOwners:', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -178,7 +181,7 @@ export default {
     },
     async getSellers () {
       try {
-        await this.A_GET_SELLERS({ modul: this.modul, body: { roles: '[]', type: '1' } })
+        await this.A_GET_SELLERS({ modul: this.currentUser.modul_id, body: { roles: '[]', type: '1' } })
       } catch (error) {
         console.log('Something went wrong getSellers:', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -219,6 +222,11 @@ export default {
       const dataExport = `name_text=${name_text}&lead_status=${this.S_FILTERS_LEADS.statusLead}&cr=${this.S_FILTERS_LEADS.cr}&program=${this.S_FILTERS_LEADS.program}&date_from=${date_from}&date_to=${date_to}&orderby=${orderby}&order=${order}&user_owner=${this.S_FILTERS_LEADS.owner}&assign_to=${this.S_FILTERS_LEADS.assignTo}&sourcename=${this.S_FILTERS_LEADS.sourceName}&Export=${Export}&TypeExport=${TypeExport}&current_pageE=${this.S_FILTERS_LEADS.currentPage}&id_leads=${jsonString}`
       window.open(`${process.env.VUE_APP_BASE_URL}/exportleadsexcel?${dataExport}`)
     },
+  },
+  watch: {
+    preloading (current, old) {
+      this.isPreloading(old)
+    }
   }
 };
 </script>

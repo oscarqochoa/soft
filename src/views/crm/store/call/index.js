@@ -29,7 +29,7 @@ const actions = {
   async A_GET_CALLS ({ commit }, body) {
     try {
       const response = await CallService.getCalls(body)
-      console.log('A_GET_CALLS response', response)
+      /* console.log('A_GET_CALLS response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         commit('SET_DATA', {
           destination: 'S_CALLS',
@@ -45,7 +45,7 @@ const actions = {
   async A_SET_CALL ({ commit }, body) {
     try {
       const response = await CallService.postCall(body)
-      console.log('A_SET_CALL response', response)
+      /* console.log('A_SET_CALL response', response) */
       if (mixins.methods.isResponseSuccess(response) && body.limit !== -1) {
         body.id = response.data.id
         commit('UNSHIFT_DATA', {

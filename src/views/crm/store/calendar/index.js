@@ -29,7 +29,7 @@ const actions = {
   async A_GET_CALENDARS ({ commit }, body) {
     try {
       const response = await CalendarService.filterMonthNext(body)
-      console.log('A_GET_CALENDARS response', response)
+      /* console.log('A_GET_CALENDARS response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         commit('SET_DATA', {
           destination: 'S_CALENDARS',

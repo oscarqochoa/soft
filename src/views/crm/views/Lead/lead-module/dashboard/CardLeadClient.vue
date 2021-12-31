@@ -2,9 +2,21 @@
   <b-card class="lead-client">
     <template #header>
       <b-card-title>
-        Client: &nbsp;
+        Client &nbsp;
         <span>
-          <a @click="$emit('onEditLead', false)">
+          <a
+            v-if="currentUser.modul_id === 15"
+            @click="$emit('onEditLead', false)"
+            class="text-important"
+          >
+            {{ leadName.name }}
+          </a>
+          <span v-else-if="onlyRead">{{ leadName.name }}</span>
+          <a
+            v-else
+            @click="$emit('onEditLead', false)"
+            class="text-important"
+          >
             {{ leadName.name }}
           </a>
         </span>
@@ -110,10 +122,6 @@ export default {
       isLoading: false,
       details: [
         {
-          label: 'Nickname:',
-          value: this.lead.nickname
-        },
-        {
           label: 'E-mail:',
           value: this.lead.email
         },
@@ -170,7 +178,6 @@ export default {
       ]
     }
   },
-  mounted () {},
   created () {
     this.blankLead = Object.assign({}, this.lead)
   },
@@ -180,7 +187,7 @@ export default {
       token: 'auth/token'
     }),
     leadName () {
-      if (this.modul === 15) {
+      if (this.currentUser.modul_id === 15) {
         return { name: `${this.lead.nickname} (${this.lead.lead_name})`, url: true }
       } else if (this.onlyRead) {
         return { name: this.lead.lead_name }
@@ -265,7 +272,7 @@ export default {
             user_id: this.currentUser.user_id,
             language: this.lead.language,
             lead_name: this.lead.last_name,
-            modul_id: this.modul,
+            modul_id: this.currentUser.modul_id,
             program,
           })
           if (this.isResponseSuccess(response))
@@ -283,6 +290,14 @@ export default {
   model: {
     prop: 'lead',
     event: 'update:lead',
+  },
+  mounted() {
+    if (this.lead.nickname && this.currentUser.modul_id === 15) {
+      this.details.unshift({
+        label: 'Nickname:',
+        value: this.lead.nickname
+      })
+    }
   },
   directives: {
     Ripple,

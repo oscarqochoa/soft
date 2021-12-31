@@ -44,7 +44,7 @@ const actions = {
   async A_GET_CREDIT_REPORTS ({ commit }, body) {
     try {
       const response = await creditReport.getCreditReport(body)
-      console.log('A_GET_CREDIT_REPORTS response', response)
+      /* console.log('A_GET_CREDIT_REPORTS response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         commit('SET_DATA', {
           destination: 'S_CREDIT_REPORTS',
@@ -60,7 +60,7 @@ const actions = {
   async A_GET_CREDIT_REPORT_PENDINGS ({ commit }, body) {
     try {
       const response = await creditReport.getCreditReportPendings(body)
-      console.log('A_GET_CREDIT_REPORT_PENDINGS response', response)
+      /* console.log('A_GET_CREDIT_REPORT_PENDINGS response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         response.data.map((el) => {
           el.attemps_count = el.attemps == null ? '' : JSON.parse(el.attemps).length
@@ -79,7 +79,7 @@ const actions = {
   async A_COUNT_CREDIT_REPORT_PENDINGS ({ commit }, body) {
     try {
       const response = await creditReport.countCreditReportPendings(body)
-      console.log('A_COUNT_CREDIT_REPORT_PENDINGS response', response)
+      /* console.log('A_COUNT_CREDIT_REPORT_PENDINGS response', response) */
       return response
     } catch (error) {
       console.log('ERROR_COUNT_CREDIT_REPORT_PENDINGS [ACTION]', error)
