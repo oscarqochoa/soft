@@ -1,55 +1,38 @@
 <template>
   <b-navbar-nav class="nav">
-    <template v-for="bookmark in bookmarks">
-      <component
-        :key="bookmark.id"
-        :is="bookmark.componentName"
-        v-if="bookmark.visible"
-      ></component>
-    </template>
+    <b-nav-item :id="`bookmark-messages`" :to="{name: 'amg-messages'}" v-b-tooltip.hover.top="'Messages'">
+      <messages></messages>
+    </b-nav-item>
+    <b-nav-item
+      @click="$refs.stickyNotes.openStickyNotes()"
+      :id="`bookmark-sticky-notes`"
+    >
+      <sticky-notes ref="stickyNotes"></sticky-notes>
+    </b-nav-item>
+    <b-nav-item
+      @click="$refs.payStub.openPayStubModal()"
+      :id="`bookmark-pay-stub`"
+    >
+      <pay-stub ref="payStub"></pay-stub>
+    </b-nav-item>
+    <b-nav-item
+      @click="$refs.messenger.redirectToMessenger()"
+      :id="`bookmark-messenger`"
+      v-b-tooltip.hover.top="'AMG Messenger'"
+    >
+      <messenger ref="messenger"></messenger>
+    </b-nav-item>
   </b-navbar-nav>
 </template>
 
 <script>
-import TaskDropdown from "./components/tasks/TaskDropdown.vue";
 import StickyNotes from "./components/sticky-notes/StickyNotes.vue";
 import Appointments from "./components/appointments/Appointments.vue";
 import Messages from "./components/messages/Messages.vue";
 import Messenger from "./components/messenger/Messenger.vue";
 import PayStub from "./components/pay-stub/PayStub.vue";
 export default {
-  data() {
-    return {
-      bookmarks: [
-        {
-          componentName: "messages",
-          visible: true,
-        },
-        {
-          componentName: "appointments",
-          visible: true,
-        },
-        {
-          componentName: "task-dropdown",
-          visible: true,
-        },
-        {
-          componentName: "sticky-notes",
-          visible: true,
-        },
-        {
-          componentName: "pay-stub",
-          visible: true,
-        },
-        {
-          componentName: "messenger",
-          visible: true,
-        }
-      ],
-    };
-  },
   components: {
-    TaskDropdown,
     StickyNotes,
     Appointments,
     Messages,

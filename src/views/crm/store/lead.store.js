@@ -431,7 +431,7 @@ const actions = {
   async A_GET_USER_APPOINTMENT_SN ({ commit }, body) {
     try {
       const response = await crmService.postUserAppointmentSn(body)
-      console.log('A_GET_USER_APPOINTMENT_SN response', response)
+      /* console.log('A_GET_USER_APPOINTMENT_SN response', response) */
       return response
     } catch (error) {
       console.log('ERROR_GET_USER_APPOINTMENT_SN [ACTION]', error)

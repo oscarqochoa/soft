@@ -1,5 +1,5 @@
 <template>
-  <b-nav-item @click="openStickyNotes" :id="`bookmark-sticky-notes`">
+  <div>
     <feather-icon icon="EditIcon" size="19" />
     <b-tooltip
       triggers="hover"
@@ -9,7 +9,7 @@
     />
     <b-modal
       v-model="stickyNotesController"
-      title="My notes"
+      title="My Notes"
       size="xl"
       hide-footer
     >
@@ -24,7 +24,7 @@
         </b-row>
       </div>
     </b-modal>
-  </b-nav-item>
+  </div>
 </template>
 
 <script>

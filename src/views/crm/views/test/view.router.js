@@ -10,6 +10,7 @@ export default [
           text: 'Test',
         },
       ],
+      module: 2
     },
   },
 ]

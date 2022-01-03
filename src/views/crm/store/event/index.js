@@ -49,7 +49,7 @@ const actions = {
   async A_GET_EVENTS ({ commit }, params) {
     try {
       const response = await eventService.getEvents(params)
-      console.log('A_GET_EVENTS response', response)
+      /* console.log('A_GET_EVENTS response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         commit('SET_DATA', {
           destination: 'S_EVENTS',
@@ -65,7 +65,7 @@ const actions = {
   async A_GET_EVENT ({ commit }, body) {
     try {
       const response = await eventService.getEvent(body)
-      console.log('A_GET_EVENT response', response)
+      /* console.log('A_GET_EVENT response', response) */
       return response
     } catch (error) {
       console.log('ERROR_GET_EVENT [ACTION]', error)
@@ -78,7 +78,7 @@ const actions = {
   async A_SET_EVENT ({ commit }, body) {
     try {
       const response = await eventService.postEvent(body)
-      console.log('A_SET_EVENT response', response)
+      /* console.log('A_SET_EVENT response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         response.data.user = {
           first_name: body.seller,
@@ -101,7 +101,7 @@ const actions = {
   async A_UPDATE_EVENT ({ commit }, body) {
     try {
       const response = await eventService.updateEvent(body)
-      console.log('A_UPDATE_EVENT response', response)
+      /* console.log('A_UPDATE_EVENT response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         body.user = {
           id: body.user_id,
@@ -126,7 +126,7 @@ const actions = {
   async A_DELETE_EVENT ({ commit }, body) {
     try {
       const response = await eventService.postDeleteEvent(body)
-      console.log('A_DELETE_EVENT response', response)
+      /* console.log('A_DELETE_EVENT response', response) */
       if (mixins.methods.isResponseSuccess(response))
         commit('REMOVE_DATA', {
           destination: 'S_EVENTS',
@@ -141,7 +141,7 @@ const actions = {
   async A_DELETE_EVENTS ({ commit }, id) {
     try {
       const response = await eventService.postDeleteEvents(id)
-      console.log('A_DELETE_EVENTS response', response)
+      /* console.log('A_DELETE_EVENTS response', response) */
       if (mixins.methods.isResponseSuccess(response))
         commit('REMOVE_DATA', {
           destination: 'S_EVENTS',
@@ -159,7 +159,7 @@ const actions = {
   async A_GET_DATE_EVENTS_TASKS ({ commit }, params) {
     try {
       const response = await eventService.getDateEventsTasks(params)
-      console.log('A_GET_DATE_EVENTS_TASKS response', response)
+      /* console.log('A_GET_DATE_EVENTS_TASKS response', response) */
       return response
     } catch (error) {
       console.log('ERROR_GET_DATE_EVENTS_TASKS [ACTION]', error)
@@ -169,7 +169,7 @@ const actions = {
   async A_ATTEND_EVENT ({ commit }, body) {
     try {
       const response = await eventService.postAttendEvent(body)
-      console.log('A_ATTEND_EVENT response', response)
+      /* console.log('A_ATTEND_EVENT response', response) */
       return response
     } catch (error) {
       console.log('ERROR_ATTEND_EVENT [ACTION]', error)

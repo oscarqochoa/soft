@@ -17,8 +17,9 @@ import TaskStore from '@/store/task'
 import NotificationStore from '@/store/notification'
 import InventoryStore from '@/views/commons/components/inventory/store'
 import NCRStore from '@/views/commons/components/ncr/store'
-
-Vue.use(Vuex)
+import UserStore from '@/store/user'
+import MessageStore from '@/store/message'
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
@@ -38,6 +39,8 @@ export default new Vuex.Store({
     'inventory-store': InventoryStore,
     'ncr-store': NCRStore,
     NotificationStore,
+    UserStore,
+    MessageStore
   },
   strict: process.env.DEV,
 })
