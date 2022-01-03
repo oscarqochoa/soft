@@ -157,8 +157,10 @@ export default {
           text: "Do you want to edit the information?",
           icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: "#ab9220",
-          cancelButtonColor: "#8f9194",
+          customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-danger ",
+          },
           confirmButtonText: "Yes",
         })
         .then((r) => {
@@ -219,6 +221,13 @@ export default {
         })
         .catch((err) => {
           console.error(err);
+          this.showToast(
+                  "danger",
+                  "top-right",
+                  "Error",
+                  "XIcon",
+                  "Something went wrong!"
+                );
         });
     },
   },

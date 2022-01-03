@@ -353,14 +353,15 @@ export default {
             text: "You want to create this card?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-danger ",
+              },
             confirmButtonText: "Yes, create it!",
           })
           .then((result) => {
             if (result.isConfirmed) {
               amgApi.post("/createcard", this.form).then((response) => {
-                console.log("entre muy adentro")
                 this.cards = response.data;
                 this.$emit("new", this.cards);
                 this.$emit("click", false);
@@ -368,6 +369,15 @@ export default {
                   icon: "success",
                   title: "Card Created Successfully",
                 });
+              }).catch(error => {
+                console.error(error)
+                this.showToast(
+                  "danger",
+                  "top-right",
+                  "Error",
+                  "XIcon",
+                  "Something went wrong!"
+                );
               });
             }
           });

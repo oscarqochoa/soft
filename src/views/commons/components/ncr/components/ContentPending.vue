@@ -36,7 +36,7 @@
           <div
             class="d-flex flex-column justify-content-start align-items-start "
           >
-            <a class="select-lead-name"
+            <a class="select-lead-name text-important"
               href="http://www.google.com"
               target="_blank"
             >

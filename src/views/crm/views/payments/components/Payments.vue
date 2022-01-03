@@ -43,7 +43,7 @@
               <a
                 href="www.google.com"
                 target="_blank"
-                class="select-lead-name"
+                class="select-lead-name text-important"
               >
                 {{ data.item.lead_name }}</a
               >
@@ -51,9 +51,28 @@
           </template>
           <template #cell(amount)="data">
             <div
-              class="d-flex flex-column justify-content-start align-items-start"
+              class=" inline"
             >
-              <span> $ {{ data.item.amount }} </span>
+              <span v-if="data.item.type_t != 39 && data.item.type_t != 40" class="mr-1">$ {{data.item.amount}}</span>
+              <span v-if="data.item.type_t == 39 || data.item.type_t == 40" class="mr-1">$ ({{data.item.amount}})</span>
+                <feather-icon icon="EyeIcon" style="cursor:pointer"
+                v-if="data.item.type_t == 39 || data.item.type_t == 40"
+                class="text-primary"></feather-icon>
+                <img
+                  :src="assetsImg +'/images/icons/void.ico'"
+                  
+                  style="cursor:pointer;color:red"
+                  title="Void"
+                  v-if="data.item.type_t != 39 && data.item.type_t != 40 && data.item.void == 1 && data.item.w_card == 1 && currentUser.role_id == 1 && data.item.result == 'Approved'"
+                >
+                <img
+                  :src="assetsImg + '/images/icons/refund.ico'"
+                  
+                  style="cursor:pointer;color:green"
+                  title="Refund"
+                 v-if="data.item.type_t != 39 && data.item.type_t != 40 && data.item.void == 0 && data.item.refund == 1 && data.item.w_card == 1 && currentUser.role_id == 1 && data.item.result == 'Approved'"
+                />
+              
             </div>
           </template>
           <template #cell(charge)="data">
@@ -66,12 +85,12 @@
               "
             >
               <b-icon
-                v-if="data.item.charge"
+                v-if="data.item.charge == 0"
                 icon="check-circle-fill"
                 variant="success"
               >
               </b-icon>
-              <feather-icon v-else icon="XCircleIcon" class="text-danger" />
+              <feather-icon v-if="data.item.charge == 1 || data.item.charge == null" icon="XCircleIcon" class="text-danger" />
             </div>
           </template>
           <template #cell(result)="data">
@@ -90,11 +109,13 @@
               >
               </b-icon>
               <feather-icon
-                v-else-if="data.item.result == 'Unverified'"
+                v-if="data.item.result == 'Unverified'"
                 icon="ClockIcon"
                 class="text-warning"
               />
-              <feather-icon v-else icon="XCircleIcon" class="text-danger" />
+              <feather-icon 
+              v-if="data.item.result != 'Approved' && data.item.result != 'Unverified'"
+               icon="XCircleIcon" class="text-danger" />
             </div>
           </template>
           <template #cell(user_name)="data">
@@ -137,6 +158,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
@@ -147,6 +169,7 @@ export default {
   },
   data() {
     return {
+      assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       totalRows: 0,
       paginate: {
         currentPage: 1,
@@ -324,6 +347,9 @@ export default {
     visibleFields() {
       return this.arrayColumns.filter((column) => column.visible);
     },
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
     myProvider(ctx) {

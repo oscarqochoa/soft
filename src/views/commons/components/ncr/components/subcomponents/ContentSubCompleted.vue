@@ -1,16 +1,16 @@
 <template>
   <div>
     <filter-slot
-        v-scrollbar
-        :filter="filter"
-        :filter-principal="filterPrincipal"
-        :total-rows="totalRows"
-        :paginate="paginate"
-        :start-page="startPage"
-        :to-page="toPage"
-        :send-multiple-sms="false"
-        @reload="$refs['refClientsList'].refresh()"
-      >
+      v-scrollbar
+      :filter="filter"
+      :filter-principal="filterPrincipal"
+      :total-rows="totalRows"
+      :paginate="paginate"
+      :start-page="startPage"
+      :to-page="toPage"
+      :send-multiple-sms="false"
+      @reload="$refs['refClientsList'].refresh()"
+    >
       <b-table
         slot="table"
         no-provider-filtering
@@ -32,13 +32,13 @@
             <strong>Loading ...</strong>
           </div>
         </template>
-        <template #cell(lead_name)="data" >
-            <div
+        <template #cell(lead_name)="data">
+          <div
             class="d-flex flex-column justify-content-start align-items-start"
-            
-          >  
-            <a href="www.google.com" target="_blank"
-            class="select-lead-name"> {{data.item.lead_name}} </a>
+          >
+            <a href="www.google.com" target="_blank" class="select-lead-name text-important">
+              {{ data.item.lead_name }}
+            </a>
             <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
           </div>
         </template>
@@ -224,12 +224,31 @@
         </template>
         <template #cell(cr)="data">
           <div v-if="status == 1">
-            <b-button variant="transparent" 
-                  :to="{name:'report-lead',params:{idFile:data.item.score_id,idLead:data.item.lead_id}}">
-                  <img :src="assetsImg + '/images/icons/report2.ico'" /></b-button>
+            <!-- <b-button variant="transparent" target="_blanck"
+                  :to="{name:'report-lead',params:{modul:2,global:{idfile:data.item.score_id,idlead:data.item.lead_id}}}">
+                  <img :src="assetsImg + '/images/icons/report2.ico'" />
+            </b-button> -->
+            <router-link
+              :to="{
+                name: 'report-lead',
+                params: {
+                  modul: 11,
+                  global: {
+                    idfile: data.item.score_id,
+                    idlead: data.item.lead_id,
+                  },
+                },
+              }"
+            >
+              <img :src="assetsImg + '/images/icons/report2.ico'" />
+            </router-link>
           </div>
           <div v-if="status == 2">
-            <a :href="data.item.route_html" v-if="!data.item.route_html" target="_blanck">
+            <a
+              :href="data.item.route_html"
+              v-if="!data.item.route_html"
+              target="_blanck"
+            >
               <amg-icon size="23" icon="CRInvalidIcon"></amg-icon>
             </a>
           </div>
@@ -311,7 +330,6 @@
       @closeModalQuestionnaire="closeModalQuestionnaire"
       @updateGrid="updateGrid"
     ></modal-questionnaire>
-    
   </div>
 </template>
 
@@ -321,7 +339,7 @@ import vSelect from "vue-select";
 import ModalQuestionnaire from "../../modal/ModalQuestionnaire.vue";
 import ModalTrackingStatus from "../../modal/ModalTrackingStatus.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-import ncrmixin from '../../mixin'
+import ncrmixin from "../../mixin";
 export default {
   mixins: [ncrmixin],
   components: {
@@ -343,7 +361,7 @@ export default {
         perPage: 10,
       },
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
-      startPage:null,
+      startPage: null,
       toPage: null,
       totalData: "",
       perPageOptions: [10, 25, 50, 100],
@@ -490,6 +508,7 @@ export default {
         ? "/ncr-leads-search-completed-successfull-crm"
         : "/ncr-leads-search-completed-invalid-crm";
     },
+    
   },
   methods: {
     resetSearch() {
@@ -526,7 +545,7 @@ export default {
         return items || [];
       });
     },
-    
+
     closeModalQuestionnaire() {
       this.modalQuestionnaire = false;
     },
@@ -542,12 +561,11 @@ export default {
       this.modalTrackingStatus = false;
     },
   },
-  
 };
 </script>
 
 <style scoped>
-  .select-lead-name:hover {
-    text-decoration-line: underline
+.select-lead-name:hover {
+  text-decoration-line: underline;
 }
 </style>
