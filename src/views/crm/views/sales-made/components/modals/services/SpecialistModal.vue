@@ -2,7 +2,7 @@
   <div>
 
     <b-modal
-      v-model="modalServices"
+      v-model="ownControl"
       modal
       size="sm"
       scrollable
@@ -141,6 +141,7 @@ export default {
   },
   data() {
     return {
+      ownControl: false,
       client: null,
       program: 7,
       rates: [],
@@ -150,7 +151,7 @@ export default {
       rate_selected: [],
       suggested: 0,
       rates_others: [],
-      fee: null,
+      fee: 0,
       vMoney: {
         decimal: '.',
         thousands: ',',
@@ -163,7 +164,17 @@ export default {
       json_ce: null,
     }
   },
-  created() {},
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+    }),
+    isModalShow() {
+      return this.typeModal === 2 || this.typeModal === 5
+    },
+    isModalAdd() {
+      return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+    },
+  },
   async mounted() {
     this.client = this.salesClient
     if (this.program) {
@@ -176,17 +187,7 @@ export default {
     if (this.isModalAdd) {
       await this.getScore()
     }
-  },
-  computed: {
-    ...mapGetters({
-      currentUser: 'auth/currentUser',
-    }),
-    isModalShow() {
-      return this.typeModal === 2 || this.typeModal === 5
-    },
-    isModalAdd() {
-      return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
-    },
+    this.ownControl = true
   },
   methods: {
     /* PRELOADER */
@@ -252,7 +253,7 @@ export default {
           json_ce: this.json_ce,
         }
 
-        const result = await this.showConfirmSwal()
+        const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
         if (result.value) {
           this.addPreloader()
           const response = await amgApi.post(`${route}`, param)
