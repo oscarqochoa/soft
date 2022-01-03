@@ -22,7 +22,7 @@
             class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
           >
             <b-button variant="success" @click="modalopen(1)">
-              CREATE GLOSSARY
+              Create Glossary
             </b-button>
           </b-col>
         </b-row>
@@ -102,13 +102,13 @@
               />
             </template>
             <b-dropdown-item @click="modalopenEdit(2, data.item)">
-              <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50"> EDIT</span>
+              <!-- <feather-icon icon="EditIcon" /> -->
+              <span class="align-middle ml-50"> Edit</span>
             </b-dropdown-item>
 
             <b-dropdown-item @click="deleteGlossary(data.item)">
-              <feather-icon icon="TrashIcon" />
-              <span class="align-middle ml-50">DELETE</span>
+              <!-- <feather-icon icon="TrashIcon" /> -->
+              <span class="align-middle ml-50">Delete</span>
             </b-dropdown-item>
           </b-dropdown>
         </template>
@@ -263,19 +263,7 @@ export default {
   },
   methods: {
     deleteGlossary(item) {
-      this.$swal
-        .fire({
-          title: "DELETE",
-          text: "Are you sure?",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Yes, delete it!",
-          customClass: {
-            confirmButton: "btn btn-primary",
-            cancelButton: "btn btn-danger",
-          },
-        })
-        .then((result) => {
+      this.showConfirmSwal("DELETE","Are you sure?").then((result) => {
           if (result.value) {
             const params = { user_id: this.currentUser.id, id: item.id };
             amgApi

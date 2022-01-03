@@ -44,7 +44,7 @@ export default [
         ],
       },
       {
-        path: '/crm/ncr/reportLead',
+        path: '/crm/ncr/reportLead/:idfile/:idlead',
         name: 'report-lead',
         component: () => import('@/views/commons/components/ncr/components/ReportLead.vue'),
         props:true,

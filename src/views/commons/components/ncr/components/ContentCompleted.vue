@@ -5,10 +5,10 @@
       lazy
       active-nav-item-class="bg-important border-0 shadow-none"
     >
-      <b-tab title="Successfull">
+      <b-tab title="Successfull" title-link-class="border-secondary ml-1">
         <content-sub-completed :status="1"></content-sub-completed>
       </b-tab>
-      <b-tab title="Invalid">
+      <b-tab title="Invalid" title-link-class="border-secondary ml-1">
         <content-sub-completed :status="2"></content-sub-completed>
       </b-tab>
     </b-tabs>

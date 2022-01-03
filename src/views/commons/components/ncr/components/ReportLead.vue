@@ -1377,6 +1377,8 @@ export default {
   props: {
     modul: Number,
     global: Object,
+    idfile:[Number,String],
+    idlead:[Number,String],
   },
   components: { FeatherIcon, vSelect },
   data() {
@@ -1638,7 +1640,7 @@ export default {
     getDataOfScore() {
       amgApi
         .post("/get-cr-data", {
-          score_id: this.global.idfile,
+          score_id: this.idfile,
           account_id: this.global.idaccount,
         })
         .then((res) => {
@@ -1746,7 +1748,7 @@ export default {
       this.$store.commit("app/SET_LOADING", true);
       amgApi
         .post("/allreportlead", {
-          id: this.global.idfile,
+          id: this.idfile,
         })
         .then((response) => {
           if (response.status == 200) {
@@ -2035,7 +2037,8 @@ export default {
     returnGrid() {
       var route = "";
       if (this.modul == 2) {
-        route = "/crm/leads/show/" + this.global.idlead;
+        console.log("dentro de ruta")
+        route = "/crm/leads/show/" + this.idlead;
       } else if (this.modul == 3) {
         route =
           this.global.idaccount != undefined
@@ -2105,7 +2108,7 @@ export default {
               .post("/process-credit-report", {
                 user_id: this.global.layout.id,
                 account: this.global.idaccount,
-                score_id: this.global.idfile,
+                score_id: this.idfile,
                 pi: this.personal_info,
                 in: this.inquires,
                 pr: this.public_info,

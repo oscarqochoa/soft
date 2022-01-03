@@ -1,13 +1,14 @@
 <template>
   <div>
-    <b-tabs pills lazy
-    active-nav-item-class="bg-important border-0 shadow-none">
-      <b-tab title="Pending">
+    <b-tabs pills 
+      
+      active-nav-item-class="bg-important box-shadow-important border-important">
+      <b-tab title="Pending" title-link-class="border-secondary ml-1">
         <pending-done active
          :status="1"
         />
       </b-tab>
-      <b-tab title="Done">
+      <b-tab title="Done" title-link-class="border-secondary ml-1">
         <pending-done
           :status="2"
         />

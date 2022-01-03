@@ -45,7 +45,7 @@
         </div>
       </template>
       <template #cell(commentary)="data">
-        <b-form-textarea
+        <!-- <b-form-textarea
           id="textarea"
           v-model="data.item.commentary"
           placeholder="Argue Something ..."
@@ -53,7 +53,10 @@
           max-rows="2"
           class="input-background-white"
           disabled
-        ></b-form-textarea>
+        ></b-form-textarea> -->
+        <!-- <b-form-input  v-model="data.item.commentary"  disabled></b-form-input> -->
+        <span>{{data.item.commentary}}</span>
+
       </template>
       <template #cell(status)="data">
         <p

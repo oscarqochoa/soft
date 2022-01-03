@@ -231,7 +231,7 @@
             <router-link
               :to="{
                 name: 'report-lead',
-                params: {
+                params: {idfile:data.item.score_id,idlead:data.item.lead_id,
                   modul: 11,
                   global: {
                     idfile: data.item.score_id,
@@ -239,6 +239,7 @@
                   },
                 },
               }"
+              target="_blank"
             >
               <img :src="assetsImg + '/images/icons/report2.ico'" />
             </router-link>
@@ -249,7 +250,7 @@
               v-if="!data.item.route_html"
               target="_blanck"
             >
-              <amg-icon size="23" icon="CRInvalidIcon"></amg-icon>
+              <amg-icon size="23" icon="CRInvalidIcon" ></amg-icon>
             </a>
           </div>
         </template>
