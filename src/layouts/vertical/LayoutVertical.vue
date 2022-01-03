@@ -1,8 +1,8 @@
 <template>
   <layout-vertical>
     <router-view />
-    <template #navbar>
-      <navbar />
+    <template #navbar="{toggleVerticalMenuActive}">
+      <navbar :toggleVerticalMenuActive="toggleVerticalMenuActive"></navbar>
     </template>
     <app-customizer
       v-if="showCustomizer"

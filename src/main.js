@@ -20,7 +20,7 @@ import { ValidationProvider, ValidationObserver } from "vee-validate";
 import money from "v-money";
 import VueTheMask from "vue-the-mask";
 import VueMoment from "vue-moment";
-
+import Pusher from 'pusher-js' // import Pusher
 // import 'vue-loading-rx/dist/vue-loading.css';
 // global register
 // Global Components
@@ -48,6 +48,7 @@ import './filters/number'
 
 import './validation/rules'
 
+
 Vue.prototype.$log = console.log
 
 window.amgApi = amgApi
@@ -57,6 +58,7 @@ Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
 Vue.use(BootstrapVue, {
   BModal: { headerBgVariant: "primary", titleClass: "text-light" },
+  breakpoints: [`xs`, 'sm', 'md', 'lg', 'xl', 'xxl']
 })
 Vue.use(BootstrapVueIcons)
 // Composition API
@@ -71,7 +73,7 @@ Vue.use(vueLoader, 'loading')
 // register directive v-money and component <money>
 Vue.use(money, { precision: 4 })
 // register directive v-mask and component <the-mask>
-Vue.use(VueTheMask);
+Vue.use(VueTheMask)
 
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard
@@ -82,6 +84,9 @@ require('@core/scss/core.scss')
 
 // import assets styles
 require('@/assets/scss/style.scss')
+
+
+import './pusher/index'
 
 // Global Mixins general.js
 

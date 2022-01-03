@@ -368,13 +368,19 @@ export default {
           || this.contractSale.st == 1
     },
   },
+  watch: {
+    cardType(val) {
+      console.log(val)
+      if (val === 0) {
+      }
+    },
+  },
   async created() {
     this.addPreloader()
     try {
       await this.getCards()
       await this.getPaymentsDays()
       await this.getContractSales()
-      console.log(this.contractFee, 'cfee')
       this.perPay = this.fee - this.initialPayment
       if (this.contractSale.program_id == 2) {
         this.monthlyAmount = 0

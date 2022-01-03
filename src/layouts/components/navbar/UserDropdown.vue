@@ -28,7 +28,7 @@
     </template>
 
     <b-dropdown-item
-      :to="{ name: 'pages-profile'}"
+      :to="{ name: 'users-my-profile'}"
       link-class="d-flex align-items-center"
     >
       <feather-icon
@@ -36,76 +36,35 @@
         icon="UserIcon"
         class="mr-50"
       />
-      <span>Profile</span>
+      <span>My Profile</span>
     </b-dropdown-item>
     <b-dropdown-item
-      :to="{ name: 'apps-email' }"
       link-class="d-flex align-items-center"
+      :to="{name: 'amg-messages'}"
     >
-      <feather-icon
-        size="16"
-        icon="MailIcon"
-        class="mr-50"
-      />
-      <span>Inbox</span>
+      <messages class="mr-50"></messages>
+      <span>Messages</span>
     </b-dropdown-item>
     <b-dropdown-item
-      :to="{ name: 'apps-todo' }"
       link-class="d-flex align-items-center"
+      @click="$refs.stickyNotes.openStickyNotes()"
     >
-      <feather-icon
-        size="16"
-        icon="CheckSquareIcon"
-        class="mr-50"
-      />
-      <span>Task</span>
+      <sticky-notes ref="stickyNotes" class="mr-50"></sticky-notes>
+      <span>Sticky Notes</span>
     </b-dropdown-item>
     <b-dropdown-item
-      :to="{ name: 'apps-chat' }"
       link-class="d-flex align-items-center"
+      @click="$refs.payStub.openPayStubModal()"
     >
-      <feather-icon
-        size="16"
-        icon="MessageSquareIcon"
-        class="mr-50"
-      />
-      <span>Chat</span>
-    </b-dropdown-item>
-
-    <b-dropdown-divider />
-
-    <b-dropdown-item
-      :to="{ name: 'pages-account-setting' }"
-      link-class="d-flex align-items-center"
-    >
-      <feather-icon
-        size="16"
-        icon="SettingsIcon"
-        class="mr-50"
-      />
-      <span>Settings</span>
+      <pay-stub ref="payStub" class="mr-50"></pay-stub>
+      <span>Pay Stub</span>
     </b-dropdown-item>
     <b-dropdown-item
-      :to="{ name: 'pages-pricing' }"
       link-class="d-flex align-items-center"
+      @click="$refs.messenger.redirectToMessenger()"
     >
-      <feather-icon
-        size="16"
-        icon="CreditCardIcon"
-        class="mr-50"
-      />
-      <span>Pricing</span>
-    </b-dropdown-item>
-    <b-dropdown-item
-      :to="{ name: 'pages-faq' }"
-      link-class="d-flex align-items-center"
-    >
-      <feather-icon
-        size="16"
-        icon="HelpCircleIcon"
-        class="mr-50"
-      />
-      <span>FAQ</span>
+      <messenger ref="messenger" class="mr-50"></messenger>
+      <span>Messenger</span>
     </b-dropdown-item>
     <b-dropdown-item
       link-class="d-flex align-items-center"
@@ -117,23 +76,26 @@
         class="mr-50"
       />
       <span>Logout</span>
-    </b-dropdown-item></b-nav-item-dropdown>
+    </b-dropdown-item>
+    </b-nav-item-dropdown>
 </template>
 
 <script>
-import {
-  BNavItemDropdown, BDropdownItem, BDropdownDivider, BAvatar,
-} from 'bootstrap-vue'
 import { initialAbility } from '@/libs/acl/config'
 import useJwt from '@/auth/jwt/useJwt'
 import { avatarText } from '@core/utils/filter'
-
+import StickyNotes from "./components/sticky-notes/StickyNotes.vue";
+import Appointments from "./components/appointments/Appointments.vue";
+import Messages from "./components/messages/Messages.vue";
+import Messenger from "./components/messenger/Messenger.vue";
+import PayStub from "./components/pay-stub/PayStub.vue";
 export default {
   components: {
-    BNavItemDropdown,
-    BDropdownItem,
-    BDropdownDivider,
-    BAvatar,
+    StickyNotes,
+    Appointments,
+    Messages,
+    Messenger,
+    PayStub,
   },
   data() {
     return {

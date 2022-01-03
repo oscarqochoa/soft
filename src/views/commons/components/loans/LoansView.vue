@@ -1,10 +1,16 @@
 <template>
   <div>
-    <b-tabs v-if="isTabs" content-class="ml-2" nav-class="ml-2" pills>
-      <b-tab lazy title="Pending">
+    <b-tabs
+      v-if="isTabs"
+      content-class="ml-2"
+      nav-class="ml-2"
+      pills
+      active-nav-item-class="bg-important box-shadow-important border-important"
+    >
+      <b-tab lazy title="Pending" title-link-class="border-secondary">
         <LoansTable :tab="tab" :status="1" />
       </b-tab>
-      <b-tab lazy>
+      <b-tab lazy title-link-class="border-secondary ml-1">
         <template #title>
           Completed
           <span class="ml-1" v-if="counterTab.counter_comp>0 && isManagement">

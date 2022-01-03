@@ -37,7 +37,8 @@
     </b-row>
     <b-row>
       <b-col
-        v-for="(content,index) in currentFiles" :key="index"
+        v-for="(content, index) in currentFiles"
+        :key="index"
         cols="1"
       >
         <file-component
@@ -259,10 +260,11 @@ export default {
           this.files.forEach(file => {
             formData.append('images[]', file, file.name)
           })
+          this.addPreloader()
           formData.append('module_id', this.currentFolderModule)
           formData.append('folder_name', '')
           formData.append('user_id', this.currentUser.user_id)
-          formData.append('idfolder', this.currentFolder)
+          formData.append('idfolder', this.currentFolder ? this.currentFolder : '')
           const headers = {
             headers: {
               'Content-Type': 'multipart/form-data',

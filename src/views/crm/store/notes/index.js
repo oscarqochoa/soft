@@ -29,7 +29,7 @@ const actions = {
   async A_GET_LEAD_NOTES ({ commit }, body) {
     try {
       const response = await NotesService.getLeadNotes(body)
-      console.log('A_GET_NOTES response', response)
+      /* console.log('A_GET_NOTES response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         commit('SET_DATA', {
           destination: 'S_NOTES',
@@ -45,7 +45,7 @@ const actions = {
   async A_SET_LEAD_NOTE ({ commit }, body) {
     try {
       const response = await NotesService.postLeadNotes(body)
-      console.log('A_SET_NOTE response', response)
+      /* console.log('A_SET_NOTE response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         commit('SET_DATA', {
           destination: 'S_NOTES',
@@ -61,7 +61,7 @@ const actions = {
   async A_UPDATE_LEAD_NOTE ({ commit }, body) {
     try {
       const response = await NotesService.putLeadNotes(body)
-      console.log('A_UPDATE_LEAD_NOTE response', response)
+      /* console.log('A_UPDATE_LEAD_NOTE response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
         commit('SET_DATA', {
           destination: 'S_NOTES',
@@ -77,7 +77,7 @@ const actions = {
   async A_MAKE_IMPORTANT_NOTE ({ commit }, body) {
     try {
       const response = await NotesService.postMakeImportantNote(body)
-      console.log('A_MAKE_IMPORTANT_NOTE response', response)
+      /* console.log('A_MAKE_IMPORTANT_NOTE response', response) */
       return response
     } catch (error) {
       console.log('ERROR_MAKE_IMPORTANT_NOTE [ACTION]', error)

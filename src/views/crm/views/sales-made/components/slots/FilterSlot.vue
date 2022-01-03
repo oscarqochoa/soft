@@ -80,6 +80,7 @@
               class="mb-0 mt-1 mt-sm-0"
               prev-class="prev-item"
               next-class="next-item"
+              @input="$emit('onChangeCurrentPage', $event)"
             >
               <template #prev-text>
                 <feather-icon
@@ -113,6 +114,7 @@
               :options="[10, 25, 50, 100]"
               :clearable="false"
               class="per-page-selector d-inline-block mx-50"
+              @input="$emit('reload', false)"
             />
             <label class="mr-2">entries</label>
             <feather-icon
@@ -121,17 +123,7 @@
               size="20"
               @click="resetFilter"
             />
-            <b-button
-              v-if="sendMultipleSms"
-              variant="success"
-              class="ml-1"
-              @click="$emit('sendMultipleSms')"
-            >
-              <feather-icon
-                icon="MessageCircleIcon"
-                class="mr-50"
-              />Send SMS
-            </b-button>
+            <slot name="buttons"/>
           </b-col>
           <!-- Search -->
           <b-col
@@ -217,6 +209,7 @@
               class="mb-0 mt-1 mt-sm-0"
               prev-class="prev-item"
               next-class="next-item"
+              @input="$emit('onChangeCurrentPage', $event)"
             >
               <template #prev-text>
                 <feather-icon
@@ -254,7 +247,6 @@ export default {
     startPage: { required: false, type: Number },
     toPage: { required: false, type: Number },
     filterPrincipal: { required: true, type: Object },
-    sendMultipleSms: { required: false, default: false },
     noVisiblePrincipalFilter:{ required: false, default: false },
   },
   computed: {

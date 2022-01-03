@@ -1,70 +1,86 @@
 <template>
-  <b-card title="User Timeline">
-    <app-timeline>
-
-      <!-- 12 INVOICES HAVE BEEN PAID -->
-      <app-timeline-item>
-        <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
-          <h6>12 Invoices have been paid</h6>
-          <small class="text-muted">12 min ago</small>
-        </div>
-        <p>Invoices have been paid to the company.</p>
-        <p class="mb-0">
-          <b-img
-            :src="require('@/assets/images/icons/pdf.png')"
-            height="auto"
-            width="20"
-            class="mr-1"
-          />
-          <span class="align-bottom">invoice.pdf</span>
-        </p>
-      </app-timeline-item>
-      <app-timeline-item variant="warning">
-
-        <div class="d-flex flex-sm-row flex-column flex-wrap justify-content-between mb-1 mb-sm-0">
-          <h6>Client Meeting</h6>
-          <small class="text-muted">45 min ago</small>
-        </div>
-        <p>Project meeting with john @10:15am.</p>
-        <b-media>
-          <template #aside>
-            <b-avatar :src="require('@/assets/images/avatars/8-small.png')" />
+  <b-card title="User Access" style="height: 93%">
+    <b-row>
+      <b-col>
+        <table class="mt-2 mt-xl-0 w-100">
+          <tr>
+            <th class="pb-50">
+              <amg-icon icon="UserIcon" class="mr-75" />
+              <span class="font-weight-bold">Email</span>
+            </th>
+            <td class="pb-50">
+              {{ userData.email }}
+            </td>
+          </tr>
+          <tr>
+            <th class="pb-50">
+              <amg-icon icon="UserIcon" class="mr-75" />
+              <span class="font-weight-bold">Password</span>
+            </th>
+            <td class="pb-50">
+              <b-button variant="flat-primary" v-b-modal.change-password-modal
+                >Change password</b-button
+              >
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <amg-icon icon="LockIcon" class="mr-75" />
+              <span class="font-weight-bold">Rol</span>
+            </th>
+            <td>
+              {{ userData.role_id }}
+            </td>
+          </tr>
+        </table>
+        <b-form-group
+          id="label-modules"
+          label="Module(s)"
+          label-for="modules"
+          class="mt-1"
+        >
+          <template #label>
+            <span style="font-size: 14px">Module(s)</span>
           </template>
-          <h6>John Doe (Client)</h6>
-          <p class="mb-0">
-            CEO of Infibeam
-          </p>
-        </b-media>
-      </app-timeline-item>
-      <app-timeline-item
-        variant="info"
-        title="Create a new project for client"
-        subtitle="Add files to new design folder"
-        time="2 days ago"
-      />
-    </app-timeline>
+          <b-row v-if="userData.roleName != 'CEO'">
+            <b-col
+              cols="12"
+              md="3"
+              id="modules"
+              v-for="modul in userData.arrModuls"
+              :key="modul.id_module"
+            >
+              <b-badge variant="light-primary" class="w-100 mt-1">
+                {{ modul.module_name }}
+              </b-badge>
+            </b-col>
+          </b-row>
+          <b-badge variant="light-primary" class="w-100 mt-1 p-1" v-else>
+            ALL MODULES
+          </b-badge>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <b-modal id="change-password-modal" title="Change user password" centered @ok.prevent="$refs.changePasswordModal.changePassword()" no-close-on-backdrop cancel-variant="outline-danger">
+      <change-user-password ref="changePasswordModal" @closeModal="$bvModal.hide('change-password-modal')"></change-user-password>
+    </b-modal>
   </b-card>
 </template>
 
 <script>
-import {
-  BCard, BImg, BMedia, BAvatar,
-} from 'bootstrap-vue'
-import AppTimeline from '@core/components/app-timeline/AppTimeline.vue'
-import AppTimelineItem from '@core/components/app-timeline/AppTimelineItem.vue'
-
+import ChangeUserPassword from "././ChangeUserPassword.vue";
 export default {
-  components: {
-    BCard,
-    BImg,
-    BMedia,
-    BAvatar,
-    AppTimeline,
-    AppTimelineItem,
+  props: {
+    userData: {
+      type: Object,
+      required: true,
+    },
   },
-}
+  components: {
+    ChangeUserPassword,
+  },
+};
 </script>
 
 <style>
-
 </style>

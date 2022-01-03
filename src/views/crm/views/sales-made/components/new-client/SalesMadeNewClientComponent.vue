@@ -8,10 +8,22 @@
       :paginate="paginate"
       :start-page="startPage"
       :to-page="toPage"
-      :send-multiple-sms="true"
       @reload="$refs['new-client-done-table'].refresh()"
-      @sendMultipleSms="modalSmssOpen"
     >
+      <template #buttons>
+        <b-button
+          variant="success"
+          class="ml-1"
+          :disabled="!selected.length"
+          @click="modalSmssOpen"
+        >
+          <feather-icon
+            icon="MessageCircleIcon"
+            class="mr-50"
+          />Send SMS
+        </b-button>
+      </template>
+
       <b-table
         id="new-client-done-table"
         slot="table"
@@ -22,7 +34,7 @@
         no-provider-filtering
         :class="['text-center']"
         :busy.sync="isBusy"
-        :items="myProvider"
+        :items="search"
         :fields="filteredFields"
         :per-page="paginate.perPage"
         :current-page="paginate.currentPage"
@@ -64,16 +76,56 @@
         </template>
         <template v-slot:cell(program)="data">
           <b-button
-            :style="`color: ${data.item.program_color} !important; border-color: ${data.item.program_color} !important; background-color: transparent !important;`"
+            :style="`color: white !important; border-color: ${data.item.program_color} !important; background-color: ${data.item.program_color} !important;`"
             size="sm"
+            class="font-weight-bolder"
             @click="openModalProgram(data.item)"
           >
-            {{ data.item.program }}
+            <span
+              v-if="data.item.program === 'Business'"
+              v-b-tooltip.bottom="'Business'"
+            >BU</span>
+            <span
+              v-if="data.item.program === 'Boost Credit'"
+              v-b-tooltip.bottom="'Boost Credit'"
+            >BC</span>
+            <span
+              v-if="data.item.program === 'Credit Experts'"
+              v-b-tooltip.bottom="'Credit Experts'"
+            >CE</span>
+            <span
+              v-if="data.item.program === 'Debt Solution'"
+              v-b-tooltip.bottom="'Debt Solution'"
+            >DS</span>
+            <span
+              v-if="data.item.program === 'Tax Research'"
+              v-b-tooltip.bottom="'Tax Research'"
+            >TR</span>
+            <span
+              v-if="data.item.program === 'General Support'"
+              v-b-tooltip.bottom="'General Support'"
+            >GS</span>
+            <span
+              v-if="data.item.program === 'Specialist'"
+              v-b-tooltip.bottom="'Specialist'"
+            >SP</span>
+            <span
+              v-if="data.item.program === 'KeyBook'"
+              v-b-tooltip.bottom="'KeyBook'"
+            >KB</span>
+            <span
+              v-if="data.item.program === 'Paragon'"
+              v-b-tooltip.bottom="'Paragon'"
+            >PR</span>
             <feather-icon
               v-if="data.item.haveRates !== 1"
               icon="AlertTriangleIcon"
-              variant="danger"
-              style="margin-left: 2px"
+              style="margin-left: 5px"
+            />
+            <feather-icon
+              v-else
+              icon="CheckCircleIcon"
+              style="margin-left: 5px"
             />
           </b-button>
         </template>
@@ -325,14 +377,16 @@
             variant="warning"
             @click="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
               currentUser.role_id == 1 ||
-              currentUser.role_id == 2)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id)"
+              currentUser.role_id == 2)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id, data.item.status, data.item.user_id)"
           />
         </template>
         <template v-slot:cell(status)="data">
           <p
             class="m-0 font-weight-bold font-small-3"
             :class="'color: text-' + status[data.item.status].variant"
-          >{{ status[data.item.status].label }}</p>
+          >
+            {{ status[data.item.status].label }}
+          </p>
         </template>
         <template v-slot:cell(actions)="data">
           <b-row
@@ -346,7 +400,7 @@
                 data.item.initial_payment_status == 2 &&
                 currentUser.role_id != 1 && currentUser.role_id != 2"
               size="sm"
-              variant="info"
+              variant="outline-info"
               :disabled="((data.item.user_id != currentUser.user_id) && currentUser.role_id == 5)"
               @click="revisionSale(5, data.item)"
             >Revission</b-button>
@@ -362,7 +416,7 @@
                   ? false
                   : data.item.type == 0 ? false : true
               "
-              variant="info"
+              variant="outline-info"
               @click="revisionSale(2, data.item)"
             >Revission</b-button>
             <b-button
@@ -374,7 +428,7 @@
                   (currentUser.role_id == 1 || currentUser.role_id == 2)
               "
               size="sm"
-              variant="info"
+              variant="outline-info"
               @click="revisionSale(2, data.item)"
             >Revission</b-button>
             <b-button
@@ -386,7 +440,7 @@
                   (currentUser.role_id == 1 || currentUser.role_id == 2)
               "
               size="sm"
-              variant="warning"
+              variant="outline-warning"
               @click="revisionSale(7, data.item)"
             >Return</b-button>
             <b-button
@@ -400,7 +454,7 @@
                     currentUser.role_id == 2)
               "
               size="sm"
-              variant="info"
+              variant="outline-info"
               @click="revisionSale(2, data.item)"
             >Revission</b-button>
             <b-button
@@ -410,7 +464,7 @@
                     currentUser.role_id == 2)
               "
               size="sm"
-              variant="danger"
+              variant="outline-danger"
               @click="annulSale(data.item)"
             >ANNUL</b-button>
           </b-row>
@@ -428,7 +482,7 @@
                   data.item.initial_payment_status == 2
               "
               size="sm"
-              variant="info"
+              variant="outline-info"
               @click="revisionSale(5, data.item)"
             >Revission</b-button>
             <b-button
@@ -440,7 +494,7 @@
                   data.item.initial_payment_status == 2
               "
               size="sm"
-              variant="info"
+              variant="outline-info"
               :disabled="
                 data.item.type == 1 && currentUser.role_id == 1
                   ? false
@@ -457,7 +511,7 @@
                   data.item.initial_payment_status == 2
               "
               size="sm"
-              variant="info"
+              variant="outline-info"
               @click="revisionSale(2, data.item)"
             >Revission</b-button>
             <b-button
@@ -469,7 +523,7 @@
                   data.item.initial_payment_status == 2
               "
               size="sm"
-              variant="warning"
+              variant="outline-warning"
               @click="revisionSale(7, data.item)"
             >Return</b-button>
             <b-button
@@ -483,7 +537,7 @@
                   data.item.initial_payment_status == 2
               "
               size="sm"
-              variant="info"
+              variant="outline-info"
               @click="revisionSale(2, data.item)"
             >Revission</b-button>
             <b-button
@@ -493,7 +547,7 @@
                     currentUser.role_id == 2)
               "
               size="sm"
-              variant="danger"
+              variant="outline-danger"
               @click="annulSale(data.item)"
             >ANNUL</b-button>
           </b-row>
@@ -710,6 +764,8 @@ import ModalNotesBoost from '@/views/commons/components/first-notes/ModalNotesBo
 import ModalNotesParagon from '@/views/commons/components/first-notes/ModalNotesParagon.vue'
 import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue'
 import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms.vue'
+import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasCredit.vue'
+import ModalNotesSpecialist from '@/views/commons/components/first-notes/ModalNotesSpecialist.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -738,6 +794,8 @@ export default {
     ModalNotesParagon,
     ModalNotesFirst,
     ModalNotesTax,
+    ModalNotesCredit,
+    ModalNotesSpecialist,
   },
   props: {
     done: {
@@ -825,6 +883,7 @@ export default {
           program: '',
           client: '',
           sale_id: null,
+          valorEdit: false,
         },
         programs: {
           programSelected: '',
@@ -878,7 +937,8 @@ export default {
       sources: state => state['crm-store'].sources,
       sts: state => state['crm-store'].states,
       stip: state => state['crm-store'].statusip,
-      status: state => state['crm-store'].status,
+      status: state => state['crm-store'].statusNewClient,
+      statusFilter: state => state['crm-store'].statusFilter,
     }),
     ...mapGetters({
       currentUser: 'auth/currentUser',
@@ -907,7 +967,7 @@ export default {
       this.filter[2].options = this.captured
       this.filter[3].options = this.sellers
       this.filter[4].options = this.sources
-      this.filter[5].options = this.status
+      this.filter[5].options = this.statusFilter
       this.filter[6].options = this.programs
       this.filter[7].options = this.stip
       this.filter[8].options = this.sts
@@ -941,7 +1001,7 @@ export default {
       this.modalData.historySms.id = item.lead_id
       this.$bvModal.show('modal-history-sms')
     },
-    async myProvider(ctx) {
+    async search(ctx) {
       try {
         let sortBy = 11
         let sortDirection = 'desc'
@@ -1057,7 +1117,7 @@ export default {
           this.modalData.notes.programSelected = 'ModalNotesBoost' // ready
           break
         case created >= '2021-03-04' && program == 3:
-          this.modalData.notes.programSelected = 'ModalNotesCredit' // next next
+          this.modalData.notes.programSelected = 'ModalNotesCredit' // ready
           break
         case created >= '2020-09-24' && program == 5:
           this.modalData.notes.programSelected = 'ModalNotesTax' // ready
@@ -1069,7 +1129,7 @@ export default {
           this.modalData.notes.programSelected = 'ModalNotesParagon' // ready
           break
         default:
-          this.modalData.notes.programSelected = 'ModalNotesOld' // next next next
+          this.modalData.notes.programSelected = 'ModalNotesOld' // next next
           break
       }
 
@@ -1198,11 +1258,17 @@ export default {
         this.modal.programs = true
       }
     },
-    openFilesModal(id, program, client, saleId) {
+    openFilesModal(id, program, client, saleId, status, sellerId) {
       this.modalData.files.id = id
       this.modalData.files.program = program
       this.modalData.files.client = client
       this.modalData.files.sale_id = saleId
+      const isCeoOrSupervisor = this.currentUser.role_id == '1' || this.currentUser.role_id == '2'
+      const saleStatus = status == '4' || status == '2'
+      console.log(this.currentUser.user_id, sellerId)
+      if ((this.currentUser.user_id == sellerId || isCeoOrSupervisor) && saleStatus == false) {
+        this.modalData.files.valorEdit = true
+      }
       this.modal.files = true
     },
     selectedRow(data) {

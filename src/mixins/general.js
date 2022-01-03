@@ -132,7 +132,7 @@ export default {
     //   else style.sheet.insertRule(`${name}{${rules}}`, 0);
     // },
     /* TOAST */
-    showToast(variant, position, title, icon, text) {
+    showToast(variant = "success", position = "top-right", title = "Congratulations", icon = "CheckIcon", text = "You've successfully done it!") {
       this.$toast(
         {
           component: ToastificationContent,
@@ -274,6 +274,12 @@ export default {
         return 'Something went wrong'
       }
     },
+    toggleModal (tagId, state = true) {
+      if (tagId && state)
+        this.$bvModal.show(tagId)
+      if (tagId && !state)
+        this.$bvModal.hide(tagId)
+    },
     getCurrentMonth() {
       return this.$moment().format('MMM')
     },
@@ -290,8 +296,8 @@ export default {
       }
       return arr
     },
-    isPreloading (status = true) {
-      this.$store.commit("app/SET_LOADING", status)
+    isPreloading (state = true) {
+      this.$store.commit("app/SET_LOADING", state)
     }
   },
 }

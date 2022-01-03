@@ -185,7 +185,6 @@ export default {
     async getLeadEdit () {
       try {
         await this.A_GET_LEAD_EDIT({ id: this.$route.params.id })
-        console.log('S_LEAD', this.S_LEAD)
       } catch (error) {
         console.log('Something went wrong getLeadEdit', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))

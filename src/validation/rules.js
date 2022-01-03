@@ -72,3 +72,17 @@ extend('validate-spaces', {
     validate: value => value.replace(/\s/g, "") != "",
     message: "The field is required"
 })
+extend('password', {
+    params: ['confirm'],
+    validate(value, { confirm }) {
+        return value === confirm;
+    },
+    message: 'Password confirmation does not match'
+});
+extend('specialpassword', {
+    validate: (value) => {
+        let regularExpression = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+        return regularExpression.test(value)
+    },
+    message: 'The Format must have a minimum. A capital letter, a lowercase, a number, a special character, and a minimum of 8 characters. Example: Abcd1234@'
+})

@@ -1,123 +1,113 @@
 <template>
   <div>
-    <ValidationObserver ref="form">
-      <b-modal
-        v-model="modalServices"
-        modal
-        size="lg"
-        scrollable
-        header-class="p-0"
-        header-bg-variant="transparent border-bottom border-bottom-2"
-        :hide-footer="isModalShow"
-        @hidden="hideModal(false,0)"
-      >
-        <!-- HEADER START -->
-        <template v-slot:modal-header>
-          <modal-service-header
-            :type-modal="typeModal"
-            :users-services="usersServices"
-            :programs-all="programsAll"
-            :header-s="headerS"
-            :sales="salesClient"
-            @changeProgram="changeProgram"
-            @close="hideModal(false,0)"
-          />
-        </template>
-        <!-- HEADER END -->
 
-        <!-- BODY START -->
-        <div>
-          <div class="row">
-            <div class="col-lg-4" />
-            <div class="col-lg-4">
-              <ValidationProvider
-                v-slot="{errors}"
-                rules="required|money-1"
-              >
-                <table class="table table-striped mb-0">
-                  <tbody style="border: 1px solid #ccc">
-                    <tr class="tr-style">
-                      <td
-                        colspan="1"
-                        class="td-style"
-                      >
-                        FEE
-                      </td>
-                    </tr>
-                    <tr class="text-center">
-                      <td class="text-center bg-gray">
-                        <div class="div-style">
-                          $
-                          <money
-                            v-model="fee"
-                            v-bind="vMoney"
-                            class="input-total text-center"
-                            :style="errors[0] && validateMoney? 'color:red !important':''"
-                            :class="{'border border-danger':errors[0] && validateMoney}"
-                            :disabled="isModalShow"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div
-                  v-if="errors[0] && validateMoney"
-                  class="fee-error"
-                >
-                  Fee {{ errors[0] }}
-                </div>
-              </ValidationProvider>
-            </div>
-            <div class="col-lg-4" />
-          </div>
-        </div>
-        <!-- BODY END -->
+    <b-modal
+      v-model="modalServices"
+      modal
+      size="sm"
+      scrollable
+      header-class="p-0"
+      header-bg-variant="transparent border-bottom border-bottom-2"
+      :hide-footer="isModalShow"
+      @hidden="hideModal(false,0)"
+    >
+      <!-- HEADER START -->
+      <template v-slot:modal-header>
+        <modal-service-header
+          :type-modal="typeModal"
+          :users-services="usersServices"
+          :programs-all="programsAll"
+          :two-per-row="true"
+          :header-s="headerS"
+          :sales="salesClient"
+          @changeProgram="changeProgram"
+          @close="hideModal(false,0)"
+        />
+      </template>
+      <!-- HEADER END -->
+      <b-container>
+        <b-row class="d-flex align-items-center justify-content-center">
+          <b-col>
 
-        <!--  FOOTER START -->
-        <template #modal-footer="{ }">
-          <b-row class="w-100">
-            <b-col
-              v-if="!isModalAdd"
-              class="d-flex align-items-center justify-content-center"
+            <b-card
+              class="border"
+              header="FEE"
+              header-bg-variant="info"
+              header-class="text-white py-1 font-weight-bolder"
             >
-              <b-button
-                variant="danger"
-                class="mr-1"
-                @click="hideModal(false,0)"
-              >
-                <feather-icon icon="PowerIcon" /> CANCEL
-              </b-button>
-              <b-button
-                variant="success"
-                @click="saveRates()"
-              >
-                <feather-icon icon="SaveIcon" /> SAVE
-              </b-button>
-            </b-col>
-            <b-col v-if="isModalAdd">
-              <b-button
-                variant="info"
-                @click="saveRates()"
-              >
-                Continue
-                <feather-icon icon="ChevronsRightIcon" />
-              </b-button>
-            </b-col>
-          </b-row>
-        </template>
-        <!-- FOOTER END -->
-      </b-modal>
-    </ValidationObserver>
+              <b-row class="mt-1">
+                <b-col
+                  cols="2"
+                  class="d-flex align-items-center justify-content-center text-success font-medium-5"
+                >
+                  $
+                </b-col>
+                <b-col>
+                  <validation-observer ref="form">
+                    <validation-provider
+                      v-slot="{errors}"
+                      name="fee"
+                      rules="required"
+                    >
+                      <money
+                        v-model="fee"
+                        v-bind="vMoney"
+                        class="form-control text-center"
+                        :class="{'border-danger':errors[0] && validateMoney}"
+                        :disabled="isModalShow"
+                      />
+                    </validation-provider>
+                  </validation-observer>
+                </b-col>
+              </b-row>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-container>
+      <!-- BODY START -->
+      <!-- BODY END -->
+
+      <!--  FOOTER START -->
+      <template #modal-footer="{ }">
+        <b-row class="w-100">
+          <b-col
+            v-if="!isModalAdd"
+            class="d-flex align-items-center justify-content-end"
+          >
+            <button-save
+              @click="saveRates()"
+            />
+            <button-cancel
+              class="ml-1"
+              @click="hideModal(false,0)"
+            />
+          </b-col>
+          <b-col v-if="isModalAdd">
+            <b-button
+              variant="info"
+              @click="saveRates()"
+            >
+              Continue
+            </b-button>
+          </b-col>
+        </b-row>
+      </template>
+      <!-- FOOTER END -->
+    </b-modal>
+
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
   components: {
+    ButtonSave,
+    ButtonCancel,
     ModalServiceHeader,
   },
   props: {
@@ -160,7 +150,7 @@ export default {
       rate_selected: [],
       suggested: 0,
       rates_others: [],
-      fee: 0,
+      fee: null,
       vMoney: {
         decimal: '.',
         thousands: ',',
@@ -262,15 +252,7 @@ export default {
           json_ce: this.json_ce,
         }
 
-        const result = await this.$swal.fire({
-          title: `Are you sure you want to ${message}?`,
-          text: "You won't be able to revert this!",
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes',
-        })
+        const result = await this.showConfirmSwal()
         if (result.value) {
           this.addPreloader()
           const response = await amgApi.post(`${route}`, param)
@@ -315,52 +297,4 @@ export default {
 </script>
 
 <style scoped>
-.gold-text {
-  color: #baa345 !important;
-}
-
-.input-total {
-  width: 100px;
-  border-radius: 5px;
-  outline: none;
-  background: white;
-  margin-left: 5px;
-  color: #212529;
-}
-.p-fee {
-  padding: 2px 0 2px 0;
-}
-.td-style {
-  text-align: center;
-  font-weight: bold;
-  background: white;
-}
-.tr-style {
-  color: #b59200;
-  border-bottom: 1px solid #cccccc;
-}
-.select-style {
-  text-align: center;
-  border: 2px solid #ffffff;
-  width: 100px;
-  border-radius: 5px;
-  outline: none;
-  background: white;
-  font-size: 14px;
-  color: black;
-}
-.div-style {
-  font-size: 19px;
-  color: white;
-}
-.bg-gray {
-  background: #999999;
-}
-
-.fee-error {
-  margin-left: 6rem;
-  font-size: 100%;
-  width: 100%;
-  color: #dc3545;
-}
 </style>

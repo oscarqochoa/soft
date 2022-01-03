@@ -7,7 +7,6 @@
             <!-- SSN -->
             <validation-provider
               v-if="hideSSN || userData.ssn || (!userData.ssn && !userData.itin)"
-              #default="validationContext"
               name="SSN"
             >
               <b-form-group
@@ -21,7 +20,6 @@
                     ref="ssn"
                     v-model="userData.ssn"
                     autofocus
-                    :state="getValidationState(validationContext)"
                     :disabled="disabled.ssn"
                     trim
                     maxlength="11"
@@ -77,7 +75,6 @@
             <!-- ITIN -->
             <validation-provider
               v-if="hideITIN || userData.itin"
-              #default="validationContext"
               name="ITIN"
             >
               <b-form-group
@@ -91,7 +88,6 @@
                     ref="itin"
                     v-model="userData.itin"
                     autofocus
-                    :state="getValidationState(validationContext)"
                     :disabled="disabled.itin"
                     trim
                     maxlength="11"
@@ -150,7 +146,6 @@
             <!-- CPN -->
             <validation-provider
               v-if="hideSSN || (userData.ssn && userData.itin)"
-              #default="validationContext"
               name="CPN"
             >
               <b-form-group
@@ -164,7 +159,6 @@
                     ref="cpn"
                     v-model="userData.other"
                     autofocus
-                    :state="getValidationState(validationContext)"
                     :disabled="disabled.other"
                     trim
                     maxlength="11"
@@ -213,7 +207,6 @@
           <template v-else>
             <!-- SSN? -->
             <validation-provider
-              #default="validationContext"
               name="SSN?"
             >
               <b-form-group
@@ -226,7 +219,6 @@
                     id="ssn?"
                     v-model="userData.social"
                     autofocus
-                    :state="getValidationState(validationContext)"
                     trim
                     maxlength="11"
                     v-mask="'###-##-####'"
@@ -245,7 +237,6 @@
             <!-- SSN -->
             <validation-provider
               v-if="hideSSN"
-              #default="validationContext"
               name="SSN"
             >
               <b-form-group
@@ -257,7 +248,6 @@
                   id="ssn"
                   v-model="userData.ssn"
                   autofocus
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="11"
                   v-mask="'###-##-####'"
@@ -267,7 +257,6 @@
             <!-- ITIN -->
             <validation-provider
               v-if="hideITIN"
-              #default="validationContext"
               name="ITIN"
             >
               <b-form-group
@@ -279,7 +268,6 @@
                   id="itin"
                   v-model="userData.itin"
                   autofocus
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="11"
                   v-mask="'###-##-####'"
@@ -289,7 +277,6 @@
             <!-- CPN -->
             <validation-provider
               v-if="hideCPN"
-              #default="validationContext"
               name="CPN"
             >
               <b-form-group
@@ -301,7 +288,6 @@
                   id="cpn"
                   v-model="userData.other"
                   autofocus
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="11"
                   v-mask="'###-##-####'"
@@ -313,7 +299,6 @@
         <b-col md="6">
           <!-- Phone -->
           <validation-provider
-            #default="validationContext"
             name="Phone"
           >
             <b-form-group
@@ -324,7 +309,6 @@
                 <b-form-input
                   id="phone"
                   v-model="userData.phone"
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="14"
                   :disabled="userData.id && disabled.phone"
@@ -367,15 +351,11 @@
                   </b-input-group-append>
                 </template>
               </b-input-group>
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
           <!-- Mobile -->
           <validation-provider
-            #default="validationContext"
+            v-slot="{errors}"
             name="Mobile"
             rules="required"
           >
@@ -387,10 +367,10 @@
                 <b-form-input
                   id="mobile"
                   v-model="userData.mobile"
-                  :state="getValidationState(validationContext)"
                   trim
                   maxlength="14"
                   :disabled="userData.id && disabled.mobile"
+                  :state="errors[0] ? false : null"
                   @keyup.native="mobile()"
                 />
                 <template v-if="userData.id">
@@ -430,10 +410,6 @@
                   </b-input-group-append>
                 </template>
               </b-input-group>
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -456,14 +432,14 @@
         <b-col md="6">
           <!-- Origin Country -->
           <validation-provider
-            #default="validationContext"
+            v-slot="{errors}"
             name="Origin Country"
             rules="required"
           >
             <b-form-group
               label="Origin Country"
               label-for="originCountry"
-              :state="getValidationState(validationContext)"
+              :state="errors[0] ? false : null"
             >
               <v-select
                 id="originCountry"
@@ -473,9 +449,6 @@
                 :options="G_COUNTRIES"
                 :reduce="el => el.id"
               />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -526,7 +499,7 @@ export default {
     },
     blankUserFields: {
       type: Object,
-      required: true,
+      required: false,
     }
   },
   data() {
@@ -659,6 +632,7 @@ export default {
     },
     async mobile () {
       try {
+        this.isPreloading(true)
         var x = this.userData.mobile
           .replace(/\D/g, "")
           .match(/(\d{0,3})(\d{0,3})(\d{0,4})/)
@@ -673,17 +647,23 @@ export default {
               this.showSwalGeneric('Are you sure?', `The phone number already exists: ${response.data.message}`, 'warning', { confirmButtonText: 'REQUEST LEAD TO SOCIAL NETWORK' })
               .then(async (result) => {
                 if (result.value) {
+                  this.isPreloading(true)
                   await this.A_SET_REQUEST_LEADS({
                     lead_id: response.data.lead_id,
                     lead_name: response.data.message,
                   })
+                  this.isPreloading(false)
                 }
+              }).catch(error => {
+                throw error
               })
             }
+            this.isPreloading(false)
           }
         }
       } catch (error) {
         console.log('Something went wrong mobile:', error)
+        this.isPreloading(false)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
@@ -849,7 +829,8 @@ export default {
     },
   },
   mounted () {
-    this.hideWithOtherAddress = this.userData.otherAddress.street !== null
+    if (this.userData.id)
+      this.hideWithOtherAddress = this.userData.otherAddress.street !== null
   },
   watch: {
     hideWithOtherAddress (current, old) {

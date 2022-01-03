@@ -1,11 +1,11 @@
-import CrmServices from '../services/crm.service'
+import CrmServices from '../../services/crm.service'
 
 export default {
   namespaced: true,
   state: {
     sellersCrm: {},
     capturedCrm: [],
-    //TODO Hacerlo global
+    // TODO Hacerlo global
     programs: {},
     sources: {},
     states: {},
@@ -14,13 +14,36 @@ export default {
       { id: 1, label: 'NO' },
       { id: 2, label: 'YES' },
     ],
-    status: [
+    statusFilter: [
       { id: 0, label: 'ALL', variant: '' },
       { id: 1, label: 'PENDING', variant: 'warning' },
       { id: 2, label: 'REVISION', variant: 'primary' },
       { id: 3, label: 'DESAPROVE', variant: 'danger' },
       { id: 4, label: 'APPROVED', variant: 'success' },
-      { id: 5, label: 'SUPERVISOR', variant: 'warning' },
+    ],
+    statusAnnuled: [
+      { id: 0, label: 'PENDING', variant: 'warning' },
+      { id: 1, label: 'PENDING', variant: 'warning' },
+      { id: 2, label: 'REVISION', variant: 'primary' },
+      { id: 3, label: 'DESAPROVE', variant: 'danger' },
+      { id: 4, label: 'APPROVED', variant: 'success' },
+    ],
+    statusAddChange: [
+      { id: 0, label: 'ALL', variant: '' },
+      { id: 1, label: 'PENDING', variant: 'warning' },
+      { id: 2, label: 'UNDERVIEW', variant: 'primary' },
+      { id: 3, label: 'DESAPROVED', variant: 'danger' },
+      { id: 4, label: 'APPROVED', variant: 'success' },
+    ],
+    statusNewClient: [
+      { id: 0, label: 'Pending', variant: 'warning' },
+      { id: 1, label: 'Pending', variant: 'warning' },
+      { id: 2, label: 'Underview', variant: 'primary' },
+      { id: 3, label: 'Desapproved', variant: 'danger' },
+      { id: 4, label: 'Approved', variant: 'success' },
+      { id: 5, label: 'In Supervisor', variant: 'info' },
+      { id: 6, label: 'In Ceo', variant: 'info' },
+      { id: 7, label: 'Return', variant: 'info' },
     ],
   },
   getters: {
@@ -38,7 +61,7 @@ export default {
     SET_CAPTURED_CRM(state, capturedCrm) {
       state.capturedCrm = capturedCrm
     },
-    //TODO Hacerlo global
+    // TODO Hacerlo global
     SET_PROGRAMS(state, programs) {
       state.programs = programs
     },
@@ -66,7 +89,7 @@ export default {
       }))
       commit('SET_CAPTURED_CRM', formatedCaptured)
     },
-    //TODO Hacerlo global
+    // TODO Hacerlo global
     async getPrograms({ commit }) {
       const programs = await CrmServices.getPrograms()
       const formatedPrograms = programs.map(pro => ({

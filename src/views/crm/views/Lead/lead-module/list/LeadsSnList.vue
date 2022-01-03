@@ -5,130 +5,113 @@
       no-body
       class="mb-0"
     >
-
-      <!-- Paginate -->
-      <paginate-table
-        :currentPage="currentPage"
+      <filter-slot
+        v-scrollbar
+        :filter="filter"
+        :filter-principal="filterPrincipal"
         :total-rows="totalLeads"
-        :per-page="perPage"
-        :from-page="fromPage"
+        :paginate="paginate"
+        :start-page="fromPage"
         :to-page="toPage"
+        :send-multiple-sms="false"
+        @reload="myProvider"
         @onChangeCurrentPage="onChangeCurrentPage"
-      />
-
-      <div class="m-2">
-
-        <!-- Filters -->
-        <filters-table
-          :filter="optionFilters"
-          :per-page="perPage"
-          :per-page-options="perPageOptions"
-          :owner-options="G_OWNERS"
-          :st-ad-options="G_STATES"
-          @onSearch="myProvider"
-        />
-
-      </div>
-
-      <b-table
-        ref="refUserListTable"
-        class="position-relative"
-        :fields="fields"
-        responsive
-        :items="items"
-        primary-key="id"
-        :sort-by.sync="sortBy"
-        show-empty
-        empty-text="No matching records found"
-        :sort-desc.sync="isSortDirDesc"
-        :busy.sync="isBusy"
       >
-        <template #table-busy>
-          <div class="text-center text-primary my-2">
-            <b-spinner class="align-middle mr-1" />
-            <strong>Loading ...</strong>
-          </div>
-        </template>
 
-        <!-- Column: Nickname -->
-        <template #cell(nickname)="data">
-          <a href="#" target="_blank">{{ data.item.nickname }}</a>
-          <br>
-          <span>{{ data.item.lead_name }}</span>
-        </template>
-
-        <!-- Column: Status -->
-        <template #cell(status)="data">
-          <b-badge
-            pill
-            :variant="`light-${resolveLeadSnStatusVariant(data.item.status_sn_id)}`"
-            class="text-capitalize"
-          >
-            {{ data.item.status }}
-          </b-badge>
-        </template>
-
-        <!-- Column: Fanpage -->
-        <template #cell(fanpage)="data">
-          <div
-            style="width: 50px;height: 50px;background-position: center;background-repeat: no-repeat;background-size: contain;"
-            v-bind:style="{ backgroundImage: `url(${baseUrl + data.item.logo})` }"
-          />
-        </template>
-
-        <!-- Column: Recomendations -->
-        <template #cell(programs)="data">
-          <template v-for="(program, key) in JSON.parse(data.item.programs)">
-            <span
-              :key="key"
-            >{{ program }}</span>
-            <br :key="JSON.parse(data.item.programs).length + key">
+        <b-table
+          slot="table"
+          ref="refUserListTable"
+          class="position-relative"
+          empty-text="No matching records found"
+          primary-key="id"
+          responsive="sm"
+          table-class="text-nowrap"
+          sticky-header="50vh"
+          show-empty
+          :fields="fields"
+          :items="items"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="isSortDirDesc"
+          :busy.sync="isBusy"
+        >
+          <template #table-busy>
+            <div class="text-center text-primary my-2">
+              <b-spinner class="align-middle mr-1" />
+              <strong>Loading ...</strong>
+            </div>
           </template>
-        </template>
 
-        <!-- Column: Appointment -->
-        <template #cell(appointment)="data">
-          <strong
-            v-if="data.item.attend == 2"
-            class="text-success"
-          >
-            <feather-icon
-              icon="CheckCircleIcon"
-              size="18"
-              class="mr-50 text-danger"
+          <!-- Column: Nickname -->
+          <template #cell(nickname)="data">
+            <a href="#" target="_blank">{{ data.item.nickname }}</a>
+            <br>
+            <span>{{ data.item.lead_name }}</span>
+          </template>
+
+          <!-- Column: Status -->
+          <template #cell(status)="data">
+            <b-badge
+              pill
+              :variant="`light-${resolveLeadSnStatusVariant(data.item.status_sn_id)}`"
+              class="text-capitalize"
+            >
+              {{ data.item.status }}
+            </b-badge>
+          </template>
+
+          <!-- Column: Fanpage -->
+          <template #cell(fanpage)="data">
+            <div
+              style="width: 50px;height: 50px;background-position: center;background-repeat: no-repeat;background-size: contain;"
+              v-bind:style="{ backgroundImage: `url(${baseUrl + data.item.logo})` }"
             />
-            YES
-          </strong>
-          <strong
-            v-else-if="data.item.attend == 1"
-            class="text-success"
-          >YES</strong>
-          <strong
-            v-else
-            class="text-danger"
-          >NO</strong>
-          <br>
-          <span v-if="data.item.seller_name != null">{{ data.item.seller_name }}</span>
-          <br>
-          <span v-if="data.item.attend_date != null">{{ data.item.attend_date }}</span>
-        </template>
+          </template>
 
-        <!-- Column: Created Date -->
-        <template #cell(created_date)="data">
-          <small>{{ data.item.created_at | myDateGlobalWithHour }}</small>
-        </template>
+          <!-- Column: Recomendations -->
+          <template #cell(programs)="data">
+            <template v-for="(program, key) in JSON.parse(data.item.programs)">
+              <span
+                :key="key"
+              >{{ program }}</span>
+              <br :key="JSON.parse(data.item.programs).length + key">
+            </template>
+          </template>
 
-      </b-table>
+          <!-- Column: Appointment -->
+          <template #cell(appointment)="data">
+            <strong
+              v-if="data.item.attend == 2"
+              class="text-success"
+            >
+              <feather-icon
+                icon="CheckCircleIcon"
+                size="18"
+                class="mr-50 text-danger"
+              />
+              YES
+            </strong>
+            <strong
+              v-else-if="data.item.attend == 1"
+              class="text-success"
+            >YES</strong>
+            <strong
+              v-else
+              class="text-danger"
+            >NO</strong>
+            <br>
+            <span v-if="data.item.seller_name != null">{{ data.item.seller_name }}</span>
+            <br>
+            <span v-if="data.item.attend_date != null">{{ data.item.attend_date }}</span>
+          </template>
+
+          <!-- Column: Created Date -->
+          <template #cell(created_date)="data">
+            <small>{{ data.item.created_at | myDateGlobalWithHour }}</small>
+          </template>
+
+        </b-table>
       
-      <!-- Paginate -->
-      <paginate-table
-        :currentPage="currentPage"
-        :total-rows="totalLeads"
-        :per-page="perPage"
-        :from-page="fromPage"
-        :to-page="toPage"
-        @onChangeCurrentPage="onChangeCurrentPage"
-      />
+      </filter-slot>
     </b-card>
   </div>
 </template>
@@ -140,6 +123,8 @@ import { BTable, BPagination } from 'bootstrap-vue'
 import vSelect from 'vue-select'
 
 import dataFields from '@/views/crm/views/Lead/lead-table/fields.data'
+import dataFilters from '@/views/crm/views/Lead/lead-table/filtersLeadSn.data'
+import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
 import FiltersTable from '../../lead-table/FiltersTable.vue'
 import PaginateTable from '@/views/crm/views/Lead/lead-table/PaginateTable.vue'
 
@@ -149,6 +134,7 @@ export default {
     BPagination,
 
     vSelect,
+    FilterSlot,
     FiltersTable,
     PaginateTable
   },
@@ -167,18 +153,20 @@ export default {
       
       isBusy: false,
       fields: dataFields.leadSnFields,
+      filter: dataFilters,
+      filterPrincipal: {
+        type: 'input',
+        inputType: 'text',
+        placeholder: 'Search...',
+        model: '',
+      },
       items: [],
       totalLeads: 0,
-      perPage: 10,
       fromPage: 0,
       toPage: 0,
-      currentPage: 1,
-      optionFilters: {
-        searchQuery: '',
-        from: null,
-        to: null,
-        stAd: null,
-        owner: null,
+      paginate: {
+        currentPage: 1,
+        perPage: 10,
       },
       perPageOptions: [10, 25, 50, 100],
       sortBy: 'id',
@@ -187,6 +175,7 @@ export default {
   },
   created () {
     this.myProvider()
+    this.setOptionsOnFilters()
   },
   methods: {
     ...mapActions({
@@ -194,7 +183,7 @@ export default {
     }),
     resolveLeadSnStatusVariant (status) {
       if (status === 2) return 'success'
-      if ([3, 4].includes(status)) return 'dark'
+      if ([3, 4].includes(status)) return 'primary'
       if (status === 5) return 'secondary'
       if (status === 6) return 'warning'
       if (status === 7) return 'danger'
@@ -205,18 +194,18 @@ export default {
         this.isBusy = true
         const response = await this.A_GET_SN_LEADS({
           cr: null,
-          date_from: this.optionFilters.from,
-          date_to: this.optionFilters.to,
+          date_from: this.filter[0].model,
+          date_to: this.filter[1].model,
           lead_status: null,
-          name_text: this.optionFilters.searchQuery,
+          name_text: this.filterPrincipal.model,
           order: 'desc',
           orderby: 10,
           program: null,
-          state_h: this.optionFilters.stAd,
+          state_h: this.filter[3].model,
           type: 3,
-          user_owner: this.optionFilters.owner,
-          perpage: this.perPage,
-          page: this.currentPage
+          user_owner: this.filter[2].model,
+          perpage: this.paginate.perPage,
+          page: this.paginate.currentPage
         })
         this.totalLeads = response.total
         this.fromPage = response.from
@@ -228,16 +217,14 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
+    setOptionsOnFilters () {
+      this.filter[2].options = this.G_OWNERS
+      this.filter[3].options = this.G_STATES
+    },
     onChangeCurrentPage (e) {
-      this.currentPage = e
+      this.paginate.currentPage = e
       this.myProvider()
     },
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .table-responsive {
-    min-height: 15rem;
-  }
-</style>

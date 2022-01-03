@@ -2,7 +2,7 @@
   <div>
     <ValidationObserver ref="form">
       <b-modal
-        v-model="modalServices"
+        v-model="ownControl"
         modal
         size="lg"
         scrollable
@@ -98,7 +98,9 @@
                       <b-col
                         v-if="rate.id === 42 || rate.id === 44"
                         :key="index"
-                        lg="3"
+                        lg="4"
+                        md="6"
+                        xs="12"
                       >
                         <b-card
                           class="font-weight-bolder hover-card"
@@ -231,19 +233,28 @@
                   <template v-if="isModalShow">
                     <template v-for="(rate, index) in rates">
                       <b-col
-                        v-if="rate.id == 43 || rate.id == 45"
+                        v-if="rate.id === 43 || rate.id === 45"
                         :key="index"
                         lg="4"
                         md="6"
                         xs="12"
                       >
                         <b-card
-                          :title="rate.description"
-                          :bg-variant="(option === rate.id) ? 'success' : 'light'"
+                          class="font-weight-bolder hover-card"
+                          :class="{'cursor-pointer': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
+                          bg-variant="transparent"
+                          @click="!(isModalShow) && changeRate(rate)"
                         >
                           <b-row>
                             <b-col>
-                              <p>
+                              <p class="text-center">
+                                {{ rate.description }}
+                              </p>
+                            </b-col>
+                          </b-row>
+                          <b-row>
+                            <b-col v-if="rate.id !== 63 && rate.id !== 34">
+                              <p class="text-center">
                                 $ {{ rate.price }}.00
                               </p>
                             </b-col>
@@ -346,7 +357,10 @@
                     v-if="!isModalAdd"
                     class="d-flex justify-content-end align-items-center"
                   >
-                    <button-save @click="saveRates()" />
+                    <button-save
+                      class="mr-1"
+                      @click="saveRates()"
+                    />
                     <button-cancel @click="hideModal(false,0)" />
                   </b-col>
                   <b-col
@@ -354,7 +368,7 @@
                     class="d-flex justify-content-center align-items-center"
                   >
                     <b-button
-                      class="rounded text-uppercase"
+                      class="rounded ml-1"
                       variant="success"
                       @click="saveRates()"
                     >
@@ -429,6 +443,7 @@ export default {
       businessCreditS: 0,
       businessCreditM: 0,
       suggested: 0,
+      ownControl: false,
       s_payments: [],
       m_payments: [],
       rates_others: [],
@@ -486,6 +501,7 @@ export default {
     if (this.isModalAdd) {
       await this.getScore()
     }
+    this.ownControl = true
   },
   methods: {
     /* PRELOADER */
@@ -555,19 +571,12 @@ export default {
           json_ce: this.json_ce,
         }
 
-        const result = await this.$swal.fire({
-          title: `Are you sure you want to ${message}?`,
-          text: "You won't be able to revert this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes',
-        })
+        const result = await this.showConfirmSwal()
         if (result.value) {
           this.addPreloader()
           const response = await amgApi.post(`${route}`, param)
           if (response.status === 200) {
             this.removePreloader()
-            this.showToast('success', 'top-right', 'Succes', 'CheckIcon', 'Su lead ya puede ser atendido')
             this.hideModal(true, this.program)
           }
         }

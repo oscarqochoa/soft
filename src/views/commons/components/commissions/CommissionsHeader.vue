@@ -1,62 +1,60 @@
 <template>
-  <b-card>
-    <b-row>
-      <b-col lg="4" :class="[bigWindowLeft]">
-        <b-input-group prepend="Year" :class="{'w-40':bigWindow}">
-          <b-form-select
-            v-model="year"
-            :options="optionsYear"
-            @change="searchCommissions()"
-            class="text-center"
-          ></b-form-select>
-        </b-input-group>
-      </b-col>
+  <b-row>
+    <b-col lg="4" :class="[bigWindowLeft]">
+      <b-input-group prepend="Year" :class="{'w-40':bigWindow}">
+        <b-form-select
+          v-model="year"
+          :options="optionsYear"
+          @change="searchCommissions()"
+          class="text-center"
+        ></b-form-select>
+      </b-input-group>
+    </b-col>
 
-      <b-col lg="4" v-if="isSupervisorCrm" :class="[bigWindowLeft,'d-flex justify-content-center']">
-        <b-input-group prepend="Departments">
-          <b-form-select v-model="program" :options="programs" @change="changeProgram()"></b-form-select>
+    <b-col lg="4" v-if="isSupervisorCrm" :class="[bigWindowLeft,'d-flex justify-content-center']">
+      <b-input-group prepend="Departments">
+        <b-form-select v-model="program" :options="programs" @change="changeProgram()"></b-form-select>
+      </b-input-group>
+    </b-col>
+    <b-col lg="4" v-if="!isSupervisorCrm && !(isCrm && isManagement) "></b-col>
+    <b-col v-if="isCrm && isManagement" lg="4 d-flex justify-content-center">
+      <template>
+        <b-input-group prepend="To Pay" append="%" :class="{'w-input-percent':bigWindow}">
+          <b-form-input
+            min="1"
+            max="100"
+            type="number"
+            v-model="percentApartment"
+            :disabled="!editPercent"
+            class="text-center"
+            @keyup="maxPercentage()"
+          ></b-form-input>
         </b-input-group>
-      </b-col>
-      <b-col lg="4" v-if="!isSupervisorCrm && !(isCrm && isManagement) "></b-col>
-      <b-col v-if="isCrm && isManagement" lg="4 d-flex justify-content-center">
-        <template>
-          <b-input-group prepend="To Pay" append="%" :class="{'w-input-percent':bigWindow}">
-            <b-form-input
-              min="1"
-              max="100"
-              type="number"
-              v-model="percentApartment"
-              :disabled="!editPercent"
-              class="text-center"
-              @keyup="maxPercentage()"
-            ></b-form-input>
-          </b-input-group>
-          <div class="button-margin">
-            <buttons-edit
-              :editMode="editPercent"
-              @edit="editPercentageDepartment()"
-              @cancel="cancelPercentageDepartment()"
-              @update="updatePercentageDepartment()"
-            ></buttons-edit>
-          </div>
-        </template>
-      </b-col>
-      <b-col lg="4" :class="[bigWindowRight]">
-        <b-button
-          variant="gradient-warning"
-          :class="{'btn-block': !bigWindow}"
-          size="sm"
-          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-          v-b-tooltip.hover.top="'Change part of the year'"
-          @click="changePartOfYear()"
-        >
-          <b-icon v-if="halfYear" icon="arrow-right" font-scale="1.5"></b-icon>
-          <b-icon v-else icon="arrow-left" font-scale="1.5"></b-icon>
-          <span v-if="!bigWindow">&nbsp; Half of the Year</span>
-        </b-button>
-      </b-col>
-    </b-row>
-  </b-card>
+        <div class="button-margin">
+          <buttons-edit
+            :editMode="editPercent"
+            @edit="editPercentageDepartment()"
+            @cancel="cancelPercentageDepartment()"
+            @update="updatePercentageDepartment()"
+          ></buttons-edit>
+        </div>
+      </template>
+    </b-col>
+    <b-col lg="4" :class="[bigWindowRight]">
+      <b-button
+        variant="gradient-primary"
+        :class="{'btn-block': !bigWindow}"
+        size="sm"
+        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+        v-b-tooltip.hover.top="'Change part of the year'"
+        @click="changePartOfYear()"
+      >
+        <b-icon v-if="halfYear" icon="arrow-right" font-scale="1.5"></b-icon>
+        <b-icon v-else icon="arrow-left" font-scale="1.5"></b-icon>
+        <span v-if="!bigWindow">&nbsp; Half of the Year</span>
+      </b-button>
+    </b-col>
+  </b-row>
 </template>
 
 <script>

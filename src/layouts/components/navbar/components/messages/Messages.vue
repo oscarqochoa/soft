@@ -1,17 +1,24 @@
 <template>
-  <b-nav-item>
-    <feather-icon icon="SendIcon" size="19" />
-    <b-tooltip
-      triggers="hover"
-      :target="`bookmark-message`"
-      title="Messages"
-      :delay="{ show: 1000, hide: 50 }"
-    />
-  </b-nav-item>
+  <feather-icon
+    icon="SendIcon"
+    :badge="messageCounter > 99 ? '+99' : messageCounter"
+    badge-classes="bg-danger"
+    size="19"
+  />
 </template>
 
 <script>
-export default {};
+import { mapState } from 'vuex';
+export default {
+  computed:{
+    ...mapState({
+      S_USER_CONTACTS: state => state.MessageStore.S_USER_CONTACTS,
+    }),
+    messageCounter(){
+      return this.S_USER_CONTACTS.reduce((accum,item) => accum + Number(item.cm), 0)
+    }
+  }
+};
 </script>
 
 <style>
