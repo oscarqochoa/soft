@@ -1,18 +1,19 @@
 <template>
   <b-navbar-nav class="nav">
-    <b-nav-item :id="`bookmark-messages`" :to="{name: 'amg-messages'}" v-b-tooltip.hover.top="'Messages'">
+    <b-nav-item @click="$refs.clockIn.openClockInModal()" :id="`bookmark-clock-in`">
+      <clock-in ref="clockIn"></clock-in>
+    </b-nav-item>
+    <b-nav-item
+      :id="`bookmark-messages`"
+      :to="{name: 'amg-messages'}"
+      v-b-tooltip.hover.top="'Messages'"
+    >
       <messages></messages>
     </b-nav-item>
-    <b-nav-item
-      @click="$refs.stickyNotes.openStickyNotes()"
-      :id="`bookmark-sticky-notes`"
-    >
+    <b-nav-item @click="$refs.stickyNotes.openStickyNotes()" :id="`bookmark-sticky-notes`">
       <sticky-notes ref="stickyNotes"></sticky-notes>
     </b-nav-item>
-    <b-nav-item
-      @click="$refs.payStub.openPayStubModal()"
-      :id="`bookmark-pay-stub`"
-    >
+    <b-nav-item @click="$refs.payStub.openPayStubModal()" :id="`bookmark-pay-stub`">
       <pay-stub ref="payStub"></pay-stub>
     </b-nav-item>
     <b-nav-item
@@ -31,6 +32,7 @@ import Appointments from "./components/appointments/Appointments.vue";
 import Messages from "./components/messages/Messages.vue";
 import Messenger from "./components/messenger/Messenger.vue";
 import PayStub from "./components/pay-stub/PayStub.vue";
+import ClockIn from "./components/schedules/ClockIn.vue";
 export default {
   components: {
     StickyNotes,
@@ -38,7 +40,8 @@ export default {
     Messages,
     Messenger,
     PayStub,
-  },
+    ClockIn
+  }
 };
 </script>
 
