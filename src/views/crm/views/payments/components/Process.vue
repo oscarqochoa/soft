@@ -132,22 +132,19 @@
                       v-slot="{ errors }"
                     >
                       <b-form-radio-group
-                        
                         v-model="payment"
                         :options="options"
                         :class="{ 'border border-danger': errors[0] }"
                         name="radios-stacked"
                         stacked
                       />
-                     
-                      </ValidationProvider>
-                      <br />
-                      <b-form-input
-                        v-if="payment == 3"
-                        v-model="observationOther"
-                        placeholder="Specific"
-                      />
-                  
+                    </ValidationProvider>
+                    <br />
+                    <b-form-input
+                      v-if="payment == 3"
+                      v-model="observationOther"
+                      placeholder="Specific"
+                    />
                   </b-form-group>
                 </div>
 
@@ -246,25 +243,31 @@
             </div>
 
             <div class="row w-100">
-              <div class="col-lg-12 ml-2">
+              <div class="col-lg-3 col-xl-2 col-md-4 col-9 ml-2">
                 <b-form-group class="inline">
-                  <b-button
-                    type="submit"
-                    variant="primary"
-                    class="mr-1"
-                    @click="submitAutorize"
-                    :disabled="changeDisable"
-                  >
-                    SUBMIT
-                  </b-button>
-                  <b-form-checkbox
-                    v-if="methodpayment == 1"
-                    v-model="sendsms"
-                    value="true"
-                    class="custom-control-primary"
-                  >
-                    Send SMS
-                  </b-form-checkbox>
+                  <b-row>
+                    <b-col cols="5" cols-xl="1" cols-md="1" cols-lg="2">
+                      <b-button
+                        type="submit"
+                        variant="primary"
+                        class="mr-1"
+                        @click="submitAutorize"
+                        :disabled="changeDisable"
+                      >
+                        SUBMIT
+                      </b-button>
+                    </b-col>
+                    <b-col cols="1" class=" " >
+                      <b-form-checkbox
+                        v-if="methodpayment == 1"
+                        v-model="sendsms"
+                        value="true"
+                        class="custom-control-primary"
+                      >
+                        Send SMS
+                      </b-form-checkbox>
+                    </b-col>
+                  </b-row>
                 </b-form-group>
               </div>
             </div>
@@ -344,7 +347,6 @@ export default {
     }),
   },
   methods: {
-    
     getCardsLead() {
       this.cardsLead = {
         lead_id: this.user_id, //user_id
@@ -465,12 +467,12 @@ export default {
           this.$store.commit("app/SET_LOADING", false);
           console.log(error);
           this.showToast(
-                  "danger",
-                  "top-right",
-                  "Error",
-                  "XIcon",
-                  "Something went wrong!"
-                );
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
         });
     },
     submitAutorize() {
@@ -645,8 +647,7 @@ export default {
       });
     },
   },
-  created() {
-  },
+  created() {},
 };
 </script>
 

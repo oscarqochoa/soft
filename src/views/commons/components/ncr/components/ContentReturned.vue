@@ -37,9 +37,19 @@
             <div
             class="d-flex flex-column justify-content-start align-items-start"
           >  
-            <a href="http://www.google.com" target="_blank"
-            class="select-lead-name text-important"> {{data.item.lead_name}} link</a>
+            <!-- <a href="http://www.google.com" target="_blank"
+            class="select-lead-name text-important"> {{data.item.lead_name}} </a> -->
             <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
+            <router-link
+              class="select-lead-name text-important"
+              :to="{
+                name: 'lead-show',
+                params: { id: data.item.lead_id },
+              }"
+              target="_blank"
+            >
+              {{ data.item.lead_name }}
+            </router-link>
           </div>
         </template>
         <template #cell(seller_name)="data">

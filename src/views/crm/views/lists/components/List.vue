@@ -90,223 +90,128 @@
           </div>
         </b-card>
       </div>
-      <div class="mx-2 mb-2 mt-2">
-        <b-row>
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            "
-          >
-            <span class="text-muted"
-              >Showing {{ startPage }} to {{ toPage }} of
-              {{ totalData }} entries</span
-            >
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-end
-            "
-          >
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
-          </b-col>
-        </b-row>
-      </div>
-      <div class="m-2">
-        <!-- Table Top -->
-        <b-row>
-          <!-- Per Page -->
-          <b-col
-            cols="12"
-            md="6"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Show</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label class="mr-2">entries</label>
-            <feather-icon
-              class="cursor-pointer"
-              icon="RefreshCcwIcon"
-              size="20"
-              @click="resetSearch"
-            />
-          </b-col>
-          <!-- Search -->
-          <b-col cols="12" md="6">
-            <div class="d-flex align-items-end justify-content-end">
-              <b-form-group label="From" label-for="from" class="mb-md-0 mb-2">
-                <b-form-datepicker
-                  class="per-page-datepicker d-inline-block mx-50"
-                  id="from"
-                  placeholder="Date"
-                  :date-format-options="{
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                  }"
-                  v-model="fromToObject.from"
-                />
-              </b-form-group>
-              <!-- <label>{{filter.label}}</label> -->
 
-              <b-form-group label="To" label-for="to" class="mb-md-0 mb-2">
-                <b-form-datepicker
-                  class="per-page-datepicker d-inline-block mx-50"
-                  id="to"
-                  placeholder="Date"
-                  :date-format-options="{
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                  }"
-                  v-model="fromToObject.to"
-                />
-              </b-form-group>
-              <!-- <label>{{filter.label}}</label> -->
-              
+      <filter-slot
+        v-scrollbar
+        :filter="filter"
+        :filter-principal="filterPrincipal"
+        :total-rows="totalRows"
+        :no-visible-principal-filter="true"
+        :paginate="paginate"
+        :start-page="startPage"
+        :to-page="toPage"
+        :send-multiple-sms="false"
+        @reload="$refs['refClientsList'].refresh()"
+      >
+        <b-table
+          slot="table"
+          no-provider-filtering
+          :api-url="clientRoute"
+          ref="refClientsList"
+          :items="myProvider"
+          :fields="visibleFields"
+          primary-key="id"
+          table-class="text-nowrap"
+          responsive="sm"
+          show-empty
+          sticky-header="50vh"
+          :busy="isBusy"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
+          :current-page="paginate.currentPage"
+          :per-page="paginate.perPage"
+          :filter="searchInput"
+        >
+          <template #table-busy>
+            <div class="text-center text-primary my-2">
+              <b-spinner class="align-middle mr-1"></b-spinner>
+              <strong>Loading ...</strong>
+            </div>
+          </template>
+          <template #cell(created_at)="data">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <span v-if="data.item.created_at == 'Today'">
+                {{ data.item.created_at }}
+              </span>
+              <span v-else>
+                {{ data.item.created_at | myGlobalDay }}
+              </span>
+            </div>
+          </template>
+          <template #cell(users)="data" v-if="getRoles">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
               <b-button
-                variant="primary" class="button-top"
-                @click="$refs.refClientsList.refresh()"
+                variant="flat-primary"
+                style="
+                  padding-left: 2px;
+                  padding-right: 2px;
+                  padding-top: 5px;
+                  padding-bottom: 5px;
+                "
+                v-for="(user, index) in JSON.parse(data.item.users)"
+                :key="index"
+                @click="modalopen(user.user_name, user.id, data.item.id)"
+                >{{ user.user_name }}</b-button
               >
-                <div class="d-flex ">
-                  <span class="mr-50"
-                    ><feather-icon icon="FilterIcon" size="15"
-                  /></span>
-
-                  <span class="text-nowrap">{{ "Search" }}</span>
-                </div>
+            </div>
+          </template>
+          <template #cell(action)="data">
+            <div
+              class="
+                d-flex
+                flex-column
+                justify-content-center
+                align-items-center
+              "
+              v-if="getRoles"
+            >
+              <b-button
+                variant="danger"
+                class="mr-1 reset-radius btn-sm"
+                @click="deleteuser(data.item.id)"
+              >
+                <feather-icon icon="Trash2Icon"></feather-icon>
               </b-button>
             </div>
-          </b-col>
-        </b-row>
-      </div>
-      <b-table
-        v-scrollbar
-        :api-url="clientRoute"
-        ref="refClientsList"
-        :items="myProvider"
-        :fields="visibleFields"
-        primary-key="id"
-        table-class="text-nowrap"
-        responsive="sm"
-        show-empty
-        sticky-header="50vh"
-        :busy="isBusy"
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
-        :current-page="currentPage"
-        :per-page="perPage"
-        :filter="searchInput"
-      >
-        <template #table-busy>
-          <div class="text-center text-primary my-2">
-            <b-spinner class="align-middle mr-1"></b-spinner>
-            <strong>Loading ...</strong>
-          </div>
-        </template>
-        <template #cell(created_at)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <span v-if="data.item.created_at=='Today'">
-              {{ data.item.created_at}}
-            </span>
-            <span v-else>
-              {{ data.item.created_at | myGlobalDay }}
-            </span>
-          </div>
-        </template>
-        <template #cell(users)="data" v-if="getRoles">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <b-button
-              variant="flat-primary"
-              style="
-                padding-left: 2px;
-                padding-right: 2px;
-                padding-top: 5px;
-                padding-bottom: 5px;
+            <div
+              class="
+                d-flex
+                flex-column
+                justify-content-center
+                align-items-start
               "
-              v-for="(user, index) in JSON.parse(data.item.users)"
-              :key="index"
-              @click="modalopen(user.user_name, user.id, data.item.id)"
-              >{{ user.user_name }}</b-button
+              v-if="!getRoles"
             >
-          </div>
-        </template>
-        <template #cell(action)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-            v-if="getRoles"
-          >
-            <b-button
-              variant="danger"
-              class="mr-1 reset-radius btn-sm"
-              @click="deleteuser(data.item.id)"
-            >
-              <feather-icon icon="Trash2Icon"></feather-icon>
-            </b-button>
-          </div>
-          <div
-            class="d-flex flex-column justify-content-center align-items-start"
-            v-if="!getRoles"
-          >
-            <b-button
-              v-if="data.item.cant > 0"
-              variant="warning"
-              class="ml-1 reset-radius btn-sm"
-              @click="
-                modalopen(
-                  currentUser.fullName,
-                  currentUser.user_id,
-                  data.item.id
-                )
-              "
-            >
-              <feather-icon icon="EyeIcon"></feather-icon>
-            </b-button>
-            <b-button
-              v-else
-              disabled
-              variant="warning"
-              class="ml-1 reset-radius btn-sm"
-            >
-              <feather-icon icon="EyeIcon"></feather-icon>
-            </b-button>
-          </div>
-        </template>
-      </b-table>
+              <b-button
+                v-if="data.item.cant > 0"
+                variant="warning"
+                class="ml-1 reset-radius btn-sm"
+                @click="
+                  modalopen(
+                    currentUser.fullName,
+                    currentUser.user_id,
+                    data.item.id
+                  )
+                "
+              >
+                <feather-icon icon="EyeIcon"></feather-icon>
+              </b-button>
+              <b-button
+                v-else
+                disabled
+                variant="warning"
+                class="ml-1 reset-radius btn-sm"
+              >
+                <feather-icon icon="EyeIcon"></feather-icon>
+              </b-button>
+            </div>
+          </template>
+        </b-table>
+      </filter-slot>
     </b-card>
     <modal-by-user
       v-if="modalChanging"
@@ -326,25 +231,38 @@ import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
 import ModalByUser from "../components/subcomponents/ModalByUser.vue";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 
 export default {
   components: {
     vSelect,
     ModalByUser,
+    FilterSlot,
   },
   data() {
     return {
+      totalRows: 0,
+      paginate: {
+        currentPage: 1,
+        perPage: 10,
+      },
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Client...",
+        model: "",
+      },
       id: null,
       nameUser: "",
       value: [],
       number: "",
       options: [],
       searchInput: "",
-      startPage: "",
-      toPage: "",
+      startPage: null,
+      toPage: null,
       totalData: "",
-      currentPage: 1,
-      perPage: 10,
+      // currentPage: 1,
+      // perPage: 10,
       perPageOptions: [10, 25, 50, 100],
       filterController: false,
       isBusy: false,
@@ -424,6 +342,40 @@ export default {
       cancelList: false,
       add: null,
       newList: false,
+      filter: [
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+      ],
     };
   },
   computed: {
@@ -481,8 +433,8 @@ export default {
           this.currentUser.arrRoles[0].role_id == 2
             ? null
             : this.currentUser.user_id,
-        from: this.fromToObject.from,
-        to: this.fromToObject.to,
+        from: this.filter[0].model,
+        to: this.filter[1].model,
       });
       // Must return a promise that resolves to an array of items
       return promise.then((data) => {
@@ -494,6 +446,7 @@ export default {
         this.nextPage = this.startPage + 1;
         this.endPage = data.data.last_page;
         this.totalData = data.data.total;
+        this.totalRows = data.data.total;
         this.toPage = data.data.to;
         if (data.data.data[0] != null) {
           this.count_alltask = data.data.data[0].count_alltask;
@@ -503,13 +456,12 @@ export default {
           this.count_donetask = 0;
         }
         if (
-         this.currentUser.arrRoles[0].role_id == 1 ||
+          this.currentUser.arrRoles[0].role_id == 1 ||
           this.currentUser.arrRoles[0].role_id == 2
         ) {
-         return items || [];
-        }else{
-          
-           let firstOption = {
+          return items || [];
+        } else {
+          let firstOption = {
             created_at: "Today",
             create_name: "System",
             cant: this.count_alltask,
@@ -700,18 +652,17 @@ td.div {
     display: flex;
     flex-direction: column;
   }
-  .button-top{
-    margin-bottom:22px
+  .button-top {
+    margin-bottom: 22px;
   }
 }
 
 @media (max-width: 740px) {
   .per-page-datepicker {
     width: 110px;
-  
   }
-  .button-top{
-    margin-bottom:22px
+  .button-top {
+    margin-bottom: 22px;
   }
 }
 .b-calendar-grid-caption {

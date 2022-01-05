@@ -1375,7 +1375,7 @@ import FeatherIcon from "@/@core/components/feather-icon/FeatherIcon.vue";
 import vSelect from "vue-select";
 export default {
   props: {
-    modul: Number,
+    // modul: Number,
     global: Object,
     idfile:[Number,String],
     idlead:[Number,String],
@@ -1383,6 +1383,7 @@ export default {
   components: { FeatherIcon, vSelect },
   data() {
     return {
+      modul:this.$route.meta.module,
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       datos: {},
       status: [],
@@ -2035,9 +2036,10 @@ export default {
       this.public_info = [];
     },
     returnGrid() {
+     
       var route = "";
       if (this.modul == 2) {
-        console.log("dentro de ruta")
+      
         route = "/crm/leads/show/" + this.idlead;
       } else if (this.modul == 3) {
         route =

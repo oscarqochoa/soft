@@ -14,7 +14,7 @@
 
       <ValidationObserver ref="form">
         <b-row class="font-bureau-style">
-          <b-col cols="6">
+          <b-col cols="12" md="6">
             <div class="form-group">
                 <label for="card_holder">Card Holder Name</label>
               <ValidationProvider rules="required" v-slot="{errors}">
@@ -30,7 +30,7 @@
               </ValidationProvider>
             </div>
           </b-col>
-          <b-col cols="6">
+          <b-col cols="12" md="6">
             <div class="form-group">
               <label for="card_number">Card Number</label>
               <b-row>
@@ -89,7 +89,7 @@
               </b-row>
             </div>
           </b-col>
-          <b-col cols="2">
+          <b-col cols="4" md="2">
             <div class="form-group">
               <label for="card-expi-month">MM</label>
               <ValidationProvider rules="required|length:2" v-slot="{errors}">
@@ -106,7 +106,7 @@
               </ValidationProvider>
             </div>
           </b-col>
-          <b-col cols="2">
+          <b-col cols="4" md="2">
             <div class="form-group">
               <label for="card-expi-year">YY</label>
               <ValidationProvider rules="required|length:2" v-slot="{errors}">
@@ -123,16 +123,16 @@
               </ValidationProvider>
             </div>
           </b-col>
-          <b-col cols="2">
+          <b-col cols="4" md="2">
             <div class="form-group">
               <label for="card-cvv">CVV</label>
-              <ValidationProvider rules="required|min:3" v-slot="{errors}">
+              <ValidationProvider rules="required|min:3|max:4" v-slot="{errors}">
                 <b-form-input
                   class="border-hover-p"
                   v-model="form.cardsecuritycode"
                   ref="input-7"
                   id="card-cvv"
-
+                  max="4"
                   type="text"
                   maxlength="16"
                   :class="{'border border-danger':errors[0]}"
@@ -140,7 +140,7 @@
               </ValidationProvider>
             </div>
           </b-col>
-          <b-col cols="6">
+          <b-col cols="12" md="6">
             <div class="form-group">
               <input type="text" v-model="moreInfo" class="d-none" />
               <label for="billing">Billing Address is the same the Mailling Address ?</label>
