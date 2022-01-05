@@ -41,9 +41,13 @@ export default {
       state.currentUser.modul_id = module
     },
     SET_CURRENT_USER_ROLE_ID(state) {
-      state.currentUser.role_id = state.currentUser.arrRoles.find(
+      let roleId = state.currentUser.arrRoles.find(
         rol => rol.module_id === state.currentUser.modul_id,
-      ).role_id
+      )
+      if (roleId) {
+        state.currentUser.role_id = roleId.role_id
+      }
+
     },
   },
   actions: {

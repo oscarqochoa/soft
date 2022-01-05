@@ -41,6 +41,14 @@ class MessageService {
             throw error
         }
     }
+    async getMessagesCounter(body) {
+        try {
+            const data = await amgApi.post('/contmessages', body)
+            return data
+        } catch (error) {
+            throw error
+        }
+    }
     async getUserMessages(body) {
         try {
             const data = await amgApi.post('/messagesuser', body)
