@@ -1,7 +1,7 @@
 <template>
-  <b-container fluid>
+  <b-container>
     <b-row>
-      <b-col>
+      <b-col class="pl-0 d-flex align-items-center justify-content-start">
         <feather-icon
           v-b-tooltip.hover
           :title="selectedView ? 'Change to list' : 'Change to explorer'"
@@ -11,7 +11,10 @@
           @click="selectedView = !selectedView"
         />
       </b-col>
-      <b-col class="d-flex align-items-center justify-content-end">
+      <b-col
+        cols="10"
+        class="d-flex align-items-center justify-content-end pr-0"
+      >
         <b-button
           class="mr-1"
           variant="important"
@@ -28,29 +31,33 @@
       </b-col>
     </b-row>
     <b-row class="my-1">
-      <b-col class="d-flex">
-        <template v-for="(route, index) in history">
-          <div
-            :key="index"
-            class="mr-50 d-flex align-items-center justify-content-between cursor-pointer"
-            @click="historyClicked(index)"
-          >
-            <amg-icon
-              class="font-medium-5"
-              :icon="route.icon"
-              :class="{'text-warning' : route.icon === 'FolderIcon', 'text-primary' : route.icon === 'HomeIcon'}"
-            />
-            <span class="ml-50 d-flex align-items-center justify-content-center font-medium-1">{{ route.label }}</span>
-            <span class="font-large-1 ml-50">/</span>
-          </div>
-        </template>
-      </b-col>
+
+      <template v-for="(route, index) in history">
+        <div
+          :key="index"
+          class="d-flex align-items-center justify-content-between cursor-pointer"
+          @click="historyClicked(index)"
+        >
+          <amg-icon
+            class="font-medium-5"
+            :icon="route.icon"
+            :class="{'text-warning' : route.icon === '', 'text-primary' : route.icon === 'HomeIcon'}"
+          />
+          <span class="ml-50 d-flex align-items-center justify-content-center font-medium-1">{{ route.label }}</span>
+          <span class="font-large-1 ml-50">/</span>
+        </div>
+      </template>
+
     </b-row>
     <b-row v-if="selectedView">
       <b-col
         v-for="(content, index) in currentFiles"
         :key="index"
-        cols="1"
+        cols="6"
+        sm="4"
+        md="3"
+        lg="2"
+        xl="1"
       >
         <file-component
           :current-user="currentUser"
@@ -67,6 +74,7 @@
       <b-table
         :fields="fields"
         :items="currentFiles"
+        responsive
         small
       >
         <template #cell(file_name)="data">
@@ -431,7 +439,7 @@ export default {
         await this.getFilesFromFolder(content.id, content.module_id)
         this.history.push({
           label: content.file_name,
-          icon: 'FolderIcon',
+          icon: '',
           folderId: content.id,
           folderModule: content.module_id,
         })

@@ -77,6 +77,11 @@ export default [
   {
     key: 'sms',
     sortable: false,
-    label: 'SMS',
+    label: 'Send',
+  },
+  {
+    key: 'done',
+    sortable: false,
+    label: 'Done',
   },
 ]

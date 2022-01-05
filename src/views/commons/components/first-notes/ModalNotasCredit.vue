@@ -767,6 +767,7 @@ export default {
       note.forEach(answer => {
         if (answer.answer != 'null') {
           if (answer.question_id === 23) {
+            console.log(answer.answer.replaceAll('\\', '"'))
             const response = JSON.parse(answer.answer.replaceAll('\\', '"'))
             response.forEach(ans => {
               if (ans.id === 'reco-4') {

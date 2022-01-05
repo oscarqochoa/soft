@@ -371,7 +371,13 @@ export default {
   watch: {
     cardType(val) {
       console.log(val)
-      if (val === 0) {
+      if (val === '0') {
+        this.yearCFee = this.$moment()._d.getFullYear()
+        this.monthCFee = this.$moment()._d.getMonth() + 2
+        if (this.monthCFee === 13) {
+          this.monthCFee = 1
+          this.yearCFee += 1
+        }
       }
     },
   },

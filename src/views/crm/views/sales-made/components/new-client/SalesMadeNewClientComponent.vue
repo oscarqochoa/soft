@@ -325,19 +325,35 @@
           </div>
         </template>
         <template v-slot:cell(contract_fee_status)="data">
-          <b-icon
-            :class="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
-              currentUser.role_id == 1 ||
-              currentUser.role_id == 2)) && data.item.initial_payment_status != 1 ? 'cursor-pointer' : ''"
-            icon="file-text"
-            :variant="
-              ( data.item.contract_fee_status === 0 ||
-                (data.item.contract_fee_status === 1 && data.item.initial_payment_status === 3)
-              ) ? 'muted' :
-                (data.item.contract_fee_status === 1 && data.item.initial_payment_status === 2) ? 'success' :
-                (data.item.contract_fee_status === 2) ? 'danger' : '' "
-            @click="data.item.initial_payment_status != 1 && openContractFeeModal(data.item)"
-          />
+          <b-row
+            :style="data.item.user_id != currentUser.user_id && G_IS_SELLER ? 'pointer-events: none !important; opacity: 0.4 !important;': ''"
+            class="d-flex align-items-center justify-content-center"
+          >
+            <b-icon
+              v-if="data.item.contract_fee_status == 0 || (data.item.contract_fee_status == 1 &&data.item.initial_payment_status == 3)"
+              class="cursor-pointer"
+              icon="file-text"
+              variant="muted"
+              :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
+              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item)"
+            />
+            <b-icon
+              v-if="data.item.contract_fee_status == 1 && data.item.initial_payment_status == 2"
+              variant="success"
+              icon="file-text"
+              class="cursor-pointer"
+              :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
+              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item)"
+            />
+            <b-icon
+              v-if="data.item.contract_fee_status == 2"
+              variant="danger"
+              icon="file-text"
+              class="cursor-pointer"
+              :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
+              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item)"
+            />
+          </b-row>
         </template>
         <template v-slot:cell(notes_status)="data">
           <b-icon
@@ -369,12 +385,10 @@
           />
         </template>
         <template v-slot:cell(files)="data">
-          <b-icon
-            :class="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
-              currentUser.role_id == 1 ||
-              currentUser.role_id == 2)) ? 'cursor-pointer' : ''"
-            icon="folder-fill"
-            variant="warning"
+          <amg-icon
+            :class="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||G_IS_CEO || G_IS_SUPERVISOR)) ? 'cursor-pointer text-warning' : ''"
+            :style="( (( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||G_IS_CEO || G_IS_SUPERVISOR)) ? 'fill: #ff9f43' : 'fill: #D8D8D6'"
+            icon="FolderIcon"
             @click="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
               currentUser.role_id == 1 ||
               currentUser.role_id == 2)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id, data.item.status, data.item.user_id)"
@@ -391,165 +405,142 @@
         <template v-slot:cell(actions)="data">
           <b-row
             v-if="data.item.creates > '2021-05-16 00:00:00'"
-            class="d-flex align-items-center justify-content-center"
+            class="d-flex align-items-center justify-content-center flex-column"
+            :class="{'not-pointer':data.item.user_id != currentUser.user_id && G_IS_SELLER }"
           >
             <b-button
-              v-if="(data.item.status == 1 || data.item.status == 7) &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 &&
-                data.item.initial_payment_status == 2 &&
-                currentUser.role_id != 1 && currentUser.role_id != 2"
+              v-if=" (data.item.status == 1 || data.item.status == 7) && !G_IS_CEO && !G_IS_SUPERVISOR &&
+                data.item.contract_fee_status == 1 && data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
+              variant="outline-success"
+              class="m-10px"
               size="sm"
-              variant="outline-info"
-              :disabled="((data.item.user_id != currentUser.user_id) && currentUser.role_id == 5)"
-              @click="revisionSale(5, data.item)"
-            >Revission</b-button>
+              @click="revisionSale(5,data.item)"
+            >
+              Revission
+            </b-button>
+
+            <!-- Revission to Administration for Supervisor or Ceo -->
             <b-button
-              v-if="(data.item.status == 1 || data.item.status == 6) &&
-                (currentUser.role_id == 1 || currentUser.role_id == 2) &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 &&
-                data.item.initial_payment_status == 2"
+              v-if="(data.item.status == 1 || data.item.status == 6) && (G_IS_CEO || G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 && data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
+              variant="outline-success"
+              :disabled="data.item.type == 1 && G_IS_CEO ? false: data.item.type == 0 ? false : true"
+              class="m-10px"
               size="sm"
-              :disabled="
-                data.item.type == 1 && currentUser.role_id == 1
-                  ? false
-                  : data.item.type == 0 ? false : true
-              "
-              variant="outline-info"
               @click="revisionSale(2, data.item)"
-            >Revission</b-button>
+            >
+              Revission
+            </b-button>
+
+            <!-- IN SUPERVISOR REVISSION  -->
             <b-button
-              v-if="
-                data.item.status == 5 &&
-                  data.item.contract_fee_status == 1 &&
-                  data.item.notes_status_new == 0 &&
-                  data.item.initial_payment_status == 2 &&
-                  (currentUser.role_id == 1 || currentUser.role_id == 2)
-              "
+              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
+              variant="outline-success"
+              class="m-10px"
               size="sm"
-              variant="outline-info"
               @click="revisionSale(2, data.item)"
-            >Revission</b-button>
+            >
+              Revission
+            </b-button>
             <b-button
-              v-if="
-                data.item.status == 5 &&
-                  data.item.contract_fee_status == 1 &&
-                  data.item.notes_status_new == 0 &&
-                  data.item.initial_payment_status == 2 &&
-                  (currentUser.role_id == 1 || currentUser.role_id == 2)
-              "
-              size="sm"
+              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
               variant="outline-warning"
+              class="m-10px"
+              size="sm"
               @click="revisionSale(7, data.item)"
-            >Return</b-button>
+            >
+              Return
+            </b-button>
             <b-button
-              v-if="
-                data.item.status == 3 &&
-                  data.item.contract_fee_status == 1 &&
-                  data.item.notes_status_new == 0 &&
-                  data.item.initial_payment_status == 2 &&
-                  (currentUser.user_id == data.item.user_id ||
-                    currentUser.role_id == 1 ||
-                    currentUser.role_id == 2)
-              "
-              size="sm"
-              variant="outline-info"
-              @click="revisionSale(2, data.item)"
-            >Revission</b-button>
-            <b-button
-              v-if="
-                data.item.initial_payment_status == 1 &&
-                  (currentUser.role_id == 1 ||
-                    currentUser.role_id == 2)
-              "
-              size="sm"
+              v-if="data.item.status == 3 && (currentUser.user_id == data.item.user_id ||
+                G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
               variant="outline-danger"
+              class="m-10px"
+              size="sm"
+              @click="revisionSale(2,data.item)"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="data.item.initial_payment_status == 1 && (G_IS_CEO || G_IS_SUPERVISOR)"
+              variant="outline-danger"
+              class="m-10px"
+              size="sm"
               @click="annulSale(data.item)"
-            >ANNUL</b-button>
+            >
+              Annul
+            </b-button>
           </b-row>
+
           <b-row
             v-else
-            class="d-flex align-items-center justify-content-center"
+            :class="{'not-pointer':data.item.user_id != currentUser.user_id && G_IS_SELLER }"
+            class="d-flex align-items-center justify-content-center flex-column"
           >
             <b-button
-              v-if="
-                (data.item.status == 1 || data.item.status == 7) &&
-                  currentUser.role_id != 1 &&
-                  currentUser.role_id != 2 &&
-                  data.item.contract_fee_status == 1 &&
-                  data.item.notes_status == 1 &&
-                  data.item.initial_payment_status == 2
-              "
+              v-if="(data.item.status == 1 || data.item.status == 7) && !G_IS_CEO && !G_IS_SUPERVISOR &&
+                data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
+              variant="outline-success"
+              class="m-10px"
               size="sm"
-              variant="outline-info"
               @click="revisionSale(5, data.item)"
-            >Revission</b-button>
+            >
+              Revission
+            </b-button>
             <b-button
-              v-if="
-                (data.item.status == 1 || data.item.status == 6) &&
-                  (currentUser.role_id == 1 || currentUser.role_id == 2) &&
-                  data.item.contract_fee_status == 1 &&
-                  data.item.notes_status == 1 &&
-                  data.item.initial_payment_status == 2
-              "
+              v-if="(data.item.status == 1 || data.item.status == 6) && (G_IS_CEO || G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
+              class="m-10px"
+              variant="outline-success"
+              :disabled="data.item.type == 1 && G_IS_CEO ? false : data.item.type == 0 ? false : true"
               size="sm"
-              variant="outline-info"
-              :disabled="
-                data.item.type == 1 && currentUser.role_id == 1
-                  ? false
-                  : data.item.type == 0 ? false : true
-              "
               @click="revisionSale(2, data.item)"
-            >Revission</b-button>
+            >
+              Revission
+            </b-button>
             <b-button
-              v-if="
-                data.item.status == 5 &&
-                  (currentUser.role_id == 1 || currentUser.role_id == 2) &&
-                  data.item.contract_fee_status == 1 &&
-                  data.item.notes_status == 1 &&
-                  data.item.initial_payment_status == 2
-              "
+              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
+              class="m-10px"
+              variant="outline-success"
               size="sm"
-              variant="outline-info"
               @click="revisionSale(2, data.item)"
-            >Revission</b-button>
+            >
+              Revission
+            </b-button>
             <b-button
-              v-if="
-                data.item.status == 5 &&
-                  (currentUser.role_id == 1 || currentUser.role_id == 2) &&
-                  data.item.contract_fee_status == 1 &&
-                  data.item.notes_status_new == 0 &&
-                  data.item.initial_payment_status == 2
-              "
-              size="sm"
-              variant="outline-warning"
-              @click="revisionSale(7, data.item)"
-            >Return</b-button>
-            <b-button
-              v-if="
-                data.item.status == 3 &&
-                  (currentUser.user_id == data.item.user_id ||
-                    currentUser.role_id == 1 ||
-                    currentUser.role_id == 2) &&
-                  data.item.contract_fee_status == 1 &&
-                  data.item.notes_status == 1 &&
-                  data.item.initial_payment_status == 2
-              "
-              size="sm"
-              variant="outline-info"
-              @click="revisionSale(2, data.item)"
-            >Revission</b-button>
-            <b-button
-              v-if="
-                data.item.initial_payment_status == 1 &&
-                  (currentUser.role_id == 1 ||
-                    currentUser.role_id == 2)
-              "
-              size="sm"
+              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 && data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
+              class="m-10px"
               variant="outline-danger"
+              size="sm"
+              @click="revisionSale(7, data.item)"
+            >
+              Return
+            </b-button>
+            <b-button
+              v-if="data.item.status == 3 && (currentUser.user_id == data.item.user_id ||
+                G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
+                data.item.notes_status == 1 && data.item.initial_payment_status == 2"
+              class="m-10px"
+              variant="outline-danger"
+              size="sm"
+              @click="revisionSale(2, data.item)"
+            >
+              Revission
+            </b-button>
+            <b-button
+              v-if="data.item.initial_payment_status == 1 && (G_IS_CEO || G_IS_SUPERVISOR)"
+              variant="outline-danger"
+              size="sm"
+              class="m-10px"
               @click="annulSale(data.item)"
-            >ANNUL</b-button>
+            >
+              ANNUL
+            </b-button>
           </b-row>
         </template>
         <template #cell(creates)="data">
@@ -1060,8 +1051,9 @@ export default {
       }
     },
     openContractFeeModal(data) {
+      console.log(data)
       if (
-        data.id == this.currentUser.user_id
+        data.user_id == this.currentUser.user_id
         || this.currentUser.role_id == 1
         || this.currentUser.role_id == 2
       ) {
@@ -1123,13 +1115,13 @@ export default {
           this.modalData.notes.programSelected = 'ModalNotesTax' // ready
           break
         case created >= '2020-10-23' && program == 7:
-          this.modalData.notes.programSelected = 'ModalNotesSpecialist' // next
+          this.modalData.notes.programSelected = 'ModalNotesSpecialist' // ready
           break
         case program == 9:
           this.modalData.notes.programSelected = 'ModalNotesParagon' // ready
           break
         default:
-          this.modalData.notes.programSelected = 'ModalNotesOld' // next next
+          this.modalData.notes.programSelected = 'ModalNotesOld' // next
           break
       }
 
@@ -1456,4 +1448,11 @@ export default {
 </script>
 
 <style scoped>
+.not-pointer {
+  pointer-events: none;
+  opacity: 0.4;
+}
+.m-10px{
+  margin: 2px;
+}
 </style>

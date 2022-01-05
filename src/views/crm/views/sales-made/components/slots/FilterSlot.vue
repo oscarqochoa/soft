@@ -123,7 +123,7 @@
               size="20"
               @click="resetFilter"
             />
-            <slot name="buttons"/>
+            <slot name="buttons" />
           </b-col>
           <!-- Search -->
           <b-col
@@ -138,7 +138,10 @@
                 align-items-center
               "
             >
-              <b-input-group v-if="!noVisiblePrincipalFilter" class="mr-1">
+              <b-input-group
+                v-if="!noVisiblePrincipalFilter"
+                class="mr-1"
+              >
                 <b-form-input
                   v-if="filterPrincipal.type === 'input'"
                   v-model="filterPrincipal.model"
@@ -158,6 +161,7 @@
               </b-input-group>
               <b-button
                 v-b-toggle.sidebar-right
+                v-b-tooltip.bottom="'Advanced Search'"
                 variant="primary"
               >
                 <div class="d-flex justify-content-between">
@@ -177,7 +181,6 @@
       <div class="mx-2 mb-2 mt-2">
         <b-row>
           <b-col
-           
             class="
                 d-flex
                 align-items-center
@@ -190,10 +193,9 @@
               {{ totalRows }} entries</span>
           </b-col>
           <!-- Pagination -->
-          <slot name="footer"></slot>
+          <slot name="footer" />
           <b-col
-            
-            
+
             class="
                 d-flex
                 align-items-center
@@ -247,7 +249,7 @@ export default {
     startPage: { required: false, type: Number },
     toPage: { required: false, type: Number },
     filterPrincipal: { required: true, type: Object },
-    noVisiblePrincipalFilter:{ required: false, default: false },
+    noVisiblePrincipalFilter: { required: false, default: false },
   },
   computed: {
     ...mapGetters({

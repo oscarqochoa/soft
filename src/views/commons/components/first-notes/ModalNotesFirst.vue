@@ -9,7 +9,7 @@
   >
     <template #modal-header>
       <header-modal-notes
-        program="Boost Credit"
+        program="Bussiness"
         :info="noteInfo"
         @close="hideModal(false)"
       />

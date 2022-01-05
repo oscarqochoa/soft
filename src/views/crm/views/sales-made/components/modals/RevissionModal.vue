@@ -23,7 +23,10 @@
           max-rows="6"
         />
       </b-row>
-      <b-row v-if="type === 2">
+      <b-row
+        v-if="revission.type === 2"
+        class="mt-1"
+      >
         <b-form-checkbox
           v-model="sendSms"
           switch
@@ -35,7 +38,7 @@
     <template #modal-footer>
       <b-button
         :disabled="disabledButton"
-        :variant="type === 3 ? 'danger' : 'success'"
+        :variant="revission.type === 3 ? 'danger' : 'success'"
         @click="revision"
       >
         {{ buttonText }}
@@ -71,20 +74,20 @@ export default {
   },
   computed: {
     title() {
-      if (this.revission.type === 2) return 'SEND TO REVISSION'
-      if (this.revission.type === 3) return 'DISAPPROVE'
-      if (this.revission.type === 4) return 'APPROVE'
-      if (this.revission.type === 5) return 'SEND TO SUPERVISOR'
-      if (this.revission.type === 6) return 'SEND TO CEO'
-      if (this.revission.type === 7) return 'RETURN'
+      if (this.revission.type === 2) return 'Send to revission'
+      if (this.revission.type === 3) return 'Disapprove'
+      if (this.revission.type === 4) return 'Approve'
+      if (this.revission.type === 5) return 'Send to supervisor'
+      if (this.revission.type === 6) return 'Send to ceo'
+      if (this.revission.type === 7) return 'Return'
       return ''
     },
     buttonText() {
-      if (this.revission.type === 2 || this.revission.type === 6) return 'SEND'
-      if (this.revission.type === 3) return 'DISAPPROVE'
-      if (this.revission.type === 4) return 'APPROVE'
-      if (this.revission.type === 5) return 'SEND TO SUPERVISOR'
-      if (this.revission.type === 7) return 'RETURN'
+      if (this.revission.type === 2 || this.revission.type === 6) return 'Send'
+      if (this.revission.type === 3) return 'Disapprove'
+      if (this.revission.type === 4) return 'Approve'
+      if (this.revission.type === 5) return 'Send to supervisor'
+      if (this.revission.type === 7) return 'Return'
       return ''
     },
   },

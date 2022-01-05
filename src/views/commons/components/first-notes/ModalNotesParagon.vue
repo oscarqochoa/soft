@@ -52,21 +52,21 @@
         </b-col>
         <b-col>
           <validation-provider
-              v-slot="{ errors }"
-              name="originCountry"
-              rules="required"
+            v-slot="{ errors }"
+            name="originCountry"
+            rules="required"
           >
             <b-form-group
-                label="Origin Country"
-                label-class="font-weight-bolder"
+              label="Origin Country"
+              label-class="font-weight-bolder"
             >
               <v-select
-                  v-model="note.country.value"
-                  :class="{'border-danger rounded': errors[0]}"
-                  :disabled="disabled"
-                  label="name"
-                  :reduce="value => value.id"
-                  :options="note.country.options"
+                v-model="note.country.value"
+                :class="{'border-danger rounded': errors[0]}"
+                :disabled="disabled"
+                label="name"
+                :reduce="value => value.id"
+                :options="note.country.options"
               />
             </b-form-group>
           </validation-provider>

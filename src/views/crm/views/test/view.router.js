@@ -10,7 +10,8 @@ export default [
           text: 'Test',
         },
       ],
-      module: 2
+      module: 2,
+      permittedRoles: [1],
     },
   },
 ]

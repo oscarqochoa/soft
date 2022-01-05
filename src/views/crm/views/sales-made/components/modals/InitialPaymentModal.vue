@@ -4,8 +4,9 @@
     centered
     title-class="h3 text-white font-weight-bolder"
     size="lg"
-    title="INITIAL PAYMENT"
+    title="Initial Payment"
     scrollable
+    @hide="hideModal"
   >
     <b-container fluid>
       <program-client-header
@@ -85,6 +86,7 @@
             <b-input-group>
               <money
                 :ref="'campo'+data.item.id"
+                v-model="data.item.model"
                 class="form-control"
                 v-bind="{decimal: '.', thousands: ',', precision: 2, prefix: '$  '}"
                 :disabled="initial_payment.cfeestatus == 0 ? false : true"
@@ -102,7 +104,10 @@
             </b-input-group>
           </template>
           <template v-slot:cell(sms)="data">
-            <b-form-checkbox :ref="'sms'+data.item.id" />
+            <b-form-checkbox
+              :ref="'sms'+data.item.id"
+              :checked="true"
+            />
           </template>
           <template v-slot:cell(actions)="data">
             <b-button
@@ -236,7 +241,7 @@ export default {
     return {
       method: '',
       deletecardmodal: false,
-      amount: this.initial_payment.payments.amount,
+      amount: this.initial_payment.payments.amount ? this.initial_payment.payments.amount : 0,
       charge: true,
       listCards: [],
       cardId: null,
@@ -384,7 +389,8 @@ export default {
   async mounted() {
     this.method = (this.initial_payment.payments.type_payment == null || this.initial_payment.payments.type_payment == 0) ? 'credit-card' : 'others'
     await this.getListCards()
-    console.log(this.initial_payment)
+    // eslint-disable-next-line no-return-assign
+    this.initial_payment.allcards.map(val => val.model = 0)
   },
   methods: {
     createCard() {
@@ -433,7 +439,6 @@ export default {
       }
     },
     async sendValidatePayment(type, refCard, cardId) {
-      console.log(this.$refs)
       try {
         let sms = null
         if (this.method_payment == 0) {
@@ -444,12 +449,7 @@ export default {
           }
         }
         if (type == 0) {
-          const result = await this.$swal.fire({
-            title: 'Initial Payment',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-          })
+          const result = await this.showConfirmSwal()
           if (result.value) {
             this.addPreloader()
             this.sendMessage = true
@@ -468,10 +468,7 @@ export default {
             if (response.status === 200) {
               this.removePreloader()
               if (response.data.transaction.responseCode === '1') {
-                const res = await this.$swal.fire({
-                  icon: 'success',
-                  title: 'Transaction Aproved',
-                })
+                const res = await this.showSuccessSwal()
                 if (res) {
                   this.amount = response.data
                   await this.getListCards()
@@ -489,12 +486,7 @@ export default {
             this.removePreloader()
           }
         } else {
-          const result = await this.$swal.fire({
-            title: 'Initial Payment',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-          })
+          const result = await this.showConfirmSwal()
           if (result.value) {
             this.sendMessage = true
             this.addPreloader()
@@ -510,10 +502,7 @@ export default {
             if (response.status === 200) {
               this.removePreloader()
               this.sendMessage = false
-              const res = await this.$swal.fire({
-                type: 'success',
-                title: 'Transaction Unverified',
-              })
+              const res = await this.showSuccessSwal()
               if (res) {
                 this.$emit('click', false)
               }
@@ -526,6 +515,9 @@ export default {
         this.removePreloader()
         this.showErroSwal()
       }
+    },
+    hideModal() {
+      this.$emit('close')
     },
   },
 }
