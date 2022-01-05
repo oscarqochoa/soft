@@ -26,7 +26,7 @@
                   ? ''
                   : 'gray-home'
               "
-            /> 
+            />
             <p class="font-name-home mt-2" :class="[skin == 'dark' ? 'text-light':'text-dark']">{{ item.module_name }}</p>
           </router-link>
           <div v-else class="card-logo cursor-pointer" @click="redirectToOldSoft(item.module_route)">

@@ -54,6 +54,11 @@ export default {
       loading: 'app/loading',
     }),
   },
+  watch: {
+    $route() {
+      this.updateCurrentUserModuleRole(this.$route.matched[0].meta.module)
+    },
+  },
   methods: {
     ...mapActions({
       updateCurrentUserModuleRole: 'auth/updateCurrentUserModuleRole',

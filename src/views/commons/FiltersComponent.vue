@@ -2,10 +2,10 @@
   <b-row>
     <template v-for="(filter, index) in filters">
       <b-col
+        v-if="filter.keys().includes('visible')? filter.visible : true"
         :key="index"
-        :cols="filter.cols ?  filter.cols : ''"
+        :cols="filter.cols ? filter.cols : ''"
         :class="filter.margin === true ? 'mt-1' : ''"
-        v-if="filter.visible"
       >
         <label v-if="filter.showLabel">{{ filter.label }}</label>
         <b-form-input
@@ -32,7 +32,9 @@
           :reduce="value => value[filter.reduce]"
           :placeholder="filter.placeholder"
         />
-      </b-col>
+      </b-col
+      v-if="filter.visible"
+      >
     </template>
   </b-row>
 </template>
