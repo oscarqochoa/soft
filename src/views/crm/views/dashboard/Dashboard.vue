@@ -408,6 +408,7 @@
                     v-model="year"
                     :clearable="false"
                     :options="years"
+                    
                     @input="filtrocont()"
                   />
                 </b-col>
@@ -419,6 +420,7 @@
                     placeholder="Select User"
                     label="user_name"
                     :options="users"
+                    :reduce="val => val.id"
                     @input="filtrocont()"
                   />
                 </b-col>
@@ -589,7 +591,7 @@ export default {
         this.$store.commit("app/SET_LOADING", true);
         amgApi
           .post("/filtrouserdash", {
-            created_id: this.userfilter.id,
+            created_id: this.userfilter,
             anio: this.year,
           })
           .then((response) => {
