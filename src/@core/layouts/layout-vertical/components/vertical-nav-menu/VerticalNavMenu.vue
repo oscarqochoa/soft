@@ -26,12 +26,7 @@
               class="navbar-brand"
               to="/"
             >
-
-              <span class="brand-logo">
-                <!-- <b-img
-                  :src="appLogoImage"
-                  alt="logo"
-                />-->
+              <span >
                 <amg-icon
                   icon="AmgIcon"
                   size="44"
@@ -46,7 +41,6 @@
               </h2>
             </b-link>
           </li>
-
           <!-- Toggler Button -->
           <li class="nav-item nav-toggle">
             <b-link
@@ -78,21 +72,24 @@
       :class="{'d-block': shallShadowBottom}"
       class="shadow-bottom"
     />
-
-    <!-- main menu content-->
-    <vue-perfect-scrollbar
-      :settings="perfectScrollbarSettings"
-      class="main-menu-content scroll-area"
-      tagname="ul"
-      @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
-    >
-      <vertical-nav-menu-items
-        :items="navMenuItems"
-        class="navigation navigation-main"
-        style="font-size: 14px;"
-      />
-    </vue-perfect-scrollbar>
-    <!-- /main menu content-->
+    
+      <!-- main menu content-->
+      <vue-perfect-scrollbar
+        :settings="perfectScrollbarSettings"
+        class="main-menu-content scroll-area"
+        tagname="ul"
+        @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
+      >
+      <slot name="items" :isMouseHovered="isMouseHovered" :isVerticalMenuCollapsed="isVerticalMenuCollapsed">
+        <vertical-nav-menu-items
+          :items="navMenuItems"
+          class="navigation navigation-main"
+          style="font-size: 14px;"
+        />
+        </slot>
+      </vue-perfect-scrollbar>
+      <!-- /main menu content-->
+    
   </div>
 </template>
 

@@ -10,7 +10,8 @@ export default {
         S_USERS_TO_MESSAGE: [],
         S_USER_TO_MESSAGE: {},
         S_TOTAL_MESSAGES: 0,
-        S_FILTERED_MESSAGES: []
+        S_FILTERED_MESSAGES: [],
+        S_MESSAGES_COUNTER_NOTIFICATION: 0
     },
     getters: {
     },
@@ -66,6 +67,9 @@ export default {
                     contact.cm++
                 }
             })
+        },
+        SET_MESSAGES_COUNTER_NOTIFICATION(state, payload) {
+            state.S_MESSAGES_COUNTER_NOTIFICATION = payload
         }
     },
     actions: {
@@ -73,6 +77,16 @@ export default {
             try {
                 const response = await MessageService.getUserContacts(body)
                 commit('SET_USER_CONTACTS', response.data)
+                return response
+            } catch (error) {
+                throw error
+            }
+        },
+        async A_GET_MESSAGES_COUNTER_NOTIFICATION({ commit }, body) {
+            try {
+                const response = await MessageService.getMessagesCounter(body)
+                console.log(response);
+                commit('SET_MESSAGES_COUNTER_NOTIFICATION', response.data[0].cont)
                 return response
             } catch (error) {
                 throw error

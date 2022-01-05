@@ -83,7 +83,7 @@ import { ref, computed } from "@vue/composition-api";
 import ChatContact from "./ChatContact.vue";
 import UserProfileSidebar from "./UserProfileSidebar.vue";
 import NewMessageCompose from './components/NewMessageCompose.vue';
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   components: {
     // BSV
@@ -131,9 +131,16 @@ export default {
       required: true,
     },
   },
+  computed:{
+    ...mapState({
+      S_MESSAGES_COUNTER_NOTIFICATION: state => state.MessageStore.counterNotification,
+    })
+  },
   methods: {
     ...mapMutations({
       SET_USER_TO_MESSAGE: "MessageStore/SET_USER_TO_MESSAGE",
+      SET_MESSAGES_COUNTER_NOTIFICATION:
+        "MessageStore/SET_MESSAGES_COUNTER_NOTIFICATION",
     }),
     setUserToMessage(contact) {
       let contactN = {
@@ -147,6 +154,7 @@ export default {
         state_coworker: contact.state_coworker,
       };
       this.SET_USER_TO_MESSAGE(contactN);
+      this.SET_MESSAGES_COUNTER_NOTIFICATION(this.S_MESSAGES_COUNTER_NOTIFICATION - Number(contact.cm));
       this.$emit("open-chat");
       contact.cm = 0;
     },

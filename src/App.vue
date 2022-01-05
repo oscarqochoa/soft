@@ -59,11 +59,6 @@ export default {
       updateCurrentUserModuleRole: 'auth/updateCurrentUserModuleRole',
     }),
   },
-  watch:{
-    '$route'(){
-      this.updateCurrentUserModuleRole(this.$route.matched[0].meta.module)
-    }
-  },
   beforeCreate() {
     // Set colors in theme
     const colors = [

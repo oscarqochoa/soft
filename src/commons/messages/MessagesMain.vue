@@ -52,9 +52,9 @@
                   S_USER_TO_MESSAGE.type == 1 ? 'person-fill' : 'people-fill'
                 "
                 class="mr-1 cursor-pointer badge-minimal"
-                @click.native="shallShowActiveChatContactSidebar = true"
+                
               />
-
+              <!-- @click.native="shallShowActiveChatContactSidebar = true" -->
               <h6 class="mb-0">
                 <span v-if="S_USER_TO_MESSAGE.type == 1">{{
                   S_USER_TO_MESSAGE.fullName
@@ -468,6 +468,17 @@ export default {
       this.contentresp = null;
       this.$refs.chatLog.closeReply();
     },
+  },
+  created() {
+    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", true);
+    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", { type: "floating" });
+  },
+  destroyed() {
+    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", {
+      type: this.navbarConfig,
+    });
+    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", this.menuHidden);
+    this.$store.commit("appConfig/UPDATE_LAYOUT_TYPE", "vertical");
   },
   setup() {
     const CHAT_APP_STORE_MODULE_NAME = "app-chat";
