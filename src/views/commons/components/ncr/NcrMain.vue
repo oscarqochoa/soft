@@ -5,18 +5,21 @@
         :to="{ name: 'ncr-pending' }"
         exact
         exact-active-class="active"
+        link-classes="ml-1 border-secondary hover-primary"
         >Pending</b-nav-item>
       
       <b-nav-item
         :to="{ name: 'ncr-returned' }"
         exact
         exact-active-class="active"
+        link-classes="ml-1 border-secondary hover-primary"
         >Returned</b-nav-item
       >
       <b-nav-item
         :to="{ name: 'ncr-completed' }"
         exact
         exact-active-class="active"
+        link-classes="ml-1 border-secondary hover-primary"
         >Completed</b-nav-item
       >
     </b-nav>

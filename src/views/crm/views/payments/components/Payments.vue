@@ -1,142 +1,194 @@
 <template>
-    <div>
-      <filter-slot
-        v-scrollbar
-        :filter="filter"
-        :filter-principal="filterPrincipal"
-        :total-rows="totalRows"
-        :paginate="paginate"
-        :start-page="startPage"
-        :to-page="toPage"
-        :send-multiple-sms="false"
-        @reload="$refs['refClientsList'].refresh()"
+  <div>
+    <filter-slot
+      v-scrollbar
+      :filter="filter"
+      :filter-principal="filterPrincipal"
+      :total-rows="totalRows"
+      :paginate="paginate"
+      :start-page="startPage"
+      :to-page="toPage"
+      :send-multiple-sms="false"
+      @reload="$refs['refClientsList'].refresh()"
+    >
+      <b-table
+        small
+        slot="table"
+        no-provider-filtering
+        :api-url="clientRoute"
+        ref="refClientsList"
+        :items="myProvider"
+        :fields="visibleFields"
+        primary-key="id"
+        table-class="text-nowrap"
+        responsive="sm"
+        show-empty
+        sticky-header="50vh"
+        :busy="isBusy"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
+        :current-page="paginate.currentPage"
+        :per-page="paginate.perPage"
       >
-        <b-table
-          small
-          slot="table"
-          no-provider-filtering
-          :api-url="clientRoute"
-          ref="refClientsList"
-          :items="myProvider"
-          :fields="visibleFields"
-          primary-key="id"
-          table-class="text-nowrap"
-          responsive="sm"
-          show-empty
-          sticky-header="50vh"
-          :busy="isBusy"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          :current-page="paginate.currentPage"
-          :per-page="paginate.perPage"
-        >
-          <template #table-busy>
-            <div class="text-center text-primary my-2">
-              <b-spinner class="align-middle mr-1"></b-spinner>
-              <strong>Loading ...</strong>
-            </div>
-          </template>
-          <template #cell(lead_name)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
-              <a
+        <template #table-busy>
+          <div class="text-center text-primary my-2">
+            <b-spinner class="align-middle mr-1"></b-spinner>
+            <strong>Loading ...</strong>
+          </div>
+        </template>
+        <template #cell(lead_name)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <!-- <a
                 href="www.google.com"
                 target="_blank"
-                class="select-lead-name"
+                class="select-lead-name text-important"
               >
                 {{ data.item.lead_name }}</a
-              >
-            </div>
-          </template>
-          <template #cell(amount)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
+              > -->
+            <router-link
+              class="select-lead-name text-important"
+              :to="{
+                name: 'lead-show',
+                params: { id: data.item.lead_id },
+              }"
+              target="_blank"
             >
-              <span> $ {{ data.item.amount }} </span>
-            </div>
-          </template>
-          <template #cell(charge)="data">
-            <div
-              class="
-                d-flex
-                flex-column
-                justify-content-center
-                align-items-center
+              {{ data.item.lead_name }}
+            </router-link>
+          </div>
+        </template>
+        <template #cell(amount)="data">
+          <div class="inline">
+            <span
+              v-if="data.item.type_t != 39 && data.item.type_t != 40"
+              class="mr-1"
+              >$ {{ data.item.amount }}</span
+            >
+            <span
+              v-if="data.item.type_t == 39 || data.item.type_t == 40"
+              class="mr-1"
+              >$ ({{ data.item.amount }})</span
+            >
+            <feather-icon
+              icon="EyeIcon"
+              style="cursor: pointer"
+              v-if="data.item.type_t == 39 || data.item.type_t == 40"
+              class="text-primary"
+            ></feather-icon>
+            <img
+              :src="assetsImg + '/images/icons/void.ico'"
+              style="cursor: pointer; color: red"
+              title="Void"
+              v-if="
+                data.item.type_t != 39 &&
+                data.item.type_t != 40 &&
+                data.item.void == 1 &&
+                data.item.w_card == 1 &&
+                currentUser.role_id == 1 &&
+                data.item.result == 'Approved'
               "
-            >
-              <b-icon
-                v-if="data.item.charge"
-                icon="check-circle-fill"
-                variant="success"
-              >
-              </b-icon>
-              <feather-icon v-else icon="XCircleIcon" class="text-danger" />
-            </div>
-          </template>
-          <template #cell(result)="data">
-            <div
-              class="
-                d-flex
-                flex-column
-                justify-content-center
-                align-items-center
+            />
+            <img
+              :src="assetsImg + '/images/icons/refund.ico'"
+              style="cursor: pointer; color: green"
+              title="Refund"
+              v-if="
+                data.item.type_t != 39 &&
+                data.item.type_t != 40 &&
+                data.item.void == 0 &&
+                data.item.refund == 1 &&
+                data.item.w_card == 1 &&
+                currentUser.role_id == 1 &&
+                data.item.result == 'Approved'
               "
+            />
+          </div>
+        </template>
+        <template #cell(charge)="data">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
+            <b-icon
+              v-if="data.item.charge == 0"
+              icon="check-circle-fill"
+              variant="success"
             >
-              <b-icon
-                v-if="data.item.result == 'Approved'"
-                icon="check-circle-fill"
-                variant="success"
-              >
-              </b-icon>
-              <feather-icon
-                v-else-if="data.item.result == 'Unverified'"
-                icon="ClockIcon"
-                class="text-warning"
-              />
-              <feather-icon v-else icon="XCircleIcon" class="text-danger" />
-            </div>
-          </template>
-          <template #cell(user_name)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
+            </b-icon>
+            <feather-icon
+              v-if="data.item.charge == 1 || data.item.charge == null"
+              icon="XCircleIcon"
+              class="text-danger"
+            />
+          </div>
+        </template>
+        <template #cell(result)="data">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
+            <b-icon
+              v-if="data.item.result == 'Approved'"
+              icon="check-circle-fill"
+              variant="success"
             >
-              <span>
-                {{ data.item.user_name }} -
-                {{ data.item.created_at | myGlobalDay }}
-              </span>
-            </div>
-          </template>
-        </b-table>
-        <template #footer>
-          <b-col
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
+            </b-icon>
+            <feather-icon
+              v-if="data.item.result == 'Unverified'"
+              icon="ClockIcon"
+              class="text-warning"
+            />
+            <feather-icon
+              v-if="
+                data.item.result != 'Approved' &&
+                data.item.result != 'Unverified'
+              "
+              icon="XCircleIcon"
+              class="text-danger"
+            />
+          </div>
+        </template>
+        <template #cell(user_name)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <span>
+              {{ data.item.user_name }} -
+              {{ data.item.created_at | myGlobalDay }}
+            </span>
+          </div>
+        </template>
+      </b-table>
+      <template #footer>
+        <b-col
+          class="
+            d-flex
+            align-items-center
+            justify-content-center justify-content-sm-start
+          "
+        >
+          <div
+            style="
+              background-color: #3764ff !important;
+              padding: 5px;
+              border-radius: 30px;
+              padding-left: 15px;
+              padding-right: 15px;
             "
           >
-            <div
-              style="
-                background-color: #3764ff !important;
-                padding: 5px;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >
-              <span class="text-nowrap" style="color: #fff">
-                Total Amount
-                {{ totalAmount == 0 ? "$" + totalAmount : totalAmount }}
-              </span>
-            </div>
-          </b-col>
-        </template>
-      </filter-slot>
-    </div>
+            <span class="text-nowrap" style="color: #fff">
+              Total Amount
+              {{ totalAmount == 0 ? "$" + totalAmount : totalAmount }}
+            </span>
+          </div>
+        </b-col>
+      </template>
+    </filter-slot>
+  </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
@@ -147,6 +199,7 @@ export default {
   },
   data() {
     return {
+      assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       totalRows: 0,
       paginate: {
         currentPage: 1,
@@ -324,6 +377,9 @@ export default {
     visibleFields() {
       return this.arrayColumns.filter((column) => column.visible);
     },
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
     myProvider(ctx) {
@@ -396,9 +452,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .select-lead-name:hover {
-    text-decoration-line: underline
+  text-decoration-line: underline;
 }
 .per-page-selector {
   width: 90px;

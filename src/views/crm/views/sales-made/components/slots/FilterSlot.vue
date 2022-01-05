@@ -10,14 +10,18 @@
         backdrop
         bg-variant="white"
         sidebar-class="sidebar-lg"
+        header-class="pt-1"
         lazy
       >
         <template #header>
-          <b-container>
-            <b-row>
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <span>
               <h3>Advanced Search</h3>
-            </b-row>
-          </b-container>
+            </span>
+            <span class="cursor-pointer" v-b-toggle.sidebar-right>
+              <amg-icon icon="XIcon" size="20" />
+            </span>
+          </div>
         </template>
         <b-container>
           <filters-component
@@ -29,10 +33,10 @@
             <b-row class="d-flex align-items-center justify-content-between p-1">
               <b-button
                 v-b-toggle.sidebar-right
-                variant="outline-danger"
-                class="hover-close"
+                variant="info"
+                @click="$emit('reset-all-filters')"
               >
-                Close
+                Reset
               </b-button>
               <b-button
                 v-b-toggle.sidebar-right

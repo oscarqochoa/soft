@@ -48,8 +48,8 @@
     >
       <quill-editor
         id="quil-content"
+        :value="note.content" @change="v => note.content = v.html"
         :options="editorOption"
-        v-model="note.content"
         style="height: 50%; overflow: hidden;"
         :style="{ background: skin=='dark'?'':'#FFF' }"
       />

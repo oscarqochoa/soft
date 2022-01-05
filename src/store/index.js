@@ -19,14 +19,32 @@ import InventoryStore from '@/views/commons/components/inventory/store'
 import NCRStore from '@/views/commons/components/ncr/store'
 import UserStore from '@/store/user'
 import MessageStore from '@/store/message'
+import SidebarStore from '@/store/sidebar'
 Vue.use(Vuex);
+
+let initialState = {
+  ecommerceStoreModule: {...ecommerceStoreModule.state},
+  CrmStore: {...CrmStore.state},
+  saleMade: {...saleMade.state},
+  CommissionsStore: {...CommissionsStore.state},
+  LoansStore: {...LoansStore.state},
+  GlobalStore: {...GlobalStore.state},
+  stickyNotesStoreModule: {...stickyNotesStoreModule.state},
+  TaskStore: {...TaskStore.state},
+  NotificationStore: {...NotificationStore.state},
+  InventoryStore: {...InventoryStore.state},
+  NCRStore: {...NCRStore.state},
+  UserStore: {...UserStore.state},
+  MessageStore: {...MessageStore.state},
+  SidebarStore: {...SidebarStore.state}
+}
+
 
 export default new Vuex.Store({
   modules: {
     app,
     appConfig,
     verticalMenu,
-
     'app-ecommerce': ecommerceStoreModule,
     auth,
     'crm-store': saleMade,
@@ -40,7 +58,15 @@ export default new Vuex.Store({
     'ncr-store': NCRStore,
     NotificationStore,
     UserStore,
-    MessageStore
+    MessageStore,
+    SidebarStore
+  },
+  mutations: {
+    resetState(state) {
+      Object.keys(state).forEach(key => {
+        Object.assign(state[key], initialState[key])
+      })
+    }
   },
   strict: process.env.DEV,
 })

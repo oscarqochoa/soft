@@ -260,4 +260,12 @@ $borderamg: #efb911;
         position: initial !important;
       }
     }
+    [data-col='1-column']{
+      .head-navbar{
+        &.floating-nav {
+          width: calc(100vw - (100vw - 100%) - calc(2rem * 1)) !important;
+        }
+      }
+    }
 }
+

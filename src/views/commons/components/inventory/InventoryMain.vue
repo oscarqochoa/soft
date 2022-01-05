@@ -19,7 +19,7 @@
         >
           <b-button @click="openModalRequest()"
           v-if="![1,19].includes($route.meta.module)"
-          variant="success"> REQUEST EQUIPMENT </b-button>
+          variant="success"> Request Equipment </b-button>
         </b-col>
       </b-row>
     </div>
@@ -28,12 +28,14 @@
         :to="{ name: 'inventory-crm-equipment' }"
         exact
         exact-active-class="active"
+        link-classes="ml-1 border-secondary hover-primary"
         >Equipment</b-nav-item
       >
       <b-nav-item
         :to="{ name: 'inventory-crm-equipment-request' }"
         exact
         exact-active-class="active"
+         link-classes="ml-1 border-secondary hover-primary"
         >Equipment Request</b-nav-item
       >
       <b-nav-item
@@ -41,6 +43,7 @@
         :to="{ name: 'inventory-crm-assign' }"
         exact
         exact-active-class="active"
+         link-classes="ml-1 border-secondary hover-primary"
         >To Assigned</b-nav-item
       >
     </b-nav>

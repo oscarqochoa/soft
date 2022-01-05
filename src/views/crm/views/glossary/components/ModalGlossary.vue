@@ -89,7 +89,7 @@
             @click="createGlossary()"
             v-if="!spinnerBtn && statusModal == '1'"
           >
-            <feather-icon icon="SaveIcon"></feather-icon> SAVE
+             Save
           </b-button>
           <b-button
             variant="success"
@@ -97,7 +97,7 @@
             @click="editGlossary()"
             v-if="!spinnerBtn && statusModal == '2'"
           >
-            <feather-icon icon="Edit3Icon"></feather-icon> UPDATE
+             Update
           </b-button>
           <b-button
             variant="success"
@@ -180,24 +180,12 @@ export default {
         if (!success) {
           return;
         }
-        this.$swal
-          .fire({
-            title: "CREATE",
-            text: "Are you sure?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, create it!",
-            customClass: {
-              confirmButton: "btn btn-primary",
-              cancelButton: "btn btn--danger",
-            },
-          })
-          .then((result) => {
+          this.showConfirmSwal("CREATE","Are you sure?").then((result) => {
             if (result.value) {
               this.spinnerBtn = true;
               const params = {
                 user_id: this.currentUser.user_id,
-                module_id: this.currentUser.arrRoles[1].module_id,
+                module_id: this.$route.meta.module,
                 category_id: this.selectCategory,
                 title: this.title,
                 description: this.description,
@@ -231,19 +219,7 @@ export default {
         if (!success) {
           return;
         }
-        this.$swal
-          .fire({
-            title: "UPDATE",
-            text: "Are you sure?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, update it!",
-            customClass: {
-              confirmButton: "btn btn-primary",
-              cancelButton: "btn btn--danger",
-            },
-          })
-          .then((result) => {
+          this.showConfirmSwal("UPDATE","Are you sure?").then((result) => {
             if (result.value) {
               this.spinnerBtn = true;
               const params = {

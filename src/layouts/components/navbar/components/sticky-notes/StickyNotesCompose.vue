@@ -59,7 +59,6 @@
                 }; color: ${color.category}; fill: ${color.category}`"
                 class="cursor-pointer"
                 size="28"
-                @click="selectColor(color)"
               />
             </span>
           </div>
@@ -226,14 +225,6 @@ export default {
         this.isLoading = false;
       });
     },
-    selectColor(color) {
-      this.noteData.colorId = color.id;
-      //Mixin create class
-      this.createClass(
-        ".custom-header-color",
-        "background: " + color.category + "!important;"
-      );
-    },
     resetData() {
       this.noteData = {
         title: null,
@@ -253,10 +244,6 @@ export default {
         (color) => color.category == newVal.category
       ).id;
       //Mixin create class
-      this.createClass(
-        ".custom-header-color",
-        "background: " + newVal.category + "!important;"
-      );
     },
   },
 };

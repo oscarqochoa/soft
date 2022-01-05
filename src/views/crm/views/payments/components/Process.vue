@@ -44,15 +44,20 @@
                       class="autocomplete-results"
                       v-if="statusSpinner"
                     >
-                      <div class="text-center ">
+                      <div class="text-center">
                         <b-spinner variant="primary" label="Text Centered" />
                       </div>
                     </b-list-group>
                     <b-list-group
                       class="autocomplete-results"
-                      v-if="filterSearch && users == null && !statusSpinner && statusSelectedSearch"
+                      v-if="
+                        filterSearch &&
+                        users == null &&
+                        !statusSpinner &&
+                        statusSelectedSearch
+                      "
                     >
-                      <div class="text-center ">
+                      <div class="text-center">
                         <strong>Sorry, There's not result</strong>
                       </div>
                     </b-list-group>
@@ -93,7 +98,7 @@
                     v-slot="{ errors }"
                   >
                     <b-form-group label="Amount" label-for="v-Amount">
-                      <b-input-group
+                      <!-- <b-input-group
                         prepend="$"
                         :class="{ 'border border-danger': errors[0] }"
                       >
@@ -105,19 +110,26 @@
                           @keypress="justNumbers"
                           placeholder="amount"
                         />
-                      </b-input-group>
+                        <money  v-bind="money" v-model="amount"></money>
+                      </b-input-group> -->
+                      <money
+                        v-model="amount"
+                        style="height: 37px"
+                        class="form-control input-form fond-white border-hover"
+                        :class="{ 'border border-danger': errors[0] }"
+                      ></money>
                     </b-form-group>
                   </ValidationProvider>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
-                  <ValidationProvider
-                    name="comment"
-                    rules="required"
-                    v-slot="{ errors }"
+                  <b-form-group
+                    label="Type of Payment"
+                    label-for="v-TypeOfPayment"
                   >
-                    <b-form-group
-                      label="Type of Payment"
-                      label-for="v-TypeOfPayment"
+                    <ValidationProvider
+                      name="comment"
+                      rules="required"
+                      v-slot="{ errors }"
                     >
                       <b-form-radio-group
                         v-model="payment"
@@ -126,14 +138,14 @@
                         name="radios-stacked"
                         stacked
                       />
-                      <br />
-                      <b-form-input
-                        v-if="payment == 3"
-                        v-model="observationOther"
-                        placeholder="Specific"
-                      />
-                    </b-form-group>
-                  </ValidationProvider>
+                    </ValidationProvider>
+                    <br />
+                    <b-form-input
+                      v-if="payment == 3"
+                      v-model="observationOther"
+                      placeholder="Specific"
+                    />
+                  </b-form-group>
                 </div>
 
                 <div class="col-lg-12" v-if="errosList">
@@ -231,25 +243,31 @@
             </div>
 
             <div class="row w-100">
-              <div class="col-lg-12 ml-2">
+              <div class="col-lg-3 col-xl-2 col-md-4 col-9 ml-2">
                 <b-form-group class="inline">
-                  <b-button
-                    type="submit"
-                    variant="primary"
-                    class="mr-1"
-                    @click="submitAutorize"
-                    :disabled="changeDisable"
-                  >
-                    SUBMIT
-                  </b-button>
-                  <b-form-checkbox
-                    v-if="methodpayment == 1"
-                    v-model="sendsms"
-                    value="true"
-                    class="custom-control-primary"
-                  >
-                    Send SMS
-                  </b-form-checkbox>
+                  <b-row>
+                    <b-col cols="5" cols-xl="1" cols-md="1" cols-lg="2">
+                      <b-button
+                        type="submit"
+                        variant="primary"
+                        class="mr-1"
+                        @click="submitAutorize"
+                        :disabled="changeDisable"
+                      >
+                        SUBMIT
+                      </b-button>
+                    </b-col>
+                    <b-col cols="1" class=" " >
+                      <b-form-checkbox
+                        v-if="methodpayment == 1"
+                        v-model="sendsms"
+                        value="true"
+                        class="custom-control-primary"
+                      >
+                        Send SMS
+                      </b-form-checkbox>
+                    </b-col>
+                  </b-row>
                 </b-form-group>
               </div>
             </div>
@@ -308,15 +326,15 @@ export default {
       messageList: false,
       charge: true,
       spinner: false,
-      statusSelected:false,
+      statusSelected: false,
     };
   },
   computed: {
     statusSpinner() {
       return this.spinner;
     },
-    statusSelectedSearch(){
-      return this.statusSelected
+    statusSelectedSearch() {
+      return this.statusSelected;
     },
     changeDisable() {
       return this.userfilter == "" ? true : false;
@@ -387,21 +405,27 @@ export default {
     searchlead() {
       if (this.userfilter != "") {
         this.spinner = true;
-        this.statusSelected = true
+        this.statusSelected = true;
         amgApi
           .post("/searchlead", {
             q: this.userfilter,
           })
           .then((response) => {
             this.users = response.data;
-            if(this.users.length == 0){
-              this.users = null
+            if (this.users.length == 0) {
+              this.users = null;
             }
             this.spinner = false;
           })
           .catch((err) => {
             this.spinner = false;
-            this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Something went wrong with users, try again!')
+            this.showToast(
+              "danger",
+              "top-right",
+              "Error",
+              "XIcon",
+              "Something went wrong with users, try again!"
+            );
             console.error(err);
           });
       } else {
@@ -412,10 +436,9 @@ export default {
       this.user_id = id;
       this.userfilter = first + " " + last + " | " + mobile;
       this.users = null;
-      this.statusSelected = false
+      this.statusSelected = false;
     },
     getCardId(Card) {
-      
       this.card_id = Card;
     },
     getcard() {
@@ -443,6 +466,13 @@ export default {
         .catch((error) => {
           this.$store.commit("app/SET_LOADING", false);
           console.log(error);
+          this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
         });
     },
     submitAutorize() {
@@ -473,7 +503,7 @@ export default {
                     idcard: this.card_id,
                     amount: this.amount,
                     merchant: this.merchant,
-                    idsession: this.currentUser.status_session,
+                    idsession: this.currentUser.user_id,
                     payment: this.payment,
                     lead_id: this.user_id,
                     methodpayment: this.methodpayment,
@@ -553,7 +583,6 @@ export default {
                         this.messageList = false;
                         this.errosList = true;
                         if (this.methodpayment == 1) {
-                          
                           this.$swal
                             .fire({
                               icon: "error",
@@ -602,8 +631,8 @@ export default {
                     }
                   })
                   .catch((error) => {
-                     this.$store.commit("app/SET_LOADING", false);
-                     this.showToast(
+                    this.$store.commit("app/SET_LOADING", false);
+                    this.showToast(
                       "danger",
                       "top-right",
                       "Error",
