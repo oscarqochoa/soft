@@ -2,7 +2,7 @@
   <div>
     <ValidationObserver ref="form">
       <b-modal
-        v-model="modalServices"
+        v-model="ownControl"
         size="xl"
         scrollable
         header-class="p-0"
@@ -33,14 +33,16 @@
               >
                 <b-card
                   :header="name"
+                  header-class="border-bottom"
+                  :header-bg-variant="skin === 'dark' ? 'dark' : 'light'"
                   body-class="p-0"
-                  header-tag="h5"
+                  class="border"
                 >
                   <div class="d-flex flex-column">
-                    <template v-for="(row, indexRow) in rates.filter(rate => rate.type === (index + 1).toString())">
+                    <template v-for="(row) in rates.filter(rate => rate.type === (index + 1).toString())">
                       <div
-                        class="d-flex w-100 px-1 py-1 border-top cursor-pointer"
-                        :class="{'bg-success': option === row.id, 'bg-light': (index % 2 === 0)? indexRow % 2 === 0 : indexRow % 2 !== 0}"
+                        class="d-flex w-100 px-1 py-1 cursor-pointer"
+                        :class="{'bg-info text-white font-weight-bolder': option === row.id}"
                         @click="!isModalShow && addFee(row)"
                       >
                         <span>{{ row.description }} - ${{ row.price }}</span>
@@ -108,7 +110,7 @@
                 <b-row>
                   <b-col
                     v-if="!isModalAdd"
-                    class="d-flex justify-content-center align-items-center"
+                    class="d-flex justify-content-end align-items-center"
                   >
                     <button-cancel
                       class="mr-1"
@@ -178,6 +180,7 @@ export default {
   },
   data() {
     return {
+      ownControl: false,
       client: null,
       program: 9,
       option: null,
@@ -205,6 +208,7 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
+      skin: 'appConfig/skin',
     }),
     isModalShow() {
       return this.typeModal === 2 || this.typeModal === 5
@@ -213,7 +217,6 @@ export default {
       return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
     },
   },
-  created() {},
   async mounted() {
     this.client = this.salesClient
     if (this.program) {
@@ -222,6 +225,7 @@ export default {
     if (this.isModalAdd) {
       await this.getScore()
     }
+    this.ownControl = true
   },
   methods: {
     /* PRELOADER */
@@ -232,7 +236,6 @@ export default {
       this.$store.commit('app/SET_LOADING', false)
     },
     addFee(item) {
-      console.log(item)
       this.option = item.id
       this.fee = item.price
     },
@@ -294,15 +297,7 @@ export default {
           json_ce: this.json_ce,
         }
 
-        const result = await this.$swal.fire({
-          title: `Are you sure you want to ${message}?`,
-          text: "You won't be able to revert this!",
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes',
-        })
+        const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
         if (result.value) {
           this.addPreloader()
           const response = await amgApi.post(`${route}`, param)

@@ -233,9 +233,9 @@ export default {
           }
         }
         if (this.startIndex === -1) {
-          if (this.state1 === 1) this.startIndex = 0
-          if (this.state2 === 1) this.startIndex = 1
-          if (this.state3 === 1) this.startIndex = 2
+          if (this.state1 === 0 && this.state2 === 0 && this.state3 === 0) this.startIndex = 0
+          if (this.state1 === 1) this.startIndex = 1
+          if (this.state2 === 1) this.startIndex = 2
         }
       } catch (error) {
         console.error(error)

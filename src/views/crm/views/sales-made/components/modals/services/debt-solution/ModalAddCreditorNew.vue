@@ -168,8 +168,7 @@
                 :options="types"
                 :reduce="value => value.id"
                 label="value"
-              >
-              </v-select>
+              />
               <div
                 v-if="errors[0]"
                 class="invalid-feedback"
@@ -188,14 +187,14 @@
               v-model="unsecured"
               type="checkbox"
               disabled
-            />
+            >
           </b-col>
         </b-row>
         <b-row
           v-if="trueRetainer == 1"
         >
           <b-col
-              md="2"
+            md="2"
           >
             <label>Add Retainer Fee:</label>
           </b-col>
@@ -307,15 +306,7 @@ export default {
       // Validate Money
       const success = await this.$refs.form.validate()
       if (success) {
-        const result = await this.$swal.fire({
-          title: 'Are you Sure?',
-          text: 'Before finalizing you must save.',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes',
-        })
+        const result = await this.showConfirmSwal('Are you Sure?', 'Before finalizing you must save.')
         if (result.value) {
           const response = await amgApi.post('/savecreditor', {
             event: this.idevent,
@@ -361,15 +352,7 @@ export default {
     },
     async updatecreditor() {
       try {
-        const result = await this.$swal.fire({
-          title: 'Are you Sure?',
-          text: 'Before finalizing you must save.',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes',
-        })
+        const result = await this.showConfirmSwal('Are you Sure?', 'Before finalizing you must save.')
         if (result.value) {
           const response = await amgApi.post('/updatecreditor', {
             id: this.idcreditor,

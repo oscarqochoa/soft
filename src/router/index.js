@@ -14,7 +14,7 @@ import chartsMaps from './routes/charts-maps'
 import formsTable from './routes/forms-tables'
 import messages from '@/commons/messages/messages.router';
 import others from './routes/others'
-
+import commons from './routes/amg/common'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -24,7 +24,8 @@ const router = new VueRouter({
     return { x: 0, y: 0 }
   },
   routes: [
-    { path: '/', redirect: { name: 'dashboard-ecommerce' } },
+    { path: '/', redirect: { name: 'amg-menu' } },
+    { path: '/crm', redirect: { name: 'dashboard-crm' } },
     ...crm,
     ...users,
     ...messages,
@@ -35,6 +36,7 @@ const router = new VueRouter({
     ...formsTable,
     ...uiElements,
     ...others,
+    ...commons,
     {
       path: '*',
       redirect: 'error-404',
@@ -46,8 +48,7 @@ router.beforeEach((to, _, next) => {
   const isLoggedIn = isUserLoggedIn()
   const userData = getUserData()
   if(isLoggedIn){
-    if (!canNavigate(to, userData.modul_id, userData.role_id)) {
-      
+    if (!canNavigate(to, userData.arrRoles)) {
       // Redirect to login if not logged in
       if (!isLoggedIn) return next({ name: 'auth-login' })
       
@@ -55,12 +56,10 @@ router.beforeEach((to, _, next) => {
       return next({ name: 'misc-not-authorized' })
     }
   }
-
   // Redirect if logged in
   if (to.meta.redirectIfLoggedIn && isLoggedIn) {
     next(getHomeRouteForLoggedInUser(userData ? userData.role : null))
   }
-
   return next()
 })
 

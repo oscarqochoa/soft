@@ -9,7 +9,7 @@
         <p class="user-name font-weight-bolder mb-0">
           {{ userData.fullName || userData.username }}
         </p>
-        <span class="user-status">{{ userData.role }}</span>
+        <span class="user-status">{{ userData.roleName }}</span>
       </div>
       <b-avatar
         size="40"
@@ -89,6 +89,7 @@ import Appointments from "./components/appointments/Appointments.vue";
 import Messages from "./components/messages/Messages.vue";
 import Messenger from "./components/messenger/Messenger.vue";
 import PayStub from "./components/pay-stub/PayStub.vue";
+import {mapMutations} from 'vuex';
 export default {
   components: {
     StickyNotes,
@@ -104,6 +105,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      resetState: 'resetState'
+    }),
     logout() {
       // Remove userData from localStorage
       // ? You just removed token from localStorage. If you like, you can also make API call to backend to blacklist used token
@@ -111,8 +115,9 @@ export default {
       localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
 
       // Remove userData from localStorage
-      localStorage.removeItem('userData')
-
+      this.resetState();
+      // this.$store.commit('resetState');
+      console.log(this.$store.commit('resetState'), 'store')
       // Reset ability
       this.$ability.update(initialAbility)
 

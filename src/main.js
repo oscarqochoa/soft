@@ -6,7 +6,7 @@ import {
   BootstrapVueIcons,
 } from "bootstrap-vue";
 import VueCompositionAPI from "@vue/composition-api";
-import i18n from "@/libs/i18n";
+// import i18n from "@/libs/i18n";
 import router from "./router";
 import store from "./store";
 import App from "./App.vue";
@@ -97,6 +97,6 @@ initialize(router)
 new Vue({
   router,
   store,
-  i18n,
+  // i18n,
   render: h => h(App),
 }).$mount('#app')

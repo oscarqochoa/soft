@@ -1,96 +1,97 @@
 <template>
   <div>
-    <ValidationObserver ref="form">
-      <b-modal
-        v-model="modalServices"
-        modal
-        size="sm"
-        scrollable
-        :hide-footer="isModalShow"
-        header-class="p-0"
-        header-bg-variant="transparent border-bottom border-bottom-2"
-        @hidden="hideModal(false,0)"
-      >
-        <!-- HEADER START -->
-        <template #modal-header="{ }">
-          <modal-service-header
-            :type-modal="typeModal"
-            :users-services="usersServices"
-            :programs-all="programsAll"
-            :header-s="headerS"
-            :sales="salesClient"
-            :two-per-row="true"
-            @changeProgram="changeProgram"
-            @close="hideModal(false,0)"
-          />
-        </template>
-        <!-- HEADER END -->
+    <b-modal
+      v-model="ownControl"
+      modal
+      size="sm"
+      scrollable
+      :hide-footer="isModalShow"
+      header-class="p-0"
+      header-bg-variant="transparent border-bottom border-bottom-2"
+      @hidden="hideModal(false,0)"
+    >
+      <!-- HEADER START -->
+      <template #modal-header="{ }">
+        <modal-service-header
+          :type-modal="typeModal"
+          :users-services="usersServices"
+          :programs-all="programsAll"
+          :header-s="headerS"
+          :sales="salesClient"
+          :two-per-row="true"
+          @changeProgram="changeProgram"
+          @close="hideModal(false,0)"
+        />
+      </template>
+      <!-- HEADER END -->
 
-        <!-- BODY START -->
-        <b-container>
-          <b-row class="d-flex align-items-center justify-content-center">
-            <b-col>
-              <ValidationProvider
-                v-slot="{errors}"
-                rules="required"
-              >
-                <b-card
-                  header="FEE"
-                  header-bg-variant="important"
-                  header-class="text-white"
+      <!-- BODY START -->
+      <b-container>
+        <b-row class="d-flex align-items-center justify-content-center">
+          <b-col>
+            <b-card
+              header="FEE"
+              header-bg-variant="important"
+              header-class="text-white"
+            >
+              <b-row class="mt-1">
+                <b-col
+                  cols="2"
+                  class="d-flex align-items-center justify-content-center text-success font-medium-5"
                 >
-                  <b-row class="mt-1">
-                    <b-col
-                      cols="2"
-                      class="d-flex align-items-center justify-content-center text-success font-medium-5"
-                    >
-                      $
-                    </b-col>
+                  $
+                </b-col>
+                <validation-observer ref="form">
+                  <validation-provider
+                    v-slot="{errors}"
+                    rules="required|min:1"
+                  >
                     <b-col>
                       <money
                         v-model="fee"
                         v-bind="vMoney"
                         class="form-control text-center"
-                        :style="errors[0] && validateMoney? 'color:red !important':''"
-                        :class="{'border border-danger':errors[0] && validateMoney}"
+                        :class="{'border-danger':errors[0] && validateMoney}"
                         :disabled="isModalShow"
                       />
                     </b-col>
-                  </b-row>
-                </b-card>
-                <div
-                  v-if="errors[0]"
-                  class="fee-error"
-                >
-                  Fee {{ errors[0] }}
-                </div>
-              </ValidationProvider>
-            </b-col>
-          </b-row>
-        </b-container>
-        <!-- BODY END -->
+                  </validation-provider>
+                </validation-observer>
+              </b-row>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-container>
+      <!-- BODY END -->
 
-        <!--  FOOTER START -->
-        <template #modal-footer="{ }">
-          <b-row v-if="!isModalShow">
-            <b-col v-if="!isModalAdd">
-              <button-cancel @click="hideModal(false,0)" />
-              <button-save @click="saveRates()" />
-            </b-col>
-            <b-col>
-              <b-button
-                v-if="isModalAdd"
-                variant="info"
-                @click="saveRates()"
-              >
-                Continue
-              </b-button>
-            </b-col>
-          </b-row>
-        </template>
-        <!-- FOOTER END -->
-      </b-modal>
-    </ValidationObserver>
+      <!--  FOOTER START -->
+      <template #modal-footer="{ }">
+        <b-row
+          v-if="!isModalShow"
+          class="w-100"
+        >
+          <b-col
+            v-if="!isModalAdd"
+            class="d-flex align-items-center justify-content-end"
+          >
+            <button-save
+              class="mr-1"
+              @click="saveRates()"
+            />
+            <button-cancel @click="hideModal(false,0)" />
+          </b-col>
+          <b-col v-if="isModalAdd">
+            <b-button
+              variant="info"
+              @click="saveRates()"
+            >
+              Continue
+            </b-button>
+          </b-col>
+        </b-row>
+      </template>
+      <!-- FOOTER END -->
+    </b-modal>
   </div>
 </template>
 
@@ -134,8 +135,9 @@ export default {
   },
   data() {
     return {
+      ownControl: false,
       client: null,
-      program: 6,
+      program: 8,
       rates: [],
       observation: 'Services',
       otherspayments: [],
@@ -179,6 +181,7 @@ export default {
     if (this.isModalAdd) {
       await this.getScore()
     }
+    this.ownControl = true
   },
   methods: {
     /* PRELOADER */
@@ -192,6 +195,7 @@ export default {
       try {
         this.validateMoney = true
         // Validate Money
+        console.log(this.$refs)
         const success = await this.$refs.form.validate()
         if (success) {
           let message = ''
@@ -245,12 +249,7 @@ export default {
             json_ce: this.json_ce,
           }
 
-          const result = await this.$swal.fire({
-            title: `Are you sure you want to ${message}?`,
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-          })
+          const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
           if (result.value) {
             this.addPreloader()
             const response = await amgApi.post(`${route}`, param)

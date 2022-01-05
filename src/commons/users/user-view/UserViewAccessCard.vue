@@ -29,7 +29,7 @@
               <span class="font-weight-bold">Rol</span>
             </th>
             <td>
-              {{ userData.role_id }}
+              {{ userData.roleName }}
             </td>
           </tr>
         </table>

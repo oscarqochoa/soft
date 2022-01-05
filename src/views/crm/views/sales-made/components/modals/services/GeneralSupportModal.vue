@@ -2,7 +2,7 @@
   <div>
     <ValidationObserver ref="form">
       <b-modal
-        v-model="modalServices"
+        v-model="ownControl"
         modal
         size="sm"
         scrollable
@@ -135,6 +135,7 @@ export default {
   },
   data() {
     return {
+      ownControl: false,
       client: null,
       program: 6,
       rates: [],
@@ -180,6 +181,7 @@ export default {
     if (this.isModalAdd) {
       await this.getScore()
     }
+    this.ownControl = true
   },
   methods: {
     /* PRELOADER */
@@ -246,7 +248,7 @@ export default {
             json_ce: this.json_ce,
           }
 
-          const result = await this.showConfirmSwal()
+          const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
           if (result.value) {
             this.addPreloader()
             const response = await amgApi.post(`${route}`, param)

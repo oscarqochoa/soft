@@ -1,7 +1,16 @@
 <template>
   <b-container fluid>
     <b-row>
-      <b-col />
+      <b-col>
+        <feather-icon
+          v-b-tooltip.hover
+          :title="selectedView ? 'Change to list' : 'Change to explorer'"
+          class="cursor-pointer text-important"
+          size="25"
+          :icon="selectedView ? 'ListIcon' : 'FolderIcon'"
+          @click="selectedView = !selectedView"
+        />
+      </b-col>
       <b-col class="d-flex align-items-center justify-content-end">
         <b-button
           class="mr-1"
@@ -18,24 +27,26 @@
         </b-button>
       </b-col>
     </b-row>
-    <b-row class="mb-1">
-      <template v-for="(route, index) in history">
-        <div
-          :key="index"
-          class="mr-50 d-flex align-items-center justify-content-between cursor-pointer"
-          @click="historyClicked(index)"
-        >
-          <amg-icon
-            class="font-medium-5"
-            :icon="route.icon"
-            :class="{'text-warning' : route.icon === 'FolderIcon', 'text-primary' : route.icon === 'HomeIcon'}"
-          />
-          <span class="ml-50 d-flex align-items-center justify-content-center font-medium-1">{{ route.label }}</span>
-          <span class="font-large-1 ml-50">/</span>
-        </div>
-      </template>
+    <b-row class="my-1">
+      <b-col class="d-flex">
+        <template v-for="(route, index) in history">
+          <div
+            :key="index"
+            class="mr-50 d-flex align-items-center justify-content-between cursor-pointer"
+            @click="historyClicked(index)"
+          >
+            <amg-icon
+              class="font-medium-5"
+              :icon="route.icon"
+              :class="{'text-warning' : route.icon === 'FolderIcon', 'text-primary' : route.icon === 'HomeIcon'}"
+            />
+            <span class="ml-50 d-flex align-items-center justify-content-center font-medium-1">{{ route.label }}</span>
+            <span class="font-large-1 ml-50">/</span>
+          </div>
+        </template>
+      </b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="selectedView">
       <b-col
         v-for="(content, index) in currentFiles"
         :key="index"
@@ -51,6 +62,87 @@
         />
 
       </b-col>
+    </b-row>
+    <b-row v-else>
+      <b-table
+        :fields="fields"
+        :items="currentFiles"
+        small
+      >
+        <template #cell(file_name)="data">
+          <span
+            v-if="selectedFile !== data.item"
+            class="cursor-pointer d-flex align-items-center justify-content-start"
+            @click="contentClicked(data.item)"
+          >
+            <feather-icon
+              :icon="data.item.extension ? 'FileIcon' : 'FolderIcon'"
+              :style="data.item.type === 'Folder' ? 'fill: #ff9f43' : ''"
+              class="mr-50"
+              :class="{'text-warning' : data.item.type === 'Folder'}"
+              size="15"
+            />
+            <span class="font-small-4">
+              {{ data.item.file_name + (data.item.extension? '.' + data.item.extension : '') }}
+            </span>
+          </span>
+          <b-form-input
+            v-else
+            v-model="selectedFile.file_name"
+            size="sm"
+            @keyup.enter="renameFile(data.item)"
+            @blur="renameFile(data.item)"
+          />
+        </template>
+        <template #cell(countfiel)="data">
+          <span
+            v-if="!data.item.extension"
+          >
+            {{ data.item.countfiel }}
+          </span>
+          <span v-else>
+            {{ data.item.size }}
+          </span>
+        </template>
+        <template #cell(user_upload)="data">
+          <p>{{ data.item.user_upload }}</p>
+          <p>{{ data.item.created_at | myGlobalWithHour }}</p>
+        </template>
+        <template #cell(user_modified)="data">
+          <div v-if="data.item.user_modified">
+            <p>{{ data.item.user_modified }}</p>
+            <p>{{ data.item.updated_at | myGlobalWithHour }}</p>
+          </div>
+        </template>
+        <template #cell(actions)="data">
+          <b-row>
+            <b-col
+              v-if="currentUser.modul_id === data.item.module_id"
+              class="d-flex align-items-center justify-content-around"
+            >
+              <amg-icon
+                class="text-primary cursor-pointer"
+                icon="EditIcon"
+                size="15"
+                @click="selectedFile = data.item"
+              />
+              <amg-icon
+                class="text-danger cursor-pointer"
+                icon="TrashIcon"
+                size="15"
+                @click="asyncDeleteFile(data.item)"
+              />
+              <amg-icon
+                v-if="data.item.parent == null"
+                class="text-success cursor-pointer"
+                icon="Share2Icon"
+                size="15"
+                @click="openShareFileModal(data.item)"
+              />
+            </b-col>
+          </b-row>
+        </template>
+      </b-table>
     </b-row>
     <b-sidebar
       id="sidebar-right"
@@ -218,6 +310,32 @@ export default {
       fileModel: {
         model: false,
       },
+      selectedView: true,
+      fields: [
+        {
+          key: 'file_name',
+          label: 'File Name ',
+        },
+        {
+          key: 'countfiel',
+          label: 'Files/Size',
+          class: 'text-center',
+        },
+        {
+          key: 'user_upload',
+          label: 'Created By',
+          class: 'text-center',
+        },
+        {
+          key: 'user_modified',
+          label: 'Modified By',
+          class: 'text-center',
+        },
+        {
+          key: 'actions',
+          label: 'Actions',
+        },
+      ],
       shareFileModal: false,
       newFolderModal: false,
       uploadFileModal: false,
@@ -349,9 +467,37 @@ export default {
     openFileDetail(content) {
       this.selectedFile = content
     },
+    async asyncDeleteFile(content) {
+      const params = {
+        file_id: content.id,
+        user_id: this.currentUser.user_id,
+      }
+      try {
+        const response = await this.showConfirmSwal()
+        if (response.isConfirmed) {
+          await amgApi.post('/deletefilemodule', params)
+          this.showSuccessSwal('File has been deleted successfully')
+          this.deleteFile(content)
+        }
+      } catch (error) {
+        this.showErrorSwal(error)
+      }
+    },
     deleteFile(content) {
       const index = this.currentFiles.indexOf(content)
       if (index > -1) this.currentFiles.splice(index, 1)
+    },
+    async renameFile(content) {
+      const params = {
+        file_id: content.id,
+        name_file: this.selectedFile.file_name,
+      }
+      try {
+        await amgApi.post('/savefilename', params)
+      } catch (error) {
+        this.showErrorSwal(error)
+      }
+      this.selectedFile = {}
     },
   },
 }
