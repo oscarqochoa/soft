@@ -415,6 +415,7 @@ export default {
       this.uploadFileModal = true
     },
     async getFilesFromFolder(folderId, folderModule = this.currentUser.modul_id) {
+      console.log(this.currentUser)
       try {
         this.addPreloader()
         const response = await amgApi.post('/searchfilesmodule', {
