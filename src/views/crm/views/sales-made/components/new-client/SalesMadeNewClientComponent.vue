@@ -39,6 +39,7 @@
         :per-page="paginate.perPage"
         :current-page="paginate.currentPage"
         :filter="filter"
+        class="font-small-3"
       >
         <template #table-busy>
           <div class="text-center text-primary my-2">
@@ -132,21 +133,24 @@
         <template v-slot:cell(captured)="data">
           <b-row>
             <b-col v-if="!data.item.editCaptured">
-              <p>{{ data.item.captured }}</p>
+              <p> {{ data.item.captured }} </p>
             </b-col>
             <b-col v-else>
-              <v-select
+              <b-form-select
                 v-model="data.item.capturedNew"
-                class="font-small-1 mb-1"
-                :clearable="false"
+                text-field="label"
+                value-field="id"
                 :options="captured"
+                class="mb-1 font-small-1"
+                style="width: 80px !important;"
+                size="sm"
               />
             </b-col>
           </b-row>
           <b-row>
             <b-col>
               <p
-                v-if="(data.item.commission) && (currentUser.role_id == 1 || currentUser.role_id == 2)"
+                v-if="(data.item.commission) && (G_IS_CEO || G_IS_SUPERVISOR)"
               >
                 <small
                   class="text-primary font-weight-bold"
@@ -155,9 +159,9 @@
             </b-col>
           </b-row>
           <b-row
-            v-if="(data.item.status == 1 || data.item.status == 3) && (currentUser.role_id == 1 || currentUser.role_id == 2)"
+            v-if="(data.item.status == 1 || data.item.status == 3) && (G_IS_CEO || G_IS_SUPERVISOR)"
           >
-            <b-col>
+            <b-col cols="6">
               <b-icon
                 v-if="!data.item.editCaptured"
                 icon="pencil-fill"
@@ -171,7 +175,7 @@
                 @click="saveNewCaptured(data.item.captured, data.item.capturedNew, data.item.id, data.item)"
               />
             </b-col>
-            <b-col>
+            <b-col cols="6">
               <b-icon
                 v-if="!data.item.editCaptured"
                 class="cursor-pointer"
@@ -193,18 +197,21 @@
               <p>{{ data.item.seller }}</p>
             </b-col>
             <b-col v-else>
-              <v-select
+              <b-form-select
                 v-model="data.item.sellerNew"
-                class="font-small-2 mb-1"
-                :clearable="false"
+                text-field="label"
+                value-field="id"
                 :options="sellers"
+                class="mb-1 font-small-1"
+                style="width: 80px !important;"
+                size="sm"
               />
             </b-col>
           </b-row>
           <b-row>
             <b-col>
               <p
-                v-if="data.item.commission && (currentUser.role_id == 1 || currentUser.role_id == 2)"
+                v-if="data.item.commission && (G_IS_CEO || G_IS_SUPERVISOR)"
               >
                 <small
                   class="text-primary font-weight-bold"
@@ -213,9 +220,9 @@
             </b-col>
           </b-row>
           <b-row
-            v-if="(data.item.status == 1 || data.item.status == 3) && (currentUser.role_id == 1 || currentUser.role_id == 2)"
+            v-if="(data.item.status == 1 || data.item.status == 3) && (G_IS_CEO || G_IS_SUPERVISOR)"
           >
-            <b-col>
+            <b-col cols="6">
               <b-icon
                 v-if="!data.item.editSeller"
                 icon="pencil-fill"
@@ -229,7 +236,7 @@
                 @click="saveNewSeller(data.item.seller, data.item.sellerNew, data.item.id, data.item)"
               />
             </b-col>
-            <b-col>
+            <b-col cols="6">
               <b-icon
                 v-if="!data.item.editSeller"
                 class="cursor-pointer"
@@ -248,27 +255,31 @@
         <template v-slot:cell(fee)="data">
           <b-row v-if="!data.item.editFee">
             <b-col>
-              <p>$ {{ data.item.fee }}</p>
+              <money
+                v-model="data.item.fee"
+                class="form-control form-control-sm mb-1 p-0 border-0 text-center"
+                v-bind="{prefix: ' $ ', precision: 2}"
+                style="width: 70px !important; padding-left: 10px; opacity: 1"
+                disabled
+              />
             </b-col>
           </b-row>
           <b-row v-else>
             <b-col>
-              <b-input-group
-                prepend="$"
-                size="sm"
-                class="mb-1"
-              >
-                <b-form-input
-                  v-model="data.item.feeNew"
-                  type="number"
-                />
-              </b-input-group>
+              <money
+                v-model="data.item.feeNew"
+                class="form-control form-control-sm mb-1 p-0"
+                v-bind="{prefix: ' $ ', precision: 2}"
+                style="width: 70px !important;"
+              />
             </b-col>
           </b-row>
           <b-row
-            v-if="(data.item.status === 1 || data.item.status === 3) && (currentUser.role_id == 1 || currentUser.role_id == 2)"
+            v-if="(data.item.status === 1 || data.item.status === 3) && (G_IS_CEO || G_IS_SUPERVISOR)"
           >
-            <b-col>
+            <b-col
+              cols="6"
+            >
               <b-icon
                 v-if="!data.item.editFee"
                 icon="pencil-fill"
@@ -282,7 +293,9 @@
                 @click="saveNewFee(data.item.fee, data.item.feeNew, data.item.id, data.item)"
               />
             </b-col>
-            <b-col>
+            <b-col
+              cols="6"
+            >
               <b-icon
                 v-if="!data.item.editFee"
                 icon="list-ul"
@@ -300,23 +313,23 @@
         </template>
         <template v-slot:cell(initial_amount)="data">
           <div
-            :class="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
-              currentUser.role_id == 1 ||
-              currentUser.role_id == 2)) ? 'cursor-pointer' : ''"
-            @click="( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
-              currentUser.role_id == 1 ||
-              currentUser.role_id == 2) &&
+            :class="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
+              G_IS_CEO || G_IS_SUPERVISOR)) ? 'cursor-pointer' : ''"
+            @click="( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
+              G_IS_CEO || G_IS_SUPERVISOR) &&
               openInitialPaymentModal(data.item)"
           >
             <b-icon
               v-if="data.item.initial_payment_status === 1"
               icon="wallet2"
               variant="muted"
+              class="font-medium-2"
             />
             <b-icon
               v-else-if="data.item.initial_payment_status === 3"
               icon="wallet2"
               variant="warning"
+              class="font-medium-2"
             />
             <p
               v-else-if="data.item.initial_payment_status === 2"
@@ -331,7 +344,7 @@
           >
             <b-icon
               v-if="data.item.contract_fee_status == 0 || (data.item.contract_fee_status == 1 &&data.item.initial_payment_status == 3)"
-              class="cursor-pointer"
+              class="cursor-pointer font-medium-2"
               icon="file-text"
               variant="muted"
               :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
@@ -341,7 +354,7 @@
               v-if="data.item.contract_fee_status == 1 && data.item.initial_payment_status == 2"
               variant="success"
               icon="file-text"
-              class="cursor-pointer"
+              class="cursor-pointer font-medium-2"
               :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
               @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item)"
             />
@@ -349,7 +362,7 @@
               v-if="data.item.contract_fee_status == 2"
               variant="danger"
               icon="file-text"
-              class="cursor-pointer"
+              class="cursor-pointer font-medium-2"
               :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
               @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item)"
             />
@@ -359,7 +372,7 @@
           <b-icon
             v-if="data.item.creates > '2021-05-16 00:00:00' "
             icon="chat-square-text-fill"
-            class="cursor-pointer"
+            class="cursor-pointer font-medium-2"
             :variant="
               (data.item.notes_status_new == null) ? 'muted':
               (data.item.notes_status_new == 0) ? 'success' :
@@ -369,7 +382,7 @@
           <b-icon
             v-else
             icon="chat-square-text-fill"
-            class="cursor-pointer"
+            class="cursor-pointer font-medium-2"
             :variant="
               (data.item.notes_status === 0) ? 'muted': 'success' "
             @click="notesModal(data.item)"
@@ -377,7 +390,7 @@
         </template>
         <template v-slot:cell(trackings)="data">
           <b-icon
-            class="cursor-pointer"
+            class="cursor-pointer font-medium-2"
             icon="list-check"
             :variant="
               (data.item.trackings) ? 'success': 'muted' "
@@ -389,9 +402,9 @@
             :class="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||G_IS_CEO || G_IS_SUPERVISOR)) ? 'cursor-pointer text-warning' : ''"
             :style="( (( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||G_IS_CEO || G_IS_SUPERVISOR)) ? 'fill: #ff9f43' : 'fill: #D8D8D6'"
             icon="FolderIcon"
-            @click="(( ( (data.item.user_id == currentUser.user_id) && currentUser.role_id == 5) ||
-              currentUser.role_id == 1 ||
-              currentUser.role_id == 2)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id, data.item.status, data.item.user_id)"
+            class="font-medium-2"
+            @click="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
+              G_IS_CEO || G_IS_SUPERVISOR)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id, data.item.status, data.item.user_id, data.item.program_id)"
           />
         </template>
         <template v-slot:cell(status)="data">
@@ -569,7 +582,7 @@
               <feather-icon icon="RotateCcwIcon" />History
             </b-dropdown-item>
             <b-dropdown-item
-              v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || currentUser.role_id == 1 || currentUser.role_id == 2)"
+              v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || G_IS_CEO || G_IS_SUPERVISOR)"
               @click="openUrlModal(data.item)"
             >
               <feather-icon icon="LinkIcon" />Url
@@ -1052,11 +1065,7 @@ export default {
     },
     openContractFeeModal(data) {
       console.log(data)
-      if (
-        data.user_id == this.currentUser.user_id
-        || this.currentUser.role_id == 1
-        || this.currentUser.role_id == 2
-      ) {
+      if (data.user_id == this.currentUser.user_id || this.G_IS_CEO || this.G_IS_SUPERVISOR) {
         this.modalData.contractFee.editModal = true
       } else {
         this.modalData.contractFee.editModal = false
@@ -1184,11 +1193,12 @@ export default {
     },
     async openInitialPaymentModal(data) {
       try {
+        console.log(data)
         this.modalData.initial_payment.programid = data.program_id
         this.modalData.initial_payment.sessionId = this.currentUser.user_id
         this.modalData.initial_payment.cfeestatus = data.contract_fee_status
         this.modalData.initial_payment.id_transaction = data.transaction_id
-        this.modalData.initial_payment.editmodal = data.user_id === this.currentUser.user_id
+        this.modalData.initial_payment.editmodal = data.user_id == this.currentUser.user_id
           || this.currentUser.role_id == 1
           || this.currentUser.role_id == 2
         this.modalData.initial_payment.statusSale = data.status
@@ -1250,11 +1260,12 @@ export default {
         this.modal.programs = true
       }
     },
-    openFilesModal(id, program, client, saleId, status, sellerId) {
+    openFilesModal(id, program, client, saleId, status, sellerId, programId) {
       this.modalData.files.id = id
       this.modalData.files.program = program
       this.modalData.files.client = client
       this.modalData.files.sale_id = saleId
+      this.modalData.files.programId = programId
       const isCeoOrSupervisor = this.currentUser.role_id == '1' || this.currentUser.role_id == '2'
       const saleStatus = status == '4' || status == '2'
       console.log(this.currentUser.user_id, sellerId)
@@ -1273,15 +1284,9 @@ export default {
       else this.items.forEach(item => (item.selected = false))
     },
     async saveNewCaptured(captured, capturedNew, userId, user) {
-      if (captured === capturedNew) {
-        this.showToast(
-          'danger',
-          'top-right',
-          'Error',
-          'XIcon',
-          "You can't select the same captured",
-        )
-      } else if (captured === capturedNew.label) {
+      // eslint-disable-next-line no-param-reassign
+      const [capturedNew2] = this.captured.filter(val => val.id === capturedNew)
+      if (captured === capturedNew2.label) {
         this.showToast(
           'danger',
           'top-right',
@@ -1293,7 +1298,7 @@ export default {
         this.$store.commit('app/SET_LOADING', true)
         try {
           const response = await CrmService.saveNewCaptured({
-            capt: capturedNew.id,
+            capt: capturedNew2.id,
             id: userId,
             user: this.currentUser.user_id,
           })
@@ -1307,28 +1312,23 @@ export default {
             )
           } else return
           // eslint-disable-next-line no-param-reassign
-          user.captured = user.capturedNew.label
+          user.capturedNew = capturedNew2.id
           // eslint-disable-next-line no-param-reassign
-          user.capturedNew = user.captured
+          user.captured_id = capturedNew2.id
+          // eslint-disable-next-line no-param-reassign
+          user.captured = capturedNew2.label
           // eslint-disable-next-line no-param-reassign
           user.editCaptured = false
-          this.$store.commit('app/SET_LOADING', false)
+          this.removePreloader()
         } catch (error) {
           this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
-          this.$store.commit('app/SET_LOADING', false)
+          this.removePreloader()
         }
       }
     },
     async saveNewSeller(seller, sellerNew, userId, user) {
-      if (seller === sellerNew) {
-        this.showToast(
-          'danger',
-          'top-right',
-          'Error',
-          'XIcon',
-          "You can't select the same captured",
-        )
-      } else if (seller === sellerNew.label) {
+      const [sellerNew2] = this.sellers.filter(val => val.id === sellerNew)
+      if (seller === sellerNew2.label) {
         this.showToast(
           'danger',
           'top-right',
@@ -1337,10 +1337,10 @@ export default {
           "You can't select the same captured",
         )
       } else {
-        this.$store.commit('app/SET_LOADING', true)
+        this.addPreloader()
         try {
           const response = await CrmService.saveNewSeller({
-            sel: sellerNew.id,
+            sel: sellerNew2.id,
             id: userId,
             user: this.currentUser.user_id,
           })
@@ -1354,15 +1354,17 @@ export default {
             )
           } else return
           // eslint-disable-next-line no-param-reassign
-          user.seller = user.sellerNew.label
+          user.sellerNew = sellerNew2.id
           // eslint-disable-next-line no-param-reassign
-          user.sellerNew = user.seller
+          user.seller_id = sellerNew2.id
+          // eslint-disable-next-line no-param-reassign
+          user.seller = sellerNew2.label
           // eslint-disable-next-line no-param-reassign
           user.editSeller = false
-          this.$store.commit('app/SET_LOADING', false)
+          this.removePreloader()
         } catch (error) {
           this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
-          this.$store.commit('app/SET_LOADING', false)
+          this.removePreloader()
         }
       }
     },

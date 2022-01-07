@@ -1,16 +1,29 @@
 <template>
   <div class="navbar-container d-flex content align-items-center">
     <!-- Left Col -->
-    <b-link v-if="$route.meta.module == undefined && $route.name != 'amg-menu'" :class="skin == 'dark'?'text-light':'text-dark'" :to="{name: 'amg-menu'}">
-      <amg-icon icon="AmgIcon" size="35" class="d-xl-none" />
+    <b-link
+      v-if="$route.meta.module == undefined && $route.name != 'amg-menu'"
+      :class="skin == 'dark'?'text-light':'text-dark'"
+      :to="{name: 'amg-menu'}"
+    >
+      <amg-icon
+        icon="AmgIcon"
+        size="35"
+      />
     </b-link>
     <ul
-      class="nav navbar-nav d-xl-none"
       v-else-if="$route.meta.module != undefined"
+      class="nav navbar-nav d-xl-none"
     >
       <li class="nav-item">
-        <b-link class="nav-link" @click="toggleVerticalMenuActive">
-          <feather-icon icon="MenuIcon" size="21" />
+        <b-link
+          class="nav-link"
+          @click="toggleVerticalMenuActive"
+        >
+          <feather-icon
+            icon="MenuIcon"
+            size="21"
+          />
         </b-link>
       </li>
     </ul>
@@ -30,11 +43,12 @@
 </template>
 
 <script>
-import DarkToggler from "@core/layouts/components/app-navbar/components/DarkToggler.vue";
-import NotificationDropdown from "./NotificationDropdown.vue";
-import TaskDropdown from "./components/tasks/TaskDropdown.vue";
-import UserDropdown from "./UserDropdown.vue";
-import Bookmarks from "./Bookmark.vue";
+import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
+import NotificationDropdown from './NotificationDropdown.vue'
+import TaskDropdown from './components/tasks/TaskDropdown.vue'
+import UserDropdown from './UserDropdown.vue'
+import Bookmarks from './Bookmark.vue'
+
 export default {
   components: {
     DarkToggler,
@@ -43,18 +57,18 @@ export default {
     Bookmarks,
     TaskDropdown,
   },
-  computed:{
-    skin(){
-      return this.$store.getters['appConfig/skin']
-    }
-  },
   props: {
     toggleVerticalMenuActive: {
       type: Function,
       default: () => {},
     },
   },
-};
+  computed: {
+    skin() {
+      return this.$store.getters['appConfig/skin']
+    },
+  },
+}
 </script>
 
 <style>

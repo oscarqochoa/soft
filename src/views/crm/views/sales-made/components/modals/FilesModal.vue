@@ -2,7 +2,6 @@
   <b-modal
     v-model="modal.files"
     lazy
-    centered
     title-class="h3 text-white font-weight-bolder"
     size="xl"
     title="Files"
@@ -72,7 +71,7 @@
         <b-col>
           <b-table
             v-scrollbar
-            :items="item"
+            :items="itemTable"
             small
             class="font-small-3"
             sticky-header="50vh"
@@ -122,6 +121,7 @@
                           variant="success"
                           class="ml-1"
                           size="sm"
+                          @click="openSmsUrlPdfModal(data.item.url)"
                         >
                           <feather-icon icon="Share2Icon" />
                         </b-btn>
@@ -151,6 +151,7 @@
                           variant="success"
                           class="ml-1"
                           size="sm"
+                          @click="openSmsUrlPdfModal(data.item.url)"
                         >
                           <feather-icon icon="Share2Icon" />
                         </b-btn>
@@ -194,17 +195,28 @@
         </b-col>
       </b-row>
     </b-container>
+    <sms-url-pdf-modal
+      v-if="openModalSmsPdf"
+      :user_id="currentUser.user_id"
+      :modul="currentUser.modul_id"
+      :sms="files.id"
+      :url-pdf="urlpdf"
+      :nameleads="files.client"
+      @closeModal="openModalSmsPdf = false"
+    />
   </b-modal>
 </template>
 
 <script>
 import vSelect from 'vue-select'
+import { mapGetters } from 'vuex'
 import CrmService from '@/views/crm/services/crm.service'
 import ProgramClientHeader from '@/views/crm/views/sales-made/components/modals/ProgramClientHeader'
+import SmsUrlPdfModal from '@/views/crm/views/sales-made/components/modals/SmsUrlPdfModal'
 
 export default {
   name: 'FilesModal',
-  components: { ProgramClientHeader, vSelect },
+  components: { SmsUrlPdfModal, ProgramClientHeader, vSelect },
   props: {
     modal: {
       type: Object,
@@ -222,7 +234,9 @@ export default {
   },
   data() {
     return {
+      urlpdf: '',
       item: [],
+      openModalSmsPdf: false,
       fields: [
         {
           key: 'file_name',
@@ -276,10 +290,29 @@ export default {
       base_url: process.env.VUE_APP_BASE_URL_ASSETS,
     }
   },
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+    }),
+    itemTable() {
+      const programid = this.files.programId
+      return this.item.filter(item => (
+        item.is_ag == 0
+          || (item.is_ag == 1
+              && (programid == 1 || programid == 2 || programid == 3 || programid == 4 || programid == 7))
+          || (item.is_ag == 2 && (programid == 3 || programid == 4))
+          || (item.is_ag == 3 && (programid == 3 || programid == 4))))
+    },
+  },
   async created() {
     await this.loadTable()
   },
   methods: {
+    openSmsUrlPdfModal(urlPdf) {
+      this.urlpdf = urlPdf
+      console.log(this.urlpdf)
+      this.openModalSmsPdf = true
+    },
     async loadTable() {
       try {
         this.item = await CrmService.getLeadsFiles({
@@ -292,51 +325,41 @@ export default {
     },
     // eslint-disable-next-line camelcase
     async generatePdf(lead_id, program, sale_id, typee) {
-      const result = await this.$swal.fire({
-        icon: 'warning',
-        title: 'Are you sure ?',
-        text: 'You won\'t be able to revert this!',
-        showCancelButton: true,
-      })
+      const result = await this.showConfirmSwal()
       try {
         if (result.isConfirmed) {
-          this.$store.commit('app/SET_LOADING', true)
+          this.addPreloader()
           const response = await CrmService.generatePdf({
             lead_id,
             program,
             sale_id,
             typee,
           })
-          this.$store.commit('app/SET_LOADING', false)
+          this.removePreloader()
           if (response === 'ok') this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Tu archivo se genero correctamente')
           await this.loadTable()
         }
       } catch (error) {
-        this.$store.commit('app/SET_LOADING', false)
+        this.removePreloader()
         this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
         await this.loadTable()
       }
     },
     async deleteFile(id, url) {
-      const result = await this.$swal.fire({
-        icon: 'warning',
-        title: 'Are you sure ?',
-        text: 'You won\'t be able to revert this!',
-        showCancelButton: true,
-      })
+      const result = await this.showConfirmSwal()
       try {
         if (result.isConfirmed) {
-          this.$store.commit('app/SET_LOADING', true)
+          this.addPreloader()
           const response = await CrmService.deleteFile({
             id,
             url,
           })
-          this.$store.commit('app/SET_LOADING', false)
+          this.removePreloader()
           if (response === 'ok') this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Tu archivo se elimino correctamente')
           await this.loadTable()
         }
       } catch (error) {
-        this.$store.commit('app/SET_LOADING', false)
+        this.removePreloader()
         this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
         await this.loadTable()
       }
