@@ -20655,7 +20655,7 @@ var CRInvalidIcon = {
             height: "24",
             viewBox: "0 0 24 24",
             fill: "none",
-            stroke: "#0277BD",
+            stroke: "currentColor",
             "stroke-width": "2",
             "stroke-linecap": "round",
             "stroke-linejoin": "round",
@@ -20698,6 +20698,337 @@ var CRInvalidIcon = {
     );
   },
 };
+
+var FilePdfIcon = {
+  name: "FilePdfIcon",
+  props: {
+    size: {
+      type: String,
+      default: "18",
+      validator: function validator(s) {
+        return (
+          !isNaN(s) ||
+          (s.length >= 2 &&
+            !isNaN(s.slice(0, s.length - 1)) &&
+            s.slice(-1) === "x")
+        );
+      },
+    },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+    var size =
+      ctx.props.size.slice(-1) === "x"
+        ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+        : parseInt(ctx.props.size) + "px";
+    var attrs = ctx.data.attrs || {};
+    attrs.width = attrs.width || size;
+    attrs.height = attrs.height || size;
+    ctx.data.attrs = attrs;
+    return h(
+      "svg",
+      _mergeJSXProps([
+        {
+          attrs: {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "24",
+            height: "24",
+            viewBox: "0 0 384 512",
+            fill: "currentColor",
+            "aria-hidden": "true",
+            focusable: "false",
+            role: "img",
+          },
+          class: "feather feather-file-pdf",
+        },
+        ctx.data,
+      ]),
+      [
+        h("path", {
+          attrs: {
+            d: "M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zM332.1 128H256V51.9l76.1 76.1zM48 464V48h160v104c0 13.3 10.7 24 24 24h104v288H48zm250.2-143.7c-12.2-12-47-8.7-64.4-6.5-17.2-10.5-28.7-25-36.8-46.3 3.9-16.1 10.1-40.6 5.4-56-4.2-26.2-37.8-23.6-42.6-5.9-4.4 16.1-.4 38.5 7 67.1-10 23.9-24.9 56-35.4 74.4-20 10.3-47 26.2-51 46.2-3.3 15.8 26 55.2 76.1-31.2 22.4-7.4 46.8-16.5 68.4-20.1 18.9 10.2 41 17 55.8 17 25.5 0 28-28.2 17.5-38.7zm-198.1 77.8c5.1-13.7 24.5-29.5 30.4-35-19 30.3-30.4 35.7-30.4 35zm81.6-190.6c7.4 0 6.7 32.1 1.8 40.8-4.4-13.9-4.3-40.8-1.8-40.8zm-24.4 136.6c9.7-16.9 18-37 24.7-54.7 8.3 15.1 18.9 27.2 30.1 35.5-20.8 4.3-38.9 13.1-54.8 19.2zm131.6-5s-5 6-37.3-7.8c35.1-2.6 40.9 5.4 37.3 7.8z",
+          },
+        }),
+      ]
+    );
+  },
+};
+
+var FileExcelIcon = {
+  name: "FileExcelIcon",
+  props: {
+    size: {
+      type: String,
+      default: "18",
+      validator: function validator(s) {
+        return (
+          !isNaN(s) ||
+          (s.length >= 2 &&
+            !isNaN(s.slice(0, s.length - 1)) &&
+            s.slice(-1) === "x")
+        );
+      },
+    },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+    var size =
+      ctx.props.size.slice(-1) === "x"
+        ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+        : parseInt(ctx.props.size) + "px";
+    var attrs = ctx.data.attrs || {};
+    attrs.width = attrs.width || size;
+    attrs.height = attrs.height || size;
+    ctx.data.attrs = attrs;
+    return h(
+      "svg",
+      _mergeJSXProps([
+        {
+          attrs: {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "24",
+            height: "24",
+            viewBox: "0 0 384 512",
+            fill: "currentColor",
+            "aria-hidden": "true",
+            focusable: "false",
+            role: "img",
+          },
+          class: "feather feather-file-excel",
+        },
+        ctx.data,
+      ]),
+      [
+        h("path", {
+          attrs: {
+            d: "M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zM332.1 128H256V51.9l76.1 76.1zM48 464V48h160v104c0 13.3 10.7 24 24 24h104v288H48zm212-240h-28.8c-4.4 0-8.4 2.4-10.5 6.3-18 33.1-22.2 42.4-28.6 57.7-13.9-29.1-6.9-17.3-28.6-57.7-2.1-3.9-6.2-6.3-10.6-6.3H124c-9.3 0-15 10-10.4 18l46.3 78-46.3 78c-4.7 8 1.1 18 10.4 18h28.9c4.4 0 8.4-2.4 10.5-6.3 21.7-40 23-45 28.6-57.7 14.9 30.2 5.9 15.9 28.6 57.7 2.1 3.9 6.2 6.3 10.6 6.3H260c9.3 0 15-10 10.4-18L224 320c.7-1.1 30.3-50.5 46.3-78 4.7-8-1.1-18-10.3-18z",
+          },
+        }),
+      ]
+    );
+  },
+};
+
+var FileCsvIcon = {
+  name: "FileCsvIcon",
+  props: {
+    size: {
+      type: String,
+      default: "18",
+      validator: function validator(s) {
+        return (
+          !isNaN(s) ||
+          (s.length >= 2 &&
+            !isNaN(s.slice(0, s.length - 1)) &&
+            s.slice(-1) === "x")
+        );
+      },
+    },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+    var size =
+      ctx.props.size.slice(-1) === "x"
+        ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+        : parseInt(ctx.props.size) + "px";
+    var attrs = ctx.data.attrs || {};
+    attrs.width = attrs.width || size;
+    attrs.height = attrs.height || size;
+    ctx.data.attrs = attrs;
+    return h(
+      "svg",
+      _mergeJSXProps([
+        {
+          attrs: {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "24",
+            height: "24",
+            viewBox: "0 0 384 512",
+            fill: "currentColor",
+            "aria-hidden": "true",
+            focusable: "false",
+            role: "img",
+          },
+          class: "feather feather-file-csv",
+        },
+        ctx.data,
+      ]),
+      [
+        h("path", {
+          attrs: {
+            d: "M369.83 97.98L285.94 14.1c-9-9-21.2-14.1-33.89-14.1H47.99C21.5.1 0 21.6 0 48.09v415.92C0 490.5 21.5 512 47.99 512h287.94c26.5 0 48.07-21.5 48.07-47.99V131.97c0-12.69-5.17-24.99-14.17-33.99zM255.95 51.99l76.09 76.08h-76.09V51.99zM336 464.01H47.99V48.09h159.97v103.98c0 13.3 10.7 23.99 24 23.99H336v287.95zM224 264v20.8c0 35.48 12.88 68.89 36.28 94.09 3.02 3.25 7.27 5.11 11.72 5.11s8.7-1.86 11.72-5.11c23.41-25.2 36.28-58.61 36.28-94.09V264c0-4.42-3.58-8-8-8h-16c-4.42 0-8 3.58-8 8v20.8c0 20.27-5.7 40.17-16 56.88-10.3-16.7-16-36.61-16-56.88V264c0-4.42-3.58-8-8-8h-16c-4.42 0-8 3.58-8 8zm-104-8h-8c-26.51 0-48 21.49-48 48v32c0 26.51 21.49 48 48 48h8c4.42 0 8-3.58 8-8v-16c0-4.42-3.58-8-8-8h-8c-8.84 0-16-7.16-16-16v-32c0-8.84 7.16-16 16-16h8c4.42 0 8-3.58 8-8v-16c0-4.42-3.58-8-8-8zm59.45 42.47c-1.38-1.19-2.12-2.55-2.12-3.84 0-3.12 4.45-6.62 10.41-6.62H200c4.42 0 8-3.58 8-8v-16c0-4.42-3.58-8-8-8h-12.27c-23.39 0-42.41 17.33-42.41 38.62 0 10.66 4.86 20.92 13.33 28.14l21.89 18.77c1.38 1.19 2.12 2.55 2.12 3.84 0 3.12-4.45 6.62-10.41 6.62H160c-4.42 0-8 3.58-8 8v16c0 4.42 3.58 8 8 8h12.27c23.39 0 42.41-17.33 42.41-38.62 0-10.66-4.86-20.92-13.33-28.14l-21.9-18.77z",
+          },
+        }),
+      ]
+    );
+  },
+};
+
+var FilePowerpointIcon = {
+  name: "FilePowerpointIcon",
+  props: {
+    size: {
+      type: String,
+      default: "18",
+      validator: function validator(s) {
+        return (
+          !isNaN(s) ||
+          (s.length >= 2 &&
+            !isNaN(s.slice(0, s.length - 1)) &&
+            s.slice(-1) === "x")
+        );
+      },
+    },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+    var size =
+      ctx.props.size.slice(-1) === "x"
+        ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+        : parseInt(ctx.props.size) + "px";
+    var attrs = ctx.data.attrs || {};
+    attrs.width = attrs.width || size;
+    attrs.height = attrs.height || size;
+    ctx.data.attrs = attrs;
+    return h(
+      "svg",
+      _mergeJSXProps([
+        {
+          attrs: {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "24",
+            height: "24",
+            viewBox: "0 0 384 512",
+            fill: "currentColor",
+            "aria-hidden": "true",
+            focusable: "false",
+            role: "img",
+          },
+          class: "feather feather-file-powerpoint",
+        },
+        ctx.data,
+      ]),
+      [
+        h("path", {
+          attrs: {
+            d: "M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zM332.1 128H256V51.9l76.1 76.1zM48 464V48h160v104c0 13.3 10.7 24 24 24h104v288H48zm72-60V236c0-6.6 5.4-12 12-12h69.2c36.7 0 62.8 27 62.8 66.3 0 74.3-68.7 66.5-95.5 66.5V404c0 6.6-5.4 12-12 12H132c-6.6 0-12-5.4-12-12zm48.5-87.4h23c7.9 0 13.9-2.4 18.1-7.2 8.5-9.8 8.4-28.5.1-37.8-4.1-4.6-9.9-7-17.4-7h-23.9v52z",
+          },
+        }),
+      ]
+    );
+  },
+};
+
+var FileWordIcon = {
+  name: "FileWordIcon",
+  props: {
+    size: {
+      type: String,
+      default: "18",
+      validator: function validator(s) {
+        return (
+          !isNaN(s) ||
+          (s.length >= 2 &&
+            !isNaN(s.slice(0, s.length - 1)) &&
+            s.slice(-1) === "x")
+        );
+      },
+    },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+    var size =
+      ctx.props.size.slice(-1) === "x"
+        ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+        : parseInt(ctx.props.size) + "px";
+    var attrs = ctx.data.attrs || {};
+    attrs.width = attrs.width || size;
+    attrs.height = attrs.height || size;
+    ctx.data.attrs = attrs;
+    return h(
+      "svg",
+      _mergeJSXProps([
+        {
+          attrs: {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "24",
+            height: "24",
+            viewBox: "0 0 384 512",
+            fill: "currentColor",
+            "aria-hidden": "true",
+            focusable: "false",
+            role: "img",
+          },
+          class: "feather feather-file-word",
+        },
+        ctx.data,
+      ]),
+      [
+        h("path", {
+          attrs: {
+            d: "M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zM332.1 128H256V51.9l76.1 76.1zM48 464V48h160v104c0 13.3 10.7 24 24 24h104v288H48zm220.1-208c-5.7 0-10.6 4-11.7 9.5-20.6 97.7-20.4 95.4-21 103.5-.2-1.2-.4-2.6-.7-4.3-.8-5.1.3.2-23.6-99.5-1.3-5.4-6.1-9.2-11.7-9.2h-13.3c-5.5 0-10.3 3.8-11.7 9.1-24.4 99-24 96.2-24.8 103.7-.1-1.1-.2-2.5-.5-4.2-.7-5.2-14.1-73.3-19.1-99-1.1-5.6-6-9.7-11.8-9.7h-16.8c-7.8 0-13.5 7.3-11.7 14.8 8 32.6 26.7 109.5 33.2 136 1.3 5.4 6.1 9.1 11.7 9.1h25.2c5.5 0 10.3-3.7 11.6-9.1l17.9-71.4c1.5-6.2 2.5-12 3-17.3l2.9 17.3c.1.4 12.6 50.5 17.9 71.4 1.3 5.3 6.1 9.1 11.6 9.1h24.7c5.5 0 10.3-3.7 11.6-9.1 20.8-81.9 30.2-119 34.5-136 1.9-7.6-3.8-14.9-11.6-14.9h-15.8z",
+          },
+        }),
+      ]
+    );
+  },
+};
+
+var FileChartIcon = {
+  name: "FileChartIcon",
+  props: {
+    size: {
+      type: String,
+      default: "18",
+      validator: function validator(s) {
+        return (
+          !isNaN(s) ||
+          (s.length >= 2 &&
+            !isNaN(s.slice(0, s.length - 1)) &&
+            s.slice(-1) === "x")
+        );
+      },
+    },
+  },
+  functional: true,
+  render: function render(h, ctx) {
+    var size =
+      ctx.props.size.slice(-1) === "x"
+        ? ctx.props.size.slice(0, ctx.props.size.length - 1) + "em"
+        : parseInt(ctx.props.size) + "px";
+    var attrs = ctx.data.attrs || {};
+    attrs.width = attrs.width || size;
+    attrs.height = attrs.height || size;
+    ctx.data.attrs = attrs;
+    return h(
+      "svg",
+      _mergeJSXProps([
+        {
+          attrs: {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "24",
+            height: "24",
+            viewBox: "0 0 384 512",
+            fill: "currentColor",
+            "aria-hidden": "true",
+            focusable: "false",
+            role: "img",
+          },
+          class: "feather feather-file-chart",
+        },
+        ctx.data,
+      ]),
+      [
+        h("path", {
+          attrs: {
+            d: "M196.66 363.33l-13.88-41.62c-3.28-9.81-12.44-16.41-22.78-16.41s-19.5 6.59-22.78 16.41L119 376.36c-1.5 4.58-5.78 7.64-10.59 7.64H96c-8.84 0-16 7.16-16 16s7.16 16 16 16h12.41c18.62 0 35.09-11.88 40.97-29.53L160 354.58l16.81 50.48a15.994 15.994 0 0 0 14.06 10.89c.38.03.75.05 1.12.05 6.03 0 11.59-3.41 14.31-8.86l7.66-15.33c2.78-5.59 7.94-6.19 10.03-6.19s7.25.59 10.19 6.53c7.38 14.7 22.19 23.84 38.62 23.84H288c8.84 0 16-7.16 16-16s-7.16-16-16-16h-15.19c-4.28 0-8.12-2.38-10.16-6.5-11.93-23.85-46.24-30.33-65.99-14.16zM369.83 97.98L285.94 14.1c-9-9-21.2-14.1-33.89-14.1H47.99C21.5.1 0 21.6 0 48.09v415.92C0 490.5 21.5 512 47.99 512h287.94c26.5 0 48.07-21.5 48.07-47.99V131.97c0-12.69-5.17-24.99-14.17-33.99zM255.95 51.99l76.09 76.08h-76.09V51.99zM336 464.01H47.99V48.09h159.97v103.98c0 13.3 10.7 23.99 24 23.99H336v287.95zM88 112h80c4.42 0 8-3.58 8-8V88c0-4.42-3.58-8-8-8H88c-4.42 0-8 3.58-8 8v16c0 4.42 3.58 8 8 8zm0 64h80c4.42 0 8-3.58 8-8v-16c0-4.42-3.58-8-8-8H88c-4.42 0-8 3.58-8 8v16c0 4.42 3.58 8 8 8z",
+          },
+        }),
+      ]
+    );
+  },
+};
+
 exports.ActivityIcon = ActivityIcon;
 exports.AirplayIcon = AirplayIcon;
 exports.AlertCircleIcon = AlertCircleIcon;
@@ -20995,4 +21326,10 @@ exports.ThListIcon = ThListIcon;
 exports.Edit2SlashIcon = Edit2SlashIcon;
 exports.OtherSourcesIcon = OtherSourcesIcon;
 exports.ValidationInformationIcon = ValidationInformationIcon;
-exports.CRInvalidIcon =  CRInvalidIcon;
+exports.CRInvalidIcon = CRInvalidIcon;
+exports.FilePdfIcon = FilePdfIcon;
+exports.FileExcelIcon = FileExcelIcon;
+exports.FileCsvIcon = FileCsvIcon;
+exports.FilePowerpointIcon = FilePowerpointIcon;
+exports.FileWordIcon = FileWordIcon;
+exports.FileChartIcon = FileChartIcon;
