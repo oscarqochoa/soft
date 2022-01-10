@@ -30,6 +30,7 @@
                 v-model="note.typeOfServices.value"
                 :options="note.typeOfServices.options"
                 :class="{'border-danger rounded': errors[0]}"
+                :disabled="disabled"
                 @change="changeTypeService"
               />
             </validation-provider>
@@ -193,6 +194,7 @@
               name="amountOwed"
               rules="required"
             >
+              {{ note.amountOwed.value }}
               <money
                 v-model="note.amountOwed.value"
                 size="sm"
@@ -242,7 +244,7 @@
                 v-model="note.inconvenience.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -263,7 +265,7 @@
                 v-model="note.information.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -284,7 +286,7 @@
                 v-model="note.recommendations.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -305,7 +307,7 @@
                 v-model="note.pending.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -326,7 +328,7 @@
                 v-model="note.goal.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -674,7 +676,7 @@ export default {
         { number: 1035, value: this.note.currentIdNumbers.time },
         { number: 1036, value: this.note.idTypeNumber.value },
         { number: 1037, value: this.note.studentLoanType.value },
-        { number: 1038, value: this.note.amountOwed.value },
+        { number: 1038, value: this.note.amountOwed.value.toFixed(2) },
       ]
     },
     hideModal(status) {

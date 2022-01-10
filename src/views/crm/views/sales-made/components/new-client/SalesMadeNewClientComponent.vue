@@ -1409,12 +1409,7 @@ export default {
     },
     async annulSale(sale) {
       try {
-        const swal = await this.$swal.fire({
-          title: 'Are you sure?',
-          text: 'Are you suere annuled this sale',
-          icon: 'danger',
-          showCancelButton: true,
-        })
+        const swal = await this.showConfirmSwal('Are you sure?', 'Are you sure annuled this sale')
         if (swal.isConfirmed) {
           const response = await amgApi.post('/annulsale', {
             id: sale.id,

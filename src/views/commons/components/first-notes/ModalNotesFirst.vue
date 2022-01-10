@@ -241,7 +241,7 @@
                 v-model="note.newBusiness.registerBusiness.text"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </validation-provider>
           </b-col>
@@ -285,7 +285,7 @@
                 v-model="note.information.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -306,7 +306,7 @@
                 v-model="note.indications.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -327,7 +327,7 @@
                 v-model="note.suggestion.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -348,7 +348,7 @@
                 v-model="note.pending.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -448,7 +448,7 @@ export default {
         },
         businessIdentification: {
           value: '',
-          otherValue: '0',
+          otherValue: '',
           options: [
             {
               text: 'ITIN',
@@ -559,9 +559,9 @@ export default {
               value: 'No',
             },
           ],
-          startBusiness: '0',
+          startBusiness: '',
           registration: {
-            value: '0',
+            value: '',
             options: [
               {
                 text: 'Yes',
@@ -574,7 +574,7 @@ export default {
             ],
           },
           registerBusiness: {
-            value: '0',
+            value: '',
             options: [
               {
                 text: 'FBN',
@@ -589,7 +589,7 @@ export default {
                 value: 'INC',
               },
             ],
-            text: '0',
+            text: '',
           },
         },
         country: {
@@ -639,6 +639,35 @@ export default {
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller
     },
+  },
+  watch: {
+    'note.businessIdentification.value': {
+      handler(newValue) {
+        if (newValue !== 'N/A') {
+          this.note.businessIdentification.otherValue = this.note.businessIdentification.otherValue ? this.note.businessIdentification.otherValue : this.note.businessIdentification.otherValue
+        }
+      },
+      deep: true,
+    },
+    'note.newBusiness.value': {
+      handler(newValue) {
+        if (newValue !== 'No') {
+          this.note.newBusiness.startBusiness = this.note.newBusiness.startBusiness ? this.note.newBusiness.startBusiness : 0
+          this.note.newBusiness.registration.value = this.note.newBusiness.registration.value ? this.note.newBusiness.registration.value : 0
+        }
+      },
+      deep: true,
+    },
+    'note.newBusiness.registration.value': {
+      handler(newValue) {
+        if (newValue !== 'Yes') {
+          this.note.newBusiness.registerBusiness.value = this.note.newBusiness.registerBusiness.value ? this.note.newBusiness.registerBusiness.value : 0
+          this.note.newBusiness.registerBusiness.text = this.note.newBusiness.registerBusiness.text ? this.note.newBusiness.registerBusiness.text : 0
+        }
+      },
+      deep: true,
+    },
+
   },
   async created() {
     await this.getFirstNote()

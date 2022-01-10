@@ -631,12 +631,10 @@ export default {
       handler(newValue, oldValue) {
         const isRemoved = newValue.length < oldValue.length
         if (isRemoved) {
-          console.log(newValue, oldValue)
           const includedReco4InNewValue = newValue.map(val => val.id).includes('reco-4')
           const includedReco4InOldValue = oldValue.map(val => val.id).includes('reco-4')
           console.log(includedReco4InNewValue, includedReco4InOldValue)
           if (!includedReco4InNewValue && includedReco4InOldValue) {
-            console.log('geeee')
             this.note.recomendations.value = ''
           }
         }

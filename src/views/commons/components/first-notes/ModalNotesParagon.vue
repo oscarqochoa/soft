@@ -335,7 +335,7 @@
                   v-model="note.details.value"
                   :disabled="disabled"
                   :options="editorOption"
-                  :class="{'border-danger' : errors[0]}"
+                  :class="{'border-danger rounded' : errors[0]}"
                 />
               </b-form-group>
             </validation-provider>
@@ -357,7 +357,7 @@
                 v-model="note.information.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -378,7 +378,7 @@
                 v-model="note.indications.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -399,7 +399,7 @@
                 v-model="note.suggestion.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -420,7 +420,7 @@
                 v-model="note.pending.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -528,8 +528,8 @@ export default {
             },
           ],
           disabled: false,
-          link: 0,
-          likes: 0,
+          link: '',
+          likes: '',
         },
         experience: {
           value: null,
@@ -558,7 +558,7 @@ export default {
             },
           ],
           disabled: false,
-          years: 0,
+          years: '',
         },
         website: {
           value: null,
@@ -573,8 +573,8 @@ export default {
             },
           ],
           disabled: false,
-          link: 0,
-          type: 0,
+          link: '',
+          type: '',
         },
         instagram: {
           value: null,
@@ -589,8 +589,8 @@ export default {
             },
           ],
           disabled: false,
-          link: 0,
-          likes: 0,
+          link: '',
+          likes: '',
         },
         typeOfBuisiness: {
           value: [],
@@ -654,6 +654,51 @@ export default {
     },
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller
+    },
+  },
+  watch: {
+    'note.facebook.value': {
+      handler(newValue) {
+        if (newValue !== 'Yes') {
+          this.note.facebook.likes = this.note.facebook.likes ? this.note.facebook.likes : 0
+          this.note.facebook.link = this.note.facebook.link ? this.note.facebook.link : 0
+        }
+      },
+      deep: true,
+    },
+    'note.instagram.value': {
+      handler(newValue) {
+        if (newValue !== 'Yes') {
+          this.note.instagram.likes = this.note.instagram.likes ? this.note.instagram.likes : 0
+          this.note.instagram.link = this.note.instagram.link ? this.note.instagram.link : this.note.instagram.link
+        }
+      },
+      deep: true,
+    },
+    'note.website.value': {
+      handler(newValue) {
+        if (newValue !== 'Yes') {
+          this.note.website.link = this.note.website.link ? this.note.website.link : 0
+          this.note.website.type = this.note.website.type ? this.note.website.type : 0
+        }
+      },
+      deep: true,
+    },
+    'note.experience.value': {
+      handler(newValue) {
+        if (newValue !== 'Yes') {
+          this.note.details.value = this.note.details.value ? this.note.details.value : 0
+        }
+      },
+      deep: true,
+    },
+    'note.newBusiness.value': {
+      handler(newValue) {
+        if (newValue !== 'Yes') {
+          this.note.newBusiness.years = this.note.newBusiness.years ? this.note.newBusiness.years : 0
+        }
+      },
+      deep: true,
     },
   },
   async created() {
