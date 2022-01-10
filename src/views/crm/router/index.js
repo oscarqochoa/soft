@@ -15,6 +15,7 @@ import InventoryRouter from '../views/inventory/inventory.router'
 import NcrRouter from '../views/ncr/ncr.router'
 
 const routes = [
+  { path: '/crm', redirect: { name: 'dashboard-crm' } },
   ...calendarRoute,
   ...viewRoute,
   ...leadRoute,
@@ -34,6 +35,18 @@ const routes = [
 
 // eslint-disable-next-line array-callback-return
 routes.map(route => {
+  if (route.children) {
+    // eslint-disable-next-line array-callback-return
+    route.children.map(child => {
+      if (child.meta) {
+        // eslint-disable-next-line array-callback-return,no-param-reassign
+        child.meta.module = 2
+      } else {
+        // eslint-disable-next-line array-callback-return,no-param-reassign
+        child.meta = { module: 2 }
+      }
+    })
+  }
   if (route.meta) {
     // eslint-disable-next-line array-callback-return,no-param-reassign
     route.meta.module = 2

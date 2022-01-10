@@ -21,6 +21,8 @@ import UserStore from '@/store/user'
 import MessageStore from '@/store/message'
 import SidebarStore from '@/store/sidebar'
 
+import SocialNetworkStore from '@/views/social-network/store'
+
 Vue.use(Vuex)
 
 const initialState = {
@@ -49,6 +51,7 @@ export default new Vuex.Store({
     auth,
     'crm-store': saleMade,
     ...CrmStore,
+    ...SocialNetworkStore,
     'commissions-store': CommissionsStore,
     'loans-store': LoansStore,
     'global-store': GlobalStore,

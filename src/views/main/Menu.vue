@@ -11,7 +11,7 @@
           class="text-center mb-5 center-fix"
         >
           <router-link
-            v-if="item.module_route == 'crm'"
+            v-if="item.module_route == 'crm' || item.module_route == 'socialnetwork'"
             :to="{ path: item.module_route }"
             class="card-logo"
           >
