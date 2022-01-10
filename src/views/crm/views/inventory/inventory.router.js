@@ -6,6 +6,7 @@ export default [
         meta:{
             isClientsTab: true,
             module: 2,
+            permittedRoles:[1,2]
             
         },
         children: [
@@ -16,6 +17,7 @@ export default [
                 meta:{
                     isClientsTab: true,
                     module: 2,
+                    permittedRoles:[1,2]
                 },
                 
             },
@@ -26,6 +28,7 @@ export default [
                 meta:{
                     isClientsTab: false,
                     module: 2,
+                    permittedRoles:[1,2]
                 }
             },
             {
@@ -35,6 +38,7 @@ export default [
                 meta:{
                     isClientsTab: false,
                     module: 2,
+                    permittedRoles:[1,2]
                 }
             },
         ],

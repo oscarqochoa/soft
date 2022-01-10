@@ -6,6 +6,7 @@ export default [
         meta:{
             isClientsTab: true,
             module: 2,
+            
         },
     }
 ]
