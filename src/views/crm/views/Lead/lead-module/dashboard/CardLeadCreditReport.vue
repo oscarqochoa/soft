@@ -31,7 +31,7 @@
           <span>Obtained</span>
         </template>
 
-        <card-lead-credit-report-obtained :modul="modul" :is-busy="isBusyCreditReportObtained" />
+        <card-lead-credit-report-obtained :lead="lead" :is-busy="isBusyCreditReportObtained" />
 
       </b-tab>
       <b-tab title-link-class="border-secondary hover-primary">
@@ -44,7 +44,7 @@
           </div>
         </template>
 
-        <card-lead-credit-report-pending :modul="modul" :is-busy="isBusyCreditReportPending" />
+        <card-lead-credit-report-pending :modul="modul" :lead="lead" :is-busy="isBusyCreditReportPending" />
 
       </b-tab>
     </b-tabs>

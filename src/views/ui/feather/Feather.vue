@@ -362,7 +362,13 @@ export default {
         'Edit2SlashIcon',
         'OtherSourcesIcon',
         'ValidationInformationIcon',
-        'CRInvalidIcon'
+        'CRInvalidIcon',
+        'FilePdfIcon',
+        'FileExcelIcon',
+        'FileCsvIcon',
+        'FilePowerpointIcon',
+        'FileWordIcon',
+        'FileChartIcon',
       ],
     }
   },

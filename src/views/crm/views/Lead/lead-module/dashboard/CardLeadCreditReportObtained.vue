@@ -20,7 +20,7 @@
 
         <template #cell(provider)="data">
           <div
-            style="width: 50px;height: 50px;background-position: center;background-repeat: no-repeat;background-size: contain;"
+            style="width: 20px;height: 20px;background-position: center;background-repeat: no-repeat;background-size: contain;"
             v-bind:style="{ backgroundImage: `url(${ baseUrl + data.item.plataform_icon })` }"
             v-b-tooltip.hover.top="data.item.plataform_name"
           />
@@ -32,35 +32,34 @@
 
         <template #cell(cr)="data">
           <span
-            v-if="modul === 4 && data.item.state == 0 && data.item.plataform_type == 'Source'"
+            v-if="currentUser.modul_id === 4 && data.item.state == 0 && data.item.plataform_type == 'Source'"
             @click="/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - on: processhtml(data.item.id) */"
             class="text-danger"
           >
             Process
           </span>
-          <a
+          <router-link
             v-if="data.item.state == 1"
-            :href="`/${ moduleName }/leads/report/${ data.item.lead_id }/${ data.item.id }`"
+            :to="{ name: 'report-lead', params: { modul: currentUser.modul_id, global: { idfile: data.item.id, idlead: lead.id } } }"
             variant="flat-success"
             class="button-little-size rounded-circle"
             target="_blanck"
           >
-            <feather-icon
-              icon="FileTextIcon"
+            <amg-icon
+              icon="FileChartIcon"
               size="18"
             />
-          </a>
+          </router-link>
         </template>
         <template #cell(pdf)="data">
           <a
             v-if="data.item.route_pdf"
             :href="data.item.route_pdf"
-            variant="flat-danger"
-            class="button-little-size rounded-circle"
+            class="button-little-size rounded-circle text-important"
             target="_blanck"
           >
-            <feather-icon
-              icon="FileIcon"
+            <amg-icon
+              icon="FilePdfIcon"
               size="18"
             />
           </a>
@@ -81,12 +80,11 @@
           <a
             v-if="data.item.marked_pdf"
             :href="data.item.marked_pdf"
-            variant="flat-danger"
-            class="button-little-size rounded-circle"
+            class="button-little-size rounded-circle text-important"
             target="_blanck"
           >
-            <feather-icon
-              icon="FileIcon"
+            <amg-icon
+              icon="FilePdfIcon"
               size="18"
             />
           </a>
@@ -115,30 +113,33 @@ export default {
   created () {},
   data () {
     return {
-      fieldsEvent: [
-        { key: 'provider' },
-        { key: 'date' },
-        { key: 'transunion', label: 'TU' },
-        { key: 'experian', label: 'EX' },
-        { key: 'equifax', label: 'EQ' },
-        { key: 'cr' },
-        { key: 'pdf' },
-        (this.modul === 4) ? { key: 'ad' } : null,
-        { key: 'marked' },
-      ],
-      moduleName: this.getModuleName(this.modul)
+      fieldsEvent: new Array,
+      moduleName: ''
     }
   },
   directives: {},
   methods: {
     ...mapActions({
       /* A_GET_TEMPLATES: 'CrmTemplateStore/A_GET_TEMPLATES' */
-    })
+    }),
   },
-  mounted () {},
+  mounted () {
+    this.moduleName = this.getModuleName(this.currentUser.modul_id)
+    this.fieldsEvent = [
+      { key: 'provider' },
+      { key: 'date' },
+      { key: 'transunion', label: 'TU' },
+      { key: 'experian', label: 'EX' },
+      { key: 'equifax', label: 'EQ' },
+      { key: 'cr' },
+      { key: 'pdf' },
+      (this.currentUser.modul_id === 4) ? { key: 'ad' } : null,
+      { key: 'marked' },
+    ]
+  },
   props: {
-    modul: {
-      type: Number,
+    lead: {
+      type: Object,
       required: true
     },
     isBusy: {
