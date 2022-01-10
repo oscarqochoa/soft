@@ -56,7 +56,6 @@ export default {
   },
   setup() {
     provide('openGroups', ref([]))
-
     return {
       resolveNavItemComponent,
     }

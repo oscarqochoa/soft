@@ -1,4 +1,5 @@
 import { refreshMessageQuantites } from '@/commons/messages/messages.pusher'
+import { insertLoan } from '@/views/commons/components/loans/loans.pusher'
 let pusher = new Pusher('fb2e6fc854a858bb1dda', {
     cluster: 'us2', authEndpoint: `${process.env.VUE_APP_BASE_URL}/pusher`, auth: {
         headers: {
@@ -9,3 +10,4 @@ let pusher = new Pusher('fb2e6fc854a858bb1dda', {
 window.pusher = pusher;
 pusher.subscribe("private-mail");
 refreshMessageQuantites();
+insertLoan();

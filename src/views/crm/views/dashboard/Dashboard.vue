@@ -6,8 +6,8 @@
         <div class="col-lg-6"></div>
       </div>
       <b-row>
-        <b-col cols="6" sm="2" md="2">
-          <b-card class="ecommerce-card col-lg-12 h-200" no-body>
+        <b-col cols="6" sm="3" md="4" lg="3" xl="2">
+          <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
             <div class="text-center pt-1">
               <b-button
                 variant="primary"
@@ -43,8 +43,8 @@
             </div>
           </b-card>
         </b-col>
-        <b-col cols="6" sm="2" md="2">
-          <b-card class="ecommerce-card col-lg-12 h-200" no-body>
+        <b-col cols="6" sm="3" md="4" lg="3" xl="2">
+          <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
             <div class="text-center pt-1">
               <b-button
                 variant="primary"
@@ -80,8 +80,8 @@
             </div>
           </b-card>
         </b-col>
-        <b-col cols="6" sm="2" md="2">
-          <b-card class="ecommerce-card col-lg-12 h-200" no-body>
+        <b-col cols="6" sm="3" md="4" lg="3" xl="2">
+          <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
             <div class="text-center pt-1">
               <b-button
                 variant="primary"
@@ -117,8 +117,8 @@
             </div>
           </b-card>
         </b-col>
-        <b-col cols="6" sm="2" md="2">
-          <b-card class="ecommerce-card col-lg-12 h-200" no-body>
+        <b-col cols="6" sm="3" md="4" lg="3" xl="2">
+          <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
             <div class="text-center pt-1">
               <b-button
                 variant="primary"
@@ -154,8 +154,8 @@
             </div>
           </b-card>
         </b-col>
-        <b-col cols="6" sm="2" md="2">
-          <b-card class="ecommerce-card col-lg-12 h-200" no-body>
+        <b-col cols="6" sm="3" md="4" lg="3" xl="2">
+          <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
             <div class="text-center pt-1">
               <b-button
                 variant="primary"
@@ -408,17 +408,20 @@
                     v-model="year"
                     :clearable="false"
                     :options="years"
+                    
                     @input="filtrocont()"
                   />
                 </b-col>
                 <b-col cols="12" sm="4" md="4">
                   <v-select
+                    v-if="[1,2].includes(currentUser.role_id)"
                     v-model="userfilter"
                     class="per-page-selector-user"
                     style="font-size: 15px"
                     placeholder="Select User"
                     label="user_name"
                     :options="users"
+                    :reduce="val => val.id"
                     @input="filtrocont()"
                   />
                 </b-col>
@@ -546,6 +549,7 @@ export default {
       this.index = index;
     },
     allData() {
+      
       this.$store.commit("app/SET_LOADING", true);
       let { user_id } = this.currentUser;
       if (
@@ -589,7 +593,7 @@ export default {
         this.$store.commit("app/SET_LOADING", true);
         amgApi
           .post("/filtrouserdash", {
-            created_id: this.userfilter.id,
+            created_id: this.userfilter,
             anio: this.year,
           })
           .then((response) => {

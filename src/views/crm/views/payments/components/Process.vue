@@ -93,8 +93,8 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
                   <ValidationProvider
-                    name="comment"
-                    rules="required"
+                    name="price"
+                    :rules="{ required: true, min: 0.01 }"
                     v-slot="{ errors }"
                   >
                     <b-form-group label="Amount" label-for="v-Amount">
@@ -114,10 +114,21 @@
                       </b-input-group> -->
                       <money
                         v-model="amount"
-                        style="height: 37px"
-                        class="form-control input-form fond-white border-hover"
+                        v-bind="moneyConfig"
+                        name="price"
+                        id="price"
+                        class="form-control "
                         :class="{ 'border border-danger': errors[0] }"
-                      ></money>
+                      >
+                      </money>
+                      <!-- <money
+                        id="campo2"
+                        type="text"
+                        v-model="amount"
+                        class="form-control input-form fond-white border-hover"
+                        placeholder="amount"
+                        :class="{ 'border border-danger': errors[0] }"
+                      /> -->
                     </b-form-group>
                   </ValidationProvider>
                 </div>
@@ -127,7 +138,7 @@
                     label-for="v-TypeOfPayment"
                   >
                     <ValidationProvider
-                      name="comment"
+                      name="payment"
                       rules="required"
                       v-slot="{ errors }"
                     >
@@ -257,7 +268,7 @@
                         SUBMIT
                       </b-button>
                     </b-col>
-                    <b-col cols="1" class=" " >
+                    <b-col cols="1" class="">
                       <b-form-checkbox
                         v-if="methodpayment == 1"
                         v-model="sendsms"
@@ -291,8 +302,10 @@ export default {
     vSelect,
     ModalCreditCard,
   },
+
   data() {
     return {
+      price: 0,
       modalCreditController: 0,
       cardsLead: {},
       options: [
@@ -327,8 +340,19 @@ export default {
       charge: true,
       spinner: false,
       statusSelected: false,
+
+      Amerror: false,
+      moneyConfig: {
+        decimal: ",",
+        thousands: ".",
+        prefix: "$",
+        suffix: "",
+        precision: 2,
+        masked: false,
+      },
     };
   },
+
   computed: {
     statusSpinner() {
       return this.spinner;
@@ -681,3 +705,4 @@ export default {
   flex-wrap: wrap;
 }
 </style>
+  
