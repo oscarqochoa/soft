@@ -380,8 +380,8 @@ export default {
   },
   computed: {
     getRoles() {
-      return this.currentUser.arrRoles[0].role_id == 1 ||
-        this.currentUser.arrRoles[0].role_id == 2
+      return this.currentUser.role_id == 1 ||
+        this.currentUser.role_id == 2
         ? true
         : false;
     },
@@ -390,8 +390,8 @@ export default {
       return "/listusers";
     },
     visibleFields() {
-      return this.currentUser.arrRoles[0].role_id == 1 ||
-        this.currentUser.arrRoles[0].role_id == 2
+      return this.currentUser.role_id == 1 ||
+        this.currentUser.role_id == 2
         ? this.arrayColumns.filter((column) => column.visible)
         : this.arrayColumnsTwo.filter((column) => column.visible);
     },
@@ -404,7 +404,7 @@ export default {
       this.$refs.refClientsList.refresh();
     },
     statusRol() {
-      this.add = this.currentUser.arrRoles[0].role_id == 2 ? true : false;
+      this.add = this.currentUser.role_id == 2 ? true : false;
     },
     addlist() {
       this.newList = true;
@@ -429,8 +429,8 @@ export default {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         per_page: ctx.perPage,
         id:
-          this.currentUser.arrRoles[0].role_id == 1 ||
-          this.currentUser.arrRoles[0].role_id == 2
+          this.currentUser.role_id == 1 ||
+          this.currentUser.role_id == 2
             ? null
             : this.currentUser.user_id,
         from: this.filter[0].model,
@@ -456,8 +456,8 @@ export default {
           this.count_donetask = 0;
         }
         if (
-          this.currentUser.arrRoles[0].role_id == 1 ||
-          this.currentUser.arrRoles[0].role_id == 2
+          this.currentUser.role_id == 1 ||
+          this.currentUser.role_id == 2
         ) {
           return items || [];
         } else {
@@ -480,8 +480,8 @@ export default {
       amgApi
         .post("/listusers", {
           id:
-            this.currentUser.arrRoles[0].role_id == 1 ||
-            this.currentUser.arrRoles[0].role_id == 2
+            this.currentUser.role_id == 1 ||
+            this.currentUser.role_id == 2
               ? null
               : this.currentUser.user_id,
           from: this.from,

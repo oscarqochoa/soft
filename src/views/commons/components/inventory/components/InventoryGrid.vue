@@ -26,6 +26,7 @@
       show-empty
       sticky-header="50vh"
       :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
       :current-page="paginate.currentPage"
       :per-page="paginate.perPage"
     >
@@ -66,6 +67,14 @@
       <template #cell(price)="data"
         >{{ data.item.price != null ? "$ " + data.item.price : "" }}
       </template>
+      <template #cell(assigned_to)="data">
+        <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+          <span>{{data.item.assigned_to}}</span>
+          <div>{{data.item.name_module}}</div>
+        </div>
+      </template>
       <template #cell(tracking)="data">
         <div>
           <b-button
@@ -74,6 +83,16 @@
           >
             TRACKING
           </b-button>
+        </div>
+      </template>
+      <template #cell(created_at)="data">
+        <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+          <span>
+            {{data.item.created_by}}
+          </span>
+          <div>{{data.item.created_at | myGlobalDay}}</div>
         </div>
       </template>
       <template #cell(actions)="data">
@@ -195,6 +214,8 @@ export default {
   },
   data() {
     return {
+      sortBy: "created_at",
+      sortDesc: true,
       totalRows: 0,
       paginate: {
         currentPage: 1,
@@ -277,7 +298,7 @@ export default {
           label: "Assigned To",
           class: "text-left",
           sortable: false,
-          visible: false,
+          visible: true,
         },
         {
           key: "tracking",

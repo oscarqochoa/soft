@@ -76,11 +76,17 @@
               style="cursor: pointer"
               v-if="data.item.type_t == 39 || data.item.type_t == 40"
               class="text-primary"
+              @click="getVoidRefund(data.item.transaction_id)"
             ></feather-icon>
             <img
               :src="assetsImg + '/images/icons/void.ico'"
               style="cursor: pointer; color: red"
               title="Void"
+              @click="voidAuthorize( data.item.transaction_id,
+                  data.item.merchant,
+                  data.item.amount,
+                  data.item.lead_name,
+                  data.item.settlement_date,1)"
               v-if="
                 data.item.type_t != 39 &&
                 data.item.type_t != 40 &&
@@ -102,6 +108,16 @@
                 data.item.w_card == 1 &&
                 currentUser.role_id == 1 &&
                 data.item.result == 'Approved'
+              "
+              @click="
+                voidAuthorize(
+                  data.item.transaction_id,
+                  data.item.merchant,
+                  data.item.amount,
+                  data.item.lead_name,
+                  data.item.settlement_date,
+                  2
+                )
               "
             />
           </div>
@@ -184,6 +200,21 @@
         </b-col>
       </template>
     </filter-slot>
+
+    <modal-refund
+      v-if="modalRefund"
+      :modalRefund="modalRefund"
+      :modul="$route.meta.module"
+      :dataVoid="this.dataVoid"
+      :global="this.currentUser"
+      @close="closeModalRefund"
+    ></modal-refund>
+    <modal-void-refund-info
+      v-if="modalVoidRefund"
+      :modalVoidRefund="modalVoidRefund"
+      :idtransaction="idtransaction"
+      @closeInfo="closeModalVoidRefundInfo"
+      ></modal-void-refund-info>
   </div>
 </template>
 
@@ -192,13 +223,19 @@ import { mapGetters } from "vuex";
 import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+
+import ModalRefund from "@/views/crm/views/payments/components/ModalRefund.vue";
+import ModalVoidRefundInfo from "@/views/crm/views/payments/components/ModalVoidRefundInfo.vue";
 export default {
   components: {
     vSelect,
     FilterSlot,
+    ModalRefund,
+    ModalVoidRefundInfo,
   },
   data() {
     return {
+      modalRefund: false,
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       totalRows: 0,
       paginate: {
@@ -365,6 +402,10 @@ export default {
         },
       ],
       filterController: false,
+      modalRefund: false,
+      dataVoid: [],
+      modalVoidRefund: false,
+      idtransaction:null,
     };
   },
   mounted() {
@@ -382,6 +423,27 @@ export default {
     }),
   },
   methods: {
+    voidAuthorize(idtransaction,idmerchant,amount,client_name,settlement_date,type){
+      this.dataVoid = {
+        idtransaction,
+        idmerchant,
+        amount,
+        client_name,
+        settlement_date,
+        type,
+      };
+      this.modalRefund = true;
+    },
+    closeModalRefund(){
+      this.modalRefund = false
+    },
+    getVoidRefund(idtransaction){
+      this.idtransaction = idtransaction
+      this.modalVoidRefund = true
+    },
+    closeModalVoidRefundInfo(){
+      this.modalVoidRefund = false
+    },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         per_page: ctx.perPage,
