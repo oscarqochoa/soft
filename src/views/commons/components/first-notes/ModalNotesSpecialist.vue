@@ -194,7 +194,6 @@
               name="amountOwed"
               rules="required"
             >
-              {{ note.amountOwed.value }}
               <money
                 v-model="note.amountOwed.value"
                 size="sm"

@@ -23,7 +23,6 @@ const state = {
   S_LEAD: {},
   S_FILTERS_LEADS: {
     searchQuery: '',
-    assignTo: null,
     from: null,
     to: null,
     statusLead: null,
@@ -35,50 +34,50 @@ const state = {
     typeDoc: null,
     stAd: null,
     perPage: 10,
-    currentPage: 1
+    currentPage: 1,
   },
 }
 const getters = {
-  G_STATE_LEADS () {
+  G_STATE_LEADS() {
     const stateLeads = state.S_STATE_LEADS.map(el => ({ label: el.name, value: el.id }))
     return stateLeads
   },
-  G_STATUS_LEADS () {
+  G_STATUS_LEADS() {
     const statusLeads = state.S_STATUS_LEADS.map(el => ({ label: el.value, value: el.id }))
     return statusLeads
   },
-  G_SOURCE_LEADS () {
+  G_SOURCE_LEADS() {
     const sourceLeads = state.S_SOURCE_LEADS.map(el => ({ label: el.value, value: el.id }))
     return sourceLeads
   },
-  G_OWNERS () {
+  G_OWNERS() {
     const owners = state.S_OWNERS.map(el => ({ label: el.user_name, value: el.id }))
     return owners
   },
-  G_SOURCE_NAMES () {
+  G_SOURCE_NAMES() {
     const sourceNames = state.S_SOURCE_NAMES.map(el => ({ label: el.name, value: el.id }))
     return sourceNames
   },
-  G_PROGRAMS () {
+  G_PROGRAMS() {
     const programs = state.S_PROGRAMS.map(el => ({ label: el.value, value: el.id }))
     return programs
   },
-  G_STATES () {
+  G_STATES() {
     const states = state.S_STATES.map(el => ({ label: el.slug, value: el.id }))
     return states
   },
-  G_EEUU_STATES () {
+  G_EEUU_STATES() {
     const eeuuStates = state.S_EEUU_STATES.map(el => ({ label: el.state, value: el.slug }))
     return eeuuStates
   },
-  G_CRS () {
+  G_CRS() {
     return [
       { label: 'All', value: null },
       { label: 'Yes', value: 2 },
-      { label: 'No', value: 1 }
+      { label: 'No', value: 1 },
     ]
   },
-  G_TYPE_DOCS () {
+  G_TYPE_DOCS() {
     return [
       { label: 'All', value: null },
       { label: 'SSN', value: 'ssn' },
@@ -86,42 +85,42 @@ const getters = {
       { label: 'CPN', value: 'cpn' },
     ]
   },
-  G_LANGUAGES () {
+  G_LANGUAGES() {
     return [
       { label: 'English', value: 'EN' },
       { label: 'Spanish', value: 'ES' },
     ]
   },
-  G_COUNTRIES () {
+  G_COUNTRIES() {
     const countries = state.S_COUNTRIES.map(el => ({ label: el.name, value: el.id }))
     return countries
   },
-  G_SELLERS () {
+  G_SELLERS() {
     const sellers = state.S_SELLERS.map(el => ({ label: el.user_name, value: el.id }))
     return sellers
   },
 }
 const mutations = {
-  SET_DATA (state, params) {
+  SET_DATA(state, params) {
     Vue.set(state, params.destination, params.data)
   },
-  PUSH_DATA (state, params) {
+  PUSH_DATA(state, params) {
     state[params.destination].push(params.data)
   },
-  REMOVE_DATA (state, params) {
+  REMOVE_DATA(state, params) {
     const index = state[params.destination].map(el => el.id).indexOf(params.id)
     if (index !== -1) {
       state[params.destination].splice(index, 1)
     }
-  }
+  },
 }
 const actions = {
-  async A_GET_LEADS ({ commit }, body) {
+  async A_GET_LEADS({ commit }, body) {
     try {
       const response = await crmService.getLeads(body)
       commit('SET_DATA', {
         destination: 'S_LEADS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -129,12 +128,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_SN_LEADS ({ commit }, body) {
+  async A_GET_SN_LEADS({ commit }, body) {
     try {
       const response = await crmService.getLeadsSn(body)
       commit('SET_DATA', {
         destination: 'S_SN_LEADS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -142,12 +141,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_W_POTENTIAL_LEADS ({ commit }, body) {
+  async A_GET_W_POTENTIAL_LEADS({ commit }, body) {
     try {
       const response = await crmService.getLeadsWPotential(body)
       commit('SET_DATA', {
         destination: 'S_W_POTENTIAL_LEADS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -155,12 +154,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_STATE_LEADS ({ commit }, params) {
+  async A_GET_STATE_LEADS({ commit }, params) {
     try {
       const response = await crmService.getStateLeads(params)
       commit('SET_DATA', {
         destination: 'S_STATE_LEADS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -168,12 +167,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_STATUS_LEADS ({ commit }, params) {
+  async A_GET_STATUS_LEADS({ commit }, params) {
     try {
       const response = await crmService.getStatusLeads(params)
       commit('SET_DATA', {
         destination: 'S_STATUS_LEADS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -181,12 +180,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_SOURCE_LEADS ({ commit }, params) {
+  async A_GET_SOURCE_LEADS({ commit }, params) {
     try {
       const response = await crmService.getSourceLeads(params)
       commit('SET_DATA', {
         destination: 'S_SOURCE_LEADS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -194,12 +193,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_OWNERS ({ commit }, { modul, body }) {
+  async A_GET_OWNERS({ commit }, { modul, body }) {
     try {
       const response = await crmService.getOwners({ modul, body })
       commit('SET_DATA', {
         destination: 'S_OWNERS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -207,12 +206,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_PROGRAMS ({ commit }, params) {
+  async A_GET_PROGRAMS({ commit }, params) {
     try {
       const response = await crmService.getPrograms(params)
       commit('SET_DATA', {
         destination: 'S_PROGRAMS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -220,12 +219,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_SOURCE_NAMES ({ commit }, params) {
+  async A_GET_SOURCE_NAMES({ commit }, params) {
     try {
       const response = await crmService.getSourceNames(params)
       commit('SET_DATA', {
         destination: 'S_SOURCE_NAMES',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -233,12 +232,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_STATES ({ commit }, params) {
+  async A_GET_STATES({ commit }, params) {
     try {
       const response = await crmService.getStates(params)
       commit('SET_DATA', {
         destination: 'S_STATES',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -246,12 +245,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_EEUU_STATES ({ commit }, params) {
+  async A_GET_EEUU_STATES({ commit }, params) {
     try {
       const response = await crmService.getStatesEeuu(params)
       commit('SET_DATA', {
         destination: 'S_EEUU_STATES',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -259,12 +258,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_COUNTRIES ({ commit }, params) {
+  async A_GET_COUNTRIES({ commit }, params) {
     try {
       const response = await crmService.getCountries(params)
       commit('SET_DATA', {
         destination: 'S_COUNTRIES',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -272,12 +271,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_SELLERS ({ commit }, { modul, body }) {
+  async A_GET_SELLERS({ commit }, { modul, body }) {
     try {
       const response = await crmService.getSellers({ modul, body })
       commit('SET_DATA', {
         destination: 'S_SELLERS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -285,12 +284,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_SMS_QUICKS ({ commit }, body) {
+  async A_GET_SMS_QUICKS({ commit }, body) {
     try {
       const response = await crmService.getAllQuicksSms(body)
       commit('SET_DATA', {
         destination: 'S_SMS_QUICKS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -298,12 +297,12 @@ const actions = {
       throw error
     }
   },
-  async A_GET_HISTORY_SMS_LEADS ({ commit }, body) {
+  async A_GET_HISTORY_SMS_LEADS({ commit }, body) {
     try {
       const response = await crmService.postHistorySmsLead(body)
       commit('SET_DATA', {
         destination: 'S_SMS_HISTORY_QUICKS',
-        data: response.data
+        data: response.data,
       })
       return response
     } catch (error) {
@@ -314,26 +313,26 @@ const actions = {
 
   /* SETS */
 
-  A_SET_SELECTED_LEADS ({ commit }, data) {
+  A_SET_SELECTED_LEADS({ commit }, data) {
     commit('SET_DATA', {
       destination: 'S_SELECTED_LEADS',
-      data: data
+      data,
     })
   },
-  A_SET_FILTERS_LEADS ({ commit }, data) {
+  A_SET_FILTERS_LEADS({ commit }, data) {
     commit('SET_DATA', {
       destination: 'S_FILTERS_LEADS',
-      data: data
+      data,
     })
   },
-  async A_SET_LEADS ({ commit }, body) {
+  async A_SET_LEADS({ commit }, body) {
     try {
       const response = await crmService.postCreateLead(body)
       if (response.status == 200 || response.status == 201) {
         body.id = response.data.id
         commit('PUSH_DATA', {
           destination: 'S_LEADS',
-          data: body
+          data: body,
         })
       }
       return response
@@ -342,7 +341,7 @@ const actions = {
       throw error
     }
   },
-  async A_SET_REQUEST_LEADS ({ commit }, body) {
+  async A_SET_REQUEST_LEADS({ commit }, body) {
     try {
       const response = await crmService.postRequestLead(body)
       return response
@@ -351,14 +350,14 @@ const actions = {
       throw error
     }
   },
-  async A_SET_SMS_QUICK ({ commit }, body) {
+  async A_SET_SMS_QUICK({ commit }, body) {
     try {
       const response = await crmService.postSaveQuickSms(body)
       if (response.status == 200) {
         body.id = response.data.id
         commit('PUSH_DATA', {
           destination: 'S_SMS_QUICKS',
-          data: body
+          data: body,
         })
       }
       return response
@@ -369,29 +368,31 @@ const actions = {
   },
 
   /* DELETES */
-  
-  async A_DELETE_LEADS ({ commit }, body) {
+
+  async A_DELETE_LEADS({ commit }, body) {
     try {
       const response = await crmService.postDeleteLead(body)
-      if (response.status == 200)
+      if (response.status == 200) {
         commit('REMOVE_DATA', {
           destination: 'S_LEADS',
-          id: body.leadid
+          id: body.leadid,
         })
+      }
       return response
     } catch (error) {
       console.log('ERROR_DELETE_LEADS [ACTION]', error)
       throw error
     }
   },
-  async A_DELETE_SMS_QUICK ({ commit }, body) {
+  async A_DELETE_SMS_QUICK({ commit }, body) {
     try {
       const response = await crmService.postDeleteQuickSms(body)
-      if (response.status == 200)
+      if (response.status == 200) {
         commit('REMOVE_DATA', {
           destination: 'S_SMS_QUICKS',
-          id: body.id
+          id: body.id,
         })
+      }
       return response
     } catch (error) {
       console.log('ERROR_DELETE_SMS_QUICK [ACTION]', error)
@@ -401,7 +402,7 @@ const actions = {
 
   /* OTHER ACTIONS */
 
-  async A_PROCESS_LEADS ({ commit }, body) {
+  async A_PROCESS_LEADS({ commit }, body) {
     try {
       const response = await crmService.postProcessLead(body)
       return response
@@ -410,7 +411,7 @@ const actions = {
       throw error
     }
   },
-  async A_UNIQUE_MOBILE ({ commit }, body) {
+  async A_UNIQUE_MOBILE({ commit }, body) {
     try {
       const response = await crmService.postUniqueMobile(body)
       return response
@@ -419,7 +420,7 @@ const actions = {
       throw error
     }
   },
-  async A_SEND_MESSAGE_LEAD ({ commit }, body) {
+  async A_SEND_MESSAGE_LEAD({ commit }, body) {
     try {
       const response = await crmService.postSendMessageLead(body)
       return response
@@ -428,7 +429,7 @@ const actions = {
       throw error
     }
   },
-  async A_GET_USER_APPOINTMENT_SN ({ commit }, body) {
+  async A_GET_USER_APPOINTMENT_SN({ commit }, body) {
     try {
       const response = await crmService.postUserAppointmentSn(body)
       /* console.log('A_GET_USER_APPOINTMENT_SN response', response) */
@@ -444,6 +445,6 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 
 }

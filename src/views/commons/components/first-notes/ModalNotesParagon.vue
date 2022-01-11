@@ -662,6 +662,9 @@ export default {
         if (newValue !== 'Yes') {
           this.note.facebook.likes = this.note.facebook.likes ? this.note.facebook.likes : 0
           this.note.facebook.link = this.note.facebook.link ? this.note.facebook.link : 0
+        } else {
+          this.note.facebook.likes = this.note.facebook.likes === 0 || this.note.facebook.likes === '0' ? '' : this.note.facebook.likes
+          this.note.facebook.link = this.note.facebook.link === 0 || this.note.facebook.link === '0' ? '' : this.note.facebook.link
         }
       },
       deep: true,
@@ -670,7 +673,10 @@ export default {
       handler(newValue) {
         if (newValue !== 'Yes') {
           this.note.instagram.likes = this.note.instagram.likes ? this.note.instagram.likes : 0
-          this.note.instagram.link = this.note.instagram.link ? this.note.instagram.link : this.note.instagram.link
+          this.note.instagram.link = this.note.instagram.link ? this.note.instagram.link : 0
+        } else {
+          this.note.instagram.likes = this.note.instagram.likes === 0 || this.note.instagram.likes === '0' ? '' : this.note.instagram.likes
+          this.note.instagram.link = this.note.instagram.link === 0 || this.note.instagram.link === '0' ? '' : this.note.instagram.link
         }
       },
       deep: true,
@@ -680,6 +686,9 @@ export default {
         if (newValue !== 'Yes') {
           this.note.website.link = this.note.website.link ? this.note.website.link : 0
           this.note.website.type = this.note.website.type ? this.note.website.type : 0
+        } else {
+          this.note.website.link = this.note.website.link === 0 || this.note.website.link === '0' ? '' : this.note.website.link
+          this.note.website.type = this.note.website.type === 0 || this.note.website.type === '0' ? '' : this.note.website.type
         }
       },
       deep: true,
@@ -688,14 +697,18 @@ export default {
       handler(newValue) {
         if (newValue !== 'Yes') {
           this.note.details.value = this.note.details.value ? this.note.details.value : 0
+        } else {
+          this.note.details.value = this.note.details.value === 0 || this.note.details.value === '0' ? '' : this.note.details.value
         }
       },
       deep: true,
     },
     'note.newBusiness.value': {
       handler(newValue) {
-        if (newValue !== 'Yes') {
+        if (newValue !== 'No') {
           this.note.newBusiness.years = this.note.newBusiness.years ? this.note.newBusiness.years : 0
+        } else {
+          this.note.newBusiness.years = this.note.newBusiness.years === 0 || this.note.newBusiness.years === '0' ? '' : this.note.newBusiness.years
         }
       },
       deep: true,
@@ -808,28 +821,31 @@ export default {
     },
     getDetailsAnswers(note) {
       note.forEach(answer => {
-        console.log(answer)
         if (answer.answer != 'null') {
-          if (answer.question_id === 1075) this.note.facebook.value = answer.answer
-          if (answer.question_id === 1072) this.note.website.value = answer.answer
-          if (answer.question_id === 1078) this.note.instagram.value = answer.answer
-          if (answer.question_id === 1083) this.note.logo.value = answer.answer
-          if (answer.question_id === 1081) this.note.experience.value = answer.answer
-          if (answer.question_id === 1066) this.note.newBusiness.value = answer.answer
+          if (answer.question_id === 1075) this.note.facebook.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1072) this.note.website.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1078) this.note.instagram.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1083) this.note.logo.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1081) this.note.experience.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1066) this.note.newBusiness.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
           if (answer.question_id === 1064) this.note.typeOfBuisiness.value = JSON.parse(answer.answer)
-          if (answer.question_id === 1071) this.note.contactTime.value = answer.answer
-          if (answer.question_id === 1067) this.note.information.value = answer.answer
-          if (answer.question_id === 1068) this.note.indications.value = answer.answer
-          if (answer.question_id === 1069) this.note.suggestion.value = answer.answer
-          if (answer.question_id === 1070) this.note.pending.value = answer.answer
-          if (answer.question_id === 1082) this.note.details.value = answer.answer
-          if (answer.question_id === 1076) this.note.facebook.link = answer.answer
-          if (answer.question_id === 1077) this.note.facebook.likes = answer.answer
-          if (answer.question_id === 1079) this.note.instagram.link = answer.answer
-          if (answer.question_id === 1080) this.note.instagram.likes = answer.answer
-          if (answer.question_id === 1073) this.note.website.link = answer.answer
-          if (answer.question_id === 1074) this.note.website.type = answer.answer
-          if (answer.question_id === 1065) this.note.newBusiness.years = answer.answer
+          if (answer.question_id === 1071) this.note.contactTime.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1067) this.note.information.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1068) this.note.indications.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1069) this.note.suggestion.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1070) this.note.pending.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1082) this.note.details.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1076) {
+            console.log((answer.answer === 0 || answer.answer === '0') ? '' : answer.answer)
+            this.note.facebook.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+            console.log(this.note.facebook.link)
+          }
+          if (answer.question_id === 1077) this.note.facebook.likes = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1079) this.note.instagram.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1080) this.note.instagram.likes = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1073) this.note.website.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1074) this.note.website.type = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1065) this.note.newBusiness.years = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
         } else this.noteNull = true
       })
     },

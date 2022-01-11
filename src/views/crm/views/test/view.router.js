@@ -1,6 +1,6 @@
 export default [
   {
-    path: '/test',
+    path: '/crm/test',
     name: 'test-crm',
     component: () => import('@/views/crm/views/test/View.vue'),
     meta: {
@@ -10,7 +10,7 @@ export default [
           text: 'Test',
         },
       ],
-      permittedRoles: [1,2]
+      permittedRoles: [1, 2],
     },
   },
 ]

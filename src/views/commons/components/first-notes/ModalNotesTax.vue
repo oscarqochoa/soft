@@ -19,14 +19,14 @@
     >
       <b-row>
         <b-col md="9">
-          <validation-provider
-            v-slot="{errors}"
-            name="maritalStatus"
-            rulses="required"
+          <b-form-group
+            label="Marital Status"
+            label-class="font-weight-bolder"
           >
-            <b-form-group
-              label="Marital Status"
-              label-class="font-weight-bolder"
+            <validation-provider
+              v-slot="{ errors }"
+              name="maritalStatus"
+              rules="required"
             >
               <b-form-radio-group
                 v-model="note.maritalStatus.value"
@@ -34,19 +34,19 @@
                 :options="note.maritalStatus.options"
                 :class="{'border-danger': errors[0]}"
               />
-            </b-form-group>
-          </validation-provider>
+            </validation-provider>
+          </b-form-group>
         </b-col>
         <b-col md="2">
-          <validation-provider
-            v-slot="{errors}"
-            name="dependents"
-            rules="required"
+          <b-form-group
+            label="Dependents"
+            label-class="font-weight-bolder"
+            :disabled="disabled"
           >
-            <b-form-group
-              label="Dependents"
-              label-class="font-weight-bolder"
-              :disabled="disabled"
+            <validation-provider
+              v-slot="{ errors }"
+              name="dependents"
+              rules="required"
             >
               <b-form-input
                 v-model="note.dependents.value"
@@ -54,8 +54,8 @@
                 type="number"
                 :class="{'border-danger rounded': errors[0]}"
               />
-            </b-form-group>
-          </validation-provider>
+            </validation-provider>
+          </b-form-group>
         </b-col>
       </b-row>
       <b-row>
@@ -383,7 +383,7 @@ export default {
           ],
         },
         dependents: {
-          value: 0,
+          value: '',
         },
         migrationSituation: {
           value: '',
