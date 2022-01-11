@@ -444,7 +444,6 @@
 <script>
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
 import vSelect from "vue-select";
-import axios from "axios";
 import moment from "moment";
 import AppEchartLine from "@core/components/charts/echart/AppEchartLine.vue";
 import { mapGetters } from "vuex";
@@ -518,6 +517,7 @@ export default {
       this.idEchart++;
     },
     change_tab(index) {
+      
       switch (index) {
         case 0:
           this.total_year = this.global.leads_year;
@@ -553,8 +553,8 @@ export default {
       this.$store.commit("app/SET_LOADING", true);
       let { user_id } = this.currentUser;
       if (
-        this.currentUser.arrRoles[0].role_id == 1 ||
-        this.currentUser.arrRoles[0].role_id == 2
+        this.currentUser.role_id == 1 ||
+        this.currentUser.role_id == 2
       ) {
         user_id = 0;
       }
@@ -565,6 +565,7 @@ export default {
         .then((response) => {
           this.userfilter = response.data.usercreate;
           this.global = response.data;
+          console.log(this.global)
           this.leads = response.data.leads.map((list) => list);
 
           this.quotes = response.data.quotes.map((list) => list);
@@ -589,6 +590,7 @@ export default {
         });
     },
     filtrocont() {
+      console.log(this.global)
       if (this.userfilter != null) {
         this.$store.commit("app/SET_LOADING", true);
         amgApi

@@ -24,7 +24,7 @@
       table-class="text-nowrap"
       responsive="sm"
       show-empty
-      sticky-header="50vh"
+      sticky-header="70vh"
       :sort-desc.sync="sortDesc"
       :current-page="paginate.currentPage"
         :per-page="paginate.perPage"

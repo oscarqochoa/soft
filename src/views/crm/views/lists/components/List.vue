@@ -114,7 +114,7 @@
           table-class="text-nowrap"
           responsive="sm"
           show-empty
-          sticky-header="50vh"
+          sticky-header="70vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
