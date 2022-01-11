@@ -590,11 +590,13 @@
           </b-dropdown>
         </template>
         <template #cell(done)="data">
-          <b-btn v-if="data.item.initial_payment_status == 2">
-            <b-icon
-              icon="arrow-left-square-fill"
-              variant="primary"
-            />
+          <b-btn
+            v-if="data.item.initial_payment_status == 2"
+            variant="outline-info"
+            size="sm"
+            @click="returnDone(data.item.event_id, null)"
+          >
+            Return
           </b-btn>
         </template>
       </b-table>
@@ -734,6 +736,15 @@
       @close="modal.contract_fee = false"
       @reload="$refs['new-client-done-table'].refresh()"
     />
+    <approve-supervisor-modal
+      v-if="modal.approveSupervisorModal"
+      :session-id="currentUser.user_id"
+      :modul="modalData.approveSupervisorModal.modul"
+      :event-id="modalData.approveSupervisorModal.eventId"
+      :type-approve="modalData.approveSupervisorModal.typeApprove"
+      @approveSupChar="returnDone"
+      @click="closeModalApprove"
+    />
   </div>
 </template>
 
@@ -770,6 +781,7 @@ import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue
 import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms.vue'
 import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasCredit.vue'
 import ModalNotesSpecialist from '@/views/commons/components/first-notes/ModalNotesSpecialist.vue'
+import ApproveSupervisorModal from '@/views/crm/views/sales-made/components/modals/ApproveSupervisorModal.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -800,6 +812,7 @@ export default {
     ModalNotesTax,
     ModalNotesCredit,
     ModalNotesSpecialist,
+    ApproveSupervisorModal,
   },
   props: {
     done: {
@@ -838,6 +851,7 @@ export default {
         url: false,
         contract_fee: false,
         notes: false,
+        approveSupervisorModal: false,
       },
       modalData: {
         historySms: {
@@ -928,6 +942,11 @@ export default {
           notes_status: null,
           notes_status_new: null,
         },
+        approveSupervisorModal: {
+          modul: 2,
+          typeApprove: 1,
+          eventId: '',
+        },
       },
       selectAll: false,
     }
@@ -980,6 +999,29 @@ export default {
     }
   },
   methods: {
+    closeModalApprove() {
+      this.modal.approveSupervisorModal = false
+    },
+    async returnDone(eventId, sendSupervisor) {
+      this.modalData.approveSupervisorModal.eventId = Array.isArray(eventId) ? eventId[0] : eventId
+      if (this.G_IS_SELLER && sendSupervisor === null) {
+        this.modal.approveSupervisorModal = true
+      } else {
+        const result = await this.showConfirmSwal('Are you sure?', 'Are you sure set done this sale')
+        if (result.value) {
+          try {
+            const response = await amgApi.post('/set-done', {
+              eventId: this.modalData.approveSupervisorModal.eventId,
+            })
+            if (response.status === 200) {
+              this.$refs['new-client-done-table'].refresh()
+            }
+          } catch (error) {
+            this.showErrorSwal(error)
+          }
+        }
+      }
+    },
     modalSmsOpen(item) {
       this.modalData.sendSms.leads_sms = []
       this.modalData.sendSms.typesms = 1
