@@ -23,7 +23,7 @@
         table-class="text-nowrap"
         responsive="sm"
         show-empty
-        sticky-header="50vh"
+        sticky-header="70vh"
         :current-page="paginate.currentPage"
         :per-page="paginate.perPage"
       >
