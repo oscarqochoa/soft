@@ -228,7 +228,7 @@ export default {
   data() {
     return {
       status: "",
-      password: "Soft@@2021",
+      password: "Carolina@123",
       userEmail: "rogerdtfs@gmail.com",
       sideImg: require("@/assets/images/pages/login-v2.svg"),
 

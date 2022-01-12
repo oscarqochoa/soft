@@ -33,9 +33,9 @@ export default {
 
   ],
   meta: {
-    pageTitle: 'Sales Made',
+    pageTitle: 'Bank Of Flyers',
     breadcrumb: [{
-      text: 'Sales Made',
+      text: 'Bank Of Flyers',
     }],
   },
 }

@@ -28,7 +28,6 @@ const state = {
     to: null,
     statusLead: null,
     owner: null,
-    assignTo: null,
     cr: null,
     program: null,
     sourceName: null,
@@ -330,7 +329,7 @@ const actions = {
   },
 
   /* DELETES */
-  
+
   async A_DELETE_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.postDeleteLead(body)
@@ -346,7 +345,7 @@ const actions = {
       throw error
     }
   },
-  
+
   async A_DELETE_FILES_LEADS ({ commit }, body) {
     try {
       const response = await crmLead.deleteFileLead(body)
