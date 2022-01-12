@@ -18,7 +18,10 @@
       body-class="p-0"
       no-close-on-backdrop
     >
-      <content-camera ref="content" />
+      <content-camera
+        ref="content"
+        @capturedImage="httpRequest"
+      />
       <template #modal-footer>
         <div class="footer-capture">
           <b-button
@@ -48,6 +51,9 @@ export default {
     }
   },
   methods: {
+    httpRequest(image) {
+      console.log(image)
+    },
     openPayStubModal() {
       this.payStubModalController = true
     },
@@ -55,7 +61,6 @@ export default {
       this.dialAttendance = true
     },
     attendance() {
-      this.$refs.content.$refs.photo
       this.$refs.content.$refs.photo.capture()
       this.$refs.content.$refs.photo.done()
     },

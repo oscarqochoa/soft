@@ -6,7 +6,6 @@
       ref="photo"
       v-model="imageBase64"
     />
-    {{ imageBase64 }} kghgjhgjh
     <div
       id="reloj"
       ref="reloj"
@@ -46,8 +45,8 @@ export default {
     }
   },
   watch: {
-    imageBase64(newVald, oldVal) {
-      alert('sasas')
+    imageBase64(newValue) {
+      this.$emit('capturedImage', newValue)
     },
   },
   mounted() {
