@@ -17,8 +17,15 @@
       size="sm"
       body-class="p-0"
       no-close-on-backdrop
+      @hidden="image = ''"
     >
+      <b-img
+        v-if="image"
+        :src="image"
+        class="w-100"
+      />
       <content-camera
+        v-else
         ref="content"
         @capturedImage="httpRequest"
       />
@@ -48,10 +55,13 @@ export default {
       payStubModalController: false,
       dialAttendance: false,
       titleModal: 'clock in',
+      image: '',
     }
   },
   methods: {
     httpRequest(image) {
+      // ACA LA PETICION HTTP >:v
+      this.image = image
       console.log(image)
     },
     openPayStubModal() {
