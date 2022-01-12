@@ -196,7 +196,7 @@ $borderamg: #efb911;
 //Modal XMD
 
 .modal .modal-xmd {
-  max-width: 60vw;
+  max-width: 65vw;
   width: 100%;
 }
 .modal .modal-xlg {
@@ -249,23 +249,22 @@ $borderamg: #efb911;
   background-color: #567cff;
 }
 
-.blue-scrollbar{
+.blue-scrollbar {
   scrollbar-color: #d4aa70 #e4e4e4;
   scrollbar-width: thin;
 }
 
-@media (max-width: 991.98px){
-    .messages-application{
-      .sidebar-left{
-        position: initial !important;
+@media (max-width: 991.98px) {
+  .messages-application {
+    .sidebar-left {
+      position: initial !important;
+    }
+  }
+  [data-col="1-column"] {
+    .head-navbar {
+      &.floating-nav {
+        width: calc(100vw - (100vw - 100%) - calc(2rem * 1)) !important;
       }
     }
-    [data-col='1-column']{
-      .head-navbar{
-        &.floating-nav {
-          width: calc(100vw - (100vw - 100%) - calc(2rem * 1)) !important;
-        }
-      }
-    }
+  }
 }
-
