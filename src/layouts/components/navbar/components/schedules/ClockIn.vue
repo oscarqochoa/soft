@@ -1,6 +1,10 @@
 <template>
   <div>
-    <feather-icon icon="ClockIcon" size="19" @click="openModal()" />
+    <feather-icon
+      icon="ClockIcon"
+      size="19"
+      @click="openModal()"
+    />
     <b-tooltip
       triggers="hover"
       :target="`bookmark-clock-in`"
@@ -14,10 +18,15 @@
       body-class="p-0"
       no-close-on-backdrop
     >
-      <content-camera />
+      <content-camera ref="content" />
       <template #modal-footer>
         <div class="footer-capture">
-          <b-button variant="primary" @click="attendance()">CAPTURE</b-button>
+          <b-button
+            variant="primary"
+            @click="attendance()"
+          >
+            CAPTURE
+          </b-button>
         </div>
       </template>
     </b-modal>
@@ -25,30 +34,33 @@
 </template>
 
 <script>
-import ContentCamera from "./DialAttendance.vue";
+import ContentCamera from './DialAttendance.vue'
+
 export default {
+  components: {
+    ContentCamera,
+  },
   data() {
     return {
       payStubModalController: false,
       dialAttendance: false,
-      titleModal: "clock in",
-    };
-  },
-  components: {
-    ContentCamera,
+      titleModal: 'clock in',
+    }
   },
   methods: {
     openPayStubModal() {
-      this.payStubModalController = true;
+      this.payStubModalController = true
     },
     openModal() {
-      this.dialAttendance = true;
+      this.dialAttendance = true
     },
-    attendance(){
-      this.$el.querySelectorAll('.photo-capture-actions');
-    }
+    attendance() {
+      this.$refs.content.$refs.photo
+      this.$refs.content.$refs.photo.capture()
+      this.$refs.content.$refs.photo.done()
+    },
   },
-};
+}
 </script>
 
 <style>

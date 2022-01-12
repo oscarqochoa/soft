@@ -1,22 +1,40 @@
 <template>
   <div>
     <!-- <div class="text-center reloj">11:00:00</div> -->
-    
-    <PhotoCapture v-model="imageBase64" />
+
+    <PhotoCapture
+      ref="photo"
+      v-model="imageBase64"
+    />
     {{ imageBase64 }} kghgjhgjh
-    <div class="reloj" ref="reloj" id="reloj">
-      <span class="text-white" ref="hour"></span
-      >: <span class="text-white" ref="min"></span
-      >:
-      <span class="text-white" ref="min"></span>
+    <div
+      id="reloj"
+      ref="reloj"
+      class="reloj"
+    >
+      <span
+        ref="hour"
+        class="text-white"
+      />: <span
+        ref="min"
+        class="text-white"
+      />:
+      <span
+        ref="min"
+        class="text-white"
+      />
     </div>
     <!-- <button @click="capturePhoto()">sasa</button> -->
   </div>
 </template>
 <script>
-import { PhotoCapture } from "vue-media-recorder";
-import ScheduleService from "./service/schedule.service";
+import { PhotoCapture } from 'vue-media-recorder'
+import ScheduleService from './service/schedule.service'
+
 export default {
+  components: {
+    PhotoCapture,
+  },
   data() {
     return {
       reloj: {
@@ -24,44 +42,47 @@ export default {
         min: 0,
         second: 0,
       },
-    };
+      imageBase64: '',
+    }
   },
-  components: {
-    PhotoCapture,
+  watch: {
+    imageBase64(newVald, oldVal) {
+      alert('sasas')
+    },
   },
   mounted() {
-    this.getCurrentTime();
+    this.getCurrentTime()
     // console.log(this.$refs.reloj);
   },
   created() {},
   methods: {
     capturePhoto() {
-      this.currentTime();
+      this.currentTime()
     },
     async getCurrentTime() {
-      const data = await ScheduleService.currentTime();
-      let hourRef =  this.$refs.hour;
-      let minRef =  this.$refs.min;
-      let secondRef =  this.$refs.second;
+      const data = await ScheduleService.currentTime()
+      const hourRef = this.$refs.hour
+      const minRef = this.$refs.min
+      const secondRef = this.$refs.second
 
-      let hour = data[0];
-      let min = data[1];
-      let second = data[2];
-      window.setInterval(function () {
+      let hour = data[0]
+      let min = data[1]
+      let second = data[2]
+      window.setInterval(() => {
         if (second == 60) {
-          second = 0;
-          min++;
+          second = 0
+          min++
         }
         if (min == 60) {
-          min = 0;
-          second = 0;
-          hour++;
+          min = 0
+          second = 0
+          hour++
         }
-        second++;
-        hourRef.innerHTML = ("0" + hour).slice(-2);
-        minRef.innerHTML = ("0" + min).slice(-2);
-        secondRef.innerHTML = ("0" + second).slice(-2);
-      }, 1000);
+        second++
+        hourRef.innerHTML = (`0${hour}`).slice(-2)
+        minRef.innerHTML = (`0${min}`).slice(-2)
+        secondRef.innerHTML = (`0${second}`).slice(-2)
+      }, 1000)
     },
     currentTime() {
       // axios.get("/api/hour_counter").then((res) => {
@@ -89,12 +110,7 @@ export default {
       // });
     },
   },
-  watch:{
-    imageBase64(newVald,oldVal){
-      alert("sasas");
-    }
-  }
-};
+}
 </script>
 <style>
 .camera,
@@ -102,10 +118,10 @@ canvas.preview {
   max-width: 100% !important;
   height: auto !important;
 }
-/* .photo-capture h1,
+.photo-capture h1,
 .photo-capture-actions {
   display: none;
-} */
+}
 .photo-capture .camera {
   transform: scaleX(-1);
   filter: FlipH;
