@@ -60,6 +60,7 @@
     "vue-google-autocomplete": "^1.1.2",
     "vue-i18n": "8.22.2",
     "vue-infinite-loading": "^2.4.5",
+    "vue-media-recorder": "^0.1.25",
     "vue-moment": "^4.1.0",
     "vue-perfect-scrollbar": "0.2.1",
     "vue-prism-component": "1.1.1",
