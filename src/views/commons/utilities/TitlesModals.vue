@@ -1,15 +1,7 @@
 <template>
-  <b-form-group
-    label-class="font-weight-bolder font-small-5"
-    :label="labelTitle"
-  >
-    <b-alert
-      variant="info"
-      show
-    >
-      <div
-        class="alert-body alert-body bg-info rounded text-white font-medium-1 text-center box-shadow-info"
-      >
+  <b-form-group label-class="font-weight-bolder font-small-5" :label="labelTitle">
+    <b-alert variant="info" show>
+      <div class="alert-body alert-body bg-info rounded text-white text-center box-shadow-info">
         <span>{{ title }}</span>
       </div>
     </b-alert>
@@ -18,18 +10,18 @@
 
 <script>
 export default {
-  name: 'TitlesModal',
+  name: "TitlesModal",
   props: {
     title: {
       type: String,
-      default: '',
+      default: ""
     },
     labelTitle: {
       type: String,
-      default: 'Title',
-    },
-  },
-}
+      default: "Title"
+    }
+  }
+};
 </script>
 
 <style >

@@ -27,9 +27,16 @@
                   : 'gray-home'
               "
             />
-            <p class="font-name-home mt-2" :class="[skin == 'dark' ? 'text-light':'text-dark']">{{ item.module_name }}</p>
+            <p
+              class="font-name-home mt-2"
+              :class="[skin == 'dark' ? 'text-light':'text-dark']"
+            >{{ item.module_name }}</p>
           </router-link>
-          <div v-else class="card-logo cursor-pointer" @click="redirectToOldSoft(item.module_route)">
+          <div
+            v-else
+            class="card-logo cursor-pointer"
+            @click="redirectToOldSoft(item.module_route)"
+          >
             <img
               :src="`./assets${item.module_icon}`"
               alt="Logo"
@@ -55,7 +62,7 @@ export default {
   data() {
     return {
       menuHidden: this.$store.state.appConfig.layout.menu.hidden,
-      navbarConfig: this.$store.state.appConfig.layout.navbar.type,
+      navbarConfig: this.$store.state.appConfig.layout.navbar.type
     };
   },
   computed: {
@@ -65,8 +72,8 @@ export default {
     currentUser() {
       return this.$store.getters["auth/currentUser"];
     },
-    skin(){
-      return this.$store.getters['appConfig/skin']
+    skin() {
+      return this.$store.getters["appConfig/skin"];
     }
   },
   methods: {
@@ -75,7 +82,7 @@ export default {
         `${process.env.VUE_APP_ORIGINAL_SOFT}api/v1/auth/autologin?id=${this.currentUser.user_id}&route=${route}`,
         "_blank"
       );
-    },
+    }
   },
   mounted() {},
   created() {
@@ -84,11 +91,11 @@ export default {
   },
   destroyed() {
     this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", {
-      type: this.navbarConfig,
+      type: this.navbarConfig
     });
     this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", this.menuHidden);
     this.$store.commit("appConfig/UPDATE_LAYOUT_TYPE", "vertical");
-  },
+  }
 };
 </script>
 
@@ -149,7 +156,7 @@ export default {
   filter: invert(59%) sepia(7%) saturate(18%) hue-rotate(11deg) brightness(97%)
     contrast(89%);
 }
-.mt-13{
+.mt-13 {
   margin-top: 13px !important;
 }
 </style>
