@@ -27,6 +27,7 @@
         :per-page="paginate.perPage"
         :current-page="paginate.currentPage"
         :filter="filter"
+        class="font-small-3"
       >
         <template #table-busy>
           <div class="text-center text-primary my-2">

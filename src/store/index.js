@@ -28,6 +28,7 @@ Vue.use(Vuex)
 const initialState = {
   ecommerceStoreModule: { ...ecommerceStoreModule.state },
   CrmStore: { ...CrmStore.state },
+  SocialNetworkStore: {...SocialNetworkStore.state },
   saleMade: { ...saleMade.state },
   CommissionsStore: { ...CommissionsStore.state },
   LoansStore: { ...LoansStore.state },

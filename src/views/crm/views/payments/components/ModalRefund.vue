@@ -17,7 +17,7 @@
             <div class="col-lg-8 col-12 col-xl-8 col-md-8 p-1">
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">Client</span>
+                  <span class="input-group-text" id="basic-addon1">Clienasdasdt</span>
                 </div>
                 <b-form-input disabled v-model="dataVoid.client_name" />
                 <!-- <span>{{dataVoid.client_name}}</span> -->

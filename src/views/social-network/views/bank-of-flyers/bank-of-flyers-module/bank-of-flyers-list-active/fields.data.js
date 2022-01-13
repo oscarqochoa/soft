@@ -48,6 +48,7 @@ export default [
     key: 'actions',
     sortable: false,
     label: 'Action',
+
   },
 
 ]
