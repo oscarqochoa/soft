@@ -5,6 +5,9 @@ import {
   BootstrapVue,
   BootstrapVueIcons,
 } from 'bootstrap-vue'
+import '@progress/kendo-ui'
+import '@progress/kendo-theme-default/dist/all.css'
+import { DateinputsInstaller } from '@progress/kendo-dateinputs-vue-wrapper'
 import VueCompositionAPI from '@vue/composition-api'
 // import i18n from "@/libs/i18n";
 import ScrollBar from '@morioh/v-perfect-scrollbar'
@@ -53,6 +56,9 @@ import './pusher/index'
 Vue.prototype.$log = console.log
 
 window.amgApi = amgApi
+
+// KENDO PLUGIN
+Vue.use(DateinputsInstaller)
 // require('./service/axios');
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
