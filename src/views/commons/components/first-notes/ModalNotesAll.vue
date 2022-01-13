@@ -1,72 +1,256 @@
 <template>
   <div>
-    <b-modal
-      v-model="modalUp"
-      size="xmd"
-      header-class="p-0"
-      header-bg-variant="transparent"
-      scrollable
-      @hide="hideModal(false)"
+    <validation-observer
+      ref="form"
     >
-      <template #modal-header>
-        <HeaderModalNotes
-          :program="noteInfo.nameProgram"
-          :info="noteInfo"
-          @close="hideModal(false)"
-        />
-      </template>
-      <b-container>
-        <b-row>
-          <b-col
-            v-for="(question, index) in notesSales"
-            :key="index"
-            :md="question.column"
-          >
-            <pre> {{ question }}</pre>
-            <b-form-group
-              v-if="findFather(question.father)"
-              :label="question.question"
-            >
-              <b-form-input
-                v-if="question.type == 2"
-                :ref="'required'+question.question_id"
-                v-model="question.answer"
-                :name="'answer'+question.question_id"
-                @keyup="deleteRequired(question)"
-              />
-              <quill-editor
-                v-else-if="question.type == 0"
-                :id="'required'+question.question_id"
-                v-model="question.answer"
-                :name="'answer'+question.question_id"
-                :disabled="valorEdit"
-                :options="{modules: { toolbar: false },}"
-                @keyup="deleteRequired(question)"
-              />
-              <b-form-radio-group
-                v-else
-                v-model="question.answer"
-                :options="JSON.parse(question.options)"
-              />
-            </b-form-group>
-          </b-col>
-        </b-row>
-      </b-container>
-      <!-- <template #modal-footer>
-        <template v-if="newNote">
-          <button-save v-if="showButtonSave" @click="saveNotesIncomplete" />
-          <button-save-and-complete v-if="showButtonSave" @click="saveNotesCompleted" />
-          <button-update
-            v-if="showNewButtonUpdate || showNewButtonUpdateAdmin"
-            @click="updateNotesCompleted"
+      <b-modal
+        v-model="modalUp"
+        size="xmd"
+        header-class="p-0"
+        header-bg-variant="transparent"
+        scrollable
+        @hide="hideModal(false)"
+      >
+        <template #modal-header>
+          <HeaderModalNotes
+            :program="noteInfo.nameProgram"
+            :info="noteInfo"
+            @close="hideModal(false)"
           />
         </template>
-        <template v-else>
-          <button-save v-if="showButtonSave" @click="saveNotesIncomplete" />
-          <button-update v-if="showButtonUpdate" @click="updateNotesCompleted" />
+        <b-container>
+          <b-row>
+            <b-col
+              v-if="notesSales[0].type_view == 2 && noteInfo.created >= '2021-06-15'"
+              md="12"
+              class="mb-1"
+            >
+              <validation-provider
+                v-slot="{ errors }"
+                rules="required"
+                name="contactSchedule"
+              >
+                <b-input-group>
+                  <b-input-group-prepend
+                    class="border-info rounded-left px-1 d-flex align-items-center justify-content-center bg-info text-white font-weight-bolder"
+                  >
+                    Contact Schedule
+                  </b-input-group-prepend>
+                  <b-form-input
+                    v-model="contact_schedule"
+                    :disabled="valorEdit"
+                    :class="{'border-danger rounded' : errors[0]}"
+                  />
+                </b-input-group>
+              </validation-provider>
+            </b-col>
+            <b-col md="6">
+              <b-form-group
+                label="Origin Country"
+                label-class="font-weight-bolder"
+              >
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required"
+                  name="originCountry"
+                >
+                  <v-select
+                    v-model="origin_country"
+                    label="name"
+                    :reduce="value => value.id"
+                    :options="countryOptions"
+                    :disabled="valorEdit"
+                    :class="{'border-danger rounded': errors[0]}"
+                  />
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col
+              v-for="(question, index) in notesSales"
+              :key="index"
+              :cols="question.column"
+            >
+              <validation-provider
+                v-slot="{errors}"
+                rules="required"
+              >
+                <b-form-group
+                  v-if="findFather(question.father)"
+                  :label="question.question"
+                  :disabled="valorEdit"
+                >
+                  <b-form-input
+                    v-if="question.type == 2"
+                    v-model="question.answer"
+                    :class="{'border-danger rounded' : errors[0]}"
+                  />
+                  <quill-editor
+                    v-if="question.type === 0"
+                    v-model="question.answer"
+                    :disabled="valorEdit"
+                    :options="{modules: { toolbar: false },}"
+                    :class="{'border-danger rounded' : errors[0]}"
+                  />
+                  <b-form-radio-group
+                    v-if="question.type == 1"
+                    v-model="question.answer"
+                    :options="JSON.parse(question.options)"
+                    :class="{'border-danger rounded' : errors[0]}"
+                  />
+                </b-form-group>
+              </validation-provider>
+            </b-col>
+            <b-col
+              v-if="notesSales[0].type_view == 2"
+              md="12"
+            >
+              <b-row>
+                <b-col
+                  md="12"
+                  class="text-primary font-medium-2 mb-1"
+                >
+                  More Information
+                </b-col>
+                <b-col
+                  class="mb-1 d-flex align-items-center"
+                  md="6"
+                >
+                  <span
+                    class="rounded-left border-info bg-info text-white w-25 text-center px-0"
+                    style="padding: 3px 10px"
+                  >
+                    Legal Status
+                  </span>
+                  <span
+                    class="w-75 border-top-info border-right-info border-bottom-info rounded-right"
+                    style="padding: 3px 10px"
+                  > {{ showContactSchedule.status_lead ? showContactSchedule.status_lead : '-' }}</span>
+                </b-col>
+                <b-col
+                  class="mb-1 d-flex align-items-center"
+                  md="6"
+                >
+                  <span
+                    class="rounded-left border-info bg-info text-white text-center"
+                    style="padding: 3px 10px; width: 35%"
+                  >
+                    Monthly Payment
+                  </span>
+                  <span
+                    class="border-top-info border-right-info border-bottom-info rounded-right"
+                    style="padding: 3px 10px; width: 65%"
+                  > $ {{ showContactSchedule.monthly_payment }}</span>
+                </b-col>
+                <b-col
+                  class="mb-1 d-flex align-items-center"
+                  md="6"
+                >
+                  <span
+                    class="rounded-left border-info bg-info text-white w-25 text-center px-0"
+                    style="padding: 3px 10px"
+                  >
+                    Retainer Fee
+                  </span>
+                  <span
+                    class="w-75 border-top-info border-right-info border-bottom-info rounded-right"
+                    style="padding: 3px 10px"
+                  > $ {{ showContactSchedule.retainer_fee }}</span>
+                </b-col>
+                <b-col
+                  class="mb-1 d-flex align-items-center"
+                  md="6"
+                >
+                  <span
+                    class="rounded-left border-info bg-info text-white text-center"
+                    style="padding: 3px 10px; width: 35%"
+                  >
+                    Incomes
+                  </span>
+                  <span
+                    class="border-top-info border-right-info border-bottom-info rounded-right"
+                    style="padding: 3px 10px; width: 65%"
+                  > $ {{ showContactSchedule.total_income }}</span>
+                </b-col>
+                <b-col
+                  class="mb-1 d-flex align-items-center"
+                  md="6"
+                >
+                  <span
+                    class="rounded-left border-info bg-info text-white w-25 text-center"
+                    style="padding: 3px 10px"
+                  >
+                    Saving
+                  </span>
+                  <span
+                    class="w-75 border-top-info border-right-info border-bottom-info rounded-right"
+                    style="padding: 3px 10px"
+                  > $ {{ showContactSchedule.saving }}</span>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col
+                  md="12"
+                  class="text-primary font-medium-2 mb-1"
+                >
+                  Creditor´s List
+                </b-col>
+                <b-col md="12">
+                  <b-table
+                    small
+                    class="font-small-3"
+                    :items="JSON.parse(showContactSchedule.creditors)"
+                    :fields="creditorsFields"
+                  />
+                </b-col>
+                <b-col
+                  class="mb-1"
+                  md="12"
+                >
+                  <b-row class="d-flex align-items-center justify-content-end font-small-3">
+                    <b-col
+                      md="6"
+                      class="d-flex align-items-center justify-content-center"
+                    >
+                      <span
+                        class="rounded-left border-info bg-info text-white text-center px-1"
+                        style="padding: 3px 10px"
+                      >
+                        Total
+                      </span>
+                      <span
+                        class="border-top-info border-right-info border-bottom-info rounded-right px-2"
+                        style="padding: 3px 10px"
+                      > $ {{ showContactSchedule.total_balance ? showContactSchedule.total_balance : '0.00' }}</span>
+                    </b-col>
+                  </b-row>
+                </b-col>
+              </b-row>
+            </b-col>
+          </b-row>
+        </b-container>
+        <template #modal-footer>
+          <b-container fluid>
+            <b-row v-if="notesCompleted">
+              <b-col
+                v-if="!valorEdit"
+                class="d-flex align-items-center justify-content-end"
+              >
+                <button-update @click="saveNotesCompleted" />
+              </b-col>
+            </b-row>
+            <b-row v-else>
+              <b-col class="d-flex align-items-center justify-content-end">
+                <button-save
+                  class="mr-1"
+                  @click="saveNotesIncomplete"
+                />
+                <button-save-and-complete @click="saveNotesCompleted" />
+              </b-col>
+            </b-row>
+          </b-container>
         </template>
-      </template>-->
-    </b-modal>
+      </b-modal>
+    </validation-observer>
   </div>
 </template>
 
@@ -81,9 +265,9 @@ import GlobalService from '@/views/services/global.service'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-import ButtonSave from '@/views/commons/utilities/ButtonSave'
-import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete'
-import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate'
+import ButtonSave from '@/views/commons/utilities/ButtonSave.vue'
+import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete.vue'
+import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate.vue'
 
 export default {
   name: 'ModalNotesAll',
@@ -126,10 +310,24 @@ export default {
   },
   data() {
     return {
+      creditorsFields: [
+        {
+          key: 'credit',
+          label: 'Creditors Name',
+        },
+        {
+          key: 'account',
+          label: '# Account',
+        },
+        {
+          key: 'balance',
+          label: 'Total Balance',
+          formatter: value => `$ ${value.toFixed(2)}`,
+        },
+      ],
       program: this.noteInfo.nameProgram,
       client_name: this.noteInfo.nameClient,
       /* notas: this.noteInfo.notesProgram.filter(val => val.question_id != 1062), */
-      valorEdit: false,
       notesCompleted: true,
       /* contact_schedule:
         this.noteInfo.notesProgram[5].answer == "null" ||
@@ -137,44 +335,37 @@ export default {
         this.noteInfo.notesProgram[5].answer == null
           ? ""
           : this.noteInfo.notesProgram[5].answer, */
-      contact_error: false,
       origin_country: null,
-      countrys: [],
       modalUp: false,
-      notesSales: [],
+      notesSales: [{ type_view: null }],
+      countryOptions: [],
+      contact_schedule: '',
     }
   },
   computed: {
     showContactSchedule() {
       return this.notesSales[0]
     },
+    valorEdit() {
+      return this.noteInfo.type == 1
+          || this.noteInfo.editModal == false
+          || this.noteInfo.statusSale == 2
+          || this.noteInfo.statusSale == 4
+          || this.noteInfo.notSeller
+    },
   },
-  mounted() {
-    /*  // Filter by date for new fields
-    if (this.noteInfo.created < '2021-08-05') {
-      this.notas = this.noteeInfo.notesProgram.filter(val => val.question != 'Type of Agreement' && val.question_id != 1062)
-    }
-
-    // type of Modal Edit or Create
-    if (
-      this.noteInfo.type == 1
-        || this.noteInfo.editModal == false
-        || this.noteInfo.statusSale == 2
-        || this.noteInfo.statusSale == 4
-        || this.noteInfo.notSeller
-    ) {
-      this.valorEdit = true
-    } else {
-      this.valorEdit = false
-    }
-
-    this.cleanNotes() */
-  },
-  created() {
-    this.getNotesSales()
-    this.getCountrys()
+  async created() {
+    await this.getNotesSales()
+    await this.getCountrys()
+    this.filterQuestions()
     this.getOriginCountry()
-    console.log(this.noteInfo)
+    this.notesSales = this.notesSales.filter(val => val.question_id != 1062)
+    if (this.noteInfo.created < '2021-08-05') {
+      this.notesSales = this.notesSales.filter(
+        val => val.question != 'Type of Agreement' && val.question_id != 1062,
+      )
+    }
+    this.cleanNotes()
   },
   methods: {
     async getNotesSales() {
@@ -182,6 +373,7 @@ export default {
         const params = { id: this.noteInfo.saleId }
         const response = await NotesServices.notesSales(params)
         this.notesSales = response
+        this.contact_schedule = this.notesSales[5].answer ? this.notesSales[5].answer : ''
         this.modalUp = true
         this.removePreloader()
       } catch (e) {
@@ -198,7 +390,7 @@ export default {
       }
     },
     getOriginCountry() {
-      this.note.originCountry = this.noteInfo.originCountry
+      this.origin_country = this.noteInfo.originCountry
     },
     // Hide Modal
     hideModal(status) {
@@ -222,178 +414,69 @@ export default {
       }
       return true
     },
-    saveNotesCompleted() {
-      const notes = []
-      this.addPreloader()
-      let fr = true
-      let nr = 0
-      for (let x = 0; x < this.notas.length; x++) {
-        if (!this.findFather(this.notas[x].father)) {
-          fr = false
-          nr += 1
-          this.notas[x].answer = null
-        } else {
-          fr = true
-        }
-
-        if (
-          fr == true
-          && (this.notas[x].answer == null || this.notas[x].answer == '')
-        ) {
-          this.$refs[`required${this.notas[x].question_id}`].$el.classList.add(
-            'required-text',
-          )
-          setTimeout(() => {
+    async saveNotesCompleted() {
+      const result = await this.$refs.form.validate()
+      if (result) {
+        const { value } = await this.showConfirmSwal()
+        if (value) {
+          const response = await amgApi.post('/insertSaleNotes', {
+            notes: this.notesSales,
+            sale_id: this.notesSales[0].sale_id,
+            contact_schedule: this.contact_schedule,
+            originCountry: this.originCountry,
+            idLead: this.noteInfo.idLead,
+          })
+          if (response.status === 200) {
             this.removePreloader()
-          }, 50)
+            this.showSuccessSwal('Notes Successfull')
+            this.hideModal(true)
+          }
         }
-      }
-      this.notas.map(index => {
-        if (index.answer != null && index.answer != '') {
-          notes.push(index)
-        }
-      })
-      // Validation for Debt Solution
-      if (this.notas[0].type_view == 2 && this.created >= '2021-06-15') {
-        if (this.contact_schedule == '' || this.contact_schedule == null) {
-          this.contact_error = true
-          var boton = document.getElementById('loading')
-          boton.classList.remove('preloader')
-          boton.classList.remove('modal-preloader')
-        } else {
-          this.contact_error = false
-        }
-      }
-
-      if (
-        this.notas.length == notes.length + nr
-        && this.contact_error == false
-      ) {
-        swal
-          .fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ab9220',
-            cancelButtonColor: '#8f9194',
-            confirmButtonText: 'Yes',
-          })
-          .then(result => {
-            if (result.value) {
-              axios
-                .post('/api/insertSaleNotes', {
-                  notes,
-                  sale_id: this.notas[0].sale_id,
-                  contact_schedule: this.contact_schedule,
-                  originCountry: this.origin_country,
-                  idLead: this.idLead,
-                })
-                .then(response => {
-                  if (response.status == 200) {
-                    setTimeout(() => {
-                      const boton = document.getElementById('loading')
-                      boton.classList.remove('preloader')
-                    }, 50)
-                    boton.classList.remove('modal-preloader')
-                    swal
-                      .fire({
-                        type: 'success',
-                        title: 'Notes Successfull',
-                      })
-                      .then(res => {
-                        if (res) {
-                          this.$emit('click', false)
-                        }
-                      })
-                  }
-                })
-            }
-          })
       }
     },
 
-    saveNotesIncomplete() {
-      const boton = document.getElementById('loading')
-
-      swal
-        .fire({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes',
+    async saveNotesIncomplete() {
+      const result = await this.showConfirmSwal()
+      if (result.value) {
+        this.addPreloader()
+        const response = await amgApi.post('/insertSaleNotes', {
+          notes: this.notesSales,
+          sale_id: this.notesSales[0].sale_id,
+          contact_schedule: this.contact_schedule,
+          originCountry: this.originCountry,
+          idLead: this.noteInfo.idLead,
         })
-        .then(result => {
-          if (result.value) {
-            axios
-              .post('/api/insertSaleNotes', {
-                notes: this.notas,
-                sale_id: this.notas[0].sale_id,
-                contact_schedule: this.contact_schedule,
-                originCountry: this.origin_country,
-                idLead: this.idLead,
-              })
-              .then(response => {
-                if (response.status == 200) {
-                  setTimeout(() => {
-                    const boton = document.getElementById('loading')
-                    boton.classList.remove('preloader')
-                  }, 50)
-                  boton.classList.remove('modal-preloader')
-                  swal
-                    .fire({
-                      type: 'success',
-                      title: 'Notes Successfull',
-                    })
-                    .then(res => {
-                      if (res) {
-                        this.$emit('click', false)
-                      }
-                    })
-                }
-              })
-          }
-        })
+        if (response.status === 200) {
+          this.removePreloader()
+          this.showSuccessSwal('Notes Successfull')
+          this.hideModal(true)
+        }
+      }
     },
     cleanNotes() {
-      for (let x = 0; x < this.notas.length; x++) {
-        if (this.notas[x].answer == 'null' || this.notas[x].answer == null) {
-          this.notas[x].answer = ''
-
-          // Update o Save
+      this.notesSales.map(note => {
+        if (note.answer == 'null' || note.answer == null) {
+          // eslint-disable-next-line no-param-reassign
+          note.answer = ''
           this.notesCompleted = false
-          //
         }
-      }
-      if (this.contact_schedule == '') {
+      })
+      /* if (this.contact_schedule == '') {
         this.notesCompleted = false
-      }
+      } */
     },
     filterQuestions() {
       // filter repeat clients
       let noRepeatQuestions = []
       const uniqueQuestion = {}
-      noRepeatQuestions = this.notas
+      noRepeatQuestions = this.notesSales
 
       noRepeatQuestions = noRepeatQuestions.filter(current => {
         const exists = !uniqueQuestion[current.question_id]
         uniqueQuestion[current.question_id] = true
         return exists
       })
-      this.notas = noRepeatQuestions
-    },
-    getCountries() {
-      axios
-        .post('/api/view-countrys', {})
-        .then(response => {
-          this.countrys = response.data
-        })
-        .catch(err => {
-          console.error(err)
-        })
+      this.notesSales = noRepeatQuestions
     },
   },
 }
