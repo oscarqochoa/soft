@@ -670,6 +670,7 @@ import ModalHistorySms from "@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue
 import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
 import ModalNotesCredit from "@/views/commons/components/first-notes/ModalNotasCredit.vue";
 import ModalNotesSpecialist from "@/views/commons/components/first-notes/ModalNotesSpecialist.vue";
+import ModalNotesAll from "@/views/commons/components/first-notes/ModalNotesAll.vue";
 import ApproveSupervisorModal from "@/views/crm/views/sales-made/components/modals/ApproveSupervisorModal.vue";
 
 export default {
@@ -700,6 +701,7 @@ export default {
     ModalNotesFirst,
     ModalNotesTax,
     ModalNotesCredit,
+    ModalNotesAll,
     ModalNotesSpecialist,
     ApproveSupervisorModal
   },
