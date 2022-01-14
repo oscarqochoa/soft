@@ -43,18 +43,13 @@
           </validation-provider>
         </b-col>
         <b-col cols="12 form-group-md-2">
-          <validation-provider #default="validationContext" name="Subject" rules="required">
-            <b-form-group
-              label="Subject"
-              label-for="subject"
-              label-cols-md="2"
-              :state="getValidationState(validationContext)"
-            >
+          <validation-provider v-slot="{errors}" name="Subject" rules="required">
+            <b-form-group label="Subject" label-for="subject" label-cols-md="2">
               <b-form-input
                 v-if="modul !== 15 || taskForSn"
                 id="subject"
                 v-model="task.subject"
-                :state="getValidationState(validationContext)"
+                :state="errors[0] ? false : null"
                 trim
               />
               <v-select
@@ -64,10 +59,6 @@
                 :options="[ 'CALL' ]"
               />
             </b-form-group>
-
-            <b-form-invalid-feedback
-              :state="getValidationState(validationContext)"
-            >{{ validationContext.errors[0] }}</b-form-invalid-feedback>
           </validation-provider>
         </b-col>
         <b-col v-if="authUser.role_id === 7" cols="12 form-group-md-2">
@@ -97,73 +88,71 @@
           <b-row>
             <label class="col-md-2 col-form-label">Due Date</label>
             <b-col>
-              <validation-provider #default="validationContext" name="Date" rules="required">
-                <b-form-group :state="getValidationState(validationContext)">
-                  <flat-pickr
-                    v-model="task.date"
-                    id="date"
-                    placeholder="Date"
-                    class="form-control"
-                    :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'm/d/Y', locale: 'en' }"
-                    :min="minDate"
-                    :max="maxDate"
-                  />
-                  <b-form-invalid-feedback
-                    :state="getValidationState(validationContext)"
-                  >{{ validationContext.errors[0] }}</b-form-invalid-feedback>
-                </b-form-group>
-              </validation-provider>
+              <b-form-group>
+                <flat-pickr
+                  v-model="task.date"
+                  id="date"
+                  placeholder="Date"
+                  class="form-control"
+                  :config="configFlatPickr"
+                />
+              </b-form-group>
             </b-col>
             <b-col>
-              <validation-provider #default="validationContext" name="Hour" rules="required">
-                <b-form-group>
-                  <b-form-invalid-feedback>{{ validationContext.errors[0] }}</b-form-invalid-feedback>
-                </b-form-group>
-              </validation-provider>
+              <b-form-group>
+                <kendo-timepicker
+                  :format="'HH:mm'"
+                  v-model="task.hour"
+                  :interval="15"
+                  class="w-100 rounded bg-transparent"
+                  placeholder="Hour"
+                  style="height: 2.73rem"
+                />
+              </b-form-group>
             </b-col>
             <b-col md="2">
-              <validation-provider>
-                <b-form-group>
-                  <b-form-input :value="modul === 15 ? 'UNK' : lead.state" readonly />
-                </b-form-group>
-              </validation-provider>
+              <b-form-group>
+                <b-form-input :value="modul === 15 ? 'UNK' : lead.state" readonly />
+              </b-form-group>
             </b-col>
           </b-row>
         </b-col>
         <b-col cols="12 form-group-md-2">
-          <validation-provider #default="validationContext" name="Assign to" rules="required">
+          <validation-provider v-slot="{errors}" name="Assign to" rules="required">
             <b-form-group
               label="Assign to"
               label-cols-md="2"
               label-for="asigned"
-              :state="getValidationState(validationContext)"
+              :state="errors[0] ? false : null"
             >
               <v-select
-                v-model="task.asignedObj"
+                v-model="task.seller"
                 id="asigned"
                 placeholder="Select a Seller"
-                label="label"
+                label="user_name"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="S_USER_APPOINTEMENTS"
-                :selectable="(val) => !val.itemDisabled"
-              />
+                :options="sellers"
+                :reduce="val=> val.id"
+                :clearable="false"
+              >
+                <template #option="data">
+                  <span
+                    :class="data.state_advisors == 1? 'text-success': 'text-muted'"
+                  >{{data.user_name}}</span>
+                </template>
+              </v-select>
             </b-form-group>
-
-            <b-form-invalid-feedback
-              :state="getValidationState(validationContext)"
-            >{{ validationContext.errors[0] }}</b-form-invalid-feedback>
           </validation-provider>
         </b-col>
         <b-col cols="12 form-group-md-2">
-          <validation-provider #default="validationContext" name="Content">
+          <validation-provider v-slot="{errors}" name="Content" rules="required">
             <b-form-group label="Content" label-cols-md="2" label-for="content">
               <b-form-textarea
                 id="content"
                 rows="3"
                 v-model="task.content"
-                :state="getValidationState(validationContext)"
+                :state="errors[0] ? false : null"
               />
-              <b-form-invalid-feedback>{{ validationContext.errors[0] }}</b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -214,7 +203,8 @@ import { mapActions, mapGetters, mapState } from "vuex";
 import flatPickr from "vue-flatpickr-component";
 import Ripple from "vue-ripple-directive";
 import vSelect from "vue-select";
-
+import moment from "moment";
+import GlobalService from "@/views/services/global.service";
 import formValidation from "@core/comp-functions/forms/form-validation";
 
 export default {
@@ -233,28 +223,68 @@ export default {
     textButtonSubmit() {
       if (this.taskForSn) return "SUBMIT";
       else return "SEND TO CRM";
+    },
+    moduleId() {
+      return this.$route.meta.module;
     }
   },
-  created() {
+  async created() {
     this.authUser = this.currentUser;
     this.blankTask = Object.assign({}, this.task);
+    this.task.date = moment().format("MM/DD/YYYY");
+    await this.getHourSystem();
+    await this.getSellers();
+    this.removePreloader();
   },
   data() {
     return {
       authUser: {},
       blankTask: {},
+      sellers: [],
       isLoading: false,
       maxDate: new Date(2050, 9, 1),
       minDate: new Date(1000, 1, 1),
-      task: {}
+      task: { hour: "", seller: "", date: "" },
+      hour: "",
+      configFlatPickr: {
+        dateFormat: "m/d/Y",
+        locale: "en",
+        minDate: `${moment().format("MM/DD/YYYY")}`
+      }
     };
   },
   directives: { Ripple },
   methods: {
     ...mapActions({
       A_VALIDATE_TASK_FAVORITE: "TaskStore/A_VALIDATE_TASK_FAVORITE",
-      A_SET_LEAD_TASK: "TaskStore/A_SET_LEAD_TASK"
+      A_SET_LEAD_TASK: "TaskStore/A_SET_LEAD_TASK",
+      A_GET_HOUR_SYSTEM: "TaskStore/A_GET_HOUR_SYSTEM",
+      A_GET_USERS_BY_MODULE: "GlobalStore/A_GET_USERS_BY_MODULE"
     }),
+    async getHourSystem() {
+      const response = await this.A_GET_HOUR_SYSTEM(this.lead.state);
+      let hour = response.substr(0, 2);
+      let minute = response.substr(3, 4);
+      if (minute >= "00" && minute <= "14") {
+        minute = "15";
+      } else if (minute >= "16" && minute <= "29") {
+        minute = "30";
+      } else if (minute >= "31" && minute <= "44") {
+        minute = "45";
+      } else if (minute >= "46" && minute <= "59") {
+        minute = "00";
+        hour = hour == "24" ? "00" : +hour + 1;
+      }
+      this.task.hour = hour + ":" + minute;
+    },
+    async getSellers() {
+      const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
+      try {
+        const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
+        this.sellers = response;
+        this.task.seller = this.authUser.user_id;
+      } catch (error) {}
+    },
     onChangeSms() {
       this.task.sms = "";
       if (this.task.withsms) {
@@ -290,62 +320,32 @@ export default {
     async onSubmit() {
       try {
         if (await this.validateTaskFavorites()) {
-          this.showSwalGeneric(
-            "Are you sure?",
-            "You won't be able to revert this!",
-            "warning"
-          )
-            .then(async result => {
-              if (result.value) {
-                this.isLoading = true;
-                const response = await this.A_SET_LEAD_TASK({
-                  task_id: "",
-                  user_id: this.authUser.user_id,
-                  lead_id: this.lead.id,
-                  state: this.lead.state,
-                  status_sn: this.modul === 15 ? 2 : null,
-                  leadname: this.lead.lead_name,
-                  modul_id: this.modul,
-                  attend_id: this.task.attend_type ? 1 : 2,
-                  program_id:
-                    this.authUser.role_id === 7 &&
-                    this.this.lead.lead_programs.length
-                      ? this.this.lead.lead_programs[0].program_id
-                      : null,
-                  ...this.task,
-                  sms: this.task.sms ? this.task.sms : "",
-                  sms_status: this.task.sms_status ? this.task.sms_status : 0,
-                  asigned: this.task.asignedObj.value,
-                  method: this.authUser.role_id === 7 ? this.task.method : null,
-                  withsms: this.task.withsms ? 1 : 0,
-                  taskForSn: this.taskForSn
-                });
-                if (this.isResponseSuccess(response)) {
-                  this.$emit("onReloadTasks", response.data);
-                  this.showToast(
-                    "success",
-                    "top-right",
-                    "Success!",
-                    "CheckIcon",
-                    "Successful operation"
-                  );
-                  this.$bvModal.hide("modal-task-create");
-                } else
-                  this.showToast(
-                    "warning",
-                    "top-right",
-                    "Warning!",
-                    "AlertTriangleIcon",
-                    `Something went wrong. ${response.message}`
-                  );
-                this.isLoading = false;
-              }
-            })
-            .catch(error => {
-              console.log("Something went wrong onSubmit", error);
-              this.showErrorSwal();
-              this.isLoading = false;
-            });
+          const swal = await this.showConfirmSwal();
+          if (swal.isConfirmed) {
+            this.isLoading = true;
+            const params = {
+              task_id: "",
+              user_id: this.authUser.user_id,
+              lead_id: this.lead.id,
+              state: this.lead.state,
+              modul_id: this.modul,
+              program_id:
+                this.authUser.role_id === 7 &&
+                this.this.lead.lead_programs.length
+                  ? this.this.lead.lead_programs[0].program_id
+                  : null,
+              ...this.task,
+              sms: this.task.sms ? this.task.sms : "",
+              sms_status: this.task.sms_status ? this.task.sms_status : 0,
+              asigned: this.task.seller,
+              method: this.authUser.role_id === 7 ? this.task.method : null,
+              withsms: this.task.withsms ? 1 : 0,
+              taskForSn: this.taskForSn
+            };
+            const response = await this.A_SET_LEAD_TASK(params);
+            await this.$emit("onReloadTasks", response.data);
+            this.$bvModal.hide("modal-task-create");
+          }
         }
       } catch (error) {
         console.log("Something went wrong onSubmit", error);
@@ -357,7 +357,7 @@ export default {
       try {
         if (this.taskForSn) return true;
         const response = await this.A_VALIDATE_TASK_FAVORITE({
-          seller: this.task.asignedObj.value,
+          seller: this.task.seller,
           hour_date: this.$moment(
             `${this.task.date} ${this.task.hour}`,
             "MM/DD/YYYY HH:mm"

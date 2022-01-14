@@ -18,6 +18,23 @@ class GlobalService {
       throw error;
     }
   }
+  async getHourSystem(params) {
+    try {
+      const { data } = await amgApi.get("/get-hour-system?timezone=" + params);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getUsersByModuleAndRoles(module, params) {
+    try {
+      const { data } = await amgApi.post("/usermodule/" + module, params);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new GlobalService();

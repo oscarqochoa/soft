@@ -268,3 +268,14 @@ $borderamg: #efb911;
     }
   }
 }
+
+.k-picker-wrap {
+  border-radius: 0.357rem !important;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  transition: all 0.1s ease;
+  outline: 0;
+  background: transparent !important;
+  border-color: rgba(146, 151, 165, 0.2) !important;
+}

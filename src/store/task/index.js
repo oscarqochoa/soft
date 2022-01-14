@@ -1,6 +1,7 @@
 import Vue from "vue";
 
 import TaskService from "@/service/task";
+import GlobalService from "@/views/services/global.service";
 import mixins from "@/mixins/general";
 
 const state = {
@@ -153,6 +154,15 @@ const actions = {
       return response;
     } catch (error) {
       console.log("ERROR_CHANGE_TASK_TODAY_MODAL [ACTION]", error);
+      throw error;
+    }
+  },
+
+  async A_GET_HOUR_SYSTEM(body) {
+    try {
+      const response = await GlobalService.getHourSystem(body);
+      return response;
+    } catch (error) {
       throw error;
     }
   },

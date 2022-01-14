@@ -247,6 +247,7 @@ export default {
     },
     onModalCreateTaskOpen() {
       this.type = 1;
+      this.addPreloader();
       this.$bvModal.show("modal-task-create");
     },
     onReloadTasks(tasks) {
