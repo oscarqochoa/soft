@@ -19,8 +19,8 @@
             >
               <b-form-group label-for="text">
                 <b-form-textarea
-                  v-model="note.text"
                   id="text"
+                  v-model="note.text"
                   rows="11"
                   :disabled="isDisabled || onlyRead"
                   :state="getValidationState(validationContext)"
@@ -28,7 +28,10 @@
                 <small class="form-text text-muted">
                   <b>Created by: &nbsp;</b>
                   {{ note.created_by_name }} (
-                  <feather-icon icon="CalendarIcon" class="mr-50" />
+                  <feather-icon
+                    icon="CalendarIcon"
+                    class="mr-50"
+                  />
                   <span>{{ note.created_at | myGlobalWithHour }}</span> )
                   <b-button
                     v-if="isMyNote && !onlyRead"
@@ -51,8 +54,14 @@
       </b-form>
     </validation-observer>
 
-    <template v-if="(!isDisabled && !onlyRead) || (lead.count_notes && !onlyRead) || lead.count_notes" #footer>
-      <div class="d-flex" :class="!isDisabled && !onlyRead ? 'justify-content-between' : 'justify-content-end'">
+    <template
+      v-if="(!isDisabled && !onlyRead) || (lead.count_notes && !onlyRead) || lead.count_notes"
+      #footer
+    >
+      <div
+        class="d-flex"
+        :class="!isDisabled && !onlyRead ? 'justify-content-between' : 'justify-content-end'"
+      >
         <div v-if="!isDisabled && !onlyRead">
           <b-button
             v-ripple.400="'rgba(255, 255, 255, 0.15)'"
@@ -140,7 +149,7 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState,  } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
@@ -156,95 +165,101 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
     }),
   },
-  created () {
+  created() {
     this.authUser = this.currentUser
     this.myNote()
   },
-  data () {
+  directives: { Ripple },
+  data() {
     return {
-      authUser: new Object,
-      blankNote: new Object,
+      authUser: new Object(),
+      blankNote: new Object(),
       isDisabled: true,
       isMyNote: false,
-      note: new Object,
-      noteSave: new Object,
+      note: new Object(),
+      noteSave: new Object(),
     }
   },
-  directives: { Ripple },
   methods: {
     ...mapActions({
-      A_UPDATE_LEAD_NOTE: 'CrmNotesStore/A_UPDATE_LEAD_NOTE'
+      A_UPDATE_LEAD_NOTE: 'CrmNotesStore/A_UPDATE_LEAD_NOTE',
     }),
-    setDataBlank (key) {
-      this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`] = Object.assign({}, this[key])
+    setDataBlank(key) {
+      this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = { ...this[key] }
     },
-    resetData (key) {
-      const object = this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`]
-      for (let subkey in object) {
+    resetData(key) {
+      const object = this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`]
+      for (const subkey in object) {
         this[key][subkey] = object[subkey]
       }
       this.$refs.refFormObserver.reset()
     },
-    reloadNote (notes) {
+    reloadNote(notes) {
       this.note = notes[0]
       this.lead.count_notes = notes.length
       this.isMyNote = this.note.created_by == this.authUser.user_id
     },
-    myNote () {
+    myNote() {
       this.isMyNote = this.note.user_id == this.authUser.user_id
     },
-    async onSubmit () {
+    async onSubmit() {
       if (await this.$refs.refFormObserver.validate()) {
         this.showConfirmSwal()
-        .then(async result => {
-          if (result.value) {
-            this.isLoading = true
-            this.addPreloader()
-            const response = await this.A_UPDATE_LEAD_NOTE(this.note)
-            if (this.isResponseSuccess(response)) {
-              this.reloadNote(response.data)
-              this.setDataBlank('note')
-              this.isDisabled = true
-              this.removePreloader()
-              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-            } else {
-              this.removePreloader()
-              this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong. ' + response.message)
+          .then(async result => {
+            if (result.value) {
+              this.isLoading = true
+              this.addPreloader()
+              const response = await this.A_UPDATE_LEAD_NOTE(this.note)
+              if (this.isResponseSuccess(response)) {
+                this.reloadNote(response.data)
+                this.setDataBlank('note')
+                this.isDisabled = true
+                this.removePreloader()
+                this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+              } else {
+                this.removePreloader()
+                this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
+              }
+              this.isLoading = false
             }
+          }).catch(error => {
+            console.log('Something went wrong onSubmit', error)
+            this.removePreloader()
+            this.showErrorSwal()
             this.isLoading = false
-          }
-        }).catch(error => {
-          console.log('Something went wrong onSubmit', error)
-          this.removePreloader()
-          this.showErrorSwal()
-          this.isLoading = false
-        })
+          })
       }
-    }
+    },
   },
-  mounted () {
-    this.note = this.lead.notes ? this.lead.notes[0] : new Object
+  watch: {
+    isDisabled(current, old) {
+      if (current) this.resetData('note')
+      else this.setDataBlank('note')
+    },
+  },
+  mounted() {
+    this.note = this.lead.notes ? this.lead.notes[0] : new Object()
     this.note.created_by_name = this.note.created_by
     this.note.created_at = this.note.created
   },
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     onlyRead: {
       type: Boolean,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  setup () {
+  setup() {
     const {
       refFormObserver,
       getValidationState,
@@ -252,16 +267,8 @@ export default {
 
     return {
       refFormObserver,
-      getValidationState
+      getValidationState,
     }
   },
-  watch: {
-    isDisabled (current, old) {
-      if (current)
-        this.resetData('note')
-      else
-        this.setDataBlank('note')
-    }
-  }
 }
 </script>
