@@ -53,6 +53,21 @@ export default {
     },
   },
   actions: {
+    async A_GET_USERS_BY_MODULE(moduleId) {
+      try {
+        const params = {
+          roles: "[]",
+          type: "1",
+        };
+        const response = await GlobalServices.getUsersByModuleAndRoles(
+          moduleId,
+          params
+        );
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getSellers({ commit }) {
       const sellers = await GlobalServices.getSellersCrm();
       const formatedSellers = sellers.map((seller) => ({
