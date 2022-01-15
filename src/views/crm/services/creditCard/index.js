@@ -1,16 +1,16 @@
 import { amgApi } from '@/service/axios'
 
 class CreditCard {
-  async getCreditCard (body) {
+  async getCreditCard(body) {
     try {
-      const data = await amgApi.post('carddata', body)
+      const data = await amgApi.post('/carddata', body)
       return data
     } catch (error) {
       throw error
     }
   }
 
-  async getOriginalTarget (body) {
+  async getOriginalTarget(body) {
     try {
       const data = await amgApi.post('originaltarget', body)
       return data
@@ -19,7 +19,7 @@ class CreditCard {
     }
   }
 
-  async deleteCreditCard (body) {
+  async deleteCreditCard(body) {
     try {
       const data = await amgApi.post('deletecard', body)
       return data
@@ -28,7 +28,7 @@ class CreditCard {
     }
   }
 
-  async createCreditCard (body) {
+  async createCreditCard(body) {
     try {
       const data = await amgApi.post('createcard', body)
       return data

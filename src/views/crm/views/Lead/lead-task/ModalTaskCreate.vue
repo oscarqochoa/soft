@@ -32,8 +32,8 @@
           <validation-provider>
             <b-form-group label="Send Sms" label-for="sms-status" label-cols-md="4">
               <b-form-checkbox
-                v-model="task.sms_status"
                 id="sms-status"
+                v-model="task.sms_status"
                 checked="true"
                 class="custom-control-primary pt-50"
                 name="check-button"
@@ -70,8 +70,8 @@
               :state="getValidationState(validationContext)"
             >
               <b-form-radio-group
-                v-model="task.method"
                 id="method"
+                v-model="task.method"
                 name="radio-method"
                 class="mt-50"
                 :options="[ { text: 'INSTANTLY', value: '1' }, { text: 'PROGRAMED', value: '2' } ]"
@@ -90,8 +90,8 @@
             <b-col>
               <b-form-group>
                 <flat-pickr
-                  v-model="task.date"
                   id="date"
+                  v-model="task.date"
                   placeholder="Date"
                   class="form-control"
                   :config="configFlatPickr"
@@ -101,8 +101,8 @@
             <b-col>
               <b-form-group>
                 <kendo-timepicker
-                  :format="'HH:mm'"
                   v-model="task.hour"
+                  :format="'HH:mm'"
                   :interval="15"
                   class="w-100 rounded bg-transparent"
                   placeholder="Hour"
@@ -126,8 +126,8 @@
               :state="errors[0] ? false : null"
             >
               <v-select
-                v-model="task.seller"
                 id="asigned"
+                v-model="task.seller"
                 placeholder="Select a Seller"
                 label="user_name"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -138,7 +138,7 @@
                 <template #option="data">
                   <span
                     :class="data.state_advisors == 1? 'text-success': 'text-muted'"
-                  >{{data.user_name}}</span>
+                  >{{ data.user_name }}</span>
                 </template>
               </v-select>
             </b-form-group>
@@ -149,8 +149,8 @@
             <b-form-group label="Content" label-cols-md="2" label-for="content">
               <b-form-textarea
                 id="content"
-                rows="3"
                 v-model="task.content"
+                rows="3"
                 :state="errors[0] ? false : null"
               />
             </b-form-group>
@@ -161,9 +161,9 @@
             <b-form-group>
               <b-form-textarea
                 id="sms"
+                v-model="task.sms"
                 placeholder="Write new message"
                 rows="4"
-                v-model="task.sms"
                 :state="getValidationState(validationContext)"
               />
               <b-form-invalid-feedback>{{ validationContext.errors[0] }}</b-form-invalid-feedback>
@@ -204,8 +204,8 @@ import flatPickr from "vue-flatpickr-component";
 import Ripple from "vue-ripple-directive";
 import vSelect from "vue-select";
 import moment from "moment";
-import GlobalService from "@/views/services/global.service";
 import formValidation from "@core/comp-functions/forms/form-validation";
+import GlobalService from "@/views/services/global.service";
 
 export default {
   components: {
@@ -222,7 +222,7 @@ export default {
     }),
     textButtonSubmit() {
       if (this.taskForSn) return "SUBMIT";
-      else return "SEND TO CRM";
+      return "SEND TO CRM";
     },
     moduleId() {
       return this.$route.meta.module;
@@ -230,12 +230,13 @@ export default {
   },
   async created() {
     this.authUser = this.currentUser;
-    this.blankTask = Object.assign({}, this.task);
+    this.blankTask = { ...this.task };
     this.task.date = moment().format("MM/DD/YYYY");
     await this.getHourSystem();
     await this.getSellers();
     this.removePreloader();
   },
+  directives: { Ripple },
   data() {
     return {
       authUser: {},
@@ -253,13 +254,11 @@ export default {
       }
     };
   },
-  directives: { Ripple },
   methods: {
     ...mapActions({
       A_VALIDATE_TASK_FAVORITE: "TaskStore/A_VALIDATE_TASK_FAVORITE",
-      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
       A_SET_LEAD_TASK: "TaskStore/A_SET_LEAD_TASK",
-      A_GET_HOUR_SYSTEM: "global-store/A_GET_HOUR_SYSTEM",
+      A_GET_HOUR_SYSTEM: "TaskStore/A_GET_HOUR_SYSTEM",
       A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE"
     }),
     async getHourSystem() {
@@ -276,14 +275,47 @@ export default {
         minute = "00";
         hour = hour == "24" ? "00" : +hour + 1;
       }
-      this.task.hour = hour + ":" + minute;
+      this.task.hour = `${hour}:${minute}`;
     },
     async getSellers() {
+      const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
       try {
-        const response = await this.A_GET_USERS_BY_MODULE(this.moduleId);
+        const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
         this.sellers = response;
         this.task.seller = this.authUser.user_id;
       } catch (error) {}
+    },
+    onChangeSms() {
+      this.task.sms = "";
+      if (this.task.withsms) {
+        if (!this.task.asignedObj || !this.task.hour || !this.task.date) {
+          this.showToast(
+            "warning",
+            "top-right",
+            "Warning!",
+            "AlertTriangleIcon",
+            "these fields are required: Due Date and Assign to"
+          );
+          return;
+        }
+        const time = this.$moment(this.task.hour, "HH:mm:ss").format("h:mm A");
+        if (this.lead.lead_programs.length) {
+          if (this.lead.lead_programs[0].program_id === 1) {
+            this.task.sms = `Estimado(a) ${this.lead.lead_name} \n
+            Se agendó la cita telefónica con el especialista de negocios ${this.task.asignedObj.user_name}.\n
+            Fecha: ${this.task.date}
+            Hora: ${time}\n
+            Atte. AMG Business`;
+          }
+          if (this.lead.lead_programs[0].program_id === 3) {
+            this.task.sms = `Estimado(a) ${this.lead.lead_name} \n
+            Se agendó la cita telefónica con el especialista de crédito ${this.task.asignedObj.user_name}.\n
+            Fecha: ${this.task.date}
+            Hora: ${time}\n
+            Atte. AMG Credit Experts`;
+          }
+        }
+      }
     },
     async onSubmit() {
       try {
@@ -311,7 +343,6 @@ export default {
               taskForSn: this.taskForSn
             };
             const response = await this.A_SET_LEAD_TASK(params);
-            this.A_GET_TASK_COUNTER({ id: this.authUser.user_id });
             await this.$emit("onReloadTasks", response.data);
             this.$bvModal.hide("modal-task-create");
           }
@@ -333,7 +364,7 @@ export default {
           ).format("YYYY-MM-DD HH:mm:ss")
         });
         if (this.isResponseSuccess(response)) {
-          if (response.data.length)
+          if (response.data.length) {
             this.showToast(
               "warning",
               "top-right",
@@ -341,8 +372,8 @@ export default {
               "AlertTriangleIcon",
               "This Seller has an important task close to this time, please select another time"
             );
-          else return true;
-        } else
+          } else return true;
+        } else {
           this.showToast(
             "warning",
             "top-right",
@@ -350,6 +381,7 @@ export default {
             "AlertTriangleIcon",
             `Something went wrong. ${response.message}`
           );
+        }
       } catch (error) {
         console.log("Something went wrong validateTaskFavorites", error);
         this.showToast(
@@ -364,9 +396,9 @@ export default {
   },
   mounted() {
     if (this.taskForSn) this.task.attend_type = true;
-    else
-      this.task.attend_type =
-        this.task.type_attend_social === "programed" ? true : false;
+    else {
+      this.task.attend_type = this.task.type_attend_social === "programed";
+    }
   },
   props: {
     modul: {
@@ -385,7 +417,7 @@ export default {
   },
   setup() {
     const resetuserData = () => {
-      const event = Object.assign({}, this.blankTask);
+      const event = { ...this.blankTask };
       this.$emit("update:task", event);
     };
     const { refFormObserver, getValidationState } = formValidation(

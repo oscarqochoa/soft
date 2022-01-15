@@ -8,7 +8,13 @@ const state = {
   S_TASKS: [],
   S_HISTORY_TASKS: [],
   S_TASK: {},
-  S_TASK_COUNTER: { overdue: 0, today: 0, upcoming: 0, done: 0, t_today: 0 },
+  S_TASK_COUNTER: {
+    overdue: 0,
+    today: 0,
+    upcoming: 0,
+    done: 0,
+    t_today: 0,
+  },
   S_TASK_TODAY_INITIAL: false,
 };
 const getters = {
@@ -65,11 +71,12 @@ const actions = {
     try {
       const response = await TaskService.getHistoryTasks(body);
       /* console.log('A_GET_LEAD_HISTORY_TASKS response', response) */
-      if (mixins.methods.isResponseSuccess(response))
+      if (mixins.methods.isResponseSuccess(response)) {
         commit("SET_DATA", {
           destination: "S_HISTORY_TASKS",
           data: response.data.data,
         });
+      }
       return response;
     } catch (error) {
       console.log("ERROR_GET_LEAD_HISTORY_TASKS [ACTION]", error);
@@ -79,11 +86,14 @@ const actions = {
   async A_GET_TASK_COUNTER({ commit }, body) {
     try {
       const response = await TaskService.getTaskCounter(body);
-      if (mixins.methods.isResponseSuccess(response))
+      if (mixins.methods.isResponseSuccess(response)) {
         commit("SET_DATA", {
           destination: "S_TASK_COUNTER",
           data: response.data,
         });
+      }
+      // Show Modal Task TodayInitially
+      commit("M_SHOW_TASK_TODAY_MODAL");
       return response;
     } catch (error) {
       throw error;
@@ -112,7 +122,14 @@ const actions = {
   async A_SET_LEAD_TASK({ commit }, body) {
     try {
       const response = await TaskService.postCreateLeadTask(body);
-
+      /* console.log('A_SET_LEAD_TASK response', response) */
+      /* if (mixins.methods.isResponseSuccess(response)) {
+        body.id = response.data.id
+        commit('PUSH_DATA', {
+          destination: 'S_TASKS',
+          data: response.data
+        })
+      } */
       return response;
     } catch (error) {
       console.log("ERROR_SET_LEAD_TASK [ACTION]", error);
@@ -145,6 +162,15 @@ const actions = {
       return response;
     } catch (error) {
       console.log("ERROR_CHANGE_TASK_TODAY_MODAL [ACTION]", error);
+      throw error;
+    }
+  },
+
+  async A_GET_HOUR_SYSTEM(body) {
+    try {
+      const response = await GlobalService.getHourSystem(body);
+      return response;
+    } catch (error) {
       throw error;
     }
   },

@@ -5,7 +5,6 @@ export default {
   state: {
     sellersCrm: {},
     capturedCrm: [],
-    //TODO Hacerlo global
     programs: {},
     sources: {},
     states: {},
@@ -41,7 +40,7 @@ export default {
     SET_CAPTURED_CRM(state, capturedCrm) {
       state.capturedCrm = capturedCrm;
     },
-    //TODO Hacerlo global
+    // TODO Hacerlo global
     SET_PROGRAMS(state, programs) {
       state.programs = programs;
     },
@@ -53,7 +52,8 @@ export default {
     },
   },
   actions: {
-    async A_GET_USERS_BY_MODULE({}, moduleId) {
+    // eslint-disable-next-line consistent-return
+    async A_GET_USERS_BY_MODULE(moduleId) {
       try {
         const params = {
           roles: "[]",
@@ -93,7 +93,7 @@ export default {
       }));
       commit("SET_CAPTURED_CRM", formatedCaptured);
     },
-    //TODO Hacerlo global
+    // TODO Hacerlo global
     async getPrograms({ commit }) {
       const programs = await GlobalServices.getPrograms();
       const formatedPrograms = programs.map((pro) => ({
