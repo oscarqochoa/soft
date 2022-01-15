@@ -84,8 +84,6 @@ const actions = {
           destination: "S_TASK_COUNTER",
           data: response.data,
         });
-      //Show Modal Task TodayInitially
-      commit("M_SHOW_TASK_TODAY_MODAL");
       return response;
     } catch (error) {
       throw error;
@@ -114,14 +112,7 @@ const actions = {
   async A_SET_LEAD_TASK({ commit }, body) {
     try {
       const response = await TaskService.postCreateLeadTask(body);
-      /* console.log('A_SET_LEAD_TASK response', response) */
-      /* if (mixins.methods.isResponseSuccess(response)) {
-        body.id = response.data.id
-        commit('PUSH_DATA', {
-          destination: 'S_TASKS',
-          data: response.data
-        })
-      } */
+
       return response;
     } catch (error) {
       console.log("ERROR_SET_LEAD_TASK [ACTION]", error);
@@ -154,15 +145,6 @@ const actions = {
       return response;
     } catch (error) {
       console.log("ERROR_CHANGE_TASK_TODAY_MODAL [ACTION]", error);
-      throw error;
-    }
-  },
-
-  async A_GET_HOUR_SYSTEM(body) {
-    try {
-      const response = await GlobalService.getHourSystem(body);
-      return response;
-    } catch (error) {
       throw error;
     }
   },

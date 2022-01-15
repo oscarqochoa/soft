@@ -45,7 +45,13 @@
             </div>
           </template>
           <template #cell(client_name)="data">
-            <b-link class="text-important">{{ data.item.client_name }}</b-link>
+            <b-link
+              class="text-important"
+              :to="`/${routeModule}/leads/${data.item.lead_id}`"
+              target="_blank"
+            >{{ data.item.client_name }}</b-link>
+            <!-- 
+            <b-link class="text-important">{{ data.item.client_name }}</b-link>-->
             <br />
             <span>
               <amg-icon icon="SmartphoneIcon"></amg-icon>
@@ -64,38 +70,44 @@
           <template #cell(actions)="data">
             <div class="d-flex justify-content-between align-items-center">
               <span v-if="type != 4">
-                <amg-icon
-                  icon="CheckIcon"
-                  size="20"
-                  class="text-success cursor-pointer"
+                <b-button
+                  variant="flat-success"
+                  class="button-little-size rounded-circle"
                   @click="checkTask(data.item.id)"
-                  v-b-tooltip.hover.top="'Complete'"
-                />
+                  v-b-tooltip.hover.top="'Done Task'"
+                >
+                  <feather-icon icon="CheckCircleIcon" />
+                </b-button>
               </span>
               <span v-if="type != 4">
-                <amg-icon
-                  icon="Edit2Icon"
-                  size="16"
-                  class="text-warning cursor-pointer"
+                <b-button
+                  variant="flat-warning"
+                  class="button-little-size rounded-circle"
+                  @click="onModalEditTaskOpen(data.item.id, false)"
                   v-b-tooltip.hover.top="'Edit'"
-                />
+                >
+                  <feather-icon icon="EditIcon" />
+                </b-button>
               </span>
               <span>
-                <amg-icon
-                  icon="EyeIcon"
-                  size="16"
-                  class="text-info cursor-pointer"
+                <b-button
+                  variant="flat-info"
+                  class="button-little-size rounded-circle"
                   v-b-tooltip.hover.top="'View'"
-                />
+                  @click="onModalEditTaskOpen(data.item.id, true)"
+                >
+                  <feather-icon icon="EyeIcon" />
+                </b-button>
               </span>
               <span v-if="type != 4">
-                <amg-icon
-                  icon="TrashIcon"
-                  size="16"
-                  class="text-danger cursor-pointer"
+                <b-button
+                  variant="flat-danger"
+                  class="button-little-size rounded-circle"
                   v-b-tooltip.hover.top="'Delete'"
                   @click="deleteTask(data.item.id)"
-                />
+                >
+                  <feather-icon icon="Trash2Icon" />
+                </b-button>
               </span>
             </div>
           </template>
@@ -204,7 +216,11 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser"
-    })
+    }),
+
+    routeModule() {
+      return this.$route.meta.route;
+    }
   },
   methods: {
     ...mapActions({

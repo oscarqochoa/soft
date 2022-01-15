@@ -53,7 +53,7 @@ export default {
     },
   },
   actions: {
-    async A_GET_USERS_BY_MODULE(moduleId) {
+    async A_GET_USERS_BY_MODULE({}, moduleId) {
       try {
         const params = {
           roles: "[]",
@@ -66,6 +66,15 @@ export default {
         return response;
       } catch (error) {
         console.log(error);
+      }
+    },
+
+    async A_GET_HOUR_SYSTEM(body) {
+      try {
+        const response = await GlobalServices.getHourSystem(body);
+        return response;
+      } catch (error) {
+        throw error;
       }
     },
     async getSellers({ commit }) {

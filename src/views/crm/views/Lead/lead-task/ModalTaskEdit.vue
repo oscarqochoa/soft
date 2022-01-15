@@ -40,20 +40,15 @@
           </validation-provider>
         </b-col>
         <b-col cols="12 form-group-md-2">
-          <validation-provider #default="validationContext" name="Subject" rules="required">
-            <b-form-group
-              label="Subject"
-              label-for="subject"
-              label-cols-md="2"
-              :state="getValidationState(validationContext)"
-            >
+          <validation-provider v-slot="{errors}" name="Subject" rules="required">
+            <b-form-group label="Subject" label-for="subject" label-cols-md="2">
               <b-form-input
                 v-if="modul !== 15 || taskForSn"
-                v-model="task.subject"
                 id="subject"
-                trim
+                v-model="task.subject"
+                :state="errors[0] ? false : null"
                 :disabled="isDisabled"
-                :state="getValidationState(validationContext)"
+                trim
               />
               <v-select
                 v-else
@@ -62,10 +57,6 @@
                 :options="[ 'CALL' ]"
               />
             </b-form-group>
-
-            <b-form-invalid-feedback
-              :state="getValidationState(validationContext)"
-            >{{ validationContext.errors[0] }}</b-form-invalid-feedback>
           </validation-provider>
         </b-col>
         <b-col v-if="authUser.role_id === 7" cols="12 form-group-md-2">
@@ -103,30 +94,24 @@
                     id="date"
                     placeholder="Date"
                     class="form-control"
-                    :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'm/d/Y', locale: 'en' }"
+                    :config="configFlatPickr"
                     :disabled="isDisabled"
-                    :min="minDate"
-                    :max="maxDate"
                   />
-                  <b-form-invalid-feedback
-                    :state="getValidationState(validationContext)"
-                  >{{ validationContext.errors[0] }}</b-form-invalid-feedback>
                 </b-form-group>
               </validation-provider>
             </b-col>
             <b-col>
-              <validation-provider #default="validationContext" name="Hour" rules="required">
-                <b-form-group>
-                  <b-form-input
-                    id="hour"
-                    type="time"
-                    v-model="task.hour"
-                    :disabled="isDisabled"
-                    :state="getValidationState(validationContext)"
-                  />
-                  <b-form-invalid-feedback>{{ validationContext.errors[0] }}</b-form-invalid-feedback>
-                </b-form-group>
-              </validation-provider>
+              <b-form-group>
+                <kendo-timepicker
+                  :format="'HH:mm'"
+                  v-model="task.hour"
+                  :interval="15"
+                  class="w-100 rounded bg-transparent"
+                  placeholder="Hour"
+                  :disabled="isDisabled"
+                  style="height: 2.73rem"
+                />
+              </b-form-group>
             </b-col>
             <b-col md="2">
               <validation-provider>
@@ -138,41 +123,36 @@
           </b-row>
         </b-col>
         <b-col cols="12 form-group-md-2">
-          <validation-provider #default="validationContext" name="Assign to" rules="required">
-            <b-form-group
-              label="Assign to"
-              label-cols-md="2"
-              label-for="asigned"
-              :state="getValidationState(validationContext)"
+          <b-form-group label="Assign to" label-cols-md="2" label-for="asigned">
+            <v-select
+              v-model="seller"
+              id="asigned"
+              placeholder="Select a Seller"
+              label="user_name"
+              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+              :options="sellers"
+              :reduce="val=> val.id"
+              :clearable="false"
+              :disabled="isDisabled"
             >
-              <v-select
-                v-model="task.asignedObj"
-                id="asigned"
-                placeholder="Select a Seller"
-                label="label"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :disabled="isDisabled"
-                :options="S_USER_APPOINTEMENTS"
-                :selectable="(val) => !val.itemDisabled"
-              />
-            </b-form-group>
-
-            <b-form-invalid-feedback
-              :state="getValidationState(validationContext)"
-            >{{ validationContext.errors[0] }}</b-form-invalid-feedback>
-          </validation-provider>
+              <template #option="data">
+                <span
+                  :class="data.state_advisors == 1? 'text-success': 'text-muted'"
+                >{{data.user_name}}</span>
+              </template>
+            </v-select>
+          </b-form-group>
         </b-col>
         <b-col cols="12 form-group-md-2">
-          <validation-provider #default="validationContext" name="Content">
+          <validation-provider v-slot="{errors}" name="Content" rules="required">
             <b-form-group label="Content" label-cols-md="2" label-for="content">
               <b-form-textarea
                 id="content"
                 rows="3"
                 v-model="task.content"
                 :disabled="isDisabled"
-                :state="getValidationState(validationContext)"
+                :state="errors[0] ? false : null"
               />
-              <b-form-invalid-feedback>{{ validationContext.errors[0] }}</b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -191,7 +171,7 @@
             </b-form-group>
           </validation-provider>
           <div v-if="!isDisabled" class="d-flex justify-content-right">
-            <b-form-checkbox v-model="task.withsms" @input="onChangeSms" />
+            <b-form-checkbox v-model="task.withsms" />
             <span>&nbsp;&nbsp;SMS</span>
           </div>
         </b-col>
@@ -241,11 +221,16 @@ export default {
     }),
     ...mapState({
       S_USER_APPOINTEMENTS: state => state.CrmLeadStore.S_USER_APPOINTEMENTS
-    })
+    }),
+    moduleId() {
+      return this.$route.meta.module;
+    }
   },
-  created() {
+  async created() {
     this.authUser = this.currentUser;
     this.blankTask = Object.assign({}, this.task);
+    await this.getSellers();
+    this.removePreloader();
   },
   data() {
     return {
@@ -253,7 +238,19 @@ export default {
       blankTask: {},
       isLoading: false,
       maxDate: new Date(2050, 9, 1),
-      minDate: new Date(1000, 1, 1)
+      minDate: "",
+      configFlatPickr: {
+        dateFormat: "m/d/Y",
+        locale: "en",
+        minDate: `${
+          moment(this.task.real_time).format("MM/DD/YYYY") >
+          moment().format("MM/DD/YYYY")
+            ? moment().format("MM/DD/YYYY")
+            : moment(this.task.real_time).format("MM/DD/YYYY")
+        } `
+      },
+      sellers: [],
+      seller: null
     };
   },
   directives: { Ripple },
@@ -298,96 +295,48 @@ export default {
   methods: {
     ...mapActions({
       A_VALIDATE_TASK_FAVORITE: "TaskStore/A_VALIDATE_TASK_FAVORITE",
-      A_SET_LEAD_TASK: "TaskStore/A_SET_LEAD_TASK"
+      A_SET_LEAD_TASK: "TaskStore/A_SET_LEAD_TASK",
+      A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE"
     }),
-    onChangeSms() {
-      this.task.sms = "";
-      if (this.task.withsms) {
-        if (!this.task.asignedObj || !this.task.hour || !this.task.date) {
-          this.showToast(
-            "warning",
-            "top-right",
-            "Warning!",
-            "AlertTriangleIcon",
-            "these fields are required: Due Date and Assign to"
-          );
-          return;
-        }
-        const time = this.$moment(this.task.hour, "HH:mm:ss").format("h:mm A");
-        if (this.lead.lead_programs.length) {
-          if (this.lead.lead_programs[0].program_id === 1) {
-            this.task.sms = `Estimado(a) ${this.lead.lead_name} \n
-            Se agendó la cita telefónica con el especialista de negocios ${this.task.asignedObj.user_name}.\n
-            Fecha: ${this.task.date}
-            Hora: ${time}\n
-            Atte. AMG Business`;
-          }
-          if (this.lead.lead_programs[0].program_id === 3) {
-            this.task.sms = `Estimado(a) ${this.lead.lead_name} \n
-            Se agendó la cita telefónica con el especialista de crédito ${this.task.asignedObj.user_name}.\n
-            Fecha: ${this.task.date}
-            Hora: ${time}\n
-            Atte. AMG Credit Experts`;
-          }
-        }
-      }
+    async getSellers() {
+      try {
+        const response = await this.A_GET_USERS_BY_MODULE(this.moduleId);
+        this.sellers = response;
+        this.seller = this.task.user_id;
+      } catch (error) {}
     },
     async onSubmit() {
       try {
         if (await this.validateTaskFavorites()) {
-          this.showSwalGeneric(
-            "Are you sure?",
-            "You won't be able to revert this!",
-            "warning"
-          ).then(async result => {
-            if (result.value) {
-              this.isLoading = true;
-              const response = await this.A_SET_LEAD_TASK({
-                task_id: this.task.id,
-                user_id: this.authUser.user_id,
-                lead_id: this.lead.id,
-                state: this.lead.state,
-                status_sn: this.modul === 15 ? 2 : null,
-                leadname: this.lead.lead_name,
-                modul_id: this.modul,
-                attend_id: this.task.attend_type ? 1 : 2,
-                program_id:
-                  this.authUser.role_id === 7 &&
-                  this.this.lead.lead_programs.length
-                    ? this.this.lead.lead_programs[0].program_id
-                    : null,
-                ...this.task,
-                sms: this.task.sms ? this.task.sms : "",
-                sms_status: this.task.sms_status ? this.task.sms_status : 0,
-                asigned: this.task.asignedObj.value,
-                method: this.authUser.role_id === 7 ? this.task.method : null,
-                withsms: this.task.withsms ? 1 : 0,
-                taskForSn: this.taskForSn
-              });
-              if (this.isResponseSuccess(response)) {
-                this.$emit("onReloadTasks", response.data);
-                this.showToast(
-                  "success",
-                  "top-right",
-                  "Success!",
-                  "CheckIcon",
-                  "Successful operation"
-                );
-                this.$bvModal.hide("modal-task-create");
-              } else
-                this.showToast(
-                  "warning",
-                  "top-right",
-                  "Warning!",
-                  "AlertTriangleIcon",
-                  `Something went wrong. ${response.message}`
-                );
-              this.isLoading = false;
-            }
-          });
+          const swal = await this.showConfirmSwal();
+          if (swal.isConfirmed) {
+            this.isLoading = true;
+            const params = {
+              task_id: this.task.id,
+              user_id: this.authUser.user_id,
+              lead_id: this.lead.id,
+              state: this.lead.state,
+              modul_id: this.modul,
+              program_id:
+                this.authUser.role_id === 7 &&
+                this.this.lead.lead_programs.length
+                  ? this.this.lead.lead_programs[0].program_id
+                  : null,
+              ...this.task,
+              sms: this.task.sms ? this.task.sms : "",
+              sms_status: this.task.sms_status ? this.task.sms_status : 0,
+              asigned: this.seller,
+              method: this.authUser.role_id === 7 ? this.task.method : null,
+              withsms: this.task.withsms ? 1 : 0,
+              taskForSn: this.taskForSn
+            };
+            const response = await this.A_SET_LEAD_TASK(params);
+            await this.$emit("onReloadTasks", response.data);
+            this.$bvModal.hide("modal-task-edit");
+          }
         }
       } catch (error) {
-        console.log("Something went wrong onGetTask", error);
+        console.log("Something went wrong onSubmit", error);
         this.showErrorSwal();
         this.isLoading = false;
       }
@@ -434,10 +383,10 @@ export default {
     }
   },
   mounted() {
+    this.task.sms_status = this.task.sms_status ? true : false;
     this.task.date = this.$moment(
-      this.task.real_time ? this.task.real_time : this.task.due_date,
-      "YYYY-MM-DD HH:mm:ss"
-    ).format("m/d/Y");
+      this.task.real_time ? this.task.real_time : this.task.due_date
+    ).format("MM/DD/YYYY");
     this.task.hour = this.$moment(
       this.task.real_time ? this.task.real_time : this.task.due_date,
       "YYYY-MM-DD HH:mm:ss"

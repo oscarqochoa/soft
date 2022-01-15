@@ -31,20 +31,20 @@
           exact-active-class="active"
           link-classes="border-secondary hover-primary"
           exact
-          :to="{ name: 'lead-crm-lead-list' }"
+          :to="`/${routeModule}/leads/`"
         >Leads</b-nav-item>
         <b-nav-item
           exact-active-class="active"
           link-classes="border-secondary hover-primary"
           exact
-          :to="{ name: 'lead-crm-lead-sn-list' }"
+          :to="`/${routeModule}/leads/sn`"
         >Leads Sn</b-nav-item>
         <b-nav-item
           v-if="[1, 2].includes(currentUser.role_id) || isOnlyLead"
           exact-active-class="active"
           link-classes="border-secondary hover-primary"
           exact
-          :to="{ name: 'lead-crm-lead-w-potential-list' }"
+          :to="`/${routeModule}/leads/w-potential`"
         >Leads W Potential</b-nav-item>
       </b-nav>
       <router-view v-if="preloading" />
@@ -70,7 +70,10 @@ export default {
     ...mapState({
       S_SELECTED_LEADS: state => state.CrmLeadStore.S_SELECTED_LEADS,
       S_FILTERS_LEADS: state => state.CrmLeadStore.S_FILTERS_LEADS
-    })
+    }),
+    routeModule() {
+      return this.$route.meta.route;
+    }
   },
   data() {
     return {

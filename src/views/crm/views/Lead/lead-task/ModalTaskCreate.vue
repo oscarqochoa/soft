@@ -257,9 +257,10 @@ export default {
   methods: {
     ...mapActions({
       A_VALIDATE_TASK_FAVORITE: "TaskStore/A_VALIDATE_TASK_FAVORITE",
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
       A_SET_LEAD_TASK: "TaskStore/A_SET_LEAD_TASK",
-      A_GET_HOUR_SYSTEM: "TaskStore/A_GET_HOUR_SYSTEM",
-      A_GET_USERS_BY_MODULE: "GlobalStore/A_GET_USERS_BY_MODULE"
+      A_GET_HOUR_SYSTEM: "global-store/A_GET_HOUR_SYSTEM",
+      A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE"
     }),
     async getHourSystem() {
       const response = await this.A_GET_HOUR_SYSTEM(this.lead.state);
@@ -278,44 +279,11 @@ export default {
       this.task.hour = hour + ":" + minute;
     },
     async getSellers() {
-      const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
       try {
-        const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
+        const response = await this.A_GET_USERS_BY_MODULE(this.moduleId);
         this.sellers = response;
         this.task.seller = this.authUser.user_id;
       } catch (error) {}
-    },
-    onChangeSms() {
-      this.task.sms = "";
-      if (this.task.withsms) {
-        if (!this.task.asignedObj || !this.task.hour || !this.task.date) {
-          this.showToast(
-            "warning",
-            "top-right",
-            "Warning!",
-            "AlertTriangleIcon",
-            "these fields are required: Due Date and Assign to"
-          );
-          return;
-        }
-        const time = this.$moment(this.task.hour, "HH:mm:ss").format("h:mm A");
-        if (this.lead.lead_programs.length) {
-          if (this.lead.lead_programs[0].program_id === 1) {
-            this.task.sms = `Estimado(a) ${this.lead.lead_name} \n
-            Se agendó la cita telefónica con el especialista de negocios ${this.task.asignedObj.user_name}.\n
-            Fecha: ${this.task.date}
-            Hora: ${time}\n
-            Atte. AMG Business`;
-          }
-          if (this.lead.lead_programs[0].program_id === 3) {
-            this.task.sms = `Estimado(a) ${this.lead.lead_name} \n
-            Se agendó la cita telefónica con el especialista de crédito ${this.task.asignedObj.user_name}.\n
-            Fecha: ${this.task.date}
-            Hora: ${time}\n
-            Atte. AMG Credit Experts`;
-          }
-        }
-      }
     },
     async onSubmit() {
       try {
@@ -343,6 +311,7 @@ export default {
               taskForSn: this.taskForSn
             };
             const response = await this.A_SET_LEAD_TASK(params);
+            this.A_GET_TASK_COUNTER({ id: this.authUser.user_id });
             await this.$emit("onReloadTasks", response.data);
             this.$bvModal.hide("modal-task-create");
           }

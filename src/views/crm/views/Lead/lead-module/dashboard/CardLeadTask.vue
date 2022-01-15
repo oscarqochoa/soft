@@ -202,10 +202,10 @@ export default {
   data() {
     return {
       fieldsTask: [
-        { key: "subject", thClass: "py-1" },
-        { key: "date", label: "Date/Hour", thClass: "py-1" },
-        { key: "sms", thClass: "py-1" },
-        { key: "Actions", thClass: "py-1" }
+        { key: "subject", tdClass: "py-1" },
+        { key: "date", label: "Date/Hour", tdClass: "py-1" },
+        { key: "sms", tdClass: "py-1" },
+        { key: "Actions", tdClass: "py-1" }
       ],
       isLoading: false,
       isTaskDisabled: false,
@@ -291,6 +291,7 @@ export default {
     },
     async onModalEditTaskOpen(id, isDisabled) {
       try {
+        this.addPreloader();
         this.isLoading = true;
         const response = await this.A_GET_TASK({ id });
         if (this.isResponseSuccess(response)) {
@@ -381,7 +382,7 @@ export default {
                 "top-right",
                 "Success!",
                 "CheckIcon",
-                "Deleted successful"
+                "Favorite successful"
               );
             } else
               this.showToast(
