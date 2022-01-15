@@ -1,9 +1,9 @@
 import bankOfFlyersListActive
-  from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyers-list-active/bank-of-flyers-list-active'
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyers-list-active/bank-of-flyers-list-active.vue'
 import bankOfFlyersListInactive
-  from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyers-list-inactive/bank-of-flyers-list-inactive'
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyers-list-inactive/bank-of-flyers-list-inactive.vue'
 import bankOfFlyersListPreactive
-  from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyer-preactive/bank-of-flyers-list-preactive'
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyer-preactive/bank-of-flyers-list-preactive.vue'
 
 export default [
   {
@@ -16,23 +16,19 @@ export default [
         component: bankOfFlyersListActive,
         name: 'list-social-network-active',
 
-
       },
       {
-        path: '',
+        path: 'inactive',
         component: bankOfFlyersListInactive,
         name: 'list-social-network-inactive',
 
-
       },
       {
-        path: '',
+        path: 'preactive',
         component: bankOfFlyersListPreactive,
         name: 'list-social-network-preactive',
 
-
       },
-
 
     ],
     meta: {

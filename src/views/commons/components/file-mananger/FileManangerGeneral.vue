@@ -275,6 +275,7 @@
       ok-title="Ok"
       @hidden="actionOnHideUploadFileModal"
     >
+
       <drag-and-drop
         v-model="files"
         :files-array="files"

@@ -30,8 +30,8 @@ export default [
     label: 'Program',
     model: null,
     options: [],
-    reduce: 'id',
-    selectText: 'label',
+    reduce: 'logo',
+    selectText: 'value',
     cols: 12,
   },
   {
