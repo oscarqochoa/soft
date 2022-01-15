@@ -155,6 +155,7 @@
           :items="items"
           :type="type"
           @close="closeWatchModal"
+          @reloadCampaigns=""
         />
 
         <modal-replies

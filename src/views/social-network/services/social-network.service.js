@@ -40,5 +40,35 @@ class SocialNetworkService {
       throw error
     }
   }
+
+  async insertCampaignFlyers(body) {
+    try {
+      const data = await amgApi.post('/insert-campaigns-flyers', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on insertCampaignFlyers:', error)
+      throw error
+    }
+  }
+
+  async deleteCampaignFlyers(body) {
+    try {
+      const data = await amgApi.post('/delete-campaigns-flyers', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on deleteCampaignFlyers:', error)
+      throw error
+    }
+  }
+
+  async getCampaignFlyers(body) {
+    try {
+      const data = await amgApi.post('/get-campaigns-flyers', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getCampaignFlyers:', error)
+      throw error
+    }
+  }
 }
 export default new SocialNetworkService()
