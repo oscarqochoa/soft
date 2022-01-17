@@ -670,6 +670,7 @@ export default {
 
   },
   async created() {
+    console.log(this.noteInfo)
     await this.getFirstNote()
     await this.listTypeBusiness()
     await this.getCountries()

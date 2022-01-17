@@ -33,6 +33,14 @@ class NotesService {
       throw error;
     }
   }
+  async notesSales(params){
+    try{
+      const { data } = await amgApi.post("/view-countrys",params);
+      return data
+    } catch(error){
+      throw error
+    }
+  }
 }
 
 export default new NotesService();

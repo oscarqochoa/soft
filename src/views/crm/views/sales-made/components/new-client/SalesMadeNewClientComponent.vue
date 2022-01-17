@@ -770,6 +770,7 @@ import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue
 import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms.vue'
 import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasCredit.vue'
 import ModalNotesSpecialist from '@/views/commons/components/first-notes/ModalNotesSpecialist.vue'
+import ModalNotesOld from '@/views/commons/components/first-notes/ModalNotesOld.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -800,6 +801,7 @@ export default {
     ModalNotesTax,
     ModalNotesCredit,
     ModalNotesSpecialist,
+    ModalNotesOld
   },
   props: {
     done: {
@@ -1081,7 +1083,7 @@ export default {
 
     // Notes
     async notesModal(data) {
-      this.addPreloader()
+      // this.addPreloader()
       this.modalData.notes.capturedName = data.captured
       this.modalData.notes.sellerName = data.seller
       this.modalData.notes.trackings = data.trackings
