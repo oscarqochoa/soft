@@ -11,6 +11,7 @@
       @hidden="closeModal"
       title-tag="h3"
       scrollable
+      :no-close-on-backdrop="true"
     >
       <div class="m-1" id="modalBody">
         <div class="row" id="cont-list" style="height: 400px; overflow: auto">

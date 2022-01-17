@@ -10,6 +10,7 @@
       hide-footer
       @hidden="closeModal"
       title-tag="h3"
+      
     >
       <div>
         <ValidationObserver ref="form">

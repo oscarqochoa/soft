@@ -10,6 +10,7 @@
       hide-footer
       @hidden="closeModal"
       title-tag="h3"
+      :no-close-on-backdrop="true"
     >
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6">

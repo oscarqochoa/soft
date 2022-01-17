@@ -60,7 +60,7 @@
           </div>
         </template>
         <template #cell(amount)="data">
-          <div class="inline">
+          <div class="inline" style="position: relative;">
             <span
               v-if="data.item.type_t != 39 && data.item.type_t != 40"
               class="mr-1"
@@ -73,14 +73,14 @@
             >
             <feather-icon
               icon="EyeIcon"
-              style="cursor: pointer"
+              style="cursor: pointer;position: absolute; left: 80px;"
               v-if="data.item.type_t == 39 || data.item.type_t == 40"
               class="text-primary"
               @click="getVoidRefund(data.item.transaction_id)"
             ></feather-icon>
             <img
               :src="assetsImg + '/images/icons/void.ico'"
-              style="cursor: pointer; color: red"
+              style="cursor: pointer; color: red;position: absolute; left: 80px;"
               title="Void"
               @click="voidAuthorize( data.item.transaction_id,
                   data.item.merchant,
@@ -98,7 +98,7 @@
             />
             <img
               :src="assetsImg + '/images/icons/refund.ico'"
-              style="cursor: pointer; color: green"
+              style="cursor: pointer; color: green;position: absolute; left: 80px;"
               title="Refund"
               v-if="
                 data.item.type_t != 39 &&
