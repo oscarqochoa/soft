@@ -225,7 +225,7 @@
                     v-model="note.incoveniences.value"
                     :disabled="disabled"
                     :options="editorOption"
-                    :class="{'border-danger' : errors[0]}"
+                    :class="{'border-danger rounded' : errors[0]}"
                   />
                 </validation-provider>
               </b-col>
@@ -248,7 +248,7 @@
                 v-model="note.information.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -274,13 +274,15 @@
             </validation-provider>
             <validation-provider
               v-slot="{ errors }"
+              name="recomendationTextArea"
+              :rules="isSelectedOthersOnRecomendations ? 'required' : ''"
             >
               <quill-editor
                 v-model="note.recomendations.value"
                 :disabled="disabled"
                 :options="editorOption"
                 class="mt-1"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </validation-provider>
           </b-form-group>
@@ -301,7 +303,7 @@
                 v-model="note.suggestion.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -610,6 +612,9 @@ export default {
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller
     },
+    isSelectedOthersOnRecomendations() {
+      return this.note.recomendations.selectedsOptions.map(val => val.id).includes('reco-4')
+    },
   },
   watch: {
     'note.recomendations.value': {
@@ -631,12 +636,10 @@ export default {
       handler(newValue, oldValue) {
         const isRemoved = newValue.length < oldValue.length
         if (isRemoved) {
-          console.log(newValue, oldValue)
           const includedReco4InNewValue = newValue.map(val => val.id).includes('reco-4')
           const includedReco4InOldValue = oldValue.map(val => val.id).includes('reco-4')
           console.log(includedReco4InNewValue, includedReco4InOldValue)
           if (!includedReco4InNewValue && includedReco4InOldValue) {
-            console.log('geeee')
             this.note.recomendations.value = ''
           }
         }
@@ -767,6 +770,7 @@ export default {
       note.forEach(answer => {
         if (answer.answer != 'null') {
           if (answer.question_id === 23) {
+            console.log(answer.answer.replaceAll('\\', '"'))
             const response = JSON.parse(answer.answer.replaceAll('\\', '"'))
             response.forEach(ans => {
               if (ans.id === 'reco-4') {

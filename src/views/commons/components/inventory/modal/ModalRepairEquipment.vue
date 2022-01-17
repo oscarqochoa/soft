@@ -104,18 +104,7 @@ export default {
         if (!success) {
           return;
         } else {
-          this.$swal
-            .fire({
-              title: "Are you sure?",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonText: "Yes, send it!",
-              customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-danger",
-              },
-            })
+            this.showConfirmSwal("Are you sure?","You won't be able to revert this!")
             .then((result) => {
               if (result.value) {
                 amgApi

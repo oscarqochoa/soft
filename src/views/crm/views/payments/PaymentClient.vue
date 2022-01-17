@@ -5,12 +5,14 @@
         :to="{ name: 'payments-crm-list' }"
         exact
         exact-active-class="active"
+        link-classes="ml-1 border-secondary hover-primary"
         >Payments</b-nav-item
       >
       <b-nav-item
         :to="{ name: 'payments-crm-process' }"
         exact
         exact-active-class="active"
+        link-classes="ml-1 border-secondary hover-primary"
         >Process</b-nav-item
       >
     </b-nav>

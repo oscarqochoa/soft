@@ -3,265 +3,239 @@
     <template #header>
       <b-card-title>Notes</b-card-title>
     </template>
-    <validation-observer
-      ref="refFormObserver"
-    >
-      <!-- Form -->
-      <b-form
-        @reset.prevent="resetForm"
+    <validation-observer ref="form">
+      <b-row>
+        <b-col>
+          <validation-provider
+            v-slot="{ errors }"
+            name="noteText"
+            rules="required"
+          >
+            <b-form-textarea
+              v-model="note.text"
+              :disabled="onlyRead || textAreaDisabled"
+              rows="8"
+              :class="{'border-danger rounded' : errors[0]}"
+            />
+          </validation-provider>
+        </b-col>
+      </b-row>
+      <b-row
+        v-if="!dontHaveNote"
+        class="font-small-3"
+        style="margin-top: 3px"
       >
-        <b-row>
-          <b-col>
-            <validation-provider
-              #default="validationContext"
-              name="text"
-              rules="required"
-            >
-              <b-form-group label-for="text">
-                <b-form-textarea
-                  v-model="note.text"
-                  id="text"
-                  rows="11"
-                  :disabled="isDisabled || onlyRead"
-                  :state="getValidationState(validationContext)"
-                />
-                <small class="form-text text-muted">
-                  <b>Created by: &nbsp;</b>
-                  {{ note.created_by_name }} (
-                  <feather-icon icon="CalendarIcon" class="mr-50" />
-                  <span>{{ note.created_at | myGlobalWithHour }}</span> )
-                  <b-button
-                    v-if="isMyNote && !onlyRead"
-                    size="sm"
-                    variant="flat-warning"
-                    class="button-little-size rounded-circle"
-                    @click="isDisabled = !isDisabled"
-                  >
-                    <feather-icon icon="Edit2Icon" />
-                  </b-button>
-                </small>
-
-                <b-form-invalid-feedback>
-                  {{ validationContext.errors[0] }}
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </validation-provider>
-          </b-col>
-        </b-row>
-      </b-form>
-    </validation-observer>
-
-    <template v-if="(!isDisabled && !onlyRead) || (lead.count_notes && !onlyRead) || lead.count_notes" #footer>
-      <div class="d-flex" :class="!isDisabled && !onlyRead ? 'justify-content-between' : 'justify-content-end'">
-        <div v-if="!isDisabled && !onlyRead">
+        <b-col
+          md="10"
+          class="d-flex align-items-center justify-content-start"
+        >
+          <span
+            class="font-weight-bolder"
+            style="margin-right: 2px"
+          >Created by:</span> {{ note.created_by_name }} (<amg-icon
+            icon="CalendarIcon"
+            size="12"
+            style="margin-right: 4px; margin-bottom: 2px; margin-left: 2px"
+          /> {{ note.created_at | myGlobalWithHour }})
+        </b-col>
+        <b-col
+          class="text-right"
+        >
           <b-button
-            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-            variant="outline-success"
-            class="btn-icon rounded-circle"
-            @click="onSubmit"
+            v-if="note.user_id === currentUser.user_id.toString()"
+            size="sm"
+            variant="info"
+            class="btn-icon rounded-circle p-0"
+            style="padding: 3px !important;"
+            @click="enableTextArea"
           >
-            <feather-icon icon="CheckIcon" />
-          </b-button>
-          <b-button
-            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-            variant="outline-danger"
-            class="btn-icon rounded-circle ml-50"
-            @click="isDisabled = true"
-          >
-            <feather-icon icon="XIcon" />
-          </b-button>
-        </div>
-        <div>
-          <b-button
-            v-if="lead.count_notes && !onlyRead"
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            variant="primary"
-            @click="$bvModal.show('modal-notes-save')"
-          >
-            <span class="align-middle">Add</span>
-          </b-button>
-          <b-button
-            v-if="lead.count_notes"
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            variant="outline-secondary"
-            class="btn-icon ml-1"
-            @click="$bvModal.show('modal-notes-history')"
-          >
-            <feather-icon
-              icon="ListIcon"
-              size="18"
+            <amg-icon
+              icon="Edit2Icon"
+              size="10"
+              class="cursor-pointer"
             />
           </b-button>
-        </div>
-      </div>
-    </template>
-
-    <!-- modal NOTES SAVE -->
-    <b-modal
-      id="modal-notes-save"
-      ok-only
-      modal-class="modal-primary"
-      centered
-      size="lg"
-      title="TASKS"
-      hide-footer
-      no-close-on-backdrop
-    >
-      <modal-notes-save
-        :modul="modul"
-        :lead="lead"
-        :note="noteSave"
-        :is-important="note.text === ''"
-        @reloadNote="reloadNote"
-      />
-    </b-modal>
-
-    <!-- modal HISTORY NOTES -->
-    <b-modal
-      id="modal-notes-history"
-      ok-only
-      modal-class="modal-primary"
-      centered
-      size="lg"
-      title="HISTORY NOTES"
-      hide-footer
-      no-close-on-backdrop
-    >
-      <modal-notes-history
-        :modul="modul"
-        :lead="lead"
-        :only-read="onlyRead"
-        :note="note"
-        @reloadNote="reloadNote"
-      />
-    </b-modal>
+        </b-col>
+      </b-row>
+      <b-row style="margin-top: 10px">
+        <b-col v-if="!textAreaDisabled || dontHaveNote">
+          <b-button
+            size="sm"
+            variant="outline-success"
+            class="btn-icon rounded-circle"
+            @click="clickCheckIcon"
+          >
+            <amg-icon
+              icon="CheckIcon"
+              class="font-small-3"
+            />
+          </b-button>
+          <b-button
+            size="sm"
+            style="margin-left: 5px"
+            variant="outline-danger"
+            class="btn-icon rounded-circle"
+            @click="clickXIcon"
+          >
+            <amg-icon
+              icon="XIcon"
+              class="font-small-3"
+            />
+          </b-button>
+        </b-col>
+        <b-col
+          v-if="!dontHaveNote"
+          class="d-flex align-items-center justify-content-end"
+        >
+          <amg-icon
+            icon="ListIcon"
+            size="20"
+            class="cursor-pointer"
+            style="margin-right: 10px"
+            @click="openHistoryModal"
+          />
+          <b-button
+            variant="primary"
+            size="sm"
+            @click="openAddNewNote"
+          >
+            Add
+          </b-button>
+        </b-col>
+      </b-row>
+    </validation-observer>
+    <history-notes-modal
+      v-if="historyModal"
+      :lead="lead"
+      @close="closeHistoryModal"
+      @newImportant="setNewImportantNote"
+    />
+    <add-notes-modal
+      v-if="addNoteModal"
+      :lead="lead"
+      @close="closeAddNewNote"
+      @newImportant="setNewImportantNote"
+    />
   </b-card>
 </template>
 
 <script>
-
-import { mapActions, mapGetters, mapState,  } from 'vuex'
-
-import formValidation from '@core/comp-functions/forms/form-validation'
-import Ripple from 'vue-ripple-directive'
-
-import ModalNotesHistory from '../../lead-notes/ModalNotesHistory.vue'
-import ModalNotesSave from '../../lead-notes/ModalNotesSave.vue'
+import { mapGetters } from 'vuex'
+import HistoryNotesModal from '@/views/crm/views/Lead/lead-module/dashboard/modal/HistoryNotesModal.vue'
+import AddNotesModal from '@/views/crm/views/Lead/lead-module/dashboard/modal/AddNotesModal'
 
 export default {
-  components: {
-    ModalNotesHistory,
-    ModalNotesSave,
+  components: { AddNotesModal, HistoryNotesModal },
+  props: {
+    modul: {
+      type: Number,
+      required: true,
+    },
+    onlyRead: {
+      type: Boolean,
+      required: true,
+    },
+    lead: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      note: {
+        id: '',
+        text: '',
+        created: '',
+        user_id: '',
+        created_by: '',
+      },
+      textAreaDisabled: true,
+      historyModal: false,
+      addNoteModal: false,
+    }
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
     }),
+    dontHaveNote() {
+      return this.note.id === ''
+    },
   },
-  created () {
-    this.authUser = this.currentUser
-    this.myNote()
-  },
-  data () {
-    return {
-      authUser: new Object,
-      blankNote: new Object,
-      isDisabled: true,
-      isMyNote: false,
-      note: new Object,
-      noteSave: new Object,
+  created() {
+    if (this.lead.notes) {
+      [this.note] = this.lead.notes
+      this.note.created_by_name = this.note.created_by
+      this.note.created_at = this.note.created
     }
+    if (this.dontHaveNote) this.textAreaDisabled = false
   },
-  directives: { Ripple },
   methods: {
-    ...mapActions({
-      A_UPDATE_LEAD_NOTE: 'CrmNotesStore/A_UPDATE_LEAD_NOTE'
-    }),
-    setDataBlank (key) {
-      this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`] = Object.assign({}, this[key])
+    enableTextArea() {
+      this.textAreaDisabled = false
     },
-    resetData (key) {
-      const object = this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`]
-      for (let subkey in object) {
-        this[key][subkey] = object[subkey]
-      }
-      this.$refs.refFormObserver.reset()
+    disableTextArea() {
+      this.textAreaDisabled = true
     },
-    reloadNote (notes) {
-      this.note = notes[0]
-      this.lead.count_notes = notes.length
-      this.isMyNote = this.note.created_by == this.authUser.user_id
+    clickXIcon() {
+      if (this.dontHaveNote) this.note.text = ''
+      else this.disableTextArea()
     },
-    myNote () {
-      this.isMyNote = this.note.user_id == this.authUser.user_id
+    openAddNewNote() {
+      this.addNoteModal = true
     },
-    async onSubmit () {
-      if (await this.$refs.refFormObserver.validate()) {
-        this.showConfirmSwal()
-        .then(async result => {
-          if (result.value) {
-            this.isLoading = true
-            this.addPreloader()
-            const response = await this.A_UPDATE_LEAD_NOTE(this.note)
-            if (this.isResponseSuccess(response)) {
-              this.reloadNote(response.data)
-              this.setDataBlank('note')
-              this.isDisabled = true
-              this.removePreloader()
-              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-            } else {
-              this.removePreloader()
-              this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong. ' + response.message)
+    closeAddNewNote() {
+      this.addNoteModal = false
+    },
+    openHistoryModal() {
+      this.historyModal = true
+    },
+    closeHistoryModal() {
+      this.historyModal = false
+    },
+    async clickCheckIcon() {
+      const resolve = await this.$refs.form.validate()
+      if (resolve) {
+        const result = await this.showConfirmSwal()
+        if (result.value) {
+          if (this.dontHaveNote) {
+            const response = await amgApi.post('/updatenotes', {
+              created_at: '',
+              created_by: '',
+              created_by_name: '',
+              id: '',
+              lead_id: this.lead.id,
+              text: this.note.text,
+              user_id: this.currentUser.user_id,
+            })
+            if (response.status === 200) {
+              [this.note] = response.data
+              this.note.user_id = this.note.created_by
+              this.disableTextArea()
             }
-            this.isLoading = false
+          } else {
+            const response = await amgApi.post('/updatenotes', {
+              created_at: this.note.created_at,
+              created_by: this.note.user_id,
+              created_by_name: this.note.created_by_name,
+              id: this.note.id,
+              important: 1,
+              lead_id: this.lead.id,
+              text: this.note.text,
+            })
+            if (response.status === 200) {
+              [this.note] = response.data
+              this.note.user_id = this.note.created_by
+              this.disableTextArea()
+            }
           }
-        }).catch(error => {
-          console.log('Something went wrong onSubmit', error)
-          this.removePreloader()
-          this.showErrorSwal()
-          this.isLoading = false
-        })
+        }
       }
-    }
-  },
-  mounted () {
-    this.note = this.lead.notes ? this.lead.notes[0] : new Object
-    this.note.created_by_name = this.note.created_by
-    this.note.created_at = this.note.created
-  },
-  props: {
-    modul: {
-      type: Number,
-      required: true
     },
-    onlyRead: {
-      type: Boolean,
-      required: true
+    setNewImportantNote(newImportant) {
+      this.note = newImportant
+      this.note.user_id = this.note.created_by
     },
-    lead: {
-      type: Object,
-      required: true
-    }
   },
-  setup () {
-    const {
-      refFormObserver,
-      getValidationState,
-    } = formValidation(() => {})
-
-    return {
-      refFormObserver,
-      getValidationState
-    }
-  },
-  watch: {
-    isDisabled (current, old) {
-      if (current)
-        this.resetData('note')
-      else
-        this.setDataBlank('note')
-    }
-  }
 }
 </script>

@@ -8,13 +8,14 @@ import leadNav from '../views/Lead/lead.nav'
 import ListsNavigation from '../views/lists/lists.nav'
 import GlossaryNavigation from '../views/glossary/glossary.nav'
 import LoansNavigation from '../views/loans/loans.nav'
+import SchedulesNavigation from '../views/schedules/schedules.nav'
 import FileManangerNavigation from '@/views/crm/views/file-mananger/file-mananger.nav'
 import InventoryNavigation from '../views/inventory/inventory.nav'
 import NcrNavigation from '../views/ncr/ncr.nav'
 
 const navigation = [
   {
-    header: 'CRM',
+    header: 'C.R.M.',
   },
   {
     title: 'Test',
@@ -32,6 +33,7 @@ const navigation = [
   ...calendarNav,
   GlossaryNavigation,
   InventoryNavigation,
+  SchedulesNavigation,
   NcrNavigation,
   FileManangerNavigation,
 ]

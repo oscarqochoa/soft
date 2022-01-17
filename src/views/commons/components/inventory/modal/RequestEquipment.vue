@@ -105,7 +105,7 @@
 
               <b-form-group>
                 <b-button variant="primary" style="float: right" type="submit">
-                  SEND
+                  Send
                 </b-button>
               </b-form-group>
             </div>
@@ -217,20 +217,7 @@ export default {
         if (!success) {
           return;
         } else {
-          this.$swal
-            .fire({
-              title: "Are you sure?",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "Yes, send it!",
-              customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-outline-danger ml-1",
-              },
-            })
+            this.showConfirmSwal("Are you sure?","You won't be able to revert this!")
             .then((result) => {
               if (result.value) {
                 amgApi

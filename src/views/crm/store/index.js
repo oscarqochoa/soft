@@ -8,7 +8,7 @@ import Event from './event'
 import Global from './global'
 import Lead from './lead'
 import Notes from './notes'
-import SaleMade from '../views/sales-made/saleMade.store'
+import SaleMade from '../views/sales-made/sale-made.store'
 import Sms from './sms'
 import Navigation from './navigationStore/indexjs'
 

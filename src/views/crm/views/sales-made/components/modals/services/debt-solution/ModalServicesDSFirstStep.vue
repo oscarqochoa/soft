@@ -269,15 +269,7 @@ export default {
     },
     async editCreditor(id) {
       try {
-        const result = await this.$swal.fire({
-          title: 'Are you Sure?',
-          text: 'Before finalizing you must save.',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes',
-        })
+        const result = await this.showConfirmSwal('Are you Sure?', 'Before finalizing you must save.')
         if (result.value) {
           this.openmodal = true
           this.statemodal = 0
@@ -293,15 +285,7 @@ export default {
     },
     async deleteCreditor(id) {
       try {
-        const result = await this.$swal.fire({
-          title: 'Are you Sure?',
-          text: 'Before finalizing you must save.',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ab9220',
-          cancelButtonColor: '#8f9194',
-          confirmButtonText: 'Yes',
-        })
+        const result = await this.showConfirmSwal('Are you Sure?', 'Before finalizing you must save.')
         if (result.value) {
           const response = await amgApi.post('/deletecredit', { id })
           if (response.status === 200) {
@@ -452,12 +436,7 @@ export default {
     },
     async axiosNext(id, type) {
       try {
-        const result = await this.$swal.fire({
-          title: 'ARE YOU SURE OF CONTINUE ?',
-          text: 'Before finalizing you must save.',
-          icon: 'warning',
-          showCancelButton: true,
-        })
+        const result = await this.showConfirmSwal('Are you sure of continue ?', 'Before finalizing you must save.')
         if (result.value) {
           this.addPreloader()
           const response = await amgApi.post('/savefirst', {

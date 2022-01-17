@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-card no-body class="ml-3 mr-3">
-      <div class="m-2">
+    <b-card no-body >
+      <div>
         <!-- Table Top -->
         <b-row>
           <!-- Per Page -->
@@ -47,12 +47,11 @@
           </b-col>
         </b-row>
       </div>
-      <div v-scrollbar style="height: 500px">
+      <div v-scrollbar style="height: 500px" class="mt-1">
         <b-table
           ref="refClientsList"
           class="position-relative"
           :items="notes"
-          stacked="lg"
           :fields="arrayColumns"
           primary-key="id"
           table-class="text-nowrap"

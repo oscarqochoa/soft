@@ -20,7 +20,7 @@
           name="content-renderer-sidebar-left"
           slim
         />
-        <div class="content-right">
+        <div class="content-right" style="width: 100%; overflow: auto;">
           <div class="content-wrapper">
             <div class="content-body">
               <slot />

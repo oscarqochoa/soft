@@ -442,10 +442,12 @@ export default {
       );
     },
     hideFooter() {
-      return !(
-        !this.isLoanActive ||
-        (this.isNotUserLoan &&
-          (this.isShowSupervisor || this.isShowRrhh || this.isShowManagement))
+      return (
+        !(
+          !this.isLoanActive ||
+          (this.isNotUserLoan &&
+            (this.isShowSupervisor || this.isShowRrhh || this.isShowManagement))
+        ) || !this.isDataComplete
       );
     },
     isOverProvision() {

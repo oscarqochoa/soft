@@ -6,16 +6,16 @@
         <span>
           <a
             v-if="currentUser.modul_id === 15"
-            @click="$emit('onEditLead', false)"
             class="text-important"
+            @click="$emit('onEditLead', false)"
           >
             {{ leadName.name }}
           </a>
           <span v-else-if="onlyRead">{{ leadName.name }}</span>
           <a
             v-else
-            @click="$emit('onEditLead', false)"
             class="text-important"
+            @click="$emit('onEditLead', false)"
           >
             {{ leadName.name }}
           </a>
@@ -64,7 +64,10 @@
         </b-button>
       </b-button-group>
     </template>
-    <detail-component :modul="modul" :details="details" />
+    <detail-component
+      :modul="modul"
+      :details="details"
+    />
 
     <!-- modal NOT CALL -->
     <b-modal
@@ -105,103 +108,102 @@ export default {
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     onlyRead: {
       type: Boolean,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  data() {
     return {
       blankLead: {},
       isLoading: false,
       details: [
         {
           label: 'E-mail:',
-          value: this.lead.email
+          value: this.lead.email,
         },
         {
           label: 'Phone:',
-          value: this.lead.mobile
+          value: this.lead.mobile,
         },
         [
           this.lead.ssn ? {
             label: 'SSN:',
-            value: `XXX-XX-${ this.lead.ssn }`
+            value: `XXX-XX-${this.lead.ssn}`,
           } : null,
           this.lead.itin ? {
             label: 'ITIN:',
-            value: `XXX-XX-${ this.lead.itin }`
+            value: `XXX-XX-${this.lead.itin}`,
           } : null,
         ],
         (this.modul !== 15) ? {
           label: 'DOB:',
-          value: this.lead.dob
+          value: this.lead.dob,
         } : null,
         {
           label: 'Language:',
-          value: this.lead.language === 'en' ? 'English' : 'Spanish'
+          value: this.lead.language === 'en' ? 'English' : 'Spanish',
         },
         {
           label: 'Origin Country:',
-          value: this.lead.origin_country
+          value: this.lead.origin_country,
         },
         {
           label: 'Programs:',
-          value: this.lead.name_programs
+          value: this.lead.name_programs,
         },
         (this.modul !== 15) ? {
           label: 'Status:',
-          value: this.lead.valuestatuslead
+          value: this.lead.valuestatuslead,
         } : null,
         (this.modul !== 15) ? {
           label: 'Address:',
-          value: this.longAddress
+          value: this.longAddress,
         } : null,
         (this.modul === 15) ? {
           label: 'CATCHER:',
-          value: this.lead.user_catcher
+          value: this.lead.user_catcher,
         } : null,
         (this.modul === 15) ? {
           label: 'FAN PAGE:',
-          value: this.lead.fanpage
+          value: this.lead.fanpage,
         } : null,
         (this.modul === 15) ? {
           label: 'CREATED DATE:',
-          value: this.lead.created_at
+          value: this.lead.created_at,
         } : null,
-      ]
+      ],
     }
   },
-  created () {
-    this.blankLead = Object.assign({}, this.lead)
+  created() {
+    this.blankLead = { ...this.lead }
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
     }),
-    leadName () {
+    leadName() {
       if (this.currentUser.modul_id === 15) {
         return { name: `${this.lead.nickname} (${this.lead.lead_name})`, url: true }
-      } else if (this.onlyRead) {
+      } if (this.onlyRead) {
         return { name: this.lead.lead_name }
-      } else {
-        return { name: this.lead.lead_name, url: true }
       }
+      return { name: this.lead.lead_name, url: true }
     },
-    longAddress () {
+    longAddress() {
       const names = []
       if (this.lead.street) names.push(this.lead.street)
       if (this.lead.city) names.push(this.lead.city)
-      if (this.lead.states_eeuu_slug && this.lead.zipcode) names.push(`${ this.lead.states_eeuu_slug } ${ this.lead.zipcode }`)
+      if (this.lead.states_eeuu_slug && this.lead.zipcode) names.push(`${this.lead.states_eeuu_slug} ${this.lead.zipcode}`)
       return names.join(', ')
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -209,83 +211,82 @@ export default {
       A_SET_POTENTIAL: 'CrmLeadStore/A_SET_POTENTIAL',
       A_CHANGE_STATUS_SN: 'CrmLeadStore/A_CHANGE_STATUS_SN',
     }),
-    onAddMyList () {
+    onAddMyList() {
       this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          this.isLoading = true
-          const response = await this.A_MY_LIST_CREATE({
-            module_id: this.modul,
-            user_id: this.currentUser.user_id,
-            lead_id: this.lead.id,
-          })
-          if (this.isResponseSuccess(response))
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong. ' + response.message)
-          this.isLoading = false
-        }
-      }).catch(error => {
-        console.log('spmething went wrong onAddMyList: ', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-      })
-    },
-    onSetPotential () {
-      this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          this.isLoading = true
-          const response = await this.A_SET_POTENTIAL({
-            lead_id: this.lead.id,
-            potential: 1,
-          })
-          if (this.isResponseSuccess(response)) {
-            this.lead.potential = 1
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+        .then(async result => {
+          if (result.value) {
+            this.isLoading = true
+            const response = await this.A_MY_LIST_CREATE({
+              module_id: this.modul,
+              user_id: this.currentUser.user_id,
+              lead_id: this.lead.id,
+            })
+            if (this.isResponseSuccess(response)) this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+            else this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
+            this.isLoading = false
           }
-          else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong. ' + response.message)
-          this.isLoading = false
-        }
-      }).catch(error => {
-        console.log('spmething went wrong onSetPotential: ', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-      })
+        }).catch(error => {
+          console.log('spmething went wrong onAddMyList: ', error)
+          this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        })
     },
-    onNotCall () {
+    onSetPotential() {
       this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          this.isLoading = true
-          const specialist = `${this.currentUser.first_name} ${this.currentUser.last_name}`
+        .then(async result => {
+          if (result.value) {
+            this.isLoading = true
+            const response = await this.A_SET_POTENTIAL({
+              lead_id: this.lead.id,
+              potential: 1,
+            })
+            if (this.isResponseSuccess(response)) {
+              this.lead.potential = 1
+              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+            } else this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
+            this.isLoading = false
+          }
+        }).catch(error => {
+          console.log('spmething went wrong onSetPotential: ', error)
+          this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        })
+    },
+    onNotCall() {
+      this.showConfirmSwal()
+        .then(async result => {
+          if (result.value) {
+            this.isLoading = true
+            const specialist = `${this.currentUser.first_name} ${this.currentUser.last_name}`
 
-          //Have just the first program of a string
-          let program = ''
-          if (this.lead.lead_programs) {
-            const programs = this.lead.name_programs
-            program = programs.split(',')[0]
+            // Have just the first program of a string
+            let program = ''
+            if (this.lead.lead_programs) {
+              const programs = this.lead.name_programs
+              program = programs.split(',')[0]
+            }
+            const response = await this.A_CHANGE_STATUS_SN({
+              lead_id: this.lead.id,
+              status_id: 4,
+              specialist,
+              user_id: this.currentUser.user_id,
+              language: this.lead.language,
+              lead_name: this.lead.last_name,
+              modul_id: this.currentUser.modul_id,
+              program,
+            })
+            if (this.isResponseSuccess(response)) {
+              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+              this.$emit('reloadLead')
+            } else this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
+            this.isLoading = false
           }
-          const response = await this.A_CHANGE_STATUS_SN({
-            lead_id: this.lead.id,
-            status_id: 4,
-            specialist,
-            user_id: this.currentUser.user_id,
-            language: this.lead.language,
-            lead_name: this.lead.last_name,
-            modul_id: this.currentUser.modul_id,
-            program,
-          })
-          if (this.isResponseSuccess(response))
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong. ' + response.message)
-          this.isLoading = false
-        }
-      }).catch(error => {
-        console.log('spmething went wrong onNotCall: ', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-      })
+        }).catch(error => {
+          console.log('spmething went wrong onNotCall: ', error)
+          this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        })
     },
+  },
+  directives: {
+    Ripple,
   },
   model: {
     prop: 'lead',
@@ -295,12 +296,9 @@ export default {
     if (this.lead.nickname && this.currentUser.modul_id === 15) {
       this.details.unshift({
         label: 'Nickname:',
-        value: this.lead.nickname
+        value: this.lead.nickname,
       })
     }
-  },
-  directives: {
-    Ripple,
   },
 }
 </script>

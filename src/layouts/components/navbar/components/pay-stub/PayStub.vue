@@ -1,5 +1,5 @@
 <template>
-  <b-nav-item @click="openPayStubModal" :id="`bookmark-pay-stub`">
+  <div>
     <feather-icon  icon="DollarSignIcon" size="19" />
     <b-tooltip
       triggers="hover"
@@ -15,7 +15,7 @@
     >
       <pay-stub-grid></pay-stub-grid>
     </b-modal>
-  </b-nav-item>
+  </div>
 </template>
 
 <script>

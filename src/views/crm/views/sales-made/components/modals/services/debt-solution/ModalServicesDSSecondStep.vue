@@ -122,14 +122,9 @@
                     v-bind="vMoney"
                     :disabled="isModalShow"
                     class="form-control form-control-sm font-weight-bolder text-center"
+                    :class="{'border-danger' : errors[0] && validateMoney}"
                     style="width: 120px"
                   />
-                  <div
-                    v-if="errors[0] && validateMoney"
-                    class="invalid-feedback"
-                  >
-                    Monthly payment is {{ errors[0] }}
-                  </div>
                 </ValidationProvider>
               </span>
             </b-col>
@@ -445,12 +440,7 @@ export default {
         this.validateMoney = true
         const success = await this.$refs.form.validate()
         if (success) {
-          const result = await this.$swal.fire({
-            title: 'ARE YOU SURE OF CONTINUE ?',
-            text: 'Before finalizing you must save.',
-            icon: 'warning',
-            showCancelButton: true,
-          })
+          const result = await this.showConfirmSwal('Are you sure of continue ?', 'Before finalizing you must save.')
           if (result.value) {
             this.addPreloader()
             const response = await amgApi.post('/savefirst', {

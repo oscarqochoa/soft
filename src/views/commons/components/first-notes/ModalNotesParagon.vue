@@ -52,21 +52,21 @@
         </b-col>
         <b-col>
           <validation-provider
-              v-slot="{ errors }"
-              name="originCountry"
-              rules="required"
+            v-slot="{ errors }"
+            name="originCountry"
+            rules="required"
           >
             <b-form-group
-                label="Origin Country"
-                label-class="font-weight-bolder"
+              label="Origin Country"
+              label-class="font-weight-bolder"
             >
               <v-select
-                  v-model="note.country.value"
-                  :class="{'border-danger rounded': errors[0]}"
-                  :disabled="disabled"
-                  label="name"
-                  :reduce="value => value.id"
-                  :options="note.country.options"
+                v-model="note.country.value"
+                :class="{'border-danger rounded': errors[0]}"
+                :disabled="disabled"
+                label="name"
+                :reduce="value => value.id"
+                :options="note.country.options"
               />
             </b-form-group>
           </validation-provider>
@@ -335,7 +335,7 @@
                   v-model="note.details.value"
                   :disabled="disabled"
                   :options="editorOption"
-                  :class="{'border-danger' : errors[0]}"
+                  :class="{'border-danger rounded' : errors[0]}"
                 />
               </b-form-group>
             </validation-provider>
@@ -357,7 +357,7 @@
                 v-model="note.information.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -378,7 +378,7 @@
                 v-model="note.indications.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -399,7 +399,7 @@
                 v-model="note.suggestion.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -420,7 +420,7 @@
                 v-model="note.pending.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -449,13 +449,12 @@ import { quillEditor } from 'vue-quill-editor'
 import vSelect from 'vue-select'
 import NotesServices from '@/views/commons/components/first-notes/services/notes.service'
 import HeaderModalNotes from '@/views/commons/components/first-notes/HeaderModalNotes.vue'
-
+import ButtonSave from '@/views/commons/utilities/ButtonSave.vue'
+import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete.vue'
+import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate.vue'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-import ButtonSave from '@/views/commons/utilities/ButtonSave'
-import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete'
-import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate'
 
 export default {
   name: 'ModalNotesParagon',
@@ -528,8 +527,8 @@ export default {
             },
           ],
           disabled: false,
-          link: 0,
-          likes: 0,
+          link: '',
+          likes: '',
         },
         experience: {
           value: null,
@@ -558,7 +557,7 @@ export default {
             },
           ],
           disabled: false,
-          years: 0,
+          years: '',
         },
         website: {
           value: null,
@@ -573,8 +572,8 @@ export default {
             },
           ],
           disabled: false,
-          link: 0,
-          type: 0,
+          link: '',
+          type: '',
         },
         instagram: {
           value: null,
@@ -589,8 +588,8 @@ export default {
             },
           ],
           disabled: false,
-          link: 0,
-          likes: 0,
+          link: '',
+          likes: '',
         },
         typeOfBuisiness: {
           value: [],
@@ -654,6 +653,64 @@ export default {
     },
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller
+    },
+  },
+  watch: {
+    'note.facebook.value': {
+      handler(newValue) {
+        if (newValue !== 'Yes') {
+          this.note.facebook.likes = this.note.facebook.likes ? this.note.facebook.likes : 0
+          this.note.facebook.link = this.note.facebook.link ? this.note.facebook.link : 0
+        } else {
+          this.note.facebook.likes = this.note.facebook.likes === 0 || this.note.facebook.likes === '0' ? '' : this.note.facebook.likes
+          this.note.facebook.link = this.note.facebook.link === 0 || this.note.facebook.link === '0' ? '' : this.note.facebook.link
+        }
+      },
+      deep: true,
+    },
+    'note.instagram.value': {
+      handler(newValue) {
+        if (newValue !== 'Yes') {
+          this.note.instagram.likes = this.note.instagram.likes ? this.note.instagram.likes : 0
+          this.note.instagram.link = this.note.instagram.link ? this.note.instagram.link : 0
+        } else {
+          this.note.instagram.likes = this.note.instagram.likes === 0 || this.note.instagram.likes === '0' ? '' : this.note.instagram.likes
+          this.note.instagram.link = this.note.instagram.link === 0 || this.note.instagram.link === '0' ? '' : this.note.instagram.link
+        }
+      },
+      deep: true,
+    },
+    'note.website.value': {
+      handler(newValue) {
+        if (newValue !== 'Yes') {
+          this.note.website.link = this.note.website.link ? this.note.website.link : 0
+          this.note.website.type = this.note.website.type ? this.note.website.type : 0
+        } else {
+          this.note.website.link = this.note.website.link === 0 || this.note.website.link === '0' ? '' : this.note.website.link
+          this.note.website.type = this.note.website.type === 0 || this.note.website.type === '0' ? '' : this.note.website.type
+        }
+      },
+      deep: true,
+    },
+    'note.experience.value': {
+      handler(newValue) {
+        if (newValue !== 'Yes') {
+          this.note.details.value = this.note.details.value ? this.note.details.value : 0
+        } else {
+          this.note.details.value = this.note.details.value === 0 || this.note.details.value === '0' ? '' : this.note.details.value
+        }
+      },
+      deep: true,
+    },
+    'note.newBusiness.value': {
+      handler(newValue) {
+        if (newValue !== 'No') {
+          this.note.newBusiness.years = this.note.newBusiness.years ? this.note.newBusiness.years : 0
+        } else {
+          this.note.newBusiness.years = this.note.newBusiness.years === 0 || this.note.newBusiness.years === '0' ? '' : this.note.newBusiness.years
+        }
+      },
+      deep: true,
     },
   },
   async created() {
@@ -763,28 +820,31 @@ export default {
     },
     getDetailsAnswers(note) {
       note.forEach(answer => {
-        console.log(answer)
         if (answer.answer != 'null') {
-          if (answer.question_id === 1075) this.note.facebook.value = answer.answer
-          if (answer.question_id === 1072) this.note.website.value = answer.answer
-          if (answer.question_id === 1078) this.note.instagram.value = answer.answer
-          if (answer.question_id === 1083) this.note.logo.value = answer.answer
-          if (answer.question_id === 1081) this.note.experience.value = answer.answer
-          if (answer.question_id === 1066) this.note.newBusiness.value = answer.answer
+          if (answer.question_id === 1075) this.note.facebook.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1072) this.note.website.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1078) this.note.instagram.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1083) this.note.logo.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1081) this.note.experience.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1066) this.note.newBusiness.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
           if (answer.question_id === 1064) this.note.typeOfBuisiness.value = JSON.parse(answer.answer)
-          if (answer.question_id === 1071) this.note.contactTime.value = answer.answer
-          if (answer.question_id === 1067) this.note.information.value = answer.answer
-          if (answer.question_id === 1068) this.note.indications.value = answer.answer
-          if (answer.question_id === 1069) this.note.suggestion.value = answer.answer
-          if (answer.question_id === 1070) this.note.pending.value = answer.answer
-          if (answer.question_id === 1082) this.note.details.value = answer.answer
-          if (answer.question_id === 1076) this.note.facebook.link = answer.answer
-          if (answer.question_id === 1077) this.note.facebook.likes = answer.answer
-          if (answer.question_id === 1079) this.note.instagram.link = answer.answer
-          if (answer.question_id === 1080) this.note.instagram.likes = answer.answer
-          if (answer.question_id === 1073) this.note.website.link = answer.answer
-          if (answer.question_id === 1074) this.note.website.type = answer.answer
-          if (answer.question_id === 1065) this.note.newBusiness.years = answer.answer
+          if (answer.question_id === 1071) this.note.contactTime.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1067) this.note.information.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1068) this.note.indications.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1069) this.note.suggestion.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1070) this.note.pending.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1082) this.note.details.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1076) {
+            console.log((answer.answer === 0 || answer.answer === '0') ? '' : answer.answer)
+            this.note.facebook.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+            console.log(this.note.facebook.link)
+          }
+          if (answer.question_id === 1077) this.note.facebook.likes = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1079) this.note.instagram.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1080) this.note.instagram.likes = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1073) this.note.website.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1074) this.note.website.type = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1065) this.note.newBusiness.years = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
         } else this.noteNull = true
       })
     },

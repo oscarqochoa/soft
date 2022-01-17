@@ -435,7 +435,7 @@ export default {
             json_ce: this.json_ce,
           }
 
-          const result = await this.showConfirmSwal()
+          const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
           if (result.value) {
             this.addPreloader()
             const response = await amgApi.post(`${route}`, param)

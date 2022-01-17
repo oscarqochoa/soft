@@ -19,14 +19,14 @@
     >
       <b-row>
         <b-col md="9">
-          <validation-provider
-            v-slot="{errors}"
-            name="maritalStatus"
-            rulses="required"
+          <b-form-group
+            label="Marital Status"
+            label-class="font-weight-bolder"
           >
-            <b-form-group
-              label="Marital Status"
-              label-class="font-weight-bolder"
+            <validation-provider
+              v-slot="{ errors }"
+              name="maritalStatus"
+              rules="required"
             >
               <b-form-radio-group
                 v-model="note.maritalStatus.value"
@@ -34,19 +34,19 @@
                 :options="note.maritalStatus.options"
                 :class="{'border-danger': errors[0]}"
               />
-            </b-form-group>
-          </validation-provider>
+            </validation-provider>
+          </b-form-group>
         </b-col>
         <b-col md="2">
-          <validation-provider
-            v-slot="{errors}"
-            name="dependents"
-            rules="required"
+          <b-form-group
+            label="Dependents"
+            label-class="font-weight-bolder"
+            :disabled="disabled"
           >
-            <b-form-group
-              label="Dependents"
-              label-class="font-weight-bolder"
-              :disabled="disabled"
+            <validation-provider
+              v-slot="{ errors }"
+              name="dependents"
+              rules="required"
             >
               <b-form-input
                 v-model="note.dependents.value"
@@ -54,8 +54,8 @@
                 type="number"
                 :class="{'border-danger rounded': errors[0]}"
               />
-            </b-form-group>
-          </validation-provider>
+            </validation-provider>
+          </b-form-group>
         </b-col>
       </b-row>
       <b-row>
@@ -226,7 +226,7 @@
                 v-model="note.information.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -247,7 +247,7 @@
                 v-model="note.indications.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -268,7 +268,7 @@
                 v-model="note.suggestion.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -383,7 +383,7 @@ export default {
           ],
         },
         dependents: {
-          value: 0,
+          value: '',
         },
         migrationSituation: {
           value: '',
@@ -464,7 +464,6 @@ export default {
       return this.noteInfo.created > '2021-08-05'
     },
     newNote() {
-      console.log(this.noteInfo.created > '2021-05-16 00:00:00')
       return this.noteInfo.created > '2021-05-16 00:00:00'
     },
     emptyNote() {
@@ -478,6 +477,20 @@ export default {
     },
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller
+    },
+  },
+  watch: {
+    'note.bankruptcy.value': {
+      handler(newVal) {
+        if (newVal !== 'YES') {
+          this.note.bankruptcy.bankruptcyYear = this.note.bankruptcy.bankruptcyYear ? this.note.bankruptcy.bankruptcyYear : 0
+          this.note.bankruptcy.chapter = this.note.bankruptcy.chapter ? this.note.bankruptcy.chapter : 0
+        } else {
+          this.note.bankruptcy.bankruptcyYear = (this.note.bankruptcy.bankruptcyYear === '0' || this.note.bankruptcy.bankruptcyYear === 0) ? '' : this.note.bankruptcy.bankruptcyYear
+          this.note.bankruptcy.chapter = (this.note.bankruptcy.chapter === '0' || this.note.bankruptcy.chapter === 0) ? '' : this.note.bankruptcy.chapter
+        }
+      },
+      deep: true,
     },
   },
   async created() {
@@ -563,7 +576,6 @@ export default {
     },
     getDetailsAnswers(note) {
       note.forEach(answer => {
-        console.log(answer)
         if (answer.answer != 'null') {
           if (answer.question_id === 1021) this.note.maritalStatus.value = answer.answer
           if (answer.question_id === 1022) this.note.dependents.value = answer.answer

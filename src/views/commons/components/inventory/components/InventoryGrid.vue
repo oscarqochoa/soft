@@ -1,136 +1,21 @@
 <template>
   <div>
-    <div class="mx-2 mb-2 mt-2">
-      <b-row>
-        <b-col
-          cols="12"
-          sm="6"
-          class="
-            d-flex
-            align-items-center
-            justify-content-center justify-content-sm-start
-          "
-        >
-          <span class="text-muted"
-            >Showing {{ startPage }} to {{ toPage }} of
-            {{ totalData }} entries</span
-          >
-        </b-col>
-        <!-- Pagination -->
-        <b-col
-          cols="12"
-          sm="6"
-          class="
-            d-flex
-            align-items-center
-            justify-content-center justify-content-sm-end
-          "
-        >
-          <b-pagination
-            v-model="currentPage"
-            :total-rows="totalData"
-            :per-page="perPage"
-            first-number
-            last-number
-            class="mb-0 mt-1 mt-sm-0"
-            prev-class="prev-item"
-            next-class="next-item"
-          >
-            <template #prev-text>
-              <feather-icon icon="ChevronLeftIcon" size="18" />
-            </template>
-            <template #next-text>
-              <feather-icon icon="ChevronRightIcon" size="18" />
-            </template>
-          </b-pagination>
-        </b-col>
-      </b-row>
-    </div>
-    <div class="m-2">
-      <!-- Table Top -->
-      <b-row>
-        <!-- Per Page -->
-        <b-col
-          cols="12"
-          md="4"
-          class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-        >
-          <label>Show</label>
-          <v-select
-            v-model="perPage"
-            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-            :options="perPageOptions"
-            :clearable="false"
-            class="per-page-selector d-inline-block mx-50"
-          />
-          <label class="mr-2">entries</label>
-          <feather-icon
-            class="cursor-pointer"
-            icon="RefreshCcwIcon"
-            size="20"
-            @click="resetSearch"
-          />
-        </b-col>
-        <!-- Search -->
-        <b-col cols="12" md="8">
-          <div class="d-flex align-items-end justify-content-end">
-            <b-form-group label="From" label-for="from" class="mb-md-0 mb-2">
-              <b-form-datepicker
-                class="per-page-datepicker d-inline-block mx-50"
-                id="from"
-                :date-format-options="{
-                  year: 'numeric',
-                  month: 'numeric',
-                  day: 'numeric',
-                }"
-                v-model="fromToObject.from"
-              />
-            </b-form-group>
-            <!-- <label>{{filter.label}}</label> -->
-
-            <b-form-group label="To" label-for="to" class="mb-md-0 mb-2">
-              <b-form-datepicker
-                class="per-page-datepicker d-inline-block mx-50"
-                id="to"
-                :date-format-options="{
-                  year: 'numeric',
-                  month: 'numeric',
-                  day: 'numeric',
-                }"
-                v-model="fromToObject.to"
-              />
-            </b-form-group>
-            <!-- <label>{{filter.label}}</label> -->
-            <b-form-group class="mb-md-0 mb-2">
-              <v-select
-                v-model="categoryFilter"
-                class="per-page-datepicker d-inline-block mx-50"
-                style="font-size: 15px"
-                placeholder="Select Category"
-                label="name"
-                :options="optionsCategory"
-                :reduce="(val) => val.id"
-              />
-            </b-form-group>
-            <b-button
-              variant="primary"
-              class="button-top"
-              @click="$refs.refClientsList.refresh()"
-            >
-              <div class="d-flex">
-                <span class="mr-50"
-                  ><feather-icon icon="FilterIcon" size="15"
-                /></span>
-
-                <span class="text-nowrap">{{ "Search" }}</span>
-              </div>
-            </b-button>
-          </div>
-        </b-col>
-      </b-row>
-    </div>
-    <b-table
+    <filter-slot
+        v-scrollbar
+        :filter="filter"
+        :filter-principal="filterPrincipal"
+        :no-visible-principal-filter="true"
+        :total-rows="totalRows"
+        :paginate="paginate"
+        :start-page="startPage"
+        :to-page="toPage"
+        :send-multiple-sms="false"
+        @reload="$refs['refClientsList'].refresh()"
+      >
+      <b-table
       small
+      slot="table"
+      no-provider-filtering
       :api-url="'/inventory/search-equipments'"
       ref="refClientsList"
       :items="myProvider"
@@ -139,10 +24,11 @@
       table-class="text-nowrap"
       responsive="sm"
       show-empty
-      sticky-header="50vh"
+      sticky-header="70vh"
       :sort-by.sync="sortBy"
-      :current-page="currentPage"
-      :per-page="perPage"
+      :sort-desc.sync="sortDesc"
+      :current-page="paginate.currentPage"
+      :per-page="paginate.perPage"
     >
       <template #table-busy>
         <div class="text-center text-primary my-2">
@@ -181,6 +67,14 @@
       <template #cell(price)="data"
         >{{ data.item.price != null ? "$ " + data.item.price : "" }}
       </template>
+      <template #cell(assigned_to)="data">
+        <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+          <span>{{data.item.assigned_to}}</span>
+          <div>{{data.item.name_module}}</div>
+        </div>
+      </template>
       <template #cell(tracking)="data">
         <div>
           <b-button
@@ -189,6 +83,16 @@
           >
             TRACKING
           </b-button>
+        </div>
+      </template>
+      <template #cell(created_at)="data">
+        <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+          <span>
+            {{data.item.created_by}}
+          </span>
+          <div>{{data.item.created_at | myGlobalDay}}</div>
         </div>
       </template>
       <template #cell(actions)="data">
@@ -247,6 +151,9 @@
         </b-dropdown>
       </template>
     </b-table>
+    </filter-slot>
+    
+    
     <modal-tracking-equipment
       v-if="modalTracking"
       :modalTracking="modalTracking"
@@ -284,6 +191,8 @@ import vSelect from "vue-select";
 import ModalTrackingEquipment from "../modal/ModalTrackingEquipment.vue";
 import ModalViewEquipment from "../modal/ModalViewEquipment.vue";
 import ModalRepairEquipment from "../modal/ModalRepairEquipment.vue";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+
 export default {
   props: {
     global: {
@@ -301,21 +210,31 @@ export default {
     ModalTrackingEquipment,
     ModalViewEquipment,
     ModalRepairEquipment,
+    FilterSlot,
   },
   data() {
     return {
+      sortBy: "created_at",
+      sortDesc: true,
+      totalRows: 0,
+      paginate: {
+        currentPage: 1,
+        perPage: 10,
+      },
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Client...",
+        model: "",
+      },
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       categoryFilter: null,
-      startPage: "",
-      toPage: "",
+      startPage: null,
+      toPage: null,
       totalData: "",
-      currentPage: 1,
-      perPage: 10,
+      // currentPage: 1,
+      // perPage: 10,
       perPageOptions: [10, 25, 50, 100],
-      fromToObject: {
-        from: null,
-        to: null,
-      },
       optionsCategory: [],
       arrayColumns: [
         {
@@ -379,7 +298,7 @@ export default {
           label: "Assigned To",
           class: "text-left",
           sortable: false,
-          visible: false,
+          visible: true,
         },
         {
           key: "tracking",
@@ -412,6 +331,51 @@ export default {
       assignedTo: "",
       num: "",
       sortBy: "created_at",
+      filter: [
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Category",
+          model: null,
+          options: [],
+          reduce: "id",
+          selectText: "name",
+          cols: 12,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+      ],
     };
   },
   computed: {
@@ -425,12 +389,12 @@ export default {
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perpage: ctx.perPage,
-        from: this.fromToObject.from,
-        to: this.fromToObject.to,
+        from:this.filter[1].model,
+        to: this.filter[2].model,
         statusEquipment: this.statusEquipment,
         order: ctx.sortBy == "" ? "created_at" : ctx.sortBy,
         orderby: ctx.sortDesc == 1 ? "desc" : "asc",
-        idCategory: this.categoryFilter,
+        idCategory: this.filter[0].model,
         moduleId: this.module,
       });
       // Must return a promise that resolves to an array of items
@@ -443,6 +407,7 @@ export default {
         this.nextPage = this.startPage + 1;
         this.endPage = data.data.last_page;
         this.totalData = data.data.total;
+        this.totalRows = data.data.total;
         this.toPage = data.data.to;
         return items || [];
       });
@@ -450,12 +415,14 @@ export default {
     getSelectCategory() {
       if (this.listCategoryAll != null) {
         this.optionsCategory = this.listCategoryAll;
+        this.filter[0].options = this.listCategoryAll;
       } else {
         amgApi
           .get("/inventory/get-list-category", {})
           .then((response) => {
             if (response.status == 200) {
               this.optionsCategory = response.data;
+              this.filter[0].options = response.data;
               if (this.listCategoryAll == null) {
                 this.LIST_CATEGORIES(this.optionsCategory);
               }

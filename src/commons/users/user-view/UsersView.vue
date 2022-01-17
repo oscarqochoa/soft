@@ -4,7 +4,7 @@
     <!-- Alert: No item found -->
     <b-alert
       variant="danger"
-      :show="userData === undefined"
+      :show="currentUser === undefined"
     >
       <h4 class="alert-heading">
         Error fetching user data
@@ -29,22 +29,22 @@
         >
           <user-view-user-info-card :user-data="currentUser" />
         </b-col>
+        
       </b-row>
-
-      <!-- <b-row>
+      <b-row>
         <b-col
           cols="12"
           lg="6"
         >
-          <user-view-user-timeline-card />
+          <user-view-access-card :user-data="currentUser" />
         </b-col>
         <b-col
           cols="12"
           lg="6"
         >
-          <user-view-user-permissions-card />
+          <user-view-session-list-card />
         </b-col>
-      </b-row> -->
+      </b-row>
     </template>
 
   </div>
@@ -53,15 +53,30 @@
 <script>
 import { mapGetters } from 'vuex'
 import UserViewUserInfoCard from './UserViewUserInfoCard.vue';
+import UserViewAccessCard from './UserViewAccessCard.vue';
+import UserViewSessionListCard from './UserViewSessionListCard.vue';
 export default {
   components: {
     UserViewUserInfoCard,
+    UserViewAccessCard,
+    UserViewSessionListCard
   },
   computed:{
     ...mapGetters({
       currentUser: 'auth/currentUser',
     })
-  }
+  },
+  created() {
+    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", true);
+    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", { type: "floating" });
+  },
+  destroyed() {
+    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", {
+      type: this.navbarConfig,
+    });
+    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", this.menuHidden);
+    this.$store.commit("appConfig/UPDATE_LAYOUT_TYPE", "vertical");
+  },
 }
 </script>
 

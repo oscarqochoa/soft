@@ -1,9 +1,6 @@
 <template>
   <div>
-    <b-nav-item-dropdown
-      class="dropdown-notification mr-25"
-      menu-class="dropdown-menu-media"
-    >
+    <b-nav-item-dropdown right class="dropdown-notification mr-25" menu-class="dropdown-menu-media">
       <template #button-content>
         <feather-icon
           :badge="taskCounter"
@@ -30,9 +27,7 @@
         <template v-for="notification in S_TASKS">
           <div :key="notification.id">
             <div class="media d-flex align-items-center">
-              <h6 class="font-weight-bolder mr-auto mb-0 text-capitalize">
-                {{ notification.type }}
-              </h6>
+              <h6 class="font-weight-bolder mr-auto mb-0 text-capitalize">{{ notification.type }}</h6>
             </div>
             <!-- Account Notification -->
             <template v-for="task in notification.tasks">
@@ -45,20 +40,18 @@
                   </template>
 
                   <p class="media-heading">
-                    <span class="font-weight-bolder">
-                      {{ task.subject }}
-                    </span>
+                    <span class="font-weight-bolder">{{ task.subject }}</span>
                   </p>
-                  <div class="d-flex justify-content-between  align-items-center">
-                    <small class="notification-text" style="width: calc(100% - 115px);"
-                      >{{ task.client_name }} | {{ task.date | myHourTime }} |
-                      {{ task.real_time | myHourTime }}</small
-                    >
+                  <div class="d-flex justify-content-between align-items-center">
+                    <small class="notification-text" style="width: calc(100% - 115px)">
+                      {{ task.client_name }} | {{ task.date | myHourTime }} |
+                      {{ task.real_time | myHourTime }}
+                    </small>
                     <b-button
                       v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                       variant="outline-primary"
                       size="sm"
-                      style="width: 105px;"
+                      style="width: 105px"
                       block
                     >
                       {{ notification.type == "today" ? "" : task.cant }}
@@ -79,12 +72,11 @@
           variant="primary"
           block
           @click="taskModal = true"
-          >See all tasks</b-button
-        >
+        >See all tasks</b-button>
       </li>
     </b-nav-item-dropdown>
-    <b-modal size="lg" v-model="taskModal" hide-footer centered title="TASKS">
-      <task-modal></task-modal> 
+    <b-modal size="xmd" v-model="taskModal" hide-footer centered title="TASKS">
+      <task-modal></task-modal>
     </b-modal>
   </div>
 </template>
@@ -92,19 +84,20 @@
 <script>
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import Ripple from "vue-ripple-directive";
-import TaskModal from './components/TaskModal.vue'
-import { mapActions, mapGetters, mapState } from "vuex";
+import TaskModal from "./components/TaskModal.vue";
+import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 export default {
-  mounted() {
-    this.getFirstFiveUserTasks()
-    this.getTaskCounter()
+  async mounted() {
+    this.getFirstFiveUserTasks();
+    await this.getTaskCounter();
+    this.showTaskTodayModal();
   },
   components: {
     VuePerfectScrollbar,
     TaskModal
   },
   directives: {
-    Ripple,
+    Ripple
   },
   computed: {
     ...mapGetters({
@@ -119,31 +112,30 @@ export default {
     return {
       perfectScrollbarSettings: {
         maxScrollbarLength: 60,
-        wheelPropagation: false,
+        wheelPropagation: false
       },
       taskModal: false
     };
   },
   methods: {
     ...mapActions({
-      A_GET_TASKS: 'TaskStore/A_GET_TASKS',
-      A_GET_TASK_COUNTER: 'TaskStore/A_GET_TASK_COUNTER'
+      A_GET_TASKS: "TaskStore/A_GET_TASKS",
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER"
     }),
-    async getFirstFiveUserTasks () {
+    ...mapMutations({
+      showTaskTodayModal: "TaskStore/M_SHOW_TASK_TODAY_MODAL"
+    }),
+    async getFirstFiveUserTasks() {
       try {
-        await this.A_GET_TASKS({ id: this.currentUser.user_id })
-      } catch (error) {
-
-      }
+        await this.A_GET_TASKS({ id: this.currentUser.user_id });
+      } catch (error) {}
     },
-    async getTaskCounter () {
+    async getTaskCounter() {
       try {
-        await this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id })
-      } catch (error) {
-
-      }
-    },
-  },
+        await this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id }, true);
+      } catch (error) {}
+    }
+  }
 };
 </script>
 

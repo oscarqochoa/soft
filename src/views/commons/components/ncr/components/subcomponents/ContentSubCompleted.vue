@@ -1,16 +1,16 @@
 <template>
   <div>
     <filter-slot
-        v-scrollbar
-        :filter="filter"
-        :filter-principal="filterPrincipal"
-        :total-rows="totalRows"
-        :paginate="paginate"
-        :start-page="startPage"
-        :to-page="toPage"
-        :send-multiple-sms="false"
-        @reload="$refs['refClientsList'].refresh()"
-      >
+      v-scrollbar
+      :filter="filter"
+      :filter-principal="filterPrincipal"
+      :total-rows="totalRows"
+      :paginate="paginate"
+      :start-page="startPage"
+      :to-page="toPage"
+      :send-multiple-sms="false"
+      @reload="$refs['refClientsList'].refresh()"
+    >
       <b-table
         slot="table"
         no-provider-filtering
@@ -22,7 +22,7 @@
         table-class="text-nowrap"
         responsive="sm"
         show-empty
-        sticky-header="50vh"
+        sticky-header="70vh"
         :current-page="paginate.currentPage"
         :per-page="paginate.perPage"
       >
@@ -32,14 +32,24 @@
             <strong>Loading ...</strong>
           </div>
         </template>
-        <template #cell(lead_name)="data" >
-            <div
+        <template #cell(lead_name)="data">
+          <div
             class="d-flex flex-column justify-content-start align-items-start"
-            
-          >  
-            <a href="www.google.com" target="_blank"
-            class="select-lead-name"> {{data.item.lead_name}} link</a>
+          >
+            <!-- <a href="www.google.com" target="_blank" class="select-lead-name text-important">
+              {{ data.item.lead_name }}
+            </a> -->
             <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
+            <router-link
+              class="select-lead-name text-important"
+              :to="{
+                name: 'lead-show',
+                params: { id: data.item.lead_id },
+              }"
+              target="_blank"
+            >
+              {{ data.item.lead_name }}
+            </router-link>
           </div>
         </template>
         <template #cell(seller_name)="data">
@@ -224,24 +234,35 @@
         </template>
         <template #cell(cr)="data">
           <div v-if="status == 1">
-            <a
-              v-if="data.item.cr == 1"
-              :href="
-                'http://127.0.0.1:8000/crm/leads/report/' +
-                data.item.lead_id +
-                '/' +
-                data.item.score_id
-              "
-              target="_blanck"
-              style="cursor: pointer"
+            <!-- <b-button variant="transparent" target="_blanck"
+                  :to="{name:'report-lead',params:{modul:2,global:{idfile:data.item.score_id,idlead:data.item.lead_id}}}">
+                  <img :src="assetsImg + '/images/icons/report2.ico'" />
+            </b-button> -->
+            <router-link
+              :to="{
+                name: 'report-lead',
+                params: {idfile:data.item.score_id,idlead:data.item.lead_id,
+                  modul: 2,
+                  global: {
+                    idfile: data.item.score_id,
+                    idlead: data.item.lead_id,
+                  },
+                },
+              }"
+              target="_blank"
             >
               <img :src="assetsImg + '/images/icons/report2.ico'" />
-            </a>
+            </router-link>
           </div>
           <div v-if="status == 2">
-            <a :href="data.item.route_html" v-if="!data.item.route_html" target="_blanck">
-              <amg-icon size="23" icon="CRInvalidIcon"></amg-icon>
+            <a
+              :href="data.item.route_html"
+              v-if="!data.item.route_html"
+              target="_blanck"
+            >
+              <amg-icon size="23" icon="CRInvalidIcon" ></amg-icon>
             </a>
+           
           </div>
         </template>
         <template #cell(route_pdf)="data">
@@ -330,7 +351,7 @@ import vSelect from "vue-select";
 import ModalQuestionnaire from "../../modal/ModalQuestionnaire.vue";
 import ModalTrackingStatus from "../../modal/ModalTrackingStatus.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-import ncrmixin from '../../mixin'
+import ncrmixin from "../../mixin";
 export default {
   mixins: [ncrmixin],
   components: {
@@ -352,7 +373,7 @@ export default {
         perPage: 10,
       },
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
-      startPage:null,
+      startPage: null,
       toPage: null,
       totalData: "",
       perPageOptions: [10, 25, 50, 100],
@@ -499,6 +520,7 @@ export default {
         ? "/ncr-leads-search-completed-successfull-crm"
         : "/ncr-leads-search-completed-invalid-crm";
     },
+    
   },
   methods: {
     resetSearch() {
@@ -535,7 +557,7 @@ export default {
         return items || [];
       });
     },
-    
+
     closeModalQuestionnaire() {
       this.modalQuestionnaire = false;
     },
@@ -551,12 +573,11 @@ export default {
       this.modalTrackingStatus = false;
     },
   },
-  
 };
 </script>
 
 <style scoped>
-  .select-lead-name:hover {
-    text-decoration-line: underline
+.select-lead-name:hover {
+  text-decoration-line: underline;
 }
 </style>

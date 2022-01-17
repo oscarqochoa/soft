@@ -1,35 +1,34 @@
 <template>
-  <div
-    id="app"
-    v-loading.full="loading"
-    class="h-100"
-    :class="[skinClasses] "
-  >
+  <div id="app" v-loading.full="loading" class="h-100" :class="[skinClasses] ">
     <component :is="layout">
       <router-view />
     </component>
+
+    <ModalsContainer :modul="currentModul" />
 
     <scroll-to-top v-if="enableScrollToTop" />
   </div>
 </template>
 
 <script>
-import ScrollToTop from '@core/components/scroll-to-top/ScrollToTop.vue'
+import ScrollToTop from "@core/components/scroll-to-top/ScrollToTop.vue";
+import ModalsContainer from "@/views/commons/components/modals-container/ModalsContainer.vue";
 
 // This will be populated in `beforeCreate` hook
-import { $themeColors, $themeBreakpoints, $themeConfig } from '@themeConfig'
-import { provideToast } from 'vue-toastification/composition'
-import { watch } from '@vue/composition-api'
-import useAppConfig from '@core/app-config/useAppConfig'
+import { $themeColors, $themeBreakpoints, $themeConfig } from "@themeConfig";
+import { provideToast } from "vue-toastification/composition";
+import { watch } from "@vue/composition-api";
+import useAppConfig from "@core/app-config/useAppConfig";
 
-import { useWindowSize, useCssVar } from '@vueuse/core'
+import { useWindowSize, useCssVar } from "@vueuse/core";
 
-import { mapGetters, mapActions } from 'vuex'
-import store from '@/store'
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import store from "@/store";
 
-const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')
-const LayoutHorizontal = () => import('@/layouts/horizontal/LayoutHorizontal.vue')
-const LayoutFull = () => import('@/layouts/full/LayoutFull.vue')
+const LayoutVertical = () => import("@/layouts/vertical/LayoutVertical.vue");
+const LayoutHorizontal = () =>
+  import("@/layouts/horizontal/LayoutHorizontal.vue");
+const LayoutFull = () => import("@/layouts/full/LayoutFull.vue");
 
 export default {
   components: {
@@ -39,81 +38,85 @@ export default {
     LayoutFull,
 
     ScrollToTop,
+    ModalsContainer
   },
   // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
   // Currently, router.currentRoute is not reactive and doesn't trigger any change
   computed: {
     layout() {
-      if (this.$route.meta.layout === 'full') return 'layout-full'
-      return `layout-${this.contentLayoutType}`
+      if (this.$route.meta.layout === "full") return "layout-full";
+      return `layout-${this.contentLayoutType}`;
     },
     contentLayoutType() {
-      return this.$store.state.appConfig.layout.type
+      return this.$store.state.appConfig.layout.type;
     },
     ...mapGetters({
-      loading: 'app/loading',
-    }),
-  },
-  mounted() {
-    this.$root.$on('bv::modal::shown', bvEvent => {
-      bvEvent.vueTarget.$refs.content.attributes.removeNamedItem('tabindex')
+      loading: "app/loading"
     })
-    // this.updateCurrentUserModuleRole(this.$route.meta.module)
-  },
-  methods: {
-    ...mapActions({
-      updateCurrentUserModuleRole: 'auth/updateCurrentUserModuleRole',
-    }),
   },
   watch: {
     $route() {
-      this.updateCurrentUserModuleRole(this.$route.matched[0].meta.module)
-    },
+      this.updateCurrentUserModuleRole(this.$route.matched[0].meta.module);
+      this.showModalTaskToday();
+    }
+  },
+  methods: {
+    ...mapActions({
+      updateCurrentUserModuleRole: "auth/updateCurrentUserModuleRole"
+    }),
+    ...mapMutations({
+      showModalTaskToday: "TaskStore/M_SHOW_TASK_TODAY_MODAL"
+    })
+  },
+  data() {
+    return {
+      currentModul: null
+    };
   },
   beforeCreate() {
     // Set colors in theme
     const colors = [
-      'primary',
-      'secondary',
-      'success',
-      'info',
-      'warning',
-      'danger',
-      'light',
-      'dark',
-    ]
+      "primary",
+      "secondary",
+      "success",
+      "info",
+      "warning",
+      "danger",
+      "light",
+      "dark"
+    ];
 
     // eslint-disable-next-line no-plusplus
     for (let i = 0, len = colors.length; i < len; i++) {
       $themeColors[colors[i]] = useCssVar(
         `--${colors[i]}`,
-        document.documentElement,
-      ).value.trim()
+        document.documentElement
+      ).value.trim();
     }
 
     // Set Theme Breakpoints
-    const breakpoints = ['xs', 'sm', 'md', 'lg', 'xl']
+    const breakpoints = ["xs", "sm", "md", "lg", "xl"];
 
     // eslint-disable-next-line no-plusplus
     for (let i = 0, len = breakpoints.length; i < len; i++) {
       $themeBreakpoints[breakpoints[i]] = Number(
         useCssVar(
           `--breakpoint-${breakpoints[i]}`,
-          document.documentElement,
-        ).value.slice(0, -2),
-      )
+          document.documentElement
+        ).value.slice(0, -2)
+      );
     }
 
     // Set RTL
-    const { isRTL } = $themeConfig.layout
-    document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr')
+    const { isRTL } = $themeConfig.layout;
+    document.documentElement.setAttribute("dir", isRTL ? "rtl" : "ltr");
   },
   setup() {
-    const { skin, skinClasses } = useAppConfig()
-    const { enableScrollToTop } = $themeConfig.layout
+    const { skin, skinClasses } = useAppConfig();
+    const { enableScrollToTop } = $themeConfig.layout;
 
     // If skin is dark when initialized => Add class to body
-    if (skin.value === 'dark') document.body.classList.add('dark-layout')
+    if (skin.value === "dark") document.body.classList.add("dark-layout");
 
     // Provide toast for Composition API usage
     // This for those apps/components which uses composition API
@@ -124,22 +127,22 @@ export default {
       closeButton: false,
       icon: false,
       timeout: 3000,
-      transition: 'Vue-Toastification__fade',
-    })
+      transition: "Vue-Toastification__fade"
+    });
 
     // Set Window Width in store
-    store.commit('app/UPDATE_WINDOW_WIDTH', window.innerWidth)
-    const { width: windowWidth } = useWindowSize()
+    store.commit("app/UPDATE_WINDOW_WIDTH", window.innerWidth);
+    const { width: windowWidth } = useWindowSize();
     watch(windowWidth, val => {
-      store.commit('app/UPDATE_WINDOW_WIDTH', val)
-    })
+      store.commit("app/UPDATE_WINDOW_WIDTH", val);
+    });
 
     return {
       skinClasses,
-      enableScrollToTop,
-    }
-  },
-}
+      enableScrollToTop
+    };
+  }
+};
 </script>
 
 <style lang="scss">

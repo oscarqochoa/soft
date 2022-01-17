@@ -185,8 +185,8 @@ class CrmService {
         d.editFee = false
         d.editCaptured = false
         d.editSeller = false
-        d.sellerNew = d.seller
-        d.capturedNew = d.captured
+        d.sellerNew = 0
+        d.capturedNew = d.captured_id
         d.feeNew = d.fee
       })
       return data
@@ -368,7 +368,7 @@ class CrmService {
     }
   }
 
-  async postUserAppointmentSn (body) {
+  async postUserAppointmentSn(body) {
     try {
       const data = await amgApi.post('/get-users-appointmens-sn', body)
       return data

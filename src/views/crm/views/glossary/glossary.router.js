@@ -4,7 +4,8 @@ export default [
           name: 'glossary-crm',
           component: () => import('@/views/crm/views/glossary/Glossary.vue'),
           meta:{
-            isClientsTab: true
+            isClientsTab: true,
+            module:2,
         },
       }
   ]

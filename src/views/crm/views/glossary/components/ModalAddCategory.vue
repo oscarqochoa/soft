@@ -44,7 +44,7 @@
             @click="createCategory()"
             v-if="!spinnerBtnCg"
           >
-            <i class="fas fa-save"></i>&nbsp; CREATE
+             Create
           </b-button>
           <b-button
             variant="success"
@@ -84,19 +84,7 @@ export default {
         if (!success) {
           return;
         } else {
-          this.$swal
-            .fire({
-              title: "CREATE GLOSSSARY",
-              text: "Are you sure?",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonText: "Yes, create it!",
-              customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn--danger",
-              },
-            })
-            .then((result) => {
+            this.showConfirmSwal("CREATE GLOSSSARY","Are you sure?").then((result) => {
               if (result.value) {
                 this.spinnerBtnCg = true;
                 // this.selectCategory = null;

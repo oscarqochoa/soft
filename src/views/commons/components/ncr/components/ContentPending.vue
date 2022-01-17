@@ -22,7 +22,7 @@
         table-class="text-nowrap"
         responsive="sm"
         show-empty
-        sticky-header="50vh"
+        sticky-header="70vh"
         :current-page="paginate.currentPage"
         :per-page="paginate.perPage"
       >
@@ -34,15 +34,18 @@
         </template>
         <template #cell(lead_name)="data">
           <div
-            class="d-flex flex-column justify-content-start align-items-start "
+            class="d-flex flex-column justify-content-start align-items-start"
           >
-            <a class="select-lead-name"
-              href="http://www.google.com"
+            <router-link
+              class="select-lead-name text-important"
+              :to="{
+                name: 'lead-show',
+                params: { id: data.item.lead_id },
+              }"
               target="_blank"
             >
-              {{ data.item.lead_name }} link</a
-            >
-            <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
+              {{ data.item.lead_name }}
+            </router-link>
           </div>
         </template>
         <template #cell(seller_name)="data">
@@ -203,7 +206,7 @@ import vSelect from "vue-select";
 import ModalTrackingStatus from "../modal/ModalTrackingStatus.vue";
 import ModalQuestionnaire from "../modal/ModalQuestionnaire.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-import ncrmixin from '../mixin'
+import ncrmixin from "../mixin";
 
 export default {
   mixins: [ncrmixin],
@@ -363,7 +366,7 @@ export default {
         return items || [];
       });
     },
-    
+
     openTrackingStatus(id, lead_name) {
       this.lead_name = lead_name;
       this.score_id = id;
@@ -372,20 +375,18 @@ export default {
     closeTrackingStatus() {
       this.modalTrackingStatus = false;
     },
-    
+
     closeModalQuestionnaire() {
       this.modalQuestionnaire = false;
     },
   },
-  created() {
-    
-  },
+  created() {},
 };
 </script>
 
 <style lang="scss" scoped>
 .select-lead-name:hover {
-    text-decoration-line: underline
+  text-decoration-line: underline;
 }
 .per-page-selector {
   width: 90px;

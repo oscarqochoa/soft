@@ -2,16 +2,20 @@
   <div class="chats">
     <div
       v-for="(msgGrp, index) in formattedChatData.formattedChatLog"
-      :key="msgGrp.senderId+String(index)"
+      :key="msgGrp.senderId + String(index)"
       class="chat"
-      :class="{'chat-left': msgGrp.senderId === formattedChatData.contact.id}"
+      :class="{ 'chat-left': msgGrp.senderId === formattedChatData.contact.id }"
     >
       <div class="chat-avatar">
         <b-avatar
           size="36"
           class="avatar-border-2 box-shadow-1"
           variant="transparent"
-          :src="msgGrp.senderId === formattedChatData.contact.id ? formattedChatData.contact.avatar : profileUserAvatar"
+          :src="
+            msgGrp.senderId === formattedChatData.contact.id
+              ? formattedChatData.contact.avatar
+              : profileUserAvatar
+          "
         />
       </div>
       <div class="chat-body">
@@ -28,10 +32,15 @@
 </template>
 
 <script>
-import { computed } from '@vue/composition-api'
-import { BAvatar } from 'bootstrap-vue'
+import { computed } from "@vue/composition-api";
+import { BAvatar } from "bootstrap-vue";
 
 export default {
+  mounted() {
+    this.$nextTick(function () {
+      this.scrollToEnd();
+    });
+  },
   components: {
     BAvatar,
   },
@@ -45,59 +54,66 @@ export default {
       required: true,
     },
   },
+  methods: {
+    scrollToEnd() {
+      var container = this.$el.querySelector(".chat");
+      container.scrollTop = container.scrollHeight;
+    },
+  },
   setup(props) {
     const formattedChatData = computed(() => {
       const contact = {
         id: props.chatData.contact.id,
         avatar: props.chatData.contact.avatar,
-      }
+      };
 
-      let chatLog = []
+      let chatLog = [];
       if (props.chatData.chat) {
-        chatLog = props.chatData.chat.chat
+        chatLog = props.chatData.chat.chat;
       }
 
-      const formattedChatLog = []
-      let chatMessageSenderId = chatLog[0] ? chatLog[0].senderId : undefined
+      const formattedChatLog = [];
+      let chatMessageSenderId = chatLog[0] ? chatLog[0].senderId : undefined;
       let msgGroup = {
         sender: chatMessageSenderId,
         messages: [],
-      }
+      };
 
       chatLog.forEach((msg, index) => {
         if (chatMessageSenderId === msg.senderId) {
           msgGroup.messages.push({
             msg: msg.message,
             time: msg.time,
-          })
+          });
         } else {
-          chatMessageSenderId = msg.senderId
-          formattedChatLog.push(msgGroup)
+          chatMessageSenderId = msg.senderId;
+          formattedChatLog.push(msgGroup);
           msgGroup = {
             senderId: msg.senderId,
-            messages: [{
-              msg: msg.message,
-              time: msg.time,
-            }],
-          }
+            messages: [
+              {
+                msg: msg.message,
+                time: msg.time,
+              },
+            ],
+          };
         }
-        if (index === chatLog.length - 1) formattedChatLog.push(msgGroup)
-      })
+        if (index === chatLog.length - 1) formattedChatLog.push(msgGroup);
+      });
 
       return {
         formattedChatLog,
         contact,
         profileUserAvatar: props.profileUserAvatar,
-      }
-    })
+      };
+    });
 
     return {
       formattedChatData,
-    }
+    };
   },
-}
+};
 </script>
 
 <style>
-
 </style>

@@ -127,7 +127,7 @@
                 <div>
                   <label for>Email</label>
                   <b-form-input
-                    v-model="email"
+                    v-model="applicantObject.email"
                     :disabled="isModalShow"
                   />
                 </div>
@@ -382,13 +382,9 @@
                 md="5"
               >
                 <b-input-group prepend="Monthly Net Income">
-                  <money
-                    id="co-applicant-net"
-                    v-model="totalMonthlyNetIncome"
-                    v-bind="vMoney"
-                    disabled
-                    class="form-control"
-                  />
+                  <div class="form-control d-flex align-items-center justify-content-center bg-transparent border">
+                    $ {{ totalMonthlyNetIncome.toFixed(2) }}
+                  </div>
                 </b-input-group>
               </b-col>
             </b-row>
@@ -490,13 +486,9 @@
                 cols="2"
               >
                 <label>Total Utilities</label>
-                <money
-                  id="dato5"
-                  v-model="totalDato5"
-                  v-bind="vMoney"
-                  disabled
-                  class="form-control"
-                />
+                <div class="form-control d-flex align-items-center justify-content-start bg-transparent border">
+                  $ {{ totalDato5 }}
+                </div>
               </b-col>
             </b-row>
             <b-row class="mt-1">
@@ -626,22 +618,18 @@
                 cols="2"
               >
                 <label>Total Others</label>
-                <money
-                  id="dato5"
-                  v-model="totalOthers"
-                  disabled
-                  v-bind="vMoney"
-                  class="form-control"
-                />
+                <div class="form-control d-flex align-items-center justify-content-start bg-transparent border">
+                  $ {{ totalOthers.toFixed(2) }}
+                </div>
               </b-col>
             </b-row>
             <b-row class="mt-1">
               <b-col
-                md="4"
+                cols="2"
               >
                 <label>Total monthly living cost</label>
-                <div class="form-control w-75">
-                  $ {{ totalDato7 }}
+                <div class="form-control d-flex align-items-center justify-content-start bg-transparent border">
+                  $ {{ totalDato7.toFixed(2) }}
                 </div>
               </b-col>
             </b-row>
@@ -698,13 +686,8 @@
                     :id="`date-label-${index}`"
                     v-model="goal.goal"
                     :disabled="isModalShow"
+                    :class="{'border-danger' : errors[0]}"
                   />
-                  <div
-                    v-if="errors[0]"
-                    class="invalid-feedback"
-                  >
-                    {{ goal.text }} is {{ errors[0] }}
-                  </div>
                 </ValidationProvider>
                 <ValidationProvider
                   v-slot="{errors}"
@@ -720,13 +703,8 @@
                     locale="en"
                     :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                     :disabled="isModalShow"
+                    :class="{'border-danger' : errors[0]}"
                   />
-                  <div
-                    v-if="errors[0]"
-                    class="invalid-feedback"
-                  >
-                    {{ goal.text }} date is {{ errors[0] }}
-                  </div>
                 </ValidationProvider>
               </b-col>
             </b-row>
@@ -939,12 +917,7 @@ export default {
       try {
         const success = await this.$refs.formThirdStep.validate()
         if (success) {
-          const result = await this.$swal.fire({
-            title: 'ARE YOU SURE OF CONTINUE ?',
-            text: 'Before finalizing you must save.',
-            icon: 'warning',
-            showCancelButton: true,
-          })
+          const result = await this.showConfirmSwal('Are you sure of continue ?', 'Before finalizing you must save.')
           if (result.value) {
             this.addPreloader()
             const arrayUtilities = []
@@ -1158,12 +1131,7 @@ export default {
           user_id: this.currentUser.id,
           module: this.currentUser.modul_id,
         }
-        const result = await this.$swal.fire({
-          title: `Are you sure you want to ${message}?`,
-          text: "You won't be able to revert this!",
-          type: 'warning',
-          showCancelButton: true,
-        })
+        const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
         if (result.value) {
           this.addPreloader()
           const response = await amgApi.post(route, param)

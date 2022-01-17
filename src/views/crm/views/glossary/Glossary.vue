@@ -22,145 +22,27 @@
             class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
           >
             <b-button variant="success" @click="modalopen(1)">
-              CREATE GLOSSARY
+              Create Glossary
             </b-button>
           </b-col>
         </b-row>
       </div>
-      <div class="mx-2 mb-2 mt-2">
-        <b-row>
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            "
-          >
-            <span class="text-muted"
-              >Showing {{ startPage }} to {{ toPage }} of
-              {{ totalData }} entries</span
-            >
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-end
-            "
-          >
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
-          </b-col>
-        </b-row>
-      </div>
-      <div class="m-2">
-        <!-- Table Top -->
-        <b-row>
-          <!-- Per Page -->
-          <b-col
-            cols="12"
-            md="3"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Show</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label class="mr-2">entries</label>
-            <feather-icon
-              class="cursor-pointer"
-              icon="RefreshCcwIcon"
-              size="20"
-              @click="resetSearch"
-            />
-          </b-col>
-          <!-- Search -->
-          <b-col cols="12" md="9">
-            <div class="d-flex align-items-end justify-content-end">
-              <b-form-group
-                label="Category"
-                label-for="from"
-                class="mb-md-0 mb-2"
-              >
-                <v-select
-                  v-model="categorySearch"
-                  :options="categories"
-                  :clearable="false"
-                  :reduce="(val) => val.id"
-                  label="name"
-                  class="per-page-datepicker d-inline-block mx-50"
-                />
-              </b-form-group>
-              <b-form-group label="From" label-for="from" class="mb-md-0 mb-2">
-                <b-form-datepicker
-                  class="per-page-datepicker d-inline-block mx-50"
-                  id="from"
-                  :date-format-options="{
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                  }"
-                  v-model="fromToObject.from"
-                />
-              </b-form-group>
-              <!-- <label>{{filter.label}}</label> -->
-
-              <b-form-group label="To" label-for="to" class="mb-md-0 mb-2">
-                <b-form-datepicker
-                  class="per-page-datepicker d-inline-block mx-50"
-                  id="to"
-                  :date-format-options="{
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                  }"
-                  v-model="fromToObject.to"
-                />
-              </b-form-group>
-              <!-- <label>{{filter.label}}</label> -->
-
-              <b-button
-                variant="primary"
-                class="button-top"
-                @click="$refs.refClientsList.refresh()"
-              >
-                <div class="d-flex justify-content-between">
-                  <span class="mr-50"
-                    ><feather-icon icon="FilterIcon" size="15"
-                  /></span>
-
-                  <span class="text-nowrap">{{ "Search" }}</span>
-                </div>
-              </b-button>
-            </div>
-          </b-col>
-        </b-row>
-      </div>
+    </b-card>
+    <filter-slot
+        v-scrollbar
+        :filter="filter"
+        :filter-principal="filterPrincipal"
+        :total-rows="totalRows"
+        :no-visible-principal-filter="true"
+        :paginate="paginate"
+        :start-page="startPage"
+        :to-page="toPage"
+        :send-multiple-sms="false"
+        @reload="$refs['refClientsList'].refresh()"
+      >
       <b-table
+        slot="table"
+        no-provider-filtering
         :api-url="clientRoute"
         ref="refClientsList"
         :items="myProvider"
@@ -169,9 +51,9 @@
         table-class="text-nowrap"
         responsive="sm"
         show-empty
-        sticky-header="50vh"
-        :current-page="currentPage"
-        :per-page="perPage"
+        sticky-header="70vh"
+        :current-page="paginate.currentPage"
+        :per-page="paginate.perPage"
         :filter="searchInput"
       >
         <template #table-busy>
@@ -220,18 +102,21 @@
               />
             </template>
             <b-dropdown-item @click="modalopenEdit(2, data.item)">
-              <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50"> EDIT</span>
+              <!-- <feather-icon icon="EditIcon" /> -->
+              <span class="align-middle ml-50"> Edit</span>
             </b-dropdown-item>
 
             <b-dropdown-item @click="deleteGlossary(data.item)">
-              <feather-icon icon="TrashIcon" />
-              <span class="align-middle ml-50">DELETE</span>
+              <!-- <feather-icon icon="TrashIcon" /> -->
+              <span class="align-middle ml-50">Delete</span>
             </b-dropdown-item>
           </b-dropdown>
         </template>
       </b-table>
-    </b-card>
+    </filter-slot>
+     
+      
+    
     <modal-glossary
       v-if="modalChanging"
       :ifModalCard="modalChanging"
@@ -250,20 +135,34 @@ import { mapGetters } from "vuex";
 import vSelect from "vue-select";
 import ModalGlossary from "./components/ModalGlossary.vue";
 import { amgApi } from "@/service/axios";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+
 export default {
   components: {
     vSelect,
     ModalGlossary,
+    FilterSlot,
   },
   data() {
     return {
+      totalRows: 0,
+      paginate: {
+        currentPage: 1,
+        perPage: 10,
+      },
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Client...",
+        model: "",
+      },
       searchInput: "",
       created_by: null,
       categorySearch: null,
       startdate: "",
       enddate: "",
-      startPage: "",
-      toPage: "",
+      startPage:null,
+      toPage: null,
       totalData: "",
       currentPage: 1,
       perPage: 10,
@@ -304,6 +203,51 @@ export default {
       modalChanging: false,
       statusModal: "",
       objectGlossary: null,
+      filter: [
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Category",
+          model: null,
+          options: [],
+          reduce: "id",
+          selectText: "name",
+          cols: 12,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+      ],
     };
   },
   computed: {
@@ -319,19 +263,7 @@ export default {
   },
   methods: {
     deleteGlossary(item) {
-      this.$swal
-        .fire({
-          title: "DELETE",
-          text: "Are you sure?",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Yes, delete it!",
-          customClass: {
-            confirmButton: "btn btn-primary",
-            cancelButton: "btn btn-danger",
-          },
-        })
-        .then((result) => {
+      this.showConfirmSwal("DELETE","Are you sure?").then((result) => {
           if (result.value) {
             const params = { user_id: this.currentUser.id, id: item.id };
             amgApi
@@ -391,9 +323,9 @@ export default {
       const promise = amgApi.post(`${ctx.apiUrl}`, {
         page: ctx.currentPage,
         created_by: this.created_by,
-        category: this.categorySearch,
-        startdate: this.fromToObject.from,
-        enddate: this.fromToObject.to,
+        category: this.filter[0].model,
+        startdate: this.filter[1].model,
+        enddate: this.filter[2].model,
       });
 
       // Must return a promise that resolves to an array of items
@@ -406,6 +338,7 @@ export default {
         this.nextPage = this.startPage + 1; //
         this.endPage = data.data.last_page; //
         this.totalData = data.data.total;
+        this.totalRows = data.data.total;
         this.toPage = data.data.to;
         // Must return an array of items or an empty array if an error occurred
         return items || [];
@@ -423,6 +356,7 @@ export default {
         .get("/glossary/get-categories")
         .then((res) => {
           this.categories = res.data;
+          this.filter[0].options = res.data;
         })
         .catch((error) => {
           console.log(error);

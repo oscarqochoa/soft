@@ -10,6 +10,7 @@ export default {
   getters: {
     currentBreakPoint: (state) => {
       const { windowWidth } = state;
+      if (windowWidth >= 1600) return "xxl";
       if (windowWidth >= $themeBreakpoints.xl) return "xl";
       if (windowWidth >= $themeBreakpoints.lg) return "lg";
       if (windowWidth >= $themeBreakpoints.md) return "md";
@@ -18,7 +19,7 @@ export default {
     },
     bigWindow: (state, getters) => {
       return (
-        getters.currentBreakPoint === "xl" || getters.currentBreakPoint === "lg"
+        getters.currentBreakPoint === "xl" || getters.currentBreakPoint === "lg" || getters.currentBreakPoint === "xxl"
       );
     },
     loading: (state) => {

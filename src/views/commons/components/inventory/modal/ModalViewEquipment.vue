@@ -246,40 +246,34 @@
                 </b-row>
               </div>
 
-              <div
-                v-if="category == 1"
+              <!-- <div
+                
                 style="background: #f7f6f2; color: #706d7d; padding: 10px"
               >
                 SECONDARY INFORMATION
-              </div>
-              <div v-if="category == 1" class="p-4 mt-3 pt-1 pb-3">
+              </div> -->
+              <b-alert variant="primary" v-if="category == 1" show>
+                <div class="alert-body">
+                  <span><strong>SECONDARY INFORMATION</strong></span>
+                </div>
+              </b-alert>
+              <div v-if="category == 1" class="p-4 pb-3">
                 <b-row>
-                  <b-col sm="6">
-                    <b-form-group
-                      id="input-group-2"
-                      label="SERIE:"
-                      style="color: #706d7d"
-                      label-for="input-2"
-                    >
+                  <b-col sm="6" cols="12">
+                    <b-form-group id="input-group-2" label="SERIE:">
                       <b-form-input
                         v-model="serie"
                         placeholder="..."
-                        size="sm"
                         :disabled="disabled"
                         class="input-background-white"
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
                   <b-col sm="6">
-                    <b-form-group
-                      id="input-group-2"
-                      label="PROCESSOR:"
-                      label-for="input-2"
-                    >
+                    <b-form-group id="input-group-2" label="PROCESSOR:">
                       <b-form-input
                         v-model="processor"
                         placeholder="..."
-                        size="sm"
                         class="input-background-white"
                         :disabled="disabled"
                       ></b-form-input>
@@ -290,21 +284,16 @@
                       id="input-group-3"
                       label="RAM:"
                       style="color: #706d7d"
-                      label-for="input-3"
                     >
-                      <b-form-select
+                      <v-select
                         v-model="ram"
                         :options="optionsRam"
-                        size="sm"
+                        label="text"
+                        class="w-100"
+                        :reduce="(val) => val.text"
+                        placeholder="Select"
                         :disabled="disabled"
-                        class="select-icon-none input-background-white"
-                      >
-                        <template #first>
-                          <b-form-select-option :value="null" disabled
-                            >Please select an option</b-form-select-option
-                          >
-                        </template>
-                      </b-form-select>
+                      />
                     </b-form-group>
                   </b-col>
                   <b-col sm="4">
@@ -312,21 +301,16 @@
                       id="input-group-3"
                       label="DISC:"
                       style="color: #706d7d"
-                      label-for="input-3"
                     >
-                      <b-form-select
+                      <v-select
                         v-model="disc"
                         :options="optionsDisc"
-                        size="sm"
+                        label="text"
+                        class="w-100"
+                        :reduce="(val) => val.text"
+                        placeholder="Select"
                         :disabled="disabled"
-                        class="select-icon-none input-background-white"
-                      >
-                        <template #first>
-                          <b-form-select-option :value="null" disabled
-                            >Please select an option</b-form-select-option
-                          >
-                        </template>
-                      </b-form-select>
+                      />
                     </b-form-group>
                   </b-col>
                   <b-col sm="4">
@@ -334,21 +318,16 @@
                       id="input-group-3"
                       label="S.OPERATIONAL:"
                       style="color: #706d7d"
-                      label-for="input-3"
                     >
-                      <b-form-select
-                        v-model="so"
+                      <v-select
+                        v-model="disc"
                         :options="optionsSo"
-                        size="sm"
+                        label="text"
+                        class="w-100"
+                        :reduce="(val) => val.text"
+                        placeholder="Select"
                         :disabled="disabled"
-                        class="select-icon-none input-background-white"
-                      >
-                        <template #first>
-                          <b-form-select-option :value="null" disabled
-                            >Please select an option</b-form-select-option
-                          >
-                        </template>
-                      </b-form-select>
+                      />
                     </b-form-group>
                   </b-col>
 
@@ -508,6 +487,7 @@ export default {
       reader.readAsDataURL(file);
     },
     searchEquipmentById() {
+      console.log(this.idEquipment)
       amgApi
         .post("/inventory/get-equipment-data-by-id", {
           equipmentId: this.idEquipment,
@@ -518,20 +498,19 @@ export default {
             this.category = this.dataEquipment.category;
             this.brand = this.dataEquipment.brand;
             this.condition = this.dataEquipment.condition;
-            // this.disc = this.dataEquipment["disc"];
-            // this.ram = this.dataEquipment["ram"];
-            // this.so = this.dataEquipment["os"];
-            // this.serie = this.dataEquipment["serie"];
-            // this.processor = this.dataEquipment["process"];
+            this.disc = this.dataEquipment.disc;
+            this.ram = this.dataEquipment.ram;
+            this.so = this.dataEquipment.os;
+            this.serie = this.dataEquipment.serie;
+            this.processor = this.dataEquipment.process;
             this.price = this.dataEquipment.price;
             this.model = this.dataEquipment.model;
             this.dateRegister = this.dataEquipment.purchase_date;
-            // this.commentary = this.dataEquipment["commentary"];
+            this.commentary = this.dataEquipment.commentary;
             this.viewImage =
               this.dataEquipment.url_image == null
                 ? this.assetsImg + this.Image
                 : this.dataEquipment.url_image;
-            // var x = document.getElementById("app");
             this.charge = true;
           }
         })
@@ -547,20 +526,23 @@ export default {
         });
     },
     getSelectBrand() {
-      amgApi.get("/inventory/get-list-brand", {}).then((response) => {
-        if (response.status == 200) {
-          this.optionsBrand = response.data;
-        }
-      }).catch(error=>{
-        console.error(error)
-        this.showToast(
+      amgApi
+        .get("/inventory/get-list-brand", {})
+        .then((response) => {
+          if (response.status == 200) {
+            this.optionsBrand = response.data;
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          this.showToast(
             "danger",
             "top-right",
             "Error",
             "XIcon",
             "Something went wrong!"
           );
-      });
+        });
     },
   },
   created() {

@@ -57,7 +57,7 @@
                 style="border-radius: 5px !important"
                 @click="changeStatus()"
               >
-                <feather-icon icon="FileTextIcon" /> SAVE
+                 Save
               </b-button>
             </b-col>
           </b-row>
