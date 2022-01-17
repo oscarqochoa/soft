@@ -1,9 +1,7 @@
 <template>
-<div>
-  <h1>{{message}}</h1>
-  <pre>{{currentUser}}</pre>
-  <pre>{{ userRole }}</pre>
-</div>
+  <div>
+    <pre>{{ currentUser }}</pre>
+  </div>
 
 </template>
 
@@ -39,6 +37,11 @@ export default {
       token: 'auth/token',
       userRole: 'auth/userRole',
     }),
+  },
+  methods: {
+    click() {
+      alert('aaa')
+    },
   },
 }
 </script>

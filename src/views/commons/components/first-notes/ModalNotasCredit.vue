@@ -225,7 +225,7 @@
                     v-model="note.incoveniences.value"
                     :disabled="disabled"
                     :options="editorOption"
-                    :class="{'border-danger' : errors[0]}"
+                    :class="{'border-danger rounded' : errors[0]}"
                   />
                 </validation-provider>
               </b-col>
@@ -248,7 +248,7 @@
                 v-model="note.information.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -274,13 +274,15 @@
             </validation-provider>
             <validation-provider
               v-slot="{ errors }"
+              name="recomendationTextArea"
+              :rules="isSelectedOthersOnRecomendations ? 'required' : ''"
             >
               <quill-editor
                 v-model="note.recomendations.value"
                 :disabled="disabled"
                 :options="editorOption"
                 class="mt-1"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </validation-provider>
           </b-form-group>
@@ -301,7 +303,7 @@
                 v-model="note.suggestion.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -609,6 +611,9 @@ export default {
     },
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller
+    },
+    isSelectedOthersOnRecomendations() {
+      return this.note.recomendations.selectedsOptions.map(val => val.id).includes('reco-4')
     },
   },
   watch: {

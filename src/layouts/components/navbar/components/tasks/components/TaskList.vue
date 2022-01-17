@@ -1,27 +1,17 @@
 <template>
   <div>
-    <b-card no-body class="mb-1">
-      <div class="m-2">
+    <b-card no-body class="mb-1 mt-1">
+      <div class="m-2" v-if="!taskToday">
         <!-- Table Top -->
         <b-row>
           <!-- Per Page -->
-          <b-col cols="12" md="6"> </b-col>
+          <b-col cols="12" md="6"></b-col>
           <!-- Search -->
           <b-col cols="12" md="6">
-            <div
-              class="
-                d-flex
-                align-items-center
-                justify-content-end
-                align-items-center
-              "
-            >
-              <b-button
-                variant="primary"
-                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-              >
+            <div class="d-flex align-items-center justify-content-end align-items-center">
+              <b-button variant="primary" v-ripple.400="'rgba(255, 255, 255, 0.15)'">
                 <div class="d-flex justify-content-between">
-                  <span class="text-nowrap"> Export to excel </span>
+                  <span class="text-nowrap">Export to excel</span>
                 </div>
               </b-button>
             </div>
@@ -55,56 +45,69 @@
             </div>
           </template>
           <template #cell(client_name)="data">
-            <b-link class="text-important">
-              {{ data.item.client_name }}
-            </b-link>
+            <b-link
+              class="text-important"
+              :to="`/${routeModule}/leads/${data.item.lead_id}`"
+              target="_blank"
+            >{{ data.item.client_name }}</b-link>
+            <!-- 
+            <b-link class="text-important">{{ data.item.client_name }}</b-link>-->
             <br />
             <span>
-              <amg-icon icon="SmartphoneIcon"></amg-icon> {{ data.item.mobile }}
+              <amg-icon icon="SmartphoneIcon"></amg-icon>
+              {{ data.item.mobile }}
             </span>
           </template>
           <template #cell(due_date)="data">
-            {{ data.item.due_date | myGlobalDay }} <br />
+            {{ data.item.due_date | myGlobalDay }}
+            <br />
             <span style="font-weight: bold">
               {{ data.item.real_time | myGlobalDay }} ({{
-                data.item.state_hour
+              data.item.state_hour
               }})
             </span>
           </template>
           <template #cell(actions)="data">
             <div class="d-flex justify-content-between align-items-center">
               <span v-if="type != 4">
-                <amg-icon
-                  icon="CheckIcon"
-                  size="20"
-                  class="text-success cursor-pointer"
+                <b-button
+                  variant="flat-success"
+                  class="button-little-size rounded-circle"
                   @click="checkTask(data.item.id)"
-                  v-b-tooltip.hover.top="'Complete'"
-                />
+                  v-b-tooltip.hover.top="'Done Task'"
+                >
+                  <feather-icon icon="CheckCircleIcon" />
+                </b-button>
               </span>
               <span v-if="type != 4">
-                <amg-icon
-                  icon="Edit2Icon"
-                  size="16"
-                  class="text-warning cursor-pointer"
+                <b-button
+                  variant="flat-warning"
+                  class="button-little-size rounded-circle"
+                  @click="onModalEditTaskOpen(data.item.id, false)"
                   v-b-tooltip.hover.top="'Edit'"
-                />
+                >
+                  <feather-icon icon="EditIcon" />
+                </b-button>
               </span>
               <span>
-                <amg-icon
-                  icon="EyeIcon"
-                  size="16"
-                  class="text-info cursor-pointer"
+                <b-button
+                  variant="flat-info"
+                  class="button-little-size rounded-circle"
                   v-b-tooltip.hover.top="'View'"
-                /> </span
-              ><span v-if="type != 4">
-                <amg-icon
-                  icon="TrashIcon"
-                  size="16"
-                  class="text-danger cursor-pointer"
+                  @click="onModalEditTaskOpen(data.item.id, true)"
+                >
+                  <feather-icon icon="EyeIcon" />
+                </b-button>
+              </span>
+              <span v-if="type != 4">
+                <b-button
+                  variant="flat-danger"
+                  class="button-little-size rounded-circle"
                   v-b-tooltip.hover.top="'Delete'"
                   @click="deleteTask(data.item.id)"
-                />
+                >
+                  <feather-icon icon="Trash2Icon" />
+                </b-button>
               </span>
             </div>
           </template>
@@ -115,25 +118,17 @@
           <b-col
             cols="12"
             sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            "
+            class="d-flex align-items-center justify-content-center justify-content-sm-start"
           >
-            <span class="text-muted">
-              Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries
-            </span>
+            <span
+              class="text-muted"
+            >Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries</span>
           </b-col>
           <!-- Pagination -->
           <b-col
             cols="12"
             sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-end
-            "
+            class="d-flex align-items-center justify-content-center justify-content-sm-end"
           >
             <b-pagination
               v-model="currentPage"
@@ -167,14 +162,18 @@ export default {
   props: {
     type: {
       type: [Number, String],
-      default: 1,
+      default: 1
     },
+    taskToday: {
+      type: Boolean,
+      default: false
+    }
   },
   directives: {
-    Ripple,
+    Ripple
   },
   components: {
-    vSelect,
+    vSelect
   },
   data() {
     return {
@@ -185,20 +184,20 @@ export default {
           key: "client_name",
           label: "Client Name",
           sortable: true,
-          visible: true,
+          visible: true
         },
         {
           key: "subject",
           label: "Subject",
           sortable: true,
-          visible: true,
+          visible: true
         },
         {
           key: "due_date",
           label: "Date / Hour",
-          visible: true,
+          visible: true
         },
-        { key: "actions", label: "Actions" },
+        { key: "actions", label: "Actions" }
       ],
       searchInput: "",
       orderby: "",
@@ -211,17 +210,21 @@ export default {
       currentPage: 1,
       toPage: "",
       isBusy: false,
-      perPageOptions: [10, 25, 50, 100],
+      perPageOptions: [10, 25, 50, 100]
     };
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
+      currentUser: "auth/currentUser"
     }),
+
+    routeModule() {
+      return this.$route.meta.route;
+    }
   },
   methods: {
     ...mapActions({
-      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER"
     }),
     async myProvider(ctx) {
       let params = {
@@ -231,7 +234,7 @@ export default {
         order: ctx.sortDesc == 1 ? "desc" : "asc",
         orderby: 5,
         type: this.type,
-        id: this.currentUser.user_id,
+        id: this.currentUser.user_id
       };
       const data = await TaskService.getAllTask(params);
       const items = data.data;
@@ -305,8 +308,8 @@ export default {
           throw error;
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

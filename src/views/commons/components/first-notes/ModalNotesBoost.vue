@@ -314,6 +314,7 @@
                   :options="editorOption"
                   class="font-small-1"
                   :class="{'border-danger' : errors[0]}"
+                  :disabled="disabledNote"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -338,6 +339,7 @@
                   :options="editorOption"
                   class="font-small-1"
                   :class="{'border-danger' : errors[0]}"
+                  :disabled="disabledNote"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -359,6 +361,7 @@
                   v-model="note.recommendations"
                   :options="editorOption"
                   :class="{'border-danger' : errors[0]}"
+                  :disabled="disabledNote"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -578,7 +581,7 @@ export default {
       )
     },
     disabledFile() {
-      return this.noteInfo.statusSale == 4
+      return this.noteInfo.statusSale == 4 || this.noteInfo.notSeller
     },
     showButtonSave() {
       return this.showSave && !this.noteInfo.notSeller
