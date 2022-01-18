@@ -231,7 +231,7 @@ export default {
         })
     },
     onSetPotential() {
-      this.showConfirmSwal()
+      this.showConfirmSwal('Without Potential?')
         .then(async result => {
           if (result.value) {
             this.isLoading = true
@@ -251,7 +251,7 @@ export default {
         })
     },
     onNotCall() {
-      this.showConfirmSwal()
+      this.showConfirmSwal('Your lead not responding to you?')
         .then(async result => {
           if (result.value) {
             this.isLoading = true

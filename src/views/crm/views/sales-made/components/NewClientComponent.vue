@@ -7,12 +7,16 @@
     >
       <b-tab
         title="Done"
+        title-link-class="border-secondary hover-important"
       >
         <sales-made-new-client-component
           :done="1"
         />
       </b-tab>
-      <b-tab title="Pending">
+      <b-tab
+        title="Pending"
+        title-link-class="border-secondary hover-important"
+      >
         <sales-made-new-client-component
           :done="0"
         />
