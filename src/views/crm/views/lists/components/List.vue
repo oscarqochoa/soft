@@ -92,7 +92,6 @@
       </div>
 
       <filter-slot
-        
         :filter="filter"
         :filter-principal="filterPrincipal"
         :total-rows="totalRows"
@@ -115,7 +114,7 @@
           table-class="text-nowrap"
           responsive="sm"
           show-empty
-          sticky-header="70vh"
+          sticky-header="50vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
@@ -137,7 +136,7 @@
                 {{ data.item.created_at }}
               </span>
               <span v-else>
-                {{ data.item.created_at | myGlobalDay }}
+                {{ data.item.created_at | myDateGlobalWithHour }}
               </span>
             </div>
           </template>
@@ -201,8 +200,17 @@
               >
                 <feather-icon icon="EyeIcon"></feather-icon>
               </b-button>
+
               <b-button
-                v-else
+                v-if="data.item.created_at == 'Today'"
+                variant="warning"
+                class="ml-1 reset-radius btn-sm"
+                @click="openModalTaskToday()"
+              >
+                <feather-icon icon="EyeIcon"></feather-icon>
+              </b-button>
+              <b-button
+                v-if="data.item.cant <= 0 && data.item.created_at != 'Today'"
                 disabled
                 variant="warning"
                 class="ml-1 reset-radius btn-sm"
@@ -224,24 +232,35 @@
       :nameUser="nameUser"
       :id="id"
     ></modal-by-user>
+    <modal-task-today
+      v-if="modalTaskToday"
+      :modalTaskToday="modalTaskToday"
+      :currentUser="currentUser"
+      @close="closeModalTaskToday"
+      @updatingTasks="updatingTasks"
+    >
+    </modal-task-today>
   </div>
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
 import ModalByUser from "../components/subcomponents/ModalByUser.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-
+import Button from "@/views/components/button/Button.vue";
+import ModalTaskToday from "./subcomponents/ModalTaskToday.vue";
 export default {
   components: {
     vSelect,
     ModalByUser,
     FilterSlot,
+    Button,
+    ModalTaskToday,
   },
   data() {
     return {
+      modalTaskToday: false,
       totalRows: 0,
       paginate: {
         currentPage: 1,
@@ -381,8 +400,7 @@ export default {
   },
   computed: {
     getRoles() {
-      return this.currentUser.role_id == 1 ||
-        this.currentUser.role_id == 2
+      return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
         ? true
         : false;
     },
@@ -391,8 +409,7 @@ export default {
       return "/listusers";
     },
     visibleFields() {
-      return this.currentUser.role_id == 1 ||
-        this.currentUser.role_id == 2
+      return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
         ? this.arrayColumns.filter((column) => column.visible)
         : this.arrayColumnsTwo.filter((column) => column.visible);
     },
@@ -401,6 +418,15 @@ export default {
     }),
   },
   methods: {
+    updatingTasks(){
+      this.$refs.refClientsList.refresh();
+    },
+    openModalTaskToday() {
+      this.modalTaskToday = true;
+    },
+    closeModalTaskToday() {
+      this.modalTaskToday = false;
+    },
     refresh() {
       this.$refs.refClientsList.refresh();
     },
@@ -430,8 +456,7 @@ export default {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         per_page: ctx.perPage,
         id:
-          this.currentUser.role_id == 1 ||
-          this.currentUser.role_id == 2
+          this.currentUser.role_id == 1 || this.currentUser.role_id == 2
             ? null
             : this.currentUser.user_id,
         from: this.filter[0].model,
@@ -456,10 +481,7 @@ export default {
           this.count_alltask = 0;
           this.count_donetask = 0;
         }
-        if (
-          this.currentUser.role_id == 1 ||
-          this.currentUser.role_id == 2
-        ) {
+        if (this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
           return items || [];
         } else {
           let firstOption = {
@@ -481,8 +503,7 @@ export default {
       amgApi
         .post("/listusers", {
           id:
-            this.currentUser.role_id == 1 ||
-            this.currentUser.role_id == 2
+            this.currentUser.role_id == 1 || this.currentUser.role_id == 2
               ? null
               : this.currentUser.user_id,
           from: this.from,

@@ -103,7 +103,7 @@
                         v-bind="moneyConfig"
                         name="price"
                         id="price"
-                        class="form-control "
+                        class="form-control"
                         :class="{ 'border border-danger': errors[0] }"
                       >
                       </money>
@@ -231,7 +231,7 @@
               </div>
             </div>
 
-            <div class="row w-100">
+            <!-- <div class="row w-100">
               <div class="col-lg-3 col-xl-3 col-md-4 col-9 ml-2 col-sm-6 ">
                   <b-row>
                     <b-col cols="4" cols-sm="3" cols-xl="1" cols-md="1" cols-lg="3">
@@ -256,6 +256,29 @@
                       </b-form-checkbox>
                     </b-col>
                   </b-row>
+              </div>
+            </div> -->
+            <div class="row w-100">
+              <div class="ml-1 pl-1 d-flex">
+                <div class="d-inline-block mr-1">
+                  <b-button
+                    type="submit"
+                    variant="primary"
+                    class="pr-1"
+                    @click="submitAutorize"
+                    :disabled="changeDisable"
+                  >
+                    Submit
+                  </b-button>
+                </div>
+                <b-form-checkbox
+                  v-if="methodpayment == 1"
+                  v-model="sendsms"
+                  value="true"
+                  class="custom-control-primary"
+                >
+                  Send SMS
+                </b-form-checkbox>
               </div>
             </div>
           </div>

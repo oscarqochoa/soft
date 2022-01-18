@@ -12,14 +12,21 @@
               show-empty table-class="text-nowrap"
               sticky-header :items="cards" :fields="fields">
               <template #cell(Select)="data">
+                <ValidationProvider
+                    name="comment"
+                    rules="required"
+                    v-slot="{ errors }"
+                  >
                   <b-form-radio
                   class="vs-checkbox-con"
+                  :class="{ 'border border-danger': errors[0] }"
                   :value="data.item.id"
                   @change="$emit('CardId',data.item.id)"
                   v-model="selected"
                   plain
                 >
                 </b-form-radio>
+                </ValidationProvider>
               </template>
               <template #cell(cardnumber)="data">
                 <div

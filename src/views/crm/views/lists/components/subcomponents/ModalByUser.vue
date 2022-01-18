@@ -52,7 +52,6 @@
       </div>
 
       <b-table
-        v-scrollbar
         :api-url="clientRoute"
         ref="refClientsList"
         :items="myProvider"
@@ -83,10 +82,19 @@
           <div
             class="d-flex flex-column justify-content-center align-items-center"
           >
-            <b-form-checkbox :disabled="rolByUser"
-            v-model="data.item.done" :value="1"   
-            @change="callead(data.item.done,data.item.lead_id,data.item.id_list,data.item.user_id)">
-            
+            <b-form-checkbox
+              :disabled="rolByUser"
+              v-model="data.item.done"
+              :value="1"
+              @change="
+                callead(
+                  data.item.done,
+                  data.item.lead_id,
+                  data.item.id_list,
+                  data.item.user_id
+                )
+              "
+            >
             </b-form-checkbox>
           </div>
         </template>
@@ -108,11 +116,11 @@ export default {
     objectUser: {
       type: Object,
     },
-    nameUser:{
-      type:String,
+    nameUser: {
+      type: String,
     },
-    id:{
-      type:[Number, String],
+    id: {
+      type: [Number, String],
     },
     ifModalCard: {
       type: Boolean,
@@ -123,7 +131,7 @@ export default {
   },
   data() {
     return {
-      statusCheck:true,
+      statusCheck: true,
       totalMissing: 0,
       totalDone: 0,
       mutableIfModalCard: this.ifModalCard,
@@ -181,16 +189,19 @@ export default {
     clientRoute() {
       return "/showlist";
     },
-    rolByUser(){
-      return this.currentUser.arrRoles[0].role_id ==1 || this.currentUser.arrRoles[0].role_id ==2? true:false
+    rolByUser() {
+      return this.currentUser.arrRoles[0].role_id == 1 ||
+        this.currentUser.arrRoles[0].role_id == 2
+        ? true
+        : false;
     },
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
   },
   methods: {
-    checkveri(state){
-        console.log(state)
+    checkveri(state) {
+      console.log(state);
     },
     closeModal() {
       this.$emit("close", false);
@@ -204,19 +215,20 @@ export default {
 
       return promise.then((data) => {
         let items = data.data;
-        if(items.length != 0){
+        if (items.length != 0) {
           this.totalMissing = items[0].quantity_pending;
           this.totalDone = items[0].quantity_done;
-          items.map((item) => { item.selected = false})
-        }else{
-          this.totalMissing = 0
-          this.totalDone =0
+          items.map((item) => {
+            item.selected = false;
+          });
+        } else {
+          this.totalMissing = 0;
+          this.totalDone = 0;
         }
         return items || [];
       });
     },
-    callead(state,idlead, idlist, iduser) {
-      
+    callead(state, idlead, idlist, iduser) {
       if (state == "1") {
         amgApi
           .post("/callead", {
@@ -242,7 +254,7 @@ export default {
           })
           .then((response) => {
             this.$refs.refClientsList.refresh();
-             this.$emit("updateList", false);
+            this.$emit("updateList", false);
             // this.listsgroups(1);
             // this.modalopen(this.idlist, this.listmodal, this.datafilter);
           });
