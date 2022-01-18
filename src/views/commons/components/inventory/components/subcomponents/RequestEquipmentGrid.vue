@@ -1,7 +1,7 @@
 <template>
   <div>
     <filter-slot
-      v-scrollbar
+      
       :filter="filter"
       :filter-principal="filterPrincipal"
       :no-visible-principal-filter="true"
@@ -13,6 +13,7 @@
       @reload="$refs['refClientsList'].refresh()"
     >
       <b-table
+        v-scrollbar
         small
         slot="table"
         no-provider-filtering

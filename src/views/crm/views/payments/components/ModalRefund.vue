@@ -144,6 +144,9 @@ export default {
     closeModal() {
       this.$emit("close", false);
     },
+    updateGrid(){
+      this.$emit("updateGrid",false)
+    },
     sendVoid() {
       this.$refs.form.validate().then((success) => {
         if (!success) {
@@ -166,6 +169,7 @@ export default {
                   .then((response) => {
                     if (response.status == 200) {
                       if (response.data.code == 1) {
+                        this.closeModal();
                         this.$swal
                           .fire({
                             type: "success",
@@ -173,7 +177,8 @@ export default {
                           })
                           .then((res) => {
                             if (res) {
-                              this.closeModal();
+                              this.updateGrid()
+                              
                             }
                           });
                       } else {
@@ -185,6 +190,7 @@ export default {
                           .then((res) => {
                             if (res) {
                               this.closeModal();
+                              this.updateGrid()
                             }
                           });
                       }
@@ -197,6 +203,7 @@ export default {
                         .then((res) => {
                           if (res) {
                             this.closeModal();
+                            this.updateGrid()
                           }
                         });
                     }
@@ -230,6 +237,7 @@ export default {
                     .then((response) => {
                       if (response.status == 200) {
                         if (response.data.code == 1) {
+                          this.closeModal();
                           this.$swal
                             .fire({
                               icon: "success",
@@ -237,7 +245,8 @@ export default {
                             })
                             .then((res) => {
                               if (res) {
-                                this.closeModal();
+                                
+                                this.updateGrid()
                               }
                             });
                         } else {
@@ -249,6 +258,7 @@ export default {
                             .then((res) => {
                               if (res) {
                                 this.closeModal();
+                                this.updateGrid()
                               }
                             });
                         }
@@ -261,6 +271,7 @@ export default {
                           .then((res) => {
                             if (res) {
                               this.closeModal();
+                              this.updateGrid()
                             }
                           });
                       }

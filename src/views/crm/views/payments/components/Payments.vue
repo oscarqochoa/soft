@@ -12,6 +12,7 @@
       @reload="$refs['refClientsList'].refresh()"
     >
       <b-table
+        v-scrollbar
         small
         slot="table"
         no-provider-filtering
@@ -208,6 +209,7 @@
       :dataVoid="this.dataVoid"
       :global="this.currentUser"
       @close="closeModalRefund"
+      @updateGrid="updateGrid"
     ></modal-refund>
     <modal-void-refund-info
       v-if="modalVoidRefund"
@@ -509,6 +511,9 @@ export default {
       this.fromToObject.to = null;
       this.$refs.refClientsList.refresh();
     },
+    updateGrid(){
+      this.$refs.refClientsList.refresh();
+    }
   },
 };
 </script>

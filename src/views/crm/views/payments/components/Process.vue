@@ -94,24 +94,10 @@
                 <div class="col-lg-6 col-md-6 col-sm-6">
                   <ValidationProvider
                     name="price"
-                    :rules="{ required: true, min: 0.01 }"
+                    rules="required|validate-amount"
                     v-slot="{ errors }"
                   >
                     <b-form-group label="Amount" label-for="v-Amount">
-                      <!-- <b-input-group
-                        prepend="$"
-                        :class="{ 'border border-danger': errors[0] }"
-                      >
-                        <b-form-input
-                          id="campo2"
-                          type="text"
-                          v-model="amount"
-                          v-on:blur="validMounthly(2)"
-                          @keypress="justNumbers"
-                          placeholder="amount"
-                        />
-                        <money  v-bind="money" v-model="amount"></money>
-                      </b-input-group> -->
                       <money
                         v-model="amount"
                         v-bind="moneyConfig"
@@ -121,14 +107,6 @@
                         :class="{ 'border border-danger': errors[0] }"
                       >
                       </money>
-                      <!-- <money
-                        id="campo2"
-                        type="text"
-                        v-model="amount"
-                        class="form-control input-form fond-white border-hover"
-                        placeholder="amount"
-                        :class="{ 'border border-danger': errors[0] }"
-                      /> -->
                     </b-form-group>
                   </ValidationProvider>
                 </div>
