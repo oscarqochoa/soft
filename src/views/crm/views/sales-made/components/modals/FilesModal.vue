@@ -114,6 +114,15 @@
               :fields="fields"
               responsive
             >
+              <template #cell(status)="data">
+                <b-form-checkbox
+                  v-if="data.item.type_file == 0"
+                  v-model="data.item.status"
+                  unchecked-value="0"
+                  value="1"
+                  @change="checkFile(data.item.id, data.item.status)"
+                />
+              </template>
               <template v-slot:cell(file_name)="data">
                 <div>
                   <feather-icon icon="FileTextIcon" />
@@ -143,6 +152,7 @@
                       <b-row
                         v-if="data.item.route"
                         class="pb-50"
+                        :class="{'hidden': !data.item.url}"
                       >
                         <b-col
                           cols="1"
@@ -233,6 +243,7 @@
                         <feather-icon icon="DownloadIcon" />
                       </b-btn>
                       <b-btn
+                        v-if="mode === 1"
                         class="ml-1 btn-icon rounded-circle"
                         variant="danger"
                         size="sm"
@@ -338,12 +349,15 @@ export default {
     }),
     itemTable() {
       const programid = this.files.programId
-      return this.item.filter(item => (
-        item.is_ag == 0
-          || (item.is_ag == 1
-              && (programid == 1 || programid == 2 || programid == 3 || programid == 4 || programid == 7))
-          || (item.is_ag == 2 && (programid == 3 || programid == 4))
-          || (item.is_ag == 3 && (programid == 3 || programid == 4))))
+      if (this.mode === 1) {
+        return this.item.filter(item => (
+          item.is_ag == 0
+            || (item.is_ag == 1
+                && (programid == 1 || programid == 2 || programid == 3 || programid == 4 || programid == 7))
+            || (item.is_ag == 2 && (programid == 3 || programid == 4))
+            || (item.is_ag == 3 && (programid == 3 || programid == 4))))
+      }
+      return this.item
     },
   },
   async created() {
@@ -353,6 +367,23 @@ export default {
     this.removePreloader()
   },
   methods: {
+    async checkFile(id, status) {
+      try {
+        this.addPreloader()
+        const response = await amgApi.post('/checkfile', {
+          id,
+          saleid: this.files.sale_id,
+        })
+        if (response.status === 200) {
+          if (status == 1 || status == true) this.showSuccessSwal('Retired File')
+          else if (status == false) this.showSuccessSwal('File Added')
+        }
+        this.removePreloader()
+      } catch (error) {
+        this.removePreloader()
+        this.showErrorSwal(error)
+      }
+    },
     hideModal() {
       this.$emit('close')
       this.ownControl = false
@@ -394,10 +425,51 @@ export default {
     },
     async loadTable() {
       try {
-        this.item = await CrmService.getLeadsFiles({
-          program: this.files.program,
-          id: this.files.id,
-        })
+        if (this.mode === 1) {
+          this.item = await CrmService.getLeadsFiles({
+            program: this.files.program,
+            id: this.files.id,
+          })
+        }
+        if (this.mode === 2) {
+          this.item = await CrmService.getLeadsFilesAccount({
+            id: 'ec41e66e-c94e-11e9-8837-1687e29b1cde',
+            programid: 2,
+            saleid: 11829,
+          })
+          this.fields = [
+            {
+              key: 'status',
+              sortable: false,
+              label: '',
+            },
+            {
+              key: 'file_name',
+              sortable: false,
+              label: 'Name',
+            },
+            {
+              key: 'size',
+              sortable: false,
+              label: 'Size',
+            },
+            {
+              key: 'expiration',
+              sortable: false,
+              label: 'DOE',
+            },
+            {
+              key: 'updated_at',
+              sortable: false,
+              label: 'Upload',
+            },
+            {
+              key: 'actions',
+              sortable: false,
+              label: 'Actions',
+            },
+          ]
+        }
       } catch (error) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
       }

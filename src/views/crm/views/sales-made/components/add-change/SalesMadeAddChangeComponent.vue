@@ -520,6 +520,7 @@
       :modal="modal"
       :files="modalData.files"
       :mode="2"
+      @close="modal.files = false"
     />
     <revission-modal
       v-if="modal.revission"
