@@ -41,13 +41,6 @@
           <div
             class="d-flex flex-column justify-content-start align-items-start"
           >
-            <!-- <a
-                href="www.google.com"
-                target="_blank"
-                class="select-lead-name text-important"
-              >
-                {{ data.item.lead_name }}</a
-              > -->
             <router-link
               class="select-lead-name text-important"
               :to="{
