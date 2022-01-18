@@ -199,14 +199,25 @@ export default {
       isDisabled: this.modul !== 15 ? false : true,
       sellers: [],
       event: {
-        id: null,
-        name: "",
+        user_id: null,
+        title: null,
+        location: "",
+        lead_id: this.lead.id,
+        lead_name: this.lead.lead_name,
+        all_day: "",
         date: "",
         from: "",
         to: "",
-        location: "",
+        state: this.lead.state,
         description: "",
-        seller_id: null
+        created_users: null,
+        type: "event",
+        modul: this.modul,
+        language: this.lead.language,
+        seller: null,
+        dateSp: null,
+        dateEn: null,
+        hourMsn: null
       },
       configFlatPickr: {
         dateFormat: "m/d/Y",
@@ -217,9 +228,16 @@ export default {
   },
   mounted() {},
   async created() {
-    await this.getOwners();
-    await this.setInitialDate();
-    await this.setInitialFrom();
+    //promise all
+    await Promise.all([
+      this.getOwners(),
+      this.setInitialDate(),
+      this.setInitialFrom()
+    ]);
+
+    console.log(this.event);
+    console.log(this.lead);
+
     this.removePreloader();
   },
   computed: {
@@ -228,32 +246,7 @@ export default {
       token: "auth/token",
       G_EVENT_TITLES_OPTIONS: "CrmEventStore/G_EVENT_TITLES",
       G_OWNERS: "CrmGlobalStore/G_OWNERS"
-    }),
-    dateSp() {
-      return new Date(this.event.date.replace(/-/g, "/")).toLocaleDateString(
-        "es-ES",
-        {
-          weekday: "long",
-          month: "long",
-          day: "numeric"
-        }
-      );
-    },
-    dateEn() {
-      return new Date(this.event.date.replace(/-/g, "/")).toLocaleDateString(
-        "en-EN",
-        {
-          weekday: "long",
-          month: "long",
-          day: "numeric"
-        }
-      );
-    },
-    hourMsn() {
-      return this.$moment(`${this.event.date} ${this.event.from}`).format(
-        "h:mm A"
-      );
-    }
+    })
   },
   methods: {
     ...mapActions({
@@ -264,6 +257,7 @@ export default {
     }),
     setInitialUser() {
       this.event.user_id = this.currentUser.user_id;
+      this.event.created_users = this.currentUser.user_id;
     },
     setInitialDate() {
       this.event.date = moment().format("MM/DD/YYYY");
@@ -315,30 +309,12 @@ export default {
     async onSubmit() {
       try {
         this.isLoading = true;
-        const event = {
-          ...this.event,
-          user_id: this.event.user_id.value,
-          seller: this.event.user_id.label,
-          lead_id: this.$route.params.id,
-          all_day: "",
-          state: this.lead.state,
-          created_users: this.currentUser.user_id,
-          type: "event",
-          modul: this.modul
-        };
-        if (this.modul !== 15) {
-          event.lead_name = this.lead.lead_name;
-          event.language = this.lead.language;
-          event.date = this.event.date
-            ? this.$moment(this.event.date, "YYYY-MM-DD").format("MM/DD/YYYY")
-            : "";
-          event.dateSp = this.dateSp;
-          event.dateEn = this.dateEn;
-          event.hourMsn = this.hourMsn;
-        } else {
-          event.leadname = this.lead.lead_name;
-        }
-        const response = await this.A_SET_EVENT(event);
+        await this.datesMsn();
+        //GET SELLER NAME
+        this.event.seller = this.sellers.filter(
+          item => item.value === this.event.user_id
+        )[0].label;
+        const response = await this.A_SET_EVENT(this.event);
         if (this.isResponseSuccess(response)) {
           this.showToast(
             "success",
@@ -369,6 +345,26 @@ export default {
           this.getInternalErrors(error)
         );
       }
+    },
+    datesMsn() {
+      //Dates to  send Msn
+      this.event.dateSp = new Date(
+        this.event.date.replace(/-/g, "/")
+      ).toLocaleDateString("es-ES", {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+      });
+      this.event.dateEn = new Date(
+        this.event.date.replace(/-/g, "/")
+      ).toLocaleDateString("en-EN", {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+      });
+      //Hour Msn
+      let dateNew = moment(this.event.date + " " + this.event.from);
+      this.event.hourMsn = dateNew.format("h:mm A");
     },
     async onGetSeller() {
       try {

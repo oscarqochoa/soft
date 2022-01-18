@@ -10,6 +10,7 @@
       hide-footer
       body-class="mb-2"
       @hidden="closeModal"
+      :no-close-on-backdrop="true"
     >
       <div>
         <div class="campos-detail-modal row" style="margin: 0">

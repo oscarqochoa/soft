@@ -2036,11 +2036,9 @@ export default {
       this.public_info = [];
     },
     returnGrid() {
-     
       var route = "";
       if (this.modul == 2) {
-      
-        route = "/crm/leads/show/" + this.idlead;
+        route = "/crm/leads/" + this.idlead;
       } else if (this.modul == 3) {
         route =
           this.global.idaccount != undefined

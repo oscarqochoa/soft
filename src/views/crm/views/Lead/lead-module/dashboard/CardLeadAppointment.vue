@@ -80,13 +80,7 @@
       title="Create Appointment"
       hide-footer
     >
-      <modal-event-create
-        :modul="modul"
-        :only-read="onlyRead"
-        :lead="lead"
-        :event="event"
-        @resetData="resetData"
-      />
+      <modal-event-create :modul="modul" :only-read="onlyRead" :lead="lead" @resetData="resetData" />
     </b-modal>
     <!-- modal EVENT EDIT -->
     <b-modal

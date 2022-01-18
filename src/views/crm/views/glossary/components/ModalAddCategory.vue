@@ -10,6 +10,7 @@
       body-class="mb-2"
       @hidden="closeModalCategory"
       title-tag="h3"
+      :no-close-on-backdrop="true"
     >
       <ValidationObserver ref="form">
         <div class="row">

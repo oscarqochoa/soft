@@ -1,11 +1,6 @@
 <template>
     <div>
         <b-card no-body>
-          <!-- <inventory-grid
-            :global="currentUser"
-            :module="$route.meta.module"
-            :statusEquipment="3"
-          ></inventory-grid> -->
            <request-equipment-grid
             :global="currentUser"
             :module="$route.meta.module"
