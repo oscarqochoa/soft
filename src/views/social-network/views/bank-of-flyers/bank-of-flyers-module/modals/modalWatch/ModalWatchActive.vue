@@ -220,7 +220,6 @@
                       <b-form-group>
 
                         <v-select
-
                           v-model="item.campaign"
                           :options="items"
                           label="campaign"

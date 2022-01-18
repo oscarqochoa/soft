@@ -8,11 +8,27 @@
     @hidden="closeModal"
   >
 
-    <b-form-textarea
-      id="textarea"
-      v-model="comments"
-      placeholder="Enter something..."
-    />
+    <validation-observer ref="form">
+      <label>Comment</label>
+      <validation-provider
+        v-slot="{ errors }"
+        name="comment"
+        rules="required"
+      >
+        <b-form-textarea
+          id="textarea"
+          v-model="comments"
+          required
+          placeholder="Enter something..."
+        />
+        <label
+          v-if="errors[0]"
+          class="text-danger"
+        >
+          Required
+        </label>
+      </validation-provider>
+    </validation-observer>
 
     <template #modal-footer>
       <b-button
@@ -23,6 +39,7 @@
       </b-button>
 
     </template>
+
   </b-modal>
 </template>
 
@@ -60,18 +77,22 @@ export default {
     closeModal() {
       this.$emit('close')
     },
+    // eslint-disable-next-line consistent-return
     async insertFlyerComments() {
       try {
-        const params = {
-          comments: this.comments,
-          flyer_id: this.index,
-          user_id: this.currentUser.user_id,
-        }
-        console.log(params)
-        const data = await SocialNetworkService.insertFlyerComments(params)
-        if (data.status === 200) {
-          this.showSuccessSwal()
-          this.closeModal()
+        const result = await this.$refs.form.validate()
+        if (result) {
+          const params = {
+            comments: this.comments,
+            flyer_id: this.index,
+            user_id: this.currentUser.user_id,
+          }
+          console.log(params)
+          const data = await SocialNetworkService.insertFlyerComments(params)
+          if (data.status === 200) {
+            this.showSuccessSwal()
+            this.closeModal()
+          }
         }
       } catch (e) {
         this.showErrorSwal(e)

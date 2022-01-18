@@ -65,6 +65,7 @@
             <template v-slot:cell(flyer)="data">
               <p class="mb-0 font-weight-bold">
                 <a
+                  v-b-tooltip.hover.left="'Click to view flyer'"
                   class="clickable"
                   @click="openImage(data.index)"
                 >
@@ -91,7 +92,8 @@
             <template v-slot:cell(replies)="data">
               <p
                 v-if="data.item.count>0"
-                class="mb-0 font-weight-bold cursor-pointer text-success"
+                v-b-tooltip.hover="'Click to view history of replies'"
+                class="mb-0 font-weight-bolder cursor-pointer text-primary fon"
                 @click="OpenRepliesModal(data.index)"
               >
                 {{ data.item.count }}
@@ -144,12 +146,19 @@
                     class="align-middle text-body"
                   />
                 </template>
-                <b-dropdown-item @click="OpenInsertCommentsModal(data.item.id)">
+                <b-dropdown-item
+                  v-b-tooltip.hover.left="'Add new comment'"
+
+                  @click="OpenInsertCommentsModal(data.item.id)"
+                >
                   <feather-icon
                     icon="PlusIcon"
                   />Add
                 </b-dropdown-item>
-                <b-dropdown-item @click="OpenListCommentsModal(data.item.id)">
+                <b-dropdown-item
+                  v-b-tooltip.hover.left="'View history of comments'"
+                  @click="OpenListCommentsModal(data.item.id)"
+                >
                   <feather-icon icon="RotateCcwIcon" />History
                 </b-dropdown-item>
               </b-dropdown>
