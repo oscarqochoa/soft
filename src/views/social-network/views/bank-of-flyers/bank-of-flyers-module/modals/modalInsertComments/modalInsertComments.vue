@@ -3,15 +3,10 @@
     v-model="ownControl"
     scrollable
     title-class="h3 text-white font-weight-bolder"
-
+    title="NEW COMMENT"
     size="lg"
     @hidden="closeModal"
   >
-
-    <template #modal-header>
-      <p class="font-medium-3 font-weight-bolder text-white d-flex align-items-center justify-content-center w-100 "> NEW COMMENT
-
-      </p></template>
 
     <b-form-textarea
       id="textarea"

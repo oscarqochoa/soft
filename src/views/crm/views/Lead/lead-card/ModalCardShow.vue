@@ -1,39 +1,45 @@
 <template>
-	<validation-observer
-		#default="{ handleSubmit }"
-		ref="refFormObserver"
-	>
-		<!-- Form -->
-		<b-form
-			@submit.prevent="handleSubmit(onSubmit)"
-			@reset.prevent="resetForm"
-		>
-			<b-row>
-				<b-col cols="12" sm="6">
-					<validation-provider>
-						<b-form-group
-							label="Card Holder Number"
-							label-for="card-holder-name"
-						>
-							<b-form-input
-								id="card-holder-name"
-								disabled
-								:value="card.cardholdername"
-							/>
-						</b-form-group>
-					</validation-provider>
+  <validation-observer
+    #default="{ handleSubmit }"
+    ref="refFormObserver"
+  >
+    <!-- Form -->
+    <b-form
+      @submit.prevent="handleSubmit(onSubmit)"
+      @reset.prevent="resetForm"
+    >
+      <b-row>
+        <b-col
+          cols="12"
+          sm="6"
+        >
+          <validation-provider>
+            <b-form-group
+              label="Card Holder Number"
+              label-for="card-holder-name"
+            >
+              <b-form-input
+                id="card-holder-name"
+                disabled
+                :value="card.cardholdername"
+              />
+            </b-form-group>
+          </validation-provider>
         </b-col>
-				<b-col cols="12" sm="6">
-					<validation-provider>
-						<b-form-group
-							label="Card Number"
-							label-for="card-number"
-						>
-							<b-input-group>
+        <b-col
+          cols="12"
+          sm="6"
+        >
+          <validation-provider>
+            <b-form-group
+              label="Card Number"
+              label-for="card-number"
+            >
+              <b-input-group>
                 <b-form-input
                   id="card-number"
                   placeholder="XXXX-XXXX-XXXX-..."
-								  disabled
+                  disabled
                   :value="cardOriginalNumber ? cardOriginalNumber : cardNumber"
                 />
                 <b-input-group-append is-text>
@@ -43,13 +49,19 @@
                     class="cursor-pointer"
                     @click="onToggleCreditCard"
                   />
-                  <b-spinner v-else small/>
+                  <b-spinner
+                    v-else
+                    small
+                  />
                 </b-input-group-append>
               </b-input-group>
-						</b-form-group>
-					</validation-provider>
-				</b-col>
-				<b-col cols="12" sm="6">
+            </b-form-group>
+          </validation-provider>
+        </b-col>
+        <b-col
+          cols="12"
+          sm="6"
+        >
           <b-row>
             <b-col cols="3">
               <validation-provider>
@@ -104,11 +116,14 @@
             </b-col>
           </b-row>
         </b-col>
-				<b-col cols="12" sm="6">
+        <b-col
+          cols="12"
+          sm="6"
+        >
           <validation-provider>
-						<b-form-group
-							label="Billing Address is the same the Mailling Address ?"
-						>
+            <b-form-group
+              label="Billing Address is the same the Mailling Address ?"
+            >
               <b-button-group class="w-100">
                 <b-button
                   v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -125,15 +140,22 @@
                   NO
                 </b-button>
               </b-button-group>
-						</b-form-group>
-					</validation-provider>
+            </b-form-group>
+          </validation-provider>
         </b-col>
-        <b-col v-if="!moreInfo && type !== 1" cols="12">
-          <address-component :address-data="card" :state-options="G_EEUU_STATES" :is-disabled="true" />
+        <b-col
+          v-if="!moreInfo && type !== 1"
+          cols="12"
+        >
+          <address-component
+            :address-data="card"
+            :state-options="G_EEUU_STATES"
+            :is-disabled="true"
+          />
         </b-col>
-			</b-row>
-		</b-form>
-	</validation-observer>
+      </b-row>
+    </b-form>
+  </validation-observer>
 </template>
 
 <script>
@@ -157,24 +179,39 @@ export default {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
-      G_EEUU_STATES: 'CrmGlobalStore/G_EEUU_STATES'
+      G_EEUU_STATES: 'CrmGlobalStore/G_EEUU_STATES',
     }),
-    creditCardToggleIcon () {
+    creditCardToggleIcon() {
       return this.cardOriginalNumber ? 'EyeOffIcon' : 'EyeIcon'
     },
-    cardCvv () {
-      return (this.isShowCardCvv ? this.card.cardsecuritycode : (this.card.cardsecuritycode.length === 3 ? `XX${ this.card.cardsecuritycode.substr(2) }` : `XXX${ this.card.cardsecuritycode.substr(3) }`))
-    }
+    cardCvv() {
+      return (this.isShowCardCvv ? this.card.cardsecuritycode : (this.card.cardsecuritycode.length === 3 ? `XX${this.card.cardsecuritycode.substr(2)}` : `XXX${this.card.cardsecuritycode.substr(3)}`))
+    },
   },
-  created () {
+  created() {
     this.authUser = this.currentUser
-    this.blankItem = Object.assign({}, this.card)
+    this.blankItem = { ...this.card }
   },
-  data () {
+  directives: { Ripple },
+  props: {
+    modul: {
+      type: Number,
+      required: true,
+    },
+    type: {
+      type: Number,
+      required: false,
+    },
+    card: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
     return {
-      authUser: new Object,
-      blankItem: new Object,
-      cardNumber: `XXXX-XXXX-XXXX-${ this.card.cardnumber }`,
+      authUser: new Object(),
+      blankItem: new Object(),
+      cardNumber: `XXXX-XXXX-XXXX-${this.card.cardnumber}`,
       cardOriginalNumber: null,
       eeuu_state: null,
       isCreditCardLoading: false,
@@ -182,24 +219,9 @@ export default {
       moreInfo: false,
     }
   },
-  directives: { Ripple },
-  props: {
-    modul: {
-      type: Number,
-      required: true
-    },
-    type: {
-      type: Number,
-      required: false
-    },
-    card: {
-      type: Object,
-      required: true
-    }
-  },
-  setup () {
+  setup() {
     const resetuserData = () => {
-      const event = Object.assign({}, this.blankItem)
+      const event = { ...this.blankItem }
       this.$emit('update:card', event)
     }
     const {
@@ -210,25 +232,23 @@ export default {
     return {
       refFormObserver,
       getValidationState,
-      resetuserData
+      resetuserData,
     }
   },
   methods: {
     ...mapActions({
       A_GET_ORIGINAL_TARGET: 'CrmCreditCardStore/A_GET_ORIGINAL_TARGET',
     }),
-    async onToggleCreditCard () {
+    async onToggleCreditCard() {
       try {
         if (!this.cardOriginalNumber) {
           this.isCreditCardLoading = true
           const response = await this.A_GET_ORIGINAL_TARGET({ id: this.card.id })
           if (this.isResponseSuccess(response)) {
             this.cardOriginalNumber = response.data[0]
-          } else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
+          } else this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
           this.isCreditCardLoading = false
-        } else
-          this.cardOriginalNumber = null
+        } else this.cardOriginalNumber = null
       } catch (error) {
         console.log('Something went wrong onToggleCreditCard', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
@@ -236,8 +256,8 @@ export default {
       }
     },
   },
-  mounted () {
-    this.moreInfo = this.card.address ? false : true
+  mounted() {
+    this.moreInfo = !this.card.address
     this.card.prename = 'card'
     this.card.street = this.card.address
   },

@@ -1,5 +1,13 @@
 import { amgApi } from '@/service/axios'
 
+const DEFAULT_BODY_GET_SELLERS_CRM = {
+  roles: '[1,2,5]',
+  type: '1',
+}
+const DEFAULT_BODY_GET_CAPTURED_CRM = {
+  roles: '[]',
+  type: '1',
+}
 class CrmService {
   async getLeads(body) {
     try {
@@ -11,22 +19,16 @@ class CrmService {
     }
   }
 
-  async getSellersCrm() {
+  async getSellersCrm(module = 2, body = DEFAULT_BODY_GET_SELLERS_CRM) {
     // eslint-disable-next-line no-undef
-    let data = await amgApi.post('/sellerall/2', {
-      roles: '[1,2,5]',
-      type: '1',
-    })
+    let data = await amgApi.post(`/sellerall/${module}`, body)
     data = data.data
     return data
   }
 
-  async getCapturedCrm() {
+  async getCapturedCrm(module = 2, body = DEFAULT_BODY_GET_CAPTURED_CRM) {
     // eslint-disable-next-line no-undef
-    let data = await amgApi.post('/capturedall/2', {
-      roles: '[]',
-      type: '1',
-    })
+    let data = await amgApi.post(`/capturedall/${module}`, body)
     data = data.data
     return data
   }

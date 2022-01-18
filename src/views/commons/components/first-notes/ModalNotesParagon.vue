@@ -449,13 +449,12 @@ import { quillEditor } from 'vue-quill-editor'
 import vSelect from 'vue-select'
 import NotesServices from '@/views/commons/components/first-notes/services/notes.service'
 import HeaderModalNotes from '@/views/commons/components/first-notes/HeaderModalNotes.vue'
-
+import ButtonSave from '@/views/commons/utilities/ButtonSave.vue'
+import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete.vue'
+import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate.vue'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-import ButtonSave from '@/views/commons/utilities/ButtonSave'
-import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete'
-import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate'
 
 export default {
   name: 'ModalNotesParagon',

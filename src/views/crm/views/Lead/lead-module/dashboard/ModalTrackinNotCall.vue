@@ -6,7 +6,7 @@
       small
       responsive
       :fields="fields"
-      :items="lead.not_call"
+      :items="JSON.parse(lead.not_call)"
       :busy="isBusy"
     >
       <template #table-busy>
@@ -40,12 +40,22 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
   },
-  created () {},
-  data () {
+  created() {},
+  props: {
+    modul: {
+      type: Number,
+      required: true,
+    },
+    lead: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
     return {
       historyTasks: [],
       fields: [
@@ -57,18 +67,8 @@ export default {
       isBusy: false,
     }
   },
+  mounted() {},
   methods: {},
-  mounted () {},
-  props: {
-    modul: {
-      type: Number,
-      required: true
-    },
-    lead: {
-      type: Object,
-      required: true
-    },
-  },
   setup() {},
 }
 </script>

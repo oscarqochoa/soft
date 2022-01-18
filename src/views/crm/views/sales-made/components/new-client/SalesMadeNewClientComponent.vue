@@ -133,7 +133,7 @@
         <template v-slot:cell(captured)="data">
           <b-row>
             <b-col v-if="!data.item.editCaptured">
-              <p> {{ data.item.captured }} </p>
+              <p>{{ data.item.captured }}</p>
             </b-col>
             <b-col v-else>
               <b-form-select
@@ -149,9 +149,7 @@
           </b-row>
           <b-row>
             <b-col>
-              <p
-                v-if="(data.item.commission) && (G_IS_CEO || G_IS_SUPERVISOR)"
-              >
+              <p v-if="(data.item.commission) && (G_IS_CEO || G_IS_SUPERVISOR)">
                 <small
                   class="text-primary font-weight-bold"
                 >$ {{ JSON.parse(data.item.commission)[0].commission }}</small>
@@ -210,9 +208,7 @@
           </b-row>
           <b-row>
             <b-col>
-              <p
-                v-if="data.item.commission && (G_IS_CEO || G_IS_SUPERVISOR)"
-              >
+              <p v-if="data.item.commission && (G_IS_CEO || G_IS_SUPERVISOR)">
                 <small
                   class="text-primary font-weight-bold"
                 >$ {{ JSON.parse(data.item.commission)[1].commission }}</small>
@@ -277,9 +273,7 @@
           <b-row
             v-if="(data.item.status === 1 || data.item.status === 3) && (G_IS_CEO || G_IS_SUPERVISOR)"
           >
-            <b-col
-              cols="6"
-            >
+            <b-col cols="6">
               <b-icon
                 v-if="!data.item.editFee"
                 icon="pencil-fill"
@@ -293,9 +287,7 @@
                 @click="saveNewFee(data.item.fee, data.item.feeNew, data.item.id, data.item)"
               />
             </b-col>
-            <b-col
-              cols="6"
-            >
+            <b-col cols="6">
               <b-icon
                 v-if="!data.item.editFee"
                 icon="list-ul"
@@ -404,16 +396,14 @@
             icon="FolderIcon"
             class="font-medium-2"
             @click="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
-              G_IS_CEO || G_IS_SUPERVISOR)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id, data.item.status, data.item.user_id, data.item.program_id)"
+              G_IS_CEO || G_IS_SUPERVISOR)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id, data.item.status, data.item.user_id, data.item.program_id, data.item.event_date)"
           />
         </template>
         <template v-slot:cell(status)="data">
           <p
             class="m-0 font-weight-bold font-small-3"
             :class="'color: text-' + status[data.item.status].variant"
-          >
-            {{ status[data.item.status].label }}
-          </p>
+          >{{ status[data.item.status].label }}</p>
         </template>
         <template v-slot:cell(actions)="data">
           <b-row
@@ -428,9 +418,7 @@
               class="m-10px"
               size="sm"
               @click="revisionSale(5,data.item)"
-            >
-              Revission
-            </b-button>
+            >Revission</b-button>
 
             <!-- Revission to Administration for Supervisor or Ceo -->
             <b-button
@@ -441,9 +429,7 @@
               class="m-10px"
               size="sm"
               @click="revisionSale(2, data.item)"
-            >
-              Revission
-            </b-button>
+            >Revission</b-button>
 
             <!-- IN SUPERVISOR REVISSION  -->
             <b-button
@@ -453,9 +439,7 @@
               class="m-10px"
               size="sm"
               @click="revisionSale(2, data.item)"
-            >
-              Revission
-            </b-button>
+            >Revission</b-button>
             <b-button
               v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
                 data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
@@ -463,9 +447,7 @@
               class="m-10px"
               size="sm"
               @click="revisionSale(7, data.item)"
-            >
-              Return
-            </b-button>
+            >Return</b-button>
             <b-button
               v-if="data.item.status == 3 && (currentUser.user_id == data.item.user_id ||
                 G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
@@ -474,18 +456,14 @@
               class="m-10px"
               size="sm"
               @click="revisionSale(2,data.item)"
-            >
-              Revission
-            </b-button>
+            >Revission</b-button>
             <b-button
               v-if="data.item.initial_payment_status == 1 && (G_IS_CEO || G_IS_SUPERVISOR)"
               variant="outline-danger"
               class="m-10px"
               size="sm"
               @click="annulSale(data.item)"
-            >
-              Annul
-            </b-button>
+            >Annul</b-button>
           </b-row>
 
           <b-row
@@ -500,9 +478,7 @@
               class="m-10px"
               size="sm"
               @click="revisionSale(5, data.item)"
-            >
-              Revission
-            </b-button>
+            >Revission</b-button>
             <b-button
               v-if="(data.item.status == 1 || data.item.status == 6) && (G_IS_CEO || G_IS_SUPERVISOR) &&
                 data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
@@ -511,9 +487,7 @@
               :disabled="data.item.type == 1 && G_IS_CEO ? false : data.item.type == 0 ? false : true"
               size="sm"
               @click="revisionSale(2, data.item)"
-            >
-              Revission
-            </b-button>
+            >Revission</b-button>
             <b-button
               v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) &&
                 data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
@@ -521,9 +495,7 @@
               variant="outline-success"
               size="sm"
               @click="revisionSale(2, data.item)"
-            >
-              Revission
-            </b-button>
+            >Revission</b-button>
             <b-button
               v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) &&
                 data.item.contract_fee_status == 1 && data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
@@ -531,9 +503,7 @@
               variant="outline-danger"
               size="sm"
               @click="revisionSale(7, data.item)"
-            >
-              Return
-            </b-button>
+            >Return</b-button>
             <b-button
               v-if="data.item.status == 3 && (currentUser.user_id == data.item.user_id ||
                 G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
@@ -542,18 +512,14 @@
               variant="outline-danger"
               size="sm"
               @click="revisionSale(2, data.item)"
-            >
-              Revission
-            </b-button>
+            >Revission</b-button>
             <b-button
               v-if="data.item.initial_payment_status == 1 && (G_IS_CEO || G_IS_SUPERVISOR)"
               variant="outline-danger"
               size="sm"
               class="m-10px"
               @click="annulSale(data.item)"
-            >
-              ANNUL
-            </b-button>
+            >ANNUL</b-button>
           </b-row>
         </template>
         <template #cell(creates)="data">
@@ -590,12 +556,12 @@
           </b-dropdown>
         </template>
         <template #cell(done)="data">
-          <b-btn v-if="data.item.initial_payment_status == 2">
-            <b-icon
-              icon="arrow-left-square-fill"
-              variant="primary"
-            />
-          </b-btn>
+          <b-btn
+            v-if="data.item.initial_payment_status == 2"
+            variant="outline-info"
+            size="sm"
+            @click="returnDone(data.item.event_id, null)"
+          >Return</b-btn>
         </template>
       </b-table>
     </filter-slot>
@@ -693,8 +659,7 @@
       v-if="modal.initial_payment"
       :modal="modal"
       :initial_payment="modalData.initial_payment"
-      @click="modal.initial_payment = false; $refs['new-client-done-table'].refresh()"
-      @close="modal.initial_payment = false; $refs['new-client-done-table'].refresh()"
+      @close="hideInitialPaymentModal"
     />
     <tracking-captured-by-modal
       v-if="modal.captuerd_by_tracking"
@@ -705,6 +670,7 @@
       v-if="modal.files"
       :modal="modal"
       :files="modalData.files"
+      @close="modal.files = false"
     />
     <revission-modal
       v-if="modal.revission"
@@ -733,6 +699,15 @@
       :contract-fee="modalData.contractFee"
       @close="modal.contract_fee = false"
       @reload="$refs['new-client-done-table'].refresh()"
+    />
+    <approve-supervisor-modal
+      v-if="modal.approveSupervisorModal"
+      :session-id="currentUser.user_id"
+      :modul="modalData.approveSupervisorModal.modul"
+      :event-id="modalData.approveSupervisorModal.eventId"
+      :type-approve="modalData.approveSupervisorModal.typeApprove"
+      @approveSupChar="returnDone"
+      @click="closeModalApprove"
     />
   </div>
 </template>
@@ -769,7 +744,9 @@ import ModalNotesParagon from '@/views/commons/components/first-notes/ModalNotes
 import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue'
 import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms.vue'
 import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasCredit.vue'
+import ModalNotesAll from '@/views/commons/components/first-notes/ModalNotesAll.vue'
 import ModalNotesSpecialist from '@/views/commons/components/first-notes/ModalNotesSpecialist.vue'
+import ApproveSupervisorModal from '@/views/crm/views/sales-made/components/modals/ApproveSupervisorModal.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -799,7 +776,9 @@ export default {
     ModalNotesFirst,
     ModalNotesTax,
     ModalNotesCredit,
+    ModalNotesAll,
     ModalNotesSpecialist,
+    ApproveSupervisorModal,
   },
   props: {
     done: {
@@ -838,6 +817,7 @@ export default {
         url: false,
         contract_fee: false,
         notes: false,
+        approveSupervisorModal: false,
       },
       modalData: {
         historySms: {
@@ -928,6 +908,11 @@ export default {
           notes_status: null,
           notes_status_new: null,
         },
+        approveSupervisorModal: {
+          modul: 2,
+          typeApprove: 1,
+          eventId: '',
+        },
       },
       selectAll: false,
     }
@@ -962,8 +947,20 @@ export default {
   async created() {
     try {
       await Promise.all([
-        this.$store.dispatch('crm-store/getSellers'),
-        this.$store.dispatch('crm-store/getCaptured'),
+        this.$store.dispatch('crm-store/getSellers', {
+          module: 2,
+          body: {
+            roles: '[1,5,2,3]',
+            type: '1',
+          },
+        }),
+        this.$store.dispatch('crm-store/getCaptured', {
+          module: 2,
+          body: {
+            roles: '[]',
+            type: '1',
+          },
+        }),
         this.$store.dispatch('crm-store/getPrograms'),
         this.$store.dispatch('crm-store/getSources'),
         this.$store.dispatch('crm-store/getStates'),
@@ -980,6 +977,40 @@ export default {
     }
   },
   methods: {
+    hideInitialPaymentModal(val) {
+      this.modal.initial_payment = false
+      if (val) {
+        this.$refs['new-client-done-table'].refresh()
+      }
+    },
+    closeModalApprove() {
+      this.modal.approveSupervisorModal = false
+    },
+    async returnDone(eventId, sendSupervisor) {
+      this.modalData.approveSupervisorModal.eventId = Array.isArray(eventId)
+        ? eventId[0]
+        : eventId
+      if (this.G_IS_SELLER && sendSupervisor === null) {
+        this.modal.approveSupervisorModal = true
+      } else {
+        const result = await this.showConfirmSwal(
+          'Are you sure?',
+          'Are you sure set done this sale',
+        )
+        if (result.value) {
+          try {
+            const response = await amgApi.post('/set-done', {
+              eventId: this.modalData.approveSupervisorModal.eventId,
+            })
+            if (response.status === 200) {
+              this.$refs['new-client-done-table'].refresh()
+            }
+          } catch (error) {
+            this.showErrorSwal(error)
+          }
+        }
+      }
+    },
     modalSmsOpen(item) {
       this.modalData.sendSms.leads_sms = []
       this.modalData.sendSms.typesms = 1
@@ -1064,8 +1095,11 @@ export default {
       }
     },
     openContractFeeModal(data) {
-      console.log(data)
-      if (data.user_id == this.currentUser.user_id || this.G_IS_CEO || this.G_IS_SUPERVISOR) {
+      if (
+        data.user_id == this.currentUser.user_id
+        || this.G_IS_CEO
+        || this.G_IS_SUPERVISOR
+      ) {
         this.modalData.contractFee.editModal = true
       } else {
         this.modalData.contractFee.editModal = false
@@ -1130,7 +1164,7 @@ export default {
           this.modalData.notes.programSelected = 'ModalNotesParagon' // ready
           break
         default:
-          this.modalData.notes.programSelected = 'ModalNotesOld' // next
+          this.modalData.notes.programSelected = 'ModalNotesAll' // next
           break
       }
 
@@ -1193,7 +1227,7 @@ export default {
     },
     async openInitialPaymentModal(data) {
       try {
-        console.log(data)
+        this.addPreloader()
         this.modalData.initial_payment.programid = data.program_id
         this.modalData.initial_payment.sessionId = this.currentUser.user_id
         this.modalData.initial_payment.cfeestatus = data.contract_fee_status
@@ -1260,16 +1294,20 @@ export default {
         this.modal.programs = true
       }
     },
-    openFilesModal(id, program, client, saleId, status, sellerId, programId) {
+    openFilesModal(id, program, client, saleId, status, sellerId, programId, eventDate) {
       this.modalData.files.id = id
       this.modalData.files.program = program
       this.modalData.files.client = client
       this.modalData.files.sale_id = saleId
       this.modalData.files.programId = programId
+      this.modalData.files.event_date = eventDate
       const isCeoOrSupervisor = this.currentUser.role_id == '1' || this.currentUser.role_id == '2'
       const saleStatus = status == '4' || status == '2'
       console.log(this.currentUser.user_id, sellerId)
-      if ((this.currentUser.user_id == sellerId || isCeoOrSupervisor) && saleStatus == false) {
+      if (
+        (this.currentUser.user_id == sellerId || isCeoOrSupervisor)
+        && saleStatus == false
+      ) {
         this.modalData.files.valorEdit = true
       }
       this.modal.files = true
@@ -1285,7 +1323,9 @@ export default {
     },
     async saveNewCaptured(captured, capturedNew, userId, user) {
       // eslint-disable-next-line no-param-reassign
-      const [capturedNew2] = this.captured.filter(val => val.id === capturedNew)
+      const [capturedNew2] = this.captured.filter(
+        val => val.id === capturedNew,
+      )
       if (captured === capturedNew2.label) {
         this.showToast(
           'danger',
@@ -1409,7 +1449,10 @@ export default {
     },
     async annulSale(sale) {
       try {
-        const swal = await this.showConfirmSwal('Are you sure?', 'Are you sure annuled this sale')
+        const swal = await this.showConfirmSwal(
+          'Are you sure?',
+          'Are you sure annuled this sale',
+        )
         if (swal.isConfirmed) {
           const response = await amgApi.post('/annulsale', {
             id: sale.id,
@@ -1449,7 +1492,7 @@ export default {
   pointer-events: none;
   opacity: 0.4;
 }
-.m-10px{
+.m-10px {
   margin: 2px;
 }
 </style>

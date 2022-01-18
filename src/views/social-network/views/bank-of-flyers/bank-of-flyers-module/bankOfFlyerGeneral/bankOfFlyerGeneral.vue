@@ -90,8 +90,16 @@
 
             <template v-slot:cell(replies)="data">
               <p
-                class="mb-0 font-weight-bold cursor-pointer"
+                v-if="data.item.count>0"
+                class="mb-0 font-weight-bold cursor-pointer text-success"
                 @click="OpenRepliesModal(data.index)"
+              >
+                {{ data.item.count }}
+              </p>
+
+              <p
+                v-else
+                class="mb-0 font-weight-bold"
               >
                 {{ data.item.count }}
               </p>
@@ -148,6 +156,50 @@
             </template>
 
           </b-table>
+          <template #footer>
+            <b-col
+              class="d-flex
+            align-items-center
+            justify-content-end
+          "
+            >
+              <div
+                style="
+              background-color: #3764ff !important;
+              padding: 5px;
+              border-radius: 30px;
+              padding-left: 15px;
+              padding-right: 15px;
+            "
+              >
+                <span
+                  class="text-nowrap"
+                  style="color: #fff"
+                >
+                  Total Replies
+                  {{ totalReplies == 0 ? + totalReplies : totalReplies }}
+                </span>
+              </div>
+              <div
+                style="
+              background-color: #3764ff !important;
+              padding: 5px;
+              border-radius: 30px;
+              padding-left: 15px;
+              padding-right: 15px;
+            "
+              >
+                <span
+                  class="text-nowrap"
+                  style="color: #fff"
+                >
+                  Total New Replies
+                  {{ totalNewReplies == 0 ? + totalNewReplies : totalNewReplies }}
+                </span>
+              </div>
+            </b-col>
+
+          </template>
         </filter-slot>
         <modal-watch-active
 
@@ -215,7 +267,6 @@ export default {
   },
   data() {
     return {
-      caro: 'prueita',
       baseImg: process.env.VUE_APP_BASE_URL_FRONT,
       items: [],
       itemImage: [],
@@ -226,7 +277,7 @@ export default {
       filterPrincipal: {
         type: 'input',
         inputType: 'text',
-        placeholder: 'Flyer Name...',
+        placeholder: 'Search...',
         model: '',
       },
       paginate: {
@@ -265,6 +316,9 @@ export default {
       showListComments: null,
       info: null,
       comments: null,
+      orderby: 1,
+      totalReplies: 0,
+      totalNewReplies: 0,
     }
   },
   computed: {
@@ -276,7 +330,7 @@ export default {
     ...mapState({
 
       programs: state => state.SocialNetworkGlobalStore.S_PROGRAMS,
-      state: state => state.SocialNetworkGlobalStore.S_STATES,
+      states: state => state.SocialNetworkGlobalStore.S_STATES,
 
     }),
 
@@ -292,13 +346,14 @@ export default {
         this.$store.dispatch('SocialNetworkGlobalStore/A_GET_STATES'),
       ])
       this.filter[2].options = this.programs
-      this.filter[3].options = this.state
+      this.filter[3].options = this.states
     } catch (error) {
       console.error(error)
     }
   },
 
   methods: {
+
     pushImage() {
       const imageArray = []
       this.items.forEach(element => {
@@ -336,7 +391,6 @@ export default {
     OpenListCommentsModal(index) {
       this.modalListCommentsModal = true
       this.showListComments = index
-      console.log('aaaaaaaaaaaaaaa')
     },
     closeRepliesModal() {
       this.modalReplies = false
@@ -349,10 +403,42 @@ export default {
     },
     async search(ctx) {
       try {
+        let orderBy = 1
+        let sortDirection = 'desc'
+        if (ctx.sortBy === 'program') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 3
+        } else if (ctx.sortBy === 'campaign') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 10
+        } else if (ctx.sortBy === 'name') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 17
+        } else if (ctx.sortBy === 'replies') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 20
+        } else if (ctx.sortBy === 'new_replies') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 21
+        } else if (ctx.sortBy === 'publication_date') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 2
+        } else if (ctx.sortBy === 'created_by') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 1
+        }
+
         const params = {
           perPage: this.paginate.perPage,
-          orderby: 5,
-          order: 'desc',
+          orderby: orderBy,
+          order: sortDirection,
           status: this.status,
           from: this.filter[0].model,
           to: this.filter[1].model,
@@ -365,6 +451,15 @@ export default {
         this.items = data.data.data
         // Must return an array of items or an empty array if an error occurred
         this.pushImage()
+        if (this.items) {
+          this.totalReplies = 0
+          this.items.forEach(item => {
+            this.totalReplies += item.count
+            this.totalNewReplies += item.new_count
+            console.log(this.items)
+            console.log(this.totalReplies)
+          })
+        }
         this.startPage = data.data.from
         this.paginate.currentPage = data.data.current_page
         this.paginate.perPage = data.data.per_page
@@ -373,7 +468,7 @@ export default {
         this.totalData = data.data.total
         this.totalRows = data.data.total
         this.toPage = data.data.to
-        console.log(this.items)
+
         return this.items
       } catch (e) {
         this.showErrorSwal(e)

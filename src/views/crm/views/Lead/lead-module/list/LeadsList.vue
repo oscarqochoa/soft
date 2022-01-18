@@ -6,6 +6,7 @@
       no-body
       class="mb-0"
     >
+
       <filter-slot
         v-scrollbar
         :filter="filter"
@@ -52,7 +53,7 @@
           select-mode="multi"
           responsive="sm"
           table-class="text-nowrap"
-          sticky-header="50vh"
+          sticky-header="73vh"
           small
           show-empty
           :sort-by.sync="sortBy"
@@ -108,7 +109,8 @@
           <!-- Column: Name -->
           <template #cell(lead_name)="data">
             <router-link
-              :to="{ name: 'lead-show', params: { id: data.item.id } }"
+              class="text-important"
+              :to="`/${routeModule}/leads/${data.item.id}`"
               target="_blank"
             >{{ data.item.lead_name }}</router-link>
           </template>
@@ -173,7 +175,6 @@
           </template>
         </b-table>
       </filter-slot>
-
     </b-card>
 
     <!-- modal SEND SMS -->
@@ -266,14 +267,14 @@ import { BTable, BPagination, BModal } from 'bootstrap-vue'
 
 import vSelect from 'vue-select'
 
-import ActionsTable from "../../lead-table/ActionsTable.vue";
-import dataFields from "@/views/crm/views/Lead/lead-table/fields.data";
+import ActionsTable from '../../lead-table/ActionsTable.vue'
+import dataFields from '@/views/crm/views/Lead/lead-table/fields.data'
 import dataFilters from '@/views/crm/views/Lead/lead-table/filtersLead.data'
 import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
-import FiltersTable from "../../lead-table/FiltersTable.vue";
-import ModalHistorySms from "../../lead-sms/ModalHistorySms.vue";
-import ModalSendSms from "../../lead-sms/ModalSendSms.vue";
-import PaginateTable from "@/views/crm/views/Lead/lead-table/PaginateTable.vue";
+import FiltersTable from '../../lead-table/FiltersTable.vue'
+import ModalHistorySms from '../../lead-sms/ModalHistorySms.vue'
+import ModalSendSms from '../../lead-sms/ModalSendSms.vue'
+import PaginateTable from '@/views/crm/views/Lead/lead-table/PaginateTable.vue'
 
 export default {
   components: {
@@ -303,14 +304,17 @@ export default {
       G_TYPE_DOCS: 'CrmGlobalStore/G_TYPE_DOCS',
     }),
     ...mapState({
-      S_LEADS: state => state.CrmLeadStore.S_LEADS
-    })
+      S_LEADS: state => state.CrmLeadStore.S_LEADS,
+    }),
+    routeModule() {
+      return this.$route.meta.route
+    },
   },
   data() {
     return {
       isOnlyLead: false,
       type: 0,
-      actionsOptions: [ 'returnToSocialNetwork', 'sendSMS', 'historySMS' ],
+      actionsOptions: ['returnToSocialNetwork', 'sendSMS', 'historySMS'],
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
       isBusy: false,
       fields: dataFields.leadFields,
@@ -411,7 +415,7 @@ export default {
         )
       }
     },
-    setOptionsOnFilters () {
+    setOptionsOnFilters() {
       this.filter[2].options = this.G_STATUS_LEADS
       this.filter[3].options = this.G_OWNERS
       this.filter[4].options = this.G_OWNERS
@@ -558,15 +562,15 @@ export default {
     },
   },
   mounted() {
-    if (![4].includes(this.currentUser.role_id) && !this.isOnlyLead)
+    if (![4].includes(this.currentUser.role_id) && !this.isOnlyLead) {
       this.fields.unshift({
         key: 'selected',
         label: '',
         sortable: false,
       })
-    if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
-      this.actionsOptions.push('delete')
-  }
+    }
+    if ([1, 2].includes(this.currentUser.role_id) && this.type === 0) this.actionsOptions.push('delete')
+  },
 }
 </script>
 

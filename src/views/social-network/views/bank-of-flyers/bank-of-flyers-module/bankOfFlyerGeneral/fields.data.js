@@ -1,32 +1,32 @@
 export default [
   {
     key: 'flyer',
-    sortable: true,
+    sortable: false,
     label: 'Flyer',
   },
   {
     key: 'program',
-    sortable: false,
+    sortable: true,
     label: 'Program',
   },
   {
     key: 'campaign',
-    sortable: false,
+    sortable: true,
     label: 'Campaign',
   },
   {
     key: 'name',
-    sortable: false,
+    sortable: true,
     label: 'Flyer Name',
   },
   {
     key: 'replies',
-    sortable: false,
+    sortable: true,
     label: 'Replies',
   },
   {
     key: 'new_replies',
-    sortable: false,
+    sortable: true,
     label: 'New Replies',
   },
   {
@@ -36,12 +36,12 @@ export default [
   },
   {
     key: 'publication_date',
-    sortable: false,
+    sortable: true,
     label: 'Publication Date',
   },
   {
     key: 'created_by',
-    sortable: false,
+    sortable: true,
     label: 'Created by',
   },
   {

@@ -9,7 +9,7 @@
         <b-tab lazy title="CRM" title-link-class="border-secondary hover-primary">
           <CommissionsComponent :module="$route.meta.module" tab="crm" />
         </b-tab>
-        <b-tab lazy title="Departments" title-link-class="border-secondary ml-1 hover-primary">
+        <b-tab lazy title="Departments" title-link-class="border-secondary  hover-primary">
           <CommissionsComponent :module="$route.meta.module" tab="supervisorCrm" />
         </b-tab>
       </b-tabs>

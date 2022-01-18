@@ -36,7 +36,10 @@
               v-if="!isActionButtonLoading && !isLoading"
               icon="EyeIcon"
             />
-            <b-spinner v-else small />
+            <b-spinner
+              v-else
+              small
+            />
           </b-button>
           <b-button
             v-if="(authUser.role_id == 1 || authUser.role_id == 2) && !onlyRead"
@@ -49,14 +52,20 @@
               v-if="!isActionButtonLoading && !isLoading"
               icon="Trash2Icon"
             />
-            <b-spinner v-else small />
+            <b-spinner
+              v-else
+              small
+            />
           </b-button>
         </div>
       </template>
 
     </b-table>
-    
-    <template v-if="!onlyRead" #footer>
+
+    <template
+      v-if="!onlyRead"
+      #footer
+    >
       <div class="text-right">
         <b-button
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -88,7 +97,7 @@
 
     <!-- modal CARD SHOW -->
     <b-modal
-      :id="`modal-card-show-${ key }`"
+      v-model="viewCardModal"
       ok-only
       modal-class="modal-warning"
       centered
@@ -109,7 +118,7 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState,  } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 import Ripple from 'vue-ripple-directive'
 
@@ -124,22 +133,24 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
-    })
+    }),
   },
-  created () {
+  created() {
     this.authUser = this.currentUser
     this.getStatesEeuu()
   },
-  data () {
+  directives: { Ripple },
+  data() {
     return {
+      viewCardModal: false,
       key: Math.random(),
-      authUser: new Object,
-      card: new Object,
+      authUser: new Object(),
+      card: new Object(),
       fieldsTask: [
         { key: 'cardholdername', label: 'Card Holder Name' },
         { key: 'cardnumber', label: 'Card Number' },
@@ -147,13 +158,12 @@ export default {
         { key: 'card_expi_month', label: 'MM' },
         { key: 'card_expi_year', label: 'YY' },
         { key: 'cardsecuritycode', label: 'CVV' },
-        { key: 'actions' }
+        { key: 'actions' },
       ],
       isActionButtonLoading: false,
       isLoading: false,
     }
   },
-  directives: { Ripple },
   methods: {
     ...mapActions({
       A_GET_EEUU_STATES: 'CrmGlobalStore/A_GET_EEUU_STATES',
@@ -170,19 +180,18 @@ export default {
           'top-right',
           'Oop!',
           'AlertOctagonIcon',
-          this.getInternalErrors(error)
+          this.getInternalErrors(error),
         )
       }
     },
-    async onModalCardOpen (id) {
+    async onModalCardOpen(id) {
       try {
         this.isActionButtonLoading = true
         const response = await this.A_GET_CREDIT_CARD({ id })
         if (this.isResponseSuccess(response)) {
           this.card = response.data[0]
-          this.$bvModal.show(`modal-card-show-${ key }`)
-        } else
-          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
+          this.viewCardModal = true
+        } else this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
         this.isActionButtonLoading = false
       } catch (error) {
         console.log('Something went wrong onModalCardOpen', error)
@@ -190,65 +199,64 @@ export default {
         this.isActionButtonLoading = false
       }
     },
-    onReloadCards (cards) {
+    onReloadCards(cards) {
       console.log('cards', cards)
       this.lead.cards = cards
     },
-    onDeleteCard (id) {
+    onDeleteCard(id) {
       this.isActionButtonLoading = true
       this.showSwalGeneric('Delete Credit Card', 'You won\'t be able to revert this!', 'warning',
-        { 
+        {
           input: 'textarea',
-          inputValidator: (value) => {
+          inputValidator: value => {
             if (!value) {
               return 'You need to write something!'
             }
+          },
+        })
+        .then(async result => {
+          if (result.value) {
+            const response = await this.A_DELETE_CREDIT_CARD({
+              cardid: id,
+              leadid: this.lead.id,
+              user_id: this.authUser.user_id,
+              comment: result.value,
+            })
+            if (this.isResponseSuccess(response)) {
+              this.lead.cards = response.data
+              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+              this.isActionButtonLoading = false
+            } else {
+              this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
+              this.isActionButtonLoading = false
+            }
           }
-        }
-      )
-      .then(async result => {
-        if (result.value) {
-          const response = await this.A_DELETE_CREDIT_CARD({
-            cardid: id,
-            leadid: this.lead.id,
-            user_id: this.authUser.user_id,
-            comment: result.value,
-          })
-          if (this.isResponseSuccess(response)) {
-            this.lead.cards = response.data
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-            this.isActionButtonLoading = false
-          } else {
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
-            this.isActionButtonLoading = false
-          }
-        }
-        this.isActionButtonLoading = false
-      }).catch(error => {
-        console.log('Something went wrong onDeleteCard', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-        this.isActionButtonLoading = false
-      })
+          this.isActionButtonLoading = false
+        }).catch(error => {
+          console.log('Something went wrong onDeleteCard', error)
+          this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+          this.isActionButtonLoading = false
+        })
     },
   },
-  mounted () {},
+  mounted() {},
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     onlyRead: {
       type: Boolean,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
+      required: true,
     },
     title: {
       type: String,
-      required: false
-    }
+      required: false,
+    },
   },
   setup() {},
 }

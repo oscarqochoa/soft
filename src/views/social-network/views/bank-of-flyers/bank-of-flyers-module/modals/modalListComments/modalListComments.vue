@@ -2,16 +2,12 @@
   <b-modal
     v-model="ownControl"
     scrollable
-    title-class="h3 text-white font-weight-bolder"
     hide-footer
-
+    title-class="h3 text-white font-weight-bolder"
+    title="Tracking"
     size="lg"
     @hidden="closeModal"
   >
-    <template #modal-header>
-      <p class="font-medium-3 font-weight-bolder text-white d-flex align-items-center justify-content-center w-100 "> TRACKING
-
-      </p></template>
     <div>
       <b-card
         no-body

@@ -46,7 +46,7 @@
     <b-modal
       v-model="ownControl"
       title-class="h3 text-white font-weight-bolder"
-
+      hide-footer
       size="xmd"
       title="FLYER"
       @hidden="closeModal"
@@ -87,7 +87,7 @@
                       md="3"
                       class="d-flex align-items-center justify-content-start p-0"
                     >
-                      <span>
+                      <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
                         PROGRAM:
                       </span>
                     </b-col>
@@ -149,7 +149,7 @@
                       md="3"
                       class="d-flex align-items-center justify-content-start p-0"
                     >
-                      <span>
+                      <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
                         STATE:
                       </span>
                     </b-col>
@@ -177,14 +177,13 @@
                       md="9"
                       class="mt-1"
                     >
+
                       <b-form-group>
-
                         <v-select
-
                           v-model="item.state"
                           :options="states"
-                          label="label"
-                          :reduce="val=>val.value"
+                          label="state"
+                          :reduce="val=>val.slug"
                           class="w-100"
                           :disabled="disabled"
                         />
@@ -195,7 +194,7 @@
                       md="3"
                       class="d-flex align-items-center justify-content-start p-0"
                     >
-                      <span>
+                      <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
                         CAMPAIGN:
                       </span>
                     </b-col>
@@ -259,9 +258,9 @@
 
                     <b-col
                       md="3"
-                      class="d-flex align-items-center justify-content-start p-0"
+                      class="d-flex align-items-center justify-content-start p-0 "
                     >
-                      <span>
+                      <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
                         FLYER NAME:
                       </span>
                     </b-col>
@@ -297,7 +296,7 @@
                       md="3"
                       class="d-flex align-items-center justify-content-start p-0"
                     >
-                      <span>
+                      <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
                         PUBLICATION DATE:
                       </span>
                     </b-col>
@@ -333,11 +332,11 @@
                     </b-col>
 
                     <b-col
-                      v-if="status===4"
+                      v-if="status===1 || status===0"
                       md="3"
                       class="d-flex align-items-center justify-content-end p-0"
                     >
-                      <span>
+                      <span class="rounded-left border-primary bg-primary text-white text-center px-1">
                         ACTIVE:
                       </span>
                     </b-col>
@@ -362,7 +361,7 @@
 
                     </b-col>
                     <b-col
-                      v-if="status===1 || status===0 || info ===2"
+                      v-if="status===1 || status===0 "
                       md="3"
                       class="d-flex align-items-end justify-content-start"
                     >
@@ -386,54 +385,56 @@
 
                 </b-col>
               </b-row>
+              <b-row>
 
+                <b-col
+                  lg="3"
+
+                  class="d-flex align-items-center justify-content-lg-center p-0"
+                >
+                  <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
+                    OBSERVATION:
+                  </span>
+                </b-col>
+
+                <b-col
+                  v-if="status===2 && info ===1"
+                  lg="9"
+                  class="d-flex align-items-center  p-0"
+                >
+                  <b-form-textarea
+                    v-model="new_item.observation"
+
+                    class="input-form"
+                    :disabled="disabled"
+                  />
+
+                </b-col>
+                <b-col
+                  v-if="status===1 || status===0 || info ===2"
+                  lg="9"
+                  class="d-flex align-items-center  p-0"
+                >
+                  <b-form-textarea
+                    v-model="item.observation"
+
+                    class="input-form"
+                    :disabled="disabled"
+                  />
+
+                </b-col>
+
+              </b-row>
             </b-container>
-            <b-row>
-              <b-col lg="3" />
-              <b-col lg="9">
-                <b-row>
-                  <b-col
-                    md="3"
-                    class="d-flex align-items-center justify-content-start p-0"
-                  >
-                    <span>
-                      OBSERVATION:
-                    </span>
-                  </b-col>
 
-                  <b-col
-                    v-if="status===2 && info ===1"
-                    md="9"
-                  >
-                    <b-form-textarea
-                      v-model="new_item.observation"
-
-                      class="input-form"
-                      :disabled="disabled"
-                    />
-
-                  </b-col>
-                  <b-col
-                    v-if="status===1 || status===0 || info ===2"
-                    md="9"
-                  >
-                    <b-form-textarea
-                      v-model="item.observation"
-
-                      class="input-form"
-                      :disabled="disabled"
-                    />
-
-                  </b-col>
-                </b-row>
-
-              </b-col>
-            </b-row>
           </b-form>
         </validationobserver>
       </div>
 
-      <template #modal-footer>
+      <template
+        v-if="status===4"
+        #modal-footer
+      >
         <b-button
           variant="primary"
           @click="insertFlyer"
@@ -493,10 +494,11 @@ export default {
     }
   },
   created() {
-    this.validacion()
+    this.validation()
     this.ownControl = true
   },
   methods: {
+    // eslint-disable-next-line consistent-return
     async getCampaigns() {
       try {
         const params = {
@@ -535,11 +537,7 @@ export default {
       this.$emit('close')
     },
 
-    refresh() {
-      this.$emit('close')
-    },
-
-    tituloInsertCampaign() {
+    titleInsertCampaign() {
       this.programs.forEach(program => {
         if (program.id === this.new_item.program_id) {
           this.flyer_name = program.logo
@@ -548,25 +546,19 @@ export default {
       return this.flyer_name
     },
     OpenInsertModal() {
-      this.tituloInsertCampaign()
+      this.titleInsertCampaign()
       this.ownInsertControl = true
     },
 
     closeInsertModal() {
       this.ownInsertControl = false
     },
-    validacion() {
+    validation() {
       if (this.status === 1 || this.status === 0 || this.info === 2) {
         this.disabled = true
       }
     },
 
-    mostrar() {
-      console.log(this.new_items)
-    },
-    preActive() {
-
-    },
     async insertFlyer() {
       try {
         const result = await this.showConfirmSwal()

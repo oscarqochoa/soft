@@ -1,16 +1,28 @@
 <template>
   <b-row class="card-group">
-    <lead-update v-if="Object.keys(S_LEAD_EDIT).length" :modul="modul" :lead="S_LEAD_EDIT" :is-add-new-user-sidebar-active.sync="isAddUpdateUserSidebarActive" />
-    <b-col cols="12" lg="6">
+    <lead-update
+      v-if="Object.keys(S_LEAD_EDIT).length"
+      :modul="modul"
+      :lead="S_LEAD_EDIT"
+      :is-add-new-user-sidebar-active.sync="isAddUpdateUserSidebarActive"
+    />
+    <b-col
+      cols="12"
+      lg="6"
+    >
       <card-lead-client
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"
         :only-read="onlyRead"
         :lead="S_LEAD"
         @onEditLead="isAddUpdateUserSidebarActive = true"
+        @reloadLead="getLead"
       />
     </b-col>
-    <b-col cols="12" lg="6">
+    <b-col
+      cols="12"
+      lg="6"
+    >
       <card-lead-credit-report
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"
@@ -20,7 +32,10 @@
         :is-busy-credit-report-pending="isBusyCreditReportPending"
       />
     </b-col>
-    <b-col cols="12" lg="6">
+    <b-col
+      cols="12"
+      lg="6"
+    >
       <card-lead-appointment
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"
@@ -29,7 +44,10 @@
         :lead="S_LEAD"
       />
     </b-col>
-    <b-col cols="12" lg="6">
+    <b-col
+      cols="12"
+      lg="6"
+    >
       <card-lead-task
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"
@@ -37,7 +55,11 @@
         :lead="S_LEAD"
       />
     </b-col>
-    <b-col v-if="modul !== 15" cols="12" lg="6">
+    <b-col
+      v-if="modul !== 15"
+      cols="12"
+      lg="6"
+    >
       <card-lead-credit-card
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"
@@ -45,7 +67,11 @@
         :lead="S_LEAD"
       />
     </b-col>
-    <b-col v-if="modul !== 15" cols="12" lg="6">
+    <b-col
+      v-if="modul !== 15"
+      cols="12"
+      lg="6"
+    >
       <card-lead-call
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"
@@ -55,7 +81,10 @@
         @onReloadCall="getCalls"
       />
     </b-col>
-    <b-col cols="12" lg="6">
+    <b-col
+      cols="12"
+      lg="6"
+    >
       <card-lead-notes
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"
@@ -63,14 +92,20 @@
         :lead="S_LEAD"
       />
     </b-col>
-    <b-col cols="12" lg="6">
+    <b-col
+      cols="12"
+      lg="6"
+    >
       <card-lead-files
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"
         :lead="S_LEAD"
       />
     </b-col>
-    <b-col v-if="modul !== 15" cols="12">
+    <b-col
+      v-if="modul !== 15"
+      cols="12"
+    >
       <card-lead-payment
         v-if="Object.keys(S_LEAD).length"
         :modul="modul"
@@ -110,7 +145,7 @@ export default {
     LeadUpdate,
   },
   props: {},
-  data () {
+  data() {
     return {
       isAddUpdateUserSidebarActive: false,
       isBusyAppointment: false,
@@ -120,7 +155,7 @@ export default {
       modul: 2,
     }
   },
-  created () {
+  created() {
     this.getLead()
     this.getLeadEdit()
     this.getCreditReports()
@@ -147,7 +182,7 @@ export default {
       S_LEAD: state => state.CrmLeadStore.S_LEAD,
       S_LEAD_EDIT: state => state.CrmLeadStore.S_LEAD_EDIT,
     }),
-    onlyRead () {
+    onlyRead() {
       return this.modul === 18
     },
   },
@@ -171,7 +206,7 @@ export default {
       A_GET_COUNTRIES: 'CrmGlobalStore/A_GET_COUNTRIES',
       A_GET_SELLERS: 'CrmGlobalStore/A_GET_SELLERS',
     }),
-    async getLead () {
+    async getLead() {
       try {
         this.isPreloading(true)
         await this.A_GET_LEAD({ id: this.$route.params.id })
@@ -182,7 +217,7 @@ export default {
         this.isPreloading(false)
       }
     },
-    async getLeadEdit () {
+    async getLeadEdit() {
       try {
         await this.A_GET_LEAD_EDIT({ id: this.$route.params.id })
       } catch (error) {
@@ -190,7 +225,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getCreditReports () {
+    async getCreditReports() {
       try {
         this.isBusyCreditReportObtained = true
         await this.A_GET_CREDIT_REPORTS({ id: this.$route.params.id })
@@ -201,7 +236,7 @@ export default {
         this.isBusyCreditReportObtained = false
       }
     },
-    async getCreditReportPendings () {
+    async getCreditReportPendings() {
       try {
         this.isBusyCreditReportPending = true
         await this.A_GET_CREDIT_REPORT_PENDINGS({ id: this.$route.params.id, modul: this.modul })
@@ -212,7 +247,7 @@ export default {
         this.isBusyCreditReportPending = false
       }
     },
-    async getEvents () {
+    async getEvents() {
       try {
         this.isBusyAppointment = true
         await this.A_GET_EVENTS({ idLead: this.$route.params.id })
@@ -223,7 +258,7 @@ export default {
         this.isBusyAppointment = false
       }
     },
-    async getOwners () {
+    async getOwners() {
       try {
         const roles = [2, 4].includes(this.modul) ? '[1,2,5]' : '[1,2,3,5]'
         await this.A_GET_OWNERS({ modul: this.modul, body: { roles, type: '1' } })
@@ -232,7 +267,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getPrograms () {
+    async getPrograms() {
       try {
         await this.A_GET_PROGRAMS()
       } catch (error) {
@@ -240,7 +275,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getCalls (limit) {
+    async getCalls(limit) {
       try {
         this.isBusyCall = true
         await this.A_GET_CALLS({
@@ -255,8 +290,7 @@ export default {
       }
     },
 
-    
-    async getStateLeads () {
+    async getStateLeads() {
       try {
         await this.A_GET_STATE_LEADS()
       } catch (error) {
@@ -264,7 +298,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getStatusLeads () {
+    async getStatusLeads() {
       try {
         await this.A_GET_STATUS_LEADS()
       } catch (error) {
@@ -272,7 +306,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getSourceLeads () {
+    async getSourceLeads() {
       try {
         await this.A_GET_SOURCE_LEADS()
       } catch (error) {
@@ -280,7 +314,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getSourceNames () {
+    async getSourceNames() {
       try {
         await this.A_GET_SOURCE_NAMES()
       } catch (error) {
@@ -288,7 +322,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getStates () {
+    async getStates() {
       try {
         await this.A_GET_STATES({ type: 1 })
       } catch (error) {
@@ -296,7 +330,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getEeuuStates () {
+    async getEeuuStates() {
       try {
         await this.A_GET_EEUU_STATES()
       } catch (error) {
@@ -304,7 +338,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getCountries () {
+    async getCountries() {
       try {
         await this.A_GET_COUNTRIES()
       } catch (error) {
@@ -312,7 +346,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getSellers () {
+    async getSellers() {
       try {
         await this.A_GET_SELLERS({ modul: this.modul, body: { roles: '[]', type: '1' } })
       } catch (error) {
@@ -320,7 +354,7 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-  }
+  },
 }
 </script>
 

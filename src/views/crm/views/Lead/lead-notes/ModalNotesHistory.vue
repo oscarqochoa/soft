@@ -31,8 +31,8 @@
 
       <template #cell(actions)="data">
         <b-form-radio
-          v-model="important"
           :id="`yes-or-not-important-list${ data.item.id }`"
+          v-model="important"
           name="yes-or-not-important-list"
           class="mt-0"
           :disabled="onlyRead"
@@ -46,7 +46,7 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState,  } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 import Ripple from 'vue-ripple-directive'
 
@@ -55,20 +55,21 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
-      S_NOTES: event => event.CrmNotesStore.S_NOTES
-    })
+      S_NOTES: event => event.CrmNotesStore.S_NOTES,
+    }),
   },
-  created () {
+  created() {
     this.getNotes()
   },
-  data () {
+  directives: { Ripple },
+  data() {
     return {
       fields: [
-        { key: 'text', label: 'Note'},
+        { key: 'text', label: 'Note' },
         { key: 'created_by' },
         { key: 'actions' },
       ],
@@ -77,19 +78,20 @@ export default {
       isBusy: false,
     }
   },
-  directives: { Ripple },
   methods: {
     ...mapActions({
       A_GET_LEAD_NOTES: 'CrmNotesStore/A_GET_LEAD_NOTES',
       A_MAKE_IMPORTANT_NOTE: 'CrmNotesStore/A_MAKE_IMPORTANT_NOTE',
     }),
-    getImportant () {
-      return this.S_NOTES.filter(el => el.important === 1).length ? this.S_NOTES.filter(el => el.important === 1)[0].id : new Object
+    getImportant() {
+      return this.S_NOTES.filter(el => el.important === 1).length ? this.S_NOTES.filter(el => el.important === 1)[0].id : new Object()
     },
-    async getNotes () {
+    async getNotes() {
       try {
-        this.isBusy = true
-        await this.A_GET_LEAD_NOTES({ lead_id: this.lead.id })
+        if (this.S_NOTES.length === 0) {
+          this.isBusy = true
+          await this.A_GET_LEAD_NOTES({ lead_id: this.lead.id })
+        }
         this.important = this.getImportant()
         this.isBusy = false
       } catch (error) {
@@ -97,54 +99,54 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    onMakeImportant (id) {
+    onMakeImportant(id) {
       this.showConfirmSwal(null, 'You are going to change the important note')
-      .then(async result => {
-        if (result.value) {
-          this.addPreloader()
-          const response = await this.A_MAKE_IMPORTANT_NOTE({
-            id,
-            user_id: this.currentUser.user_id,
-            lead_id: this.lead.id
-          })
-          if (this.isResponseSuccess(response)) {
-            this.$emit('reloadNote', response.data)
-            this.important = id
-            this.removePreloader()
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+        .then(async result => {
+          if (result.value) {
+            this.addPreloader()
+            const response = await this.A_MAKE_IMPORTANT_NOTE({
+              id,
+              user_id: this.currentUser.user_id,
+              lead_id: this.lead.id,
+            })
+            if (this.isResponseSuccess(response)) {
+              this.$emit('reloadNote', response.data)
+              this.important = id
+              this.removePreloader()
+              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
+            } else {
+              this.removePreloader()
+              this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
+              this.important = this.getImportant()
+            }
           } else {
-            this.removePreloader()
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong. ' + response.message)
             this.important = this.getImportant()
           }
-        } else {
-          this.important = this.getImportant()
-        }
-      }).catch(error => {
-        console.log('Something went wrong onSubmit', error)
-        this.removePreloader()
-        this.showErrorSwal()
-      })
-    }
+        }).catch(error => {
+          console.log('Something went wrong onSubmit', error)
+          this.removePreloader()
+          this.showErrorSwal()
+        })
+    },
   },
-  mounted () {},
+  mounted() {},
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     onlyRead: {
       type: Boolean,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
+      required: true,
     },
     note: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   setup() {},
 }

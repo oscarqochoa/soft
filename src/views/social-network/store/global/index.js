@@ -57,12 +57,10 @@ const actions = {
     try {
       let states = await socialNetworkService.getStates(params)
       states = states.data
-      const formatedStates = states.map(state => ({ label: state.state, value: state.slug }))
 
-      console.log(formatedStates)
       commit('SET_STATES',
 
-        formatedStates)
+        states)
 
       return states
     } catch (error) {
