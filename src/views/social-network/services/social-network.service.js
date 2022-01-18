@@ -70,5 +70,25 @@ class SocialNetworkService {
       throw error
     }
   }
+
+  async insertFlyerComments(body) {
+    try {
+      const data = await amgApi.post('/insert-flyer-comments', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on insertFlyerComments:', error)
+      throw error
+    }
+  }
+
+  async getFlyerComments(body) {
+    try {
+      const data = await amgApi.post('/get-flyer-comments', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getFlyerComments:', error)
+      throw error
+    }
+  }
 }
 export default new SocialNetworkService()

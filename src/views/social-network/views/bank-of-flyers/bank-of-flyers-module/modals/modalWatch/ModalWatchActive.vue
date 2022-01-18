@@ -13,7 +13,7 @@
         <p class="font-medium-3 font-weight-bolder text-white d-flex align-items-center justify-content-center w-100 "> NEW CAMPAIGN
           <b-img
             class="ml-1"
-            :src="`http://localhost:8081/assets${flyer_name}`"
+            :src="`${baseImg}/assets${flyer_name}`"
             style="height: 45px"
           /></p>
 
@@ -61,7 +61,7 @@
               >
 
                 <b-col
-                  v-if="type===1"
+                  v-if="status===2 && info ===1"
                   lg="3"
                 >
                   <drag-and-drop
@@ -70,7 +70,7 @@
                   />
                 </b-col>
                 <b-col
-                  v-if="type===2"
+                  v-if="status===1 || status===0 || info ===2"
                   lg="3"
                 >
                   <b-img-lazy
@@ -93,7 +93,7 @@
                     </b-col>
 
                     <b-col
-                      v-if="type===1"
+                      v-if="status===2 && info ===1"
                       md="9"
                     >
                       <div
@@ -119,7 +119,7 @@
                         </b-form-radio></div>
                     </b-col>
                     <b-col
-                      v-if="type===2"
+                      v-if="status===1 || status===0 || info ===2"
                       md="9"
                     >
                       <div
@@ -155,7 +155,7 @@
                     </b-col>
 
                     <b-col
-                      v-if="type===1"
+                      v-if="status===2 && info ===1"
                       md="9"
                       class="mt-1"
                     >
@@ -173,7 +173,7 @@
                       </b-form-group>
                     </b-col>
                     <b-col
-                      v-if="type===2"
+                      v-if="status===1 || status===0 || info ===2"
                       md="9"
                       class="mt-1"
                     >
@@ -201,7 +201,7 @@
                     </b-col>
 
                     <b-col
-                      v-if="type===1"
+                      v-if="status===2 && info ===1"
                       md="8"
                     >
                       <b-form-group>
@@ -215,7 +215,7 @@
                         /></b-form-group>
                     </b-col>
                     <b-col
-                      v-if="type===2"
+                      v-if="status===1 || status===0 || info ===2"
                       md="8"
                     >
                       <b-form-group>
@@ -267,7 +267,7 @@
                     </b-col>
 
                     <b-col
-                      v-if="type===1"
+                      v-if="status===2 && info ===1"
                       md="9"
                     >
                       <b-form-group>
@@ -280,7 +280,7 @@
                       </b-form-group>
                     </b-col>
                     <b-col
-                      v-if="type===2"
+                      v-if="status===1 || status===0 || info ===2"
                       md="9"
                     >
                       <b-form-group>
@@ -302,8 +302,8 @@
                       </span>
                     </b-col>
                     <b-col
-                      v-if="type===1"
-                      md="3"
+                      v-if="status===2 && info ===1"
+                      md="4"
                     >
                       <b-form-group>
 
@@ -317,7 +317,7 @@
 
                     </b-col>
                     <b-col
-                      v-if="type===2"
+                      v-if="status===1 || status===0 || info ===2"
                       md="3"
                     >
                       <b-form-group>
@@ -333,6 +333,7 @@
                     </b-col>
 
                     <b-col
+                      v-if="status===4"
                       md="3"
                       class="d-flex align-items-center justify-content-end p-0"
                     >
@@ -341,7 +342,7 @@
                       </span>
                     </b-col>
                     <b-col
-                      v-if="type===1"
+                      v-if="status===4"
                       md="3"
                       class="d-flex align-items-end justify-content-start"
                     >
@@ -361,7 +362,7 @@
 
                     </b-col>
                     <b-col
-                      v-if="type===2"
+                      v-if="status===1 || status===0 || info ===2"
                       md="3"
                       class="d-flex align-items-end justify-content-start"
                     >
@@ -401,7 +402,7 @@
                   </b-col>
 
                   <b-col
-                    v-if="type===1"
+                    v-if="status===2 && info ===1"
                     md="9"
                   >
                     <b-form-textarea
@@ -413,7 +414,7 @@
 
                   </b-col>
                   <b-col
-                    v-if="type===2"
+                    v-if="status===1 || status===0 || info ===2"
                     md="9"
                   >
                     <b-form-textarea
@@ -460,7 +461,8 @@ export default {
   props: {
     item: {},
     items: {},
-    type: null,
+    status: null,
+    info: null,
 
   },
   data() {
@@ -533,6 +535,10 @@ export default {
       this.$emit('close')
     },
 
+    refresh() {
+      this.$emit('close')
+    },
+
     tituloInsertCampaign() {
       this.programs.forEach(program => {
         if (program.id === this.new_item.program_id) {
@@ -550,16 +556,17 @@ export default {
       this.ownInsertControl = false
     },
     validacion() {
-      if (this.type === 2) {
+      if (this.status === 1 || this.status === 0 || this.info === 2) {
         this.disabled = true
-        console.log('asdasd')
       }
     },
 
     mostrar() {
       console.log(this.new_items)
     },
+    preActive() {
 
+    },
     async insertFlyer() {
       try {
         const result = await this.showConfirmSwal()
@@ -569,7 +576,9 @@ export default {
             formData.append('images[]', file, file.name)
           })
           this.addPreloader()
-          if (!this.new_item.active) {
+          if (this.new_item.active === '') {
+            this.new_item.active = 2
+          } else if (!this.new_item.active) {
             this.new_item.active = 0
           } else {
             this.new_item.active = 1
@@ -578,7 +587,7 @@ export default {
 
           formData.append('campaign_id', this.new_item.campaign)
           formData.append('publication_date', this.new_item.publication_date)
-          formData.append('active', this.new_item.active)
+          formData.append('active', 2)
           formData.append('observation', this.new_item.observation)
 
           formData.append('flyer_name', this.new_item.flyer_name)
@@ -596,6 +605,8 @@ export default {
           if (response.status === 200) {
             this.uploadFileModal = false
             this.removePreloader()
+            this.closeModal()
+            this.$emit('reload')
             this.showSuccessSwal()
           }
         }
@@ -605,6 +616,7 @@ export default {
       }
     },
 
+    // eslint-disable-next-line consistent-return
     async insertCampaignFlyers() {
       try {
         const params = {

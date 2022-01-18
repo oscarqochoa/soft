@@ -50,5 +50,11 @@ export default [
     label: 'Action',
 
   },
+  {
+    key: 'comments',
+    sortable: false,
+    label: 'Comments',
+
+  },
 
 ]

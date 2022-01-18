@@ -1,9 +1,9 @@
 import bankOfFlyersListActive
-from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyers-list-active/bank-of-flyers-list-active.vue'
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyers-list-active/bankOfFlyerActive.vue'
 import bankOfFlyersListInactive
-from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyers-list-inactive/bank-of-flyers-list-inactive.vue'
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyers-list-inactive/bankOfFlyerInactive.vue'
 import bankOfFlyersListPreactive
-from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyer-preactive/bank-of-flyers-list-preactive.vue'
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyer-preactive/bankOfFlyerPreActive.vue'
 
 export default [
   {

@@ -18,10 +18,11 @@
           :paginate="paginate"
           :start-page="startPage"
           :to-page="toPage"
-          @reload="$refs['bank-of-flyer-active'].refresh()"
+          @reload="$refs['bank-of-flyer-general'].refresh()"
         >
           <template #buttons>
             <b-button
+              v-if="status===4"
               variant="primary"
               class="ml-1"
               @click="OpenWatchModal(1,1)"
@@ -34,10 +35,10 @@
             </b-button>
           </template>
           <b-table
-            id="bank-of-flyer-active"
+            id="bank-of-flyer-general"
             slot="table"
 
-            ref="bank-of-flyer-active"
+            ref="bank-of-flyer-general"
             sticky-header="70vh"
             small
             no-provider-filtering
@@ -88,12 +89,6 @@
             </template>
 
             <template v-slot:cell(replies)="data">
-              <p class="mb-0 font-weight-bold">
-                {{ data.item.count }}
-              </p>
-            </template>
-
-            <template v-slot:cell(replies)="data">
               <p
                 class="mb-0 font-weight-bold cursor-pointer"
                 @click="OpenRepliesModal(data.index)"
@@ -127,23 +122,29 @@
                 @click="OpenWatchModal(data.index,2)"
               />
 
-              <amg-icon
-                icon="EditIcon"
-                title="EDIT"
-                size="20"
-                class="cursor-pointer"
+            </template>
 
-                @click="OpenWatchModal(data.index)"
-              />
-              <amg-icon
-                icon="Trash2Icon"
-                title="DELETE"
-                size="20"
-                class="cursor-pointer m-1"
-
-                @click="OpenWatchModal(data.index)"
-              />
-
+            <template v-slot:cell(comments)="data">
+              <b-dropdown
+                variant="link"
+                no-caret
+              >
+                <template #button-content>
+                  <amg-icon
+                    icon="MoreVerticalIcon"
+                    size="16"
+                    class="align-middle text-body"
+                  />
+                </template>
+                <b-dropdown-item @click="OpenInsertCommentsModal(data.item.id)">
+                  <feather-icon
+                    icon="PlusIcon"
+                  />Add
+                </b-dropdown-item>
+                <b-dropdown-item @click="OpenListCommentsModal(data.item.id)">
+                  <feather-icon icon="RotateCcwIcon" />History
+                </b-dropdown-item>
+              </b-dropdown>
             </template>
 
           </b-table>
@@ -153,9 +154,10 @@
           v-if="modalWatch"
           :item="items[showWatch]"
           :items="items"
-          :type="type"
+          :status="status"
+          :info="info"
+
           @close="closeWatchModal"
-          @reloadCampaigns=""
         />
 
         <modal-replies
@@ -164,7 +166,17 @@
           :item="items[showReplies]"
           @close="closeRepliesModal"
         />
+        <modal-insert-comments
+          v-if="modalInsertCommentsModal"
+          :index="showComments"
+          @close="closeInsertCommentsModal"
+        />
 
+        <modal-list-comments
+          v-if="modalListCommentsModal"
+          :index="showListComments"
+          @close="closeListCommentsModal"
+        />
       </b-card>
     </div>
   </div>
@@ -175,22 +187,31 @@
 import { mapGetters, mapState } from 'vuex'
 import CoolLightBox from 'vue-cool-lightbox'
 import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
-import dataFields from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyers-list-active/fields.data'
-import dataFilters from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-flyers-list-active/filters.data'
+import dataFields from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bankOfFlyerGeneral/fields.data'
+import dataFilters from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bankOfFlyerGeneral/filters.data'
 import SocialNetworkService from '@/views/social-network/services/social-network.service'
 import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css'
 import ModalWatchActive
 from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalWatch/ModalWatchActive.vue'
 import ModalReplies
 from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalReplies/ModalReplies.vue'
+import ModalInsertComments
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalInsertComments/modalInsertComments.vue'
+import ModalListComments
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalListComments/modalListComments.vue'
 
 export default {
-
   components: {
     FilterSlot,
     CoolLightBox,
     ModalWatchActive,
     ModalReplies,
+    ModalInsertComments,
+    ModalListComments,
+  },
+  props: {
+    status: null,
+
   },
   data() {
     return {
@@ -233,12 +254,17 @@ export default {
 
       modalWatch: false,
       modalReplies: false,
+      modalInsertCommentsModal: false,
+      modalListCommentsModal: false,
 
       // Cooll Vue
       showImage: null,
       showWatch: null,
       showReplies: null,
-      type: null,
+      showComments: null,
+      showListComments: null,
+      info: null,
+      comments: null,
     }
   },
   computed: {
@@ -288,10 +314,10 @@ export default {
       this.showImage = index
     },
 
-    OpenWatchModal(index, type) {
+    OpenWatchModal(index, info) {
       this.modalWatch = true
       this.showWatch = index
-      this.type = type
+      this.info = info
     },
 
     closeWatchModal() {
@@ -301,18 +327,33 @@ export default {
       this.modalReplies = true
       this.showReplies = index
     },
+    OpenInsertCommentsModal(index) {
+      this.modalInsertCommentsModal = true
+      this.showComments = index
+      console.log(index)
+    },
 
+    OpenListCommentsModal(index) {
+      this.modalListCommentsModal = true
+      this.showListComments = index
+      console.log('aaaaaaaaaaaaaaa')
+    },
     closeRepliesModal() {
       this.modalReplies = false
     },
-
+    closeInsertCommentsModal() {
+      this.modalInsertCommentsModal = false
+    },
+    closeListCommentsModal() {
+      this.modalListCommentsModal = false
+    },
     async search(ctx) {
       try {
         const params = {
           perPage: this.paginate.perPage,
           orderby: 5,
           order: 'desc',
-          status: 1,
+          status: this.status,
           from: this.filter[0].model,
           to: this.filter[1].model,
           program: this.filter[2].model,
