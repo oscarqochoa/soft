@@ -132,7 +132,7 @@ export default {
     //   else style.sheet.insertRule(`${name}{${rules}}`, 0);
     // },
     /* TOAST */
-    showToast(variant = "success", position = "top-right", title = "Congratulations", icon = "CheckIcon", text = "You've successfully done it!") {
+    showToast(variant = 'success', position = 'top-right', title = 'Congratulations', icon = 'CheckIcon', text = "You've successfully done it!") {
       this.$toast(
         {
           component: ToastificationContent,
@@ -170,7 +170,7 @@ export default {
     },
 
     showSuccessSwal(text = 'Successful Process') {
-      this.$swal({
+      return this.$swal({
         title: 'Success!',
         text,
         imageUrl: '/assets/images/icons/swal/success.svg',
@@ -195,18 +195,18 @@ export default {
         buttonsStyling: false,
       })
     },
-    showWarningSwal(title = "Very Important!", text = "Important Information") {
+    showWarningSwal(title = 'Very Important!', text = 'Important Information') {
       this.$swal({
         title,
         text,
-        imageUrl: "/assets/images/icons/swal/warning.svg",
+        imageUrl: '/assets/images/icons/swal/warning.svg',
         imageWidth: 70,
-        confirmButtonText: "Ok",
+        confirmButtonText: 'Ok',
         customClass: {
-          confirmButton: "btn btn-primary",
+          confirmButton: 'btn btn-primary',
         },
         buttonsStyling: false,
-      });
+      })
     },
     showErrorSwal(error) {
       this.$swal({
@@ -274,11 +274,9 @@ export default {
         return 'Something went wrong'
       }
     },
-    toggleModal (tagId, state = true) {
-      if (tagId && state)
-        this.$bvModal.show(tagId)
-      if (tagId && !state)
-        this.$bvModal.hide(tagId)
+    toggleModal(tagId, state = true) {
+      if (tagId && state) this.$bvModal.show(tagId)
+      if (tagId && !state) this.$bvModal.hide(tagId)
     },
     getCurrentMonth() {
       return this.$moment().format('MMM')
@@ -296,8 +294,8 @@ export default {
       }
       return arr
     },
-    isPreloading (state = true) {
-      this.$store.commit("app/SET_LOADING", state)
-    }
+    isPreloading(state = true) {
+      this.$store.commit('app/SET_LOADING', state)
+    },
   },
 }

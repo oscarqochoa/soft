@@ -1,7 +1,6 @@
 <template>
   <b-modal
-    v-model="modal.initial_payment"
-    centered
+    v-model="ownControl"
     title-class="h3 text-white font-weight-bolder"
     size="lg"
     title="Initial Payment"
@@ -369,6 +368,9 @@ export default {
         },
       ],
       notApiCards: false,
+      reloadTable: false,
+      ownControl: false,
+      amount2: 0,
     }
   },
   computed: {
@@ -391,6 +393,8 @@ export default {
     await this.getListCards()
     // eslint-disable-next-line no-return-assign
     this.initial_payment.allcards.map(val => val.model = 0)
+    this.ownControl = true
+    this.removePreloader()
   },
   methods: {
     createCard() {
@@ -428,9 +432,10 @@ export default {
         refCard = 'campo1'
       }
       if (this.method_payment == 0 && this.initial_payment.programid != 2) {
-        this.amount = this.$refs[refCard].$el.value
+        this.amount2 = this.$refs[refCard].$el.value
+        this.amount2 = this.amount2.replace(this.$refs[refCard].prefix, '')
       }
-      if (this.amount == null) {
+      if (this.amount2 == null) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Invalid amount value')
       } else if (this.method_payment == null) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Method payment invalid')
@@ -454,7 +459,7 @@ export default {
             this.addPreloader()
             this.sendMessage = true
             const response = await amgApi.post('/saveinitial', {
-              amount: this.amount.toString(),
+              amount: this.amount2.toString(),
               idcard: this.cardId,
               method_payment: this.method_payment.toString(),
               specify: this.initial_payment.payments.specify,
@@ -469,15 +474,16 @@ export default {
               this.removePreloader()
               if (response.data.transaction.responseCode === '1') {
                 const res = await this.showSuccessSwal()
-                if (res) {
-                  this.amount = response.data
+                if (res.value) {
+                  this.amount = response.data.data
                   await this.getListCards()
+                  this.reloadTable = true
                   if (this.initial_payment.programid == 2) {
-                    this.$emit('click', false)
+                    this.hideModal()
                   }
                 }
               } else {
-                this.showErroSwal()
+                this.showErrorSwal()
               }
             } else {
               this.removePreloader()
@@ -503,8 +509,9 @@ export default {
               this.removePreloader()
               this.sendMessage = false
               const res = await this.showSuccessSwal()
-              if (res) {
-                this.$emit('click', false)
+              this.reloadTable = true
+              if (res.value) {
+                this.hideModal()
               }
             }
           } else {
@@ -513,11 +520,12 @@ export default {
         }
       } catch (error) {
         this.removePreloader()
-        this.showErroSwal()
+        this.showErrorSwal(error)
       }
     },
     hideModal() {
-      this.$emit('close')
+      this.ownControl = false
+      this.$emit('close', this.reloadTable)
     },
   },
 }
