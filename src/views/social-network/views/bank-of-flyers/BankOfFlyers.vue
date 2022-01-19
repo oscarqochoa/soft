@@ -1,33 +1,32 @@
 <template>
   <div>
     <b-card>
-    <div class="card-header">
-      <div>
-        <b-card-title>BANK OF FLYERS</b-card-title>
+      <div class="card-header">
+        <div>
+          <b-card-title>BANK OF FLYERS</b-card-title>
+        </div>
       </div>
-    </div>
       <b-nav pills>
         <b-nav-item
-            exact-active-class="active"
-            link-classes="border-secondary hover-primary"
-            exact
-            :to="{ name: 'list-social-network-preactive' }"
+          exact-active-class="active"
+          link-classes="border-secondary hover-primary"
+          exact
+          :to="{ name: 'list-social-network-preactive' }"
         >PRE ACTIVE</b-nav-item>
         <b-nav-item
-            exact-active-class="active"
-            link-classes="border-secondary hover-primary"
-            exact
-            :to="{ name: 'list-social-network-active' }"
+          exact-active-class="active"
+          link-classes="border-secondary hover-primary"
+          exact
+          :to="{ name: 'list-social-network-active' }"
         >ACTIVE</b-nav-item>
         <b-nav-item
-            exact-active-class="active"
-            link-classes="border-secondary hover-primary"
-            exact
-            :to="{ name: 'list-social-network-inactive' }"
-
+          exact-active-class="active"
+          link-classes="border-secondary hover-primary"
+          exact
+          :to="{ name: 'list-social-network-inactive' }"
         >INACTIVE</b-nav-item>
       </b-nav>
-      <router-view  />
+      <router-view :key="$route.name" />
     </b-card>
   </div>
 </template>
@@ -36,7 +35,7 @@
 import { mapGetters, mapState } from 'vuex'
 
 export default {
-  name: "BankOfFlyers",
+  name: 'BankOfFlyers',
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
@@ -45,9 +44,9 @@ export default {
     }),
     ...mapState({
 
-    })
+    }),
   },
-};
+}
 </script>
 
 <style scoped>
