@@ -13,9 +13,13 @@
               <template #eventContent="slotProps">
                 <div class="fc-event-main mb-50">
                   <div class="fc-event-main-frame">
-                    <div class="fc-event-time">{{ slotProps.event.start | myHourTime }}</div>
+                    <div class="fc-event-time">
+                      {{ slotProps.event.start | myHourTime }}
+                    </div>
                     <div class="fc-event-title-container">
-                      <div class="fc-event-title fc-sticky">{{ slotProps.event.title }}</div>
+                      <div class="fc-event-title fc-sticky">
+                        {{ slotProps.event.title }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -28,26 +32,38 @@
                   <table class="mt-2 mt-xl-0 w-100">
                     <tr>
                       <th class="py-50">
-                        <amg-icon icon="PhoneCallIcon" class="mr-50" />
+                        <amg-icon
+                          icon="PhoneCallIcon"
+                          class="mr-50"
+                        />
                         <span class="font-weight-bold">{{ slotProps.event.extendedProps.lead_mobile }}</span>
                       </th>
                     </tr>
                     <tr>
                       <th class="py-50">
-                        <amg-icon icon="UserIcon" class="mr-50" />
+                        <amg-icon
+                          icon="UserIcon"
+                          class="mr-50"
+                        />
                         <span class="font-weight-bold">{{ slotProps.event.extendedProps.lead_name }}</span>
                       </th>
                     </tr>
                     <tr>
                       <th class="py-50">
-                        <amg-icon icon="WatchIcon" class="mr-50" />
+                        <amg-icon
+                          icon="WatchIcon"
+                          class="mr-50"
+                        />
                         <span class="font-weight-bold">{{ slotProps.event.start | myHourTime }} - {{ slotProps.event.end | myHourTime }}</span>
                       </th>
                     </tr>
                     <tr>
                       <th class="py-50 text-danger">
-                        <amg-icon icon="WatchIcon" class="mr-50" />
-                        <span class="font-weight-bold">{{ slotProps.event.extendedProps.real_time | myHourTime}}({{ slotProps.event.extendedProps.state }})</span>
+                        <amg-icon
+                          icon="WatchIcon"
+                          class="mr-50"
+                        />
+                        <span class="font-weight-bold">{{ slotProps.event.extendedProps.real_time | myHourTime }}({{ slotProps.event.extendedProps.state }})</span>
                       </th>
                     </tr>
                   </table>
@@ -94,30 +110,31 @@ import interactionPlugin from '@fullcalendar/interaction'
 
 import ModalEventEdit from '@/views/crm/views/Lead/lead-event/ModalEventEdit.vue'
 
-
 export default {
   components: {
     FullCalendar,
-    ModalEventEdit
+    ModalEventEdit,
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
     }),
   },
-  created () {
+  created() {
     this.authUser = this.currentUser
     this.setDataBlank('event')
     this.calendarConfig()
+    this.modul = this.authUser.modul_id
   },
-  data () {
+  directives: { Ripple },
+  data() {
     return {
-      authUser: new Object,
+      authUser: new Object(),
       calendarApi: null,
       calendarsColor: {
         TEL: 'primary',
@@ -136,9 +153,9 @@ export default {
         title: '',
         to: '',
       },
-      modul: 2,
+      modul: null,
       onlyRead: false,
-      lead: new Object,
+      lead: new Object(),
       yearact: this.$moment().format('YYYY'),
       monthact: this.$moment().format('MMM'),
       host: 0,
@@ -156,31 +173,30 @@ export default {
         dayMaxEvents: 2,
         navLinks: true,
         rerenderDelay: 350,
-      }
+      },
     }
   },
-  directives: { Ripple },
   methods: {
     ...mapActions({
       A_GET_EVENT: 'CrmEventStore/A_GET_EVENT',
       A_GET_CALENDARS: 'CrmCalendarStore/A_GET_CALENDARS',
     }),
-    setDataBlank (key) {
-      this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`] = Object.assign({}, this[key])
+    setDataBlank(key) {
+      this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = { ...this[key] }
     },
-    resetData (key) {
-      this[key] = Object.assign({}, this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`])
+    resetData(key) {
+      this[key] = { ...this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] }
     },
-    calendarConfig () {
+    calendarConfig() {
       this.calendarOptions.eventClassNames = ({ event: calendarEvent }) => {
         const colorName = this.calendarsColor[calendarEvent._def.extendedProps.title] || 'info'
-        return [ `bg-light-${colorName}`, 'fc-daygrid-block-event', 'fc-h-event' ]
+        return [`bg-light-${colorName}`, 'fc-daygrid-block-event', 'fc-h-event']
       }
       this.calendarOptions.eventClick = ({ event: clickedEvent }) => {
         this.openModalEditEventShow(clickedEvent._def.extendedProps.id)
       }
     },
-    async fetchEvents (info, successCallback) {
+    async fetchEvents(info, successCallback) {
       try {
         if (!info) return
 
@@ -190,40 +206,39 @@ export default {
         const response = await this.A_GET_CALENDARS({
           year: currentYear,
           month: currentMonth,
-          host: this.host
+          host: this.host,
         })
 
         if (this.isResponseSuccess(response)) {
           const events = JSON.parse(response.data[0].events_month)
-          this.yearact =  response.data[0].current_year
-          this.monthact = this.$moment(response.data[0].current_month,'MM').format('MMM')
+          this.yearact = response.data[0].current_year
+          this.monthact = this.$moment(response.data[0].current_month, 'MM').format('MMM')
           const data = events.map(el => ({
             id: el.id,
             url: '',
             title: el.title,
-            start: `${ el.date } ${ el.from }`,
-            end: `${ el.date } ${ el.to }`,
+            start: `${el.date} ${el.from}`,
+            end: `${el.date} ${el.to}`,
             allDay: false,
             extendedProps: {
               ...el,
-              description: el.description
-            }
+              description: el.description,
+            },
           }))
           successCallback(data)
         } else {
-          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
+          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
         }
       } catch (error) {
         console.log('Something went wrong fetchEvents', error)
         this.showErrorSwal()
       }
     },
-    async updatedEvent (body) {
-      console.log('body', body)
+    async updatedEvent(body) {
       const existingEvent = this.calendarApi.getEventById(body.id)
       existingEvent.setProp('title', body.title)
-      
-      existingEvent.setDates(`${ body.date } ${ body.from }`, `${ body.date } ${ body.to }`, { allDay: false })
+
+      existingEvent.setDates(`${body.date} ${body.from}`, `${body.date} ${body.to}`, { allDay: false })
 
       const extendedPropsToUpdate = Object.keys(body)
       for (let index = 0; index < extendedPropsToUpdate.length; index++) {
@@ -232,7 +247,7 @@ export default {
       }
       this.$bvModal.hide('modal-event-edit')
     },
-    async openModalEditEventShow (id) {
+    async openModalEditEventShow(id) {
       try {
         const response = await this.A_GET_EVENT({ id })
         this.resetData('event')
@@ -240,15 +255,14 @@ export default {
           this.event = response.data[0]
           this.event.user_id = { label: this.event.seller_name, value: this.event.seller_id }
           this.$bvModal.show('modal-event-edit')
-        } else
-          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
+        } else this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
       } catch (error) {
         console.log('Something went wrong getEvents', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
   },
-  mounted () {
+  mounted() {
     this.calendarApi = this.$refs.refCalendar.getApi()
   },
   props: {},

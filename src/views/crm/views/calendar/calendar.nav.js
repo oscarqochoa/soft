@@ -1,7 +1,7 @@
 export default [
   {
-    title: 'Calendar1',
+    title: 'Calendar',
     icon: 'CalendarIcon',
     route: 'calendar-crm',
-  }
+  },
 ]
