@@ -379,7 +379,6 @@ export default {
   },
   created() {
     this.getInitialData();
-    console.log(this.isSupervisor);
   },
   mounted() {},
   data() {

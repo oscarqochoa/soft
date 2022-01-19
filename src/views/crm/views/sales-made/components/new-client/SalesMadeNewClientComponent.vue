@@ -1302,11 +1302,10 @@ export default {
       this.modalData.files.programId = programId
       this.modalData.files.event_date = eventDate
       const isCeoOrSupervisor = this.currentUser.role_id == '1' || this.currentUser.role_id == '2'
-      const saleStatus = status == '4' || status == '2'
-      console.log(this.currentUser.user_id, sellerId)
+      const statusNotInRevisionOrApproved = !(status == '4' || status == '2')
       if (
         (this.currentUser.user_id == sellerId || isCeoOrSupervisor)
-        && saleStatus == false
+        && statusNotInRevisionOrApproved
       ) {
         this.modalData.files.valorEdit = true
       }

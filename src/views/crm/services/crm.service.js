@@ -159,6 +159,16 @@ class CrmService {
     }
   }
 
+  async getLeadsFilesAccount(body) {
+    try {
+      const { data } = await amgApi.post('/listfilesaccount', body)
+      return data
+    } catch (error) {
+      console.error('Something went wrong on getLeadsFiles:', error)
+      throw error
+    }
+  }
+
   async generatePdf(body) {
     try {
       const { data } = await amgApi.post('/generate-pdf', body)
