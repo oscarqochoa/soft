@@ -82,6 +82,58 @@ class TaskService {
     }
   }
 
+  async editTaskCredit(body) {
+    try {
+      const { data } = await amgApi.post("/edittaskcredit", body);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async addTask(body) {
+    try {
+      const { data } = await amgApi.post("/addtask", body);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getQuickTasksList(body) {
+    try {
+      const { data } = await amgApi.post("/alltask", body);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteQuickTask(body) {
+    try {
+      const { data } = await amgApi.post("/deletetask", body);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async saveQuickTask(body) {
+    try {
+      const { data } = await amgApi.post("/savetask", body);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getQuickTasks(body) {
+    try {
+      const { data } = await amgApi.post("/alltasksselect", body);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
   async validateTaskFavorite(body) {
     try {
       const data = await amgApi.post('/validate-task-favorites', body)

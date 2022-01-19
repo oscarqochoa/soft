@@ -9,7 +9,12 @@
           <!-- Search -->
           <b-col cols="12" md="6">
             <div class="d-flex align-items-center justify-content-end align-items-center">
-              <b-button variant="primary" v-ripple.400="'rgba(255, 255, 255, 0.15)'">
+              <b-button
+                variant="primary"
+                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                @click="exportExcel"
+                :disabled="exportExcelDisabled"
+              >
                 <div class="d-flex justify-content-between">
                   <span class="text-nowrap">Export to excel</span>
                 </div>
@@ -83,8 +88,8 @@
                 <b-button
                   variant="flat-warning"
                   class="button-little-size rounded-circle"
-                  @click="onModalEditTaskOpen(data.item.id, false)"
-                  v-b-tooltip.hover.top="'Edit'"
+                  @click="openModalEditTask(data.item)"
+                  v-b-tooltip.hover.top="'Edit Task'"
                 >
                   <feather-icon icon="EditIcon" />
                 </b-button>
@@ -94,7 +99,7 @@
                   variant="flat-info"
                   class="button-little-size rounded-circle"
                   v-b-tooltip.hover.top="'View'"
-                  @click="onModalEditTaskOpen(data.item.id, true)"
+                  @click="openModalShowTask(data.item)"
                 >
                   <feather-icon icon="EyeIcon" />
                 </b-button>
@@ -151,12 +156,16 @@
         </b-row>
       </div>
     </b-card>
+    <ModalEditTask v-if="modalEdit" @hide="closeModalEditTask" :infoTask="infoTask" />
+    <ModalShowTask v-if="modalShow" @hide="closeModalShowTask" :infoTask="infoTask" />
   </div>
 </template>
 <script>
 import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 import TaskService from "@/service/task/index.js";
+import ModalEditTask from "../modals/ModalEditTask.vue";
+import ModalShowTask from "../modals/ModalShowTask.vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
   props: {
@@ -173,7 +182,9 @@ export default {
     Ripple
   },
   components: {
-    vSelect
+    vSelect,
+    ModalEditTask,
+    ModalShowTask
   },
   data() {
     return {
@@ -210,7 +221,11 @@ export default {
       currentPage: 1,
       toPage: "",
       isBusy: false,
-      perPageOptions: [10, 25, 50, 100]
+      perPageOptions: [10, 25, 50, 100],
+      modalEdit: false,
+      modalShow: false,
+      infoTask: {},
+      exportExcelDisabled: false
     };
   },
   computed: {
@@ -279,6 +294,39 @@ export default {
           throw error;
         }
       }
+    },
+    async exportExcel() {
+      const confirm = await this.showConfirmSwal(
+        "Are you sure?",
+        "Generating Excel!!!"
+      );
+      if (confirm.isConfirmed) {
+        this.exportExcelDisabled = true;
+        location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/exporttasksexcel/${this.currentUser.user_id}/${this.type}`;
+        setTimeout(() => {
+          this.exportExcelDisabled = false;
+        }, 10000);
+      }
+    },
+    openModalEditTask(task) {
+      this.addPreloader();
+      this.infoTask = task;
+      this.modalEdit = true;
+    },
+    closeModalEditTask(status) {
+      if (status) {
+        this.resetSearch();
+        this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
+      }
+      this.modalEdit = false;
+    },
+    openModalShowTask(task) {
+      this.addPreloader();
+      this.infoTask = task;
+      this.modalShow = true;
+    },
+    closeModalShowTask() {
+      this.modalShow = false;
     },
     async deleteTask(taskId) {
       const confirm = await this.showConfirmSwal();

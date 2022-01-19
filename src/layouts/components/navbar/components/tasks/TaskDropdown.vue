@@ -75,7 +75,14 @@
         >See all tasks</b-button>
       </li>
     </b-nav-item-dropdown>
-    <b-modal size="xmd" v-model="taskModal" hide-footer centered title="TASKS">
+    <b-modal
+      size="xmd"
+      v-model="taskModal"
+      hide-footer
+      centered
+      title="TASKS"
+      title-class="h2 text-white"
+    >
       <task-modal></task-modal>
     </b-modal>
   </div>
