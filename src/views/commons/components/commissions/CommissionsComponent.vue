@@ -451,7 +451,7 @@ import { mapGetters } from "vuex";
 import Ripple from "vue-ripple-directive";
 import ButtonsEdit from "@/views/commons/utilities/ButtonsEdit";
 import OverlayWait from "@/views/commons/utilities/OverlayWait";
-import CommissionsHeader from "@/views/commons/components/commissions/CommissionsHeader";
+import CommissionsHeader from "@/views/commons/components/commissions/CommissionsHeader.vue";
 import CommissionsMonthly from "@/views/commons/components/commissions/CommissionsMonthly";
 import ModalCommissionsDetails from "@/views/commons/components/commissions/modals/modal-details/ModalCommissionsDetails";
 import ModalCommissionsPayment from "@/views/commons/components/commissions/modals/modal-payment/ModalCommissionsPayment";
