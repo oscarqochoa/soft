@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card-body>
+    <b-card-body class="px-0">
       <b-table
         show-empty
         sticky-header
@@ -10,6 +10,7 @@
         :items="S_CREDIT_REPORT_PENDINGS"
         :busy.sync="isBusy"
         class="mb-0"
+        small
       >
         <template #table-busy>
           <div class="text-center text-primary my-2">
@@ -19,7 +20,7 @@
         </template>
 
         <template #cell(request_by)="data">
-          <span>{{ data.item.seller_name}}</span>
+          <span>{{ data.item.seller_name }}</span>
           <br>
           <span>{{ data.item.date | myGlobal }}</span>
         </template>
@@ -80,22 +81,23 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState,  } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   components: {},
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
-      S_CREDIT_REPORT_PENDINGS: event => event.CrmCreditReportStore.S_CREDIT_REPORT_PENDINGS
+      S_CREDIT_REPORT_PENDINGS: event => event.CrmCreditReportStore.S_CREDIT_REPORT_PENDINGS,
     }),
   },
-  created () {},
-  data () {
+  created() {},
+  directives: {},
+  data() {
     return {
       fieldsEvent: [
         { key: 'request_by' },
@@ -105,27 +107,26 @@ export default {
       ],
     }
   },
-  directives: {},
   methods: {
     ...mapActions({
       /* A_GET_TEMPLATES: 'CrmTemplateStore/A_GET_TEMPLATES' */
     }),
-    onOpenTrackingStatus (scoreId, leadName) {
+    onOpenTrackingStatus(scoreId, leadName) {
       /* *INTEGRATE* */
     },
-    onChangeStatus (scoreId, statusId) {
+    onChangeStatus(scoreId, statusId) {
       /* *INTEGRATE* */
-    }
+    },
   },
-  mounted () {},
+  mounted() {},
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     isBusy: {
       type: Boolean,
-      required: true
+      required: true,
     },
   },
   setup() {},

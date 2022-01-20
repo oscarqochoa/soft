@@ -14,7 +14,7 @@
             TransUnion
           </p>
           <span
-            class="show-lead-score-cr"
+            class="show-lead-score-cr btn-icon"
             style="border: 2px solid #0aafdb;"
             :style="`color: ${ colorScoreTransunion(score.transunion) };`"
           >
@@ -46,7 +46,7 @@
             EQUIFAX
           </p>
           <span
-            class="show-lead-score-cr"
+            class="show-lead-score-cr btn-icon"
             style="border: 2px solid #f31414;"
             :style="`color: ${ colorScoreTransunion(score.equifax) };`"
           >
