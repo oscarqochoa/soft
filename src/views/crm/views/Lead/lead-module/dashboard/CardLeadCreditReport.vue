@@ -5,33 +5,69 @@
     </template>
     <b-card-body v-if="score.equifax !== '' && score.experian !== '' && score.transunion !== ''">
       <b-row class="justify-content-center">
-        <b-col v-if="score.transunion !== ''" cols="4" class="text-center">
-          <p style="color: #0aafdb;">TransUnion</p>
-          <span class="show-lead-score-cr" style="border: 2px solid #0aafdb;" :style="`color: ${ colorScoreTransunion(score.transunion) };`">
+        <b-col
+          v-if="score.transunion !== ''"
+          cols="4"
+          class="text-center"
+        >
+          <p style="color: #0aafdb;">
+            TransUnion
+          </p>
+          <span
+            class="show-lead-score-cr"
+            style="border: 2px solid #0aafdb;"
+            :style="`color: ${ colorScoreTransunion(score.transunion) };`"
+          >
             {{ score.transunion }}
           </span>
         </b-col>
-        <b-col v-if="score.experian !== ''" cols="4" class="text-center">
-          <p style="color: #0566b7;">Experian</p>
-          <span class="show-lead-score-cr" style="border: 2px solid #0566b7;" :style="`color: ${ colorScoreTransunion(score.experian) };`">
+        <b-col
+          v-if="score.experian !== ''"
+          cols="4"
+          class="text-center"
+        >
+          <p style="color: #0566b7;">
+            Experian
+          </p>
+          <span
+            class="show-lead-score-cr"
+            style="border: 2px solid #0566b7;"
+            :style="`color: ${ colorScoreTransunion(score.experian) };`"
+          >
             {{ score.experian }}
           </span>
         </b-col>
-        <b-col v-if="score.equifax !== ''" cols="4" class="text-center">
-          <p style="color: #f31414;">EQUIFAX</p>
-          <span class="show-lead-score-cr" style="border: 2px solid #f31414;" :style="`color: ${ colorScoreTransunion(score.equifax) };`">
+        <b-col
+          v-if="score.equifax !== ''"
+          cols="4"
+          class="text-center"
+        >
+          <p style="color: #f31414;">
+            EQUIFAX
+          </p>
+          <span
+            class="show-lead-score-cr"
+            style="border: 2px solid #f31414;"
+            :style="`color: ${ colorScoreTransunion(score.equifax) };`"
+          >
             {{ score.equifax }}
           </span>
         </b-col>
       </b-row>
     </b-card-body>
     <b-tabs pills>
-      <b-tab :active="!isTabPendingActive" title-link-class="border-secondary hover-primary">
+      <b-tab
+        active
+        title-link-class="border-secondary hover-primary"
+      >
         <template #title>
           <span>Obtained</span>
         </template>
 
-        <card-lead-credit-report-obtained :lead="lead" :is-busy="isBusyCreditReportObtained" />
+        <card-lead-credit-report-obtained
+          :lead="lead"
+          :is-busy="isBusyCreditReportObtained"
+        />
 
       </b-tab>
       <b-tab :active="isTabPendingActive" title-link-class="border-secondary hover-primary">
@@ -44,11 +80,15 @@
           </div>
         </template>
 
-        <card-lead-credit-report-pending :modul="modul" :lead="lead" :is-busy="isBusyCreditReportPending" />
+        <card-lead-credit-report-pending
+          :modul="modul"
+          :lead="lead"
+          :is-busy="isBusyCreditReportPending"
+        />
 
       </b-tab>
     </b-tabs>
-    
+
     <template #footer>
       <div class="text-right">
         <b-button
@@ -110,7 +150,7 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState,  } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 import Ripple from 'vue-ripple-directive'
 
@@ -122,24 +162,47 @@ export default {
   components: {
     CardLeadCreditReportObtained,
     CardLeadCreditReportPending,
-    ModalRequestCr
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
     }),
   },
-  created () {
+  created() {
     this.countCreditReportPendings()
     if (this.lead.score && this.lead.score.length) {
+      this.lead.score = JSON.parse(this.lead.score)
       this.score.equifax = this.lead.score[0].equifax
       this.score.experian = this.lead.score[0].experian
       this.score.transunion = this.lead.score[0].transunion
     }
     this.getDocumentLead()
   },
-  data () {
+  directives: { Ripple },
+  props: {
+    modul: {
+      type: Number,
+      required: true,
+    },
+    onlyRead: {
+      type: Boolean,
+      required: true,
+    },
+    lead: {
+      type: Object,
+      required: true,
+    },
+    isBusyCreditReportObtained: {
+      type: Boolean,
+      required: true,
+    },
+    isBusyCreditReportPending: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  data() {
     return {
       countData: 0,
       score: {
@@ -147,61 +210,27 @@ export default {
         experian: '',
         transunion: '',
       },
-      isTabPendingActive: false,
-      requestCr: {
-        type_card: null,
-        send_cr: null,
-        documents: new Object,
-        document: '',
-      },
     }
-  },
-  directives: { Ripple },
-  props: {
-    modul: {
-      type: Number,
-      required: true
-    },
-    onlyRead: {
-      type: Boolean,
-      required: true
-    },
-    lead: {
-      type: Object,
-      required: true
-    },
-    isBusyCreditReportObtained: {
-      type: Boolean,
-      required: true
-    },
-    isBusyCreditReportPending: {
-      type: Boolean,
-      required: true
-    },
   },
   methods: {
     ...mapActions({
       A_COUNT_CREDIT_REPORT_PENDINGS: 'CrmCreditReportStore/A_COUNT_CREDIT_REPORT_PENDINGS',
       A_GET_LEAD_DOCUMENT: 'CrmLeadStore/A_GET_LEAD_DOCUMENT',
     }),
-    setDataBlank (key) {
-      this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`] = Object.assign({}, this[key])
+    setDataBlank(key) {
+      this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = { ...this[key] }
     },
-    resetData (key) {
-      this[key] = Object.assign({}, this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`])
+    resetData(key) {
+      this[key] = { ...this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] }
     },
-    colorScoreTransunion (score) {
-      if (score <= 659)
-        return '#ff0707'
-      else if (score >= 660 && score <= 699)
-        return '#ffc107'
-      else if (score >= 700 && score <= 759)
-        return '#bfff00'
-      else if (score >= 760 && score <= 850)
-        return '#0dff34'
+    colorScoreTransunion(score) {
+      if (score <= 659) return '#ff0707'
+      if (score >= 660 && score <= 699) return '#ffc107'
+      if (score >= 700 && score <= 759) return '#bfff00'
+      if (score >= 760 && score <= 850) return '#0dff34'
       return '#000'
     },
-    async countCreditReportPendings () {
+    async countCreditReportPendings() {
       try {
         const response = await this.A_COUNT_CREDIT_REPORT_PENDINGS({ id: this.$route.params.id, modul: this.modul })
         if (this.isResponseSuccess(response)) {
@@ -226,7 +255,7 @@ export default {
       }
     },
   },
-  setup () {},
+  setup() {},
 }
 </script>
 

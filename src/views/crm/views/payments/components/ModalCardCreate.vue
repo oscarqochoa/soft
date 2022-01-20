@@ -10,6 +10,7 @@
       hide-footer
       body-class="mb-2"
       @hidden="closeModal"
+      :no-close-on-backdrop="true"
     >
 
       <ValidationObserver ref="form">

@@ -903,7 +903,7 @@
             </tr>
 
             <template v-for="(item, indexAccount) in accounts">
-              <tr class="bg-dark" :key="item.id">
+              <tr :class="skin == 'dark'? 'bg-dark' :'bg-light'" :key="item.id">
                 <th class="td-left text-right col-2">
                   <div>
                     <b-button-group>
@@ -924,7 +924,7 @@
                     class="font-weight-bold col-3 text-center"
                     :key="t - 1"
                     :class="
-                      item.element[t - 1].status == 1 ? 'bg-warning' : 'bg-dark'
+                      item.element[t - 1].status == 1 ? 'bg-warning' : skin == 'dark'? 'bg-dark' :'bg-light'
                     "
                   >
                     <template v-if="isForSpecialist">
@@ -2036,11 +2036,9 @@ export default {
       this.public_info = [];
     },
     returnGrid() {
-     
       var route = "";
       if (this.modul == 2) {
-      
-        route = "/crm/leads/show/" + this.idlead;
+        route = "/crm/leads/" + this.idlead;
       } else if (this.modul == 3) {
         route =
           this.global.idaccount != undefined

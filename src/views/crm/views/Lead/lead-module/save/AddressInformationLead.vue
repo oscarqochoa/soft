@@ -9,11 +9,7 @@
               v-if="hideSSN || userData.ssn || (!userData.ssn && !userData.itin)"
               name="SSN"
             >
-              <b-form-group
-                label="SSN"
-                label-for="ssn"
-                label-cols-md="2"
-              >
+              <b-form-group label="SSN" label-for="ssn" label-cols-md="2">
                 <b-input-group>
                   <b-form-input
                     id="ssn"
@@ -33,10 +29,7 @@
                       :disabled="disabled.saveSSN"
                       @click="onSubmitFields('ssn', 4)"
                     >
-                      <amg-icon
-                        icon="SaveIcon"
-                        class="cursor-pointer"
-                      />
+                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -45,9 +38,7 @@
                       class="btn-sm"
                       @click="toggleElement('ssn')"
                     >
-                      <amg-icon
-                        :icon="disabled.ssn ? 'Edit2Icon' : 'Edit2SlashIcon'"
-                      />
+                      <amg-icon :icon="disabled.ssn ? 'Edit2Icon' : 'Edit2SlashIcon'" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append
@@ -55,9 +46,7 @@
                     @click="onModalTrackingChangeOpen(4, 'SSN')"
                   >
                     <b-input-group-text>
-                      <amg-icon
-                        icon="ListIcon"
-                      />
+                      <amg-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                   <b-input-group-append
@@ -65,23 +54,14 @@
                     class="border-left cursor-pointer"
                     @click="onAddSocial"
                   >
-                    <amg-icon
-                      :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
-                    />
+                    <amg-icon :icon="addSocial ? 'MinusIcon' : 'PlusIcon'" />
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
             </validation-provider>
             <!-- ITIN -->
-            <validation-provider
-              v-if="hideITIN || userData.itin"
-              name="ITIN"
-            >
-              <b-form-group
-                label="ITIN"
-                label-for="itin"
-                label-cols-md="2"
-              >
+            <validation-provider v-if="hideITIN || userData.itin" name="ITIN">
+              <b-form-group label="ITIN" label-for="itin" label-cols-md="2">
                 <b-input-group>
                   <b-form-input
                     id="itin"
@@ -101,10 +81,7 @@
                       :disabled="disabled.saveITIN"
                       @click="onSubmitFields('itin', 5)"
                     >
-                      <amg-icon
-                        icon="SaveIcon"
-                        class="cursor-pointer"
-                      />
+                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -124,9 +101,7 @@
                     @click="onModalTrackingChangeOpen(5, 'ITIN')"
                   >
                     <b-input-group-text>
-                      <amg-icon
-                        icon="ListIcon"
-                      />
+                      <amg-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                   <b-input-group-append
@@ -136,23 +111,14 @@
                     variant="warning"
                     @click="onAddSocial"
                   >
-                    <amg-icon
-                      :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
-                    />
+                    <amg-icon :icon="addSocial ? 'MinusIcon' : 'PlusIcon'" />
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
             </validation-provider>
             <!-- CPN -->
-            <validation-provider
-              v-if="hideSSN || (userData.ssn && userData.itin)"
-              name="CPN"
-            >
-              <b-form-group
-                label="CPN"
-                label-for="cpn"
-                label-cols-md="2"
-              >
+            <validation-provider v-if="hideSSN || (userData.ssn && userData.itin)" name="CPN">
+              <b-form-group label="CPN" label-for="cpn" label-cols-md="2">
                 <b-input-group>
                   <b-form-input
                     id="cpn"
@@ -172,10 +138,7 @@
                       :disabled="disabled.saveCPN"
                       @click="onSubmitFields('cpn', 6, 'other')"
                     >
-                      <amg-icon
-                        icon="SaveIcon"
-                        class="cursor-pointer"
-                      />
+                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -195,9 +158,7 @@
                     @click="onModalTrackingChangeOpen(6, 'CPN')"
                   >
                     <b-input-group-text>
-                      <amg-icon
-                        icon="ListIcon"
-                      />
+                      <amg-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                 </b-input-group>
@@ -206,9 +167,7 @@
           </template>
           <template v-else>
             <!-- SSN? -->
-            <validation-provider
-              name="SSN?"
-            >
+            <validation-provider name="SSN?">
               <b-form-group
                 :label="`${!labssn && !labitin ? 'SSN' : statusLabs}`"
                 label-for="ssn?"
@@ -235,15 +194,8 @@
               </b-form-group>
             </validation-provider>
             <!-- SSN -->
-            <validation-provider
-              v-if="hideSSN"
-              name="SSN"
-            >
-              <b-form-group
-                label="SSN"
-                label-for="ssn"
-                label-cols-md="2"
-              >
+            <validation-provider v-if="hideSSN" name="SSN">
+              <b-form-group label="SSN" label-for="ssn" label-cols-md="2">
                 <b-form-input
                   id="ssn"
                   v-model="userData.ssn"
@@ -255,15 +207,8 @@
               </b-form-group>
             </validation-provider>
             <!-- ITIN -->
-            <validation-provider
-              v-if="hideITIN"
-              name="ITIN"
-            >
-              <b-form-group
-                label="ITIN"
-                label-for="itin"
-                label-cols-md="2"
-              >
+            <validation-provider v-if="hideITIN" name="ITIN">
+              <b-form-group label="ITIN" label-for="itin" label-cols-md="2">
                 <b-form-input
                   id="itin"
                   v-model="userData.itin"
@@ -275,15 +220,8 @@
               </b-form-group>
             </validation-provider>
             <!-- CPN -->
-            <validation-provider
-              v-if="hideCPN"
-              name="CPN"
-            >
-              <b-form-group
-                label="CPN"
-                label-for="cpn"
-                label-cols-md="2"
-              >
+            <validation-provider v-if="hideCPN" name="CPN">
+              <b-form-group label="CPN" label-for="cpn" label-cols-md="2">
                 <b-form-input
                   id="cpn"
                   v-model="userData.other"
@@ -298,13 +236,8 @@
         </b-col>
         <b-col md="6">
           <!-- Phone -->
-          <validation-provider
-            name="Phone"
-          >
-            <b-form-group
-              label="Phone (H)"
-              label-for="phone"
-            >
+          <validation-provider name="Phone">
+            <b-form-group label="Phone (H)" label-for="phone">
               <b-input-group>
                 <b-form-input
                   id="phone"
@@ -321,10 +254,7 @@
                       class="btn-sm"
                       @click="onSubmitFields('phoneh', 2, 'phone')"
                     >
-                      <amg-icon
-                        icon="SaveIcon"
-                        class="cursor-pointer"
-                      />
+                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -344,9 +274,7 @@
                     @click="onModalTrackingChangeOpen(2, 'PHONE (H)')"
                   >
                     <b-input-group-text>
-                      <amg-icon
-                        icon="ListIcon"
-                      />
+                      <amg-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                 </template>
@@ -354,15 +282,8 @@
             </b-form-group>
           </validation-provider>
           <!-- Mobile -->
-          <validation-provider
-            v-slot="{errors}"
-            name="Mobile"
-            rules="required"
-          >
-            <b-form-group
-              label="Phone (M)"
-              label-for="mobile"
-            >
+          <validation-provider v-slot="{errors}" name="Mobile" rules="required">
+            <b-form-group label="Phone (M)" label-for="mobile">
               <b-input-group>
                 <b-form-input
                   id="mobile"
@@ -380,10 +301,7 @@
                       class="btn-sm"
                       @click="onSubmitFields('phonem', 3, 'mobile')"
                     >
-                      <amg-icon
-                        icon="SaveIcon"
-                        class="cursor-pointer"
-                      />
+                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -403,9 +321,7 @@
                     @click="onModalTrackingChangeOpen(3, 'PHONE (M)')"
                   >
                     <b-input-group-text>
-                      <amg-icon
-                        icon="ListIcon"
-                      />
+                      <amg-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                 </template>
@@ -414,7 +330,11 @@
           </validation-provider>
         </b-col>
       </b-row>
-      <address-component :address-data="userData.address" @onSubmitAddress="onSubmitAddress" @onModalTrackingChangeOpen="onModalTrackingChangeOpen(1, 'ADDRESS')" />
+      <address-component
+        :address-data="userData.address"
+        @onSubmitAddress="onSubmitAddress"
+        @onModalTrackingChangeOpen="onModalTrackingChangeOpen(1, 'ADDRESS')"
+      />
       <b-row>
         <b-col md="6">
           <b-form-group>
@@ -423,56 +343,54 @@
               name="another-address"
               v-model="hideWithOtherAddress"
               class="mt-2"
-            >
-              Another address?
-            </b-form-checkbox>
-
+            >Another address?</b-form-checkbox>
           </b-form-group>
         </b-col>
         <b-col md="6">
           <!-- Origin Country -->
-          <validation-provider
-            v-slot="{errors}"
-            name="Origin Country"
-            rules="required"
-          >
-            <b-form-group
-              label="Origin Country"
-              label-for="originCountry"
-              :state="errors[0] ? false : null"
-            >
-              <v-select
-                id="originCountry"
-                v-model="userData.origin_country"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                label="label"
-                :options="G_COUNTRIES"
-                :reduce="el => el.id"
-              />
-            </b-form-group>
-          </validation-provider>
+
+          <b-form-group label="Origin Country" label-for="originCountry">
+            <v-select
+              id="originCountry"
+              v-model="userData.origin_country"
+              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+              label="label"
+              :options="G_COUNTRIES"
+              :reduce="el => el.id"
+              :clearable="false"
+            />
+          </b-form-group>
         </b-col>
       </b-row>
-      <address-component v-if="hideWithOtherAddress" :address-data="userData.otherAddress" @onSubmitAddress="onSubmitAnotherAddress" @onModalTrackingChangeOpen="onModalTrackingChangeOpen(8, 'OTHER ADDRESS')" />
+      <address-component
+        v-if="hideWithOtherAddress"
+        :address-data="userData.otherAddress"
+        @onSubmitAddress="onSubmitAnotherAddress"
+        @onModalTrackingChangeOpen="onModalTrackingChangeOpen(8, 'OTHER ADDRESS')"
+      />
     </b-col>
   </b-row>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from "vuex";
 import {
-  BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
-} from 'bootstrap-vue'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import { required, alphaNum, email } from '@validations'
+  BSidebar,
+  BForm,
+  BFormGroup,
+  BFormInvalidFeedback,
+  BButton
+} from "bootstrap-vue";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
+import { required, alphaNum, email } from "@validations";
 
-import vSelect from 'vue-select'
-import VueGoogleAutocomplete from 'vue-google-autocomplete'
+import vSelect from "vue-select";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 
-import formValidation from '@core/comp-functions/forms/form-validation'
-import countries from '@/@fake-db/data/other/countries'
+import formValidation from "@core/comp-functions/forms/form-validation";
+import countries from "@/@fake-db/data/other/countries";
 
-import AddressComponent from '@/views/crm/views/Lead/components/AddressComponent.vue'
+import AddressComponent from "@/views/crm/views/Lead/components/AddressComponent.vue";
 
 export default {
   components: {
@@ -487,10 +405,10 @@ export default {
 
     // Form Validation
     ValidationProvider,
-    ValidationObserver,
+    ValidationObserver
   },
   model: {
-    event: 'update:is-add-new-user-sidebar-active',
+    event: "update:is-add-new-user-sidebar-active"
   },
   props: {
     userData: {
@@ -499,14 +417,14 @@ export default {
     },
     blankUserFields: {
       type: Object,
-      required: false,
+      required: false
     }
   },
   data() {
     return {
       addSocial: false,
       alphaNum,
-      blankUserData: new Object,
+      blankUserData: new Object(),
       countries,
       disabled: {
         ssn: true,
@@ -515,7 +433,7 @@ export default {
         phone: true,
         mobile: true,
         saveSSN: false,
-        saveITIN: false,
+        saveITIN: false
       },
       email,
       hideSSN: false,
@@ -525,326 +443,397 @@ export default {
       labssn: false,
       labitin: false,
       location: null,
-      required,
-    }
+      required
+    };
   },
   computed: {
-    statusLabs () {
-      return this.labssn ? 'SSN' : 'ITIN'
+    statusLabs() {
+      return this.labssn ? "SSN" : "ITIN";
     },
     ...mapGetters({
-      G_COUNTRIES: 'CrmGlobalStore/G_COUNTRIES',
-    }),
+      G_COUNTRIES: "CrmGlobalStore/G_COUNTRIES"
+    })
   },
-  created () {
-    this.setDataBlank('userData')
+  created() {
+    this.setDataBlank("userData");
   },
-  setup () {
-    const {
-      refFormObserver,
-      getValidationState,
-    } = formValidation(() => {})
+  setup() {
+    const { refFormObserver, getValidationState } = formValidation(() => {});
 
     return {
       refFormObserver,
       getValidationState
-    }
+    };
   },
   methods: {
     ...mapActions({
-      A_UNIQUE_MOBILE: 'CrmGlobalStore/A_UNIQUE_MOBILE',
-      A_SET_REQUEST_LEADS: 'CrmLeadStore/A_SET_REQUEST_LEADS',
-      A_VALID_UNIQUE_SSN: 'CrmLeadStore/A_VALID_UNIQUE_SSN',
-      A_VALID_UNIQUE_ITIN: 'CrmLeadStore/A_VALID_UNIQUE_ITIN',
-      A_VALID_UNIQUE_CPN: 'CrmLeadStore/A_VALID_UNIQUE_CPN',
-      A_UPDATE_FIELDS_LEAD: 'CrmLeadStore/A_UPDATE_FIELDS_LEAD',
+      A_UNIQUE_MOBILE: "CrmGlobalStore/A_UNIQUE_MOBILE",
+      A_SET_REQUEST_LEADS: "CrmLeadStore/A_SET_REQUEST_LEADS",
+      A_VALID_UNIQUE_SSN: "CrmLeadStore/A_VALID_UNIQUE_SSN",
+      A_VALID_UNIQUE_ITIN: "CrmLeadStore/A_VALID_UNIQUE_ITIN",
+      A_VALID_UNIQUE_CPN: "CrmLeadStore/A_VALID_UNIQUE_CPN",
+      A_UPDATE_FIELDS_LEAD: "CrmLeadStore/A_UPDATE_FIELDS_LEAD"
     }),
-    setDataBlank (key) {
-      this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`] = Object.assign({}, this[key])
+    setDataBlank(key) {
+      this[
+        `blank${key.charAt(0).toUpperCase()}${key.slice(1)}`
+      ] = Object.assign({}, this[key]);
     },
-    resetData (key) {
-      const object = this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`]
+    resetData(key) {
+      const object = this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`];
       for (let subkey in object) {
-        this[key][subkey] = object[subkey]
+        this[key][subkey] = object[subkey];
       }
     },
-    resetElement (key, subkey) {
-      const object = this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`]
-      this[key][subkey] = object[subkey]
+    resetElement(key, subkey) {
+      const object = this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`];
+      this[key][subkey] = object[subkey];
     },
     security() {
-      const val = this.userData.social.substr(0, 1)
-      if ([ '', '0', '1', '2', '3', '4', '5', '6', '7', '8' ].includes(val)) {
-        this.labssn = true
-        this.labitin = false
+      const val = this.userData.social.substr(0, 1);
+      if (["", "0", "1", "2", "3", "4", "5", "6", "7", "8"].includes(val)) {
+        this.labssn = true;
+        this.labitin = false;
 
         if (this.hideSSN == true) {
-          this.hideITIN = true
-          this.hideSSN = false
-          this.userData.itin = ''
+          this.hideITIN = true;
+          this.hideSSN = false;
+          this.userData.itin = "";
         }
       } else if (val == 9) {
-        this.labssn = false
-        this.labitin = true
+        this.labssn = false;
+        this.labitin = true;
         if (this.hideITIN == true) {
-          this.hideITIN = false
-          this.hideSSN = true
-          this.userData.ssn = ''
+          this.hideITIN = false;
+          this.hideSSN = true;
+          this.userData.ssn = "";
         }
       }
     },
-    toggleSocial () {
-      const val = this.userData.social.substr(0, 1)
+    toggleSocial() {
+      const val = this.userData.social.substr(0, 1);
       if (!this.addSocial) {
-        this.hideSSN = false
-        this.hideITIN = true
-        this.hideCPN = true
-        if (val === '9') {
-          this.hideSSN = true
-          this.hideITIN = false
+        this.hideSSN = false;
+        this.hideITIN = true;
+        this.hideCPN = true;
+        if (val === "9") {
+          this.hideSSN = true;
+          this.hideITIN = false;
         }
       } else {
-        this.hideSSN = false
-        this.hideITIN = false
-        this.hideCPN = false
+        this.hideSSN = false;
+        this.hideITIN = false;
+        this.hideCPN = false;
       }
-      this.addSocial = !this.addSocial
+      this.addSocial = !this.addSocial;
     },
-    onAddSocial () {
+    onAddSocial() {
       if (!this.addSocial) {
-        this.hideSSN = true
-        this.hideITIN = true
-        this.hideCPN = true
+        this.hideSSN = true;
+        this.hideITIN = true;
+        this.hideCPN = true;
       } else {
-        this.hideSSN = false
-        this.hideITIN = false
-        this.hideCPN = false
+        this.hideSSN = false;
+        this.hideITIN = false;
+        this.hideCPN = false;
       }
-      this.addSocial = !this.addSocial
+      this.addSocial = !this.addSocial;
     },
-    phone () {
+    phone() {
       var x = this.userData.phone
         .replace(/\D/g, "")
         .match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
       this.userData.phone = !x[2]
         ? x[1]
-        : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "")
+        : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "");
     },
-    async mobile () {
+    async mobile() {
       try {
-        this.isPreloading(true)
+        this.isPreloading(true);
         var x = this.userData.mobile
           .replace(/\D/g, "")
-          .match(/(\d{0,3})(\d{0,3})(\d{0,4})/)
+          .match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
         this.userData.mobile = !x[2]
           ? x[1]
-          : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "")
+          : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "");
         if (this.userData.mobile.length == 14) {
-          this.errorFormatMobile = false
-          const response = await this.A_UNIQUE_MOBILE({ mobile: this.userData.mobile })
+          this.errorFormatMobile = false;
+          const response = await this.A_UNIQUE_MOBILE({
+            mobile: this.userData.mobile
+          });
           if (response.status == 200) {
-            if (response.data.code == 'mobile') {
-              this.showSwalGeneric('Are you sure?', `The phone number already exists: ${response.data.message}`, 'warning', { confirmButtonText: 'REQUEST LEAD TO SOCIAL NETWORK' })
-              .then(async (result) => {
-                if (result.value) {
-                  this.isPreloading(true)
-                  await this.A_SET_REQUEST_LEADS({
-                    lead_id: response.data.lead_id,
-                    lead_name: response.data.message,
-                  })
-                  this.isPreloading(false)
-                }
-              }).catch(error => {
-                throw error
-              })
+            if (response.data.code == "mobile") {
+              this.showSwalGeneric(
+                "Are you sure?",
+                `The phone number already exists: ${response.data.message}`,
+                "warning",
+                { confirmButtonText: "REQUEST LEAD TO SOCIAL NETWORK" }
+              )
+                .then(async result => {
+                  if (result.value) {
+                    this.isPreloading(true);
+                    await this.A_SET_REQUEST_LEADS({
+                      lead_id: response.data.lead_id,
+                      lead_name: response.data.message
+                    });
+                    this.isPreloading(false);
+                  }
+                })
+                .catch(error => {
+                  throw error;
+                });
             }
-            this.isPreloading(false)
+            this.isPreloading(false);
           }
         }
       } catch (error) {
-        console.log('Something went wrong mobile:', error)
-        this.isPreloading(false)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        console.log("Something went wrong mobile:", error);
+        this.isPreloading(false);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
-    toggleElement (key) {
-      this.disabled[key] = !this.disabled[key]
-      if (this.disabled[key])
-        this.resetElement('userData', key)
+    toggleElement(key) {
+      this.disabled[key] = !this.disabled[key];
+      if (this.disabled[key]) this.resetElement("userData", key);
     },
-    async onValidSsn () {
+    async onValidSsn() {
       try {
-        this.$refs.ssn.$el.classList.remove('is-invalid')
-        this.disabled.saveSSN = false
+        this.$refs.ssn.$el.classList.remove("is-invalid");
+        this.disabled.saveSSN = false;
         if (this.userData.ssn.length === 11) {
-          this.isPreloading()
-          const response = await this.A_VALID_UNIQUE_SSN({ ssn: this.userData.ssn })
+          this.isPreloading();
+          const response = await this.A_VALID_UNIQUE_SSN({
+            ssn: this.userData.ssn
+          });
           if (this.isResponseSuccess(response)) {
-            if (response.data.code === 'ssn') {
-              this.disabled.saveSSN = true
-              this.$refs.ssn.$el.classList.remove('is-valid')
-              this.$refs.ssn.$el.classList.add('is-invalid')
-              this.showWarningSwal('Alert!', 'The ssn number already exists: ' + response.data.message)
+            if (response.data.code === "ssn") {
+              this.disabled.saveSSN = true;
+              this.$refs.ssn.$el.classList.remove("is-valid");
+              this.$refs.ssn.$el.classList.add("is-invalid");
+              this.showWarningSwal(
+                "Alert!",
+                "The ssn number already exists: " + response.data.message
+              );
             }
           }
-          this.isPreloading(false)
+          this.isPreloading(false);
         }
       } catch (error) {
-        console.log('spmething went wrong onValidSsn: ', error)
-        this.isPreloading(false)
-        this.showErrorSwal()
+        console.log("spmething went wrong onValidSsn: ", error);
+        this.isPreloading(false);
+        this.showErrorSwal();
       }
     },
-    async onValidItin () {
+    async onValidItin() {
       try {
-        this.$refs.itin.$el.classList.remove('is-invalid')
-        this.disabled.saveITIN = false
+        this.$refs.itin.$el.classList.remove("is-invalid");
+        this.disabled.saveITIN = false;
         if (this.userData.itin.length === 11) {
-          this.isPreloading(true)
-          const response = await this.A_VALID_UNIQUE_ITIN({ itin: this.userData.itin })
+          this.isPreloading(true);
+          const response = await this.A_VALID_UNIQUE_ITIN({
+            itin: this.userData.itin
+          });
           if (this.isResponseSuccess(response)) {
-            if (response.data.code === 'itin') {
-              this.disabled.saveITIN = true
-              this.$refs.itin.$el.classList.remove('is-valid')
-              this.$refs.itin.$el.classList.add('is-invalid')
-              this.showWarningSwal('Alert!', 'The itin number already exists: ' + response.data.message)
+            if (response.data.code === "itin") {
+              this.disabled.saveITIN = true;
+              this.$refs.itin.$el.classList.remove("is-valid");
+              this.$refs.itin.$el.classList.add("is-invalid");
+              this.showWarningSwal(
+                "Alert!",
+                "The itin number already exists: " + response.data.message
+              );
             }
           }
-          this.isPreloading(false)
+          this.isPreloading(false);
         }
       } catch (error) {
-        console.log('spmething went wrong onValidSsn: ', error)
-        this.isPreloading(false)
-        this.showErrorSwal()
+        console.log("spmething went wrong onValidSsn: ", error);
+        this.isPreloading(false);
+        this.showErrorSwal();
       }
     },
-    async onValidCpn () {
+    async onValidCpn() {
       try {
-        this.$refs.cpn.$el.classList.remove('is-invalid')
-        this.disabled.saveITIN = false
+        this.$refs.cpn.$el.classList.remove("is-invalid");
+        this.disabled.saveITIN = false;
         if (this.userData.other.length === 11) {
-          this.isPreloading(true)
-          const response = await this.A_VALID_UNIQUE_CPN({ other: this.userData.other })
+          this.isPreloading(true);
+          const response = await this.A_VALID_UNIQUE_CPN({
+            other: this.userData.other
+          });
           if (this.isResponseSuccess(response)) {
-            if (response.data.code === 'cpn') {
-              this.disabled.saveITIN = true
-              this.$refs.cpn.$el.classList.remove('is-valid')
-              this.$refs.cpn.$el.classList.add('is-invalid')
-              this.showWarningSwal('Alert!', 'The cpn number already exists: ' + response.data.message)
+            if (response.data.code === "cpn") {
+              this.disabled.saveITIN = true;
+              this.$refs.cpn.$el.classList.remove("is-valid");
+              this.$refs.cpn.$el.classList.add("is-invalid");
+              this.showWarningSwal(
+                "Alert!",
+                "The cpn number already exists: " + response.data.message
+              );
             }
           }
-          this.isPreloading(false)
+          this.isPreloading(false);
         }
       } catch (error) {
-        console.log('spmething went wrong onValidSsn: ', error)
-        this.isPreloading(false)
-        this.showErrorSwal()
+        console.log("spmething went wrong onValidSsn: ", error);
+        this.isPreloading(false);
+        this.showErrorSwal();
       }
     },
-    async onSubmitFields (key, typee, subkey) {
+    async onSubmitFields(key, typee, subkey) {
       this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          this.isPreloading(true)
-          const response = await this.A_UPDATE_FIELDS_LEAD({
-            ...this.blankUserFields,
-            typee,
-            [key]: (this.userData[subkey]) ? this.userData[subkey] : this.userData[key]
-          })
-          if (this.userData[subkey]) { key = subkey }
-          this.isPreloading(false)
-          if (this.isResponseSuccess(response)) {
-            this.blankUserData[key] = this.userData[key]
-            this.toggleElement(key)
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          } else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
-        }
-      }).catch(error => {
-        console.log('spmething went wrong onSubmitFields: ', error)
-        this.isPreloading(false)
-        this.showErrorSwal()
-      })
+        .then(async result => {
+          if (result.value) {
+            this.isPreloading(true);
+            const response = await this.A_UPDATE_FIELDS_LEAD({
+              ...this.blankUserFields,
+              typee,
+              [key]: this.userData[subkey]
+                ? this.userData[subkey]
+                : this.userData[key]
+            });
+            if (this.userData[subkey]) {
+              key = subkey;
+            }
+            this.isPreloading(false);
+            if (this.isResponseSuccess(response)) {
+              this.blankUserData[key] = this.userData[key];
+              this.toggleElement(key);
+              this.showToast(
+                "success",
+                "top-right",
+                "Success!",
+                "CheckIcon",
+                "Successful operation"
+              );
+            } else
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                "Something went wrong." + response.message
+              );
+          }
+        })
+        .catch(error => {
+          console.log("spmething went wrong onSubmitFields: ", error);
+          this.isPreloading(false);
+          this.showErrorSwal();
+        });
     },
-    async onSubmitAddress () {
+    async onSubmitAddress() {
       this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          this.isPreloading(true)
-          const response = await this.A_UPDATE_FIELDS_LEAD({
-            ...this.blankUserFields,
-            typee: 1,
-            street: this.userData.address.street,
-            city: this.userData.address.city,
-            state: this.userData.address.state,
-            zipcode: this.userData.address.zipcode,
-            country: this.userData.address.country,
-          })
-          this.isPreloading(false)
-          if (this.isResponseSuccess(response)) {
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          } else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
-        }
-      }).catch(error => {
-        console.log('spmething went wrong onSubmitAddress: ', error)
-        this.isPreloading(false)
-        this.showErrorSwal()
-      })
+        .then(async result => {
+          if (result.value) {
+            this.isPreloading(true);
+            const response = await this.A_UPDATE_FIELDS_LEAD({
+              ...this.blankUserFields,
+              typee: 1,
+              street: this.userData.address.street,
+              city: this.userData.address.city,
+              state: this.userData.address.state,
+              zipcode: this.userData.address.zipcode,
+              country: this.userData.address.country
+            });
+            this.isPreloading(false);
+            if (this.isResponseSuccess(response)) {
+              this.showToast(
+                "success",
+                "top-right",
+                "Success!",
+                "CheckIcon",
+                "Successful operation"
+              );
+            } else
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                "Something went wrong." + response.message
+              );
+          }
+        })
+        .catch(error => {
+          console.log("spmething went wrong onSubmitAddress: ", error);
+          this.isPreloading(false);
+          this.showErrorSwal();
+        });
     },
-    async onSubmitAnotherAddress () {
+    async onSubmitAnotherAddress() {
       this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          this.isPreloading(true)
-          const response = await this.A_UPDATE_FIELDS_LEAD({
-            ...this.blankUserFields,
-            typee: 8,
-            other_street: this.userData.otherAddress.street,
-            other_city: this.userData.otherAddress.city,
-            other_state: this.userData.otherAddress.state,
-            other_zipcode: this.userData.otherAddress.zipcode,
-            other_country: this.userData.otherAddress.country,
-          })
-          this.isPreloading(false)
-          if (this.isResponseSuccess(response)) {
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          } else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
-        }
-      }).catch(error => {
-        console.log('spmething went wrong onSubmitAnotherAddress: ', error)
-        this.isPreloading(false)
-        this.showErrorSwal()
-      })
+        .then(async result => {
+          if (result.value) {
+            this.isPreloading(true);
+            const response = await this.A_UPDATE_FIELDS_LEAD({
+              ...this.blankUserFields,
+              typee: 8,
+              other_street: this.userData.otherAddress.street,
+              other_city: this.userData.otherAddress.city,
+              other_state: this.userData.otherAddress.state,
+              other_zipcode: this.userData.otherAddress.zipcode,
+              other_country: this.userData.otherAddress.country
+            });
+            this.isPreloading(false);
+            if (this.isResponseSuccess(response)) {
+              this.showToast(
+                "success",
+                "top-right",
+                "Success!",
+                "CheckIcon",
+                "Successful operation"
+              );
+            } else
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                "Something went wrong." + response.message
+              );
+          }
+        })
+        .catch(error => {
+          console.log("spmething went wrong onSubmitAnotherAddress: ", error);
+          this.isPreloading(false);
+          this.showErrorSwal();
+        });
     },
-    onModalTrackingChangeOpen (type, name) {
-      this.$emit('onModalTrackingChangeOpen', { type, name, mapFunction: (el) => ({
+    onModalTrackingChangeOpen(type, name) {
+      this.$emit("onModalTrackingChangeOpen", {
+        type,
+        name,
+        mapFunction: el => ({
           ...el,
           main_row: el.fields,
           main_row_hide: el.fields_secret,
-          seeHideCell: false,
+          seeHideCell: false
         })
-      })
-    },
+      });
+    }
   },
-  mounted () {
+  mounted() {
     if (this.userData.id)
-      this.hideWithOtherAddress = this.userData.otherAddress.street !== null
+      this.hideWithOtherAddress = this.userData.otherAddress.street !== null;
   },
   watch: {
-    hideWithOtherAddress (current, old) {
-      if (current)
-        this.userData.another_address = 1
-      else
-        this.userData.another_address = 0
+    hideWithOtherAddress(current, old) {
+      if (current) this.userData.another_address = 1;
+      else this.userData.another_address = 0;
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
+@import "@core/scss/vue/libs/vue-select.scss";
 
 #add-new-user-sidebar {
   .vs__dropdown-menu {

@@ -1,5 +1,5 @@
 export default {
-  title: 'Dashboard',
-  icon: 'PieChartIcon',
-  route: 'dashboard-crm',
-}
+  title: "Dashboard",
+  icon: "GitBranchIcon",
+  route: "dashboard-crm",
+};

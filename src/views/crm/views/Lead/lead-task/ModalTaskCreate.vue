@@ -288,18 +288,10 @@ export default {
     },
     async getSellers() {
       try {
-        this.isPreloading(true)
-        const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
-        if (this.isResponseSuccess(response)) {
-          this.sellers = response;
-          this.task.seller = this.authUser.user_id;
-        }
-        this.isPreloading(false)
-      } catch (error) {
-        console.log("Something went wrong getHourSystem", error)
-        this.showToast("danger", "top-right", "Oop!", "AlertOctagonIcon", this.getInternalErrors(error))
-        this.isPreloading(false)
-      }
+        const response = await this.A_GET_USERS_BY_MODULE(this.moduleId);
+        this.sellers = response;
+        this.task.seller = this.authUser.user_id;
+      } catch (error) {}
     },
     onChangeSms() {
       this.task.sms = "";

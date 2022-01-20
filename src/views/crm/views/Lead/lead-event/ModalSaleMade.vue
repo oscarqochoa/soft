@@ -1,25 +1,15 @@
 <template>
   <div>
-    <validation-observer
-      #default="{ handleSubmit }"
-      ref="refFormObserver"
-    >
+    <validation-observer #default="{ handleSubmit }" ref="refFormObserver">
       <!-- Form -->
-      <b-form
-        class="pt-2"
-        @submit.prevent="handleSubmit(onSubmit)"
-        @reset.prevent="resetForm"
-      >
+      <b-form class="pt-2" @submit.prevent="handleSubmit(onSubmit)" @reset.prevent="resetForm">
         <b-row>
-          <b-col cols="12">
-            <p class="text-center">was the sale made?</p>
+          <b-col cols="12" class="text-center">
+            <b-img-lazy class="mb-1" src="/assets/images/icons/sale.png"></b-img-lazy>
+            <p class="font-weight-bolder text-primary">Was the sale made?</p>
           </b-col>
           <b-col cols="12">
-            <validation-provider
-              #default="validationContext"
-              name="Program"
-              rules="required"
-            >
+            <validation-provider #default="validationContext" name="Program" rules="required">
               <b-form-group
                 label="Program"
                 label-for="program"
@@ -34,9 +24,9 @@
                   :reduce="val => val.id"
                   placeholder="Select Program"
                 />
-                <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                  {{ validationContext.errors[0] }}
-                </b-form-invalid-feedback>
+                <b-form-invalid-feedback
+                  :state="getValidationState(validationContext)"
+                >{{ validationContext.errors[0] }}</b-form-invalid-feedback>
               </b-form-group>
             </validation-provider>
           </b-col>
@@ -83,16 +73,15 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 
-import { mapActions, mapGetters } from 'vuex'
-
-import formValidation from '@core/comp-functions/forms/form-validation'
-import Ripple from 'vue-ripple-directive'
-import vSelect from 'vue-select'
+import formValidation from "@core/comp-functions/forms/form-validation";
+import Ripple from "vue-ripple-directive";
+import vSelect from "vue-select";
 
 export default {
   components: {
-    vSelect,
+    vSelect
   },
   props: {
     modul: {
@@ -106,65 +95,75 @@ export default {
     event: {
       type: Object,
       required: true
-    },
+    }
   },
   setup() {
-    const {
-      refFormObserver,
-      getValidationState,
-    } = formValidation(() => {})
+    const { refFormObserver, getValidationState } = formValidation(() => {});
 
     return {
       refFormObserver,
       getValidationState
-    }
+    };
   },
-  data () {
+  data() {
     return {
       isLoading: false,
       data: {
         program: null,
         done: null
       }
-    }
+    };
   },
-  mounted () {},
-  created () {},
+  mounted() {},
+  created() {},
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token',
-      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
-    }),
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      G_PROGRAMS: "CrmGlobalStore/G_PROGRAMS"
+    })
   },
   methods: {
     ...mapActions({
-      A_ATTEND_EVENT: 'CrmEventStore/A_ATTEND_EVENT'
+      A_ATTEND_EVENT: "CrmEventStore/A_ATTEND_EVENT"
     }),
-    onSubmit () {
-      this.isLoading = true
-      this.showSwalGeneric('Attending appointment?', 'You won\'t be able to revert this!', 'warning')
-      .then(async (result) => {
-        if (result.value) {
-          const response = await this.A_ATTEND_EVENT({
+    onSubmit() {
+      this.isLoading = true;
+      this.showSwalGeneric(
+        "Attending appointment?",
+        "You won't be able to revert this!",
+        "warning"
+      )
+        .then(async result => {
+          if (result.value) {
+            const response = await this.A_ATTEND_EVENT({
               id: this.event.id,
               ...this.data,
               module: this.modul
-            })
-          if (this.isResponseSuccess(response)) {
-            /* *INTEGRATE* resources\js\components\modal\ModaEventEdit.vue - method: doneAttend */
-            this.$router.go(0)
+            });
+            if (this.isResponseSuccess(response)) {
+              /* *INTEGRATE* resources\js\components\modal\ModaEventEdit.vue - method: doneAttend */
+              this.$router.push({
+                path: "/crm/sales-made/#done=" + this.data.done
+              });
+            }
           }
-        }
-        this.isLoading = false
-      }).catch(error => {
-        console.log('Something went wrong onSubmit', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-      })
+          this.isLoading = false;
+        })
+        .catch(error => {
+          console.log("Something went wrong onSubmit", error);
+          this.showToast(
+            "danger",
+            "top-right",
+            "Oop!",
+            "AlertOctagonIcon",
+            this.getInternalErrors(error)
+          );
+        });
     }
   },
   directives: {
-    Ripple,
-  },
-}
+    Ripple
+  }
+};
 </script>

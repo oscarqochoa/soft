@@ -5,6 +5,7 @@
         to="/crm/sales-made/"
         exact
         exact-active-class="active"
+        link-classes="border-secondary hover-primary"
       >
         New Clients
       </b-nav-item>
@@ -13,6 +14,7 @@
         to="/crm/sales-made/programs"
         exact
         exact-active-class="active"
+        link-classes="border-secondary hover-primary"
       >
         Add/Change Service
       </b-nav-item>
@@ -21,6 +23,7 @@
         to="/crm/sales-made/annul"
         exact
         exact-active-class="active"
+        link-classes="border-secondary hover-primary"
       >
         Annulled
       </b-nav-item>

@@ -11,13 +11,6 @@
       @hidden="closeModal"
       title-tag="h3"
     >
-      <!-- <b-container>
-        <b-row class="mt-2">
-          <b-table class="font-small-2" :fields="fields" :items="table" small>
-            <template> </template>
-          </b-table>
-        </b-row>
-      </b-container> -->
       <div class="table-responsive">
         <b-table
           :api-url="'/inventory/get-tracking-equipment'"

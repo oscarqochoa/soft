@@ -2,10 +2,24 @@
   <div>
     <b-card title="CALENDAR">
       <b-nav pills>
-        <b-nav-item :to="{ name: 'crm-calendar-appointment' }" exact exact-active-class="active">APPOINTMENT</b-nav-item>
-        <b-nav-item :to="{ name: 'crm-calendar-task' }" exact exact-active-class="active">TASK</b-nav-item>
+        <b-nav-item
+          :to="{ name: 'crm-calendar-appointment' }"
+          exact
+          exact-active-class="active"
+          link-classes="border-secondary hover-primary"
+        >
+          APPOINTMENT
+        </b-nav-item>
+        <b-nav-item
+          :to="{ name: 'crm-calendar-task' }"
+          exact
+          exact-active-class="active"
+          link-classes="border-secondary hover-primary"
+        >
+          TASK
+        </b-nav-item>
       </b-nav>
-      <router-view/>
+      <router-view />
     </b-card>
   </div>
 </template>
@@ -20,7 +34,7 @@ export default {
       currentUser: 'auth/currentUser',
       token: 'auth/token',
     }),
-    ...mapState({})
+    ...mapState({}),
   },
   data() {
     return {
@@ -32,8 +46,8 @@ export default {
   created() {},
   methods: {
     ...mapActions({}),
-  }
-};
+  },
+}
 </script>
 
 <style lang="scss" scoped>

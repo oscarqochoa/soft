@@ -11,7 +11,7 @@
           class="text-center mb-5 center-fix"
         >
           <router-link
-            v-if="item.module_route == 'crm' || item.module_route == 'socialnetwork'"
+            v-if="enviroment === 'deploy' ? item.module_route == 'crm' : (item.module_route == 'crm' || item.module_route == 'socialnetwork')"
             :to="{ path: item.module_route }"
             class="card-logo"
           >
@@ -26,7 +26,7 @@
                   ? ''
                   : 'gray-home'
               "
-            />
+            >
             <p
               class="font-name-home mt-2"
               :class="[skin == 'dark' ? 'text-light':'text-dark']"
@@ -48,8 +48,10 @@
                   ? ''
                   : 'gray-home'
               "
-            />
-            <p class="font-name-home mt-2">{{ item.module_name }}</p>
+            >
+            <p class="font-name-home mt-2">
+              {{ item.module_name }}
+            </p>
           </div>
         </b-col>
       </b-row>
@@ -62,41 +64,43 @@ export default {
   data() {
     return {
       menuHidden: this.$store.state.appConfig.layout.menu.hidden,
-      navbarConfig: this.$store.state.appConfig.layout.navbar.type
-    };
+      navbarConfig: this.$store.state.appConfig.layout.navbar.type,
+      enviroment: process.env.VUE_APP_ENVIROMENT,
+    }
   },
   computed: {
     userModules() {
-      return this.$store.getters["auth/currentUser"].arrRoles;
+      if (Array.isArray(this.currentUser.arrRoles)) return this.currentUser.arrRoles
+      return JSON.parse(this.currentUser.arrRoles)
     },
     currentUser() {
-      return this.$store.getters["auth/currentUser"];
+      return this.$store.getters['auth/currentUser']
     },
     skin() {
-      return this.$store.getters["appConfig/skin"];
-    }
+      return this.$store.getters['appConfig/skin']
+    },
+  },
+  mounted() {},
+  created() {
+    this.$store.commit('appConfig/UPDATE_NAV_MENU_HIDDEN', true)
+    this.$store.commit('appConfig/UPDATE_NAVBAR_CONFIG', { type: 'floating' })
+  },
+  destroyed() {
+    this.$store.commit('appConfig/UPDATE_NAVBAR_CONFIG', {
+      type: this.navbarConfig,
+    })
+    this.$store.commit('appConfig/UPDATE_NAV_MENU_HIDDEN', this.menuHidden)
+    this.$store.commit('appConfig/UPDATE_LAYOUT_TYPE', 'vertical')
   },
   methods: {
     redirectToOldSoft(route) {
       window.open(
         `${process.env.VUE_APP_ORIGINAL_SOFT}api/v1/auth/autologin?id=${this.currentUser.user_id}&route=${route}`,
-        "_blank"
-      );
-    }
+        '_blank',
+      )
+    },
   },
-  mounted() {},
-  created() {
-    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", true);
-    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", { type: "floating" });
-  },
-  destroyed() {
-    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", {
-      type: this.navbarConfig
-    });
-    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", this.menuHidden);
-    this.$store.commit("appConfig/UPDATE_LAYOUT_TYPE", "vertical");
-  }
-};
+}
 </script>
 
 <style scoped>

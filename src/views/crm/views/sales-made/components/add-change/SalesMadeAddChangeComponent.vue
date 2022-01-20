@@ -12,6 +12,19 @@
       @reload="$refs['new-client-done-table'].refresh()"
       @sendMultipleSms="modalSmssOpen"
     >
+      <template #buttons>
+        <b-button
+          variant="success"
+          class="ml-1"
+          :disabled="!selected.length"
+          @click="modalSmssOpen"
+        >
+          <feather-icon
+            icon="MessageCircleIcon"
+            class="mr-50"
+          />Send SMS
+        </b-button>
+      </template>
       <b-table
         id="new-client-done-table"
         slot="table"
@@ -500,14 +513,14 @@
       v-if="modal.initial_payment"
       :modal="modal"
       :initial_payment="modalData.initial_payment"
-      @click="modal.initial_payment = false; $refs['new-client-done-table'].refresh()"
-      @close="modal.initial_payment = false; $refs['new-client-done-table'].refresh()"
+      @close="hideInitialPaymentModal"
     />
     <files-modal
       v-if="modal.files"
       :modal="modal"
       :files="modalData.files"
       :mode="2"
+      @close="modal.files = false"
     />
     <revission-modal
       v-if="modal.revission"
@@ -566,6 +579,7 @@ import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue
 import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms.vue'
 import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasCredit.vue'
 import ModalNotesSpecialist from '@/views/commons/components/first-notes/ModalNotesSpecialist.vue'
+import ModalNotesAll from '@/views/commons/components/first-notes/ModalNotesAll.vue'
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -605,6 +619,7 @@ export default {
     ModalNotesTax,
     ModalNotesCredit,
     ModalNotesSpecialist,
+    ModalNotesAll,
   },
   data() {
     return {
@@ -730,15 +745,13 @@ export default {
   },
   computed: {
     ...mapState({
-      sellers: state => state['crm-store'].sellersCrm,
       captured: state => state['crm-store'].capturedCrm,
       // TODO HACERLO GLOBAL
       programs: state => state['crm-store'].programs,
-      sources: state => state['crm-store'].sources,
-      sts: state => state['crm-store'].states,
       stip: state => state['crm-store'].statusip,
       status: state => state['crm-store'].statusAddChange,
       statusFilter: state => state['crm-store'].statusFilter,
+      typeOfSale: state => state['crm-store'].typeOfSale,
     }),
     ...mapGetters({
       currentUser: 'auth/currentUser',
@@ -751,28 +764,56 @@ export default {
       G_USER_SESSION: 'auth/userSession',
       G_ROLE_ID: 'auth/roleId',
     }),
+    originProgram() {
+      return this.filter[2].model
+    },
+  },
+  watch: {
+    originProgram: {
+      async handler(newVal) {
+        this.filter[3].model = ''
+        this.filter[4].model = ''
+        if (!newVal) {
+          this.filter[3].visible = false
+          this.filter[4].visible = false
+          return
+        }
+        await this.$store.dispatch('crm-store/getCaptured', {
+          module: this.convertProgramToModule(newVal),
+          body: {
+            roles: '[]',
+            type: '0',
+          },
+        })
+        this.filter[3].visible = true
+        this.filter[4].visible = true
+        this.filter[3].options = this.captured
+        this.filter[4].options = this.captured
+      },
+      deep: true,
+    },
   },
   async created() {
     try {
       await Promise.all([
-        this.$store.dispatch('crm-store/getSellers'),
-        this.$store.dispatch('crm-store/getCaptured'),
         this.$store.dispatch('crm-store/getPrograms'),
-        this.$store.dispatch('crm-store/getSources'),
-        this.$store.dispatch('crm-store/getStates'),
       ])
-      this.filter[2].options = this.captured
-      this.filter[3].options = this.sellers
-      this.filter[4].options = this.sources
-      this.filter[5].options = this.statusFilter
+      this.filter[2].options = this.programs
       this.filter[6].options = this.programs
-      this.filter[7].options = this.stip
-      this.filter[8].options = this.sts
+      this.filter[5].options = this.statusFilter
+      this.filter[7].options = this.typeOfSale
+      this.filter[8].options = this.stip
     } catch (error) {
       console.error(error)
     }
   },
   methods: {
+    hideInitialPaymentModal(val) {
+      this.modal.initial_payment = false
+      if (val) {
+        this.$refs['new-client-done-table'].refresh()
+      }
+    },
     modalSmsOpen(item) {
       this.modalData.sendSms.leads_sms = []
       this.modalData.sendSms.typesms = 1
@@ -815,20 +856,20 @@ export default {
           else sortDirection = 'asc'
         }
         const { data } = await amgApi.post(`/saleprogram?page=${this.paginate.currentPage}`, {
-          captured: null,
-          from: null,
+          captured: this.filter[3].model,
+          from: this.filter[0].model,
           modul: 0,
           order: 'desc',
           orderby: 11,
-          program: null,
-          rolsession: 1,
+          program: this.filter[6].model,
+          rolsession: this.currentUser.user_id,
           salemade: 0,
-          seller: null,
-          status: null,
-          statusip: null,
+          seller: this.filter[4].model,
+          status: this.filter[5].model,
+          statusip: this.filter[8].model,
           text: this.filterPrincipal.model,
-          to: null,
-          type: '',
+          to: this.filter[1].model,
+          type: this.filter[7].model,
           perPage: this.paginate.perPage,
         })
         this.startPage = data.from
@@ -922,7 +963,7 @@ export default {
           this.modalData.notes.programSelected = 'ModalNotesParagon' // ready
           break
         default:
-          this.modalData.notes.programSelected = 'ModalNotesOld' // next next
+          this.modalData.notes.programSelected = 'ModalNotesAll' // next next
           break
       }
 
@@ -985,6 +1026,7 @@ export default {
     },
     async openInitialPaymentModal(data) {
       try {
+        this.addPreloader()
         this.modalData.initial_payment.programid = data.program_id
         this.modalData.initial_payment.sessionId = this.currentUser.user_id
         this.modalData.initial_payment.cfeestatus = data.contract_fee_status
