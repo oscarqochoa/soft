@@ -18,6 +18,7 @@
           <!-- Form -->
           <div class="p-2">
             <basic-information-lead
+              ref="refBasicInformationLead"
               :user-data="lead"
               :blank-user-fields="blankUserFields"
               @onModalTrackingChangeOpen="onModalTrackingChangeOpen"
@@ -277,6 +278,7 @@ export default {
               route = "/specialists/leads";
               break;
           }
+          this.lead.programs = this.$refs.refBasicInformationLead.returnProgramlist(); // return programs because doesnt work good with v-select in the sidebar
           const body = {
             ...this.lead,
             datecreator: this.$moment(this.lead.created_at).format(

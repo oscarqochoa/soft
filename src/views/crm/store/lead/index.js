@@ -19,7 +19,7 @@ const state = {
   S_SOURCE_LEADS: [],
   S_FILES_LEADS: [],
   S_TRAKING_STATUS_LEADS: [],
-  S_DOCUMENT_LEAD: new Object,
+  S_DOCUMENT_LEAD: new Object(),
   S_USER_APPOINTEMENTS: [],
   S_LEAD: new Object(),
   S_LEAD_EDIT: new Object(),
@@ -268,20 +268,20 @@ const actions = {
       throw error;
     }
   },
-  async A_GET_LEAD_DOCUMENT ({ commit }, body) {
+  async A_GET_LEAD_DOCUMENT({ commit }, body) {
     try {
-      const response = await crmLead.getLeadDocument(body)
+      const response = await crmLead.getLeadDocument(body);
       /* console.log('A_GET_LEAD_DOCUMENT response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
-        commit('SET_DATA', {
-          destination: 'S_DOCUMENT_LEAD',
-          data: response.data[0]
-        })
+        commit("SET_DATA", {
+          destination: "S_DOCUMENT_LEAD",
+          data: response.data[0],
+        });
       }
-      return response
+      return response;
     } catch (error) {
-      console.log('ERROR_GET_LEAD_DOCUMENTS [ACTION]', error)
-      throw error
+      console.log("ERROR_GET_LEAD_DOCUMENTS [ACTION]", error);
+      throw error;
     }
   },
 
@@ -302,7 +302,7 @@ const actions = {
   async A_SET_LEADS({ commit }, body) {
     try {
       const response = await crmLead.postCreateLead(body);
-      /* console.log('A_SET_LEADS response', response) */
+      console.log("A_SET_LEADS response", response);
       if (mixins.methods.isResponseSuccess(response)) {
         body.id = response.data.id;
         commit("UNSHIFT_LEADS_DATA", {
