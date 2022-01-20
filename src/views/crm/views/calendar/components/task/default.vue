@@ -3,7 +3,10 @@
     class="app-calendar overflow-hidden border"
     fluid
   >
-    <b-row class="mt-1">
+    <b-row
+      v-if="!isModal"
+      class="mt-1"
+    >
       <b-col class="d-flex align-items-center justify-content-start">
         <div class="mr-1">
           <b-button
@@ -90,24 +93,23 @@
         </div>
       </b-col>
     </b-row>
-    <!-- modal EVENT EDIT -->
+    <!-- modal task view -->
     <b-modal
-      id="modal-event-edit"
+      :id="isModal ? 'modal-task-edit-modal' : 'modal-task-edit'"
+      title-class="h2 text-white"
       ok-only
-      modal-class="modal-warning"
-      class="zindex-4"
+      modal-class="modal-primary"
       centered
       size="lg"
-      title="EDIT"
+      title="Tasks"
       hide-footer
-      no-close-on-backdrop
     >
-      <modal-event-edit
+      <modal-task-edit
         :modul="modul"
-        :only-read="onlyRead"
+        :only-read="true"
         :lead="lead"
-        :event="event"
-        @updated="updatedEvent"
+        :task="task"
+        :is-disabled="true"
       />
     </b-modal>
   </b-container>
@@ -125,13 +127,12 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
-
-import ModalEventEdit from '@/views/crm/views/Lead/lead-event/ModalEventEdit.vue'
+import ModalTaskEdit from '@/views/crm/views/Lead/lead-task/ModalTaskEdit.vue'
 
 export default {
   components: {
+    ModalTaskEdit,
     FullCalendar,
-    ModalEventEdit,
     vSelect,
   },
   computed: {
@@ -160,6 +161,7 @@ export default {
   directives: { Ripple },
   data() {
     return {
+      task: {},
       authUser: {},
       calendarApi: null,
       calendarsColor: {
@@ -182,7 +184,7 @@ export default {
       },
       modul: 2,
       onlyRead: false,
-      lead: new Object(),
+      lead: {},
       yearact: this.$moment().format('YYYY'),
       monthact: this.$moment().format('MMM'),
       host: 0,
@@ -207,6 +209,7 @@ export default {
     ...mapActions({
       A_GET_EVENT: 'CrmEventStore/A_GET_EVENT',
       A_GET_CALENDARS_TASK: 'CrmCalendarStore/A_GET_CALENDARS_TASK',
+      A_GET_TASK: 'TaskStore/A_GET_TASK',
     }),
     refetchEvents() {
       this.calendarApi.refetchEvents()
@@ -223,7 +226,11 @@ export default {
         return [`bg-light-${colorName}`, 'fc-daygrid-block-event', 'fc-h-event']
       }
       this.calendarOptions.eventClick = ({ event: clickedEvent }) => {
-        this.openModalEditEventShow(clickedEvent._def.extendedProps.id)
+        console.log(clickedEvent._def.extendedProps, 'clickedEvent._def.extendedProps gaaa')
+        // eslint-disable-next-line no-underscore-dangle
+        this.lead = { lead_name: clickedEvent._def.extendedProps.lead_name }
+        // eslint-disable-next-line no-underscore-dangle
+        this.onModalEditTaskOpen(clickedEvent._def.extendedProps.id)
       }
     },
     async fetchEvents(info, successCallback) {
@@ -278,18 +285,33 @@ export default {
       }
       this.$bvModal.hide('modal-event-edit')
     },
-    async openModalEditEventShow(id) {
+    async onModalEditTaskOpen(id) {
       try {
-        const response = await this.A_GET_EVENT({ id })
-        this.resetData('event')
+        this.addPreloader()
+        const response = await this.A_GET_TASK({ id })
         if (this.isResponseSuccess(response)) {
-          this.event = response.data[0]
-          this.event.user_id = { label: this.event.seller_name, value: this.event.seller_id }
-          this.$bvModal.show('modal-event-edit')
-        } else this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
+          [this.task] = response.data
+          this.$bvModal.show(this.isModal ? 'modal-task-edit-modal' : 'modal-task-edit')
+        } else {
+          this.showToast(
+            'warning',
+            'top-right',
+            'Warning!',
+            'AlertTriangleIcon',
+            `Something went wrong. ${response.message}`,
+          )
+        }
+        this.removePreloader()
       } catch (error) {
-        console.log('Something went wrong getEvents', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        this.removePreloader()
+        console.log('Something went wrong onGetTask', error)
+        this.showToast(
+          'danger',
+          'top-right',
+          'Oop!',
+          'AlertOctagonIcon',
+          this.getInternalErrors(error),
+        )
       }
     },
   },
@@ -297,7 +319,13 @@ export default {
     this.calendarApi = this.$refs.refCalendar.getApi()
     console.log(this.calendarApi)
   },
-  props: {},
+  props: {
+    isModal: {
+      required: false,
+      default: false,
+      type: Boolean,
+    },
+  },
 }
 </script>
 

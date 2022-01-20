@@ -3,7 +3,10 @@
     class="app-calendar overflow-hidden border"
     fluid
   >
-    <b-row class="mt-1">
+    <b-row
+      v-if="!isModal"
+      class="mt-1"
+    >
       <b-col class="d-flex align-items-center justify-content-start">
         <div class="mr-1">
           <b-button
@@ -106,7 +109,7 @@
     </b-row>
     <!-- modal EVENT EDIT -->
     <b-modal
-      id="modal-event-edit"
+      :id="isModal ? 'modal-event-edit-modal' : 'modal-event-edit'"
       ok-only
       modal-class="modal-warning"
       class="zindex-4"
@@ -299,7 +302,7 @@ export default {
         if (this.isResponseSuccess(response)) {
           this.event = response.data[0]
           this.event.user_id = { label: this.event.seller_name, value: this.event.seller_id }
-          this.$bvModal.show('modal-event-edit')
+          this.$bvModal.show(this.isModal ? 'modal-event-edit-modal' : 'modal-event-edit')
         } else this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${response.message}`)
       } catch (error) {
         console.log('Something went wrong getEvents', error)
@@ -311,7 +314,13 @@ export default {
     this.calendarApi = this.$refs.refCalendar.getApi()
     console.log(this.calendarApi)
   },
-  props: {},
+  props: {
+    isModal: {
+      required: false,
+      default: false,
+      type: Boolean,
+    },
+  },
 }
 </script>
 
