@@ -96,49 +96,89 @@
             <span
               class="ncr-leads-status-successful"
               v-if="data.item.status_id == 1"
-              style="background-color: #38c172"
+              style="
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;
+                background-color: #38c172"
               >{{ data.item.status }}</span
             >
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 2"
-              style="background-color: #3490dc"
+              style="
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;
+                background-color: #3490dc"
               >{{ data.item.status }}</span
             >
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 3"
-              style="background-color: #e13232"
+              style="
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;
+                background-color: #e13232"
               >{{ data.item.status }}</span
             >
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 4"
-              style="background-color: #ffd46a"
+              style="
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;
+                background-color: #ffd46a"
               >{{ data.item.status }}</span
             >
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 5"
-              style="background-color: #ffd46a"
+              style="
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;
+                background-color: #ffd46a"
               >{{ data.item.status }}</span
             >
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 6"
-              style="background-color: #e13232"
+              style="
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;
+                background-color: #e13232"
               >{{ data.item.status }}</span
             >
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 7"
-              style="background-color: #eabc73"
+              style="
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;
+                background-color: #eabc73"
               >{{ data.item.status }}</span
             >
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 8"
-              style="background-color: #eabc73"
+              style="
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;
+                background-color: #eabc73"
               >{{ data.item.status }}</span
             >
             <span
@@ -157,7 +197,12 @@
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 10"
-              style="background-color: #e13232"
+              style="
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;
+                background-color: #e13232"
               >{{ data.item.status }}</span
             >
           </div>

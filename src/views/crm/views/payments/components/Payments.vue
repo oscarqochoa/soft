@@ -2,7 +2,7 @@
   <div>
     <filter-slot
       v-scrollbar
-      :filter="filter"
+      :filter="filterStatus"
       :filter-principal="filterPrincipal"
       :total-rows="totalRows"
       :paginate="paginate"
@@ -396,6 +396,73 @@ export default {
           cols: 6,
         },
       ],
+      filter2: [
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Type",
+          model: null,
+          options: [
+            { value: 0, label: "All" },
+            { value: 1, label: "Realtor" },
+            { value: 2, label: "Appointment" },
+            { value: 3, label: "Inital Payment" },
+            { value: 4, label: "Others" },
+          ],
+          reduce: "value",
+          selectText: "label",
+          cols: 12,
+        },
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Result",
+          model: null,
+          options: [
+            { value: 0, label: "All" },
+            { value: 1, label: "Approved" },
+            { value: 2, label: "Declined" },
+            { value: 3, label: "Underview" },
+          ],
+          reduce: "value",
+          selectText: "label",
+          cols: 12,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          },
+          cols: 6,
+        },
+      ],
       filterController: false,
       modalRefund: false,
       dataVoid: [],
@@ -416,6 +483,9 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    filterStatus(){
+      return this.currentUser.user_id == 1 || this.currentUser.user_id ==2? this.filter : this.filter2
+    }
   },
   methods: {
     voidAuthorize(idtransaction,idmerchant,amount,client_name,settlement_date,type){
@@ -447,7 +517,7 @@ export default {
         to: this.filter[4].model,
         result: this.filter[1].model,
         type: this.filter[0].model,
-        user: this.filter[2].model,
+        user:  this.currentUser.user_id == 1 || this.currentUser.user_id ==2? this.filter[2].model:this.currentUser.user_id
       });
 
       // Must return a promise that resolves to an array of items

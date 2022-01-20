@@ -246,10 +246,11 @@
 <script>
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-import ModalByUser from "../components/subcomponents/ModalByUser.vue";
+import ModalByUser from "./subcomponents/ModalByUser.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 import Button from "@/views/components/button/Button.vue";
-import ModalTaskToday from "./subcomponents/ModalTaskToday.vue";
+import ModalTaskToday from "./subcomponents/ModalTaskToday.vue"
+
 export default {
   components: {
     vSelect,
