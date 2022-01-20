@@ -205,12 +205,12 @@
           </b-button>
 
           <b-button
-            v-if="!onlyRead && event.seller_id === currentUser.id && event.type !== 'task'"
+            v-if="!onlyRead && event.seller_id === currentUser.user_id && event.type !== 'task'"
             v-ripple.400="'rgba(186, 191, 199, 0.15)'"
             type="button"
-            variant="outline-dark"
+            variant="primary"
             class="ml-2"
-            :disabled="isLoading || event.attend"
+            :disabled="isLoading || event.attend != 0"
             @click="onAttend"
           >
             <template>
@@ -227,13 +227,13 @@
     <!-- modal SALE MADE -->
     <b-modal
       id="modal-sale-made"
-      ok-only
+      title-class="h3 text-white"
       modal-class="modal-primary"
       centered
       size="sm"
-      title="Sale Made"
-      hide-footer
       no-close-on-backdrop
+      title="Sales Made"
+      hide-footer
     >
       <modal-sale-made :modul="modul" :only-read="onlyRead" :event="event" />
     </b-modal>
@@ -298,18 +298,14 @@ export default {
       configFlatPickr: {
         dateFormat: "m/d/Y",
         locale: "en",
-        minDate: `${
-          moment(this.event.real_time).format("MM/DD/YYYY") >
-          moment().format("MM/DD/YYYY")
-            ? moment().format("MM/DD/YYYY")
-            : moment(this.event.real_time).format("MM/DD/YYYY")
-        } `
+        minDate: `${moment(this.event.date).format("MM/DD/YYYY")}`
       }
     };
   },
   mounted() {},
   created() {
     this.sellers = this.G_OWNERS;
+    this.event.date = moment(this.event.date).format("MM/DD/YYYY");
     this.setDataBlank("event");
   },
   computed: {

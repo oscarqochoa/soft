@@ -278,9 +278,8 @@ export default {
       this.task.hour = `${hour}:${minute}`;
     },
     async getSellers() {
-      const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
       try {
-        const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
+        const response = await this.A_GET_USERS_BY_MODULE(this.moduleId);
         this.sellers = response;
         this.task.seller = this.authUser.user_id;
       } catch (error) {}
