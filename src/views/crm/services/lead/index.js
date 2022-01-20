@@ -251,9 +251,36 @@ class CrmLead {
     }
   }
 
+  async postTrackingStatusLeads (body) {
+    try {
+      const data = await amgApi.post('/ncr-leads-get-tracking-status', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+  
   async putLead (id, body) {
     try {
       const data = await amgApi.post(`/leads/update/${ id }`, body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getLeadDocument (body) {
+    try {
+      const data = await amgApi.post('/get-lead-document', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getLeadSendRequest (body) {
+    try {
+      const data = await amgApi.post('/ncr-leads-send-request', body)
       return data
     } catch (error) {
       throw error

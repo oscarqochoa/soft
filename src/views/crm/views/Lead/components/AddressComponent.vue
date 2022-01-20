@@ -24,7 +24,7 @@
               :class="{ 'border border-danger' : errors[0] }"
               :readonly="addressData.id && disabled.street || isDisabled"
             />
-            <template v-if="addressData.id">
+            <template v-if="addressData.id && isEditable">
               <b-input-group-append v-if="!disabled.street" class="border-right">
                 <b-button
                   variant="outline-primary"
@@ -190,6 +190,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    isEditable: {
+      type: Boolean,
+      required: false,
+      default: true
     },
   },
   data() {

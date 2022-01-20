@@ -18,6 +18,8 @@ const state = {
   S_STATUS_LEADS: [],
   S_SOURCE_LEADS: [],
   S_FILES_LEADS: [],
+  S_TRAKING_STATUS_LEADS: [],
+  S_DOCUMENT_LEAD: new Object,
   S_USER_APPOINTEMENTS: [],
   S_LEAD: new Object,
   S_LEAD_EDIT: new Object,
@@ -236,6 +238,22 @@ const actions = {
       return response
     } catch (error) {
       console.log('ERROR_GET_FILES_LEADS [ACTION]', error)
+      throw error
+    }
+  },
+  async A_GET_LEAD_DOCUMENT ({ commit }, body) {
+    try {
+      const response = await crmLead.getLeadDocument(body)
+      /* console.log('A_GET_LEAD_DOCUMENT response', response) */
+      if (mixins.methods.isResponseSuccess(response)) {
+        commit('SET_DATA', {
+          destination: 'S_DOCUMENT_LEAD',
+          data: response.data[0]
+        })
+      }
+      return response
+    } catch (error) {
+      console.log('ERROR_GET_LEAD_DOCUMENTS [ACTION]', error)
       throw error
     }
   },
@@ -478,6 +496,32 @@ const actions = {
       return response
     } catch (error) {
       console.log('ERROR_GET_ALL_TRAKING_FIELDS_LEAD [ACTION]', error)
+      throw error
+    }
+  },
+  async A_GET_TRAKING_STATUS_LEADS ({ commit }, body) {
+    try {
+      const response = await crmLead.postTrackingStatusLeads(body)
+      /* console.log('A_GET_TRAKING_STATUS_LEADS response', response) */
+      if (mixins.methods.isResponseSuccess(response)) {
+        commit('SET_DATA', {
+          destination: 'S_TRAKING_STATUS_LEADS',
+          data: response.data
+        })
+      }
+      return response
+    } catch (error) {
+      console.log('ERROR_GET_TRAKING_STATUS_LEADS [ACTION]', error)
+      throw error
+    }
+  },
+  async A_GET_LEAD_SEND_REQUEST ({ commit }, body) {
+    try {
+      const response = await crmLead.getLeadSendRequest(body)
+      /* console.log('A_GET_LEAD_SEND_REQUEST response', response) */
+      return response
+    } catch (error) {
+      console.log('ERROR_GET_LEAD_SEND_REQUEST [ACTION]', error)
       throw error
     }
   },

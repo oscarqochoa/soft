@@ -234,7 +234,6 @@ export default {
     this.task.date = moment().format("MM/DD/YYYY");
     await this.getHourSystem();
     await this.getSellers();
-    this.removePreloader();
   },
   directives: { Ripple },
   data() {
@@ -262,28 +261,45 @@ export default {
       A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE"
     }),
     async getHourSystem() {
-      const response = await this.A_GET_HOUR_SYSTEM(this.lead.state);
-      let hour = response.substr(0, 2);
-      let minute = response.substr(3, 4);
-      if (minute >= "00" && minute <= "14") {
-        minute = "15";
-      } else if (minute >= "16" && minute <= "29") {
-        minute = "30";
-      } else if (minute >= "31" && minute <= "44") {
-        minute = "45";
-      } else if (minute >= "46" && minute <= "59") {
-        minute = "00";
-        hour = hour == "24" ? "00" : +hour + 1;
+      try {
+        this.isPreloading(true)
+        const response = await this.A_GET_HOUR_SYSTEM(this.lead.state);
+        if (this.isResponseSuccess(response)) {
+          let hour = response.substr(0, 2);
+          let minute = response.substr(3, 4);
+          if (minute >= "00" && minute <= "14") {
+            minute = "15";
+          } else if (minute >= "16" && minute <= "29") {
+            minute = "30";
+          } else if (minute >= "31" && minute <= "44") {
+            minute = "45";
+          } else if (minute >= "46" && minute <= "59") {
+            minute = "00";
+            hour = hour == "24" ? "00" : +hour + 1;
+          }
+          this.task.hour = `${hour}:${minute}`;
+        }
+        this.isPreloading(false)
+      } catch (error) {
+        console.log("Something went wrong getHourSystem", error)
+        this.showToast("danger", "top-right", "Oop!", "AlertOctagonIcon", this.getInternalErrors(error))
+        this.isPreloading(false)
       }
-      this.task.hour = `${hour}:${minute}`;
     },
     async getSellers() {
-      const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
       try {
+        this.isPreloading(true)
         const response = await this.A_GET_USERS_BY_MODULE(this.modulId);
-        this.sellers = response;
-        this.task.seller = this.authUser.user_id;
-      } catch (error) {}
+        if (this.isResponseSuccess(response)) {
+          this.sellers = response;
+          this.task.seller = this.authUser.user_id;
+        }
+        this.isPreloading(false)
+      } catch (error) {
+        console.log("Something went wrong getHourSystem", error)
+        this.showToast("danger", "top-right", "Oop!", "AlertOctagonIcon", this.getInternalErrors(error))
+        this.isPreloading(false)
+      }
     },
     onChangeSms() {
       this.task.sms = "";
