@@ -1,8 +1,40 @@
 <template>
-  <div class="app-calendar overflow-hidden border">
-    <div class="row no-gutters">
+  <b-container
+    class="app-calendar overflow-hidden border"
+    fluid
+  >
+    <b-row class="mt-1">
+      <b-col class="d-flex align-items-center justify-content-start">
+        <div class="mr-1">
+          <b-button
+            variant="outline-info"
+            @click="showFilter = !showFilter"
+          >
+            Filter by Seller <amg-icon
+              icon="FilterIcon"
+              style="margin-left: 5px"
+            />
+          </b-button>
+        </div>
+        <div
+          v-if="showFilter"
+          style="width: 20%"
+        >
+          <v-select
+            v-model="host"
+            :options="sellers"
+            :reduce="val => val.id"
+            @input="refetchEvents"
+          />
+        </div>
+      </b-col>
+    </b-row>
+    <b-row class="no-gutters">
       <!-- Calendar -->
-      <div class="col position-relative">
+      <b-col
+        cols="12"
+        class="position-relative zindex-0"
+      >
         <div class="card shadow-none border-0 mb-0 rounded-0">
           <div class="card-body pb-0">
             <full-calendar
@@ -23,62 +55,61 @@
                     </div>
                   </div>
                 </div>
-                <div class="fc-event-content w-100 d-flex">
-                  <div
-                    v-if="slotProps.event.extendedProps.seller_image"
-                    style="width: 30px;height: 30px;background-position: center;background-repeat: no-repeat;background-size: contain;"
-                    :style="{ backgroundImage: `url(${baseUrl + slotProps.event.extendedProps.seller_image})` }"
-                  />
-                  <table class="mt-2 mt-xl-0 w-100">
-                    <tr>
-                      <th class="py-50">
+                <b-container class="fc-event-content w-100 d-flex flex-column align-items-start justify-content-center">
+                  <b-row class="text-center">
+                    {{ slotProps.event.extendedProps.seller_name }}
+                  </b-row>
+                  <b-row class="mt-2 mt-xl-0 w-100">
+                    <b-col class="py-50 px-50">
+                      <div class="text-left">
                         <amg-icon
                           icon="PhoneCallIcon"
                           class="mr-50"
                         />
                         <span class="font-weight-bold">{{ slotProps.event.extendedProps.lead_mobile }}</span>
-                      </th>
-                    </tr>
-                    <tr>
-                      <th class="py-50">
+                      </div>
+                    </b-col>
+                    <b-col class="py-50 px-50">
+                      <div class="text-left">
                         <amg-icon
                           icon="UserIcon"
                           class="mr-50"
                         />
                         <span class="font-weight-bold">{{ slotProps.event.extendedProps.lead_name }}</span>
-                      </th>
-                    </tr>
-                    <tr>
-                      <th class="py-50">
+                      </div>
+                    </b-col>
+                    <b-col class="py-50 px-50">
+                      <div class="text-left">
                         <amg-icon
                           icon="WatchIcon"
                           class="mr-50"
                         />
                         <span class="font-weight-bold">{{ slotProps.event.start | myHourTime }} - {{ slotProps.event.end | myHourTime }}</span>
-                      </th>
-                    </tr>
-                    <tr>
-                      <th class="py-50 text-danger">
+                      </div>
+                    </b-col>
+                    <b-col class="py-50 px-50">
+                      <div class="text-danger text-left">
                         <amg-icon
                           icon="WatchIcon"
                           class="mr-50"
                         />
                         <span class="font-weight-bold">{{ slotProps.event.extendedProps.real_time | myHourTime }}({{ slotProps.event.extendedProps.state }})</span>
-                      </th>
-                    </tr>
-                  </table>
-                </div>
+                      </div>
+                    </b-col>
+                  </b-row>
+                </b-container>
               </template>
             </full-calendar>
           </div>
         </div>
-      </div>
-    </div>
+      </b-col>
+    </b-row>
     <!-- modal EVENT EDIT -->
     <b-modal
       id="modal-event-edit"
       ok-only
       modal-class="modal-warning"
+      class="zindex-4"
       centered
       size="lg"
       title="EDIT"
@@ -93,13 +124,14 @@
         @updated="updatedEvent"
       />
     </b-modal>
-  </div>
+  </b-container>
 </template>
 
 <script>
 
 import { mapActions, mapGetters, mapState } from 'vuex'
 
+import vSelect from 'vue-select'
 import FullCalendar from '@fullcalendar/vue'
 import Ripple from 'vue-ripple-directive'
 // Full Calendar Plugins
@@ -114,6 +146,7 @@ export default {
   components: {
     FullCalendar,
     ModalEventEdit,
+    vSelect,
   },
   computed: {
     ...mapGetters({
@@ -122,19 +155,26 @@ export default {
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
+      sellers: state => state['crm-store'].sellersCrm,
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
     }),
   },
   created() {
+    this.$store.dispatch('crm-store/getSellers', {
+      module: 2,
+      body: {
+        roles: '[1,5,2]',
+        type: '1',
+      },
+    })
     this.authUser = this.currentUser
     this.setDataBlank('event')
     this.calendarConfig()
-    this.modul = this.authUser.modul_id
   },
   directives: { Ripple },
   data() {
     return {
-      authUser: new Object(),
+      authUser: {},
       calendarApi: null,
       calendarsColor: {
         TEL: 'primary',
@@ -143,6 +183,7 @@ export default {
         Family: 'warning',
         ETC: 'info',
       },
+      showFilter: false,
       event: {
         attend: null,
         date: '',
@@ -153,7 +194,7 @@ export default {
         title: '',
         to: '',
       },
-      modul: null,
+      modul: 2,
       onlyRead: false,
       lead: new Object(),
       yearact: this.$moment().format('YYYY'),
@@ -181,6 +222,9 @@ export default {
       A_GET_EVENT: 'CrmEventStore/A_GET_EVENT',
       A_GET_CALENDARS: 'CrmCalendarStore/A_GET_CALENDARS',
     }),
+    refetchEvents() {
+      this.calendarApi.refetchEvents()
+    },
     setDataBlank(key) {
       this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = { ...this[key] }
     },
@@ -206,7 +250,7 @@ export default {
         const response = await this.A_GET_CALENDARS({
           year: currentYear,
           month: currentMonth,
-          host: this.host,
+          host: this.host ? this.host : 0,
         })
 
         if (this.isResponseSuccess(response)) {
@@ -235,6 +279,7 @@ export default {
       }
     },
     async updatedEvent(body) {
+      console.log('body', body)
       const existingEvent = this.calendarApi.getEventById(body.id)
       existingEvent.setProp('title', body.title)
 
@@ -264,6 +309,7 @@ export default {
   },
   mounted() {
     this.calendarApi = this.$refs.refCalendar.getApi()
+    console.log(this.calendarApi)
   },
   props: {},
 }
@@ -271,4 +317,29 @@ export default {
 
 <style lang="scss">
 @import "@core/scss/vue/apps/calendar.scss";
+.fc-popover-body{
+  overflow: scroll;
+  height: 300px;
+  overflow-x: hidden;
+}
+.fc-scroller::-webkit-scrollbar{
+  width: 0;
+}
+.fc-popover-body::-webkit-scrollbar {
+  width: 5px;
+}
+/* Track */
+.fc-scroller::-webkit-scrollbar, .fc-popover-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.fc-scroller::-webkit-scrollbar, .fc-popover-body::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.fc-scroller::-webkit-scrollbar, .fc-popover-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 </style>
