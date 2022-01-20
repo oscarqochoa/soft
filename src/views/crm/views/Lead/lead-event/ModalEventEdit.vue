@@ -298,7 +298,11 @@ export default {
       configFlatPickr: {
         dateFormat: "m/d/Y",
         locale: "en",
-        minDate: `${moment(this.event.date).format("MM/DD/YYYY")}`
+        minDate:
+          moment(this.event.date).format("MM/DD/YYYY") >
+          moment().format("MM/DD/YYYY")
+            ? moment().format("MM/DD/YYYY")
+            : moment(this.event.date).format("MM/DD/YYYY")
       }
     };
   },

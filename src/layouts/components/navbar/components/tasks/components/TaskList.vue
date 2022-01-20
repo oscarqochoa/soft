@@ -52,7 +52,7 @@
           <template #cell(client_name)="data">
             <b-link
               class="text-important"
-              :to="`/${routeModule}/leads/${data.item.lead_id}`"
+              :to="data.item.account_id==null? `/${data.item.route}/leads/${data.item.lead_id}` : `/${data.item.route}/clients/account/'${data.item.account_id}`"
               target="_blank"
             >{{ data.item.client_name }}</b-link>
             <!-- 

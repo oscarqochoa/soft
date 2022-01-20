@@ -32,7 +32,7 @@
             <feather-icon
               icon
               :badge="counterTab.management > 99 ? '99+' : counterTab.management"
-              badge-classes="badge-danger badge-glow"
+              badge-classes="badge-important"
             />
           </span>
         </b-nav-item>
@@ -48,7 +48,7 @@
             <feather-icon
               icon
               :badge="counterTab.supervisor > 99 ? '99+' : counterTab.supervisor"
-              badge-classes="badge-danger badge-glow"
+              badge-classes="badge-important"
             />
           </span>
         </b-nav-item>
@@ -63,7 +63,7 @@
             <feather-icon
               icon
               :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
-              badge-classes="badge-danger badge-glow"
+              badge-classes="badge-important"
             />
           </span>
         </b-nav-item>

@@ -4,7 +4,7 @@
       <template #button-content>
         <feather-icon
           :badge="taskCounter"
-          badge-classes="bg-danger"
+          badge-classes="badge-important"
           class="text-body"
           icon="ClipboardIcon"
           size="19"
@@ -78,8 +78,8 @@
     <b-modal
       size="xmd"
       v-model="taskModal"
+      scrollable
       hide-footer
-      centered
       title="TASKS"
       title-class="h2 text-white"
     >

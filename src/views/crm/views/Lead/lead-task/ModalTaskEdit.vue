@@ -242,7 +242,11 @@ export default {
       configFlatPickr: {
         dateFormat: "m/d/Y",
         locale: "en",
-        minDate: `${moment(this.task.real_time).format("MM/DD/YYYY")} `
+        minDate:
+          moment(this.task.real_time).format("MM/DD/YYYY") >
+          moment().format("MM/DD/YYYY")
+            ? moment().format("MM/DD/YYYY")
+            : moment(this.task.real_time).format("MM/DD/YYYY")
       },
       sellers: [],
       seller: null
