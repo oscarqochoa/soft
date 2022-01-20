@@ -14,7 +14,7 @@
             TransUnion
           </p>
           <span
-            class="show-lead-score-cr btn-icon"
+            class="show-lead-score-cr"
             style="border: 2px solid #0aafdb;"
             :style="`color: ${ colorScoreTransunion(score.transunion) };`"
           >
@@ -46,7 +46,7 @@
             EQUIFAX
           </p>
           <span
-            class="show-lead-score-cr btn-icon"
+            class="show-lead-score-cr"
             style="border: 2px solid #f31414;"
             :style="`color: ${ colorScoreTransunion(score.equifax) };`"
           >
@@ -57,7 +57,7 @@
     </b-card-body>
     <b-tabs pills>
       <b-tab
-        active
+        :active="!isTabPendingActive"
         title-link-class="border-secondary hover-primary"
       >
         <template #title>
@@ -70,7 +70,10 @@
         />
 
       </b-tab>
-      <b-tab :active="isTabPendingActive" title-link-class="border-secondary hover-primary">
+      <b-tab
+        :active="isTabPendingActive"
+        title-link-class="border-secondary hover-primary"
+      >
         <template #title>
           <span>Pending</span>
           <div class="ml-50 number-circle">
@@ -129,14 +132,26 @@
       hide-footer
     >
       <template #modal-header="{ close }">
-        <h5 class="modal-title h2 text-white">Request CR</h5>
-        <span class="text-danger ml-2 my-auto" v-if="!requestCr.dob">
+        <h5 class="modal-title h2 text-white">
+          Request CR
+        </h5>
+        <span
+          v-if="!requestCr.dob"
+          class="text-danger ml-2 my-auto"
+        >
           <amg-icon
             icon="AlertCircleIcon"
           />
           <span class="ml-1 pt-1">Please fill date of birth to get Credit Report</span>
         </span>
-        <button type="button" aria-label="Close" class="close" @click="close">×</button>
+        <button
+          type="button"
+          aria-label="Close"
+          class="close"
+          @click="close"
+        >
+          ×
+        </button>
       </template>
       <modal-request-cr
         :modul="modul"
@@ -162,6 +177,7 @@ export default {
   components: {
     CardLeadCreditReportObtained,
     CardLeadCreditReportPending,
+    ModalRequestCr,
   },
   computed: {
     ...mapGetters({
@@ -172,7 +188,6 @@ export default {
   created() {
     this.countCreditReportPendings()
     if (this.lead.score && this.lead.score.length) {
-      this.lead.score = JSON.parse(this.lead.score)
       this.score.equifax = this.lead.score[0].equifax
       this.score.experian = this.lead.score[0].experian
       this.score.transunion = this.lead.score[0].transunion
@@ -210,6 +225,13 @@ export default {
         experian: '',
         transunion: '',
       },
+      isTabPendingActive: false,
+      requestCr: {
+        type_card: null,
+        send_cr: null,
+        documents: new Object(),
+        document: '',
+      },
     }
   },
   methods: {
@@ -241,11 +263,12 @@ export default {
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
       }
     },
-    async getDocumentLead () {
+    async getDocumentLead() {
       try {
         const response = await this.A_GET_LEAD_DOCUMENT({ lead_id: this.lead.id })
         if (this.isResponseSuccess(response)) {
           const documents = response.data[0]
+          // eslint-disable-next-line no-nested-ternary
           this.requestCr.document = documents?.ssn ? 1 : (documents?.itin ? 2 : (documents?.other ? 3 : null))
           this.requestCr.documents = response.data[0]
           this.requestCr.dob = response.data[0].dob
@@ -260,21 +283,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .show-lead-score-cr {
-    font-size: 25px;
-    font-weight: bold;
-    border-radius: 30px;
-    padding: 10px 7px;
-  }
-  .number-circle {
-    width: 1rem;
-    height: 1rem;
-    text-align: center;
-    border: 0.5px solid #fff;
-    border-radius: 50%;
-  }
-  .number-circle {
-    border: 0.5px solid #FF9F43;
-    font-size: 8pt;
-  }
+.show-lead-score-cr {
+  font-size: 25px;
+  font-weight: bold;
+  border-radius: 30px;
+  padding: 10px 7px;
+}
+.number-circle {
+  width: 1rem;
+  height: 1rem;
+  text-align: center;
+  border: 0.5px solid #fff;
+  border-radius: 50%;
+}
+.number-circle {
+  border: 0.5px solid #FF9F43;
+  font-size: 8pt;
+}
 </style>
