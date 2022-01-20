@@ -1,5 +1,5 @@
 export default {
   title: "Clients",
-  icon: "UsersAmgIcon",
+  icon: "UsersIcon",
   route: "crm-clients-list",
 };
