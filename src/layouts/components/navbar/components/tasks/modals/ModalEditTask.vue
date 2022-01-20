@@ -175,7 +175,10 @@ export default {
         const params = { id: this.infoTask.id };
         const response = await TaskService.editTaskCredit(params);
         this.task = response[0];
-        this.configFlatPickr.minDate = this.task.date;
+        this.configFlatPickr.minDate =
+          this.task.date > moment().format("MM/DD/YYYY")
+            ? moment().format("MM/DD/YYYY")
+            : this.task.date;
         this.modalUp = true;
         this.removePreloader();
       } catch (error) {
@@ -189,7 +192,6 @@ export default {
         };
         const response = await TaskService.getQuickTasks(params);
         this.quickTasks = response.data;
-        console.log(this.quickTasks);
       } catch (error) {
         this.showErrorSwal(error);
       }

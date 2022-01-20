@@ -14,6 +14,7 @@
         :lead="S_LEAD"
         @onEditLead="isAddUpdateUserSidebarActive = true"
         @reloadLead="getLead"
+        :key="S_KEY_UPDATE_DETAILS_LEAD"
       />
     </b-col>
     <b-col cols="12" lg="6">
@@ -145,7 +146,9 @@ export default {
     }),
     ...mapState({
       S_LEAD: state => state.CrmLeadStore.S_LEAD,
-      S_LEAD_EDIT: state => state.CrmLeadStore.S_LEAD_EDIT
+      S_LEAD_EDIT: state => state.CrmLeadStore.S_LEAD_EDIT,
+      S_KEY_UPDATE_DETAILS_LEAD: state =>
+        state.CrmLeadStore.S_KEY_UPDATE_DETAILS_LEAD
     }),
     onlyRead() {
       return this.modul === 18;

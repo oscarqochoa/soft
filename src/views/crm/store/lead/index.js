@@ -37,6 +37,7 @@ const state = {
     perPage: 10,
     currentPage: 1,
   },
+  S_KEY_UPDATE_DETAILS_LEAD: 0,
 };
 const getters = {
   G_STATE_LEADS() {
@@ -108,6 +109,10 @@ const mutations = {
     const statusLeadClient = { value: "Client", id: 7 };
     state.S_STATUS_LEADS.push(statusLeadClient);
     console.log(state.S_STATUS_LEADS, "statusLeadClient");
+  },
+  M_KEY_UPDATE_DETAILS_LEAD(state) {
+    state.S_KEY_UPDATE_DETAILS_LEAD++;
+    console.log(state.S_KEY_UPDATE_DETAILS_LEAD, "keyUpdateDetailsLead");
   },
 };
 const actions = {
