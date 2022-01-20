@@ -551,7 +551,7 @@ export default {
     allData() {
       
       this.$store.commit("app/SET_LOADING", true);
-      let { user_id } = this.currentUser;
+      let  user_id  = this.currentUser.user_id;
       if (
         this.currentUser.role_id == 1 ||
         this.currentUser.role_id == 2

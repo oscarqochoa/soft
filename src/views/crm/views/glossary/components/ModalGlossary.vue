@@ -82,7 +82,7 @@
           </b-col>
         </b-row>
       </ValidationObserver>
-      <b-row>
+      <b-row v-if="statusModal != '3'">
         <b-col md="12" style="text-align: center" class="mt-3">
           <b-button
             variant="success"
