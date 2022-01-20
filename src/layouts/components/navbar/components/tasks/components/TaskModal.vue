@@ -10,7 +10,7 @@
     </b-tab>
     <b-tab>
       <template #title>UPCOMING ({{taskCounter.upcoming}})</template>
-      <task-list :type="3"></task-list>
+      <task-list-upcoming :type="3"></task-list-upcoming>
     </b-tab>
     <b-tab>
       <template #title>COMPLETED ({{taskCounter.done}})</template>
@@ -21,10 +21,12 @@
 
 <script>
 import TaskList from "./TaskList.vue";
+import TaskListUpcoming from "./TaskListUpcoming.vue";
 import { mapState } from "vuex";
 export default {
   components: {
-    TaskList
+    TaskList,
+    TaskListUpcoming
   },
   computed: {
     ...mapState({

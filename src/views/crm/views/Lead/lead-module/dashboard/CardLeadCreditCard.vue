@@ -122,7 +122,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 
 import Ripple from 'vue-ripple-directive'
 
-import ModalCardShow from '../../lead-card/ModalCardShow.vue'
+import ModalCardShow from '@/views/crm/views/Lead/lead-card/ModalCardShow.vue'
 import ModalCardCreate from '../../lead-card/ModalCardCreate.vue'
 
 export default {

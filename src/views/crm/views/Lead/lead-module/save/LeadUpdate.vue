@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import {
   BSidebar,
   BForm,
@@ -231,9 +231,13 @@ export default {
   methods: {
     ...mapActions({
       A_SET_LEADS: "CrmLeadStore/A_SET_LEADS",
+      A_GET_LEAD: "CrmLeadStore/A_GET_LEAD",
       A_GET_ALL_TRAKING_FIELDS_LEAD:
         "CrmLeadStore/A_GET_ALL_TRAKING_FIELDS_LEAD",
       A_UPDATE_LEAD: "CrmLeadStore/A_UPDATE_LEAD"
+    }),
+    ...mapMutations({
+      M_KEY_UPDATE_DETAILS_LEAD: "CrmLeadStore/M_KEY_UPDATE_DETAILS_LEAD"
     }),
     getSelectValue(element) {
       if (typeof element === "string") return element ? element : "";
@@ -301,26 +305,25 @@ export default {
               name: el.label
             }))
           };
-          const response = await this.A_UPDATE_LEAD({ id: this.lead.id, body });
-          console.log("response", response);
-          if (this.isResponseSuccess(response)) {
-            this.isLoading = false;
-            this.$refs.refFormObserver.reset();
-            this.showToast(
-              "success",
-              "top-right",
-              "Success!",
-              "CheckIcon",
-              "Successful operation"
-            );
-          } else
-            this.showToast(
-              "warning",
-              "top-right",
-              "Warning!",
-              "AlertTriangleIcon",
-              `Something went wrong.`
-            );
+          this.addPreloader();
+          await Promise.all([
+            this.A_UPDATE_LEAD({ id: this.lead.id, body }),
+            this.A_GET_LEAD({ id: this.lead.id, body })
+          ]);
+          this.M_KEY_UPDATE_DETAILS_LEAD();
+          this.removePreloader();
+          /* const response = await this.A_UPDATE_LEAD({ id: this.lead.id, body });
+          await this.A_UPDATE_LEAD({ id: this.lead.id, body }); */
+
+          this.isLoading = false;
+          this.$refs.refFormObserver.reset();
+          this.showToast(
+            "success",
+            "top-right",
+            "Success!",
+            "CheckIcon",
+            "Successful operation"
+          );
         }
       } catch (error) {
         console.log("spmething went wrong onSubmit: ", error);

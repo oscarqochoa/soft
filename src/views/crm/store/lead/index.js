@@ -18,6 +18,8 @@ const state = {
   S_STATUS_LEADS: [],
   S_SOURCE_LEADS: [],
   S_FILES_LEADS: [],
+  S_TRAKING_STATUS_LEADS: [],
+  S_DOCUMENT_LEAD: new Object,
   S_USER_APPOINTEMENTS: [],
   S_LEAD: new Object(),
   S_LEAD_EDIT: new Object(),
@@ -37,6 +39,7 @@ const state = {
     perPage: 10,
     currentPage: 1,
   },
+  S_KEY_UPDATE_DETAILS_LEAD: 0,
 };
 const getters = {
   G_STATE_LEADS() {
@@ -108,6 +111,10 @@ const mutations = {
     const statusLeadClient = { value: "Client", id: 7 };
     state.S_STATUS_LEADS.push(statusLeadClient);
     console.log(state.S_STATUS_LEADS, "statusLeadClient");
+  },
+  M_KEY_UPDATE_DETAILS_LEAD(state) {
+    state.S_KEY_UPDATE_DETAILS_LEAD++;
+    console.log(state.S_KEY_UPDATE_DETAILS_LEAD, "keyUpdateDetailsLead");
   },
 };
 const actions = {
@@ -259,6 +266,22 @@ const actions = {
     } catch (error) {
       console.log("ERROR_GET_FILES_LEADS [ACTION]", error);
       throw error;
+    }
+  },
+  async A_GET_LEAD_DOCUMENT ({ commit }, body) {
+    try {
+      const response = await crmLead.getLeadDocument(body)
+      /* console.log('A_GET_LEAD_DOCUMENT response', response) */
+      if (mixins.methods.isResponseSuccess(response)) {
+        commit('SET_DATA', {
+          destination: 'S_DOCUMENT_LEAD',
+          data: response.data[0]
+        })
+      }
+      return response
+    } catch (error) {
+      console.log('ERROR_GET_LEAD_DOCUMENTS [ACTION]', error)
+      throw error
     }
   },
 

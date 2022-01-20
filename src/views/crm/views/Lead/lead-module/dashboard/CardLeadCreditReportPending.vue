@@ -31,11 +31,10 @@
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
               variant="flat-info"
               class="button-little-size rounded-circle"
-              @click="openTrackingStatus(data.item.score_id, data.item.lead_name)"
+              @click="onOpenTrackingStatus(data.item.score_id)"
             >
               <feather-icon
-                icon="FileTextIcon"
-                size="18"
+                icon="ListIcon"
               />
             </b-button>
           </div>
@@ -76,6 +75,19 @@
 
       </b-table>
     </b-card-body>
+
+    <!-- modal TRACKING STATUS -->
+    <b-modal
+      id="modal-tracking-status"
+      title-class="h3 text-white"
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      title="Tracking Status"
+      hide-footer
+    >
+      <modal-tracking-status :modul="modul" :lead="lead" :id-score="scoreId" />
+    </b-modal>
   </div>
 </template>
 
@@ -83,8 +95,14 @@
 
 import { mapActions, mapGetters, mapState } from 'vuex'
 
+import Ripple from 'vue-ripple-directive'
+
+import ModalTrackingStatus from '@/views/crm/views/Lead/lead-module/dashboard/modal/ModalTrackingStatus.vue'
+
 export default {
-  components: {},
+  components: {
+    ModalTrackingStatus,
+  },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
@@ -103,16 +121,19 @@ export default {
         { key: 'request_by' },
         { key: 'status' },
         { key: 'tracking' },
-        { key: 'actions' },
       ],
+      scoreId: null,
     }
   },
+  directives: { Ripple },
   methods: {
     ...mapActions({
       /* A_GET_TEMPLATES: 'CrmTemplateStore/A_GET_TEMPLATES' */
     }),
-    onOpenTrackingStatus(scoreId, leadName) {
-      /* *INTEGRATE* */
+    onOpenTrackingStatus (scoreId) {
+      this.scoreId = scoreId
+      console.log('this.scoreId', this.scoreId)
+      this.$bvModal.show('modal-tracking-status')
     },
     onChangeStatus(scoreId, statusId) {
       /* *INTEGRATE* */
@@ -123,6 +144,10 @@ export default {
     modul: {
       type: Number,
       required: true,
+    },
+    lead: {
+      type: Object,
+      required: true
     },
     isBusy: {
       type: Boolean,

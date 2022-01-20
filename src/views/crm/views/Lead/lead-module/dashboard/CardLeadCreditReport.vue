@@ -70,7 +70,7 @@
         />
 
       </b-tab>
-      <b-tab title-link-class="border-secondary hover-primary">
+      <b-tab :active="isTabPendingActive" title-link-class="border-secondary hover-primary">
         <template #title>
           <span>Pending</span>
           <div class="ml-50 number-circle">
@@ -103,7 +103,7 @@
           v-if="modul === 2"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           variant="primary"
-          @click="/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 246 */"
+          @click="$bvModal.show('modal-request-cr')"
         >
           <span>Request CR</span>
         </b-button>
@@ -117,6 +117,34 @@
         </b-button>
       </div>
     </template>
+
+    <!-- modal REQUEST CR CREATE -->
+    <b-modal
+      id="modal-request-cr"
+      ok-only
+      title-class="h2 text-white"
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      hide-footer
+    >
+      <template #modal-header="{ close }">
+        <h5 class="modal-title h2 text-white">Request CR</h5>
+        <span class="text-danger ml-2 my-auto" v-if="!requestCr.dob">
+          <amg-icon
+            icon="AlertCircleIcon"
+          />
+          <span class="ml-1 pt-1">Please fill date of birth to get Credit Report</span>
+        </span>
+        <button type="button" aria-label="Close" class="close" @click="close">×</button>
+      </template>
+      <modal-request-cr
+        :modul="modul"
+        :lead="lead"
+        :item="requestCr"
+        @onSubmit="isTabPendingActive = true"
+      />
+    </b-modal>
   </b-card>
 </template>
 
@@ -128,6 +156,7 @@ import Ripple from 'vue-ripple-directive'
 
 import CardLeadCreditReportObtained from './CardLeadCreditReportObtained.vue'
 import CardLeadCreditReportPending from './CardLeadCreditReportPending.vue'
+import ModalRequestCr from './modal/ModalRequestCr.vue'
 
 export default {
   components: {
@@ -148,6 +177,7 @@ export default {
       this.score.experian = this.lead.score[0].experian
       this.score.transunion = this.lead.score[0].transunion
     }
+    this.getDocumentLead()
   },
   directives: { Ripple },
   props: {
@@ -185,6 +215,7 @@ export default {
   methods: {
     ...mapActions({
       A_COUNT_CREDIT_REPORT_PENDINGS: 'CrmCreditReportStore/A_COUNT_CREDIT_REPORT_PENDINGS',
+      A_GET_LEAD_DOCUMENT: 'CrmLeadStore/A_GET_LEAD_DOCUMENT',
     }),
     setDataBlank(key) {
       this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = { ...this[key] }
@@ -208,6 +239,19 @@ export default {
       } catch (error) {
         console.log('Something went wrong countCreditReportPendings', error)
         this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      }
+    },
+    async getDocumentLead () {
+      try {
+        const response = await this.A_GET_LEAD_DOCUMENT({ lead_id: this.lead.id })
+        if (this.isResponseSuccess(response)) {
+          const documents = response.data[0]
+          this.requestCr.document = documents?.ssn ? 1 : (documents?.itin ? 2 : (documents?.other ? 3 : null))
+          this.requestCr.documents = response.data[0]
+          this.requestCr.dob = response.data[0].dob
+        }
+      } catch (error) {
+        console.log('Something went wrong getDocumentLead', error)
       }
     },
   },

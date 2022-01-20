@@ -151,6 +151,7 @@
             :address-data="card"
             :state-options="G_EEUU_STATES"
             :is-disabled="true"
+            :is-editable="false"
           />
         </b-col>
       </b-row>
@@ -205,6 +206,11 @@ export default {
     card: {
       type: Object,
       required: true,
+    },
+    isEditable: {
+      type: Boolean,
+      required: false,
+      default: true
     },
   },
   data() {
