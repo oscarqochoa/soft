@@ -4,13 +4,21 @@
     <div class="col-lg-12 px-0">
       <div>
         <div
-          :style="cards.length >= 3 ? 'height: 166px;overflow: auto;' : ''"
-          id="cont-list"
+          
         >
-          <div class="table-responsive" style="margin-bottom: 0" >
-            <b-table responsive="sm"  style="margin-bottom:0px"
-              show-empty table-class="text-nowrap"
-              sticky-header :items="cards" :fields="fields">
+          <div style="margin-bottom: 0" >
+            <b-table 
+         
+          slot="table"
+          no-provider-filtering
+          ref="refClientsList"
+          primary-key="id"
+          table-class="text-nowrap"
+          responsive="sm"
+          show-empty
+          sticky-header="30vh"
+              
+              :items="cards" :fields="fields">
               <template #cell(Select)="data">
                 <ValidationProvider
                     name="comment"
