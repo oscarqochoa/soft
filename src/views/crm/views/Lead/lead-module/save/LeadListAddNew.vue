@@ -9,6 +9,7 @@
     right
     @change="(val) => $emit('update:is-add-new-user-sidebar-active', val)"
     title="Create Lead"
+    header-class="text-primary"
   >
     <template #default>
       <!-- BODY -->
