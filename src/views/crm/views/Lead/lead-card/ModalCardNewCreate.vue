@@ -1,19 +1,6 @@
 <template>
   <div>
-    <b-modal
-      modal
-      title="Create Credit Card"
-      v-model="mutableIfModalCard"
-      size="lg"
-      modal-class="modal-primary"
-      title-tag="h3"
-      hide-footer
-      body-class="mb-2"
-      @hidden="closeModal"
-      :no-close-on-backdrop="true"
-    >
-
-      <ValidationObserver ref="form">
+    <ValidationObserver ref="form">
         <b-row class="font-bureau-style">
           <b-col cols="12" md="6">
             <div class="form-group">
@@ -263,26 +250,26 @@
           </b-col>
         </b-row>
       </ValidationObserver>
-    </b-modal>
   </div>
 </template>
 
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import { extend } from "vee-validate";
+import { mapActions, mapGetters, mapState } from 'vuex'
+
 import { amgApi } from '@/service/axios';
 export default {
   components: { VueGoogleAutocomplete },
-  props: ["idlead", "session", "ifModalCard"],
+  props: ["lead", "session", "ifModalCard"],
   data() {
     return {
-      mutableIfModalCard:this.ifModalCard,
       address_create_card_modal: "",
       states: [],
       cards: [],
       moreInfo: "1",
       form: {
-        idlead: this.idlead,
+        idlead: this.lead.id,
         card_expi_month: "",
         card_expi_year: "",
         cardnumber: "",
@@ -294,7 +281,7 @@ export default {
         address: "",
         cardholdername: "",
         street: "",
-        user: this.session,
+        user:null,
       },
       cardnumber1: "",
       cardnumber2: "",
@@ -302,11 +289,20 @@ export default {
       cardnumber4: "",
     };
   },
-
+    created(){
+        this.user = this.currentUser.user_id
+    },
   mounted() {
     amgApi.get("/stateseeuu").then((response) => {
       this.states = response.data;
     });
+  },
+  computed:{
+      ...mapGetters({
+      currentUser: 'auth/currentUser',
+      token: 'auth/token',
+      G_EEUU_STATES: 'CrmGlobalStore/G_EEUU_STATES',
+    }),
   },
   methods: {
     activeFocus(index, max) {
@@ -365,8 +361,8 @@ export default {
             if (result.isConfirmed) {
               amgApi.post("/createcard", this.form).then((response) => {
                 this.cards = response.data;
-                this.$emit("new", this.cards);
-                this.$emit("click", false);
+                this.$emit("closeModalCard", false);
+                 this.$emit('onReloadCards', response.data)
                 this.$swal.fire({
                   icon: "success",
                   title: "Card Created Successfully",

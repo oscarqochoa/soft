@@ -374,7 +374,7 @@ export default {
       this.cardsLead = {
         lead_id: this.user_id, //user_id
         user_id: this.currentUser.user_id,
-        rol: this.currentUser.arrRoles[0].role_id,
+        rol: this.currentUser.role_id,
       };
     },
     chargeStatus() {

@@ -224,6 +224,16 @@ export default {
         .then((response) => {
           if (response.status == 200) {
             this.cards = response.data;
+            console.log(this.cards)
+            this.cards.map(card =>{
+              let firstElement = card.cardnumber.charAt(0) 
+              console.log(firstElement)
+              if(firstElement == '-'){
+                card.cardnumber = card.cardnumber.substring(1)
+                
+              }
+            })
+            console.log("second",this.cards)
           }
         })
         .catch((err) => {

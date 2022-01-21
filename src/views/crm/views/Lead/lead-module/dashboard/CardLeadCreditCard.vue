@@ -87,12 +87,19 @@
       hide-footer
       no-close-on-backdrop
     >
-      <modal-card-create
+      <!-- <modal-card-create
         :modul="modul"
         :only-read="onlyRead"
         :lead="lead"
         @onReloadCards="onReloadCards"
-      />
+      /> -->
+      <modal-card-new-create
+        :modul="modul"
+        :only-read="onlyRead"
+        :lead="lead"
+        @onReloadCards="onReloadCards"
+        @closeModalCard="$bvModal.hide(`modal-card-create-${ key }`)"
+      ></modal-card-new-create>
     </b-modal>
 
     <!-- modal CARD SHOW -->
@@ -124,11 +131,12 @@ import Ripple from 'vue-ripple-directive'
 
 import ModalCardShow from '../../lead-card/ModalCardShow.vue'
 import ModalCardCreate from '../../lead-card/ModalCardCreate.vue'
-
+import ModalCardNewCreate from '../../lead-card/ModalCardNewCreate.vue'
 export default {
   components: {
     ModalCardShow,
     ModalCardCreate,
+    ModalCardNewCreate,
   },
   computed: {
     ...mapGetters({
