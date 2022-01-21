@@ -533,20 +533,7 @@ export default {
         });
     },
     deleteuser(id) {
-      this.$swal
-        .fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonAriaLabel: "Thumbs up, great!",
-          cancelButtonAriaLabel: "Thumbs down",
-          customClass: {
-            confirmButton: "btn btn-primary",
-            cancelButton: "btn btn-danger ",
-          },
-          confirmButtonText: "Yes, delete it!",
-        })
+      this.showConfirmSwal()
         .then((result) => {
           // Send request to the server
           if (result.value) {

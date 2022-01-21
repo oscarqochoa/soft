@@ -349,30 +349,22 @@ export default {
             this.form.street = "";
           }
           console.log(this.form)
-        this.$swal
-          .fire({
-            title: "Are you sure?",
-            text: "You want to create this card?",
-            icon: "warning",
-            showCancelButton: true,
-            customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-danger ",
-              },
-            confirmButtonText: "Yes, create it!",
-          })
+        this.showConfirmSwal()
           .then((result) => {
             if (result.isConfirmed) {
+              this.$store.commit("app/SET_LOADING", true);
               amgApi.post("/createcard", this.form).then((response) => {
                 this.cards = response.data;
                 this.$emit("new", this.cards);
                 this.$emit("click", false);
+                this.$store.commit("app/SET_LOADING", false);
                 this.$swal.fire({
                   icon: "success",
                   title: "Card Created Successfully",
                 });
               }).catch(error => {
                 console.error(error)
+                this.$store.commit("app/SET_LOADING", false);
                 this.showToast(
                   "danger",
                   "top-right",
@@ -383,6 +375,8 @@ export default {
               });
             }
           });
+      
+      
       });
     },
     closeModal() {

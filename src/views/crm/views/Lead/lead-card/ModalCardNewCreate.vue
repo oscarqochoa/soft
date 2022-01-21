@@ -62,7 +62,7 @@
                   </ValidationProvider>
                 </b-col>
                 <b-col cols="3">
-                  <ValidationProvider rules="required" v-slot="{errors}">
+                  <ValidationProvider rules="required|min:3|max:4" v-slot="{errors}">
                     <b-form-input
                       class="border-hover-p"
                       ref="input-4"
@@ -344,31 +344,22 @@ export default {
           } else {
             this.form.street = "";
           }
-          console.log(this.form)
-        this.$swal
-          .fire({
-            title: "Are you sure?",
-            text: "You want to create this card?",
-            icon: "warning",
-            showCancelButton: true,
-            customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-danger ",
-              },
-            confirmButtonText: "Yes, create it!",
-          })
+        this.showConfirmSwal()
           .then((result) => {
             if (result.isConfirmed) {
+                this.$store.commit("app/SET_LOADING", true);
               amgApi.post("/createcard", this.form).then((response) => {
                 this.cards = response.data;
                 this.$emit("closeModalCard", false);
                  this.$emit('onReloadCards', response.data)
+                 this.$store.commit("app/SET_LOADING", false);
                 this.$swal.fire({
                   icon: "success",
                   title: "Card Created Successfully",
                 });
               }).catch(error => {
                 console.error(error)
+                this.$store.commit("app/SET_LOADING", false);
                 this.showToast(
                   "danger",
                   "top-right",
