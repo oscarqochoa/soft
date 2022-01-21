@@ -167,12 +167,29 @@ export default {
       });
     },
 
-    showSuccessSwal(text = "Successful Process") {
+    showSwalSuccess(title, text, icon, html) {
+      this.$swal({
+        title,
+        text,
+        icon,
+        html,
+        customClass: {
+          confirmButton: "btn btn-primary",
+        },
+        buttonsStyling: false,
+      });
+    },
+    showSuccessSwal(
+      title = "Success!",
+      text = "Successful Process",
+      html = ""
+    ) {
       return this.$swal({
-        title: "Success!",
+        title,
         text,
         imageUrl: "/assets/images/icons/swal/success.svg",
         imageWidth: 70,
+        html,
         confirmButtonText: "Ok",
         customClass: {
           confirmButton: "btn btn-primary",
@@ -243,18 +260,6 @@ export default {
       );
     },
 
-    showSwalSuccess(title, text, icon, html) {
-      this.$swal({
-        title,
-        text,
-        icon,
-        html,
-        customClass: {
-          confirmButton: "btn btn-primary",
-        },
-        buttonsStyling: false,
-      });
-    },
     getAuthorizeErrors(errors) {
       const errorsAuthorize = [];
       for (const key in errors) {
