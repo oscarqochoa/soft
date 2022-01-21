@@ -63,7 +63,7 @@ export default [
     label: 'CR',
     model: null,
     options: [],
-    reduce: 'id',
+    reduce: 'value',
     selectText: 'label',
     cols: 12,
   },
@@ -107,9 +107,8 @@ export default [
     label: 'Type Doc',
     model: null,
     options: [],
-    reduce: 'id',
+    reduce: 'value',
     selectText: 'label',
     cols: 6,
   },
 ]
-  

@@ -1,14 +1,10 @@
 <template>
   <div>
-    <b-nav-item-dropdown
-      class="dropdown-notification mr-25"
-      menu-class="dropdown-menu-media"
-      right
-    >
+    <b-nav-item-dropdown class="dropdown-notification mr-25" menu-class="dropdown-menu-media" right>
       <template #button-content>
         <feather-icon
           :badge="G_NOTIFICATION_COUNTER > 99 ? '+99' : G_NOTIFICATION_COUNTER"
-          badge-classes="bg-danger"
+          badge-classes="badge-important"
           class="text-body"
           icon="BellIcon"
           size="19"
@@ -19,7 +15,7 @@
       <li class="dropdown-menu-header">
         <div class="dropdown-header d-flex">
           <h4 class="notification-title mb-0 mr-auto">Notifications</h4>
-          <b-badge pill variant="light-primary"> {{G_NOTIFICATION_COUNTER}} New </b-badge>
+          <b-badge pill variant="light-primary">{{G_NOTIFICATION_COUNTER}} New</b-badge>
         </div>
       </li>
 
@@ -38,13 +34,13 @@
               </b-avatar>
             </template>
             <p class="media-heading">
-              <span class="font-weight-bolder">
-                {{ notification.notification }}
-              </span>
+              <span class="font-weight-bolder">{{ notification.notification }}</span>
             </p>
-            <small class="notification-text">{{
+            <small class="notification-text">
+              {{
               notification.created_at | myDateGlobal
-            }}</small>
+              }}
+            </small>
           </b-media>
         </b-link>
       </vue-perfect-scrollbar>
@@ -56,8 +52,7 @@
           variant="primary"
           block
           @click="notificationModal = true"
-          >Read all notifications</b-button
-        >
+        >Read all notifications</b-button>
       </li>
     </b-nav-item-dropdown>
     <b-modal v-model="notificationModal" size="lg" centered title="NOTIFICATIONS" hide-footer>
@@ -70,17 +65,17 @@
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import Ripple from "vue-ripple-directive";
 import { mapGetters, mapActions, mapState, mapMutations } from "vuex";
-import NotificationList from './components/notifications/NotificationList.vue';
+import NotificationList from "./components/notifications/NotificationList.vue";
 export default {
   mounted() {
-    this.A_GET_NOTIFICATIONS({id: this.currentUser.user_id});
+    this.A_GET_NOTIFICATIONS({ id: this.currentUser.user_id });
   },
   components: {
     VuePerfectScrollbar,
     NotificationList
   },
   directives: {
-    Ripple,
+    Ripple
   },
   computed: {
     ...mapGetters({
@@ -88,26 +83,27 @@ export default {
       G_NOTIFICATION_COUNTER: "NotificationStore/G_NOTIFICATION_COUNTER"
     }),
     ...mapState({
-      S_NOTIFICATIONS: state => state.NotificationStore.S_NOTIFICATIONS,
+      S_NOTIFICATIONS: state => state.NotificationStore.S_NOTIFICATIONS
     })
   },
   data() {
     return {
       perfectScrollbarSettings: {
         maxScrollbarLength: 60,
-        wheelPropagation: false,
+        wheelPropagation: false
       },
       notificationModal: false
     };
   },
   methods: {
     ...mapActions({
-      A_GET_NOTIFICATIONS: "NotificationStore/A_GET_NOTIFICATIONS",
+      A_GET_NOTIFICATIONS: "NotificationStore/A_GET_NOTIFICATIONS"
     }),
     ...mapMutations({
-      DECREASE_NOTIFICATION_COUNTER: "NotificationStore/DECREASE_NOTIFICATION_COUNTER",
+      DECREASE_NOTIFICATION_COUNTER:
+        "NotificationStore/DECREASE_NOTIFICATION_COUNTER"
     })
-  },
+  }
 };
 </script>
 

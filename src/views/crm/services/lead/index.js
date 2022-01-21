@@ -1,18 +1,17 @@
 import { amgApi, amgApiFake } from '@/service/axios'
 
 class CrmLead {
-  
-  async getLead (id, params) {
+  async getLead(id, params) {
     try {
-      const { data } = await amgApi.get(`/lead/${ id }`, params)
+      const { data } = await amgApi.get(`/lead/${id}`, params)
       return data
     } catch (error) {
       console.log('Something went wrong on getLead:', error)
       throw error
     }
   }
-  
-  async getLeads (body) {
+
+  async getLeads(body) {
     try {
       const data = await amgApi.post('/searchleads', body)
       return data
@@ -22,7 +21,7 @@ class CrmLead {
     }
   }
 
-  async getLeadsSn (body) {
+  async getLeadsSn(body) {
     try {
       const { data } = await amgApi.post('/search-leads-sn-recovery', body)
       return data
@@ -32,7 +31,7 @@ class CrmLead {
     }
   }
 
-  async getLeadsWPotential (body) {
+  async getLeadsWPotential(body) {
     try {
       const { data } = await amgApi.post('/search-leads-sn-potential', body)
       return data
@@ -42,7 +41,7 @@ class CrmLead {
     }
   }
 
-  async getStateLeads (params) {
+  async getStateLeads(params) {
     try {
       const data = await amgApi.get('/stateleads', { params })
       return data
@@ -52,7 +51,7 @@ class CrmLead {
     }
   }
 
-  async getStatusLeads (params) {
+  async getStatusLeads(params) {
     try {
       const data = await amgApi.get('/leadstatus', { params })
       return data
@@ -62,7 +61,7 @@ class CrmLead {
     }
   }
 
-  async getSourceLeads (params) {
+  async getSourceLeads(params) {
     try {
       const data = await amgApi.get('/leadsource', { params })
       return data
@@ -72,16 +71,16 @@ class CrmLead {
     }
   }
 
-  async postCreateLead (body) {
+  async postCreateLead(body) {
     try {
       const data = await amgApi.post('/leadscreate', body)
       return data
     } catch (error) {
-      console.log('Something went wrong on postCreateLead:', error)
+      throw error
     }
   }
 
-  async postDeleteLead (body) {
+  async postDeleteLead(body) {
     try {
       const data = await amgApi.post('/leaddelete', body)
       return data
@@ -101,7 +100,7 @@ class CrmLead {
     }
   }
 
-  async postRequestLead (body) {
+  async postRequestLead(body) {
     try {
       const data = await amgApi.post('/socialnetwork/request-lead', body)
       return data
@@ -111,7 +110,7 @@ class CrmLead {
     }
   }
 
-  async postUserAppointmentSn (body) {
+  async postUserAppointmentSn(body) {
     try {
       const data = await amgApi.post('/get-users-appointmens-sn', body)
       return data
@@ -120,7 +119,7 @@ class CrmLead {
     }
   }
 
-  async postSearchFileLead (body) {
+  async postSearchFileLead(body) {
     try {
       const data = await amgApi.post('/search-file-lead-sn', body)
       return data
@@ -129,7 +128,7 @@ class CrmLead {
     }
   }
 
-  async postFileNameLead (body) {
+  async postFileNameLead(body) {
     try {
       const data = await amgApi.post('/update-file-name', body)
       return data
@@ -138,7 +137,7 @@ class CrmLead {
     }
   }
 
-  async postFileLead (body) {
+  async postFileLead(body) {
     try {
       const data = await amgApi.post('/upload-file-lead-sn', body, {
         headers: {
@@ -151,7 +150,7 @@ class CrmLead {
     }
   }
 
-  async deleteFileLead (body) {
+  async deleteFileLead(body) {
     try {
       const data = await amgApi.post('/delete-file-sn', body)
       return data
@@ -160,7 +159,7 @@ class CrmLead {
     }
   }
 
-  async postLeadPayment (body) {
+  async postLeadPayment(body) {
     try {
       const data = await amgApi.post('/leadpayment', body)
       return data
@@ -169,7 +168,7 @@ class CrmLead {
     }
   }
 
-  async postMyListCreate (body) {
+  async postMyListCreate(body) {
     try {
       const data = await amgApi.post('/my-list-create', body)
       return data
@@ -178,7 +177,7 @@ class CrmLead {
     }
   }
 
-  async postSetPotential (body) {
+  async postSetPotential(body) {
     try {
       const data = await amgApi.post('/set-potential', body)
       return data
@@ -187,7 +186,7 @@ class CrmLead {
     }
   }
 
-  async postChangeStatusSn (body) {
+  async postChangeStatusSn(body) {
     try {
       const data = await amgApi.post('/change-status-sn', body)
       return data
@@ -196,9 +195,9 @@ class CrmLead {
     }
   }
 
-  async getLeadEdit (id, params) {
+  async getLeadEdit(id, params) {
     try {
-      const { data } = await amgApi.get(`/lead/edit/${ id }`, params)
+      const { data } = await amgApi.get(`/lead/edit/${id}`, params)
       return data
     } catch (error) {
       console.log('Something went wrong on getLead:', error)
@@ -206,7 +205,7 @@ class CrmLead {
     }
   }
 
-  async postUniquesSsn (body) {
+  async postUniquesSsn(body) {
     try {
       const data = await amgApi.post('/uniquessn', body)
       return data
@@ -215,7 +214,7 @@ class CrmLead {
     }
   }
 
-  async postUniquesItin (body) {
+  async postUniquesItin(body) {
     try {
       const data = await amgApi.post('/uniqueitin', body)
       return data
@@ -224,7 +223,7 @@ class CrmLead {
     }
   }
 
-  async postUniquesCpn (body) {
+  async postUniquesCpn(body) {
     try {
       const data = await amgApi.post('/uniquecpn', body)
       return data
@@ -233,7 +232,7 @@ class CrmLead {
     }
   }
 
-  async putFieldsLead (body) {
+  async putFieldsLead(body) {
     try {
       const data = await amgApi.post('/savefieldslead', body)
       return data
@@ -242,7 +241,7 @@ class CrmLead {
     }
   }
 
-  async postAllTrackingChangeLeads (body) {
+  async postAllTrackingChangeLeads(body) {
     try {
       const data = await amgApi.post('/alltrackingfieldslead', body)
       return data
@@ -251,15 +250,41 @@ class CrmLead {
     }
   }
 
-  async putLead (id, body) {
+  async postTrackingStatusLeads(body) {
     try {
-      const data = await amgApi.post(`/leads/update/${ id }`, body)
+      const data = await amgApi.post('/ncr-leads-get-tracking-status', body)
       return data
     } catch (error) {
       throw error
     }
   }
 
+  async putLead(id, body) {
+    try {
+      const data = await amgApi.post(`/leads/update/${id}`, body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getLeadDocument(body) {
+    try {
+      const data = await amgApi.post('/get-lead-document', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async getLeadSendRequest(body) {
+    try {
+      const data = await amgApi.post('/ncr-leads-send-request', body)
+      return data
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 export default new CrmLead()

@@ -215,10 +215,17 @@ $borderamg: #efb911;
 .x-close-position {
   transform: translate(-12px, 4px) !important;
 }
-
+.hover-primary, .hover-important {
+  transition: 0.3s;
+}
 .hover-primary:hover {
   background: #3764ff;
   border-color: #3764ff !important;
+  color: #fff !important;
+}
+.hover-important:hover {
+  background: #ff0a36;
+  border-color: #ff0a36 !important;
   color: #fff !important;
 }
 

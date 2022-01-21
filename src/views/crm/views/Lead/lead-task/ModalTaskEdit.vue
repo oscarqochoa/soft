@@ -10,7 +10,7 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col v-if="!taskForSn && modul === 15">
+        <b-col v-if="!taskForSn && modul === 15 || isDisabled">
           <validation-provider>
             <b-form-group label="Type" label-for="type" label-cols-md="4">
               <b-form-checkbox
@@ -28,8 +28,8 @@
           <validation-provider>
             <b-form-group label="Send Sms" label-for="sms-status" label-cols-md="4">
               <b-form-checkbox
-                v-model="task.sms_status"
                 id="sms-status"
+                v-model="task.sms_status"
                 checked="true"
                 class="custom-control-primary pt-50"
                 name="check-button"
@@ -68,8 +68,8 @@
               :state="getValidationState(validationContext)"
             >
               <b-form-radio-group
-                v-model="task.method"
                 id="method"
+                v-model="task.method"
                 name="radio-method"
                 class="mt-50"
                 :disabled="isDisabled"
@@ -90,8 +90,8 @@
               <validation-provider #default="validationContext" name="Date" rules="required">
                 <b-form-group :state="getValidationState(validationContext)">
                   <flat-pickr
-                    v-model="task.date"
                     id="date"
+                    v-model="task.date"
                     placeholder="Date"
                     class="form-control"
                     :config="configFlatPickr"
@@ -103,8 +103,8 @@
             <b-col>
               <b-form-group>
                 <kendo-timepicker
-                  :format="'HH:mm'"
                   v-model="task.hour"
+                  :format="'HH:mm'"
                   :interval="15"
                   class="w-100 rounded bg-transparent"
                   placeholder="Hour"
@@ -116,7 +116,7 @@
             <b-col md="2">
               <validation-provider>
                 <b-form-group>
-                  <b-form-input :value="modul === 15 ? 'UNK' : lead.state" readonly />
+                  <b-form-input :value="modul === 15 || isDisabled ? 'UNK' : lead.state" readonly />
                 </b-form-group>
               </validation-provider>
             </b-col>
@@ -125,8 +125,8 @@
         <b-col cols="12 form-group-md-2">
           <b-form-group label="Assign to" label-cols-md="2" label-for="asigned">
             <v-select
-              v-model="seller"
               id="asigned"
+              v-model="seller"
               placeholder="Select a Seller"
               label="user_name"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -138,7 +138,7 @@
               <template #option="data">
                 <span
                   :class="data.state_advisors == 1? 'text-success': 'text-muted'"
-                >{{data.user_name}}</span>
+                >{{ data.user_name }}</span>
               </template>
             </v-select>
           </b-form-group>
@@ -148,8 +148,8 @@
             <b-form-group label="Content" label-cols-md="2" label-for="content">
               <b-form-textarea
                 id="content"
-                rows="3"
                 v-model="task.content"
+                rows="3"
                 :disabled="isDisabled"
                 :state="errors[0] ? false : null"
               />
@@ -161,9 +161,9 @@
             <b-form-group>
               <b-form-textarea
                 id="sms"
+                v-model="task.sms"
                 placeholder="Write new message"
                 rows="4"
-                v-model="task.sms"
                 :disabled="isDisabled"
                 :state="getValidationState(validationContext)"
               />
@@ -242,12 +242,11 @@ export default {
       configFlatPickr: {
         dateFormat: "m/d/Y",
         locale: "en",
-        minDate: `${
+        minDate:
           moment(this.task.real_time).format("MM/DD/YYYY") >
           moment().format("MM/DD/YYYY")
             ? moment().format("MM/DD/YYYY")
             : moment(this.task.real_time).format("MM/DD/YYYY")
-        } `
       },
       sellers: [],
       seller: null
@@ -277,9 +276,25 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      authUser: {},
+      blankTask: {},
+      isLoading: false,
+      maxDate: new Date(2050, 9, 1),
+      minDate: "",
+      configFlatPickr: {
+        dateFormat: "m/d/Y",
+        locale: "en",
+        minDate: `${moment(this.task.real_time).format("MM/DD/YYYY")} `
+      },
+      sellers: [],
+      seller: null
+    };
+  },
   setup() {
     const resetuserData = () => {
-      const event = Object.assign({}, this.blankTask);
+      const event = { ...this.blankTask };
       this.$emit("update:task", event);
     };
     const { refFormObserver, getValidationState } = formValidation(
@@ -352,7 +367,7 @@ export default {
           ).format("YYYY-MM-DD HH:mm:ss")
         });
         if (this.isResponseSuccess(response)) {
-          if (response.data.length)
+          if (response.data.length) {
             this.showToast(
               "warning",
               "top-right",
@@ -360,8 +375,8 @@ export default {
               "AlertTriangleIcon",
               "This Seller has an important task close to this time, please select another time"
             );
-          else return true;
-        } else
+          } else return true;
+        } else {
           this.showToast(
             "warning",
             "top-right",
@@ -369,6 +384,7 @@ export default {
             "AlertTriangleIcon",
             `Something went wrong. ${response.message}`
           );
+        }
       } catch (error) {
         console.log("Something went wrong onGetTask", error);
         this.showToast(
@@ -383,7 +399,7 @@ export default {
     }
   },
   mounted() {
-    this.task.sms_status = this.task.sms_status ? true : false;
+    this.task.sms_status = !!this.task.sms_status;
     this.task.date = this.$moment(
       this.task.real_time ? this.task.real_time : this.task.due_date
     ).format("MM/DD/YYYY");

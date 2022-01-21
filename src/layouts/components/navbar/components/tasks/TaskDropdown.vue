@@ -4,7 +4,7 @@
       <template #button-content>
         <feather-icon
           :badge="taskCounter"
-          badge-classes="bg-danger"
+          badge-classes="badge-important"
           class="text-body"
           icon="ClipboardIcon"
           size="19"
@@ -75,7 +75,14 @@
         >See all tasks</b-button>
       </li>
     </b-nav-item-dropdown>
-    <b-modal size="xmd" v-model="taskModal" hide-footer centered title="TASKS">
+    <b-modal
+      size="xmd"
+      v-model="taskModal"
+      scrollable
+      hide-footer
+      title="TASKS"
+      title-class="h2 text-white"
+    >
       <task-modal></task-modal>
     </b-modal>
   </div>

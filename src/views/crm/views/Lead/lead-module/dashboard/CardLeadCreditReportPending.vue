@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card-body>
+    <b-card-body class="px-0">
       <b-table
         show-empty
         sticky-header
@@ -10,6 +10,7 @@
         :items="S_CREDIT_REPORT_PENDINGS"
         :busy.sync="isBusy"
         class="mb-0"
+        small
       >
         <template #table-busy>
           <div class="text-center text-primary my-2">
@@ -19,9 +20,10 @@
         </template>
 
         <template #cell(request_by)="data">
-          <span>{{ data.item.seller_name}}</span>
-          <br>
-          <span>{{ data.item.date | myGlobal }}</span>
+          <div class="d-flex flex-column">
+            <span>{{ data.item.seller_name }}</span>
+            <span>{{ data.item.date | myGlobal }}</span>
+          </div>
         </template>
 
         <template #cell(tracking)="data">
@@ -30,11 +32,10 @@
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
               variant="flat-info"
               class="button-little-size rounded-circle"
-              @click="openTrackingStatus(data.item.score_id, data.item.lead_name)"
+              @click="onOpenTrackingStatus(data.item.score_id)"
             >
               <feather-icon
-                icon="FileTextIcon"
-                size="18"
+                icon="ListIcon"
               />
             </b-button>
           </div>
@@ -75,27 +76,51 @@
 
       </b-table>
     </b-card-body>
+
+    <!-- modal TRACKING STATUS -->
+    <b-modal
+      id="modal-tracking-status"
+      title-class="h3 text-white"
+      modal-class="modal-primary"
+      centered
+      size="lg"
+      title="Tracking Status"
+      hide-footer
+    >
+      <modal-tracking-status
+        :modul="modul"
+        :lead="lead"
+        :id-score="scoreId"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
 
-import { mapActions, mapGetters, mapState,  } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
+
+import Ripple from 'vue-ripple-directive'
+
+import ModalTrackingStatus from '@/views/crm/views/Lead/lead-module/dashboard/modal/ModalTrackingStatus.vue'
 
 export default {
-  components: {},
+  components: {
+    ModalTrackingStatus,
+  },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      token: 'auth/token',
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
-      S_CREDIT_REPORT_PENDINGS: event => event.CrmCreditReportStore.S_CREDIT_REPORT_PENDINGS
+      S_CREDIT_REPORT_PENDINGS: event => event.CrmCreditReportStore.S_CREDIT_REPORT_PENDINGS,
     }),
   },
-  created () {},
-  data () {
+  created() {},
+  directives: { Ripple },
+  data() {
     return {
       fieldsEvent: [
         { key: 'request_by' },
@@ -103,29 +128,78 @@ export default {
         { key: 'tracking' },
         { key: 'actions' },
       ],
+      scoreId: null,
     }
   },
-  directives: {},
   methods: {
     ...mapActions({
       /* A_GET_TEMPLATES: 'CrmTemplateStore/A_GET_TEMPLATES' */
+      A_GET_CREDIT_REPORT_PENDINGS: 'CrmCreditReportStore/A_GET_CREDIT_REPORTS',
+      A_COUNT_CREDIT_REPORT_PENDINGS: 'CrmCreditReportStore/A_COUNT_CREDIT_REPORT_PENDINGS',
     }),
-    onOpenTrackingStatus (scoreId, leadName) {
-      /* *INTEGRATE* */
+    onOpenTrackingStatus(scoreId) {
+      this.scoreId = scoreId
+      console.log('this.scoreId', this.scoreId)
+      this.$bvModal.show('modal-tracking-status')
     },
-    onChangeStatus (scoreId, statusId) {
-      /* *INTEGRATE* */
-    }
+    async countPendingTab() {
+      try {
+        await this.A_COUNT_CREDIT_REPORT_PENDINGS({
+          id: this.currentUser.user_id,
+          modul: this.currentUser.modul_id,
+        })
+      } catch (error) {
+        this.showErrorSwal(error)
+      }
+    },
+    async getCreditReportsPending() {
+      try {
+        const response = await this.A_GET_CREDIT_REPORT_PENDINGS({
+          id: this.currentUser.user_id,
+          modul: this.currentUser.modul_id,
+        })
+        if (this.isResponseSuccess(response)) {
+          await this.countPendingTab()
+        }
+      } catch (error) {
+        this.showErrorSwal(error)
+      }
+    },
+    async onChangeStatus(scoreId, statusId) {
+      try {
+        const result = await this.showConfirmSwal()
+        if (result.value) {
+          this.addPreloader()
+          const response = await amgApi.post('/ncr-leads-change-status', {
+            user_id: this.currentUser.user_id,
+            score_id: scoreId,
+            status_id: statusId,
+            text: result.value,
+          })
+          if (this.isResponseSuccess(response)) {
+            await this.getCreditReportsPending()
+            this.removePreloader()
+            this.showSuccessSwal()
+          }
+        }
+      } catch (error) {
+        this.showErrorSwal(error)
+      }
+    },
   },
-  mounted () {},
+  mounted() {},
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
+    },
+    lead: {
+      type: Object,
+      required: true,
     },
     isBusy: {
       type: Boolean,
-      required: true
+      required: true,
     },
   },
   setup() {},

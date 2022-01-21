@@ -1,6 +1,5 @@
-export default  {
-    title: 'NCR',
-    icon: 'ArchiveIcon',
-    route: 'ncr-pending',
-    badge:10
-}
+export default {
+  title: "NCR",
+  icon: "FileMinusIcon",
+  route: "ncr-pending",
+};

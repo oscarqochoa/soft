@@ -103,7 +103,7 @@
             class="cursor-pointer"
             icon="folder-fill"
             variant="warning"
-            @click="openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id)"
+            @click="openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id, data.item.status, data.item.user_id, data.item.program_id, data.item.event_date)"
           />
         </template>
         <template v-slot:cell(status)="data">
@@ -133,9 +133,10 @@
       </b-table>
     </filter-slot>
     <files-modal
-      :key="modalControllers.files"
+      v-if="modal.files"
       :modal="modal"
       :files="modalData.files"
+      @close="modal.files = false"
     />
   </div>
 </template>
@@ -227,13 +228,23 @@ export default {
     }
   },
   methods: {
-    openFilesModal(id, program, client, saleId) {
+    openFilesModal(id, program, client, saleId, status, sellerId, programId, eventDate) {
       this.modalData.files.id = id
       this.modalData.files.program = program
       this.modalData.files.client = client
       this.modalData.files.sale_id = saleId
+      this.modalData.files.programId = programId
+      this.modalData.files.event_date = eventDate
+      const isCeoOrSupervisor = this.currentUser.role_id == '1' || this.currentUser.role_id == '2'
+      const saleStatus = status == '4' || status == '2'
+      console.log(this.currentUser.user_id, sellerId)
+      if (
+        (this.currentUser.user_id == sellerId || isCeoOrSupervisor)
+          && saleStatus == false
+      ) {
+        this.modalData.files.valorEdit = true
+      }
       this.modal.files = true
-      this.modalControllers.files = (this.modalControllers.files + 1) % 2
     },
     async myProvider(ctx) {
       try {

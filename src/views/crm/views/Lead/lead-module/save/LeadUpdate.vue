@@ -10,16 +10,25 @@
       right
       @change="(val) => $emit('update:is-add-new-user-sidebar-active', val)"
       title="Edit Lead"
+      header-class="text-primary"
     >
       <template #default>
         <!-- BODY -->
-        <validation-observer
-          ref="refFormObserver"
-        >
+        <validation-observer ref="refFormObserver">
           <!-- Form -->
           <div class="p-2">
-            <basic-information-lead :user-data="lead" :blank-user-fields="blankUserFields" @onModalTrackingChangeOpen="onModalTrackingChangeOpen" />
-            <lead-information-lead :user-data="lead" @onModalTrackingChangeOpen="onModalTrackingChangeOpen" />
+            <basic-information-lead
+              ref="refBasicInformationLead"
+              :user-data="lead"
+              :blank-user-fields="blankUserFields"
+              @onModalTrackingChangeOpen="onModalTrackingChangeOpen"
+              :typeForm="editLead"
+            />
+            <lead-information-lead
+              :user-data="lead"
+              :typeEdit="typeEdit"
+              @onModalTrackingChangeOpen="onModalTrackingChangeOpen"
+            />
             <card-lead-credit-card
               :modul="modul"
               :only-read="false"
@@ -29,7 +38,7 @@
           </div>
         </validation-observer>
       </template>
-      
+
       <template #footer>
         <div class="d-flex justify-content-end px-3 py-2">
           <b-button
@@ -49,14 +58,11 @@
             type="button"
             variant="outline-secondary"
             @click="$refs.refFormObserver.reset(); $emit('update:is-add-new-user-sidebar-active', false)"
-          >
-            Cancel
-          </b-button>
+          >Cancel</b-button>
         </div>
       </template>
-
     </b-sidebar>
-    
+
     <!-- modal TRACKING CHANGE -->
     <b-modal
       id="modal-tracking-change"
@@ -66,7 +72,6 @@
       size="lg"
       :title="`TRACKING CHANGE ${ titleTrackingChange }`"
       hide-footer
-      no-close-on-backdrop
     >
       <tracking-change-component
         :lead="lead"
@@ -79,25 +84,29 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 import {
-  BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
-} from 'bootstrap-vue'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+  BSidebar,
+  BForm,
+  BFormGroup,
+  BFormInput,
+  BFormInvalidFeedback,
+  BButton
+} from "bootstrap-vue";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
 
-import { required, alphaNum, email } from '@validations'
-import Ripple from 'vue-ripple-directive'
-import vSelect from 'vue-select'
+import { required, alphaNum, email } from "@validations";
+import Ripple from "vue-ripple-directive";
+import vSelect from "vue-select";
 
-import formValidation from '@core/comp-functions/forms/form-validation'
-import countries from '@/@fake-db/data/other/countries'
+import formValidation from "@core/comp-functions/forms/form-validation";
+import countries from "@/@fake-db/data/other/countries";
 
-import BasicInformationLead from './BasicInformationLead.vue'
-import BillingInformationLead from './BillingInformationLead.vue'
-import CardLeadCreditCard from '../dashboard/CardLeadCreditCard.vue'
-import LeadInformationLead from './LeadInformationLead.vue'
-import TrackingChangeComponent from '@/views/crm/views/Lead/lead-module/save/TrackingChangeComponent.vue'
-
+import BasicInformationLead from "./BasicInformationLead.vue";
+import BillingInformationLead from "./BillingInformationLead.vue";
+import CardLeadCreditCard from "../dashboard/CardLeadCreditCard.vue";
+import LeadInformationLead from "./LeadInformationLead.vue";
+import TrackingChangeComponent from "@/views/crm/views/Lead/lead-module/save/TrackingChangeComponent.vue";
 
 export default {
   components: {
@@ -116,14 +125,14 @@ export default {
 
     // Form Validation
     ValidationProvider,
-    ValidationObserver,
+    ValidationObserver
   },
   directives: {
-    Ripple,
+    Ripple
   },
   model: {
-    prop: 'isAddNewUserSidebarActive',
-    event: 'update:is-add-new-user-sidebar-active',
+    prop: "isAddNewUserSidebarActive",
+    event: "update:is-add-new-user-sidebar-active"
   },
   props: {
     modul: {
@@ -136,15 +145,16 @@ export default {
     },
     isAddNewUserSidebarActive: {
       type: Boolean,
-      required: true,
+      required: true
     },
+    typeEdit: {
+      type: String,
+      default: "lead"
+    }
   },
   data() {
-    const resetRowData = () => {}
-    const {
-      getValidationState,
-      resetForm,
-    } = formValidation(resetRowData)
+    const resetRowData = () => {};
+    const { getValidationState, resetForm } = formValidation(resetRowData);
     return {
       getValidationState,
       resetForm,
@@ -164,7 +174,7 @@ export default {
         ssn: null,
         itin: null,
         other: null,
-        statusLead: null,
+        statusLead: null
       },
       userData: {},
       required,
@@ -174,75 +184,108 @@ export default {
       isLoading: false,
       itemsTrackingChange: [],
       isBusyTrackingChange: false,
-      titleTrackingChange: '',
-    }
+      titleTrackingChange: "",
+      editLead: "editLead"
+    };
   },
-  created () {
-    this.lead.programs = this.lead.program ? this.lead.program.map(el => ({ id: el.id, label: el.name })) : []
-    this.lead.state_lead = this.lead.status_l
-    this.lead.address =  {
+  created() {
+    this.lead.programs = this.lead.program
+      ? this.lead.program.map(el => ({ id: el.id, label: el.name }))
+      : [];
+    this.lead.state_lead = this.lead.status_l;
+    this.lead.address = {
       id: this.lead.id,
-      prename: 'main',
+      prename: "main",
       streetReal: this.lead.street,
       street: this.lead.street,
       city: this.lead.city,
       state: this.lead.states_eeuu_slug,
       zipcode: this.lead.zipcode,
-      country: this.lead.country,
-    }
-    this.lead.otherAddress =  {
+      country: this.lead.country
+    };
+    this.lead.otherAddress = {
       id: this.lead.id,
-      prename: 'origin',
+      prename: "origin",
       streetReal: this.lead.other_street,
       street: this.lead.other_street,
       city: this.lead.other_city,
       state: this.lead.other_states_eeuu_slug,
       zipcode: this.lead.other_zipcode,
-      country: this.lead.other_country,
-    }
-    this.lead.dateonline = ''
-    this.lead.passwordonline = ''
-    this.lead.membernumberonline = ''
-    this.lead.plataform = (this.lead.credit && this.lead.credit.length) ? this.lead.credit[0].plataform_id : null
-    this.lead.usernameonline = (this.lead.credit && this.lead.credit.length) ? this.lead.credit[0].username : null
+      country: this.lead.other_country
+    };
+    this.lead.dateonline = "";
+    this.lead.passwordonline = "";
+    this.lead.membernumberonline = "";
+    this.lead.plataform =
+      this.lead.credit && this.lead.credit.length
+        ? this.lead.credit[0].plataform_id
+        : null;
+    this.lead.usernameonline =
+      this.lead.credit && this.lead.credit.length
+        ? this.lead.credit[0].username
+        : null;
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token'
-    }),
+      currentUser: "auth/currentUser",
+      token: "auth/token"
+    })
   },
   methods: {
     ...mapActions({
-      A_SET_LEADS: 'CrmLeadStore/A_SET_LEADS',
-      A_GET_ALL_TRAKING_FIELDS_LEAD: 'CrmLeadStore/A_GET_ALL_TRAKING_FIELDS_LEAD',
-      A_UPDATE_LEAD: 'CrmLeadStore/A_UPDATE_LEAD',
+      A_SET_LEADS: "CrmLeadStore/A_SET_LEADS",
+      A_GET_LEAD: "CrmLeadStore/A_GET_LEAD",
+      A_GET_ALL_TRAKING_FIELDS_LEAD:
+        "CrmLeadStore/A_GET_ALL_TRAKING_FIELDS_LEAD",
+      A_UPDATE_LEAD: "CrmLeadStore/A_UPDATE_LEAD"
     }),
-    getSelectValue (element) {
-      if (typeof element === 'string')
-        return (element) ? element : ''
-      else
-        return (element) ? element.value : ''
+    ...mapMutations({
+      M_KEY_UPDATE_DETAILS_LEAD: "CrmLeadStore/M_KEY_UPDATE_DETAILS_LEAD"
+    }),
+    getSelectValue(element) {
+      if (typeof element === "string") return element ? element : "";
+      else return element ? element.value : "";
     },
-    async onSubmit () {
+    async onSubmit() {
       try {
         if (await this.$refs.refFormObserver.validate()) {
-          this.isLoading = true
-          let route = '';
+          this.isLoading = true;
+          let route = "";
           switch (this.modul) {
-            case (2) : route = 'show/'; break
-            case (3) : route = '/bussiness/leads'; break
-            case (4) : route = '/administration/leads'; break
-            case (5) : route = '/debtsolution/leads'; break
-            case (6) : route = '/creditexperts/leads'; break
-            case (7) : route = '/boostcredit/leads'; break
-            case (8) : route = '/taxresearch/leads'; break
-            case (10) : route = '/claimdepartment/leads'; break
-            case (11) : route = '/specialists/leads'; break
+            case 2:
+              route = "show/";
+              break;
+            case 3:
+              route = "/bussiness/leads";
+              break;
+            case 4:
+              route = "/administration/leads";
+              break;
+            case 5:
+              route = "/debtsolution/leads";
+              break;
+            case 6:
+              route = "/creditexperts/leads";
+              break;
+            case 7:
+              route = "/boostcredit/leads";
+              break;
+            case 8:
+              route = "/taxresearch/leads";
+              break;
+            case 10:
+              route = "/claimdepartment/leads";
+              break;
+            case 11:
+              route = "/specialists/leads";
+              break;
           }
+          this.lead.programs = this.$refs.refBasicInformationLead.returnProgramlist(); // return programs because doesnt work good with v-select in the sidebar
           const body = {
             ...this.lead,
-            datecreator: this.$moment(this.lead.created_at).format('YYYY-MM-DD'),
+            datecreator: this.$moment(this.lead.created_at).format(
+              "YYYY-MM-DD"
+            ),
             mobile_count: 0,
             modul: this.modul,
             creatorname: this.lead.creator_name,
@@ -261,70 +304,102 @@ export default {
             super: this.currentUser.role_id,
             type_credit: this.lead.type_credit_report,
             usercreator: this.lead.created_by,
-            programs: this.lead.programs.map(el => ({ id: el.id, name: el.label })),
-          }
-          const response = await this.A_UPDATE_LEAD({ id: this.lead.id, body })
-          console.log('response', response)
-          if (this.isResponseSuccess(response)) {
-            this.isLoading = false
-            this.$refs.refFormObserver.reset()
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          } else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong.`)
+            programs: this.lead.programs.map(el => ({
+              id: el.id,
+              name: el.label
+            }))
+          };
+          this.addPreloader();
+          await Promise.all([
+            this.A_UPDATE_LEAD({ id: this.lead.id, body }),
+            this.A_GET_LEAD({ id: this.lead.id, body })
+          ]);
+          this.M_KEY_UPDATE_DETAILS_LEAD();
+          this.removePreloader();
+          /* const response = await this.A_UPDATE_LEAD({ id: this.lead.id, body });
+          await this.A_UPDATE_LEAD({ id: this.lead.id, body }); */
+
+          this.isLoading = false;
+          this.$refs.refFormObserver.reset();
+          this.showToast(
+            "success",
+            "top-right",
+            "Success!",
+            "CheckIcon",
+            "Successful operation"
+          );
         }
       } catch (error) {
-        console.log('spmething went wrong onSubmit: ', error)
-        this.isLoading = false
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+        console.log("spmething went wrong onSubmit: ", error);
+        this.isLoading = false;
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
-    async onModalTrackingChangeOpen (attribute) {
+    async onModalTrackingChangeOpen(attribute) {
       try {
-        this.titleTrackingChange = attribute.name
-        this.$bvModal.show('modal-tracking-change')
-        this.isBusyTrackingChange = true
+        this.titleTrackingChange = attribute.name;
+        this.$bvModal.show("modal-tracking-change");
+        this.isBusyTrackingChange = true;
         const response = await this.A_GET_ALL_TRAKING_FIELDS_LEAD({
           id_lead: this.lead.id,
           typee: attribute.type,
-          id_module: this.modul,
-        })
+          id_module: this.modul
+        });
         if (this.isResponseSuccess(response)) {
-          this.itemsTrackingChange = response.data.map(attribute.mapFunction)
-          console.log('itemsTrackingChange', this.itemsTrackingChange)
+          this.itemsTrackingChange = response.data.map(attribute.mapFunction);
+          console.log("itemsTrackingChange", this.itemsTrackingChange);
         } else
-          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong.`)
-        this.isBusyTrackingChange = false
+          this.showToast(
+            "warning",
+            "top-right",
+            "Warning!",
+            "AlertTriangleIcon",
+            `Something went wrong.`
+          );
+        this.isBusyTrackingChange = false;
       } catch (error) {
-        console.log('spmething went wrong onModalTrackingChangeOpen: ', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-        this.isBusyTrackingChange = false
+        console.log("spmething went wrong onModalTrackingChangeOpen: ", error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
+        this.isBusyTrackingChange = false;
       }
-    },
+    }
   },
-  mounted () {
-    this.blankUserFields.id = this.currentUser.user_id
-    this.blankUserFields.id_lead = this.lead.id
-    this.blankUserFields.id_user = this.currentUser.user_id
+  mounted() {
+    this.blankUserFields.id = this.currentUser.user_id;
+    this.blankUserFields.id_lead = this.lead.id;
+    this.blankUserFields.id_user = this.currentUser.user_id;
   }
-}
+};
 </script>
 
 <style lang="scss">
-  @import '@core/scss/vue/libs/vue-select.scss';
+@import "@core/scss/vue/libs/vue-select.scss";
 
-  #add-new-user-sidebar {
-    .vs__dropdown-menu {
-      max-height: 200px !important;
-    }
+#add-new-user-sidebar {
+  .vs__dropdown-menu {
+    max-height: 200px !important;
   }
-  .sidebar-xl {
-    width: 90rem !important;
+}
+.sidebar-xl {
+  width: 90rem !important;
+}
+.b-sidebar-header {
+  flex-direction: row-reverse !important;
+  justify-content: space-between !important;
+  .close {
+    margin-right: revert !important;
   }
-  .b-sidebar-header {
-    flex-direction: row-reverse !important;
-    justify-content: space-between !important;
-    .close {
-      margin-right: revert !important;
-    }
-  }
+}
 </style>

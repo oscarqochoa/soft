@@ -53,7 +53,7 @@ export default {
   },
   actions: {
     // eslint-disable-next-line consistent-return
-    async A_GET_USERS_BY_MODULE(moduleId) {
+    async A_GET_USERS_BY_MODULE({}, moduleId) {
       try {
         const params = {
           roles: "[]",
@@ -69,7 +69,7 @@ export default {
       }
     },
 
-    async A_GET_HOUR_SYSTEM(body) {
+    async A_GET_HOUR_SYSTEM({}, body) {
       try {
         const response = await GlobalServices.getHourSystem(body);
         return response;
