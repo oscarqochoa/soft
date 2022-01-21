@@ -485,8 +485,8 @@ export default {
                   }
                 }
               } else {
-                console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                this.showErrorSwal()
+                const errorsAuthorize = response.data.transaction.errors.error
+                this.showErrorSwal(this.getAuthorizeErrors(errorsAuthorize))
               }
             } else {
               this.removePreloader()
