@@ -434,6 +434,8 @@ export default {
       if (this.method_payment == 0 && this.initial_payment.programid != 2) {
         this.amount2 = this.$refs[refCard].$el.value
         this.amount2 = this.amount2.replace(this.$refs[refCard].prefix, '')
+      } else {
+        this.amount2 = this.amount
       }
       if (this.amount2 == null) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Invalid amount value')
@@ -483,6 +485,7 @@ export default {
                   }
                 }
               } else {
+                console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 this.showErrorSwal()
               }
             } else {
