@@ -93,7 +93,7 @@
             label-for="programs"
           >
             <v-select
-              v-model="userData.programs"
+              v-model="programsList"
               multiple
               label="label"
               input-id="programs"
@@ -112,7 +112,7 @@
               id="dob"
               v-model="userData.dob"
               class="form-control"
-              :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'm/d/Y', locale: 'en' }"
+              :config="configFlatPickr"
               placeholder="From"
             />
           </b-form-group>
@@ -182,7 +182,8 @@ import vSelect from 'vue-select'
 
 import formValidation from '@core/comp-functions/forms/form-validation'
 
-import AddressInformationLead from './AddressInformationLead.vue'
+import AddressInformationLead from "./AddressInformationLead.vue";
+import moment from "moment";
 
 export default {
   components: {
@@ -219,7 +220,12 @@ export default {
       alphaNum,
       email,
       disabledemail: false,
-    }
+      configFlatPickr: {
+        dateFormat: "m/d/Y",
+        locale: "en"
+      },
+      programsList: []
+    };
   },
   computed: {
     ...mapGetters({
@@ -238,13 +244,26 @@ export default {
       getValidationState,
     }
   },
+  created() {
+    this.formatInitialData();
+  },
   methods: {
     capitalize(el) {
-      const element = this.userData[el]
-      this.userData[el] = element.substr(0, 1).toUpperCase() + element.substr(1)
+      const element = this.userData[el];
+      this.userData[el] =
+        element.substr(0, 1).toUpperCase() + element.substr(1);
     },
-  },
-}
+    formatInitialData() {
+      this.userData.dob = this.userData.dob
+        ? moment(this.userData.dob).format("MM/DD/YYYY")
+        : "";
+      this.programsList = this.userData.programs;
+    },
+    returnProgramlist() {
+      return this.programsList;
+    }
+  }
+};
 </script>
 
 <style lang="scss">

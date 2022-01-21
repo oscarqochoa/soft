@@ -166,6 +166,8 @@ export default {
           ? {
               label: "DOB:",
               value: this.lead.dob
+                ? this.$moment(this.lead.dob).format("MM/DD/YYYY")
+                : ""
             }
           : null,
         {
