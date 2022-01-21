@@ -9,13 +9,18 @@
     right
     @change="(val) => $emit('update:is-add-new-user-sidebar-active', val)"
     title="Create Lead"
+    header-class="text-primary"
   >
     <template #default>
       <!-- BODY -->
       <validation-observer ref="refFormObserver">
         <!-- Form -->
         <b-form class="p-2">
-          <basic-information-lead :user-data="userData" ref="refBasicInformationLead" />
+          <basic-information-lead
+            :user-data="userData"
+            ref="refBasicInformationLead"
+            :typeForm="newLead"
+          />
           <lead-information-lead :user-data="userData" />
           <billing-information-lead :user-data="userData" />
         </b-form>
@@ -182,7 +187,8 @@ export default {
       alphaNum,
       email,
       countries,
-      isLoading: false
+      isLoading: false,
+      newLead: "newLead"
     };
   },
   created() {
