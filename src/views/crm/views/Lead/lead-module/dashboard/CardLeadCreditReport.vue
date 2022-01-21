@@ -187,6 +187,7 @@ export default {
   },
   created() {
     this.countCreditReportPendings()
+    this.lead.score = JSON.parse(this.lead.score)
     if (this.lead.score && this.lead.score.length) {
       this.score.equifax = this.lead.score[0].equifax
       this.score.experian = this.lead.score[0].experian
@@ -287,7 +288,7 @@ export default {
   font-size: 25px;
   font-weight: bold;
   border-radius: 30px;
-  padding: 10px 7px;
+  padding: 13px 7px;
 }
 .number-circle {
   width: 1rem;

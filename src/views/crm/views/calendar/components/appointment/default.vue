@@ -249,7 +249,7 @@ export default {
 
         const currentYear = this.$moment(info.start).add(15, 'd').format('YYYY')
         const currentMonth = this.$moment(info.start).add(15, 'd').format('MM')
-
+        if (this.isModal) this.host = this.authUser.user_id
         const response = await this.A_GET_CALENDARS({
           year: currentYear,
           month: currentMonth,
