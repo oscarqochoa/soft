@@ -22,6 +22,7 @@
               :user-data="lead"
               :blank-user-fields="blankUserFields"
               @onModalTrackingChangeOpen="onModalTrackingChangeOpen"
+              :typeForm="editLead"
             />
             <lead-information-lead
               :user-data="lead"
@@ -183,7 +184,8 @@ export default {
       isLoading: false,
       itemsTrackingChange: [],
       isBusyTrackingChange: false,
-      titleTrackingChange: ""
+      titleTrackingChange: "",
+      editLead: "editLead"
     };
   },
   created() {

@@ -418,6 +418,10 @@ export default {
     blankUserFields: {
       type: Object,
       required: false
+    },
+    typeForm: {
+      type: String,
+      required: false // newLead, editLead
     }
   },
   data() {
@@ -549,7 +553,6 @@ export default {
     },
     async mobile() {
       try {
-        this.isPreloading(true);
         var x = this.userData.mobile
           .replace(/\D/g, "")
           .match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
@@ -557,6 +560,7 @@ export default {
           ? x[1]
           : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "");
         if (this.userData.mobile.length == 14) {
+          this.isPreloading(true);
           this.errorFormatMobile = false;
           const response = await this.A_UNIQUE_MOBILE({
             mobile: this.userData.mobile
@@ -567,10 +571,15 @@ export default {
                 "Are you sure?",
                 `The phone number already exists: ${response.data.message}`,
                 "warning",
-                { confirmButtonText: "REQUEST LEAD TO SOCIAL NETWORK" }
+                {
+                  confirmButtonText:
+                    this.typeForm == "newLead"
+                      ? "REQUEST LEAD TO SOCIAL NETWORK"
+                      : "OK"
+                }
               )
                 .then(async result => {
-                  if (result.value) {
+                  if (result.value && this.typeForm == "newLead") {
                     this.isPreloading(true);
                     await this.A_SET_REQUEST_LEADS({
                       lead_id: response.data.lead_id,
