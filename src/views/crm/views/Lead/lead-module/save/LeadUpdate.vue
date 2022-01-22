@@ -29,6 +29,7 @@
               :typeEdit="typeEdit"
               @onModalTrackingChangeOpen="onModalTrackingChangeOpen"
             />
+
             <card-lead-credit-card
               :modul="modul"
               :only-read="false"

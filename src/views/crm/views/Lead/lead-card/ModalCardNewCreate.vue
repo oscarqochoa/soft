@@ -352,6 +352,7 @@ export default {
                 this.cards = response.data;
                 this.$emit("closeModalCard", false);
                  this.$emit('onReloadCards', response.data)
+                 this.$emit("reloadLeadEmit");
                  this.$store.commit("app/SET_LOADING", false);
                 this.$swal.fire({
                   icon: "success",
