@@ -1,30 +1,36 @@
-import { amgApi } from '@/service/axios'
+import { amgApi } from "@/service/axios";
 
 class NotificationService {
-  async getUserNotifications (body) {
+  async getUserNotifications(body) {
     try {
-      const data = await amgApi.post('/getnotifications', body)
-      return data
+      const data = await amgApi.post("/getnotifications", body);
+      return data;
     } catch (error) {
-      throw error
+      throw error;
     }
   }
-  async getAllUserNotifications (body) {
+  async getAllUserNotifications(body) {
     try {
-      const data = await amgApi.post('/allnotifications', body)
+      const data = await amgApi.post(
+        "/notification/get-all-notifications-by-id",
+        body
+      );
       return data.data;
     } catch (error) {
-      throw error
+      throw error;
     }
   }
-  async updateNotification (body) {
+  async updateNotification(body) {
     try {
-      const data = await amgApi.post('/updatenotif', body)
+      const data = await amgApi.post(
+        "/notification/update-notifications",
+        body
+      );
       return data.data;
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 }
 
-export default new NotificationService()
+export default new NotificationService();

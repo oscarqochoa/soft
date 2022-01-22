@@ -197,21 +197,21 @@ export default {
         switch (this.typeModal) {
           case 1:
             message = "complete Rates";
-            route = "/attendend";
+            route = "/sales-made/attendend-sale";
             break;
           case 3:
             message = "add new service";
-            route = "/attendendprogram";
+            route = "/sales-made/attendend-saleprogram";
             typeADD = 1;
             break;
           case 4:
             message = "change service";
-            route = "/attendendprogram";
+            route = "/sales-made/attendend-saleprogram";
             typeADD = 2;
             break;
           case 6:
             message = "add new service";
-            route = "/leadattendend";
+            route = "/sale/insert-lead-attendance";
             break;
           default:
             break;
@@ -277,7 +277,7 @@ export default {
     },
     async getScore() {
       try {
-        const response = await amgApi.post("/getscoreattend", {
+        const response = await amgApi.post("/attend/get-score-attend", {
           lead_id: this.salesClient.lead_id
         });
         if (response.status === 200) {

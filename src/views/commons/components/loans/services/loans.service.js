@@ -43,7 +43,7 @@ class LoansService {
   }
   async getUserData(params) {
     try {
-      const { data } = await amgApi.post("/loans/get-user", params);
+      const { data } = await amgApi.post("/loans/get-user-loan", params);
       return data;
     } catch (error) {
       throw error;
@@ -59,7 +59,10 @@ class LoansService {
   }
   async updateDateLoan(params) {
     try {
-      const { data } = await amgApi.post("/loans/update-date", params);
+      const { data } = await amgApi.post(
+        "/loans/update-date-first-due",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
@@ -75,7 +78,7 @@ class LoansService {
   }
   async insertStatusLoan(params) {
     try {
-      const { data } = await amgApi.post("/loans/insert-status", params);
+      const { data } = await amgApi.post("/loans/insert-status-loan", params);
       return data;
     } catch (error) {
       throw error;
@@ -83,7 +86,7 @@ class LoansService {
   }
   async getTrackingLoan(params) {
     try {
-      const { data } = await amgApi.post("/loans/tracking-loan", params);
+      const { data } = await amgApi.post("/loans/get-tracking-loan", params);
       return data;
     } catch (error) {
       throw error;
@@ -110,7 +113,7 @@ class LoansService {
   }
   async getPayListLoan(params) {
     try {
-      const { data } = await amgApi.post("/loans/get-pay-list", params);
+      const { data } = await amgApi.post("/loans/get-pay-list-user", params);
       return data;
     } catch (error) {
       throw error;
@@ -118,7 +121,7 @@ class LoansService {
   }
   async changeStatusPayLoan(params) {
     try {
-      const { data } = await amgApi.post("/loans/change-status-pay", params);
+      const { data } = await amgApi.post("/loans/edit-status-pay", params);
       return data;
     } catch (error) {
       throw error;
@@ -127,7 +130,7 @@ class LoansService {
 
   async insertPay(params) {
     try {
-      const { data } = await amgApi.post("/loans/insert-pay", params);
+      const { data } = await amgApi.post("/loans/insert-pay-loan", params);
       return data;
     } catch (error) {
       throw error;
@@ -135,7 +138,7 @@ class LoansService {
   }
   async getDue(params) {
     try {
-      const { data } = await amgApi.post("/loans/get-due", params);
+      const { data } = await amgApi.post("/loans/get-due-user", params);
       return data;
     } catch (error) {
       throw error;

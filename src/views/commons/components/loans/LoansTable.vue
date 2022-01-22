@@ -487,7 +487,7 @@ export default {
           if (result.value) {
             this.addPreloader();
             axios
-              .post("/api/loans/update-date", {
+              .post("/api/loans/update-date-first-due", {
                 id_loan: this.loanSelected.id_loan,
                 due_date: this.loanSelected.due_date,
                 user_id: this.global.layout.id

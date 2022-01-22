@@ -2,48 +2,51 @@
   <div>
     <pre>{{ currentUser }}</pre>
   </div>
-
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import CrmService from '../../services/crm.service'
+import { mapGetters } from "vuex";
+import CrmService from "../../services/crm.service";
 
 export default {
-  name: 'Test',
+  name: "Test",
   data() {
     return {
-      message: 'Hello World 2!',
-    }
+      message: "Hello World 2!"
+    };
   },
   mounted() {
-    amgApi
-      .get('/welcome')
-      .then(response => {
-        console.log(response)
-      })
+    amgApi.get("/welcome/welcome").then(response => {
+      console.log(response);
+    });
   },
   async created() {
     try {
-      await CrmService.getAlgo()
+      await CrmService.getAlgo();
     } catch (error) {
-      console.log('Somthing went wrong created:', error)
-      this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      console.log("Somthing went wrong created:", error);
+      this.showToast(
+        "danger",
+        "top-right",
+        "Oop!",
+        "AlertOctagonIcon",
+        this.getInternalErrors(error)
+      );
     }
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token',
-      userRole: 'auth/userRole',
-    }),
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      userRole: "auth/userRole"
+    })
   },
   methods: {
     click() {
-      alert('aaa')
-    },
-  },
-}
+      alert("aaa");
+    }
+  }
+};
 </script>
 
 <style>

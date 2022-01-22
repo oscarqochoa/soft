@@ -3,7 +3,7 @@ import { amgApi } from "@/service/axios";
 class NotesService {
   async getListTypeGoal() {
     try {
-      const { data } = await amgApi.get("/listtypegoal");
+      const { data } = await amgApi.get("/commons/get-list-type-goal");
       return data;
     } catch (error) {
       throw error;
@@ -11,7 +11,10 @@ class NotesService {
   }
   async insertFirstNote(params) {
     try {
-      const { data } = await amgApi.post("/insertfirstnote", params);
+      const { data } = await amgApi.post(
+        "/notes/first-note/get-first-note",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
@@ -19,7 +22,10 @@ class NotesService {
   }
   async getFirstNote(params) {
     try {
-      const { data } = await amgApi.post("/getfirstnote", params);
+      const { data } = await amgApi.post(
+        "/notes/first-note/get-first-note",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
@@ -27,7 +33,10 @@ class NotesService {
   }
   async updateFirstNote(params) {
     try {
-      const { data } = await amgApi.post("/updatefirstnote", params);
+      const { data } = await amgApi.post(
+        "/notes/first-note/update-first-note",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
@@ -35,7 +44,7 @@ class NotesService {
   }
   async notesSales(params) {
     try {
-      const { data } = await amgApi.post("/notessales", params);
+      const { data } = await amgApi.post("/sales-made/get-sale-notes", params);
       return data;
     } catch (error) {
       throw error;
@@ -43,7 +52,10 @@ class NotesService {
   }
   async insertSaleNotes(params) {
     try {
-      const { data } = await amgApi.post("/insertSaleNotes", params);
+      const { data } = await amgApi.post(
+        "/sales-made/insert-sales-notes",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
