@@ -39,7 +39,7 @@ class TaskService {
 
   async postCreateLeadTask(body) {
     try {
-      const data = await amgApi.post("/createleadtask", body);
+      const data = await amgApi.post("/lead/task/create-task-lead", body);
       return data;
     } catch (error) {
       throw error;

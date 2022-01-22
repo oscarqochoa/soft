@@ -122,7 +122,7 @@ export default {
       try {
         const response = await this.showConfirmSwal()
         if (response.isConfirmed) {
-          await amgApi.post('/file-manager/remove-file-from-module', params)
+          await amgApi.post('/deletefilemodule', params)
           this.showSuccessSwal('File has been deleted successfully')
           this.$emit('deleteFile', this.content)
         }

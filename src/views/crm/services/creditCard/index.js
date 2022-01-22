@@ -3,7 +3,7 @@ import { amgApi } from '@/service/axios'
 class CreditCard {
   async getCreditCard(body) {
     try {
-      const data = await amgApi.post('/carddata', body)
+      const data = await amgApi.post('/card/get-card-data-by-id', body)
       return data
     } catch (error) {
       throw error

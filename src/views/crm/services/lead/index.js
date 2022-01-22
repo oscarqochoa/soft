@@ -170,7 +170,7 @@ class CrmLead {
 
   async postLeadPayment(body) {
     try {
-      const data = await amgApi.post("/leadpayment", body);
+      const data = await amgApi.post("/authorize/lead-payment", body);
       return data;
     } catch (error) {
       throw error;

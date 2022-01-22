@@ -188,7 +188,7 @@ export default {
 
     openModalCard(id) {
       amgApi
-        .post("/carddata", {
+        .post("/card/get-card-data-by-id", {
           id: id,
         })
         .then((response) => {

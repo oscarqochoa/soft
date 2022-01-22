@@ -75,7 +75,7 @@ export default {
       if (resolve) {
         const result = await this.showConfirmSwal()
         if (result.value) {
-          const response = await amgApi.post('/notescreate', {
+          const response = await amgApi.post('/note/note/notes-create', {
             important: this.noteImportant ? 1 : 0,
             lead_id: this.lead.id,
             text: this.noteText,
