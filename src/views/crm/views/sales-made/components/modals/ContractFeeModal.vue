@@ -4,7 +4,7 @@
       v-model="modal.contract_fee"
       title-class="h3 text-white font-weight-bolder"
       size="lg"
-      title="CONTRACT FEE"
+      title="Contract Fee"
       scrollable
       :hide-footer="valorEdit"
     >
@@ -335,7 +335,7 @@ export default {
       await this.getContractSales();
       this.perPay = this.fee - this.initialPayment;
       if (this.contractSale.program_id == 2) {
-        this.monthlyAmount = 0;
+        this.monthlyAmount = this.fee;
         this.months = 0;
       } else if (this.monthlyAmount > 0) {
         this.months = Math.ceil(this.perPay / this.monthlyAmount);
