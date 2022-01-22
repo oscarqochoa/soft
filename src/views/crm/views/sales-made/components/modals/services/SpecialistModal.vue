@@ -257,7 +257,7 @@ export default {
     /* Rates */
     async showRates() {
       try {
-        const response = await amgApi.post("/searchprogramsalemade", {
+        const response = await amgApi.post("/sales-made/get-details-sales-made", {
           id: this.salesClient.id
         });
         if (response.status === 200) {

@@ -4,11 +4,8 @@ class EventService {
   async getEvents(params) {
     try {
       if (params.idLead) {
-        const data = await amgApi.get(
-          `/crm/crm-events/${params.idLead}/event`,
-          { params }
-        );
-        return data;
+        const data = await amgApi.get(`/crm/event/crm-events/${ params.idLead }/event`, { params })
+        return data
       }
       throw "Endpoint not exists";
     } catch (error) {
@@ -17,8 +14,8 @@ class EventService {
   }
   async getEvent(body) {
     try {
-      const data = await amgApi.post("/eventcalendar", body);
-      return data;
+      const data = await amgApi.post('/lead/event/get-data-event-calendar', body)
+      return data
     } catch (error) {
       throw error;
     }
@@ -44,8 +41,8 @@ class EventService {
   }
   async postDeleteEvents(id) {
     try {
-      const data = await amgApi.post(`/crm/crm-events/${id}`);
-      return data;
+      const data = await amgApi.post(`/crm/event/delete-crm-events/${ id }`)
+      return data
     } catch (error) {
       throw error;
     }
@@ -71,8 +68,8 @@ class EventService {
   }
   async postEvent(body) {
     try {
-      const data = await amgApi.post("/crm/crm-events", body);
-      return data;
+      const data = await amgApi.post('/crm/event/create-crm-events', body)
+      return data
     } catch (error) {
       throw error;
     }

@@ -37,9 +37,10 @@
                 >
                   <div class="d-flex flex-column">
                     <template
-                      v-for="(row) in rates.filter(rate => rate.type === (index + 1).toString())"
+                      v-for="(row, index) in rates.filter(rate => rate.type === (index + 1).toString())"
                     >
                       <div
+                        :key=index
                         class="d-flex w-100 px-1 py-1 cursor-pointer"
                         :class="{'bg-info text-white font-weight-bolder': option === row.id}"
                         @click="!isModalShow && addFee(row)"
@@ -297,9 +298,7 @@ export default {
 
     async searchRate() {
       try {
-        const response = await amgApi.post("/searchprogram", {
-          id: this.program
-        });
+        const response = await amgApi.post('/rates/get-rates-by-programs', { id: this.program })
         if (response.status === 200) {
           this.rates = response.data;
           if (!this.isModalShow) {
@@ -316,9 +315,7 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post("/searchprogramsalemade", {
-          id: this.salesClient.id
-        });
+        const response = await amgApi.post('/sales-made/get-details-sales-made', { id: this.salesClient.id })
         if (response.status === 200) {
           this.fee = response.data[0].fee;
           this.rate_selected = JSON.parse(response.data[0].rate_selected);

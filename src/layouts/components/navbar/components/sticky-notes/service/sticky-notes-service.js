@@ -3,7 +3,7 @@ import { amgApi } from "@/service/axios";
 class StickyNotesService {
 
     async getUserNotes(userId) {
-        const data = await amgApi.post('/getnotes', {
+        const data = await amgApi.post('/note/sticky-note/get-sticky-note', {
             id: userId,
             campo1: "",
             order: 7,
@@ -16,11 +16,11 @@ class StickyNotesService {
         return notes;
     }
     async getColorNotes() {
-        const data = await amgApi.post('/getcategory-notes')
+        const data = await amgApi.get('/note/sticky-note/get-category-note')
         return data.data
     }
     async saveUserNote(payload) {
-        const data = await amgApi.post('/save-notes', {
+        const data = await amgApi.post('/note/sticky-note/save-sticky-note', {
             id: payload.userId,
             note_id: payload.noteId,
             subject: payload.title,
@@ -30,7 +30,7 @@ class StickyNotesService {
         return data.data
     }
     async deleteUserNote(selectedNoteIds, userId) {
-        const data = await amgApi.post('/delete-note', {
+        const data = await amgApi.post('/note/sticky-note/delete-sticky-note', {
             id: selectedNoteIds,
             userid: userId
         })

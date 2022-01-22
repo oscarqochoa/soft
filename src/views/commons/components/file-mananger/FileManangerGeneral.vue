@@ -400,7 +400,7 @@ export default {
               this.uploadPercentage = Math.round((progressEvent.loaded * 100) / progressEvent.total)
             }.bind(this),
           }
-          const response = await amgApi.post('/filemoduledragdrop', formData, headers)
+          const response = await amgApi.post('/file-manager/save-file-by-module', formData, headers)
           if (response.status === 200) {
             this.uploadFileModal = false
             this.showSuccessSwal()
@@ -417,7 +417,7 @@ export default {
     async getFilesFromFolder(folderId, folderModule = this.currentUser.modul_id) {
       try {
         this.addPreloader()
-        const response = await amgApi.post('/searchfilesmodule', {
+        const response = await amgApi.post('/file-manager/search-files-manager', {
           module_id: folderModule,
           order: 'asc',
           orderby: 2,
@@ -501,7 +501,7 @@ export default {
         name_file: this.selectedFile.file_name,
       }
       try {
-        await amgApi.post('/savefilename', params)
+        await amgApi.post('/file-manager/update-file-name', params)
       } catch (error) {
         this.showErrorSwal(error)
       }

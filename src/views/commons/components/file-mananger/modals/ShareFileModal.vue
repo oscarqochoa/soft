@@ -68,7 +68,7 @@ export default {
             idfolder: this.selectedFile.id,
             modules: this.selectedModules,
           }
-          await amgApi.post('/permissionsave', params)
+          await amgApi.post('/file-manager/save-file-permission', params)
           this.showSuccessSwal()
           this.hideModal()
         }
@@ -78,7 +78,7 @@ export default {
     },
     async getListModules() {
       try {
-        const response = await amgApi.get('/listmodules')
+        const response = await amgApi.get('/module/get-modules')
         this.modulesList = response.data
       } catch (error) {
         this.showErrorSwal(error)
@@ -86,7 +86,7 @@ export default {
     },
     async getSelectedModules() {
       try {
-        const response = await amgApi.post('/modulepermission', { idfolder: this.selectedFile.id })
+        const response = await amgApi.post('/file-manager/verify-file-permission', { idfolder: this.selectedFile.id })
         this.selectedModules = JSON.parse(response.data[0].share)
       } catch (error) {
         this.showErrorSwal(error)

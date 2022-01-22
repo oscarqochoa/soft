@@ -378,7 +378,7 @@ export default {
       return this.$route.meta.module;
     },
     clientRoute() {
-      return this.$route.meta.isClientsTab ? "/clients" : "/clientsshareother";
+      return this.$route.meta.isClientsTab ? "/clients/search-clients" : "/clients/search-share-clients";
     },
     visibleFields() {
       return this.arrayColumns.filter(column => column.visible);

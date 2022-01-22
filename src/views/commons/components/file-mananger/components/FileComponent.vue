@@ -106,7 +106,7 @@ export default {
         name_file: this.newName,
       }
       try {
-        await amgApi.post('/savefilename', params)
+        await amgApi.post('/file-manager/update-file-name', params)
         this.content.file_name = this.newName
         this.showToast('success', 'top-right', '', 'CheckIcon', 'Rename success')
       } catch (error) {
@@ -122,7 +122,7 @@ export default {
       try {
         const response = await this.showConfirmSwal()
         if (response.isConfirmed) {
-          await amgApi.post('/deletefilemodule', params)
+          await amgApi.post('/file-manager/remove-file-from-module', params)
           this.showSuccessSwal('File has been deleted successfully')
           this.$emit('deleteFile', this.content)
         }

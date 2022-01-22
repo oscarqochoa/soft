@@ -353,27 +353,15 @@ export default {
           })
           .then(result => {
             if (result.isConfirmed) {
-              amgApi
-                .post("/createcard", this.form)
-                .then(response => {
-                  this.cards = response.data;
-                  this.$emit("new", this.cards);
-                  this.$emit("click", false);
-                  this.$swal.fire({
-                    icon: "success",
-                    title: "Card Created Successfully"
-                  });
-                })
-                .catch(error => {
-                  console.error(error);
-                  this.showToast(
-                    "danger",
-                    "top-right",
-                    "Error",
-                    "XIcon",
-                    "Something went wrong!"
-                  );
+              amgApi.post("/cards/create-cards", this.form).then((response) => {
+                this.cards = response.data;
+                this.$emit("new", this.cards);
+                this.$emit("click", false);
+                this.$swal.fire({
+                  icon: "success",
+                  title: "Card Created Successfully",
                 });
+              })
             }
           });
       });

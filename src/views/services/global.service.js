@@ -3,7 +3,7 @@ import { amgApi } from "@/service/axios";
 class GlobalService {
   async getPrograms(params) {
     try {
-      const { data } = await amgApi.get("/programs");
+      const { data } = await amgApi.get("/programs/get-programs");
       return data;
     } catch (error) {
       throw error;
@@ -21,7 +21,7 @@ class GlobalService {
 
   async getHourSystem(params) {
     try {
-      const { data } = await amgApi.get(`/get-hour-system?timezone=${params}`);
+      const { data } = await amgApi.get(`/commons/get-hour-system?timezone=${params}`);
       return data;
     } catch (error) {
       throw error;
@@ -30,7 +30,7 @@ class GlobalService {
 
   async getUsersByModuleAndRoles(moduleId, params) {
     try {
-      const { data } = await amgApi.post(`/usermodule/${moduleId}`, params);
+      const { data } = await amgApi.post(`/commons/user-module/${moduleId}`, params);
       return data;
     } catch (error) {
       throw error;
