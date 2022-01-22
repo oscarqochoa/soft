@@ -1,6 +1,7 @@
 <template>
   <div>
     <CoolLightBox
+      class="align-items-center"
       :items="itemImage"
       :index="showImage"
       @close="showImage = null"
@@ -63,19 +64,19 @@
             </template>
 
             <template v-slot:cell(flyer)="data">
-              <p class="mb-0 font-weight-bold">
-                <a
-                  v-b-tooltip.hover.left="'Click to view flyer'"
-                  class="clickable"
-                  @click="openImage(data.index)"
-                >
-                  <b-img-lazy
-                    class="img-content-table-ti"
-                    v-bind="mainProps"
-                    :src="data.item.route_thumb"
-                  />
-                </a>
-              </p>
+
+              <a
+                v-b-tooltip.hover.left="'Click to view flyer'"
+                class="clickable"
+                @click="openImage(data.index)"
+              >
+                <b-img-lazy
+                  class="img-content-table-ti"
+                  v-bind="mainProps"
+                  :src="data.item.route_thumb"
+                />
+              </a>
+
             </template>
 
             <template v-slot:cell(program)="data">
@@ -166,48 +167,22 @@
 
           </b-table>
           <template #footer>
-            <b-col
-              class="d-flex
-            align-items-center
-            justify-content-end
-          "
-            >
-              <div
-                style="
-              background-color: #3764ff !important;
-              padding: 5px;
-              border-radius: 30px;
-              padding-left: 15px;
-              padding-right: 15px;
-            "
-              >
-                <span
-                  class="text-nowrap"
-                  style="color: #fff"
-                >
-                  Total Replies
-                  {{ totalReplies == 0 ? + totalReplies : totalReplies }}
-                </span>
-              </div>
-              <div
-                style="
-              background-color: #3764ff !important;
-              padding: 5px;
-              border-radius: 30px;
-              padding-left: 15px;
-              padding-right: 15px;
-            "
-              >
-                <span
-                  class="text-nowrap"
-                  style="color: #fff"
-                >
-                  Total New Replies
-                  {{ totalNewReplies == 0 ? + totalNewReplies : totalNewReplies }}
-                </span>
-              </div>
-            </b-col>
+            <div class="text-center">
+              <b-button
 
+                variant="primary"
+              >
+                Total replies <b-badge variant="secondary">
+
+                  {{ totalReplies == 0 ? + totalReplies : totalReplies }}
+                </b-badge>
+                <span> - </span>
+                <b-badge variant="secondary">
+
+                  {{ totalNewReplies == 0 ? + totalNewReplies : totalNewReplies }}
+                </b-badge>
+              </b-button>
+            </div>
           </template>
         </filter-slot>
         <modal-watch-active
@@ -317,7 +292,6 @@ export default {
       modalInsertCommentsModal: false,
       modalListCommentsModal: false,
 
-      // Cooll Vue
       showImage: null,
       showWatch: null,
       showReplies: null,
@@ -495,5 +469,6 @@ export default {
 }
 .clickable {
   cursor: pointer;
+  align-content: center;
 }
 </style>

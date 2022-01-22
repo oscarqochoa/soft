@@ -7,12 +7,12 @@ from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bank-of-
 
 export default [
   {
-    path: '/socialnetwork/bank-of-flyers/',
+    path: '/socialnetwork/bank-of-flyers',
     name: 'bank-of-flyers',
     component: () => import('@/views/social-network/views/bank-of-flyers/BankOfFlyers.vue'),
     children: [
       {
-        path: '',
+        path: 'active',
         component: bankOfFlyersListActive,
         name: 'list-social-network-active',
 
@@ -32,9 +32,9 @@ export default [
 
     ],
     meta: {
-      pageTitle: 'Sales Made',
+      pageTitle: 'Bank Of Flyer',
       breadcrumb: [{
-        text: 'Sales Made',
+        text: 'Bank Of Flyer',
       }],
     },
   },

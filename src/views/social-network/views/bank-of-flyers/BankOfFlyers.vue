@@ -8,22 +8,22 @@
       </div>
       <b-nav pills>
         <b-nav-item
+          :to="{ name: 'list-social-network-preactive' }"
+          exact
           exact-active-class="active"
           link-classes="border-secondary hover-primary"
-          exact
-          :to="{ name: 'list-social-network-preactive' }"
         >PRE ACTIVE</b-nav-item>
         <b-nav-item
+          :to="{ name: 'list-social-network-active' }"
+          exact
           exact-active-class="active"
           link-classes="border-secondary hover-primary"
-          exact
-          :to="{ name: 'list-social-network-active' }"
         >ACTIVE</b-nav-item>
         <b-nav-item
+          :to="{ name: 'list-social-network-inactive' }"
+          exact
           exact-active-class="active"
           link-classes="border-secondary hover-primary"
-          exact
-          :to="{ name: 'list-social-network-inactive' }"
         >INACTIVE</b-nav-item>
       </b-nav>
       <router-view :key="$route.name" />
@@ -42,9 +42,7 @@ export default {
       token: 'auth/token',
 
     }),
-    ...mapState({
 
-    }),
   },
 }
 </script>
