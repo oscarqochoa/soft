@@ -16,7 +16,7 @@
         <ValidationObserver ref="form">
           <form @submit.prevent="saveRequest">
             <div>
-              <div class="">
+              <div class>
                 <b-row>
                   <b-col sm="5">
                     <ValidationProvider rules="required" v-slot="{ errors }">
@@ -50,11 +50,7 @@
                   </b-col>
                   <b-col sm="2">
                     <ValidationProvider rules="required" v-slot="{ errors }">
-                      <b-form-group
-                        id="input-group-2"
-                        label="NUMBER:"
-                        style="color: #706d7d"
-                      >
+                      <b-form-group id="input-group-2" label="NUMBER:" style="color: #706d7d">
                         <b-form-input
                           style="width: 100%"
                           type="number"
@@ -68,11 +64,7 @@
                     </ValidationProvider>
                   </b-col>
                   <b-col sm="12" v-if="category == 1">
-                    <b-form-group
-                      label="PROGRAMS:"
-                      style="color: #706d7d"
-                      label-for="input-1"
-                    >
+                    <b-form-group label="PROGRAMS:" style="color: #706d7d" label-for="input-1">
                       <b-form-checkbox-group
                         id="checkbox-group-1"
                         v-model="programs"
@@ -105,9 +97,7 @@
               </div>
 
               <b-form-group>
-                <b-button variant="primary" style="float: right" type="submit">
-                  Send
-                </b-button>
+                <b-button variant="primary" style="float: right" type="submit">Send</b-button>
               </b-form-group>
             </div>
           </form>
@@ -125,20 +115,20 @@ import vSelect from "vue-select";
 export default {
   props: {
     modalRequest: {
-      type: Boolean,
+      type: Boolean
     },
     global: {
-      type: Object,
+      type: Object
     },
     module: {
-      type: [Number, String],
-    },
+      type: [Number, String]
+    }
   },
   components: {
-    vSelect,
+    vSelect
   },
   computed: {
-    ...mapGetters("inventory-store", ["listCategoryAll"]),
+    ...mapGetters("inventory-store", ["listCategoryAll"])
   },
   data() {
     return {
@@ -157,8 +147,8 @@ export default {
         { text: "RING CENTRAL", value: "RING CENTRAL" },
         { text: "ONE DRIVE", value: "ONE DRIVE" },
         { text: "VPN", value: "VPN" },
-        { text: "USER SOFT", value: "USER SOFT" },
-      ],
+        { text: "USER SOFT", value: "USER SOFT" }
+      ]
     };
   },
   methods: {
@@ -171,8 +161,8 @@ export default {
         this.optionsCategory = this.listCategoryAll;
       } else {
         amgApi
-          .get("/inventory/get-list-category", {})
-          .then((response) => {
+          .get("/logistics/inventory/get-all-equipment-category", {})
+          .then(response => {
             if (response.status == 200) {
               this.optionsCategory = response.data;
               if (this.listCategoryAll == null) {
@@ -180,7 +170,7 @@ export default {
               }
             }
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             this.showToast(
               "danger",
@@ -194,15 +184,15 @@ export default {
     },
     getSelectUsers() {
       amgApi
-        .post("/inventory/get-list-users-by-module-id", {
-          moduleId: this.module,
+        .post("/logistics/inventory/get-list-users-by-module-id", {
+          moduleId: this.module
         })
-        .then((response) => {
+        .then(response => {
           if (response.status == 200) {
             this.optionsEmployees = response.data;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
           this.showToast(
             "danger",
@@ -214,52 +204,54 @@ export default {
         });
     },
     saveRequest() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(success => {
         if (!success) {
           return;
         } else {
-            this.showConfirmSwal("Are you sure?","You won't be able to revert this!")
-            .then((result) => {
-              if (result.value) {
-                amgApi
-                  .post("/inventory/save-request-equipment", {
-                    userId: this.global.user_id,
-                    categoryId: this.category,
-                    employessId: this.employess,
-                    selectedOperator: this.selectedOperator,
-                    cant: this.cant,
-                    commentary: this.commentary,
-                    moduleId: this.module,
-                    programsToInstall: this.programs,
-                  })
-                  .then((response) => {
-                    if (response.status == 200) {
-                      this.$swal.fire({
-                        icon: "success",
-                        title: "REQUEST SEND",
-                      });
-                      this.$emit("closeModalRequest");
-                    }
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                    this.showToast(
-                      "danger",
-                      "top-right",
-                      "Error",
-                      "XIcon",
-                      "Something went wrong!"
-                    );
-                  });
-              }
-            });
+          this.showConfirmSwal(
+            "Are you sure?",
+            "You won't be able to revert this!"
+          ).then(result => {
+            if (result.value) {
+              amgApi
+                .post("/logistics/inventory/save-request-equipment", {
+                  userId: this.global.user_id,
+                  categoryId: this.category,
+                  employessId: this.employess,
+                  selectedOperator: this.selectedOperator,
+                  cant: this.cant,
+                  commentary: this.commentary,
+                  moduleId: this.module,
+                  programsToInstall: this.programs
+                })
+                .then(response => {
+                  if (response.status == 200) {
+                    this.$swal.fire({
+                      icon: "success",
+                      title: "REQUEST SEND"
+                    });
+                    this.$emit("closeModalRequest");
+                  }
+                })
+                .catch(error => {
+                  console.error(error);
+                  this.showToast(
+                    "danger",
+                    "top-right",
+                    "Error",
+                    "XIcon",
+                    "Something went wrong!"
+                  );
+                });
+            }
+          });
         }
       });
-    },
+    }
   },
   created() {
     this.getSelectCategory();
     this.getSelectUsers();
-  },
+  }
 };
 </script>

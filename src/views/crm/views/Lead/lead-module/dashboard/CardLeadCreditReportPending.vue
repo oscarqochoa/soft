@@ -34,9 +34,7 @@
               class="button-little-size rounded-circle"
               @click="onOpenTrackingStatus(data.item.score_id)"
             >
-              <feather-icon
-                icon="ListIcon"
-              />
+              <feather-icon icon="ListIcon" />
             </b-button>
           </div>
         </template>
@@ -47,33 +45,24 @@
               v-if="data.item.status_id == 3"
               class="cursor-pointer"
               @click="onChangeStatus(data.item.score_id, 4)"
-            >
-              Validate Information
-            </span>
+            >Validate Information</span>
             <span
               v-if="data.item.status_id == 3 && data.item.attemps_count < 3"
               class="cursor-pointer"
               @click="onChangeStatus(data.item.score_id, 5)"
-            >
-              &nbsp;| Other Source (DI)
-            </span>
+            >&nbsp;| Other Source (DI)</span>
             <span
               v-if="data.item.status_id == 6"
               class="cursor-pointer"
               @click="onChangeStatus(data.item.score_id, 7)"
-            >
-              Information Was Correct
-            </span>
+            >Information Was Correct</span>
             <span
               v-if="data.item.status_id == 6 && item.attemps_count < 3"
               class="cursor-pointer"
               @click="onChangeStatus(data.item.score_id, 8)"
-            >
-              &nbsp;| Other Source (II)
-            </span>
+            >&nbsp;| Other Source (II)</span>
           </div>
         </template>
-
       </b-table>
     </b-card-body>
 
@@ -87,121 +76,118 @@
       title="Tracking Status"
       hide-footer
     >
-      <modal-tracking-status
-        :modul="modul"
-        :lead="lead"
-        :id-score="scoreId"
-      />
+      <modal-tracking-status :modul="modul" :lead="lead" :id-score="scoreId" />
     </b-modal>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters, mapState } from "vuex";
 
-import { mapActions, mapGetters, mapState } from 'vuex'
+import Ripple from "vue-ripple-directive";
 
-import Ripple from 'vue-ripple-directive'
-
-import ModalTrackingStatus from '@/views/crm/views/Lead/lead-module/dashboard/modal/ModalTrackingStatus.vue'
+import ModalTrackingStatus from "@/views/crm/views/Lead/lead-module/dashboard/modal/ModalTrackingStatus.vue";
 
 export default {
   components: {
-    ModalTrackingStatus,
+    ModalTrackingStatus
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token',
+      currentUser: "auth/currentUser",
+      token: "auth/token"
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
-      S_CREDIT_REPORT_PENDINGS: event => event.CrmCreditReportStore.S_CREDIT_REPORT_PENDINGS,
-    }),
+      S_CREDIT_REPORT_PENDINGS: event =>
+        event.CrmCreditReportStore.S_CREDIT_REPORT_PENDINGS
+    })
   },
   created() {},
   directives: { Ripple },
   data() {
     return {
       fieldsEvent: [
-        { key: 'request_by' },
-        { key: 'status' },
-        { key: 'tracking' },
-        { key: 'actions' },
+        { key: "request_by" },
+        { key: "status" },
+        { key: "tracking" },
+        { key: "actions" }
       ],
-      scoreId: null,
-    }
+      scoreId: null
+    };
   },
   methods: {
     ...mapActions({
       /* A_GET_TEMPLATES: 'CrmTemplateStore/A_GET_TEMPLATES' */
-      A_GET_CREDIT_REPORT_PENDINGS: 'CrmCreditReportStore/A_GET_CREDIT_REPORTS',
-      A_COUNT_CREDIT_REPORT_PENDINGS: 'CrmCreditReportStore/A_COUNT_CREDIT_REPORT_PENDINGS',
+      A_GET_CREDIT_REPORT_PENDINGS: "CrmCreditReportStore/A_GET_CREDIT_REPORTS",
+      A_COUNT_CREDIT_REPORT_PENDINGS:
+        "CrmCreditReportStore/A_COUNT_CREDIT_REPORT_PENDINGS"
     }),
     onOpenTrackingStatus(scoreId) {
-      this.scoreId = scoreId
-      console.log('this.scoreId', this.scoreId)
-      this.$bvModal.show('modal-tracking-status')
+      this.scoreId = scoreId;
+      console.log("this.scoreId", this.scoreId);
+      this.$bvModal.show("modal-tracking-status");
     },
     async countPendingTab() {
       try {
         await this.A_COUNT_CREDIT_REPORT_PENDINGS({
           id: this.currentUser.user_id,
-          modul: this.currentUser.modul_id,
-        })
+          modul: this.currentUser.modul_id
+        });
       } catch (error) {
-        this.showErrorSwal(error)
+        this.showErrorSwal(error);
       }
     },
     async getCreditReportsPending() {
       try {
         const response = await this.A_GET_CREDIT_REPORT_PENDINGS({
           id: this.currentUser.user_id,
-          modul: this.currentUser.modul_id,
-        })
+          modul: this.currentUser.modul_id
+        });
         if (this.isResponseSuccess(response)) {
-          await this.countPendingTab()
+          await this.countPendingTab();
         }
       } catch (error) {
-        this.showErrorSwal(error)
+        this.showErrorSwal(error);
       }
     },
     async onChangeStatus(scoreId, statusId) {
       try {
-        const result = await this.showConfirmSwal()
+        const result = await this.showConfirmSwal();
         if (result.value) {
-          this.addPreloader()
-          const response = await amgApi.post('/ncr-leads-change-status', {
+          this.addPreloader();
+          const response = await amgApi.post("/lead/ncr/change-status", {
             user_id: this.currentUser.user_id,
             score_id: scoreId,
             status_id: statusId,
-            text: result.value,
-          })
+            text: result.value
+          });
           if (this.isResponseSuccess(response)) {
-            await this.getCreditReportsPending()
-            this.removePreloader()
-            this.showSuccessSwal()
+            await this.getCreditReportsPending();
+            this.removePreloader();
+            this.showSuccessSwal();
           }
         }
       } catch (error) {
-        this.showErrorSwal(error)
+        this.showErrorSwal(error);
       }
-    },
+    }
   },
   mounted() {},
   props: {
     modul: {
       type: Number,
-      required: true,
+      required: true
     },
     lead: {
       type: Object,
-      required: true,
+      required: true
     },
     isBusy: {
       type: Boolean,
-      required: true,
-    },
+      required: true
+    }
   },
-  setup() {},
-}
+  setup() {}
+};
 </script>

@@ -274,7 +274,7 @@ export default {
     },
     async editcreditor() {
       try {
-        const response = await amgApi.post("/editcreditor", {
+        const response = await amgApi.post("/sale/get-creditor-by-id", {
           id: this.idcreditor
         });
         if (response.status === 200) {
@@ -300,7 +300,7 @@ export default {
           "Before finalizing you must save."
         );
         if (result.value) {
-          const response = await amgApi.post("/updatecreditor", {
+          const response = await amgApi.post("/sale/update-credit-list-ds", {
             id: this.idcreditor,
             event: this.idevent,
             accountProg: this.accountProg,

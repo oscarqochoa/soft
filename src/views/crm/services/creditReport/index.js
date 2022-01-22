@@ -3,8 +3,11 @@ import { amgApi } from "@/service/axios";
 class CreditReport {
   async getCreditReport(body) {
     try {
-      const data = await amgApi.post('/lead/credit-report/get-files-report', body)
-      return data
+      const data = await amgApi.post(
+        "/lead/credit-report/get-files-report",
+        body
+      );
+      return data;
     } catch (error) {
       throw error;
     }
@@ -24,7 +27,7 @@ class CreditReport {
 
   async countCreditReportPendings(body) {
     try {
-      const data = await amgApi.post("/get-cr-count-pending-tab", body);
+      const data = await amgApi.post("/lead/get-cr-count-pending-tab", body);
       return data;
     } catch (error) {
       throw error;

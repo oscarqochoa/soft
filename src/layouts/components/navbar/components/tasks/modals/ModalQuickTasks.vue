@@ -38,7 +38,7 @@
         <div class="table-responsive">
           <b-table
             ref="refQuickTasks"
-            api-url="/alltask"
+            api-url="/messages/get-all-task-notes"
             class="position-relative"
             :items="myProvider"
             :fields="arrayColumns"

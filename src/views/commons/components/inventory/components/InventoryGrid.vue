@@ -1,128 +1,94 @@
 <template>
   <div>
     <filter-slot
-        :filter="filter"
-        :filter-principal="filterPrincipal"
-        :no-visible-principal-filter="true"
-        :total-rows="totalRows"
-        :paginate="paginate"
-        :start-page="startPage"
-        :to-page="toPage"
-        :send-multiple-sms="false"
-        @reload="$refs['refClientsList'].refresh()"
-      >
-      <b-table
-      v-scrollbar
-      small
-      slot="table"
-      no-provider-filtering
-      :api-url="'/inventory/search-equipments'"
-      ref="refClientsList"
-      :items="myProvider"
-      :fields="visibleFields"
-      primary-key="id"
-      table-class="text-nowrap"
-      responsive="sm"
-      show-empty
-      sticky-header="70vh"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
-      :current-page="paginate.currentPage"
-      :per-page="paginate.perPage"
+      :filter="filter"
+      :filter-principal="filterPrincipal"
+      :no-visible-principal-filter="true"
+      :total-rows="totalRows"
+      :paginate="paginate"
+      :start-page="startPage"
+      :to-page="toPage"
+      :send-multiple-sms="false"
+      @reload="$refs['refClientsList'].refresh()"
     >
-      <template #table-busy>
-        <div class="text-center text-primary my-2">
-          <b-spinner class="align-middle mr-1"></b-spinner>
-          <strong>Loading ...</strong>
-        </div>
-      </template>
-      <template #cell(selected)="data">
-        <div v-if="validateLocation(data.item.process)">
-          <b-form-checkbox v-model="data.item.selected"></b-form-checkbox>
-        </div>
-        <div v-else></div>
-      </template>
-      <template #cell(url_image)="data">
-        <div class="image-upload">
-          <input type="file" id="file_input" hidden />
-          <!-- INPUT_FILE FIN -->
-          <div class="form-group">
-            <figure>
-              <img
-                v-if="data.item.url_image"
-                width="80"
-                height="80"
-                :src="data.item.url_image"
-              />
-              <img
-                v-else
-                width="80"
-                height="80"
-                :src="assetsImg + '/images/inventory.jpg'"
-              />
-            </figure>
+      <b-table
+        v-scrollbar
+        small
+        slot="table"
+        no-provider-filtering
+        :api-url="'/inventory/search-equipments'"
+        ref="refClientsList"
+        :items="myProvider"
+        :fields="visibleFields"
+        primary-key="id"
+        table-class="text-nowrap"
+        responsive="sm"
+        show-empty
+        sticky-header="70vh"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
+        :current-page="paginate.currentPage"
+        :per-page="paginate.perPage"
+      >
+        <template #table-busy>
+          <div class="text-center text-primary my-2">
+            <b-spinner class="align-middle mr-1"></b-spinner>
+            <strong>Loading ...</strong>
           </div>
-        </div>
-      </template>
-      <template #cell(price)="data"
-        >{{ data.item.price != null ? "$ " + data.item.price : "" }}
-      </template>
-      <template #cell(assigned_to)="data">
-        <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-          <span>{{data.item.assigned_to}}</span>
-          <div>{{data.item.name_module}}</div>
-        </div>
-      </template>
-      <template #cell(tracking)="data">
-        <div>
-          <b-button
-            variant="light"
-            @click="openModalTrackingEquipment(data.item.id)"
-          >
-            TRACKING
-          </b-button>
-        </div>
-      </template>
-      <template #cell(created_at)="data">
-        <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-          <span>
-            {{data.item.created_by}}
-          </span>
-          <div>{{data.item.created_at | myGlobalDay}}</div>
-        </div>
-      </template>
-      <template #cell(actions)="data">
-        <b-dropdown
-          variant="link"
-          no-caret
-          :right="$store.state.appConfig.isRTL"
-        >
-          <template #button-content>
-            <feather-icon
-              icon="MoreVerticalIcon"
-              size="16"
-              class="align-middle text-body"
-            />
-          </template>
-          <b-dropdown-item
-            @click="viewEquipment(data.item.id, 2)"
-            v-if="module != 12"
-          >
-            <feather-icon icon="EyeIcon" />
-            <span class="align-middle ml-50"> INFORMATION</span>
-          </b-dropdown-item>
+        </template>
+        <template #cell(selected)="data">
+          <div v-if="validateLocation(data.item.process)">
+            <b-form-checkbox v-model="data.item.selected"></b-form-checkbox>
+          </div>
+          <div v-else></div>
+        </template>
+        <template #cell(url_image)="data">
+          <div class="image-upload">
+            <input type="file" id="file_input" hidden />
+            <!-- INPUT_FILE FIN -->
+            <div class="form-group">
+              <figure>
+                <img v-if="data.item.url_image" width="80" height="80" :src="data.item.url_image" />
+                <img v-else width="80" height="80" :src="assetsImg + '/images/inventory.jpg'" />
+              </figure>
+            </div>
+          </div>
+        </template>
+        <template #cell(price)="data">{{ data.item.price != null ? "$ " + data.item.price : "" }}</template>
+        <template #cell(assigned_to)="data">
+          <div class="d-flex flex-column justify-content-start align-items-start">
+            <span>{{data.item.assigned_to}}</span>
+            <div>{{data.item.name_module}}</div>
+          </div>
+        </template>
+        <template #cell(tracking)="data">
+          <div>
+            <b-button variant="light" @click="openModalTrackingEquipment(data.item.id)">TRACKING</b-button>
+          </div>
+        </template>
+        <template #cell(created_at)="data">
+          <div class="d-flex flex-column justify-content-start align-items-start">
+            <span>{{data.item.created_by}}</span>
+            <div>{{data.item.created_at | myGlobalDay}}</div>
+          </div>
+        </template>
+        <template #cell(actions)="data">
+          <b-dropdown variant="link" no-caret :right="$store.state.appConfig.isRTL">
+            <template #button-content>
+              <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
+            </template>
+            <b-dropdown-item @click="viewEquipment(data.item.id, 2)" v-if="module != 12">
+              <feather-icon icon="EyeIcon" />
+              <span class="align-middle ml-50">INFORMATION</span>
+            </b-dropdown-item>
 
-          <b-dropdown-item
-            v-if="
+            <b-dropdown-item
+              v-if="
               data.item.assigned_to != null &&
               module != 19 &&
               statusEquipment == 2
             "
-            @click="
+              @click="
               openValidate(
                 data.item.id,
                 1,
@@ -130,13 +96,13 @@
                 data.item.module_id
               )
             "
-          >
-            <feather-icon icon="CornerUpLeftIcon" />
-            <span class="align-middle ml-50">RETURN</span>
-          </b-dropdown-item>
-          <b-dropdown-item
-            v-if="[2].includes(data.item.status)"
-            @click="
+            >
+              <feather-icon icon="CornerUpLeftIcon" />
+              <span class="align-middle ml-50">RETURN</span>
+            </b-dropdown-item>
+            <b-dropdown-item
+              v-if="[2].includes(data.item.status)"
+              @click="
               openValidate(
                 data.item.id,
                 3,
@@ -144,16 +110,15 @@
                 data.item.module_id
               )
             "
-          >
-            <feather-icon icon="ChevronsRightIcon" />
-            <span class="align-middle ml-50">TO REPAIR</span>
-          </b-dropdown-item>
-        </b-dropdown>
-      </template>
-    </b-table>
+            >
+              <feather-icon icon="ChevronsRightIcon" />
+              <span class="align-middle ml-50">TO REPAIR</span>
+            </b-dropdown-item>
+          </b-dropdown>
+        </template>
+      </b-table>
     </filter-slot>
-    
-    
+
     <modal-tracking-equipment
       v-if="modalTracking"
       :modalTracking="modalTracking"
@@ -196,21 +161,21 @@ import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot
 export default {
   props: {
     global: {
-      type: Object,
+      type: Object
     },
     module: {
-      type: [Number, String],
+      type: [Number, String]
     },
     statusEquipment: {
-      type: [Number, String],
-    },
+      type: [Number, String]
+    }
   },
   components: {
     vSelect,
     ModalTrackingEquipment,
     ModalViewEquipment,
     ModalRepairEquipment,
-    FilterSlot,
+    FilterSlot
   },
   data() {
     return {
@@ -219,13 +184,13 @@ export default {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10,
+        perPage: 10
       },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: "",
+        model: ""
       },
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       categoryFilter: null,
@@ -242,85 +207,85 @@ export default {
           label: "#",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "url_image",
           label: "Image",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "name_category",
           label: "Category",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "price",
           label: "Price",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "condition",
           label: "Condition",
           class: "text-left ",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "name_brand",
           label: "Brand",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "model",
           label: "Model",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "process",
           label: "Current location",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "assigned_to",
           label: "Assigned To",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "tracking",
           label: "Tracking",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "created_at",
           label: "Created By",
           class: "text-left",
           sortable: true,
-          visible: true,
+          visible: true
         },
         {
           key: "actions",
           label: "Actions",
           class: "text-left",
           sortable: false,
-          visible: true,
-        },
+          visible: true
+        }
       ],
       modalTracking: false,
       edit: "",
@@ -341,7 +306,7 @@ export default {
           options: [],
           reduce: "id",
           selectText: "name",
-          cols: 12,
+          cols: 12
         },
         {
           type: "datepicker",
@@ -355,9 +320,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
+          cols: 6
         },
         {
           type: "datepicker",
@@ -371,34 +336,34 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
-        },
-      ],
+          cols: 6
+        }
+      ]
     };
   },
   computed: {
     visibleFields() {
-      return this.arrayColumns.filter((column) => column.visible);
+      return this.arrayColumns.filter(column => column.visible);
     },
-    ...mapGetters("inventory-store", ["listCategoryAll"]),
+    ...mapGetters("inventory-store", ["listCategoryAll"])
   },
   methods: {
     ...mapActions("inventory-store", ["LIST_CATEGORIES"]),
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perpage: ctx.perPage,
-        from:this.filter[1].model,
+        from: this.filter[1].model,
         to: this.filter[2].model,
         statusEquipment: this.statusEquipment,
         order: ctx.sortBy == "" ? "created_at" : ctx.sortBy,
         orderby: ctx.sortDesc == 1 ? "desc" : "asc",
         idCategory: this.filter[0].model,
-        moduleId: this.module,
+        moduleId: this.module
       });
       // Must return a promise that resolves to an array of items
-      return promise.then((data) => {
+      return promise.then(data => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
         this.startPage = data.data.from;
@@ -418,8 +383,8 @@ export default {
         this.filter[0].options = this.listCategoryAll;
       } else {
         amgApi
-          .get("/inventory/get-list-category", {})
-          .then((response) => {
+          .get("/logistics/inventory/get-all-equipment-category", {})
+          .then(response => {
             if (response.status == 200) {
               this.optionsCategory = response.data;
               this.filter[0].options = response.data;
@@ -428,7 +393,7 @@ export default {
               }
             }
           })
-          .catch((error) => {
+          .catch(error => {
             console.error(error);
             this.showToast(
               "danger",
@@ -482,15 +447,15 @@ export default {
             confirmButtonText: "OK!",
             customClass: {
               confirmButton: "btn btn-primary",
-              cancelButton: "btn btn-danger",
+              cancelButton: "btn btn-danger"
             },
-            inputValidator: (value) => {
+            inputValidator: value => {
               if (!value) {
                 return "password is required!";
               }
-            },
+            }
           })
-          .then((result) => {
+          .then(result => {
             if (result.value) {
               this.validatePassword(
                 result.value,
@@ -523,13 +488,13 @@ export default {
       }
       const params = { module: module, pass: value };
       amgApi
-        .post("/inventory/validate-return-equitment", params)
-        .then((res) => {
+        .post("/logistics/inventory/equipment-validate-return", params)
+        .then(res => {
           if (res.data == 0) {
             this.$swal.fire({
               icon: "error",
               title: "Oops...",
-              text: "Password is incorrect",
+              text: "Password is incorrect"
             });
           } else {
             this.showToast(
@@ -542,7 +507,7 @@ export default {
             this.openModalRepairEquipment(param1, param2, param3, num);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
           this.showToast(
             "danger",
@@ -566,11 +531,11 @@ export default {
     },
     updateRepairEquipment() {
       this.$refs.refClientsList.refresh();
-    },
+    }
   },
   created() {
     this.getSelectCategory();
-  },
+  }
 };
 </script>
 

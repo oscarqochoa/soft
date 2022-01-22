@@ -290,7 +290,7 @@ export default {
     async verifyPassword() {
       try {
         this.show = true;
-        const response = await amgApi.post("/claims/get-password-supervisor", {
+        const response = await amgApi.post("/commons/get-password-supervisor", {
           module_id: 2,
           field_pass: this.password,
           type: 0

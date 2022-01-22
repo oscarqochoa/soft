@@ -12,7 +12,7 @@
           >
             <!-- <span
                         style="display: inline-block;margin-left: 10px;color: black;"
-                      >Total Leads Pending : 146789</span> -->
+            >Total Leads Pending : 146789</span>-->
           </b-col>
           <b-col
             cols="12"
@@ -21,26 +21,24 @@
             sm="6"
             class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
           >
-            <b-button variant="success" @click="modalopen(1)">
-              Create Glossary
-            </b-button>
+            <b-button variant="success" @click="modalopen(1)">Create Glossary</b-button>
           </b-col>
         </b-row>
       </div>
     </b-card>
     <filter-slot
-        :filter="filter"
-        :filter-principal="filterPrincipal"
-        :total-rows="totalRows"
-        :no-visible-principal-filter="true"
-        :paginate="paginate"
-        :start-page="startPage"
-        :to-page="toPage"
-        :send-multiple-sms="false"
-        @reload="$refs['refClientsList'].refresh()"
-      >
+      :filter="filter"
+      :filter-principal="filterPrincipal"
+      :total-rows="totalRows"
+      :no-visible-principal-filter="true"
+      :paginate="paginate"
+      :start-page="startPage"
+      :to-page="toPage"
+      :send-multiple-sms="false"
+      @reload="$refs['refClientsList'].refresh()"
+    >
       <b-table
-      v-scrollbar
+        v-scrollbar
         slot="table"
         no-provider-filtering
         :api-url="clientRoute"
@@ -63,9 +61,7 @@
           </div>
         </template>
         <template #cell(title)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
+          <div class="d-flex flex-column justify-content-start align-items-start">
             <b-button
               variant="flat-primary"
               @click="modalopenEdit(3, data.item)"
@@ -75,35 +71,22 @@
                 padding-top: 5px;
                 padding-bottom: 5px;
               "
-              >{{ data.item.title }}</b-button
-            >
+            >{{ data.item.title }}</b-button>
           </div>
         </template>
         <template #cell(created_at)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <span>
-              {{ data.item.created_at | myGlobalDay }}
-            </span>
+          <div class="d-flex flex-column justify-content-start align-items-start">
+            <span>{{ data.item.created_at | myGlobalDay }}</span>
           </div>
         </template>
         <template #cell(action)="data">
-          <b-dropdown
-            variant="link"
-            no-caret
-            :right="$store.state.appConfig.isRTL"
-          >
+          <b-dropdown variant="link" no-caret :right="$store.state.appConfig.isRTL">
             <template #button-content>
-              <feather-icon
-                icon="MoreVerticalIcon"
-                size="16"
-                class="align-middle text-body"
-              />
+              <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
             </template>
             <b-dropdown-item @click="modalopenEdit(2, data.item)">
               <!-- <feather-icon icon="EditIcon" /> -->
-              <span class="align-middle ml-50"> Edit</span>
+              <span class="align-middle ml-50">Edit</span>
             </b-dropdown-item>
 
             <b-dropdown-item @click="deleteGlossary(data.item)">
@@ -114,9 +97,7 @@
         </template>
       </b-table>
     </filter-slot>
-     
-      
-    
+
     <modal-glossary
       v-if="modalChanging"
       :ifModalCard="modalChanging"
@@ -141,27 +122,27 @@ export default {
   components: {
     vSelect,
     ModalGlossary,
-    FilterSlot,
+    FilterSlot
   },
   data() {
     return {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10,
+        perPage: 10
       },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: "",
+        model: ""
       },
       searchInput: "",
       created_by: null,
       categorySearch: null,
       startdate: "",
       enddate: "",
-      startPage:null,
+      startPage: null,
       toPage: null,
       totalData: "",
       currentPage: 1,
@@ -172,32 +153,32 @@ export default {
         {
           key: "category",
           label: "Category",
-          visible: true,
+          visible: true
         },
         {
           key: "title",
           label: "Title",
-          visible: true,
+          visible: true
         },
         {
           key: "nameuser",
           label: "Created By",
-          visible: true,
+          visible: true
         },
         {
           key: "created_at",
           label: "Created",
-          visible: true,
+          visible: true
         },
         {
           key: "action",
           label: "Actions",
-          visible: true,
-        },
+          visible: true
+        }
       ],
       fromToObject: {
         from: null,
-        to: null,
+        to: null
       },
       categories: [],
       modalChanging: false,
@@ -213,7 +194,7 @@ export default {
           options: [],
           reduce: "id",
           selectText: "name",
-          cols: 12,
+          cols: 12
         },
         {
           type: "datepicker",
@@ -227,9 +208,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
+          cols: 6
         },
         {
           type: "datepicker",
@@ -243,53 +224,53 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
-        },
-      ],
+          cols: 6
+        }
+      ]
     };
   },
   computed: {
     clientRoute() {
-      return "/glossary/get-glossaries";
+      return "/glossary/get-all-glossaries";
     },
     visibleFields() {
-      return this.arrayColumns.filter((column) => column.visible);
+      return this.arrayColumns.filter(column => column.visible);
     },
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   methods: {
     deleteGlossary(item) {
-      this.showConfirmSwal("DELETE","Are you sure?").then((result) => {
-          if (result.value) {
-            const params = { user_id: this.currentUser.id, id: item.id };
-            amgApi
-              .post("/glossary/delete-glossary", params)
-              .then((res) => {
-                this.showToast(
-                  "success",
-                  "top-right",
-                  "Success",
-                  "CheckIcon",
-                  "Glossary Deleted"
-                );
-                this.resetSearch();
-              })
-              .catch((error) => {
-                console.log(error);
-                this.showToast(
-                  "danger",
-                  "top-right",
-                  "Error",
-                  "XIcon",
-                  "Something went wrong!"
-                );
-              });
-          }
-        });
+      this.showConfirmSwal("DELETE", "Are you sure?").then(result => {
+        if (result.value) {
+          const params = { user_id: this.currentUser.id, id: item.id };
+          amgApi
+            .post("/glossary/delete-glossary", params)
+            .then(res => {
+              this.showToast(
+                "success",
+                "top-right",
+                "Success",
+                "CheckIcon",
+                "Glossary Deleted"
+              );
+              this.resetSearch();
+            })
+            .catch(error => {
+              console.log(error);
+              this.showToast(
+                "danger",
+                "top-right",
+                "Error",
+                "XIcon",
+                "Something went wrong!"
+              );
+            });
+        }
+      });
     },
     updateGlossary() {
       this.modalChanging = false;
@@ -325,11 +306,11 @@ export default {
         created_by: this.created_by,
         category: this.filter[0].model,
         startdate: this.filter[1].model,
-        enddate: this.filter[2].model,
+        enddate: this.filter[2].model
       });
 
       // Must return a promise that resolves to an array of items
-      return promise.then((data) => {
+      return promise.then(data => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
         this.startPage = data.data.from;
@@ -353,12 +334,12 @@ export default {
     },
     getCategories() {
       amgApi
-        .get("/glossary/get-categories")
-        .then((res) => {
+        .get("/glossary/get-all-glossaries-category")
+        .then(res => {
           this.categories = res.data;
           this.filter[0].options = res.data;
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
           this.showToast(
             "danger",
@@ -368,11 +349,11 @@ export default {
             "Something went wrong!"
           );
         });
-    },
+    }
   },
   created() {
     this.getCategories();
-  },
+  }
 };
 </script>
 

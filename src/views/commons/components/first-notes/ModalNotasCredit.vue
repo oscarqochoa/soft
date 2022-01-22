@@ -554,7 +554,7 @@ export default {
   methods: {
     async getNoCredit() {
       try {
-        const response = await amgApi.post("/getjsonnocredit", {
+        const response = await amgApi.post("/sales-made/save-file", {
           sale_id: this.noteInfo.saleId
         });
         this.noCredit = response.data;
@@ -708,7 +708,7 @@ export default {
     },
     async listTypeBusiness() {
       try {
-        const response = await amgApi.get("/listtypebusiness");
+        const response = await amgApi.get("/crm/payment/get-all-type-business");
         this.note.typeOfBuisiness.options = response.data;
       } catch (error) {
         this.showErrorSwal(error);

@@ -15,11 +15,7 @@
       <ValidationObserver ref="form">
         <div class="row" v-if="statusModal != '3'">
           <div class="col-lg-6 col-md-6 col-sm-6">
-            <ValidationProvider
-              name="selectCategory"
-              rules="required"
-              v-slot="{ errors }"
-            >
+            <ValidationProvider name="selectCategory" rules="required" v-slot="{ errors }">
               <b-form-group label="Category">
                 <v-select
                   @input="openModalCategory()"
@@ -29,23 +25,15 @@
                   label="name"
                   class="w-100"
                   :class="{ 'border border-danger': errors[0] }"
-                >
-                </v-select>
+                ></v-select>
               </b-form-group>
             </ValidationProvider>
           </div>
           <div class="col-lg-6 col-md-6 col-sm-6">
-            <ValidationProvider
-              name="title"
-              rules="required"
-              v-slot="{ errors }"
-            >
+            <ValidationProvider name="title" rules="required" v-slot="{ errors }">
               <b-form-group label=" ">
-                <b-input-group prepend="TITLE" size="md" class="mt-2" style="">
-                  <b-form-input
-                    v-model="title"
-                    :class="{ 'border border-danger': errors[0] }"
-                  />
+                <b-input-group prepend="TITLE" size="md" class="mt-2" style>
+                  <b-form-input v-model="title" :class="{ 'border border-danger': errors[0] }" />
                 </b-input-group>
               </b-form-group>
             </ValidationProvider>
@@ -59,20 +47,15 @@
                 class="class-campo-icon add-class-campo-icon"
                 style="border-radius: 10px 10px 0px 0px"
               >
-                <span>DESCRIPTION </span>
+                <span>DESCRIPTION</span>
               </b-col>
             </b-row>
           </b-col>
           <b-col md="12">
             <div class="form-group mt-0">
-              <ValidationProvider
-                name="description"
-                rules="required"
-                v-slot="{ errors }"
-              >
+              <ValidationProvider name="description" rules="required" v-slot="{ errors }">
                 <b-form-textarea
                   :disabled="statusDescription"
-                  
                   :class="{ 'border border-danger': errors[0] }"
                   style="border-radius: 0px 10px 10px 10px; height: 120px"
                   v-model="description"
@@ -89,17 +72,13 @@
             style="border-radius: 5px !important"
             @click="createGlossary()"
             v-if="!spinnerBtn && statusModal == '1'"
-          >
-             Save
-          </b-button>
+          >Save</b-button>
           <b-button
             variant="success"
             style="border-radius: 5px !important"
             @click="editGlossary()"
             v-if="!spinnerBtn && statusModal == '2'"
-          >
-             Update
-          </b-button>
+          >Update</b-button>
           <b-button
             variant="success"
             style="border-radius: 5px !important"
@@ -127,71 +106,73 @@ import { amgApi } from "@/service/axios";
 export default {
   components: {
     vSelect,
-    ModalAddCategory,
+    ModalAddCategory
   },
   props: {
     ifModalCard: {
-      type: Boolean,
+      type: Boolean
     },
     categories: {
-      type: [],
+      type: []
     },
     statusModal: {
-      type: [Number, String],
+      type: [Number, String]
     },
     objectGlossary: {
-      type: Object,
-      
-    },
+      type: Object
+    }
   },
   data() {
     return {
-      id:null,
+      id: null,
       spinnerBtn: false,
       title: "",
       modalChangingCategory: false,
       description: null,
       selectCategory: null,
       mutableIfModalCard: this.ifModalCard,
-      objectGlossaryChange:null,
+      objectGlossaryChange: null
     };
   },
   computed: {
     categoriesModal() {
       let firstOption = {
         name: "Add Category",
-        id: "123456##@",
+        id: "123456##@"
       };
       return [firstOption, ...this.categories];
     },
     ...mapGetters({
-      currentUser: "auth/currentUser",
+      currentUser: "auth/currentUser"
     }),
-    statusDescription(){
-      return this.statusModal == "3"? true:false
+    statusDescription() {
+      return this.statusModal == "3" ? true : false;
     },
-    titleView(){
-      return this.statusModal == "3"? this.objectGlossary.title :'CREATE GLOSSARY'
-    },
-    
+    titleView() {
+      return this.statusModal == "3"
+        ? this.objectGlossary.title
+        : "CREATE GLOSSARY";
+    }
   },
   methods: {
     createGlossary() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(success => {
         if (!success) {
           return;
         }
-          this.showConfirmSwal("CREATE","Are you sure?").then((result) => {
-            if (result.value) {
-              this.spinnerBtn = true;
-              const params = {
-                user_id: this.currentUser.user_id,
-                module_id: this.$route.meta.module,
-                category_id: this.selectCategory,
-                title: this.title,
-                description: this.description,
-              };
-              amgApi.post("/glossary/create-glossaries", params).then((res) => {
+        this.showConfirmSwal("CREATE", "Are you sure?").then(result => {
+          if (result.value) {
+            this.spinnerBtn = true;
+            const params = {
+              user_id: this.currentUser.user_id,
+              module_id: this.$route.meta.module,
+              category_id: this.selectCategory,
+              title: this.title,
+              description: this.description
+            };
+            amgApi
+              .post("/glossary/create-glossary", params)
+              .then(res => {
                 this.showToast(
                   "success",
                   "top-right",
@@ -201,60 +182,61 @@ export default {
                 );
                 this.spinnerBtn = false;
                 this.$emit("updateGlossary", false);
-              }).catch(error=>{
-                console.log(error)
+              })
+              .catch(error => {
+                console.log(error);
                 this.showToast(
-                    "danger",
-                    "top-right",
-                    "Error",
-                    "XIcon",
-                    "Something went wrong!"
-                  );
+                  "danger",
+                  "top-right",
+                  "Error",
+                  "XIcon",
+                  "Something went wrong!"
+                );
               });
-            }
-          });
+          }
+        });
       });
     },
     editGlossary() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(success => {
         if (!success) {
           return;
         }
-          this.showConfirmSwal("UPDATE","Are you sure?").then((result) => {
-            if (result.value) {
-              this.spinnerBtn = true;
-              const params = {
-                id: this.id,
-                category: this.selectCategory,
-                title: this.title,
-                description: this.description,
-              };
-              
-              amgApi
-                .post("/glossary/edit-glossary", params)
-                .then((res) => {
-                  this.spinnerBtn = false;
-                  this.showToast(
-                    "success",
-                    "top-right",
-                    "Success",
-                    "CheckIcon",
-                    "Glossary Updated"
-                  );
-                  this.$emit("updateGlossary", false);
-                })
-                .catch((error) => {
-                  console.log(error);
-                  this.showToast(
-                    "danger",
-                    "top-right",
-                    "Error",
-                    "XIcon",
-                    "Something went wrong!"
-                  );
-                });
-            }
-          });
+        this.showConfirmSwal("UPDATE", "Are you sure?").then(result => {
+          if (result.value) {
+            this.spinnerBtn = true;
+            const params = {
+              id: this.id,
+              category: this.selectCategory,
+              title: this.title,
+              description: this.description
+            };
+
+            amgApi
+              .post("/glossary/edit-glossary", params)
+              .then(res => {
+                this.spinnerBtn = false;
+                this.showToast(
+                  "success",
+                  "top-right",
+                  "Success",
+                  "CheckIcon",
+                  "Glossary Updated"
+                );
+                this.$emit("updateGlossary", false);
+              })
+              .catch(error => {
+                console.log(error);
+                this.showToast(
+                  "danger",
+                  "top-right",
+                  "Error",
+                  "XIcon",
+                  "Something went wrong!"
+                );
+              });
+          }
+        });
       });
     },
     openModalCategory() {
@@ -274,7 +256,7 @@ export default {
     },
     closeModal() {
       this.$emit("close", false);
-      this.objectGlossaryChange = null
+      this.objectGlossaryChange = null;
     },
     openModalEdit(item) {
       this.id = item.id;
@@ -282,16 +264,16 @@ export default {
       this.description = item.description;
       this.selectCategory = item.category_id;
     },
-    initEdit(){
-      this.objectGlossaryChange =this.objectGlossary
-      if(this.statusModal == "2" || this.statusModal == "3"){
-        this.openModalEdit(this.objectGlossary)
+    initEdit() {
+      this.objectGlossaryChange = this.objectGlossary;
+      if (this.statusModal == "2" || this.statusModal == "3") {
+        this.openModalEdit(this.objectGlossary);
       }
     }
   },
   created() {
-    this.initEdit()
-  },
+    this.initEdit();
+  }
 };
 </script>
 

@@ -13,7 +13,7 @@
     >
       <div class="table-responsive">
         <b-table
-          :api-url="'/inventory/get-tracking-request'"
+          :api-url="'/logistics/inventory/get-tracking-request'"
           ref="refPaymentsGrid"
           class="position-relative"
           :items="myProvider"
@@ -31,18 +31,18 @@
             </div>
           </template>
           <template #cell(status)="data">
-          <p
-            :style="data.item.status == 'DISAPPROVED' ? 'color: #FF0000' : ( data.item.status == 'SEND' ? 'color: rgb(255 177 0);' : ( data.item.status == 'APPROVED' ? 'color: blue;' : 'color: #00CC00' ) )"
-          >{{ data.item.status }}</p>
-        </template>
-        <template #cell(created_at)="data">
-          {{data.item.created_by}}
-          <br />
-          {{data.item.created_at | myGlobalDay}}
-        </template>
-        <template #cell(commentary)="data">
-          <div style="white-space: normal;" v-html="data.item.commentary"></div>
-        </template>
+            <p
+              :style="data.item.status == 'DISAPPROVED' ? 'color: #FF0000' : ( data.item.status == 'SEND' ? 'color: rgb(255 177 0);' : ( data.item.status == 'APPROVED' ? 'color: blue;' : 'color: #00CC00' ) )"
+            >{{ data.item.status }}</p>
+          </template>
+          <template #cell(created_at)="data">
+            {{data.item.created_by}}
+            <br />
+            {{data.item.created_at | myGlobalDay}}
+          </template>
+          <template #cell(commentary)="data">
+            <div style="white-space: normal;" v-html="data.item.commentary"></div>
+          </template>
         </b-table>
       </div>
     </b-modal>
@@ -53,14 +53,14 @@
 export default {
   props: {
     modalTrackingRequest: {
-      type: Boolean,
+      type: Boolean
     },
     requestId: {
-      type: [Number, String],
+      type: [Number, String]
     },
     global: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   components: {},
   data() {
@@ -72,21 +72,21 @@ export default {
           key: "created_at",
           label: "Created BY",
           class: "text-left",
-          sortable: false,
+          sortable: false
         },
         {
           key: "status",
           label: "Status",
           class: "text-left",
-          sortable: false,
+          sortable: false
         },
         {
           key: "commentary",
           label: "Commentary",
           class: "text-left",
-          sortable: false,
-        },
-      ],
+          sortable: false
+        }
+      ]
     };
   },
   methods: {
@@ -95,13 +95,13 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}`, {
-        requestId: this.requestId,
+        requestId: this.requestId
       });
-      return promise.then((data) => {
+      return promise.then(data => {
         const items = data.data;
         return items || [];
       });
-    },
-  },
+    }
+  }
 };
 </script>

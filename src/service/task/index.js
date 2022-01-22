@@ -12,8 +12,11 @@ class TaskService {
 
   async getTasks(body) {
     try {
-      const data = await amgApi.post('/notification/get-task-notifications', body)
-      return data
+      const data = await amgApi.post(
+        "/notification/get-task-notifications",
+        body
+      );
+      return data;
     } catch (error) {
       throw error;
     }
@@ -21,7 +24,10 @@ class TaskService {
 
   async getHistoryTasks(body) {
     try {
-      const data = await amgApi.post("/searchhistorytasklead", body);
+      const data = await amgApi.post(
+        "/lead/task/search-history-task-lead",
+        body
+      );
       return data;
     } catch (error) {
       throw error;
@@ -93,7 +99,7 @@ class TaskService {
 
   async addTask(body) {
     try {
-      const { data } = await amgApi.post("/tasks/add-task", body)
+      const { data } = await amgApi.post("/tasks/add-task", body);
       return data;
     } catch (error) {
       throw error;
@@ -102,7 +108,7 @@ class TaskService {
 
   async getQuickTasksList(body) {
     try {
-      const { data } = await amgApi.post("/alltask", body);
+      const { data } = await amgApi.post("/messages/get-all-task-notes", body);
       return data;
     } catch (error) {
       throw error;
@@ -111,7 +117,10 @@ class TaskService {
 
   async deleteQuickTask(body) {
     try {
-      const { data } = await amgApi.post("/deletetask", body);
+      const { data } = await amgApi.post(
+        "/messages/delete-task-notes-by-id",
+        body
+      );
       return data;
     } catch (error) {
       throw error;
@@ -119,7 +128,7 @@ class TaskService {
   }
   async saveQuickTask(body) {
     try {
-      const { data } = await amgApi.post("/savetask", body);
+      const { data } = await amgApi.post("/messages/insert-task-notes", body);
       return data;
     } catch (error) {
       throw error;

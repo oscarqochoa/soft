@@ -1,55 +1,55 @@
-import { amgApi } from '@/service/axios'
+import { amgApi } from "@/service/axios";
 
 class CrmSms {
-  async getAllQuicksSms (body) {
+  async getAllQuicksSms(body) {
     try {
-      const data = await amgApi.post('/messages/get-all-quick-sms', body)
-      return data
+      const data = await amgApi.post("/messages/get-all-quick-sms", body);
+      return data;
     } catch (error) {
-      console.log('Something went wrong on getAllQuicksSms:', error)
-      throw error
+      console.log("Something went wrong on getAllQuicksSms:", error);
+      throw error;
     }
   }
 
-  async postHistorySmsLead (body) {
+  async postHistorySmsLead(body) {
     try {
-      const data = await amgApi.post('/messages/get-tracking-sms-lead', body)
-      return data
+      const data = await amgApi.post("/messages/get-tracking-sms-lead", body);
+      return data;
     } catch (error) {
-      console.log('Something went wrong on postHistorySmsLead:', error)
-      throw error
+      console.log("Something went wrong on postHistorySmsLead:", error);
+      throw error;
     }
   }
 
-  async postSaveQuickSms (body) {
+  async postSaveQuickSms(body) {
     try {
-      const data = await amgApi.post('/messages/save-quick-sms', body)
-      return data
+      const data = await amgApi.post("/messages/save-quick-sms", body);
+      return data;
     } catch (error) {
-      console.log('Something went wrong on postSaveQuickSms:', error)
-      throw error
+      console.log("Something went wrong on postSaveQuickSms:", error);
+      throw error;
     }
   }
 
-  async postDeleteQuickSms (body) {
+  async postDeleteQuickSms(body) {
     try {
-      const data = await amgApi.post('/deletequick', body)
-      return data
+      const data = await amgApi.post("/deletequick", body);
+      return data;
     } catch (error) {
-      console.log('Something went wrong on postDeleteQuickSms:', error)
-      throw error
+      console.log("Something went wrong on postDeleteQuickSms:", error);
+      throw error;
     }
   }
 
-  async postSendMessageLead (body) {
+  async postSendMessageLead(body) {
     try {
-      const data = await amgApi.post('/sendmessagelead', body)
-      return data
+      const data = await amgApi.post("/messages/send-message-lead", body);
+      return data;
     } catch (error) {
-      console.log('Something went wrong on postSendMessageLead:', error)
-      throw error
+      console.log("Something went wrong on postSendMessageLead:", error);
+      throw error;
     }
   }
 }
 
-export default new CrmSms()
+export default new CrmSms();

@@ -378,7 +378,10 @@ export default {
         };
         this.addPreloader();
         try {
-          const response = await amgApi.post("/insertContract", params);
+          const response = await amgApi.post(
+            "/sales-made/insert-contract",
+            params
+          );
           if (response.status === 200) {
             await this.showSuccessSwal("Contract save succesfully");
             this.$emit("close");
@@ -398,7 +401,9 @@ export default {
     },
     async getCards() {
       try {
-        this.cards = await amgApi.post('/clients/search-cards-clients', { id: this.contractFee.id })
+        this.cards = await amgApi.post("/clients/search-cards-clients", {
+          id: this.contractFee.id
+        });
         if (this.cards.status === 200) {
           this.cards = this.cards.data;
         } else {

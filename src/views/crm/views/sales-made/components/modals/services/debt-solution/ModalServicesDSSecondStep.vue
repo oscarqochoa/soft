@@ -396,7 +396,7 @@ export default {
     async prevfirst(id, type) {
       try {
         this.addPreloader();
-        const response = await amgApi.post("/deletesave", {
+        const response = await amgApi.post("/sale/delete-leyend-states-ds", {
           type,
           id,
           event:

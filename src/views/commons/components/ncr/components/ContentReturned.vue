@@ -1,21 +1,21 @@
 <template>
   <div>
     <filter-slot
-        :filter="filter"
-        :filter-principal="filterPrincipal"
-        :total-rows="totalRows"
-        :paginate="paginate"
-        :start-page="startPage"
-        :to-page="toPage"
-        :send-multiple-sms="false"
-        @reload="$refs['refClientsList'].refresh()"
-      >
-        <b-table
+      :filter="filter"
+      :filter-principal="filterPrincipal"
+      :total-rows="totalRows"
+      :paginate="paginate"
+      :start-page="startPage"
+      :to-page="toPage"
+      :send-multiple-sms="false"
+      @reload="$refs['refClientsList'].refresh()"
+    >
+      <b-table
         v-scrollbar
         small
         slot="table"
         no-provider-filtering
-        :api-url="'/ncr-leads-search-returned-crm'"
+        :api-url="'/lead/ncr/search-returned'"
         ref="refClientsList"
         :items="myProvider"
         :fields="arrayColumns"
@@ -33,12 +33,10 @@
             <strong>Loading ...</strong>
           </div>
         </template>
-        <template #cell(lead_name)="data" >
-            <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >  
+        <template #cell(lead_name)="data">
+          <div class="d-flex flex-column justify-content-start align-items-start">
             <!-- <a href="http://www.google.com" target="_blank"
-            class="select-lead-name text-important"> {{data.item.lead_name}} </a> -->
+            class="select-lead-name text-important"> {{data.item.lead_name}} </a>-->
             <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
             <router-link
               class="select-lead-name text-important"
@@ -47,26 +45,18 @@
                 params: { id: data.item.lead_id },
               }"
               target="_blank"
-            >
-              {{ data.item.lead_name }}
-            </router-link>
+            >{{ data.item.lead_name }}</router-link>
           </div>
         </template>
         <template #cell(seller_name)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <span>
-              {{ data.item.seller_name }}
-            </span>
+          <div class="d-flex flex-column justify-content-start align-items-start">
+            <span>{{ data.item.seller_name }}</span>
             <div>{{ data.item.date | myGlobalDay }}</div>
             <!-- <span>{{ data.item.date | myGlobalDay }}</span> -->
           </div>
         </template>
         <template #cell(status)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
+          <div class="d-flex flex-column justify-content-start align-items-start">
             <span
               class="ncr-leads-status-successful"
               v-if="data.item.status_id == 1"
@@ -77,8 +67,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 2"
@@ -89,8 +78,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 3"
@@ -101,8 +89,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 4"
@@ -113,8 +100,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 5"
@@ -125,8 +111,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 6"
@@ -137,8 +122,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 7"
@@ -149,8 +133,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 8"
@@ -161,8 +144,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 9"
@@ -173,8 +155,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 10"
@@ -185,8 +166,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
           </div>
         </template>
         <template #cell(question_id)="data">
@@ -220,9 +200,7 @@
           ></feather-icon>
         </template>
         <template #cell(tracking)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center">
             <feather-icon
               icon="ListIcon"
               class="font-medium-4"
@@ -234,15 +212,15 @@
           </div>
         </template>
         <template #cell(process_date)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
-          <span :style="data.item.state_cancel == 1 ? 'color:red' : ''">{{ data.item.process_date | myGlobalDay }}</span>
-          <span>{{data.item.state_cancel}}</span>
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <span
+              :style="data.item.state_cancel == 1 ? 'color:red' : ''"
+            >{{ data.item.process_date | myGlobalDay }}</span>
+            <span>{{data.item.state_cancel}}</span>
           </div>
         </template>
         <template #cell(cr)="data">
-          <div >
+          <div>
             <a
               v-if="data.item.cr == 1"
               :href="
@@ -259,9 +237,7 @@
           </div>
         </template>
         <template #cell(route_pdf)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center">
             <a :href="data.item.route_pdf" target="_blanck">
               <img
                 v-if="data.item.route_pdf"
@@ -273,9 +249,7 @@
           </div>
         </template>
         <template #cell(attemps)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center">
             <ul style="padding-left: 0px; margin-bottom: 0px">
               <li
                 v-for="(attemp, index) in JSON.parse(data.item.attemps)
@@ -284,10 +258,7 @@
                 :key="index"
                 style="list-style: none"
               >
-                <img
-                  :src="assetsImg + attemp.plataform_ico"
-                  :title="attemp.plataform_name"
-                />
+                <img :src="assetsImg + attemp.plataform_ico" :title="attemp.plataform_name" />
               </li>
             </ul>
           </div>
@@ -300,18 +271,14 @@
             v-if="data.item.status_id == 6 || data.item.status_id == 3"
           >
             <template #button-content>
-              <feather-icon
-                icon="MoreVerticalIcon"
-                size="16"
-                class="align-middle text-body"
-              />
+              <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
             </template>
             <b-dropdown-item
               v-if="data.item.status_id == 3"
               @click="changeStatus(data.item.score_id, 4)"
             >
               <amg-icon icon="ValidationInformationIcon" />
-              <span class="align-middle ml-50"> Validate Information</span>
+              <span class="align-middle ml-50">Validate Information</span>
             </b-dropdown-item>
 
             <b-dropdown-item
@@ -321,7 +288,10 @@
               <amg-icon icon="OtherSourcesIcon" />
               <span class="align-middle ml-50">Other Source (DI)</span>
             </b-dropdown-item>
-            <b-dropdown-item v-if="data.item.status_id == 6" @click="changeStatus(data.item.score_id, 7)">
+            <b-dropdown-item
+              v-if="data.item.status_id == 6"
+              @click="changeStatus(data.item.score_id, 7)"
+            >
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">Information Was Correct</span>
             </b-dropdown-item>
@@ -365,10 +335,10 @@ import vSelect from "vue-select";
 import ModalQuestionnaire from "../modal/ModalQuestionnaire.vue";
 import ModalTrackingStatus from "../modal/ModalTrackingStatus.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-import ncrmixin from '../mixin'
+import ncrmixin from "../mixin";
 export default {
   mixins: [ncrmixin],
-  components: { vSelect, ModalQuestionnaire, ModalTrackingStatus,FilterSlot },
+  components: { vSelect, ModalQuestionnaire, ModalTrackingStatus, FilterSlot },
   props: {},
   data() {
     return {
@@ -376,13 +346,13 @@ export default {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10,
+        perPage: 10
       },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: "",
+        model: ""
       },
       startPage: null,
       toPage: null,
@@ -390,84 +360,84 @@ export default {
       currentPage: 1,
       perPage: 10,
       perPageOptions: [10, 25, 50, 100],
-      
+
       arrayColumns: [
         {
           key: "lead_name",
           label: "Lead Name",
           class: "text-left",
-          sortable: false,
+          sortable: false
         },
         {
           key: "seller_name",
           label: "Request By",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "admin_name",
           label: "Administrador",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "status",
           label: "Status",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "question_id",
           label: "QU",
           class: "text-left ",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "tracking",
           label: "Tracking",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "process_date",
           label: "Proccess Date",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "cr",
           label: "CR",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "route_pdf",
           label: "PDF",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "attemps",
           label: "Provider",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "actions",
           label: "Actions",
           class: "text-center",
           sortable: false,
-          visible: true,
-        },
+          visible: true
+        }
       ],
       dato2: 4,
       dato1: "desc",
@@ -489,7 +459,7 @@ export default {
           options: [],
           reduce: "id",
           selectText: "user_name",
-          cols: 12,
+          cols: 12
         },
         {
           type: "datepicker",
@@ -503,9 +473,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
+          cols: 6
         },
         {
           type: "datepicker",
@@ -519,18 +489,17 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
-        },
-      ],
+          cols: 6
+        }
+      ]
     };
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
-    
+      currentUser: "auth/currentUser"
+    })
   },
   methods: {
     updateGrid() {
@@ -549,10 +518,10 @@ export default {
         user_id: this.currentUser.user_id,
         role_id: this.currentUser.role_id,
         seller: this.filter[0].model,
-        modul: this.$route.meta.module,
+        modul: this.$route.meta.module
       });
       // Must return a promise that resolves to an array of items
-      return promise.then((data) => {
+      return promise.then(data => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
         this.startPage = data.data.from;
@@ -564,7 +533,7 @@ export default {
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
         if (items != null) {
-          items.map((item) => {
+          items.map(item => {
             item.attemps_count =
               item.attemps == null ? "" : JSON.parse(item.attemps).length;
           });
@@ -598,27 +567,27 @@ export default {
           confirmButtonText: "Yes",
           customClass: {
             confirmButton: "btn btn-primary mr-1",
-            cancelButton: "btn btn-outline-danger  ",
-          },
+            cancelButton: "btn btn-outline-danger  "
+          }
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) {
             this.$store.commit("app/SET_LOADING", true);
             amgApi
-              .post("/ncr-leads-change-status", {
+              .post("/lead/ncr/change-status", {
                 user_id: this.currentUser.user_id,
                 score_id: score_id,
                 status_id: status_id,
-                text: result.value,
+                text: result.value
               })
-              .then((response) => {
+              .then(response => {
                 if (response.status == 200) {
-                  this.resetSearch()
+                  this.resetSearch();
                   this.$store.commit("app/SET_LOADING", false);
                   this.showSuccessSwal("OPERATION SUCCESSFULLY");
                 }
               })
-              .catch((error) => {
+              .catch(error => {
                 this.$store.commit("app/SET_LOADING", false);
                 console.error(error);
                 this.showToast(
@@ -631,18 +600,16 @@ export default {
               });
           }
         });
-    },
+    }
   },
-  created() {
-    
-  },
+  created() {}
 };
 </script>
 
 
 <style lang="scss" scoped>
 .select-lead-name:hover {
-    text-decoration-line: underline
+  text-decoration-line: underline;
 }
 .per-page-selector {
   width: 90px;

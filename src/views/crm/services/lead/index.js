@@ -13,8 +13,8 @@ class CrmLead {
 
   async getLeads(body) {
     try {
-      const data = await amgApi.post('/lead/search-leads', body)
-      return data
+      const data = await amgApi.post("/lead/search-leads", body);
+      return data;
     } catch (error) {
       console.log("Something went wrong on getLeads:", error);
       throw error;
@@ -79,8 +79,8 @@ class CrmLead {
 
   async postCreateLead(body) {
     try {
-      const data = await amgApi.post('/lead/create-lead', body)
-      return data
+      const data = await amgApi.post("/lead/create-lead", body);
+      return data;
     } catch (error) {
       throw error;
     }
@@ -88,8 +88,8 @@ class CrmLead {
 
   async postDeleteLead(body) {
     try {
-      const data = await amgApi.post('/lead/destroy-lead', body)
-      return data
+      const data = await amgApi.post("/lead/destroy-lead", body);
+      return data;
     } catch (error) {
       console.log("Something went wrong on postDeleteLead:", error);
       throw error;
@@ -98,8 +98,8 @@ class CrmLead {
 
   async postProcessLead(body) {
     try {
-      const data = await amgApi.post('/lead/process-lead-sn', body)
-      return data
+      const data = await amgApi.post("/lead/process-lead-sn", body);
+      return data;
     } catch (error) {
       console.log("Something went wrong on postProcessLead:", error);
       throw error;
@@ -130,7 +130,10 @@ class CrmLead {
 
   async postSearchFileLead(body) {
     try {
-      const data = await amgApi.post("/search-file-lead-sn", body);
+      const data = await amgApi.post(
+        "/lead/social-network/search-file-lead-sn",
+        body
+      );
       return data;
     } catch (error) {
       throw error;
@@ -139,7 +142,10 @@ class CrmLead {
 
   async postFileNameLead(body) {
     try {
-      const data = await amgApi.post("/update-file-name", body);
+      const data = await amgApi.post(
+        "/lead/social-network/update-file-name",
+        body
+      );
       return data;
     } catch (error) {
       throw error;
@@ -148,11 +154,15 @@ class CrmLead {
 
   async postFileLead(body) {
     try {
-      const data = await amgApi.post("/upload-file-lead-sn", body, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const data = await amgApi.post(
+        "/lead/social-network/upload-file-lead-sn",
+        body,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       return data;
     } catch (error) {
       throw error;
@@ -161,7 +171,10 @@ class CrmLead {
 
   async deleteFileLead(body) {
     try {
-      const data = await amgApi.post("/delete-file-sn", body);
+      const data = await amgApi.post(
+        "/lead/social-network/delete-file-sn",
+        body
+      );
       return data;
     } catch (error) {
       throw error;
@@ -191,7 +204,10 @@ class CrmLead {
 
   async postSetPotential(body) {
     try {
-      const data = await amgApi.post("/set-potential", body);
+      const data = await amgApi.post(
+        "/lead/social-network/set-potential",
+        body
+      );
       return data;
     } catch (error) {
       throw error;
@@ -200,7 +216,10 @@ class CrmLead {
 
   async postChangeStatusSn(body) {
     try {
-      const data = await amgApi.post("/change-status-sn", body);
+      const data = await amgApi.post(
+        "/lead/social-network/change-status-sn",
+        body
+      );
       return data;
     } catch (error) {
       throw error;
@@ -264,7 +283,10 @@ class CrmLead {
 
   async postTrackingStatusLeads(body) {
     try {
-      const data = await amgApi.post("/ncr-leads-get-tracking-status", body);
+      const data = await amgApi.post(
+        "/lead/ncr/get-lead-tracking-status-by-id",
+        body
+      );
       return data;
     } catch (error) {
       throw error;
@@ -273,9 +295,9 @@ class CrmLead {
 
   async putLead(id, body) {
     try {
-      body.id = id
-      const data = await amgApi.post(`/lead/update-lead`, body)
-      return data
+      body.id = id;
+      const data = await amgApi.post(`/lead/update-lead`, body);
+      return data;
     } catch (error) {
       throw error;
     }
@@ -292,7 +314,10 @@ class CrmLead {
 
   async getLeadSendRequest(body) {
     try {
-      const data = await amgApi.post("/ncr-leads-send-request", body);
+      const data = await amgApi.post(
+        "/glossary/create-glossary-category",
+        body
+      );
       return data;
     } catch (error) {
       throw error;

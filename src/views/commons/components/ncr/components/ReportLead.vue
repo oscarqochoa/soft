@@ -1,26 +1,24 @@
 <template>
   <div>
     <ValidationObserver ref="accounts">
-
       <b-card no-body class="mb-1">
         <div class="p-2">
           <b-row>
             <b-col cols="6">
-              <b-button class="btn btn-danger"  @click="returnGrid">
-                <feather-icon icon="ChevronsLeftIcon"></feather-icon>
-                Return</b-button
-              >
+              <b-button class="btn btn-danger" @click="returnGrid">
+                <feather-icon icon="ChevronsLeftIcon"></feather-icon>Return
+              </b-button>
               <h3
                 class="font-weight-bold ml-2 d-inline"
                 :class="process != 1 ? 'red-text-2' : 'text-success'"
               >
                 {{
-                  process != 1 ? "UNPROCESSED" : "PROCESSED BY: " + processInfo
+                process != 1 ? "UNPROCESSED" : "PROCESSED BY: " + processInfo
                 }}
               </h3>
             </b-col>
             <b-col cols="6" class="text-right">
-               <h4 class="font-weight-bold">Provider : {{ nameProvider }}</h4>
+              <h4 class="font-weight-bold">Provider : {{ nameProvider }}</h4>
             </b-col>
           </b-row>
         </div>
@@ -37,7 +35,7 @@
               <th class="td-left text-right"></th>
               <th class="font-weight-bold col-3 text-center">
                 <span>Trans</span>
-                <span style="color: #4d917a"> Union</span>
+                <span style="color: #4d917a">Union</span>
               </th>
               <th class="font-weight-bold col-3 text-center">
                 <span>Experian</span>
@@ -61,12 +59,8 @@
                   {{ !editScore ? "Edit" : "Save" }}
                 </b-button>
               </td>
-              <template
-                class="td-center td-bold text-center"
-               
-                v-for="score in datos.score"
-              >
-                <td class="td-center td-bold text-center"  :key="score.id">
+              <template class="td-center td-bold text-center" v-for="score in datos.score">
+                <td class="td-center td-bold text-center" :key="score.id">
                   <span v-if="!editScore">{{ score.score }}</span>
                   <b-input
                     v-else
@@ -93,11 +87,11 @@
             <tr v-for="LineIndex in 3" :key="LineIndex">
               <td class="td-left text-right">
                 {{
-                  LineIndex == 1
-                    ? "Name:"
-                    : LineIndex == 2
-                    ? "Date of Birth:"
-                    : "Address(es):"
+                LineIndex == 1
+                ? "Name:"
+                : LineIndex == 2
+                ? "Date of Birth:"
+                : "Address(es):"
                 }}
                 <b-button
                   class="btn btn-secondary"
@@ -127,9 +121,7 @@
                           v-for="reason in reasons"
                           :key="reason.id"
                           :value="reason.id"
-                        >
-                          {{ reason.value }}
-                        </option>
+                        >{{ reason.value }}</option>
                       </select>
                     </b-form-group>
                   </ValidationProvider>
@@ -144,19 +136,13 @@
                           v-for="instruction in instructions"
                           :key="instruction.id"
                           :value="instruction.id"
-                        >
-                          {{ instruction.value }}
-                        </option>
+                        >{{ instruction.value }}</option>
                       </select>
                     </b-form-group>
                   </ValidationProvider>
                 </div>
               </td>
-              <td
-                class="td-center text-center"
-                v-for="rowsIndex in 3"
-                :key="rowsIndex"
-              >
+              <td class="td-center text-center" v-for="rowsIndex in 3" :key="rowsIndex">
                 <ul class="list-unstyled">
                   <template v-for="(name, index) in personal_info">
                     <li
@@ -169,15 +155,10 @@
                       <b-form-checkbox
                         v-model="name.to_select"
                         v-if="isForRound && name.status != 1"
-                        >{{ name.content }}</b-form-checkbox
-                      >
+                      >{{ name.content }}</b-form-checkbox>
                       <div v-else class="mb-2">
                         <div v-if="!name.for_edit">
-                          <feather-icon
-                            size="17"
-                            icon="CheckIcon"
-                            v-if="name.check"
-                          ></feather-icon>
+                          <feather-icon size="17" icon="CheckIcon" v-if="name.check"></feather-icon>
                           <span
                             class="text-blue-underline"
                             :class="
@@ -185,8 +166,7 @@
                             "
                             @click="displayCheckArray(name)"
                             v-if="!name.for_edit"
-                            >{{ name.content }}</span
-                          >
+                          >{{ name.content }}</span>
                           <b-button
                             v-if="isForSpecialist"
                             class="ml-2 rounded-circle"
@@ -198,39 +178,24 @@
                           </b-button>
                         </div>
 
-                        <div
-                          v-if="name.for_edit && isForSpecialist"
-                          class="row mx-0"
-                        >
+                        <div v-if="name.for_edit && isForSpecialist" class="row mx-0">
                           <div class="col-md-9">
                             <b-form-input v-model="name.content"></b-form-input>
                           </div>
-                          <div
-                            class="
-                              col-md-3
-                              justify-content-center
-                              align-items-center
-                            "
-                          >
+                          <div class="col-md-3 justify-content-center align-items-center">
                             <b-button
                               class="rounded-circle btn btn-success"
                               size="sm"
                               @click="name.for_edit = !name.for_edit"
                             >
-                              <feather-icon
-                                size="17"
-                                icon="CheckIcon"
-                              ></feather-icon>
+                              <feather-icon size="17" icon="CheckIcon"></feather-icon>
                             </b-button>
                           </div>
                         </div>
                       </div>
 
                       <div v-if="name.to_select">
-                        <ValidationProvider
-                          rules="required"
-                          v-slot="{ errors }"
-                        >
+                        <ValidationProvider rules="required" v-slot="{ errors }">
                           <ul
                             class="list-group list-group-horizontal center my-3"
                             :class="{ 'border border-danger': errors[0] }"
@@ -240,24 +205,21 @@
                                 value="1"
                                 v-model="name.type_of_disput"
                                 :unchecked-value="null"
-                                >PHONE</b-form-checkbox
-                              >
+                              >PHONE</b-form-checkbox>
                             </li>
                             <li class="list-group-item">
                               <b-form-checkbox
                                 value="2"
                                 v-model="name.type_of_disput"
                                 :unchecked-value="null"
-                                >ONLINE</b-form-checkbox
-                              >
+                              >ONLINE</b-form-checkbox>
                             </li>
                             <li class="list-group-item">
                               <b-form-checkbox
                                 value="3"
                                 v-model="name.type_of_disput"
                                 :unchecked-value="null"
-                                >LETTER</b-form-checkbox
-                              >
+                              >LETTER</b-form-checkbox>
                             </li>
                           </ul>
                         </ValidationProvider>
@@ -270,17 +232,10 @@
             <!-- Line of Employers -->
             <tr>
               <td class="td-left text-right">Employers:</td>
-              <td
-                class="td-center text-center"
-                v-for="rowsIndex in 3"
-                :key="rowsIndex"
-              >
+              <td class="td-center text-center" v-for="rowsIndex in 3" :key="rowsIndex">
                 <ul class="list-unstyled">
                   <template v-for="(name, index) in personal_info">
-                    <li
-                      :key="index"
-                      v-if="name.type == 4 && name.bureau_id == rowsIndex"
-                    >
+                    <li :key="index" v-if="name.type == 4 && name.bureau_id == rowsIndex">
                       <span>{{ name.content }}</span>
                     </li>
                   </template>
@@ -308,61 +263,43 @@
             </tr>
             <tr v-if="datos.sumary">
               <td class="td-left text-right col-2">Total Accounts:</td>
-              <td class="td-center text-center">
-                {{ datos.sumary[0].t_account }}
-              </td>
-              <td class="td-center text-center">
-                {{ datos.sumary[1].t_account }}
-              </td>
-              <td class="td-center text-center">
-                {{ datos.sumary[2].t_account }}
-              </td>
+              <td class="td-center text-center">{{ datos.sumary[0].t_account }}</td>
+              <td class="td-center text-center">{{ datos.sumary[1].t_account }}</td>
+              <td class="td-center text-center">{{ datos.sumary[2].t_account }}</td>
             </tr>
             <tr v-if="datos.sumary">
               <td class="td-left text-right">Open Accounts:</td>
-              <td class="td-center text-center">
-                {{ datos.sumary[0].o_account }}
-              </td>
-              <td class="td-center text-center">
-                {{ datos.sumary[1].o_account }}
-              </td>
-              <td class="td-center text-center">
-                {{ datos.sumary[2].o_account }}
-              </td>
+              <td class="td-center text-center">{{ datos.sumary[0].o_account }}</td>
+              <td class="td-center text-center">{{ datos.sumary[1].o_account }}</td>
+              <td class="td-center text-center">{{ datos.sumary[2].o_account }}</td>
             </tr>
             <tr v-if="datos.sumary">
               <td class="td-left text-right">losed Accounts:</td>
-              <td class="td-center text-center">
-                {{ datos.sumary[0].c_account }}
-              </td>
-              <td class="td-center text-center">
-                {{ datos.sumary[1].c_account }}
-              </td>
-              <td class="td-center text-center">
-                {{ datos.sumary[2].c_account }}
-              </td>
+              <td class="td-center text-center">{{ datos.sumary[0].c_account }}</td>
+              <td class="td-center text-center">{{ datos.sumary[1].c_account }}</td>
+              <td class="td-center text-center">{{ datos.sumary[2].c_account }}</td>
             </tr>
             <tr v-if="datos.sumary">
               <td class="td-left td-left text-right">Balances:</td>
               <td class="td-center" align="center">
                 {{
-                  val != 2
-                    ? "$ " + datos.sumary[0].balance
-                    : datos.sumary[0].balance
+                val != 2
+                ? "$ " + datos.sumary[0].balance
+                : datos.sumary[0].balance
                 }}
               </td>
               <td class="td-center" align="center">
                 {{
-                  val != 2
-                    ? "$ " + datos.sumary[1].balance
-                    : datos.sumary[1].balance
+                val != 2
+                ? "$ " + datos.sumary[1].balance
+                : datos.sumary[1].balance
                 }}
               </td>
               <td class="td-center" align="center">
                 {{
-                  val != 2
-                    ? "$ " + datos.sumary[2].balance
-                    : datos.sumary[2].balance
+                val != 2
+                ? "$ " + datos.sumary[2].balance
+                : datos.sumary[2].balance
                 }}
               </td>
             </tr>
@@ -370,23 +307,23 @@
               <td class="td-left td-left text-right">Payments:</td>
               <td class="td-center" align="center">
                 {{
-                  val != 2
-                    ? "$ " + datos.sumary[0].payments
-                    : datos.sumary[0].payments
+                val != 2
+                ? "$ " + datos.sumary[0].payments
+                : datos.sumary[0].payments
                 }}
               </td>
               <td class="td-center" align="center">
                 {{
-                  val != 2
-                    ? "$ " + datos.sumary[1].payments
-                    : datos.sumary[1].payments
+                val != 2
+                ? "$ " + datos.sumary[1].payments
+                : datos.sumary[1].payments
                 }}
               </td>
               <td class="td-center" align="center">
                 {{
-                  val != 2
-                    ? "$ " + datos.sumary[2].payments
-                    : datos.sumary[2].payments
+                val != 2
+                ? "$ " + datos.sumary[2].payments
+                : datos.sumary[2].payments
                 }}
               </td>
             </tr>
@@ -404,9 +341,7 @@
                   variant="success"
                   class="rounded mt-2 ml-1 mb-1"
                   @click="addInquires()"
-                >
-                  Add Inquires
-                </b-button>
+                >Add Inquires</b-button>
               </b-col>
               <b-col cols="6" class="text-center" v-if="isForRound">
                 <b-button
@@ -414,8 +349,7 @@
                   class="rounded mt-2 ml-1 mb-1"
                   :disabled="!btnRound"
                   @click="openModalRound()"
-                  >ADD NEW ROUND</b-button
-                >
+                >ADD NEW ROUND</b-button>
               </b-col>
             </b-row>
           </div>
@@ -431,9 +365,7 @@
                   v-if="isForSpecialist"
                   @click="editInquire = !editInquire"
                 >
-                  <i
-                    :class="'fas ' + (!editInquire ? 'fa-edit' : 'fa-save')"
-                  ></i>
+                  <i :class="'fas ' + (!editInquire ? 'fa-edit' : 'fa-save')"></i>
                   {{ !editInquire ? "Edit" : "Save" }}
                 </b-button>
               </th>
@@ -469,10 +401,7 @@
                 </div>
                 <div v-else>
                   <b-form-input v-model="item.content"></b-form-input>
-                  <b-form-input
-                    type="date"
-                    v-model="item.date_show"
-                  ></b-form-input>
+                  <b-form-input type="date" v-model="item.date_show"></b-form-input>
                   <b-form-input v-model="item.sub_content"></b-form-input>
                   <b-button
                     variant="success"
@@ -485,11 +414,7 @@
                 </div>
               </td>
               <template v-for="rowsIndex in 3">
-                <td
-                  class="td-left text-right"
-                  style="position: relative"
-                  :key="rowsIndex"
-                >
+                <td class="td-left text-right" style="position: relative" :key="rowsIndex">
                   <b-form-checkbox
                     :id="'checkbox-' + inquireIndex + rowsIndex"
                     v-model="item.bureau_id"
@@ -539,9 +464,7 @@
                           v-for="reason in reasons"
                           :key="reason.id"
                           :value="reason.id"
-                        >
-                          {{ reason.value }}
-                        </option>
+                        >{{ reason.value }}</option>
                       </select>
                     </b-form-group>
                   </ValidationProvider>
@@ -556,19 +479,13 @@
                           v-for="instruction in instructions"
                           :key="instruction.id"
                           :value="instruction.id"
-                        >
-                          {{ instruction.value }}
-                        </option>
+                        >{{ instruction.value }}</option>
                       </select>
                     </b-form-group>
                   </ValidationProvider>
                 </div>
               </td>
-              <td
-                class="td-left text-right"
-                v-for="rowIndex in 3"
-                :key="rowIndex"
-              >
+              <td class="td-left text-right" v-for="rowIndex in 3" :key="rowIndex">
                 <div
                   v-if="
                     isForRound &&
@@ -589,8 +506,7 @@
                             setDisputeInquire[rowIndex - 1].type_of_disput
                           "
                           :unchecked-value="null"
-                          >PHONE</b-form-checkbox
-                        >
+                        >PHONE</b-form-checkbox>
                       </li>
                       <li class="list-group-item">
                         <b-form-checkbox
@@ -599,8 +515,7 @@
                             setDisputeInquire[rowIndex - 1].type_of_disput
                           "
                           :unchecked-value="null"
-                          >ONLINE</b-form-checkbox
-                        >
+                        >ONLINE</b-form-checkbox>
                       </li>
                       <li class="list-group-item">
                         <b-form-checkbox
@@ -609,8 +524,7 @@
                             setDisputeInquire[rowIndex - 1].type_of_disput
                           "
                           :unchecked-value="null"
-                          >LETTER</b-form-checkbox
-                        >
+                        >LETTER</b-form-checkbox>
                       </li>
                     </ul>
                   </ValidationProvider>
@@ -626,18 +540,10 @@
         <div class="pb-1">
           <b-row v-if="isForSpecialist">
             <b-col cols="4">
-              <b-button
-                variant="success"
-                class="rounded mt-2 ml-1 mb-1"
-                @click="addPublicRecord()"
-              >
+              <b-button variant="success" class="rounded mt-2 ml-1 mb-1" @click="addPublicRecord()">
                 <i class="fas fa-plus"></i> Add Record
               </b-button>
-              <b-button
-                variant="danger"
-                class="rounded mt-2 ml-1 mb-1"
-                @click="removeAllRecord()"
-              >
+              <b-button variant="danger" class="rounded mt-2 ml-1 mb-1" @click="removeAllRecord()">
                 <i class="fas fa-trash"></i> Delete All Record
               </b-button>
             </b-col>
@@ -733,21 +639,16 @@
                         "
                         style="float: right"
                         @change="toSelected(item, [t - 1])"
-                        >TO SELECT</b-form-checkbox
-                      >
+                      >TO SELECT</b-form-checkbox>
                       <span
                         v-else-if="item.element[t - 1].status == 1"
                         class="font-weight-bold"
-                        >IN DISPUTE</span
-                      >
+                      >IN DISPUTE</span>
                     </template>
                   </th>
                 </template>
               </tr>
-              <tr
-                v-for="(header, indexHeader) in headerPublics"
-                :key="indexHeader + publicIndex"
-              >
+              <tr v-for="(header, indexHeader) in headerPublics" :key="indexHeader + publicIndex">
                 <td
                   class="td-left text-left"
                   v-if="
@@ -766,9 +667,7 @@
                           v-for="reason in reasons"
                           :key="reason.id"
                           :value="reason.id"
-                        >
-                          {{ reason.value }}
-                        </option>
+                        >{{ reason.value }}</option>
                       </select>
                     </b-form-group>
                   </ValidationProvider>
@@ -783,9 +682,7 @@
                           v-for="instruction in instructions"
                           :key="instruction.id"
                           :value="instruction.id"
-                        >
-                          {{ instruction.value }}
-                        </option>
+                        >{{ instruction.value }}</option>
                       </select>
                     </b-form-group>
                   </ValidationProvider>
@@ -812,10 +709,7 @@
                       />
                       <span v-else>{{ valueItem }}</span>
                       <div v-if="header.key == 'round' && value.to_select">
-                        <ValidationProvider
-                          rules="required"
-                          v-slot="{ errors }"
-                        >
+                        <ValidationProvider rules="required" v-slot="{ errors }">
                           <ul
                             class="list-group list-group-horizontal center my-3"
                             :class="{ 'border border-danger': errors[0] }"
@@ -825,24 +719,21 @@
                                 value="1"
                                 v-model="value.type_of_disput"
                                 :unchecked-value="null"
-                                >PHONE</b-form-checkbox
-                              >
+                              >PHONE</b-form-checkbox>
                             </li>
                             <li class="list-group-item">
                               <b-form-checkbox
                                 value="2"
                                 v-model="value.type_of_disput"
                                 :unchecked-value="null"
-                                >ONLINE</b-form-checkbox
-                              >
+                              >ONLINE</b-form-checkbox>
                             </li>
                             <li class="list-group-item">
                               <b-form-checkbox
                                 value="3"
                                 v-model="value.type_of_disput"
                                 :unchecked-value="null"
-                                >LETTER</b-form-checkbox
-                              >
+                              >LETTER</b-form-checkbox>
                             </li>
                           </ul>
                         </ValidationProvider>
@@ -866,16 +757,12 @@
                   variant="success"
                   class="rounded mt-2 ml-1 mb-1"
                   @click="addAccount()"
-                >
-                  Add Account
-                </b-button>
+                >Add Account</b-button>
                 <b-button
                   variant="danger"
                   class="rounded mt-2 ml-1 mb-1"
                   @click="removeAllAccount()"
-                >
-                  Delete All Accounts
-                </b-button>
+                >Delete All Accounts</b-button>
               </b-col>
               <b-col cols="6" class="text-center" v-if="isForRound">
                 <b-button
@@ -883,8 +770,7 @@
                   class="rounded mt-2 ml-1 mb-1"
                   :disabled="!btnRound"
                   @click="openModalRound()"
-                  >Add New Round</b-button
-                >
+                >Add New Round</b-button>
               </b-col>
             </b-row>
           </div>
@@ -977,13 +863,11 @@
                         "
                         style="float: right"
                         @change="toSelected(item, [t - 1])"
-                        >TO SELECT</b-form-checkbox
-                      >
+                      >TO SELECT</b-form-checkbox>
                       <span
                         v-else-if="item.element[t - 1].status == 1"
                         class="font-weight-bold"
-                        >IN DISPUTE</span
-                      >
+                      >IN DISPUTE</span>
                     </template>
                   </th>
                 </template>
@@ -1024,9 +908,7 @@
                           v-for="reason in reasons"
                           :key="reason.id"
                           :value="reason.id"
-                        >
-                          {{ reason.value }}
-                        </option>
+                        >{{ reason.value }}</option>
                       </select>
                     </b-form-group>
                   </ValidationProvider>
@@ -1041,9 +923,7 @@
                           v-for="instruction in instructions"
                           :key="instruction.id"
                           :value="instruction.id"
-                        >
-                          {{ instruction.value }}
-                        </option>
+                        >{{ instruction.value }}</option>
                       </select>
                     </b-form-group>
                   </ValidationProvider>
@@ -1061,9 +941,11 @@
                     class="rounded"
                     @click="toggleDetails(indexAccount)"
                   >
-                    <span :ref="'btnAccounts' + indexAccount">{{
+                    <span :ref="'btnAccounts' + indexAccount">
+                      {{
                       header.label
-                    }}</span>
+                      }}
+                    </span>
                     <i class="fas fa-arrow-circle-right"></i>
                   </b-button>
                   <span v-else>{{ header.label }}</span>
@@ -1073,12 +955,11 @@
                     <td
                       :key="indexValue + indexItem"
                       v-if="header.key == key"
-                      class="col-3 text-center " 
+                      class="col-3 text-center"
                       :class="`${value.status == 6 && value.isShow &&header.key != 'status' &&header.key != 'round'? 'bg-light-red': header.key == 'status'
                           ? 'bg-gray'
                           : ''} ${statusValue}`"
                     >
-                 
                       <v-select
                         v-if="
                           header.key == 'status' && value.a_number.length > 3
@@ -1090,9 +971,11 @@
                         v-model="value.status"
                       ></v-select>
 
-                      <span v-else-if="header.key != 'status' && !value.edit">{{
+                      <span v-else-if="header.key != 'status' && !value.edit">
+                        {{
                         valueItem
-                      }}</span>
+                        }}
+                      </span>
                       <input
                         v-else-if="
                           header.key != 'status' &&
@@ -1106,10 +989,7 @@
                       />
 
                       <div v-if="header.key == 'round' && value.to_select">
-                        <ValidationProvider
-                          rules="required"
-                          v-slot="{ errors }"
-                        >
+                        <ValidationProvider rules="required" v-slot="{ errors }">
                           <ul
                             class="list-group list-group-horizontal center my-3"
                             :class="{ 'border border-danger': errors[0] }"
@@ -1119,24 +999,21 @@
                                 value="1"
                                 v-model="value.type_of_disput"
                                 :unchecked-value="null"
-                                >PHONE</b-form-checkbox
-                              >
+                              >PHONE</b-form-checkbox>
                             </li>
                             <li class="list-group-item">
                               <b-form-checkbox
                                 value="2"
                                 v-model="value.type_of_disput"
                                 :unchecked-value="null"
-                                >ONLINE</b-form-checkbox
-                              >
+                              >ONLINE</b-form-checkbox>
                             </li>
                             <li class="list-group-item">
                               <b-form-checkbox
                                 value="3"
                                 v-model="value.type_of_disput"
                                 :unchecked-value="null"
-                                >LETTER</b-form-checkbox
-                              >
+                              >LETTER</b-form-checkbox>
                             </li>
                           </ul>
                         </ValidationProvider>
@@ -1157,22 +1034,19 @@
           class="rounded mt-2 mb-1"
           :disabled="disable.save"
           @click="processReport()"
-          >PROCESS</b-button
-        >
+        >PROCESS</b-button>
       </b-col>
       <b-col cols="6" class="text-center offset-3" v-if="isForRound">
         <b-button
           variant="info"
           class="rounded mt-2 ml-1 mb-1"
           @click="openModalRound()"
-          >ADD NEW ROUND</b-button
-        >
+        >ADD NEW ROUND</b-button>
         <b-button
           variant="success"
           class="rounded mt-2 ml-1 mb-1"
           @click="completeRound()"
-          >MARK AS COMPLETE</b-button
-        >
+        >MARK AS COMPLETE</b-button>
       </b-col>
     </b-row>
     <br />
@@ -1215,18 +1089,15 @@
                       <b-form-radio
                         :value="secure_number.ssn"
                         v-if="secure_number.ssn"
-                        >{{ "SSN: " + secure_number.ssn }}</b-form-radio
-                      >
+                      >{{ "SSN: " + secure_number.ssn }}</b-form-radio>
                       <b-form-radio
                         :value="secure_number.itin"
                         v-if="secure_number.itin"
-                        >{{ "ITIN: " + secure_number.itin }}</b-form-radio
-                      >
+                      >{{ "ITIN: " + secure_number.itin }}</b-form-radio>
                       <b-form-radio
                         :value="secure_number.other"
                         v-if="secure_number.other"
-                        >{{ "CPN: " + secure_number.other }}</b-form-radio
-                      >
+                      >{{ "CPN: " + secure_number.other }}</b-form-radio>
                     </b-radio-group>
                   </b-input-group>
                 </b-form-group>
@@ -1249,9 +1120,7 @@
                         v-for="(item, index) in titles"
                         :key="index"
                         :value="item.id"
-                      >
-                        {{ item.value }}
-                      </option>
+                      >{{ item.value }}</option>
                     </select>
                   </b-input-group>
                 </b-form-group>
@@ -1274,9 +1143,7 @@
                         v-for="(item, index) in formats"
                         :key="index"
                         :value="item.id"
-                      >
-                        {{ item.value }}
-                      </option>
+                      >{{ item.value }}</option>
                     </select>
                   </b-input-group>
                 </b-form-group>
@@ -1377,13 +1244,13 @@ export default {
   props: {
     // modul: Number,
     global: Object,
-    idfile:[Number,String],
-    idlead:[Number,String],
+    idfile: [Number, String],
+    idlead: [Number, String]
   },
   components: { FeatherIcon, vSelect },
   data() {
     return {
-      modul:this.$route.meta.module,
+      modul: this.$route.meta.module,
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       datos: {},
       status: [],
@@ -1401,168 +1268,168 @@ export default {
       modalRound: false,
       disable: {
         save: false,
-        color: "#f1f1f1",
+        color: "#f1f1f1"
       },
       round_id: "",
       secure_number: {
         ssn: null,
         itin: null,
-        other: null,
+        other: null
       },
       round: {
         title: null,
         format: null,
         type: null,
-        secure_number: null,
+        secure_number: null
       },
       headerPublics: [
         {
           key: "content",
-          label: "Type",
+          label: "Type"
         },
         {
           key: "status_show",
-          label: "Status",
+          label: "Status"
         },
         {
           key: "date",
-          label: "Date",
+          label: "Date"
         },
         {
           key: "reference",
-          label: "Reference",
+          label: "Reference"
         },
         {
           key: "closing",
-          label: "Closing",
+          label: "Closing"
         },
         {
           key: "court",
-          label: "Court",
-        },
+          label: "Court"
+        }
       ],
       headerAccounts: [
         {
           key: "content",
-          label: "Account Name",
+          label: "Account Name"
         },
         {
           key: "a_number",
-          label: "Account #",
+          label: "Account #"
         },
         {
           key: "type",
-          label: "Account Type",
+          label: "Account Type"
         },
         {
           key: "a_status",
-          label: "Account Status",
+          label: "Account Status"
         },
         {
           key: "a_description",
-          label: "Account Description",
+          label: "Account Description"
         },
         {
           key: "monthly",
-          label: "Monthly Payment",
+          label: "Monthly Payment"
         },
         {
           key: "date",
-          label: "Date Opened",
+          label: "Date Opened"
         },
         {
           key: "balance",
-          label: "Balance",
+          label: "Balance"
         },
         {
           key: "n_months",
-          label: "No. of Months (terms)",
+          label: "No. of Months (terms)"
         },
         {
           key: "h_credit",
-          label: "Highest Credit",
+          label: "Highest Credit"
         },
         {
           key: "c_limit",
-          label: "Credit Limit",
+          label: "Credit Limit"
         },
         {
           key: "p_status",
-          label: "Payment Status",
+          label: "Payment Status"
         },
         {
           key: "comments",
-          label: "Comments",
+          label: "Comments"
         },
         {
           key: "lp_status",
-          label: "Last Payment Status",
+          label: "Last Payment Status"
         },
         {
           key: "detail",
-          label: "Show More Details",
+          label: "Show More Details"
         },
         {
           key: "status",
-          label: "Status",
-        },
+          label: "Status"
+        }
       ],
       setInq: [
         {
           type_of_disput: null,
           reason: null,
           instruction: null,
-          select: false,
+          select: false
         },
         {
           type_of_disput: null,
           reason: null,
           instruction: null,
-          select: false,
+          select: false
         },
         {
           type_of_disput: null,
           reason: null,
           instruction: null,
-          select: false,
-        },
+          select: false
+        }
       ],
       setPersonal: [
         {
           reason: null,
-          instruction: null,
+          instruction: null
         },
         {
           reason: null,
-          instruction: null,
+          instruction: null
         },
         {
           reason: null,
-          instruction: null,
-        },
+          instruction: null
+        }
       ],
       setDisputeInquire: [
         {
-          type_of_disput: null,
+          type_of_disput: null
         },
         {
-          type_of_disput: null,
+          type_of_disput: null
         },
         {
-          type_of_disput: null,
-        },
+          type_of_disput: null
+        }
       ],
       setInquires: {
         reason: null,
-        instruction: null,
+        instruction: null
       },
       setAccounts: {
         reason: [],
-        instruction: [],
+        instruction: []
       },
       setPublicRecord: {
         reason: [],
-        instruction: [],
+        instruction: []
       },
       editScore: false,
       editInquire: false,
@@ -1578,18 +1445,18 @@ export default {
       roundPaginator: 0,
       day_processed: null,
       modalInfo: false,
-      type_selected: null,
+      type_selected: null
     };
   },
   computed: {
     ...mapGetters({
-      skin: "appConfig/skin",
+      skin: "appConfig/skin"
     }),
     classAdd() {
-      return this.skin == "dark" ? "dark" : "light"
+      return this.skin == "dark" ? "dark" : "light";
     },
-    statusValue(){
-      return this.skin == "dark"? "text-primary":""
+    statusValue() {
+      return this.skin == "dark" ? "text-primary" : "";
     },
     processInfo() {
       return this.processed_by + " - " + this.processed_at;
@@ -1615,7 +1482,7 @@ export default {
         this.modul == 11 &&
         this.day_processed > "2021-09-27"
       );
-    },
+    }
   },
   created() {
     this.generateReport();
@@ -1640,11 +1507,11 @@ export default {
 
     getDataOfScore() {
       amgApi
-        .post("/get-cr-data", {
+        .post("/lead/get-credit-report-data", {
           score_id: this.idfile,
-          account_id: this.global.idaccount,
+          account_id: this.global.idaccount
         })
-        .then((res) => {
+        .then(res => {
           this.reloadHeaders();
           //Add Scores
           this.datos.score[0].score = res.data.scores[0].transunion;
@@ -1692,7 +1559,7 @@ export default {
                 type_of_disput: null,
                 reason: null,
                 instruction: null,
-                for_edit: false,
+                for_edit: false
               });
             });
           });
@@ -1712,7 +1579,7 @@ export default {
                 type_of_disput: null,
                 reason: null,
                 instruction: null,
-                for_edit: false,
+                for_edit: false
               });
             });
           });
@@ -1749,9 +1616,9 @@ export default {
       this.$store.commit("app/SET_LOADING", true);
       amgApi
         .post("/lead/credit-report/get-reports", {
-          id: this.idfile,
+          id: this.idfile
         })
-        .then((response) => {
+        .then(response => {
           if (response.status == 200) {
             this.$store.commit("app/SET_LOADING", false);
             this.datos = response.data[0].cr;
@@ -1772,7 +1639,7 @@ export default {
             }
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
           this.$store.commit("app/SET_LOADING", false);
         });
@@ -1782,7 +1649,7 @@ export default {
     buildArrayInquires() {
       var inquires = this.data[0].inquires;
       var x = 1;
-      inquires.map((item) => {
+      inquires.map(item => {
         switch (this.val == 2 ? item[2] : item[3]) {
           case "TransUnion":
             x = 1;
@@ -1803,7 +1670,7 @@ export default {
           date_show: moment(this.val == 2 ? item[1] : item[2]).format(
             "MM/DD/YYYY"
           ),
-          for_edit: false,
+          for_edit: false
         });
       });
     },
@@ -1811,7 +1678,7 @@ export default {
     // build array public info
     buildArrayPublic() {
       var publicr = this.data[0].public;
-      publicr.map((item) => {
+      publicr.map(item => {
         var date =
           item[0].date != ""
             ? item[0].date
@@ -1830,13 +1697,13 @@ export default {
             closing: value.closing,
             status_show: value.status,
             round: null,
-            edit: false,
+            edit: false
           });
         });
 
         this.public_info.push({
           date: moment(date).format("YYYY--MM-DD"),
-          element: elements,
+          element: elements
         });
         this.oldInfo = JSON.parse(JSON.stringify(this.public_info));
       });
@@ -1857,7 +1724,7 @@ export default {
 
     processMapData(data, bureau_id, type) {
       if (typeof data == "object") {
-        data.map((value) => {
+        data.map(value => {
           if (value != "") {
             this.personal_info.push({
               type: type,
@@ -1865,7 +1732,7 @@ export default {
               status: 5,
               bureau_id: bureau_id,
               check: false,
-              for_edit: false,
+              for_edit: false
             });
           }
         });
@@ -1877,7 +1744,7 @@ export default {
             status: 5,
             bureau_id: bureau_id,
             check: false,
-            for_edit: false,
+            for_edit: false
           });
         }
       }
@@ -1886,16 +1753,15 @@ export default {
     // build array accounts
     validateArrayAccounts() {
       var accounts = this.data[0].account;
-      var comment =
-        /profit and loss writeoff|collection|charged off|redeemed|settled less than full balance|reaffirmation debt|repossesion|merchandise taken back|foreclosure|delinquency|delinquent|paid for less/;
+      var comment = /profit and loss writeoff|collection|charged off|redeemed|settled less than full balance|reaffirmation debt|repossesion|merchandise taken back|foreclosure|delinquency|delinquent|paid for less/;
       var status = [];
       var last = [];
       var lastMap = [];
       var waitStatus = 5;
       var StatusMap = [];
-      accounts.map((item) => {
+      accounts.map(item => {
         StatusMap = [];
-        item.map((value) => {
+        item.map(value => {
           if (value.a_name != "") {
             var partOne =
               [1, 2].includes(this.val) &&
@@ -1912,7 +1778,9 @@ export default {
               [3, 7].includes(this.val) &&
               (value.a_type.toLowerCase().match(/collection|charged off/) !=
                 null ||
-                String(value.comments).toLowerCase().match(comment) != null ||
+                String(value.comments)
+                  .toLowerCase()
+                  .match(comment) != null ||
                 String(value.p_status)
                   .toLowerCase()
                   .match(/charged off/) != null ||
@@ -1934,7 +1802,7 @@ export default {
 
         status.push(StatusMap);
 
-        item.map((value) => {
+        item.map(value => {
           if (value.a_name != "") {
             lastMap = ["-", "--"].includes(value.status30)
               ? 0
@@ -1966,10 +1834,10 @@ export default {
       var x = 1;
 
       account.map((item, indexAccount) => {
-        const IsNumeric = (num) => /^-{0,1}\d*\.{0,1}\d+$/.test(num);
+        const IsNumeric = num => /^-{0,1}\d*\.{0,1}\d+$/.test(num);
         var elements = [];
         var showAccount = false;
-        item.map((value) => {
+        item.map(value => {
           if (this.isValidStatusNumber(value)) {
             showAccount = true;
           }
@@ -1978,7 +1846,7 @@ export default {
           item.map((value, index) => {
             var commentary = "";
             if (typeof value.comments == "object") {
-              value.comments.map((comment) => {
+              value.comments.map(comment => {
                 commentary += comment + " ";
               });
             } else {
@@ -2013,11 +1881,11 @@ export default {
               type_of_disput: null,
               reason: null,
               instruction: null,
-              to_select: false,
+              to_select: false
             });
           });
           this.accounts.push({
-            element: elements,
+            element: elements
           });
           this.oldAccounts = JSON.parse(JSON.stringify(this.accounts));
         }
@@ -2097,9 +1965,9 @@ export default {
           showCancelButton: true,
           confirmButtonColor: "#ab9220",
           cancelButtonColor: "#8f9194",
-          confirmButtonText: "Yes",
+          confirmButtonText: "Yes"
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) {
             var btn = document.getElementById("app");
             btn.classList.add("preloader");
@@ -2113,16 +1981,16 @@ export default {
                 in: this.inquires,
                 pr: this.public_info,
                 ac: this.accounts,
-                scores: this.datos.score,
+                scores: this.datos.score
               })
-              .then((response) => {
+              .then(response => {
                 if (response.status == 200) {
                   swal
                     .fire({
                       type: "success",
-                      title: "OPERATION SUCCESSFULLY",
+                      title: "OPERATION SUCCESSFULLY"
                     })
-                    .then((res) => {
+                    .then(res => {
                       if (res) {
                         var btn = document.getElementById("app");
                         btn.classList.remove("preloader");
@@ -2131,7 +1999,7 @@ export default {
                     });
                 }
               })
-              .catch((err) => {
+              .catch(err => {
                 console.error(err);
               });
           }
@@ -2139,9 +2007,9 @@ export default {
     },
 
     changeDispute() {
-      this.rounds.map((value) => {
-        this.accounts.map((account) => {
-          account.element.map((element) => {
+      this.rounds.map(value => {
+        this.accounts.map(account => {
+          account.element.map(element => {
             if (value.id == element.id) {
               element.status = 1;
               element.to_select = false;
@@ -2149,22 +2017,22 @@ export default {
           });
         });
 
-        this.inquires.map((inquire) => {
+        this.inquires.map(inquire => {
           if (value.id == inquire.id) {
             inquire.status = 1;
             inquire.to_select = false;
           }
         });
 
-        this.personal_info.map((pi) => {
+        this.personal_info.map(pi => {
           if (value.id == pi.id) {
             pi.status = 1;
             pi.to_select = false;
           }
         });
 
-        this.public_info.map((pr) => {
-          pr.element.map((element) => {
+        this.public_info.map(pr => {
+          pr.element.map(element => {
             if (value.id == element.id) {
               element.status = 1;
               element.to_select = false;
@@ -2176,13 +2044,13 @@ export default {
 
     allStatus() {
       amgApi
-        .get("/allstatusletters")
-        .then((response) => {
+        .get("/lead/get-all-status-letters")
+        .then(response => {
           if (response.status == 200) {
             this.status = response.data;
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
         });
     },
@@ -2207,11 +2075,12 @@ export default {
 
     editAccount(action, index, indexAccount) {
       if (action == 0) {
-        this.accounts[indexAccount].element[index] =
-          this.oldAccounts[indexAccount].element[index];
+        this.accounts[indexAccount].element[index] = this.oldAccounts[
+          indexAccount
+        ].element[index];
         this.accounts[indexAccount].element[index].edit = false;
         let band = true;
-        this.accounts[indexAccount].element.map((item) => {
+        this.accounts[indexAccount].element.map(item => {
           if (item.edit == true) {
             band = false;
           }
@@ -2224,11 +2093,12 @@ export default {
 
     editRecord(action, index, publicIndex) {
       if (action == 0) {
-        this.public_info[publicIndex].element[index] =
-          this.oldInfo[publicIndex].element[index];
+        this.public_info[publicIndex].element[index] = this.oldInfo[
+          publicIndex
+        ].element[index];
         this.public_info[publicIndex].element[index].edit = false;
         let band = true;
-        this.public_info[publicIndex].element.map((item) => {
+        this.public_info[publicIndex].element.map(item => {
           if (item.edit == true) {
             band = false;
           }
@@ -2247,7 +2117,7 @@ export default {
         bureau_id: 1,
         date: null,
         date_show: null,
-        for_edit: true,
+        for_edit: true
       });
     },
 
@@ -2258,7 +2128,7 @@ export default {
         status: 6,
         bureau_id: bureau_id,
         check: true,
-        for_edit: true,
+        for_edit: true
       });
       this.personal_info = JSON.parse(JSON.stringify(this.personal_info));
       this.modalInfo = false;
@@ -2291,11 +2161,11 @@ export default {
           isShow: true,
           edit: false,
           round: null,
-          to_select: false,
+          to_select: false
         });
       }
       this.accounts.push({
-        element: elements,
+        element: elements
       });
       this.oldAccounts = JSON.parse(JSON.stringify(this.accounts));
     },
@@ -2313,24 +2183,24 @@ export default {
           closing: null,
           status_show: null,
           round: null,
-          edit: false,
+          edit: false
         });
       }
       this.public_info.push({
         element: elements,
-        date: null,
+        date: null
       });
       this.oldInfo = JSON.parse(JSON.stringify(this.public_info));
     },
 
     alltitles() {
-      amgApi.get("/alltitles").then((res) => {
+      amgApi.get("/lead/ncr/all-titles").then(res => {
         this.titles = res.data;
       });
     },
 
     allFormats() {
-      amgApi.get("/allformats").then((res) => {
+      amgApi.get("/lead/ncr/all-formats").then(res => {
         this.formats = res.data;
       });
     },
@@ -2339,42 +2209,42 @@ export default {
       if (this.isForRound) {
         this.headerAccounts.push({
           key: "round",
-          label: "Round",
+          label: "Round"
         });
         this.headerPublics.push({
           key: "round",
-          label: "Round",
+          label: "Round"
         });
       }
     },
 
     getSelectsOptions() {
       amgApi
-        .get("/getreasons")
-        .then((response) => {
+        .get("/lead/ncr/get-reasons")
+        .then(response => {
           if (response.status == 200) {
             this.reasons = response.data;
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
         });
 
       amgApi
-        .get("/getinstructions")
-        .then((response) => {
+        .get("/lead/ncr/get-instructions")
+        .then(response => {
           if (response.status == 200) {
             this.instructions = response.data;
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
         });
     },
 
     toSelected(item, index) {
       let count = 0;
-      item.element.map((items) => {
+      item.element.map(items => {
         if (items.to_select == 1) {
           count = count + 1;
         }
@@ -2386,23 +2256,23 @@ export default {
 
     loadSecureSocial() {
       amgApi
-        .post("/all-secure-social", {
-          ncrid: this.round_id,
+        .post("/lead/ncr/all-secure-social", {
+          ncrid: this.round_id
         })
-        .then((response) => {
+        .then(response => {
           if (response.status == 200) {
             if (response.data.length > 0) {
               this.secure_number = response.data[0];
             }
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
         });
     },
 
     openModalRound() {
-      this.$refs.accounts.validate().then((success) => {
+      this.$refs.accounts.validate().then(success => {
         if (!success) {
           return;
         } else {
@@ -2412,7 +2282,7 @@ export default {
           this.rounds = [];
           // Agregar ronda cuentas online
           this.accounts.map((item, index) => {
-            item.element.map((elme) => {
+            item.element.map(elme => {
               let select = elme.to_select;
               if (select != null && select != false && elme.status != 1) {
                 count = count + 1;
@@ -2448,7 +2318,7 @@ export default {
                   instruction: this.setAccounts.instruction[index],
                   isElement: 4,
                   type_of_disput: elme.type_of_disput,
-                  type_social: null,
+                  type_social: null
                 });
               }
             });
@@ -2456,7 +2326,7 @@ export default {
 
           // Agregar ronda public record
           this.public_info.map((item, index) => {
-            item.element.map((elme) => {
+            item.element.map(elme => {
               let select = elme.to_select;
               if (select != null && select != false && elme.status != 1) {
                 count = count + 1;
@@ -2492,14 +2362,14 @@ export default {
                   instruction: this.setPublicRecord.instruction[index],
                   isElement: 3,
                   type_of_disput: elme.type_of_disput,
-                  type_social: null,
+                  type_social: null
                 });
               }
             });
           });
 
           // Agregar ronda inquries
-          this.inquires.map((elme) => {
+          this.inquires.map(elme => {
             this.setInq.map((item, index) => {
               if (index + 1 == elme.bureau_id) {
                 elme.type_of_disput = item.type_of_disput;
@@ -2539,15 +2409,15 @@ export default {
                 content: elme.content,
                 reason: this.setInquires.reason,
                 instruction: this.setInquires.instruction,
-                type_of_disput:
-                  this.setDisputeInquire[elme.bureau_id - 1].type_of_disput,
-                type_social: null,
+                type_of_disput: this.setDisputeInquire[elme.bureau_id - 1]
+                  .type_of_disput,
+                type_social: null
               });
             }
           });
 
           // Agregar ronda personal
-          this.personal_info.map((elme) => {
+          this.personal_info.map(elme => {
             let select = elme.to_select;
             if (select != null && select != false && elme.status != 1) {
               count = count + 1;
@@ -2582,7 +2452,7 @@ export default {
                 content: elme.content,
                 reason: this.setPersonal[elme.type - 1].reason,
                 instruction: this.setPersonal[elme.type - 1].instruction,
-                type_social: null,
+                type_social: null
               });
             }
           });
@@ -2608,7 +2478,7 @@ export default {
       } else {
         this.type_social = 3;
       }
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(success => {
         if (!success) {
           return;
         } else {
@@ -2620,22 +2490,22 @@ export default {
               showCancelButton: true,
               confirmButtonColor: "#ab9220",
               cancelButtonColor: "#8f9194",
-              confirmButtonText: "Yes",
+              confirmButtonText: "Yes"
             })
-            .then(async (result) => {
+            .then(async result => {
               if (result.value) {
                 await this.checkIsEmpty();
                 var btn = document.getElementById("app");
                 btn.classList.add("preloader");
                 btn.classList.add("opacity-uno");
                 amgApi
-                  .post("/report/process-round", {
+                  .post("/lead/process-round-in-credit-report", {
                     rounds: this.rounds,
                     user_id: this.global.layout.id,
                     round_id: this.round_id,
-                    type_social: this.type_social,
+                    type_social: this.type_social
                   })
-                  .then((response) => {
+                  .then(response => {
                     if (response.status == 200) {
                       //reload page
                       this.changeDispute();
@@ -2646,7 +2516,7 @@ export default {
                       swal.fire("Round Processed", "", "success");
                     }
                   })
-                  .catch((err) => {
+                  .catch(err => {
                     console.error(err);
                   });
               }
@@ -2664,9 +2534,9 @@ export default {
           showCancelButton: true,
           confirmButtonColor: "#ab9220",
           cancelButtonColor: "#8f9194",
-          confirmButtonText: "Yes",
+          confirmButtonText: "Yes"
         })
-        .then((result) => {
+        .then(result => {
           if (result.value) {
             var btn = document.getElementById("app");
             btn.classList.add("preloader");
@@ -2676,7 +2546,7 @@ export default {
     },
 
     checkIsEmpty() {
-      this.rounds.map((item) => {
+      this.rounds.map(item => {
         item.title = this.round.title;
         item.social = this.round.secure_number;
         item.format = this.round.format;
@@ -2685,7 +2555,7 @@ export default {
     },
 
     nextPageRound(index) {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(success => {
         if (!success) {
           return;
         } else {
@@ -2700,71 +2570,71 @@ export default {
         title: null,
         format: null,
         type: null,
-        secure_number: null,
+        secure_number: null
       };
       this.setInq = [
         {
           type_of_disput: null,
           reason: null,
           instruction: null,
-          select: false,
+          select: false
         },
         {
           type_of_disput: null,
           reason: null,
           instruction: null,
-          select: false,
+          select: false
         },
         {
           type_of_disput: null,
           reason: null,
           instruction: null,
-          select: false,
-        },
+          select: false
+        }
       ];
       this.setPersonal = [
         {
           reason: null,
-          instruction: null,
+          instruction: null
         },
         {
           reason: null,
-          instruction: null,
+          instruction: null
         },
         {
           reason: null,
-          instruction: null,
-        },
+          instruction: null
+        }
       ];
       this.setDisputeInquire = [
         {
-          type_of_disput: null,
+          type_of_disput: null
         },
         {
-          type_of_disput: null,
+          type_of_disput: null
         },
         {
-          type_of_disput: null,
-        },
+          type_of_disput: null
+        }
       ];
       this.setInquires = {
         reason: null,
-        instruction: null,
+        instruction: null
       };
       this.setAccounts = {
         reason: [],
-        instruction: [],
+        instruction: []
       };
       this.setPublicRecord = {
         reason: [],
-        instruction: [],
+        instruction: []
       };
     },
     showData() {
       console.log(this.datos);
       console.log(this.global);
-    },
-  },
+    }
+  }
 };
 </script>
 

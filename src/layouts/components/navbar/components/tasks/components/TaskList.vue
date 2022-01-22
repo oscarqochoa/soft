@@ -302,7 +302,7 @@ export default {
       );
       if (confirm.isConfirmed) {
         this.exportExcelDisabled = true;
-        location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/exporttasksexcel/${this.currentUser.user_id}/${this.type}`;
+        location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/tasks/export-task-to-excel/${this.currentUser.user_id}/${this.type}`;
         setTimeout(() => {
           this.exportExcelDisabled = false;
         }, 10000);

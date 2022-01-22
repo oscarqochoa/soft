@@ -651,7 +651,7 @@ export default {
     },
     async listTypeBusiness() {
       try {
-        const response = await amgApi.get("/listtypebusiness");
+        const response = await amgApi.get("/crm/payment/get-all-type-business");
         this.note.typeOfBuisiness.options = response.data;
       } catch (error) {
         this.showErrorSwal(error);

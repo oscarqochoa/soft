@@ -928,7 +928,7 @@ export default {
         );
         if (result.value) {
           try {
-            const response = await amgApi.post("/set-done", {
+            const response = await amgApi.post("/sale/update-sales-set-done", {
               eventId: this.modalData.approveSupervisorModal.eventId
             });
             if (response.status === 200) {
@@ -1159,25 +1159,32 @@ export default {
     },
     async openInitialPaymentModal(data) {
       try {
-        this.addPreloader()
-        this.modalData.initial_payment.programid = data.program_id
-        this.modalData.initial_payment.sessionId = this.currentUser.user_id
-        this.modalData.initial_payment.cfeestatus = data.contract_fee_status
-        this.modalData.initial_payment.id_transaction = data.transaction_id
-        this.modalData.initial_payment.editmodal = data.user_id == this.currentUser.user_id
-          || this.currentUser.role_id == 1
-          || this.currentUser.role_id == 2
-        this.modalData.initial_payment.statusSale = data.status
-        this.modalData.initial_payment.comissions = data.commission
-        this.modalData.initial_payment.nameProgram = data.program
-        this.modalData.initial_payment.nameClient = data.client
-        this.modalData.initial_payment.valorInitalPaymetn = data.initial_payment_status
-        this.modalData.initial_payment.feeprops = data.fee
-        const cards = await amgApi.post('/clients/search-cards-clients', { id: data.lead_id })
+        this.addPreloader();
+        this.modalData.initial_payment.programid = data.program_id;
+        this.modalData.initial_payment.sessionId = this.currentUser.user_id;
+        this.modalData.initial_payment.cfeestatus = data.contract_fee_status;
+        this.modalData.initial_payment.id_transaction = data.transaction_id;
+        this.modalData.initial_payment.editmodal =
+          data.user_id == this.currentUser.user_id ||
+          this.currentUser.role_id == 1 ||
+          this.currentUser.role_id == 2;
+        this.modalData.initial_payment.statusSale = data.status;
+        this.modalData.initial_payment.comissions = data.commission;
+        this.modalData.initial_payment.nameProgram = data.program;
+        this.modalData.initial_payment.nameClient = data.client;
+        this.modalData.initial_payment.valorInitalPaymetn =
+          data.initial_payment_status;
+        this.modalData.initial_payment.feeprops = data.fee;
+        const cards = await amgApi.post("/clients/search-cards-clients", {
+          id: data.lead_id
+        });
         if (cards.status === 200) {
           this.modalData.initial_payment.allcards = cards.data;
         }
-        const response = await amgApi.post('/sales-made/get-payments-sales-made', { id: data.id })
+        const response = await amgApi.post(
+          "/sales-made/get-payments-sales-made",
+          { id: data.id }
+        );
         if (response.status === 200) {
           [this.modalData.initial_payment.payments] = response.data;
         }
