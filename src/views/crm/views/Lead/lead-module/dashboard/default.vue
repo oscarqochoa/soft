@@ -50,6 +50,7 @@
         :modul="modul"
         :only-read="onlyRead"
         :lead="S_LEAD"
+        @reloadLead="getLead"
       />
     </b-col>
     <b-col v-if="modul !== 15" cols="12" lg="6">

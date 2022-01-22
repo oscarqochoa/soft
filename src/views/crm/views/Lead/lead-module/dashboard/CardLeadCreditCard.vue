@@ -9,7 +9,7 @@
       striped
       responsive="sm"
       :fields="fieldsTask"
-      :items="lead.cards"
+      :items="statusLeadCards"
       class="mb-0"
       small
     >
@@ -82,6 +82,7 @@
         :lead="lead"
         @onReloadCards="onReloadCards"
         @closeModalCard="$bvModal.hide(`modal-card-create-${ key }`)"
+        @reloadLeadEmit="reloadLeadEmit()"
       ></modal-card-new-create>
     </b-modal>
 
@@ -116,14 +117,19 @@ export default {
     ModalCardNewCreate,
   },
   computed: {
+    
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token"
+      token: "auth/token",
+      updatedCards:"CrmCreditCardStore/LISTCARDS"
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
-    })
+    }),
+    statusLeadCards(){
+        return this.updatedCards!=null? this.updatedCards : this.lead.cards
+    },
   },
   created() {
     this.authUser = this.currentUser;
@@ -153,8 +159,13 @@ export default {
     ...mapActions({
       A_GET_EEUU_STATES: "CrmGlobalStore/A_GET_EEUU_STATES",
       A_GET_CREDIT_CARD: "CrmCreditCardStore/A_GET_CREDIT_CARD",
-      A_DELETE_CREDIT_CARD: "CrmCreditCardStore/A_DELETE_CREDIT_CARD"
+      A_DELETE_CREDIT_CARD: "CrmCreditCardStore/A_DELETE_CREDIT_CARD",
+      SET_DATA_CARDS_UPDATE:"CrmCreditCardStore/SET_DATA_CARDS_UPDATE"
     }),
+    reloadLeadEmit(){
+      this.$emit("reloadLead");
+      
+    },
     async getStatesEeuu() {
       try {
         await this.A_GET_EEUU_STATES();
@@ -198,8 +209,9 @@ export default {
       }
     },
     onReloadCards(cards) {
-      console.log("cards", cards);
-      this.lead.cards = cards;
+      // this.lead.cards = cards;
+      this.SET_DATA_CARDS_UPDATE(cards)
+      this.lead.cards = this.updatedCards
     },
     onDeleteCard(id) {
       this.isActionButtonLoading = true;
