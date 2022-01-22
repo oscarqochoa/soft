@@ -9,7 +9,12 @@
         <b-col cols="6" sm="3" md="4" lg="3" xl="2">
           <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
             <div class="text-center pt-1">
-              <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(0)">
+              <b-button
+                variant="primary"
+                tag="a"
+                class="btn-cart w-100"
+                @click="change_tab(0)"
+              >
                 <span>Leads</span>
               </b-button>
             </div>
@@ -20,13 +25,17 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label class="item-name" for>TODAY</label>
-                      <p class="borde-count" style="color: #baa345">{{ global.leadday }}</p>
+                      <p class="borde-count" style="color: #baa345">
+                        {{ global.leadday }}
+                      </p>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>MONTH</label>
-                      <p class="borde-count">{{ global.leadmonth }}</p>
+                      <p class="borde-count">
+                        {{ global.leadmonth }}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -37,7 +46,12 @@
         <b-col cols="6" sm="3" md="4" lg="3" xl="2">
           <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
             <div class="text-center pt-1">
-              <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(1)">
+              <b-button
+                variant="primary"
+                tag="a"
+                class="btn-cart w-100"
+                @click="change_tab(1)"
+              >
                 <span>Appointments</span>
               </b-button>
             </div>
@@ -48,13 +62,17 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>TODAY</label>
-                      <p class="borde-count" style="color: #baa345">{{ global.eventday }}</p>
+                      <p class="borde-count" style="color: #baa345">
+                        {{ global.eventday }}
+                      </p>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>MONTH</label>
-                      <p class="borde-count">{{ global.eventmonth }}</p>
+                      <p class="borde-count">
+                        {{ global.eventmonth }}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -65,7 +83,12 @@
         <b-col cols="6" sm="3" md="4" lg="3" xl="2">
           <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
             <div class="text-center pt-1">
-              <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(2)">
+              <b-button
+                variant="primary"
+                tag="a"
+                class="btn-cart w-100"
+                @click="change_tab(2)"
+              >
                 <span>Tasks</span>
               </b-button>
             </div>
@@ -76,13 +99,17 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>TODAY</label>
-                      <p class="borde-count" style="color: #baa345">{{ global.taskday }}</p>
+                      <p class="borde-count" style="color: #baa345">
+                        {{ global.taskday }}
+                      </p>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>MONTH</label>
-                      <p class="borde-count">{{ global.taskmonth }}</p>
+                      <p class="borde-count">
+                        {{ global.taskmonth }}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -93,7 +120,12 @@
         <b-col cols="6" sm="3" md="4" lg="3" xl="2">
           <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
             <div class="text-center pt-1">
-              <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(3)">
+              <b-button
+                variant="primary"
+                tag="a"
+                class="btn-cart w-100"
+                @click="change_tab(3)"
+              >
                 <span>Sales</span>
               </b-button>
             </div>
@@ -104,13 +136,17 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>TODAY</label>
-                      <p class="borde-count" style="color: #baa345">{{ global.vendioday }}</p>
+                      <p class="borde-count" style="color: #baa345">
+                        {{ global.vendioday }}
+                      </p>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>MONTH</label>
-                      <p class="borde-count">{{ global.vendiomonth }}</p>
+                      <p class="borde-count">
+                        {{ global.vendiomonth }}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -121,7 +157,12 @@
         <b-col cols="6" sm="3" md="4" lg="3" xl="2">
           <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
             <div class="text-center pt-1">
-              <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(4)">
+              <b-button
+                variant="primary"
+                tag="a"
+                class="btn-cart w-100"
+                @click="change_tab(4)"
+              >
                 <span>Capturated</span>
               </b-button>
             </div>
@@ -132,13 +173,17 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>TODAY</label>
-                      <p class="borde-count" style="color: #baa345">{{ global.clientday }}</p>
+                      <p class="borde-count" style="color: #baa345">
+                        {{ global.clientday }}
+                      </p>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>MONTH</label>
-                      <p class="borde-count">{{ global.clientmonth }}</p>
+                      <p class="borde-count">
+                        {{ global.clientmonth }}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -346,7 +391,7 @@
             </li>
           </ul>
         </div>
-      </div>-->
+      </div> -->
       <div class="row">
         <b-card :title="`${nameOfTab} Balance`" class="col-12">
           <div class="d-flex justify-content-between flex-wrap row">
@@ -363,6 +408,7 @@
                     v-model="year"
                     :clearable="false"
                     :options="years"
+                    
                     @input="filtrocont()"
                   />
                 </b-col>
@@ -413,7 +459,7 @@ export default {
     AppEchartLine,
     AppEchartLineCrm,
     BBadge,
-    vSelect
+    vSelect,
   },
   data() {
     return {
@@ -431,12 +477,12 @@ export default {
           "September",
           "October",
           "November",
-          "December"
+          "December",
         ],
         series: {
           name: "",
-          data: []
-        }
+          data: [],
+        },
       },
       global: [],
       leads: [],
@@ -451,13 +497,13 @@ export default {
       users: [],
       year: moment().format("YYYY"),
       years: [],
-      nameOfTab: "Leads"
+      nameOfTab: "Leads",
     };
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser"
-    })
+      currentUser: "auth/currentUser",
+    }),
   },
   created() {
     this.userCreator();
@@ -471,6 +517,7 @@ export default {
       this.idEchart++;
     },
     change_tab(index) {
+      
       switch (index) {
         case 0:
           this.total_year = this.global.leads_year;
@@ -502,31 +549,35 @@ export default {
       this.index = index;
     },
     allData() {
+      
       this.$store.commit("app/SET_LOADING", true);
-      let { user_id } = this.currentUser;
-      if (this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
+      let  user_id  = this.currentUser.user_id;
+      if (
+        this.currentUser.role_id == 1 ||
+        this.currentUser.role_id == 2
+      ) {
         user_id = 0;
       }
       amgApi
         .post("/crm/get-data-dashboard", {
           created_id: user_id,
         })
-        .then(response => {
+        .then((response) => {
+          console.log(response.data, 'response.data')
           this.userfilter = response.data.usercreate;
           this.global = response.data;
-          console.log(this.global);
-          this.leads = response.data.leads.map(list => list);
-
-          this.quotes = response.data.quotes.map(list => list);
-          this.calls = response.data.calls.map(list => list);
-          this.sales = response.data.sales.map(list => list);
-          this.captur = response.data.vendio.map(list => list);
+          console.log(this.global)
+          this.leads = response.data.leads.map((list) => list);
+          this.quotes = response.data.quotes.map((list) => list);
+          this.calls = response.data.calls.map((list) => list);
+          this.sales = response.data.sales.map((list) => list);
+          this.captur = response.data.vendio.map((list) => list); // error
           this.$store.commit("app/SET_LOADING", false);
           this.chargeDataToEchart(this.leads, "Total Leads");
           this.total_year = this.global.leads_year;
           this.nameOfTab = "Leads";
         })
-        .catch(error => {
+        .catch((error) => {
           this.$store.commit("app/SET_LOADING", false);
           this.showToast(
             "danger",
@@ -539,36 +590,36 @@ export default {
         });
     },
     filtrocont() {
-      console.log(this.global);
+      console.log(this.global)
       if (this.userfilter != null) {
         this.$store.commit("app/SET_LOADING", true);
         amgApi
           .post("/crm/get-data-dashboard", {
             created_id: this.userfilter,
-            anio: this.year
+            anio: this.year,
           })
-          .then(response => {
+          .then((response) => {
             this.global = response.data;
-            this.leads = response.data.leads.map(list => {
+            this.leads = response.data.leads.map((list) => {
               return list;
             });
-            this.quotes = response.data.quotes.map(list => {
+            this.quotes = response.data.quotes.map((list) => {
               return list;
             });
-            this.calls = response.data.calls.map(list => {
+            this.calls = response.data.calls.map((list) => {
               return list;
             });
-            this.sales = response.data.sales.map(list => {
+            this.sales = response.data.sales.map((list) => {
               return list;
             });
-            this.captur = response.data.vendio.map(list => {
+            this.captur = response.data.vendio.map((list) => {
               return list;
             });
             this.chargeDataToEchart(this.leads, "Total Leads");
             this.total_year = this.global.leads_year;
             this.$store.commit("app/SET_LOADING", false);
           })
-          .catch(error => {
+          .catch((error) => {
             this.$store.commit("app/SET_LOADING", false);
             this.showToast(
               "danger",
@@ -588,12 +639,12 @@ export default {
       amgApi
         .post("/commons/sellerall/2", {
           roles: "",
-          type: "1"
+          type: "1",
         })
-        .then(response => {
+        .then((response) => {
           this.users = response.data;
         })
-        .catch(error => {
+        .catch((error) => {
           this.showToast(
             "danger",
             "top-right",
@@ -608,8 +659,8 @@ export default {
       for (let x = 2014; x <= moment().format("YYYY"); x++) {
         this.years.push(x);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
