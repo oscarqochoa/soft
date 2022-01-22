@@ -249,6 +249,7 @@ import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import useJwt from '@/auth/jwt/useJwt'
 import store from '@/store/index'
+import PusherService from '@/pusher/service.js'
 import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
 export default {
@@ -322,6 +323,7 @@ export default {
               this.$ability.update(userData.ability)
               this.$store.dispatch('auth/updateCurrentUser', userData)
               this.$store.dispatch('auth/updateToken', userToken)
+              PusherService.instanceNewPusher()
               // ? This is just for demo purpose as well.
               // ? Because we are showing eCommerce app's cart items count in navbar
               // this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
