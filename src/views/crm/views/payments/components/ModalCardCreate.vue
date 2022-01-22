@@ -12,12 +12,11 @@
       @hidden="closeModal"
       :no-close-on-backdrop="true"
     >
-
       <ValidationObserver ref="form">
         <b-row class="font-bureau-style">
           <b-col cols="12" md="6">
             <div class="form-group">
-                <label for="card_holder">Card Holder Name</label>
+              <label for="card_holder">Card Holder Name</label>
               <ValidationProvider rules="required" v-slot="{errors}">
                 <b-form-input
                   class="border-hover-p"
@@ -43,7 +42,6 @@
                       @input="activeFocus(1, 4)"
                       v-model="cardnumber1"
                       type="text"
-
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -56,7 +54,6 @@
                       @input="activeFocus(2, 4)"
                       v-model="cardnumber2"
                       type="text"
-
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -69,7 +66,6 @@
                       @input="activeFocus(3, 4)"
                       v-model="cardnumber3"
                       type="text"
-
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -82,7 +78,6 @@
                       @input="activeFocus(4, 4)"
                       v-model="cardnumber4"
                       type="text"
-
                       :class="{'border border-danger':errors[0]}"
                     />
                   </ValidationProvider>
@@ -100,7 +95,6 @@
                   id="card-expi-month"
                   ref="input-5"
                   @input="activeFocus(5, 2)"
-
                   v-model="form.card_expi_month"
                   :class="{'border border-danger':errors[0]}"
                 />
@@ -117,7 +111,6 @@
                   id="card-expi-year"
                   ref="input-6"
                   @input="activeFocus(6, 2)"
-
                   v-model="form.card_expi_year"
                   :class="{'border border-danger':errors[0]}"
                 />
@@ -151,19 +144,17 @@
                     @click="moreInfo = 1"
                     class="btn rounded w-100 btn-gray-selector"
                     :variant="`${moreInfo == 1? 'primary':'' }`"
-
                   >Yes</b-button>
                 </b-col>
                 <b-col cols="6" class="px-1">
                   <b-button
                     @click="moreInfo = 0"
                     class="btn rounded w-100 btn-gray-selector"
-                   :variant="`${moreInfo == 0? 'primary':'' }`"
+                    :variant="`${moreInfo == 0? 'primary':'' }`"
                   >No</b-button>
                 </b-col>
               </b-row>
             </div>
-
           </b-col>
         </b-row>
         <b-row v-if="moreInfo == 0" class="font-bureau-style">
@@ -270,13 +261,13 @@
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import { extend } from "vee-validate";
-import { amgApi } from '@/service/axios';
+import { amgApi } from "@/service/axios";
 export default {
   components: { VueGoogleAutocomplete },
   props: ["idlead", "session", "ifModalCard"],
   data() {
     return {
-      mutableIfModalCard:this.ifModalCard,
+      mutableIfModalCard: this.ifModalCard,
       address_create_card_modal: "",
       states: [],
       cards: [],
@@ -294,24 +285,24 @@ export default {
         address: "",
         cardholdername: "",
         street: "",
-        user: this.session,
+        user: this.session
       },
       cardnumber1: "",
       cardnumber2: "",
       cardnumber3: "",
-      cardnumber4: "",
+      cardnumber4: ""
     };
   },
 
   mounted() {
-    amgApi.get("/stateseeuu").then((response) => {
+    amgApi.get("/commons/get-eeuu-states").then(response => {
       this.states = response.data;
     });
   },
   methods: {
     activeFocus(index, max) {
       let inputValue = this.$refs?.[`input-${index}`];
-      if (inputValue.value.length === max-1) {
+      if (inputValue.value.length === max - 1) {
         const nextElement = this.$refs?.[`input-${index + 1}`];
         if (nextElement) nextElement.focus();
       }
@@ -329,7 +320,7 @@ export default {
       this.form.zipcode = this.direccion.postal_code;
     },
     createCard() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(success => {
         if (!success) {
           return;
         }
@@ -355,39 +346,42 @@ export default {
             icon: "warning",
             showCancelButton: true,
             customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-danger ",
-              },
-            confirmButtonText: "Yes, create it!",
+              confirmButton: "btn btn-primary",
+              cancelButton: "btn btn-danger "
+            },
+            confirmButtonText: "Yes, create it!"
           })
-          .then((result) => {
+          .then(result => {
             if (result.isConfirmed) {
-              amgApi.post("/createcard", this.form).then((response) => {
-                this.cards = response.data;
-                this.$emit("new", this.cards);
-                this.$emit("click", false);
-                this.$swal.fire({
-                  icon: "success",
-                  title: "Card Created Successfully",
+              amgApi
+                .post("/createcard", this.form)
+                .then(response => {
+                  this.cards = response.data;
+                  this.$emit("new", this.cards);
+                  this.$emit("click", false);
+                  this.$swal.fire({
+                    icon: "success",
+                    title: "Card Created Successfully"
+                  });
+                })
+                .catch(error => {
+                  console.error(error);
+                  this.showToast(
+                    "danger",
+                    "top-right",
+                    "Error",
+                    "XIcon",
+                    "Something went wrong!"
+                  );
                 });
-              }).catch(error => {
-                console.error(error)
-                this.showToast(
-                  "danger",
-                  "top-right",
-                  "Error",
-                  "XIcon",
-                  "Something went wrong!"
-                );
-              });
             }
           });
       });
     },
     closeModal() {
       this.$emit("click", false);
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -30,10 +30,7 @@
       </b-row>
       <b-row class="mt-1">
         <b-input-group>
-          <b-form-input
-            v-model="generatedUrl"
-            disabled
-          />
+          <b-form-input v-model="generatedUrl" disabled />
           <b-input-group-append>
             <b-button
               v-clipboard:copy="generatedUrl"
@@ -47,10 +44,7 @@
         </b-input-group>
       </b-row>
       <b-row class="mt-1 d-flex font-weight-bold align-items-center justify-content-center">
-        <b-button
-          variant="success"
-          @click="sendGeneratedLinkViaSms"
-        >
+        <b-button variant="success" @click="sendGeneratedLinkViaSms">
           <feather-icon icon="MessageCircleIcon" />SEND SMS
         </b-button>
       </b-row>
@@ -59,127 +53,127 @@
 </template>
 
 <script>
-import Ripple from 'vue-ripple-directive'
-import CryptoJS from 'crypto-js'
-import { mapGetters } from 'vuex'
+import Ripple from "vue-ripple-directive";
+import CryptoJS from "crypto-js";
+import { mapGetters } from "vuex";
 
-const moment = require('moment-timezone')
+const moment = require("moment-timezone");
 
 export default {
-  name: 'UrlModal',
+  name: "UrlModal",
   directives: {
-    Ripple,
+    Ripple
   },
   props: {
     modal: {
       type: Object,
       default: () => ({
-        url: true,
-      }),
+        url: true
+      })
     },
     url: {
       type: Object,
       default: () => ({
-        client: '',
-        program: '',
-        selectedLead: {},
-      }),
-    },
+        client: "",
+        program: "",
+        selectedLead: {}
+      })
+    }
   },
   data() {
     return {
       charge: true,
-      amount: 0,
-    }
+      amount: 0
+    };
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
+      currentUser: "auth/currentUser"
     }),
     generatedUrl() {
       const encryptedLeadId = CryptoJS.AES.encrypt(
         `${this.url.selectedLead.lead_id}`,
-        'Secret Passphrase',
+        "Secret Passphrase"
       )
         .toString()
-        .replaceAll('/', '-')
+        .replaceAll("/", "-");
       const encryptedProgramId = CryptoJS.AES.encrypt(
         `${this.url.selectedLead.program_id}`,
-        'Secret Passphrase',
+        "Secret Passphrase"
       )
         .toString()
-        .replaceAll('/', '-')
+        .replaceAll("/", "-");
       const encryptedAmount = CryptoJS.AES.encrypt(
         `${this.amount}`,
-        'Secret Passphrase',
+        "Secret Passphrase"
       )
         .toString()
-        .replaceAll('/', '-')
+        .replaceAll("/", "-");
       const encryptedSaleId = CryptoJS.AES.encrypt(
         `${this.url.selectedLead.sale_id}`,
-        'Secret Passphrase',
+        "Secret Passphrase"
       )
         .toString()
-        .replaceAll('/', '-')
+        .replaceAll("/", "-");
       // this.chargeUrl
       const californiaDate = moment()
-        .tz('America/Los_Angeles')
-        .format('YYYY-MM-DD')
+        .tz("America/Los_Angeles")
+        .format("YYYY-MM-DD");
 
       const encryptedcaliforniaDate = CryptoJS.AES.encrypt(
         `${californiaDate}`,
-        'Secret Passphrase',
+        "Secret Passphrase"
       )
         .toString()
-        .replaceAll('/', '-')
+        .replaceAll("/", "-");
 
       return `https://payment.alarcongroup.us/${encryptedLeadId}/${encryptedProgramId}/${encryptedAmount}/${encryptedSaleId}/${
         this.charge ? 0 : 1
-      }/${encryptedcaliforniaDate}`
-    },
+      }/${encryptedcaliforniaDate}`;
+    }
   },
   methods: {
     async changeCharge(checked) {
       const message = checked
-        ? 'Are you sure to activate the charge?'
-        : 'Are you sure to desactivate the charge?'
+        ? "Are you sure to activate the charge?"
+        : "Are you sure to desactivate the charge?";
       const answ = await this.$swal.fire({
-        title: 'Warning',
-        icon: 'warning',
+        title: "Warning",
+        icon: "warning",
         text: message,
-        showCancelButton: true,
-      })
-      if (!answ.isConfirmed) this.charge = !this.charge
+        showCancelButton: true
+      });
+      if (!answ.isConfirmed) this.charge = !this.charge;
     },
     async sendGeneratedLinkViaSms() {
       try {
-        const res = await amgApi.post('/send-generated-link-sms', {
+        const res = await amgApi.post("/sales-made/send-generated-link-sms", {
           leadid: this.url.selectedLead.lead_id,
           user_id: this.$store.state.auth.currentUser.user_id,
           generated_url: this.generatedUrl,
           modul: 2,
           language: this.url.selectedLead.language,
           program: this.url.selectedLead.program,
-          last_name: this.url.selectedLead.last_name,
-        })
+          last_name: this.url.selectedLead.last_name
+        });
         if (res.status === 200) {
           this.$swal.fire({
-            icon: 'success',
-            title: 'SMS SENT',
-          })
+            icon: "success",
+            title: "SMS SENT"
+          });
         }
       } catch (error) {
-        this.showErrorSwal()
+        this.showErrorSwal();
       }
     },
     onCopy() {
-      this.showToast('success', 'top-right', 'Text copied', 'CheckIcon', '')
+      this.showToast("success", "top-right", "Text copied", "CheckIcon", "");
     },
     onError() {
-      this.showToast('success', 'top-right', 'Failed to copy', 'XIcon', '')
-    },
-  },
-}
+      this.showToast("success", "top-right", "Failed to copy", "XIcon", "");
+    }
+  }
+};
 </script>
 
 <style scoped>

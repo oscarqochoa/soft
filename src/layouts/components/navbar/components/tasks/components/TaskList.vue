@@ -26,7 +26,7 @@
       <div class="table-responsive">
         <b-table
           ref="refTaskGrid"
-          api-url="/alltasks"
+          api-url="/tasks/get-all-tasks"
           class="position-relative"
           :items="myProvider"
           :fields="arrayColumns"

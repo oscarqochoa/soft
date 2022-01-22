@@ -546,7 +546,7 @@ export default {
     },
     async getCountries() {
       try {
-        const response = await amgApi.post("/view-countrys", {});
+        const response = await amgApi.post("/commons/get-world-countrys", {});
         this.note.country.options = response.data;
       } catch (error) {
         this.showErrorSwal(error);

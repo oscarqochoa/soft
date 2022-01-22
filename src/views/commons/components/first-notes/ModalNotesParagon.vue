@@ -8,19 +8,12 @@
     @hide="hideModal(false)"
   >
     <template #modal-header>
-      <header-modal-notes
-        program="Paragon"
-        :info="noteInfo"
-        @close="hideModal(false)"
-      />
+      <header-modal-notes program="Paragon" :info="noteInfo" @close="hideModal(false)" />
     </template>
     <validation-observer ref="form">
       <b-row>
         <b-col>
-          <b-form-group
-            label="Type of Business"
-            label-class="font-weight-bolder"
-          >
+          <b-form-group label="Type of Business" label-class="font-weight-bolder">
             <v-select
               v-model="note.typeOfBuisiness.value"
               :disabled="disabled"
@@ -33,15 +26,8 @@
       </b-row>
       <b-row>
         <b-col>
-          <validation-provider
-            v-slot="{ errors }"
-            name="contactTime"
-            rules="required"
-          >
-            <b-form-group
-              label="Contact time"
-              label-class="font-weight-bolder"
-            >
+          <validation-provider v-slot="{ errors }" name="contactTime" rules="required">
+            <b-form-group label="Contact time" label-class="font-weight-bolder">
               <b-form-input
                 v-model="note.contactTime.value"
                 :disabled="disabled"
@@ -51,15 +37,8 @@
           </validation-provider>
         </b-col>
         <b-col>
-          <validation-provider
-            v-slot="{ errors }"
-            name="originCountry"
-            rules="required"
-          >
-            <b-form-group
-              label="Origin Country"
-              label-class="font-weight-bolder"
-            >
+          <validation-provider v-slot="{ errors }" name="originCountry" rules="required">
+            <b-form-group label="Origin Country" label-class="font-weight-bolder">
               <v-select
                 v-model="note.country.value"
                 :class="{'border-danger rounded': errors[0]}"
@@ -73,18 +52,9 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="facebook"
-            rules="required"
-          >
-            <b-form-group
-              label="Facebook"
-              label-class="font-weight-bolder"
-            >
+        <b-col cols="4">
+          <validation-provider v-slot="{ errors }" name="facebook" rules="required">
+            <b-form-group label="Facebook" label-class="font-weight-bolder">
               <b-form-radio-group
                 v-model="note.facebook.value"
                 :options="note.facebook.options"
@@ -95,18 +65,9 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="logo"
-            rules="required"
-          >
-            <b-form-group
-              label="Logo"
-              label-class="font-weight-bolder"
-            >
+        <b-col cols="4">
+          <validation-provider v-slot="{ errors }" name="logo" rules="required">
+            <b-form-group label="Logo" label-class="font-weight-bolder">
               <b-form-radio-group
                 v-model="note.logo.value"
                 :disabled="disabled"
@@ -117,18 +78,9 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="instagram"
-            rules="required"
-          >
-            <b-form-group
-              label="Instagram"
-              label-class="font-weight-bolder"
-            >
+        <b-col cols="4">
+          <validation-provider v-slot="{ errors }" name="instagram" rules="required">
+            <b-form-group label="Instagram" label-class="font-weight-bolder">
               <b-form-radio-group
                 v-model="note.instagram.value"
                 :options="note.instagram.options"
@@ -140,79 +92,30 @@
           </validation-provider>
         </b-col>
         <transition name="fade">
-          <b-col
-            v-if="note.facebook.value === 'Yes' || note.instagram.value === 'Yes'"
-            cols="12"
-          >
-            <b-row
-              class="d-flex align-items-center justify-content-between"
-            >
-              <b-col
-                class="d-flex"
-                :class="{'aaa' : note.facebook.value !== 'Yes'}"
-                cols="4"
-              >
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Facebook Link"
-                  class="mr-1"
-                >
-                  <b-form-input
-                    v-model="note.facebook.link"
-                    :disabled="disabled"
-                  />
+          <b-col v-if="note.facebook.value === 'Yes' || note.instagram.value === 'Yes'" cols="12">
+            <b-row class="d-flex align-items-center justify-content-between">
+              <b-col class="d-flex" :class="{'aaa' : note.facebook.value !== 'Yes'}" cols="4">
+                <b-form-group label-class="font-weight-bolder" label="Facebook Link" class="mr-1">
+                  <b-form-input v-model="note.facebook.link" :disabled="disabled" />
                 </b-form-group>
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Facebook Likes"
-                >
-                  <b-form-input
-                    v-model="note.facebook.likes"
-                    :disabled="disabled"
-                  />
+                <b-form-group label-class="font-weight-bolder" label="Facebook Likes">
+                  <b-form-input v-model="note.facebook.likes" :disabled="disabled" />
                 </b-form-group>
-
               </b-col>
-              <b-col
-                v-if="note.instagram.value === 'Yes'"
-                cols="4"
-                class="d-flex"
-              >
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Instagram Link"
-                  class="mr-1"
-                >
-                  <b-form-input
-                    v-model="note.instagram.link"
-                    :disabled="disabled"
-                  />
+              <b-col v-if="note.instagram.value === 'Yes'" cols="4" class="d-flex">
+                <b-form-group label-class="font-weight-bolder" label="Instagram Link" class="mr-1">
+                  <b-form-input v-model="note.instagram.link" :disabled="disabled" />
                 </b-form-group>
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Instagram Likes"
-                >
-                  <b-form-input
-                    v-model="note.instagram.likes"
-                    :disabled="disabled"
-                  />
+                <b-form-group label-class="font-weight-bolder" label="Instagram Likes">
+                  <b-form-input v-model="note.instagram.likes" :disabled="disabled" />
                 </b-form-group>
               </b-col>
             </b-row>
           </b-col>
         </transition>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="website"
-            rules="required"
-          >
-            <b-form-group
-              label="Website"
-              label-class="font-weight-bolder"
-            >
+        <b-col cols="4">
+          <validation-provider v-slot="{ errors }" name="website" rules="required">
+            <b-form-group label="Website" label-class="font-weight-bolder">
               <b-form-radio-group
                 v-model="note.website.value"
                 :options="note.website.options"
@@ -223,14 +126,8 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="socialMediaServices"
-            rules="required"
-          >
+        <b-col cols="4">
+          <validation-provider v-slot="{ errors }" name="socialMediaServices" rules="required">
             <b-form-group
               label="Experience with Social Media Services"
               label-class="font-weight-bolder"
@@ -245,18 +142,9 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col
-          cols="4"
-        >
-          <validation-provider
-            v-slot="{ errors }"
-            name="newBusiness"
-            rules="required"
-          >
-            <b-form-group
-              label="It a New Business?"
-              label-class="font-weight-bolder"
-            >
+        <b-col cols="4">
+          <validation-provider v-slot="{ errors }" name="newBusiness" rules="required">
+            <b-form-group label="It a New Business?" label-class="font-weight-bolder">
               <b-form-radio-group
                 v-model="note.newBusiness.value"
                 :options="note.newBusiness.options"
@@ -268,51 +156,23 @@
           </validation-provider>
         </b-col>
         <transition name="fade">
-          <b-col
-            v-if="note.website.value === 'Yes' || note.newBusiness.value === 'No'"
-            cols="12"
-          >
-            <b-row
-              class="d-flex align-items-center justify-content-between"
-            >
-              <b-col
-                cols="6"
-                class="d-flex"
-                :class="{'aaa' : note.website.value !== 'Yes'}"
-              >
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Website Link"
-                  class="mr-1"
-                >
-                  <b-form-input
-                    v-model="note.website.link"
-                    :disabled="disabled"
-                  />
+          <b-col v-if="note.website.value === 'Yes' || note.newBusiness.value === 'No'" cols="12">
+            <b-row class="d-flex align-items-center justify-content-between">
+              <b-col cols="6" class="d-flex" :class="{'aaa' : note.website.value !== 'Yes'}">
+                <b-form-group label-class="font-weight-bolder" label="Website Link" class="mr-1">
+                  <b-form-input v-model="note.website.link" :disabled="disabled" />
                 </b-form-group>
-                <b-form-group
-                  label-class="font-weight-bolder"
-                  label="Website Type"
-                >
+                <b-form-group label-class="font-weight-bolder" label="Website Type">
                   <b-form-select
                     v-model="note.website.type"
                     :disabled="disabled"
                     :options="['STANDAR', 'PROFESSIONAL', 'ECOMMERCE']"
                   />
                 </b-form-group>
-
               </b-col>
-              <b-col
-                v-if="note.newBusiness.value === 'No'"
-                cols="4"
-              >
-                <b-form-group
-                  label="Years?"
-                  label-class="font-weight-bolder"
-                >
-                  <b-form-input
-                    v-model="note.newBusiness.years"
-                  />
+              <b-col v-if="note.newBusiness.value === 'No'" cols="4">
+                <b-form-group label="Years?" label-class="font-weight-bolder">
+                  <b-form-input v-model="note.newBusiness.years" />
                 </b-form-group>
               </b-col>
             </b-row>
@@ -322,15 +182,8 @@
       <transition name="fade">
         <b-row v-if="note.experience.value === 'Yes'">
           <b-col>
-            <validation-provider
-              v-slot="{ errors }"
-              name="experience"
-              rules="required"
-            >
-              <b-form-group
-                label="Details"
-                label-class="font-weight-bolder"
-              >
+            <validation-provider v-slot="{ errors }" name="experience" rules="required">
+              <b-form-group label="Details" label-class="font-weight-bolder">
                 <quill-editor
                   v-model="note.details.value"
                   :disabled="disabled"
@@ -344,15 +197,8 @@
       </transition>
       <b-row>
         <b-col>
-          <validation-provider
-            v-slot="{ errors }"
-            name="information"
-            rules="required"
-          >
-            <b-form-group
-              label="Information"
-              label-class="font-weight-bolder"
-            >
+          <validation-provider v-slot="{ errors }" name="information" rules="required">
+            <b-form-group label="Information" label-class="font-weight-bolder">
               <quill-editor
                 v-model="note.information.value"
                 :disabled="disabled"
@@ -365,15 +211,8 @@
       </b-row>
       <b-row>
         <b-col>
-          <validation-provider
-            v-slot="{ errors }"
-            name="indications"
-            rules="required"
-          >
-            <b-form-group
-              label="Indications"
-              label-class="font-weight-bolder"
-            >
+          <validation-provider v-slot="{ errors }" name="indications" rules="required">
+            <b-form-group label="Indications" label-class="font-weight-bolder">
               <quill-editor
                 v-model="note.indications.value"
                 :disabled="disabled"
@@ -386,15 +225,8 @@
       </b-row>
       <b-row>
         <b-col>
-          <validation-provider
-            v-slot="{ errors }"
-            name="suggestion"
-            rules="required"
-          >
-            <b-form-group
-              label="Suggestions"
-              label-class="font-weight-bolder"
-            >
+          <validation-provider v-slot="{ errors }" name="suggestion" rules="required">
+            <b-form-group label="Suggestions" label-class="font-weight-bolder">
               <quill-editor
                 v-model="note.suggestion.value"
                 :disabled="disabled"
@@ -407,15 +239,8 @@
       </b-row>
       <b-row>
         <b-col>
-          <validation-provider
-            v-slot="{ errors }"
-            name="pending"
-            rules="required"
-          >
-            <b-form-group
-              label="Pending"
-              label-class="font-weight-bolder"
-            >
+          <validation-provider v-slot="{ errors }" name="pending" rules="required">
+            <b-form-group label="Pending" label-class="font-weight-bolder">
               <quill-editor
                 v-model="note.pending.value"
                 :disabled="disabled"
@@ -428,50 +253,41 @@
       </b-row>
     </validation-observer>
     <template #modal-footer>
-      <button-save
-        v-if="showButtonSave"
-        @click="saveNotesIncomplete"
-      />
-      <button-save-and-complete
-        v-if="showButtonSave"
-        @click="saveNotesCompleted"
-      />
-      <button-update
-        v-if="showButtonUpdate"
-        @click="updateNotesCompleted"
-      />
+      <button-save v-if="showButtonSave" @click="saveNotesIncomplete" />
+      <button-save-and-complete v-if="showButtonSave" @click="saveNotesCompleted" />
+      <button-update v-if="showButtonUpdate" @click="updateNotesCompleted" />
     </template>
   </b-modal>
 </template>
 
 <script>
-import { quillEditor } from 'vue-quill-editor'
-import vSelect from 'vue-select'
-import NotesServices from '@/views/commons/components/first-notes/services/notes.service'
-import HeaderModalNotes from '@/views/commons/components/first-notes/HeaderModalNotes.vue'
-import ButtonSave from '@/views/commons/utilities/ButtonSave.vue'
-import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete.vue'
-import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate.vue'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+import { quillEditor } from "vue-quill-editor";
+import vSelect from "vue-select";
+import NotesServices from "@/views/commons/components/first-notes/services/notes.service";
+import HeaderModalNotes from "@/views/commons/components/first-notes/HeaderModalNotes.vue";
+import ButtonSave from "@/views/commons/utilities/ButtonSave.vue";
+import ButtonSaveAndComplete from "@/views/commons/utilities/ButtonSaveAndComplete.vue";
+import ButtonUpdate from "@/views/commons/utilities/ButtonUpdate.vue";
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
 
 export default {
-  name: 'ModalNotesParagon',
+  name: "ModalNotesParagon",
   components: {
     ButtonUpdate,
     ButtonSaveAndComplete,
     ButtonSave,
     HeaderModalNotes,
     quillEditor,
-    vSelect,
+    vSelect
   },
   props: {
     noteInfo: {
       type: Object,
       required: true,
       default: () => ({
-        programSelected: '',
+        programSelected: "",
         roleId: null,
         notesProgram: null,
         nameProgram: null,
@@ -491,9 +307,9 @@ export default {
         sellerName: null,
         trackings: null,
         notes_status: null,
-        notes_status_new: null,
-      }),
-    },
+        notes_status_new: null
+      })
+    }
   },
   data() {
     return {
@@ -504,243 +320,283 @@ export default {
           value: null,
           options: [
             {
-              text: 'Yes',
-              value: 'Yes',
+              text: "Yes",
+              value: "Yes"
             },
             {
-              text: 'No',
-              value: 'No',
-            },
+              text: "No",
+              value: "No"
+            }
           ],
-          disabled: false,
+          disabled: false
         },
         facebook: {
           value: null,
           options: [
             {
-              text: 'Yes',
-              value: 'Yes',
+              text: "Yes",
+              value: "Yes"
             },
             {
-              text: 'No',
-              value: 'No',
-            },
+              text: "No",
+              value: "No"
+            }
           ],
           disabled: false,
-          link: '',
-          likes: '',
+          link: "",
+          likes: ""
         },
         experience: {
           value: null,
           options: [
             {
-              text: 'Yes',
-              value: 'Yes',
+              text: "Yes",
+              value: "Yes"
             },
             {
-              text: 'No',
-              value: 'No',
-            },
+              text: "No",
+              value: "No"
+            }
           ],
-          disabled: false,
+          disabled: false
         },
         newBusiness: {
           value: null,
           options: [
             {
-              text: 'Yes',
-              value: 'Yes',
+              text: "Yes",
+              value: "Yes"
             },
             {
-              text: 'No',
-              value: 'No',
-            },
+              text: "No",
+              value: "No"
+            }
           ],
           disabled: false,
-          years: '',
+          years: ""
         },
         website: {
           value: null,
           options: [
             {
-              text: 'Yes',
-              value: 'Yes',
+              text: "Yes",
+              value: "Yes"
             },
             {
-              text: 'No',
-              value: 'No',
-            },
+              text: "No",
+              value: "No"
+            }
           ],
           disabled: false,
-          link: '',
-          type: '',
+          link: "",
+          type: ""
         },
         instagram: {
           value: null,
           options: [
             {
-              text: 'Yes',
-              value: 'Yes',
+              text: "Yes",
+              value: "Yes"
             },
             {
-              text: 'No',
-              value: 'No',
-            },
+              text: "No",
+              value: "No"
+            }
           ],
           disabled: false,
-          link: '',
-          likes: '',
+          link: "",
+          likes: ""
         },
         typeOfBuisiness: {
           value: [],
           disabled: false,
-          options: [],
+          options: []
         },
         contactTime: {
-          value: '',
-          disabled: false,
+          value: "",
+          disabled: false
         },
         country: {
           value: null,
           disabled: false,
-          options: [],
+          options: []
         },
         information: {
-          value: '',
-          disabled: false,
+          value: "",
+          disabled: false
         },
         indications: {
-          value: '',
-          disabled: false,
+          value: "",
+          disabled: false
         },
         suggestion: {
-          value: '',
-          disabled: false,
+          value: "",
+          disabled: false
         },
         pending: {
-          value: '',
-          disabled: false,
+          value: "",
+          disabled: false
         },
         details: {
-          value: '',
-          disabled: false,
-        },
+          value: "",
+          disabled: false
+        }
       },
       showSave: false,
       showUpdate: false,
       editorOption: {
-        modules: { toolbar: false },
-      },
-
-    }
+        modules: { toolbar: false }
+      }
+    };
   },
   computed: {
     disabled() {
-      return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller
+      return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller;
     },
     newNote() {
-      console.log(this.noteInfo.created > '2021-05-16 00:00:00')
-      return this.noteInfo.created > '2021-05-16 00:00:00'
+      console.log(this.noteInfo.created > "2021-05-16 00:00:00");
+      return this.noteInfo.created > "2021-05-16 00:00:00";
     },
     emptyNote() {
       if (this.newNote) {
-        return this.noteInfo.notes_status_new == null
+        return this.noteInfo.notes_status_new == null;
       }
-      return this.noteInfo.notes_status == 0
+      return this.noteInfo.notes_status == 0;
     },
     showButtonSave() {
-      return this.showSave && !this.noteInfo.notSeller
+      return this.showSave && !this.noteInfo.notSeller;
     },
     showButtonUpdate() {
-      return this.showUpdate && !this.noteInfo.notSeller
-    },
+      return this.showUpdate && !this.noteInfo.notSeller;
+    }
   },
   watch: {
-    'note.facebook.value': {
+    "note.facebook.value": {
       handler(newValue) {
-        if (newValue !== 'Yes') {
-          this.note.facebook.likes = this.note.facebook.likes ? this.note.facebook.likes : 0
-          this.note.facebook.link = this.note.facebook.link ? this.note.facebook.link : 0
+        if (newValue !== "Yes") {
+          this.note.facebook.likes = this.note.facebook.likes
+            ? this.note.facebook.likes
+            : 0;
+          this.note.facebook.link = this.note.facebook.link
+            ? this.note.facebook.link
+            : 0;
         } else {
-          this.note.facebook.likes = this.note.facebook.likes === 0 || this.note.facebook.likes === '0' ? '' : this.note.facebook.likes
-          this.note.facebook.link = this.note.facebook.link === 0 || this.note.facebook.link === '0' ? '' : this.note.facebook.link
+          this.note.facebook.likes =
+            this.note.facebook.likes === 0 || this.note.facebook.likes === "0"
+              ? ""
+              : this.note.facebook.likes;
+          this.note.facebook.link =
+            this.note.facebook.link === 0 || this.note.facebook.link === "0"
+              ? ""
+              : this.note.facebook.link;
         }
       },
-      deep: true,
+      deep: true
     },
-    'note.instagram.value': {
+    "note.instagram.value": {
       handler(newValue) {
-        if (newValue !== 'Yes') {
-          this.note.instagram.likes = this.note.instagram.likes ? this.note.instagram.likes : 0
-          this.note.instagram.link = this.note.instagram.link ? this.note.instagram.link : 0
+        if (newValue !== "Yes") {
+          this.note.instagram.likes = this.note.instagram.likes
+            ? this.note.instagram.likes
+            : 0;
+          this.note.instagram.link = this.note.instagram.link
+            ? this.note.instagram.link
+            : 0;
         } else {
-          this.note.instagram.likes = this.note.instagram.likes === 0 || this.note.instagram.likes === '0' ? '' : this.note.instagram.likes
-          this.note.instagram.link = this.note.instagram.link === 0 || this.note.instagram.link === '0' ? '' : this.note.instagram.link
+          this.note.instagram.likes =
+            this.note.instagram.likes === 0 || this.note.instagram.likes === "0"
+              ? ""
+              : this.note.instagram.likes;
+          this.note.instagram.link =
+            this.note.instagram.link === 0 || this.note.instagram.link === "0"
+              ? ""
+              : this.note.instagram.link;
         }
       },
-      deep: true,
+      deep: true
     },
-    'note.website.value': {
+    "note.website.value": {
       handler(newValue) {
-        if (newValue !== 'Yes') {
-          this.note.website.link = this.note.website.link ? this.note.website.link : 0
-          this.note.website.type = this.note.website.type ? this.note.website.type : 0
+        if (newValue !== "Yes") {
+          this.note.website.link = this.note.website.link
+            ? this.note.website.link
+            : 0;
+          this.note.website.type = this.note.website.type
+            ? this.note.website.type
+            : 0;
         } else {
-          this.note.website.link = this.note.website.link === 0 || this.note.website.link === '0' ? '' : this.note.website.link
-          this.note.website.type = this.note.website.type === 0 || this.note.website.type === '0' ? '' : this.note.website.type
+          this.note.website.link =
+            this.note.website.link === 0 || this.note.website.link === "0"
+              ? ""
+              : this.note.website.link;
+          this.note.website.type =
+            this.note.website.type === 0 || this.note.website.type === "0"
+              ? ""
+              : this.note.website.type;
         }
       },
-      deep: true,
+      deep: true
     },
-    'note.experience.value': {
+    "note.experience.value": {
       handler(newValue) {
-        if (newValue !== 'Yes') {
-          this.note.details.value = this.note.details.value ? this.note.details.value : 0
+        if (newValue !== "Yes") {
+          this.note.details.value = this.note.details.value
+            ? this.note.details.value
+            : 0;
         } else {
-          this.note.details.value = this.note.details.value === 0 || this.note.details.value === '0' ? '' : this.note.details.value
+          this.note.details.value =
+            this.note.details.value === 0 || this.note.details.value === "0"
+              ? ""
+              : this.note.details.value;
         }
       },
-      deep: true,
+      deep: true
     },
-    'note.newBusiness.value': {
+    "note.newBusiness.value": {
       handler(newValue) {
-        if (newValue !== 'No') {
-          this.note.newBusiness.years = this.note.newBusiness.years ? this.note.newBusiness.years : 0
+        if (newValue !== "No") {
+          this.note.newBusiness.years = this.note.newBusiness.years
+            ? this.note.newBusiness.years
+            : 0;
         } else {
-          this.note.newBusiness.years = this.note.newBusiness.years === 0 || this.note.newBusiness.years === '0' ? '' : this.note.newBusiness.years
+          this.note.newBusiness.years =
+            this.note.newBusiness.years === 0 ||
+            this.note.newBusiness.years === "0"
+              ? ""
+              : this.note.newBusiness.years;
         }
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   async created() {
-    await this.getFirstNote()
-    await this.listTypeBusiness()
-    await this.getCountries()
-    this.note.country.value = this.noteInfo.originCountry
+    await this.getFirstNote();
+    await this.listTypeBusiness();
+    await this.getCountries();
+    this.note.country.value = this.noteInfo.originCountry;
   },
   methods: {
     async saveNotesIncomplete() {
       if (this.emptyNote) {
-        await this.saveUpdate('insert')
+        await this.saveUpdate("insert");
       } else {
-        await this.saveUpdate('update')
+        await this.saveUpdate("update");
       }
     },
     async saveNotesCompleted() {
-      const validate = await this.$refs.form.validate()
+      const validate = await this.$refs.form.validate();
       if (validate) {
         if (this.emptyNote) {
-          await this.saveUpdate('insert')
+          await this.saveUpdate("insert");
         } else {
-          await this.saveUpdate('update')
+          await this.saveUpdate("update");
         }
       }
     },
     async updateNotesCompleted() {
-      const validate = await this.$refs.form.validate()
+      const validate = await this.$refs.form.validate();
       if (validate) {
-        await this.saveUpdate('update')
+        await this.saveUpdate("update");
       }
     },
     paramsNote() {
@@ -748,22 +604,23 @@ export default {
         sale_id: this.noteInfo.saleId,
         note: this.answersNote(),
         originCountry: this.note.country.value,
-        idLead: this.noteInfo.idLead,
-      }
-      return params
+        idLead: this.noteInfo.idLead
+      };
+      return params;
     },
     async saveUpdate(type) {
-      const swal = await this.showConfirmSwal()
+      const swal = await this.showConfirmSwal();
       if (swal.isConfirmed) {
-        this.addPreloader()
+        this.addPreloader();
         try {
-          const service = type == 'insert' ? 'insertFirstNote' : 'updateFirstNote'
-          await NotesServices[service](this.paramsNote())
-          this.hideModal(true)
+          const service =
+            type == "insert" ? "insertFirstNote" : "updateFirstNote";
+          await NotesServices[service](this.paramsNote());
+          this.hideModal(true);
         } catch (error) {
-          console.log(error)
-          this.removePreloader()
-          this.showErrorSwal(error)
+          console.log(error);
+          this.removePreloader();
+          this.showErrorSwal(error);
         }
       }
     },
@@ -789,103 +646,140 @@ export default {
         { number: 1080, value: this.note.instagram.likes },
         { number: 1073, value: this.note.website.link },
         { number: 1074, value: this.note.website.type },
-        { number: 1065, value: this.note.newBusiness.years },
-      ]
+        { number: 1065, value: this.note.newBusiness.years }
+      ];
     },
     hideModal(status) {
-      this.modalUp = false
-      this.$emit('hide', status)
+      this.modalUp = false;
+      this.$emit("hide", status);
     },
     async getCountries() {
       try {
-        const response = await amgApi.post('/view-countrys', {})
-        this.note.country.options = response.data
+        const response = await amgApi.post("/commons/get-world-countrys", {});
+        this.note.country.options = response.data;
       } catch (error) {
-        this.showErrorSwal(error)
+        this.showErrorSwal(error);
       }
     },
     initialValidationNote(note) {
-      if (
-        note.length != 0
-          && this.noteInfo.statusSale != 4
-          && !this.noteNull
-      ) {
-        this.showUpdate = true
+      if (note.length != 0 && this.noteInfo.statusSale != 4 && !this.noteNull) {
+        this.showUpdate = true;
       } else if (this.noteInfo.editmodal == false) {
-        this.showSave = false
-        this.showUpdate = false
+        this.showSave = false;
+        this.showUpdate = false;
       } else if (note.length == 0 || this.noteNull) {
-        this.showSave = true
+        this.showSave = true;
       }
     },
     getDetailsAnswers(note) {
       note.forEach(answer => {
-        if (answer.answer != 'null') {
-          if (answer.question_id === 1075) this.note.facebook.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1072) this.note.website.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1078) this.note.instagram.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1083) this.note.logo.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1081) this.note.experience.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1066) this.note.newBusiness.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1064) this.note.typeOfBuisiness.value = JSON.parse(answer.answer)
-          if (answer.question_id === 1071) this.note.contactTime.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1067) this.note.information.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1068) this.note.indications.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1069) this.note.suggestion.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1070) this.note.pending.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1082) this.note.details.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+        if (answer.answer != "null") {
+          if (answer.question_id === 1075)
+            this.note.facebook.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1072)
+            this.note.website.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1078)
+            this.note.instagram.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1083)
+            this.note.logo.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1081)
+            this.note.experience.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1066)
+            this.note.newBusiness.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1064)
+            this.note.typeOfBuisiness.value = JSON.parse(answer.answer);
+          if (answer.question_id === 1071)
+            this.note.contactTime.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1067)
+            this.note.information.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1068)
+            this.note.indications.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1069)
+            this.note.suggestion.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1070)
+            this.note.pending.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1082)
+            this.note.details.value =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
           if (answer.question_id === 1076) {
-            console.log((answer.answer === 0 || answer.answer === '0') ? '' : answer.answer)
-            this.note.facebook.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-            console.log(this.note.facebook.link)
+            console.log(
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer
+            );
+            this.note.facebook.link =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+            console.log(this.note.facebook.link);
           }
-          if (answer.question_id === 1077) this.note.facebook.likes = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1079) this.note.instagram.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1080) this.note.instagram.likes = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1073) this.note.website.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1074) this.note.website.type = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1065) this.note.newBusiness.years = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-        } else this.noteNull = true
-      })
+          if (answer.question_id === 1077)
+            this.note.facebook.likes =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1079)
+            this.note.instagram.link =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1080)
+            this.note.instagram.likes =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1073)
+            this.note.website.link =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1074)
+            this.note.website.type =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+          if (answer.question_id === 1065)
+            this.note.newBusiness.years =
+              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
+        } else this.noteNull = true;
+      });
     },
     async listTypeBusiness() {
       try {
-        const response = await amgApi.get('/listtypebusiness')
-        this.note.typeOfBuisiness.options = response.data
+        const response = await amgApi.get("/listtypebusiness");
+        this.note.typeOfBuisiness.options = response.data;
       } catch (error) {
-        this.showErrorSwal(error)
+        this.showErrorSwal(error);
       }
     },
     async getFirstNote() {
       try {
-        const params = { sale_id: this.noteInfo.saleId }
-        const response = await NotesServices.getFirstNote(params)
-        await this.getDetailsAnswers(response)
-        await this.initialValidationNote(response)
-        console.log(response)
-        this.modalUp = true
-        this.removePreloader()
+        const params = { sale_id: this.noteInfo.saleId };
+        const response = await NotesServices.getFirstNote(params);
+        await this.getDetailsAnswers(response);
+        await this.initialValidationNote(response);
+        console.log(response);
+        this.modalUp = true;
+        this.removePreloader();
       } catch (error) {
-        this.modalUp = false
-        this.showErrorSwal(error)
-        this.removePreloader()
+        this.modalUp = false;
+        this.showErrorSwal(error);
+        this.removePreloader();
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style scoped>
-.quill-editor{
+.quill-editor {
   height: 100px;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0
+  opacity: 0;
 }
-.aaa{
+.aaa {
   visibility: hidden !important;
 }
 </style>

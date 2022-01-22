@@ -12,7 +12,7 @@ class GlobalService {
 
   async getCountrys(params) {
     try {
-      const { data } = await amgApi.post("/view-countrys");
+      const { data } = await amgApi.post("/commons/get-world-countrys");
       return data;
     } catch (error) {
       throw error;
