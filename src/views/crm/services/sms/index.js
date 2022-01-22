@@ -3,7 +3,7 @@ import { amgApi } from '@/service/axios'
 class CrmSms {
   async getAllQuicksSms (body) {
     try {
-      const data = await amgApi.post('/allquickssms', body)
+      const data = await amgApi.post('/messages/get-all-quick-sms', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getAllQuicksSms:', error)
@@ -13,7 +13,7 @@ class CrmSms {
 
   async postHistorySmsLead (body) {
     try {
-      const data = await amgApi.post('/allsmshistorylead', body)
+      const data = await amgApi.post('/messages/get-tracking-sms-lead', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postHistorySmsLead:', error)
@@ -23,7 +23,7 @@ class CrmSms {
 
   async postSaveQuickSms (body) {
     try {
-      const data = await amgApi.post('/savequicksms', body)
+      const data = await amgApi.post('/messages/save-quick-sms', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postSaveQuickSms:', error)

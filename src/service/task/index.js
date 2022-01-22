@@ -12,7 +12,7 @@ class TaskService {
 
   async getTasks(body) {
     try {
-      const data = await amgApi.post('/getnotificationstask', body)
+      const data = await amgApi.post('/notification/get-task-notifications', body)
       return data
     } catch (error) {
       throw error
@@ -84,7 +84,7 @@ class TaskService {
 
   async editTaskCredit(body) {
     try {
-      const { data } = await amgApi.post("/edittaskcredit", body);
+      const { data } = await amgApi.post("/tasks/get-edit-task", body);
       return data;
     } catch (error) {
       throw error;

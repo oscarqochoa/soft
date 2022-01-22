@@ -11,7 +11,7 @@ const DEFAULT_BODY_GET_CAPTURED_CRM = {
 class CrmService {
   async getLeads(body) {
     try {
-      const { data } = await amgApi.post('/searchleads', body)
+      const { data } = await amgApi.post('/lead/search-leads', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getLeads:', error)
@@ -75,7 +75,7 @@ class CrmService {
 
   async getOwners({ modul, body }) {
     try {
-      const { data } = await amgApi.post('/usermodule/2', body)
+      const { data } = await amgApi.post('/commons/user-module/2', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getOwners:', error)
@@ -95,7 +95,7 @@ class CrmService {
 
   async getPrograms(params) {
     try {
-      const { data } = await amgApi.get('/programs', { params })
+      const { data } = await amgApi.get('/programs/get-programs', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getPrograms:', error)
@@ -131,7 +131,7 @@ class CrmService {
 
   async getListCards(body) {
     try {
-      const { data } = await amgApi.post('/getlistcards', body)
+      const { data } = await amgApi.post('/sales-made/get-list-cards', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getListCards:', error)
@@ -191,7 +191,7 @@ class CrmService {
 
   async getSaleMade(body, page) {
     try {
-      const { data } = await amgApi.post(`/salemade?page=${page}`, body)
+      const { data } = await amgApi.post(`/sales-made/get-sales-made?page=${page}`, body)
       data.data.map(d => {
         d.selected = false
         d.editFee = false
@@ -230,7 +230,7 @@ class CrmService {
 
   async postUniqueMobile(body) {
     try {
-      const { data } = await amgApi.post('/uniquemobile', body)
+      const { data } = await amgApi.post('/lead/verify-mobile', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postUniqueMobile:', error)
@@ -250,7 +250,7 @@ class CrmService {
 
   async postCreateLead(body) {
     try {
-      const data = await amgApi.post('/leadscreate', body)
+      const data = await amgApi.post('/lead/create-lead', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postCreateLead:', error)
@@ -265,7 +265,7 @@ class CrmService {
 
   async postDeleteLead(body) {
     try {
-      const data = await amgApi.post('/leaddelete', body)
+      const data = await amgApi.post('/lead/destroy-lead', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postDeleteLead:', error)
@@ -275,7 +275,7 @@ class CrmService {
 
   async postProcessLead(body) {
     try {
-      const data = await amgApi.post('/process-lead-sn', body)
+      const data = await amgApi.post('/lead/process-lead-sn', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postProcessLead:', error)
@@ -285,7 +285,7 @@ class CrmService {
 
   async getAllQuicksSms(body) {
     try {
-      const { data } = await amgApi.post('/allquickssms', body)
+      const { data } = await amgApi.post('/messages/get-all-quick-sms', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getAllQuicksSms:', error)
@@ -295,7 +295,7 @@ class CrmService {
 
   async postSaveQuickSms(body) {
     try {
-      const data = await amgApi.post('/savequicksms', body)
+      const data = await amgApi.post('/messages/save-quick-sms', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postSaveQuickSms:', error)
@@ -315,7 +315,7 @@ class CrmService {
 
   async postHistorySmsLead(body) {
     try {
-      const data = await amgApi.post('/api/allsmshistorylead', body)
+      const data = await amgApi.post('/api/messages/get-tracking-sms-lead', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postHistorySmsLead:', error)
@@ -325,7 +325,7 @@ class CrmService {
 
   async getCapturedByTracking(body) {
     try {
-      const { data } = await amgApi.post('/alltrackingcapt', body)
+      const { data } = await amgApi.post('/sales-made/get-tracking-captured', body)
       return data
     } catch (error) {
       console.error('Something went wrong on getCapturedByTracking:', error)
@@ -345,7 +345,7 @@ class CrmService {
 
   async getFeeTracking(body) {
     try {
-      const { data } = await amgApi.post('/alltrackingfee', body)
+      const { data } = await amgApi.post('/sales-made/get-tracking-fee', body)
       return data
     } catch (error) {
       console.error('Something went wrong on getSellerTracking:', error)
@@ -355,7 +355,7 @@ class CrmService {
 
   async saveNewCaptured(body) {
     try {
-      return await amgApi.post('/savenewcapt', body)
+      return await amgApi.post('/sales-made/edit-captured-by', body)
     } catch (error) {
       console.error('Something went wrong on getSellerTracking:', error)
       throw error
@@ -373,7 +373,7 @@ class CrmService {
 
   async saveNewFee(body) {
     try {
-      return await amgApi.post('/savenewfee', body)
+      return await amgApi.post('/sales-made/edit-fee-sales-made', body)
     } catch (error) {
       console.error('Something went wrong on saveNewFee:', error)
       throw error

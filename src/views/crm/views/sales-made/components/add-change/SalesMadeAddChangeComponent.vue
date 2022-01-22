@@ -1040,11 +1040,11 @@ export default {
         this.modalData.initial_payment.nameClient = data.client
         this.modalData.initial_payment.valorInitalPaymetn = data.initial_payment_status
         this.modalData.initial_payment.feeprops = data.fee
-        const cards = await amgApi.post('/searchcards', { id: data.lead_id })
+        const cards = await amgApi.post('/clients/search-cards-clients', { id: data.lead_id })
         if (cards.status === 200) {
           this.modalData.initial_payment.allcards = cards.data
         }
-        const response = await amgApi.post('/paymentsales', { id: data.id })
+        const response = await amgApi.post('/sales-made/get-payments-sales-made', { id: data.id })
         if (response.status === 200) {
           [this.modalData.initial_payment.payments] = response.data
         }

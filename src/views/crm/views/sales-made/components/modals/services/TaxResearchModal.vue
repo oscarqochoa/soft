@@ -404,7 +404,7 @@ export default {
 
     async searchRate() {
       try {
-        const response = await amgApi.post('/searchprogram', {
+        const response = await amgApi.post('/rates/get-rates-by-programs', {
           id: this.program,
         })
         if (response.status === 200) {
@@ -430,7 +430,7 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post('/searchprogramsalemade', {
+        const response = await amgApi.post('/sales-made/get-details-sales-made', {
           id: this.salesClient.id,
         })
         if (response.status === 200) {

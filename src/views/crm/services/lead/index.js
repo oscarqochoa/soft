@@ -13,7 +13,7 @@ class CrmLead {
 
   async getLeads(body) {
     try {
-      const data = await amgApi.post('/searchleads', body)
+      const data = await amgApi.post('/lead/search-leads', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getLeads:', error)
@@ -73,7 +73,7 @@ class CrmLead {
 
   async postCreateLead(body) {
     try {
-      const data = await amgApi.post('/leadscreate', body)
+      const data = await amgApi.post('/lead/create-lead', body)
       return data
     } catch (error) {
       throw error
@@ -82,7 +82,7 @@ class CrmLead {
 
   async postDeleteLead(body) {
     try {
-      const data = await amgApi.post('/leaddelete', body)
+      const data = await amgApi.post('/lead/destroy-lead', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postDeleteLead:', error)
@@ -92,7 +92,7 @@ class CrmLead {
 
   async postProcessLead(body) {
     try {
-      const data = await amgApi.post('/process-lead-sn', body)
+      const data = await amgApi.post('/lead/process-lead-sn', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postProcessLead:', error)
@@ -261,7 +261,8 @@ class CrmLead {
 
   async putLead(id, body) {
     try {
-      const data = await amgApi.post(`/leads/update/${id}`, body)
+      body.id = id
+      const data = await amgApi.post(`/lead/update-lead`, body)
       return data
     } catch (error) {
       throw error

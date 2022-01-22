@@ -559,7 +559,7 @@ export default {
         user_id = 0;
       }
       amgApi
-        .post("/filtrouserdash", {
+        .post("/crm/get-data-dashboard", {
           created_id: user_id,
         })
         .then((response) => {
@@ -594,7 +594,7 @@ export default {
       if (this.userfilter != null) {
         this.$store.commit("app/SET_LOADING", true);
         amgApi
-          .post("/filtrouserdash", {
+          .post("/crm/get-data-dashboard", {
             created_id: this.userfilter,
             anio: this.year,
           })

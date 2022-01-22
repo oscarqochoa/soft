@@ -211,7 +211,7 @@ export default {
     },
     searchcards() {
       amgApi
-        .post("/searchcards", {
+        .post("/clients/search-cards-clients", {
           id: this.cardsLead.lead_id,
         })
         .then((response) => {

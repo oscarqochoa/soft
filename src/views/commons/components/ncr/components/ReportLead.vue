@@ -1748,7 +1748,7 @@ export default {
     generateReport() {
       this.$store.commit("app/SET_LOADING", true);
       amgApi
-        .post("/allreportlead", {
+        .post("/lead/credit-report/get-reports", {
           id: this.idfile,
         })
         .then((response) => {
@@ -2105,7 +2105,7 @@ export default {
             btn.classList.add("preloader");
             this.disable.save = true;
             amgApi
-              .post("/process-credit-report", {
+              .post("/lead/credit-report/process-report", {
                 user_id: this.global.layout.id,
                 account: this.global.idaccount,
                 score_id: this.idfile,

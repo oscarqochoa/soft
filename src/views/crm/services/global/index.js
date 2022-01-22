@@ -13,7 +13,7 @@ class CrmGlobal {
   
   async getOwners ({ modul, body }) {
     try {
-      const data = await amgApi.post(`/usermodule/${ modul }`, body)
+      const data = await amgApi.post(`/commons/user-module/${ modul }`, body)
       return data
     } catch (error) {
       console.log('Something went wrong on getOwners:', error)
@@ -23,7 +23,7 @@ class CrmGlobal {
 
   async getPrograms (params) {
     try {
-      const data = await amgApi.get('/programs', { params })
+      const data = await amgApi.get('/programs/get-programs', { params })
       return data
     } catch (error) {
       console.log('Something went wrong on getPrograms:', error)
@@ -73,7 +73,7 @@ class CrmGlobal {
 
   async postUniqueMobile (body) {
     try {
-      const data = await amgApi.post('/uniquemobile', body)
+      const data = await amgApi.post('/lead/verify-mobile', body)
       return data
     } catch (error) {
       console.log('Something went wrong on postUniqueMobile:', error)

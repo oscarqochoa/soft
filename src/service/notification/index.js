@@ -3,7 +3,7 @@ import { amgApi } from '@/service/axios'
 class NotificationService {
   async getUserNotifications (body) {
     try {
-      const data = await amgApi.post('/getnotifications', body)
+      const data = await amgApi.post('/notification/get-notifications', body)
       return data
     } catch (error) {
       throw error

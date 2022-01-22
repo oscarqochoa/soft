@@ -312,7 +312,7 @@ export default {
 
     async searchRate() {
       try {
-        const response = await amgApi.post('/searchprogram', { id: this.program })
+        const response = await amgApi.post('/rates/get-rates-by-programs', { id: this.program })
         if (response.status === 200) {
           this.rates = response.data
           if (!this.isModalShow) {
@@ -329,7 +329,7 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post('/searchprogramsalemade', { id: this.salesClient.id })
+        const response = await amgApi.post('/sales-made/get-details-sales-made', { id: this.salesClient.id })
         if (response.status === 200) {
           this.fee = response.data[0].fee
           this.rate_selected = JSON.parse(response.data[0].rate_selected)

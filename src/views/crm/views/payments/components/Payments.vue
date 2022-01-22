@@ -486,7 +486,7 @@ export default {
     },
 
     async getAllUsers() {
-      const data = await amgApi.post(`/usermodule/2`, {
+      const data = await amgApi.post(`/commons/user-module/2`, {
         roles: "[1,2,5]",
         type: "0",
       });
