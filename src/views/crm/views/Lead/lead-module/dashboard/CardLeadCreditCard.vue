@@ -164,6 +164,7 @@ export default {
     }),
     reloadLeadEmit(){
       this.$emit("reloadLead");
+      
     },
     async getStatesEeuu() {
       try {
