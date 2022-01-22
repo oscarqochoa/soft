@@ -218,7 +218,7 @@ export default {
     async allDebtSolution() {
       try {
         const response = await amgApi.post(
-          "/sales-made/deb-solution/get-credits-debt-solution",
+          "/sales-made/debt-solution/get-credits-debt-solution",
           {
             event:
               this.typeModal === 3 ||
@@ -276,7 +276,7 @@ export default {
         );
         if (result.value) {
           const response = await amgApi.post(
-            "/sales-made/deb-solution/delete-credit",
+            "/sales-made/debt-solution/delete-credit",
             { id }
           );
           if (response.status === 200) {
@@ -357,7 +357,7 @@ export default {
     async saveant(id, type) {
       try {
         const response = await amgApi.post(
-          "/sales-made/deb-solution/save-first-debt-solution",
+          "/sales-made/debt-solution/save-first-debt-solution",
           {
             type,
             id,
@@ -451,7 +451,7 @@ export default {
         if (result.value) {
           this.addPreloader();
           const response = await amgApi.post(
-            "/sales-made/deb-solution/save-first-debt-solution",
+            "/sales-made/debt-solution/save-first-debt-solution",
             {
               type,
               id,

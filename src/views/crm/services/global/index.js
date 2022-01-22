@@ -23,7 +23,7 @@ class CrmGlobal {
 
   async getPrograms(params) {
     try {
-      const data = await amgApi.get('/programs/get-programs', { params })
+      const data = await amgApi.get('/program/get-programs', { params })
       return data
     } catch (error) {
       console.log("Something went wrong on getPrograms:", error);

@@ -7,7 +7,7 @@ class ClientService {
   }
 
   async getAllPrograms() {
-    const data = await amgApi.get('/programs/get-programs')
+    const data = await amgApi.get('/program/get-programs')
     return data.data
   }
 

@@ -229,7 +229,7 @@ export default {
     async leyendDebtsolution() {
       try {
         const response = await amgApi.post(
-          "/sales-made/deb-solution/get-leyend-debt-solution",
+          "/sales-made/debt-solution/get-leyend-debt-solution",
           {
             event:
               this.typeModal === 3 ||

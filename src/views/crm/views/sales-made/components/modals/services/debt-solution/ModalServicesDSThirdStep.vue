@@ -844,7 +844,7 @@ export default {
               arrayObjOthersTemp.push(obj);
             });
             const response = await amgApi.post(
-              "/sales-made/deb-solution/save-first-debt-solution",
+              "/sales-made/debt-solution/save-first-debt-solution",
               {
                 type,
                 id,
@@ -1091,7 +1091,7 @@ export default {
     async allDebtSolution() {
       try {
         const response = await amgApi.post(
-          "/sales-made/deb-solution/get-credits-debt-solution",
+          "/sales-made/debt-solution/get-credits-debt-solution",
           {
             event:
               this.typeModal === 3 ||
@@ -1188,7 +1188,7 @@ export default {
     async analisisDebsolution() {
       try {
         const response = await amgApi.post(
-          "/sales-made/deb-solution/get-analysis-debt-solution",
+          "/sales-made/debt-solution/get-analysis-debt-solution",
           {
             event:
               this.typeModal === 3 ||

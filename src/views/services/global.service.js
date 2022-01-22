@@ -3,7 +3,7 @@ import { amgApi } from "@/service/axios";
 class GlobalService {
   async getPrograms(params) {
     try {
-      const { data } = await amgApi.get("/programs/get-programs");
+      const { data } = await amgApi.get("/program/get-programs");
       return data;
     } catch (error) {
       throw error;

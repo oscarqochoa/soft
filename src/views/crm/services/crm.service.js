@@ -28,7 +28,7 @@ class CrmService {
 
   async getCapturedCrm(module = 2, body = DEFAULT_BODY_GET_CAPTURED_CRM) {
     // eslint-disable-next-line no-undef
-    let data = await amgApi.post(`/commons/commons/sellerall/${module}`, body);
+    let data = await amgApi.post(`/commons/sellerall/${module}`, body);
     data = data.data;
     return data;
   }
@@ -100,7 +100,7 @@ class CrmService {
 
   async getPrograms(params) {
     try {
-      const { data } = await amgApi.get('/programs/get-programs', { params })
+      const { data } = await amgApi.get('/program/get-programs', { params })
       return data
     } catch (error) {
       console.log("Something went wrong on getPrograms:", error);

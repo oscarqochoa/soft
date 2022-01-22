@@ -426,7 +426,7 @@ export default {
         const success = await this.$refs.form.validate();
         if (success) {
           const response = await amgApi.post(
-            "/sales-made/deb-solution/save-first-debt-solution",
+            "/sales-made/debt-solution/save-first-debt-solution",
             {
               type,
               id,
@@ -480,7 +480,7 @@ export default {
           if (result.value) {
             this.addPreloader();
             const response = await amgApi.post(
-              "/sales-made/deb-solution/save-first-debt-solution",
+              "/sales-made/debt-solution/save-first-debt-solution",
               {
                 type,
                 id,
@@ -526,7 +526,7 @@ export default {
     async allDebtSolution() {
       try {
         const response = await amgApi.post(
-          "/sales-made/deb-solution/get-credits-debt-solution",
+          "/sales-made/debt-solution/get-credits-debt-solution",
           {
             event:
               this.typeModal === 3 ||

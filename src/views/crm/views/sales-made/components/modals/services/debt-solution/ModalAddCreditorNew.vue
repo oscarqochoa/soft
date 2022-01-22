@@ -247,7 +247,7 @@ export default {
         );
         if (result.value) {
           const response = await amgApi.post(
-            "/sales-made/deb-solution/save-credits-debt-solution",
+            "/sales-made/debt-solution/save-credits-debt-solution",
             {
               event: this.idevent,
               accountProg: this.accountProg,
@@ -330,7 +330,7 @@ export default {
         return;
       }
       amgApi
-        .post(`/sales-made/deb-solution/seach-creditors?q=${text}`)
+        .post(`/sales-made/debt-solution/seach-creditors?q=${text}`)
         .then(response => {
           if (response.status === 200) {
             this.filteredOptions = [{ data: [...response.data] }];
