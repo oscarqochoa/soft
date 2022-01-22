@@ -35,6 +35,10 @@
         variant="primary"
         @click="insertFlyerComments"
       >
+        <b-spinner
+          v-if="spinnerOn"
+          small
+        />
         SAVE
       </b-button>
 
@@ -59,6 +63,7 @@ export default {
       baseImg: process.env.VUE_APP_BASE_URL_FRONT,
       ownControl: false,
       comments: null,
+      spinnerOn: false,
 
     }
   },
@@ -80,6 +85,7 @@ export default {
     // eslint-disable-next-line consistent-return
     async insertFlyerComments() {
       try {
+        this.spinnerOn = true
         const result = await this.$refs.form.validate()
         if (result) {
           const params = {

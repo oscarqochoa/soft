@@ -232,9 +232,9 @@ from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/m
 import ModalReplies
 from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalReplies/ModalReplies.vue'
 import ModalInsertComments
-from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalInsertComments/modalInsertComments.vue'
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalInsertComments/ModalInsertComments.vue'
 import ModalListComments
-from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalListComments/modalListComments.vue'
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalListComments/ModalListComments.vue'
 
 export default {
   components: {

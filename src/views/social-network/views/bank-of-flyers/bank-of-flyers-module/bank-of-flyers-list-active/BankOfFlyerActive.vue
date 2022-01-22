@@ -1,12 +1,13 @@
 <template>
   <bank-of-flyer-general
-    :status="2"
+    :status="1"
   />
 </template>
 
 <script>
+
 import bankOfFlyerGeneral
-from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bankOfFlyerGeneral/bankOfFlyerGeneral.vue'
+from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bankOfFlyerGeneral/BankOfFlyerGeneral.vue'
 
 export default {
   components: {
