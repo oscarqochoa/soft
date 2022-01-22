@@ -12,7 +12,7 @@ class NotesService {
   async insertFirstNote(params) {
     try {
       const { data } = await amgApi.post(
-        "/notes/first-note/get-first-note",
+        "/note/first-note/insert-first-note",
         params
       );
       return data;
@@ -23,7 +23,7 @@ class NotesService {
   async getFirstNote(params) {
     try {
       const { data } = await amgApi.post(
-        "/notes/first-note/get-first-note",
+        "/note/first-note/get-first-note",
         params
       );
       return data;
@@ -34,7 +34,7 @@ class NotesService {
   async updateFirstNote(params) {
     try {
       const { data } = await amgApi.post(
-        "/notes/first-note/update-first-note",
+        "/note/first-note/update-first-note",
         params
       );
       return data;

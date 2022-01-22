@@ -52,6 +52,12 @@
             show-empty
             sticky-header="50vh"
           >
+            <template #table-busy>
+              <div class="text-center text-primary my-2">
+                <b-spinner class="align-middle mr-1"></b-spinner>
+                <strong>Loading ...</strong>
+              </div>
+            </template>
             <template #cell(plataform_ico)="data">
               <div class="d-flex flex-column justify-content-start align-items-start">
                 <img

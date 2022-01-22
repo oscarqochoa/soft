@@ -243,7 +243,7 @@
                 v-if="!data.item.editFee"
                 icon="pencil-fill"
                 class="cursor-pointer"
-                @click="data.item.editFee = true"
+                @click="!(data.item.haveRates !== 1) && (data.item.editFee = true)"
               />
               <feather-icon
                 v-else
@@ -1375,13 +1375,7 @@ export default {
             user: this.currentUser.user_id
           });
           if (response.status === 200) {
-            this.showToast(
-              "success",
-              "top-right",
-              "Success",
-              "CheckIcon",
-              "Se actualizo satisfactoriamente"
-            );
+            this.showSuccessSwal()
           } else return;
           // eslint-disable-next-line no-param-reassign
           user.fee = user.feeNew;

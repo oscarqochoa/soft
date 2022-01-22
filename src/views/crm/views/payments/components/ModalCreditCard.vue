@@ -4,22 +4,37 @@
     <div class="col-lg-12 px-0">
       <div>
         <div
-          :style="cards.length >= 3 ? 'height: 166px;overflow: auto;' : ''"
-          id="cont-list"
+          
         >
-          <div class="table-responsive" style="margin-bottom: 0" >
-            <b-table responsive="sm"  style="margin-bottom:0px"
-              show-empty table-class="text-nowrap"
-              sticky-header :items="cards" :fields="fields">
+          <div style="margin-bottom: 0" >
+            <b-table 
+         
+          slot="table"
+          no-provider-filtering
+          ref="refClientsList"
+          primary-key="id"
+          table-class="text-nowrap"
+          responsive="sm"
+          show-empty
+          sticky-header="30vh"
+              
+              :items="cards" :fields="fields">
               <template #cell(Select)="data">
+                <ValidationProvider
+                    name="comment"
+                    rules="required"
+                    v-slot="{ errors }"
+                  >
                   <b-form-radio
                   class="vs-checkbox-con"
+                  :class="{ 'border border-danger': errors[0] }"
                   :value="data.item.id"
                   @change="$emit('CardId',data.item.id)"
                   v-model="selected"
                   plain
                 >
                 </b-form-radio>
+                </ValidationProvider>
               </template>
               <template #cell(cardnumber)="data">
                 <div
@@ -217,6 +232,16 @@ export default {
         .then((response) => {
           if (response.status == 200) {
             this.cards = response.data;
+            // console.log(this.cards)
+            // this.cards.map(card =>{
+            //   let firstElement = card.cardnumber.charAt(0) 
+            //   console.log(firstElement)
+            //   if(firstElement == '-'){
+            //     card.cardnumber = card.cardnumber.substring(1)
+                
+            //   }
+            // })
+            // console.log("second",this.cards)
           }
         })
         .catch((err) => {

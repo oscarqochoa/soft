@@ -233,7 +233,7 @@
             </router-link>
           </div>
           <div v-if="status == 2">
-            <a :href="data.item.route_html" v-if="!data.item.route_html" target="_blanck">
+            <a :href="data.item.route_html" v-if="data.item.route_html" target="_blanck">
               <amg-icon size="23" icon="CRInvalidIcon"></amg-icon>
             </a>
           </div>

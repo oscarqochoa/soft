@@ -203,27 +203,54 @@
               </div>
             </div>
 
+            <!-- <div class="row w-100">
+              <div class="col-lg-3 col-xl-3 col-md-4 col-9 ml-2 col-sm-6 ">
+                  <b-row>
+                    <b-col cols="4" cols-sm="3" cols-xl="1" cols-md="1" cols-lg="3">
+                      <b-button
+                        type="submit"
+                        variant="primary"
+                        class="pr-1"
+                        @click="submitAutorize"
+                        :disabled="changeDisable"
+                      >
+                        Submit
+                      </b-button>
+                    </b-col>
+                    <b-col cols="2" cols-sm="2" cols-xl="1"  cols-md="1" cols-lg="2">
+                      <b-form-checkbox
+                        v-if="methodpayment == 1"
+                        v-model="sendsms"
+                        value="true"
+                        class="custom-control-primary"
+                      >
+                        Send SMS
+                      </b-form-checkbox>
+                    </b-col>
+                  </b-row>
+              </div>
+            </div> -->
             <div class="row w-100">
-              <div class="col-lg-3 col-xl-3 col-md-4 col-9 ml-2 col-sm-6">
-                <b-row>
-                  <b-col cols="4" cols-sm="3" cols-xl="1" cols-md="1" cols-lg="3">
-                    <b-button
-                      type="submit"
-                      variant="primary"
-                      class="pr-1"
-                      @click="submitAutorize"
-                      :disabled="changeDisable"
-                    >Submit</b-button>
-                  </b-col>
-                  <b-col cols="2" cols-sm="2" cols-xl="1" cols-md="1" cols-lg="2">
-                    <b-form-checkbox
-                      v-if="methodpayment == 1"
-                      v-model="sendsms"
-                      value="true"
-                      class="custom-control-primary"
-                    >Send SMS</b-form-checkbox>
-                  </b-col>
-                </b-row>
+              <div class="ml-1 pl-1 d-flex">
+                <div class="d-inline-block mr-1">
+                  <b-button
+                    type="submit"
+                    variant="primary"
+                    class="pr-1"
+                    @click="submitAutorize"
+                    :disabled="changeDisable"
+                  >
+                    Submit
+                  </b-button>
+                </div>
+                <b-form-checkbox
+                  v-if="methodpayment == 1"
+                  v-model="sendsms"
+                  value="true"
+                  class="custom-control-primary"
+                >
+                  Send SMS
+                </b-form-checkbox>
               </div>
             </div>
           </div>
@@ -319,7 +346,7 @@ export default {
       this.cardsLead = {
         lead_id: this.user_id, //user_id
         user_id: this.currentUser.user_id,
-        rol: this.currentUser.arrRoles[0].role_id
+        rol: this.currentUser.role_id,
       };
     },
     chargeStatus() {

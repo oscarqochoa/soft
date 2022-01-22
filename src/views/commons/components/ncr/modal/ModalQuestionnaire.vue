@@ -33,7 +33,7 @@
               >{{ lead_name }}</div>
             </b-form-group>
           </div>
-          <div class="col-md-4"></div>
+         
           <div class="col-md-12 col-lg-9 col-12">
             <b-form-group
               label="EMPLOYEED"
@@ -47,31 +47,144 @@
               <b-form-input v-model="data.employeed" :disabled="this.disabled"></b-form-input>
             </b-form-group>
           </div>
+          <div class="container">
+            <b-row>
+              <b-col cols="12">
+                <b-card>
+                  <b-row>
+                    <b-col cols="12">
+                      <b-form-group label="PREVIOUS DIRECTION"></b-form-group>
+                    </b-col>
+                    <b-col cols="12">
+                      <b-form-group label="Mailing Address">
+                        <vue-google-autocomplete
+                          id="address_principal"
+                          ref="addressprincipal"
+                          class="form-control input-form"
+                          placeholder="Please type your address"
+                          @placechanged="getAddressData"
+                          country="us"
+                          v-model="data.mailing_address"
+                          style="height: 30px !important"
+                          :disabled="this.disabled"
+                        ></vue-google-autocomplete>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="City">
+                        <b-form-input
+                          v-model="data.city"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="State">
+                        <b-form-input
+                          v-model="data.state"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="Zip Code">
+                        <b-form-input
+                          v-model="data.zip_code"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="Country">
+                        <b-form-input
+                          v-model="data.mailing_country"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="COUNTY">
+                        <b-form-input
+                          v-model="data.country"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </b-card>
+              </b-col>
 
-          <div class="col-md-4"></div>
-          <div class="col-md-12">
-            <b-form-group label="PREVIOUS DIRECTION"></b-form-group>
-          </div>
-          <div class="col-md-12 col-sm-12">
-            <b-form-group
-              label="Mailing Address"
-              label-cols-md="2"
-              content-cols-md="9"
-              label-cols-sm="3"
-            >
-              <vue-google-autocomplete
-                ref="addressprincipal"
-                id="address_principal"
-                class="form-control input-form"
-                placeholder="Please type your address"
-                @placechanged="getAddressData"
-                country="us"
-                v-model="data.mailing_address"
-                style="height: 30px !important"
-                :disabled="this.disabled"
-              ></vue-google-autocomplete>
-            </b-form-group>
-          </div>
+              <b-col cols="12">
+                <b-card>
+                  <b-row>
+                    <b-col cols="12">
+                      <b-form-group
+                        label="AUTO LOAN"
+                        label-cols="5"
+                        content-cols="7"
+                        label-cols-sm="3"
+                        content-cols-sm="9"
+                        label-cols-md="3"
+                        content-cols-md="9"
+                        label-cols-lg="2"
+                        content-cols-lg="10"
+                      >
+                        <b-form-checkbox
+                          style="padding-top: 3px"
+                          id="withotheraddress"
+                          v-model="data.auto_loan"
+                          :disabled="this.disabled"
+                          value="1"
+                        ></b-form-checkbox>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="Company">
+                        <b-form-input
+                          v-model="data.al_question.company"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="Monthly Payment">
+                        <b-input-group prepend="$">
+                          <b-form-input
+                            v-model="data.al_question.monthly_payment"
+                            :disabled="this.disabled"
+                          ></b-form-input>
+                        </b-input-group>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="4" md="4" lg="4" xl="4">
+                      <b-form-group label="Year Opened">
+                        <b-form-input
+                          v-model="data.al_question.year_opened"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="No. of Months">
+                        <b-form-input
+                          v-model="data.al_question.n_months"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="4" md="4" lg="4" xl="4">
+                      <b-form-group label="Original Amount">
+                        <b-input-group prepend="$">
+                          <b-form-input
+                            v-model="data.al_question.original_amount"
+                            :disabled="this.disabled"
+                          ></b-form-input>
+                        </b-input-group>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </b-card>
+              </b-col>
 
           <div class="col-md-6 col-12">
             <b-form-group
@@ -444,7 +557,7 @@
         class="modal-footer align-items-end justify-content-end justify-content-sm-center"
         v-if="show"
       >
-        <b-button @click="save()" variant="primary">SAVE</b-button>
+        <b-button @click="save()" variant="primary">Save</b-button>
       </div>
     </b-modal>
   </div>
@@ -522,7 +635,7 @@ export default {
           balance: "",
           year_opened: ""
         },
-        open_account: "",
+        open_accounts: "",
         oa_question: {
           company: "",
           monthly_payment: "",
@@ -554,8 +667,7 @@ export default {
             this.data.mailing_country = response.data[0].mailing_country;
             this.data.country = response.data[0].country;
 
-            this.data.auto_loan =
-              response.data[0].auto_loan == "1" ? true : false;
+            this.data.auto_loan = response.data[0].auto_loan;
             var al_question = JSON.parse(response.data[0].auto_loan_question);
             this.data.al_question.company = al_question.company;
             this.data.al_question.monthly_payment = al_question.monthly_payment;
@@ -563,15 +675,14 @@ export default {
             this.data.al_question.n_months = al_question.n_months;
             this.data.al_question.original_amount = al_question.original_amount;
 
-            this.data.mortage = response.data[0].mortage == "1" ? true : false;
+            this.data.mortage = response.data[0].mortage;
             var m_question = JSON.parse(response.data[0].mortage_question);
             this.data.m_question.company = m_question.company;
             this.data.m_question.monthly_payment = m_question.monthly_payment;
             this.data.m_question.year_opened = m_question.year_opened;
             this.data.m_question.n_months = m_question.n_months;
 
-            this.data.student_loan =
-              response.data[0].student_loan == "1" ? true : false;
+            this.data.student_loan = response.data[0].student_loan;
             var sl_question = JSON.parse(
               response.data[0].student_loan_question
             );
@@ -586,9 +697,11 @@ export default {
             this.data.c_question.balance = c_question.balance;
             this.data.c_question.year_opened = c_question.year_opened;
 
-            this.data.open_account =
-              response.data[0].open_accounts == "1" ? true : false;
-            var oa_question = JSON.parse(response.data[0].mortage_question);
+            this.data.open_accounts = response.data[0].open_accounts;
+
+            var oa_question = JSON.parse(
+              response.data[0].open_accounts_question
+            );
             this.data.oa_question.company = oa_question.company;
             this.data.oa_question.monthly_payment = oa_question.monthly_payment;
             this.data.oa_question.year_opened = oa_question.year_opened;
@@ -638,6 +751,8 @@ export default {
       ).then(result => {
         if (result.value) {
           this.$store.commit("app/SET_LOADING", true);
+          this.data["score_id"] = this.score_id;
+          this.data["open_account"] = this.data["open_accounts"];
           amgApi
             .post("/lead/ncr/create-leads-questionnaire", this.data)
             .then(response => {

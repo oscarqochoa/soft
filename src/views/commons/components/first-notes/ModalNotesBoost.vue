@@ -538,6 +538,7 @@ export default {
         try {
           const service =
             type == "insert" ? "insertFirstNote" : "updateFirstNote";
+            console.log(NotesServices[service], 'service')
           const response = await NotesServices[service](this.paramsNote());
           this.hideModal(true);
         } catch (error) {
