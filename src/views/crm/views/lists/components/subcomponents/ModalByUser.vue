@@ -42,7 +42,6 @@
       </div>
 
       <b-table
-        v-scrollbar
         :api-url="clientRoute"
         ref="refClientsList"
         :items="myProvider"
@@ -66,13 +65,23 @@
           </div>
         </template>
         <template #cell(done)="data">
-          <div class="d-flex flex-column justify-content-center align-items-center">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
             <b-form-checkbox
               :disabled="rolByUser"
               v-model="data.item.done"
               :value="1"
-              @change="callead(data.item.done,data.item.lead_id,data.item.id_list,data.item.user_id)"
-            ></b-form-checkbox>
+              @change="
+                callead(
+                  data.item.done,
+                  data.item.lead_id,
+                  data.item.id_list,
+                  data.item.user_id
+                )
+              "
+            >
+            </b-form-checkbox>
           </div>
         </template>
       </b-table>
@@ -94,10 +103,10 @@ export default {
       type: Object
     },
     nameUser: {
-      type: String
+      type: String,
     },
     id: {
-      type: [Number, String]
+      type: [Number, String],
     },
     ifModalCard: {
       type: Boolean
@@ -195,7 +204,7 @@ export default {
         if (items.length != 0) {
           this.totalMissing = items[0].quantity_pending;
           this.totalDone = items[0].quantity_done;
-          items.map(item => {
+          items.map((item) => {
             item.selected = false;
           });
         } else {

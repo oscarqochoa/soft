@@ -47,7 +47,6 @@
         </b-row>
         <div>
           <b-table
-           
             ref="refClientsList"
             :items="data"
             :fields="arrayColumns"
@@ -57,6 +56,12 @@
             show-empty
             sticky-header="50vh"
           >
+            <template #table-busy>
+              <div class="text-center text-primary my-2">
+                <b-spinner class="align-middle mr-1"></b-spinner>
+                <strong>Loading ...</strong>
+              </div>
+            </template>
             <template #cell(plataform_ico)="data">
               <div
                 class="
@@ -171,16 +176,6 @@ export default {
           this.status = false;
         });
     },
-    // myProvider(ctx) {
-    //   const promise = amgApi.post(`${ctx.apiUrl}`, {
-    //     name_text: this.score_id,
-    //   });
-    //   return promise.then((data) => {
-    //     const items = data.data.data;
-    //     console.log(items);
-    //     return items || [];
-    //   });
-    // },
   },
   created() {
     this.getTrackingStatus();

@@ -89,7 +89,7 @@
           table-class="text-nowrap"
           responsive="sm"
           show-empty
-          sticky-header="70vh"
+          sticky-header="50vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
@@ -104,9 +104,15 @@
             </div>
           </template>
           <template #cell(created_at)="data">
-            <div class="d-flex flex-column justify-content-start align-items-start">
-              <span v-if="data.item.created_at == 'Today'">{{ data.item.created_at }}</span>
-              <span v-else>{{ data.item.created_at | myGlobalDay }}</span>
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <span v-if="data.item.created_at == 'Today'">
+                {{ data.item.created_at }}
+              </span>
+              <span v-else>
+                {{ data.item.created_at | myDateGlobalWithHour }}
+              </span>
             </div>
           </template>
           <template #cell(users)="data" v-if="getRoles">
@@ -156,7 +162,21 @@
               >
                 <feather-icon icon="EyeIcon"></feather-icon>
               </b-button>
-              <b-button v-else disabled variant="warning" class="ml-1 reset-radius btn-sm">
+
+              <b-button
+                v-if="data.item.created_at == 'Today'"
+                variant="warning"
+                class="ml-1 reset-radius btn-sm"
+                @click="openModalTaskToday()"
+              >
+                <feather-icon icon="EyeIcon"></feather-icon>
+              </b-button>
+              <b-button
+                v-if="data.item.cant <= 0 && data.item.created_at != 'Today'"
+                disabled
+                variant="warning"
+                class="ml-1 reset-radius btn-sm"
+              >
                 <feather-icon icon="EyeIcon"></feather-icon>
               </b-button>
             </div>
@@ -174,24 +194,36 @@
       :nameUser="nameUser"
       :id="id"
     ></modal-by-user>
+    <modal-task-today
+      v-if="modalTaskToday"
+      :modalTaskToday="modalTaskToday"
+      :currentUser="currentUser"
+      @close="closeModalTaskToday"
+      @updatingTasks="updatingTasks"
+    >
+    </modal-task-today>
   </div>
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-import ModalByUser from "../components/subcomponents/ModalByUser.vue";
+import ModalByUser from "./subcomponents/ModalByUser.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import Button from "@/views/components/button/Button.vue";
+import ModalTaskToday from "./subcomponents/ModalTaskToday.vue"
 
 export default {
   components: {
     vSelect,
     ModalByUser,
-    FilterSlot
+    FilterSlot,
+    Button,
+    ModalTaskToday,
   },
   data() {
     return {
+      modalTaskToday: false,
       totalRows: 0,
       paginate: {
         currentPage: 1,
@@ -341,14 +373,23 @@ export default {
     },
     visibleFields() {
       return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
-        ? this.arrayColumns.filter(column => column.visible)
-        : this.arrayColumnsTwo.filter(column => column.visible);
+        ? this.arrayColumns.filter((column) => column.visible)
+        : this.arrayColumnsTwo.filter((column) => column.visible);
     },
     ...mapGetters({
       currentUser: "auth/currentUser"
     })
   },
   methods: {
+    updatingTasks(){
+      this.$refs.refClientsList.refresh();
+    },
+    openModalTaskToday() {
+      this.modalTaskToday = true;
+    },
+    closeModalTaskToday() {
+      this.modalTaskToday = false;
+    },
     refresh() {
       this.$refs.refClientsList.refresh();
     },
@@ -454,21 +495,8 @@ export default {
         });
     },
     deleteuser(id) {
-      this.$swal
-        .fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonAriaLabel: "Thumbs up, great!",
-          cancelButtonAriaLabel: "Thumbs down",
-          customClass: {
-            confirmButton: "btn btn-primary",
-            cancelButton: "btn btn-danger "
-          },
-          confirmButtonText: "Yes, delete it!"
-        })
-        .then(result => {
+      this.showConfirmSwal()
+        .then((result) => {
           // Send request to the server
           if (result.value) {
             this.$store.commit("app/SET_LOADING", true);

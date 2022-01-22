@@ -125,7 +125,9 @@ export default {
       return "$ " + this.dataVoid.amount;
     },
     statusDate() {
-      return this.dataVoid.settlement_date? moment(this.dataVoid.settlement_date).format("MM/DD/YYYY"):"-";
+      return this.dataVoid.settlement_date
+        ? moment(this.dataVoid.settlement_date).format("MM/DD/YYYY")
+        : "-";
     },
     statusTitle() {
       return this.dataVoid.type == 1
@@ -144,8 +146,8 @@ export default {
     closeModal() {
       this.$emit("close", false);
     },
-    updateGrid(){
-      this.$emit("updateGrid",false)
+    updateGrid() {
+      this.$emit("updateGrid", false);
     },
     sendVoid() {
       this.$refs.form.validate().then((success) => {
@@ -159,6 +161,7 @@ export default {
               "You won't be able to revert this!"
             ).then((result) => {
               if (result.value) {
+              
                 amgApi
                   .post("/voidtransaction", {
                     idtransaction: this.dataVoid.idtransaction,
@@ -172,13 +175,11 @@ export default {
                         this.closeModal();
                         this.$swal
                           .fire({
-                            type: "success",
+                            icon: "success",
                             title: "OPERATION SUCCESSFULLY",
-                          })
-                          .then((res) => {
+                          }).then((res) => {
                             if (res) {
-                              this.updateGrid()
-                              
+                             this.updateGrid()
                             }
                           });
                       } else {
@@ -245,8 +246,7 @@ export default {
                             })
                             .then((res) => {
                               if (res) {
-                                
-                                this.updateGrid()
+                                this.updateGrid();
                               }
                             });
                         } else {
@@ -258,7 +258,7 @@ export default {
                             .then((res) => {
                               if (res) {
                                 this.closeModal();
-                                this.updateGrid()
+                                this.updateGrid();
                               }
                             });
                         }
@@ -271,7 +271,7 @@ export default {
                           .then((res) => {
                             if (res) {
                               this.closeModal();
-                              this.updateGrid()
+                              this.updateGrid();
                             }
                           });
                       }
