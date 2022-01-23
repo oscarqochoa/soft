@@ -229,7 +229,7 @@
                     </b-col>
                   </b-row>
               </div>
-            </div> -->
+            </div>-->
             <div class="row w-100">
               <div class="ml-1 pl-1 d-flex">
                 <div class="d-inline-block mr-1">
@@ -239,18 +239,14 @@
                     class="pr-1"
                     @click="submitAutorize"
                     :disabled="changeDisable"
-                  >
-                    Submit
-                  </b-button>
+                  >Submit</b-button>
                 </div>
                 <b-form-checkbox
                   v-if="methodpayment == 1"
                   v-model="sendsms"
                   value="true"
                   class="custom-control-primary"
-                >
-                  Send SMS
-                </b-form-checkbox>
+                >Send SMS</b-form-checkbox>
               </div>
             </div>
           </div>
@@ -346,7 +342,7 @@ export default {
       this.cardsLead = {
         lead_id: this.user_id, //user_id
         user_id: this.currentUser.user_id,
-        rol: this.currentUser.role_id,
+        rol: this.currentUser.role_id
       };
     },
     chargeStatus() {
@@ -494,7 +490,7 @@ export default {
               if (result.value) {
                 this.$store.commit("app/SET_LOADING", true);
                 amgApi
-                  .post("/checkoutpayment", {
+                  .post("/authorize/checkout-payment", {
                     idcard: this.card_id,
                     amount: this.amount,
                     merchant: this.merchant,
