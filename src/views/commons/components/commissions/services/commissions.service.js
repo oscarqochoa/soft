@@ -4,7 +4,7 @@ class CommissionsService {
   async searchCommissions(params) {
     try {
       const { data } = await amgApi.post(
-        "/commissions/get-report-commisions",
+        "/commissions/get-report-commissions",
         params
       );
       return data;
