@@ -33,7 +33,7 @@
               >{{ lead_name }}</div>
             </b-form-group>
           </div>
-         
+
           <div class="col-md-12 col-lg-9 col-12">
             <b-form-group
               label="EMPLOYEED"
@@ -72,42 +72,27 @@
                     </b-col>
                     <b-col cols="6">
                       <b-form-group label="City">
-                        <b-form-input
-                          v-model="data.city"
-                          :disabled="this.disabled"
-                        ></b-form-input>
+                        <b-form-input v-model="data.city" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
                     <b-col cols="6">
                       <b-form-group label="State">
-                        <b-form-input
-                          v-model="data.state"
-                          :disabled="this.disabled"
-                        ></b-form-input>
+                        <b-form-input v-model="data.state" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
                     <b-col cols="6">
                       <b-form-group label="Zip Code">
-                        <b-form-input
-                          v-model="data.zip_code"
-                          :disabled="this.disabled"
-                        ></b-form-input>
+                        <b-form-input v-model="data.zip_code" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
                     <b-col cols="6">
                       <b-form-group label="Country">
-                        <b-form-input
-                          v-model="data.mailing_country"
-                          :disabled="this.disabled"
-                        ></b-form-input>
+                        <b-form-input v-model="data.mailing_country" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
                     <b-col cols="6">
                       <b-form-group label="COUNTY">
-                        <b-form-input
-                          v-model="data.country"
-                          :disabled="this.disabled"
-                        ></b-form-input>
+                        <b-form-input v-model="data.country" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
                   </b-row>
@@ -140,10 +125,7 @@
                     </b-col>
                     <b-col cols="6">
                       <b-form-group label="Company">
-                        <b-form-input
-                          v-model="data.al_question.company"
-                          :disabled="this.disabled"
-                        ></b-form-input>
+                        <b-form-input v-model="data.al_question.company" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
                     <b-col cols="6">
@@ -166,10 +148,7 @@
                     </b-col>
                     <b-col cols="6">
                       <b-form-group label="No. of Months">
-                        <b-form-input
-                          v-model="data.al_question.n_months"
-                          :disabled="this.disabled"
-                        ></b-form-input>
+                        <b-form-input v-model="data.al_question.n_months" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
@@ -186,370 +165,218 @@
                 </b-card>
               </b-col>
 
-          <div class="col-md-6 col-12">
-            <b-form-group
-              label="City"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.city" class="w-100" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12">
-            <b-form-group
-              label="State"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.state" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12">
-            <b-form-group
-              label="Zip Code"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.zip_code" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12">
-            <b-form-group
-              label="Country"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.mailing_country" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12">
-            <b-form-group
-              label="Country"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.country" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12"></div>
-          <div class="col-md-6 col-12">
-            <b-form-group label="AUTO LOAN" label-cols="4" content-cols="6">
-              <b-form-checkbox
-                id="withotheraddress"
-                v-model="data.auto_loan"
-                :disabled="this.disabled"
-              ></b-form-checkbox>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12"></div>
-          <div class="col-md-6 col-lg-6">
-            <b-form-group
-              label="Company"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-              label-cols-xl="4"
-              content-cols-xl="6"
-            >
-              <b-form-input v-model="data.al_question.company" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12 col-lg-6">
-            <b-form-group
-              label="Monthly Payment"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-input-group prepend="$" class="input-group-merge">
-                <b-form-input v-model="data.al_question.monthly_payment" :disabled="this.disabled" />
-              </b-input-group>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12 col-xl-4">
-            <b-form-group
-              label="Year Opened"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-              label-cols-xl="6"
-              content-cols-xl
-            >
-              <b-form-input v-model="data.al_question.year_opened" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
+              <b-col cols="12">
+                <b-card>
+                  <b-row>
+                    <b-col cols="12">
+                      <b-form-group
+                        label="MORTAGE"
+                        label-cols="5"
+                        content-cols="7"
+                        label-cols-sm="3"
+                        content-cols-sm="9"
+                        label-cols-md="3"
+                        content-cols-md="9"
+                        label-cols-lg="2"
+                        content-cols-lg="10"
+                      >
+                        <b-form-checkbox
+                          id="mortage"
+                          v-model="data.mortage"
+                          :disabled="this.disabled"
+                          value="1"
+                        ></b-form-checkbox>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="Company">
+                        <b-form-input v-model="data.m_question.company" :disabled="this.disabled"></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="Monthly Payment">
+                        <b-input-group prepend="$">
+                          <b-form-input
+                            v-model="data.m_question.monthly_payment"
+                            :disabled="this.disabled"
+                          ></b-form-input>
+                        </b-input-group>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="4" md="4" lg="4" xl="4">
+                      <b-form-group label="Year Opened">
+                        <b-form-input
+                          v-model="data.m_question.year_opened"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="No. of Months">
+                        <b-form-input
+                          v-model="data.m_question.n_months"
+                          type="text"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </b-card>
+              </b-col>
 
-          <div class="col-md-6 col-sm-4 col-12 col-xl-4">
-            <b-form-group
-              label="No. of Months"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.al_question.n_months" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-sm-4 col-12 col-xl-4">
-            <b-form-group
-              label="Original Amount"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-input-group prepend="$" class="input-group-merge">
-                <b-form-input v-model="data.al_question.original_amount" :disabled="this.disabled" />
-              </b-input-group>
-            </b-form-group>
-          </div>
-          <div class="col-md-12">
-            <b-form-group
-              label="MORTAGE"
-              label-cols="4"
-              content-cols="6"
-              label-cols-md="2"
-              content-cols-md="6"
-            >
-              <b-form-checkbox id="mortage" v-model="data.mortage" :disabled="this.disabled"></b-form-checkbox>
-            </b-form-group>
-          </div>
-          <div class="col-md-12"></div>
-          <div class="col-md-6 col-12">
-            <b-form-group
-              label="Company"
-              label-cols="4"
-              content-cols="8"
-              label-cols-xl="4"
-              content-cols-xl="6"
-              label-cols-lg="4"
-              content-cols-lg="6"
-              label-cols-md="4"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.m_question.company" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12">
-            <b-form-group
-              label="Monthly Payment"
-              label-cols="4"
-              content-cols="8"
-              label-cols-xl="4"
-              content-cols-xl="6"
-              label-cols-lg="4"
-              content-cols-lg="6"
-              label-cols-md="4"
-              content-cols-md="6"
-            >
-              <b-input-group prepend="$" class="input-group-merge">
-                <b-form-input v-model="data.m_question.monthly_payment" :disabled="this.disabled" />
-              </b-input-group>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12">
-            <b-form-group
-              label="Year Opened"
-              label-cols="4"
-              content-cols="8"
-              label-cols-xl="4"
-              content-cols-xl="6"
-              label-cols-lg="4"
-              content-cols-lg="6"
-              label-cols-md="4"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.m_question.year_opened" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12">
-            <b-form-group
-              label="No. of Months"
-              label-cols="4"
-              content-cols="8"
-              label-cols-xl="4"
-              content-cols-xl="6"
-              label-cols-lg="4"
-              content-cols-lg="6"
-              label-cols-md="4"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.m_question.n_months" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6">
-            <b-form-group label="STUDENT LOAN" label-cols="4" content-cols="6">
-              <b-form-checkbox
-                id="studentLoan"
-                v-model="data.student_loan"
-                :disabled="this.disabled"
-              ></b-form-checkbox>
-            </b-form-group>
-          </div>
-          <div class="col-md-6"></div>
-          <div class="col-md-6">
-            <b-form-group
-              label="Company"
-              label-cols="4"
-              content-cols="8"
-              label-cols-xl="4"
-              content-cols-xl="6"
-              label-cols-lg="4"
-              content-cols-lg="6"
-              label-cols-md="4"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.sl_question.company" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6">
-            <b-form-group
-              label="Monthly Payment"
-              label-cols="4"
-              content-cols="8"
-              label-cols-xl="4"
-              content-cols-xl="6"
-              label-cols-lg="4"
-              content-cols-lg="6"
-              label-cols-md="4"
-              content-cols-md="6"
-            >
-              <b-input-group prepend="$" class="input-group-merge">
-                <b-form-input v-model="data.sl_question.monthly_payment" :disabled="this.disabled" />
-              </b-input-group>
-            </b-form-group>
-          </div>
+              <b-col cols="12">
+                <b-card>
+                  <b-row>
+                    <b-col cols="12">
+                      <b-form-group
+                        label="STUDENT LOAN"
+                        label-cols="5"
+                        content-cols="7"
+                        label-cols-sm="3"
+                        content-cols-sm="9"
+                        label-cols-md="3"
+                        content-cols-md="9"
+                        label-cols-lg="2"
+                        content-cols-lg="10"
+                      >
+                        <b-form-checkbox
+                          id="studentLoan"
+                          v-model="data.student_loan"
+                          value="1"
+                          :disabled="this.disabled"
+                        ></b-form-checkbox>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="Company">
+                        <b-form-input v-model="data.sl_question.company" :disabled="this.disabled"></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="Monthly Payment">
+                        <b-input-group prepend="$">
+                          <b-form-input
+                            v-model="data.sl_question.monthly_payment"
+                            :disabled="this.disabled"
+                          ></b-form-input>
+                        </b-input-group>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="4" md="4" lg="4" xl="4">
+                      <b-form-group label="Year Opened">
+                        <b-form-input
+                          v-model="data.sl_question.year_opened"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="4" md="4" lg="4" xl="4">
+                      <b-form-group label="No. of Months">
+                        <b-form-input v-model="data.sl_question.n_months" :disabled="this.disabled"></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="4" md="4" lg="4" xl="4">
+                      <b-form-group label="Original Amount">
+                        <b-input-group prepend="$">
+                          <b-form-input
+                            v-model="data.sl_question.original_amount"
+                            :disabled="this.disabled"
+                          ></b-form-input>
+                        </b-input-group>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </b-card>
+              </b-col>
 
-          <div class="col-md-6 col-12 col-xl-4">
-            <b-form-group
-              label="Year Opened"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-              label-cols-xl="6"
-              content-cols-xl
-            >
-              <b-form-input v-model="data.sl_question.year_opened" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12 col-xl-4">
-            <b-form-group
-              label="No. of Months"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.sl_question.n_months" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12 col-xl-4">
-            <b-form-group
-              label="Original Amount"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-input-group prepend="$" class="input-group-merge">
-                <b-form-input v-model="data.sl_question.original_amount" :disabled="this.disabled" />
-              </b-input-group>
-            </b-form-group>
-          </div>
-          <!-- HASTA AQUI -->
-          <div class="col-md-12">
-            <b-form-group label="COLLECTION"></b-form-group>
-          </div>
-          <div class="col-md-6 col-12 col-xl-4">
-            <b-form-group
-              label="Company"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-              label-cols-xl="6"
-              content-cols-xl
-            >
-              <b-form-input v-model="data.c_question.company" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12 col-xl-4">
-            <b-form-group
-              label="Balance"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.c_question.balance" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6 col-12 col-xl-4">
-            <b-form-group
-              label="Year Opened"
-              label-cols="4"
-              content-cols="8"
-              content-cols-sm="6"
-              content-cols-md="6"
-            >
-              <b-form-input v-model="data.c_question.year_opened" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-12 col-lg-12">
-            <b-form-group
-              label="OPEN ACCOUNTS"
-              label-cols="4"
-              content-cols="6"
-              label-cols-xl="2"
-              label-cols-lg="2"
-              label-cols-md="2"
-            >
-              <b-form-checkbox
-                id="openAccount"
-                v-model="data.open_account"
-                :disabled="this.disabled"
-              ></b-form-checkbox>
-            </b-form-group>
-          </div>
-          <div class="col-md-12 col-lg-12"></div>
-          <div class="col-md-6">
-            <b-form-group label="Company" label-cols="4" content-cols="6">
-              <b-form-input v-model="data.oa_question.company" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
+              <b-col cols="12">
+                <b-card>
+                  <b-row>
+                    <b-col cols="12">
+                      <b-form-group label="COLLECTION"></b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="4" md="4" lg="4" xl="4">
+                      <b-form-group label="Company">
+                        <b-form-input v-model="data.c_question.company" :disabled="this.disabled"></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="4" md="4" lg="4" xl="4">
+                      <b-form-group label="Balance">
+                        <b-form-input v-model="data.c_question.balance" :disabled="this.disabled"></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="4" md="4" lg="4" xl="4">
+                      <b-form-group label="Year Opened">
+                        <b-form-input
+                          v-model="data.c_question.year_opened"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </b-card>
+              </b-col>
 
-          <div class="col-md-6">
-            <b-form-group label="Monthly Payment" label-cols="4" content-cols="6">
-              <b-input-group prepend="$" class="input-group-merge">
-                <b-form-input v-model="data.oa_question.monthly_payment" :disabled="this.disabled" />
-              </b-input-group>
-            </b-form-group>
-          </div>
-          <div class="col-md-6">
-            <b-form-group label="Year Opened" label-cols="4" content-cols="6">
-              <b-form-input v-model="data.oa_question.year_opened" :disabled="this.disabled"></b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-md-6">
-            <b-form-group label="Original Amount" label-cols="4" content-cols="6">
-              <b-input-group prepend="$" class="input-group-merge">
-                <b-form-input v-model="data.oa_question.original_amount" :disabled="this.disabled" />
-              </b-input-group>
-            </b-form-group>
+              <b-col cols="12">
+                <b-card>
+                  <b-row>
+                    <b-col cols="12">
+                      <b-form-group
+                        label="OPEN ACCOUNTS"
+                        label-cols="5"
+                        content-cols="7"
+                        label-cols-sm="3"
+                        content-cols-sm="9"
+                        label-cols-md="3"
+                        content-cols-md="9"
+                        label-cols-lg="2"
+                        content-cols-lg="10"
+                      >
+                        <b-form-checkbox
+                          id="openAccount"
+                          v-model="data.open_accounts"
+                          value="1"
+                          :disabled="this.disabled"
+                        ></b-form-checkbox>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="Company">
+                        <b-form-input v-model="data.oa_question.company" :disabled="this.disabled"></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                      <b-form-group label="Monthly Payment">
+                        <b-input-group prepend="$">
+                          <b-form-input
+                            v-model="data.oa_question.monthly_payment"
+                            :disabled="this.disabled"
+                          ></b-form-input>
+                        </b-input-group>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="4" md="4" lg="4" xl="4">
+                      <b-form-group label="Year Opened">
+                        <b-form-input
+                          v-model="data.oa_question.year_opened"
+                          :disabled="this.disabled"
+                        ></b-form-input>
+                      </b-form-group>
+                    </b-col>
+                    <b-col cols="6" sm="6" md="6" lg="4" xl="4">
+                      <b-form-group label="Original Amount">
+                        <b-input-group prepend="$">
+                          <b-form-input
+                            v-model="data.oa_question.original_amount"
+                            :disabled="this.disabled"
+                          ></b-form-input>
+                        </b-input-group>
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                </b-card>
+              </b-col>
+            </b-row>
           </div>
         </div>
       </div>
@@ -745,10 +572,7 @@ export default {
       }
     },
     save() {
-      this.showConfirmSwal(
-        "Are you sure?",
-        "You won't be able to revert this!"
-      ).then(result => {
+      this.showConfirmSwal().then(result => {
         if (result.value) {
           this.$store.commit("app/SET_LOADING", true);
           this.data["score_id"] = this.score_id;
