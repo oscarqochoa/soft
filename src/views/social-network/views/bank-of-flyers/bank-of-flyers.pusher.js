@@ -10,6 +10,7 @@ export const paragonNewCommentNotification = () => {
     }
 
     // eslint-disable-next-line array-callback-return
+    console.log(data)
     data.to_id.map(user => {
       if (user.user_id === store.state.auth.currentUser.user_id) {
         NotificationMixin.methods.showWindowNotification(
