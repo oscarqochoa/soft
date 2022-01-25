@@ -31,6 +31,7 @@
           :current-page="paginate.currentPage"
           :per-page="paginate.perPage"
           :filter="searchInput"
+          striped
           no-provider-filtering
           thead-class="text-center"
           tbody-class="text-center"
@@ -444,10 +445,8 @@ export default {
           enddate: this.filters[1].model,
           status: this.status,
           status_search: this.filters[2].model,
-          perPage: ctx.perPage
+          perPage: this.paginate.perPage
         };
-
-        console.log(this.paginate);
         const response = await loansService.getLoans(params);
         this.loans = response.data;
         this.startPage = response.from;

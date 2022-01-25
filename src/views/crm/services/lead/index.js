@@ -265,7 +265,7 @@ class CrmLead {
 
   async putFieldsLead(body) {
     try {
-      const data = await amgApi.post("/savefieldslead", body);
+      const data = await amgApi.post("/lead/update-fields-lead", body);
       return data;
     } catch (error) {
       throw error;
@@ -274,7 +274,10 @@ class CrmLead {
 
   async postAllTrackingChangeLeads(body) {
     try {
-      const data = await amgApi.post("/alltrackingfieldslead", body);
+      const data = await amgApi.post(
+        "/lead/get-all-tracking-fields-lead",
+        body
+      );
       return data;
     } catch (error) {
       throw error;

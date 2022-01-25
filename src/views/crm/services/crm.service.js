@@ -68,7 +68,9 @@ class CrmService {
 
   async getSourceLeads(params) {
     try {
-      const { data } = await amgApi.get("/commons/get-lead-sources", { params });
+      const { data } = await amgApi.get("/commons/get-lead-sources", {
+        params,
+      });
       return data;
     } catch (error) {
       console.log("Something went wrong on getSourceLeads:", error);
