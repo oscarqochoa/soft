@@ -18,7 +18,7 @@
         <b-table
           slot="table"
           ref="refUserListTable"
-          class="position-relative"
+          class="position-relative font-small-3"
           responsive="sm"
           table-class="text-nowrap"
           sticky-header="73vh"

@@ -3,7 +3,7 @@ import { amgApi, amgApiFake } from "@/service/axios";
 class CrmLead {
   async getLead(id, params) {
     try {
-      const { data } = await amgApi.get(`/lead/${id}`, params);
+      const { data } = await amgApi.get(`/lead/show/${id}`, params);
       return data;
     } catch (error) {
       console.log("Something went wrong on getLead:", error);
@@ -49,7 +49,7 @@ class CrmLead {
 
   async getStateLeads(params) {
     try {
-      const data = await amgApi.get("/leads/get-state-leads", { params });
+      const data = await amgApi.get("/lead/get-state-leads", { params });
       return data;
     } catch (error) {
       console.log("Something went wrong on getStateLeads:", error);
@@ -59,7 +59,7 @@ class CrmLead {
 
   async getStatusLeads(params) {
     try {
-      const data = await amgApi.get("/leadstatus", { params });
+      const data = await amgApi.get("/lead/get-lead-status", { params });
       return data;
     } catch (error) {
       console.log("Something went wrong on getStatusLeads:", error);
@@ -69,7 +69,7 @@ class CrmLead {
 
   async getSourceLeads(params) {
     try {
-      const data = await amgApi.get("/get-lead-sources", { params });
+      const data = await amgApi.get("/commons/get-lead-sources", { params });
       return data;
     } catch (error) {
       console.log("Something went wrong on getSourceLeads:", error);
@@ -98,7 +98,7 @@ class CrmLead {
 
   async postProcessLead(body) {
     try {
-      const data = await amgApi.post("/lead/process-lead-sn", body);
+      const data = await amgApi.post("/lead/social-network/process-lead", body);
       return data;
     } catch (error) {
       console.log("Something went wrong on postProcessLead:", error);
@@ -193,7 +193,7 @@ class CrmLead {
   async postMyListCreate(body) {
     try {
       const data = await amgApi.post(
-        "/commons/list-user/create-list-of-users",
+        "/commons/list-users/create-list-of-users",
         body
       );
       return data;
@@ -305,7 +305,7 @@ class CrmLead {
 
   async getLeadDocument(body) {
     try {
-      const data = await amgApi.post("/get-lead-document", body);
+      const data = await amgApi.post("/lead/get-lead-document", body);
       return data;
     } catch (error) {
       throw error;
@@ -315,7 +315,7 @@ class CrmLead {
   async getLeadSendRequest(body) {
     try {
       const data = await amgApi.post(
-        "/glossary/create-glossary-category",
+        "/lead/ncr/send-leads-request",
         body
       );
       return data;

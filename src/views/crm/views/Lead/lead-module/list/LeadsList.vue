@@ -45,7 +45,7 @@
         <b-table
           slot="table"
           ref="refUserListTable"
-          class="position-relative"
+          class="position-relative font-small-3"
           primary-key="id"
           empty-text="No matching records found"
           select-mode="multi"
@@ -133,7 +133,7 @@
           <template #cell(programs)="data">
             <div
               v-if="data.item.programs"
-              class="d-flex"
+              class="d-flex flex-column"
               style="gap: .5rem"
             >
               <template v-for="(program, key) in JSON.parse(data.item.programs)">
@@ -383,7 +383,7 @@ export default {
           state_h: this.filter[7].model,
           typedoc: this.filter[9].model,
           user_owner: this.filter[3].model,
-          perpage: this.paginate.perPage,
+          perPage: this.paginate.perPage,
           page: this.paginate.currentPage,
         })
         setTimeout(() => {

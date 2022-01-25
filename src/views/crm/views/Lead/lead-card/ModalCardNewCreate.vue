@@ -293,7 +293,7 @@ export default {
         this.user = this.currentUser.user_id
     },
   mounted() {
-    amgApi.get("/stateseeuu").then((response) => {
+    amgApi.get("/commons/get-eeuu-states").then((response) => {
       this.states = response.data;
     });
   },

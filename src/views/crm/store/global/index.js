@@ -22,7 +22,7 @@ const getters = {
     return sourceNames
   },
   G_PROGRAMS() {
-    const programs = state.S_PROGRAMS.map(el => ({ label: el.value, id: el.id }))
+    const programs = state.S_PROGRAMS.map(el => ({ label: el.name, id: el.id }))
     return programs
   },
   G_STATES() {
@@ -66,6 +66,7 @@ const getters = {
 const mutations = {
   SET_DATA(state, params) {
     Vue.set(state, params.destination, params.data)
+    console.log(state)
   },
   PUSH_DATA(state, params) {
     state[params.destination].push(params.data)
@@ -95,7 +96,7 @@ const actions = {
   async A_GET_PROGRAMS({ commit }, params) {
     try {
       const response = await crmGlobal.getPrograms(params)
-      /* console.log('A_GET_PROGRAMS response', response) */
+      console.log('A_GET_PROGRAMS response', response)
       commit('SET_DATA', {
         destination: 'S_PROGRAMS',
         data: response.data,

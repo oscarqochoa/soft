@@ -20,7 +20,7 @@
         <b-table
           slot="table"
           ref="refUserListTable"
-          class="position-relative"
+          class="position-relative font-small-3"
           empty-text="No matching records found"
           primary-key="id"
           responsive="sm"

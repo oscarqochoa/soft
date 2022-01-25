@@ -21,7 +21,7 @@ class GlobalService {
 
   async getHourSystem(params) {
     try {
-      const { data } = await amgApi.get(`/commons/get-hour-system?timezone=${params}`);
+      const { data } = await amgApi.post(`/commons/get-hour-system?timezone=${params}`);
       return data;
     } catch (error) {
       throw error;
