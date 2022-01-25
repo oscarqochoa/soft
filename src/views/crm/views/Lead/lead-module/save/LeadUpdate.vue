@@ -52,7 +52,7 @@
               <b-spinner small />
               <span>Loading...</span>
             </template>
-            <span v-else>Save</span>
+            <span v-else>Update</span>
           </b-button>
           <b-button
             v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -329,6 +329,7 @@ export default {
             "CheckIcon",
             "Successful operation"
           );
+          this.$emit("update-lead", this.lead);
         }
       } catch (error) {
         console.log("spmething went wrong onSubmit: ", error);

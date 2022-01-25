@@ -3,7 +3,7 @@ import { amgApi, amgApiFake } from "@/service/axios";
 class CrmLead {
   async getLead(id, params) {
     try {
-      const { data } = await amgApi.get(`/lead/${id}`, params);
+      const { data } = await amgApi.get(`/lead/show/${id}`, params);
       return data;
     } catch (error) {
       console.log("Something went wrong on getLead:", error);
@@ -49,7 +49,7 @@ class CrmLead {
 
   async getStateLeads(params) {
     try {
-      const data = await amgApi.get("/leads/get-state-leads", { params });
+      const data = await amgApi.get("/lead/get-state-leads", { params });
       return data;
     } catch (error) {
       console.log("Something went wrong on getStateLeads:", error);
@@ -59,7 +59,7 @@ class CrmLead {
 
   async getStatusLeads(params) {
     try {
-      const data = await amgApi.get("/leadstatus", { params });
+      const data = await amgApi.get("/lead/get-lead-status", { params });
       return data;
     } catch (error) {
       console.log("Something went wrong on getStatusLeads:", error);
@@ -69,7 +69,7 @@ class CrmLead {
 
   async getSourceLeads(params) {
     try {
-      const data = await amgApi.get("/get-lead-sources", { params });
+      const data = await amgApi.get("/commons/get-lead-sources", { params });
       return data;
     } catch (error) {
       console.log("Something went wrong on getSourceLeads:", error);
@@ -265,7 +265,7 @@ class CrmLead {
 
   async putFieldsLead(body) {
     try {
-      const data = await amgApi.post("/savefieldslead", body);
+      const data = await amgApi.post("/lead/update-fields-lead", body);
       return data;
     } catch (error) {
       throw error;
@@ -274,7 +274,10 @@ class CrmLead {
 
   async postAllTrackingChangeLeads(body) {
     try {
-      const data = await amgApi.post("/alltrackingfieldslead", body);
+      const data = await amgApi.post(
+        "/lead/get-all-tracking-fields-lead",
+        body
+      );
       return data;
     } catch (error) {
       throw error;

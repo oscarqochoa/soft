@@ -48,7 +48,7 @@ class CrmService {
 
   async getStatusLeads(params) {
     try {
-      const { data } = await amgApi.get("/leadstatus", { params });
+      const { data } = await amgApi.get("/lead/get-lead-status", { params });
       return data;
     } catch (error) {
       console.log("Something went wrong on getStatusLeads:", error);
@@ -58,7 +58,7 @@ class CrmService {
 
   async getStateLeads(params) {
     try {
-      const { data } = await amgApi.get("/leads/get-state-leads", { params });
+      const { data } = await amgApi.get("/lead/get-state-leads", { params });
       return data;
     } catch (error) {
       console.log("Something went wrong on getStateLeads:", error);
@@ -68,7 +68,9 @@ class CrmService {
 
   async getSourceLeads(params) {
     try {
-      const { data } = await amgApi.get("/get-lead-sources", { params });
+      const { data } = await amgApi.get("/commons/get-lead-sources", {
+        params,
+      });
       return data;
     } catch (error) {
       console.log("Something went wrong on getSourceLeads:", error);
