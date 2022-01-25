@@ -11,6 +11,7 @@
     <div>
       <b-card
         no-body
+
         class="mb-0"
       >
 
