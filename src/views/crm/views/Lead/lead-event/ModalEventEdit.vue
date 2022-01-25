@@ -413,6 +413,7 @@ export default {
               this.setDataBlank("event");
               this.onToggleEdit();
               this.isLoading = false;
+              console.log(body, 'aaaa')
               this.$emit("updated", body);
             } else {
               this.showToast(

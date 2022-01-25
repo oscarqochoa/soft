@@ -281,19 +281,9 @@ export default {
         this.showErrorSwal()
       }
     },
-    async updatedEvent(body) {
-      console.log('body', body)
-      const existingEvent = this.calendarApi.getEventById(body.id)
-      existingEvent.setProp('title', body.title)
-
-      existingEvent.setDates(`${body.date} ${body.from}`, `${body.date} ${body.to}`, { allDay: false })
-
-      const extendedPropsToUpdate = Object.keys(body)
-      for (let index = 0; index < extendedPropsToUpdate.length; index++) {
-        const propName = extendedPropsToUpdate[index]
-        existingEvent.setExtendedProp(propName, body[propName])
-      }
-      this.$bvModal.hide('modal-event-edit')
+    updatedEvent(body) {
+      this.refetchEvents()
+      this.$bvModal.hide(this.isModal ? 'modal-event-edit-modal' : 'modal-event-edit')
     },
     async openModalEditEventShow(id) {
       try {
@@ -350,5 +340,12 @@ export default {
 /* Handle on hover */
 .fc-scroller::-webkit-scrollbar, .fc-popover-body::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.fc-timeGridWeek-button {
+  display: none !important;
+}
+.fc-timeGridDay-button {
+  display: none !important;
 }
 </style>
