@@ -215,7 +215,8 @@ $borderamg: #efb911;
 .x-close-position {
   transform: translate(-12px, 4px) !important;
 }
-.hover-primary, .hover-important {
+.hover-primary,
+.hover-important {
   transition: 0.3s;
 }
 .hover-primary:hover {

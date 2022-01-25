@@ -179,7 +179,7 @@ export default {
         orderby: 5,
         type: this.type,
         id: this.currentUser.user_id,
-        api_url: "alltasks"
+        api_url: "tasks/get-all-tasks"
       };
       const data = await TaskService.getAllTask(params);
       this.tasksUpcoming = data.data;

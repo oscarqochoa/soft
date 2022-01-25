@@ -26,7 +26,11 @@
         tagname="li"
       >
         <!-- Account Notification -->
-        <b-link v-for="notification in S_NOTIFICATIONS" :key="notification.id">
+        <b-link
+          v-for="notification in S_NOTIFICATIONS"
+          :key="notification.id"
+          :to="notification.link"
+        >
           <b-media>
             <template #aside>
               <b-avatar size="32" variant="light-secondary">
@@ -55,8 +59,16 @@
         >Read all notifications</b-button>
       </li>
     </b-nav-item-dropdown>
-    <b-modal v-model="notificationModal" size="lg" centered title="NOTIFICATIONS" hide-footer>
-      <notification-list></notification-list>
+    <b-modal
+      v-model="notificationModal"
+      title-class="h3 text-white"
+      size="lg"
+      centered
+      title="Notifications"
+      hide-footer
+      modal-class="modal-primary"
+    >
+      <notification-list @closeNotifications="notificationModal = false"></notification-list>
     </b-modal>
   </div>
 </template>
