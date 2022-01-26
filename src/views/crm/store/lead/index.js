@@ -540,7 +540,7 @@ const actions = {
       throw error;
     }
   },
-  async A_CREATE_SELLER_LIST({ commit }, body) {
+  async A_ADD_SELLER_LIST({ commit }, body) {
     try {
       const response = await crmLead.createSellerList(body);
       return response;

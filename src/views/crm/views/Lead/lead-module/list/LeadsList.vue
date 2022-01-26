@@ -26,7 +26,7 @@
             v-if="[5].includes(currentUser.role_id)"
             variant="success"
             class="ml-1"
-            :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.user_id).includes(currentUser.user_id))"
+            :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.assign_id).includes(currentUser.user_id))"
             @click="addListSeller()"
           >
             <feather-icon icon="ListIcon" class="mr-50" />ADD LIST
@@ -255,6 +255,9 @@ export default {
     }),
     routeModule() {
       return this.$route.meta.route;
+    },
+    moduleId() {
+      return this.$route.meta.module;
     }
   },
   created() {
@@ -268,7 +271,7 @@ export default {
       A_SET_SELECTED_LEADS: "CrmLeadStore/A_SET_SELECTED_LEADS",
       A_DELETE_LEADS: "CrmLeadStore/A_DELETE_LEADS",
       A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS",
-      A_CREATE_SELLER_LIST: "CrmLeadStore/A_CREATE_SELLER_LIST"
+      A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST"
     }),
     resolveUserStatusVariant(status) {
       if (status === "Pending") return "warning";
@@ -475,7 +478,38 @@ export default {
     modalSmsClose() {
       this.modalSms = false;
     },
-    addListSeller() {},
+    async addListSeller() {
+      const confirm = await this.showConfirmSwal(
+        "Are you sure?",
+        "You are going to add this leads to your List"
+      );
+      if (confirm.isConfirmed) {
+        this.addPreloader();
+        //filter just the owner of the lead
+        const leadList = this.leadsSelecteds
+          .filter(el => el.assign_id === this.currentUser.user_id)
+          .map(el => el.id);
+        try {
+          const params = {
+            user_id: this.currentUser.user_id,
+            list_lead: leadList,
+            module_id: this.moduleId
+          };
+          const response = await this.A_ADD_SELLER_LIST(params);
+          this.removePreloader();
+          this.showToast(
+            "success",
+            "top-right",
+            "Success!",
+            "CheckIcon",
+            "Leads were added to your list"
+          );
+        } catch (error) {
+          this.removePreloader();
+          this.showErrorSwal(error);
+        }
+      }
+    },
     resetQuickData(item) {
       this.quickData = item;
     }
