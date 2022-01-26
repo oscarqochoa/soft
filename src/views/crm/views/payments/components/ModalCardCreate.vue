@@ -344,7 +344,7 @@ export default {
           .then((result) => {
             if (result.isConfirmed) {
               this.$store.commit("app/SET_LOADING", true);
-              amgApi.post("/createcard", this.form).then((response) => {
+              amgApi.post("/commons/create-card", this.form).then((response) => {
                 this.cards = response.data;
                 this.$emit("new", this.cards);
                 this.$emit("click", false);

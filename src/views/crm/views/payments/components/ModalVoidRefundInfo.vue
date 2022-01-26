@@ -121,7 +121,7 @@ export default {
     getVoidRefund(idtransaction) {
       this.$store.commit("app/SET_LOADING", true);
       amgApi
-        .post("/getvoidrefund", {
+        .post("/crm/payment/get-void-refund", {
           idtransaction: idtransaction,
         })
         .then((response) => {

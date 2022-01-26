@@ -13,6 +13,7 @@
             <!-- <span
                         style="display: inline-block;margin-left: 10px;color: black;"
             >Total Leads Pending : 146789</span>-->
+             <h2>Glossary</h2>
           </b-col>
           <b-col
             cols="12"

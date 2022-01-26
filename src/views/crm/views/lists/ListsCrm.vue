@@ -1,5 +1,29 @@
 <template>
   <div>
+    <b-card no-body class="mb-1">
+      <div class="m-2">
+        <b-row>
+          <b-col
+            cols="12"
+            md="6"
+            lg="6"
+            sm="6"
+            class="d-flex align-items-start justify-content-start mb-1 mb-md-0"
+          >
+             <h2>Lists</h2>
+          </b-col>
+          <b-col
+            cols="12"
+            md="6"
+            lg="6"
+            sm="6"
+            class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
+          >
+          
+          </b-col>
+        </b-row>
+      </div>
+    </b-card>
     <b-nav pills>
       <b-nav-item
         :to="{ name: 'lists-crm-mylist' }"

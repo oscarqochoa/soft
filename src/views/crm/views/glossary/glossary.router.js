@@ -1,6 +1,6 @@
 export default [
     {
-          path: '/glossary',
+          path: '/crm/glossary',
           name: 'glossary-crm',
           component: () => import('@/views/crm/views/glossary/Glossary.vue'),
           meta:{

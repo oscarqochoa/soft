@@ -163,7 +163,7 @@ export default {
               if (result.value) {
               
                 amgApi
-                  .post("/voidtransaction", {
+                  .post("/authorize/void-transaction", {
                     idtransaction: this.dataVoid.idtransaction,
                     idmerchant: this.dataVoid.idmerchant,
                     comment: this.comment,
@@ -228,7 +228,7 @@ export default {
               .then((result) => {
                 if (result.value) {
                   amgApi
-                    .post("/refundtransaction", {
+                    .post("/authorize/refund-transaction", {
                       idtransaction: this.dataVoid.idtransaction,
                       idmerchant: this.dataVoid.idmerchant,
                       comment: this.comment,

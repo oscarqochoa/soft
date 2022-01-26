@@ -16,7 +16,7 @@
         small
         slot="table"
         no-provider-filtering
-        :api-url="'/inventory/search-equipments'"
+        :api-url="'/logistics/inventory/search-equipments'"
         ref="refClientsList"
         :items="myProvider"
         :fields="visibleFields"

@@ -155,7 +155,7 @@ export default {
     closeModal() {
       this.$emit("closeModalRequest", false);
     },
-    ...mapActions("inventory-store", ["LIST_CATEGORIES"]),
+    ...mapActions("inventory-store", ["LIST_CATEGORIES","UPDATE_REQUEST_EQUIPMENT"]),
     getSelectCategory() {
       if (this.listCategoryAll != null) {
         this.optionsCategory = this.listCategoryAll;
@@ -231,6 +231,7 @@ export default {
                       title: "REQUEST SEND"
                     });
                     this.$emit("closeModalRequest");
+                    this.UPDATE_REQUEST_EQUIPMENT(true);
                   }
                 })
                 .catch(error => {

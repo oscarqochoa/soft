@@ -1,5 +1,29 @@
 <template>
   <div>
+    <b-card no-body class="mb-1">
+      <div class="m-2">
+        <b-row>
+          <b-col
+            cols="12"
+            md="6"
+            lg="6"
+            sm="6"
+            class="d-flex align-items-start justify-content-start mb-1 mb-md-0"
+          >
+             <h2>NCR</h2>
+          </b-col>
+          <b-col
+            cols="12"
+            md="6"
+            lg="6"
+            sm="6"
+            class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
+          >
+          
+          </b-col>
+        </b-row>
+      </div>
+    </b-card>
     <b-nav pills>
       <b-nav-item
         :to="{ name: 'ncr-pending' }"
@@ -14,7 +38,7 @@
         exact
         exact-active-class="active"
         link-classes="ml-1 border-secondary hover-primary h-29"
-        >Returned
+        >Returned 
          <span class="ml-1" v-if="countData>0 && currentUser.role_id != 1">
             <feather-icon
               icon
@@ -53,7 +77,7 @@ export default {
     countReturned() {
       if (this.currentUser.role_id != 1) {
         amgApi
-          .post("/ncr-leads-count-in-process", {
+          .post("/lead/ncr/ncr-leads-count-in-process", {
             user_id: this.currentUser.user_id,
             modul: this.$route.meta.module,
           })

@@ -10,6 +10,7 @@
       :send-multiple-sms="false"
       @reload="$refs['refClientsList'].refresh()"
     >
+  
       <b-table
         v-scrollbar
         slot="table"
@@ -219,7 +220,8 @@ export default {
       currentUser: "auth/currentUser"
     })
   },
-  created() {},
+  created() {
+  },
   methods: {
     update() {
       this.modalChanging = false;
@@ -249,7 +251,7 @@ export default {
         leadname: this.filterPrincipal.model,
         startdate: this.filter[0].model,
         enddate: this.filter[1].model,
-        status: this.status == "1" ? 1 : 2,
+        status: this.status == 1 ? 1 : 2,
         user_id: this.currentUser.user_id
       });
 
