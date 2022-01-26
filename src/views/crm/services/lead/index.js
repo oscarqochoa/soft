@@ -326,7 +326,7 @@ class CrmLead {
   async createSellerList(body) {
     try {
       const { data } = await amgApi.post(
-        "/commons/list-user/create-seller-list",
+        "/commons/list-users/create-seller-list",
         body
       );
       return data;
