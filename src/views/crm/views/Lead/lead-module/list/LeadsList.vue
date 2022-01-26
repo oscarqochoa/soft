@@ -27,7 +27,7 @@
             variant="success"
             class="ml-1"
             :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.user_id).includes(currentUser.user_id))"
-            @click="showToast('warning', 'top-right', 'In maintenance', 'AlertIcon', 'This action is under maintenance')"
+            @click="addListSeller()"
           >
             <feather-icon icon="ListIcon" class="mr-50" />ADD LIST
           </b-button>
@@ -154,49 +154,16 @@
     </b-card>
 
     <!-- modal SEND SMS -->
-    <b-modal
-      id="modal-send-sms"
-      ok-only
-      modal-class="modal-primary"
-      scrollable
-      title-class="h3 text-white"
-      size="lg"
-      title="Send SMS"
-      no-close-on-backdrop
-    >
-      <modal-send-sms
-        :smss="leads_sms"
-        :modul="currentUser.modul_id"
-        :typesms="typesms"
-        :sms="leads_sms_o"
-        :name-leads="name_leads_arr"
-      />
 
-      <template #modal-footer>
-        <b-form-group label="VARS" class="w-100">
-          <b-row>
-            <b-col sm="3">
-              <b-input-group size="sm">
-                <b-input-group-prepend is-text>@1</b-input-group-prepend>
-                <b-form-input placeholder="FIRST NAME" readonly />
-              </b-input-group>
-            </b-col>
-            <b-col sm="3">
-              <b-input-group size="sm">
-                <b-input-group-prepend is-text>@2</b-input-group-prepend>
-                <b-form-input placeholder="LAST NAME" readonly />
-              </b-input-group>
-            </b-col>
-            <b-col v-if="currentUser.modul_id == 15" sm="3">
-              <b-input-group size="sm">
-                <b-input-group-prepend is-text>@3</b-input-group-prepend>
-                <b-form-input placeholder="LAST NAME" readonly />
-              </b-input-group>
-            </b-col>
-          </b-row>
-        </b-form-group>
-      </template>
-    </b-modal>
+    <modal-send-sms
+      v-if="modalSms"
+      :smss="leads_sms"
+      :modul="currentUser.modul_id"
+      :typesms="typesms"
+      :sms="leads_sms_o"
+      :name-leads="name_leads_arr"
+      @hide="modalSmsClose"
+    />
 
     <!-- modal HISTORY SMS -->
     <b-modal
@@ -267,7 +234,8 @@ export default {
       typesms: null,
       leads_sms_o: [],
 
-      leadsSelecteds: []
+      leadsSelecteds: [],
+      modalSms: false
     };
   },
   computed: {
@@ -299,7 +267,8 @@ export default {
       A_SET_FILTERS_LEADS: "CrmLeadStore/A_SET_FILTERS_LEADS",
       A_SET_SELECTED_LEADS: "CrmLeadStore/A_SET_SELECTED_LEADS",
       A_DELETE_LEADS: "CrmLeadStore/A_DELETE_LEADS",
-      A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS"
+      A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS",
+      A_CREATE_SELLER_LIST: "CrmLeadStore/A_CREATE_SELLER_LIST"
     }),
     resolveUserStatusVariant(status) {
       if (status === "Pending") return "warning";
@@ -487,7 +456,7 @@ export default {
       this.leads_sms_o = [];
       this.leads_sms_o.push(item.id);
       this.name_leads_arr = [{ name: item.lead_name, id: item.id }];
-      this.$bvModal.show("modal-send-sms");
+      this.modalSms = true;
     },
     modalHistorySmsOpen(item) {
       this.historySms.id = item.id;
@@ -501,8 +470,12 @@ export default {
         id: el.id
       }));
       this.leads_sms = this.leadsSelecteds.map(el => el.id);
-      this.$bvModal.show("modal-send-sms");
+      this.modalSms = true;
     },
+    modalSmsClose() {
+      this.modalSms = false;
+    },
+    addListSeller() {},
     resetQuickData(item) {
       this.quickData = item;
     }

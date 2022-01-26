@@ -317,8 +317,16 @@ class CrmLead {
 
   async getLeadSendRequest(body) {
     try {
-      const data = await amgApi.post(
-        "/lead/ncr/send-leads-request",
+      const data = await amgApi.post("/lead/ncr/send-leads-request", body);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async createSellerList(body) {
+    try {
+      const { data } = await amgApi.post(
+        "/commons/list-user/create-seller-list",
         body
       );
       return data;
