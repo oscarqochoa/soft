@@ -5,7 +5,10 @@
         <b-col lg="6">
           <h2>Loans</h2>
         </b-col>
-        <b-col lg="6" :class="[positionResponsive]">
+        <b-col
+          lg="6"
+          :class="[positionResponsive]"
+        >
           <b-button
             v-if="isManagement"
             variant="info"
@@ -13,7 +16,13 @@
             class="mr-1"
             @click="openModalImportLoan"
           >Import Loan</b-button>
-          <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()">Request Loan</b-button>
+          <b-button
+            variant="primary"
+            :block="!bigWindow"
+            @click="openModalLoan()"
+          >
+            Request Loan
+          </b-button>
         </b-col>
       </b-row>
     </b-card>
@@ -28,7 +37,10 @@
           link-classes="ml-1 border-secondary hover-primary"
         >
           Loans
-          <span class="ml-1" v-if="counterTab.management>0">
+          <span
+            v-if="counterTab.management>0"
+            class="ml-1"
+          >
             <feather-icon
               icon
               :badge="counterTab.management > 99 ? '99+' : counterTab.management"
@@ -44,7 +56,10 @@
           link-classes="ml-1 border-secondary hover-primary"
         >
           Loans by Module
-          <span class="ml-1" v-if="counterTab.supervisor>0">
+          <span
+            v-if="counterTab.supervisor>0"
+            class="ml-1"
+          >
             <feather-icon
               icon
               :badge="counterTab.supervisor > 99 ? '99+' : counterTab.supervisor"
@@ -59,7 +74,10 @@
           link-classes="ml-1 border-secondary hover-primary"
         >
           My Loans
-          <span class="ml-1" v-if="counterTab.my_loan>0">
+          <span
+            v-if="counterTab.my_loan>0"
+            class="ml-1"
+          >
             <feather-icon
               icon
               :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
@@ -71,74 +89,78 @@
 
       <router-view :key="this.$route.name" />
     </b-card>
-    <ModalRequestLoan v-if="modalRequest.show" :info="modalRequest" @hide="closeModalLoan" />
+    <ModalRequestLoan
+      v-if="modalRequest.show"
+      :info="modalRequest"
+      @hide="closeModalLoan"
+    />
   </div>
 </template>
 
 <script>
-import ModalRequestLoan from "./modals/ModalRequestLoan.vue";
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
+import ModalRequestLoan from './modals/ModalRequestLoan.vue'
+
 export default {
-  name: "LoansComponent",
+  name: 'LoansComponent',
   components: {
-    ModalRequestLoan
-  },
-  created() {
-    this.$store.dispatch("loans-store/loadCounterTab");
+    ModalRequestLoan,
   },
 
   data() {
     return {
       tab: this.$route.meta.tab,
 
-      routeVar: this.$route.name
-    };
+      routeVar: this.$route.name,
+    }
+  },
+  created() {
+    this.$store.dispatch('loans-store/loadCounterTab')
   },
   computed: {
     ...mapGetters({
-      bigWindow: "app/bigWindow",
-      currentUser: "auth/currentUser",
-      researchLoans: "loans-store/researchLoans",
-      counterTab: "loans-store/counterTab",
-      modalRequest: "loans-store/modalRequest",
-      isSupervisor: "auth/isSupervisor"
+      bigWindow: 'app/bigWindow',
+      currentUser: 'auth/currentUser',
+      researchLoans: 'loans-store/researchLoans',
+      counterTab: 'loans-store/counterTab',
+      modalRequest: 'loans-store/modalRequest',
+      isSupervisor: 'auth/isSupervisor',
     }),
     positionResponsive() {
-      return this.bigWindow ? "text-right" : "";
+      return this.bigWindow ? 'text-right' : ''
     },
     isManagement() {
-      return this.$route.meta.module == 16;
+      return this.$route.meta.module == 16
     },
     route() {
-      return this.$route.meta.route;
-    }
+      return this.$route.meta.route
+    },
+  },
+  mounted() {
+    this.modalRequest.tab = this.tab
   },
   methods: {
     openModalImportLoan() {
-      this.showImportLoan = true;
+      this.showImportLoan = true
     },
     closeModalImportLoan() {
-      this.$refs.loanTabOne.search();
-      this.showImportLoan = false;
+      this.$refs.loanTabOne.refresh()
+      this.showImportLoan = false
     },
 
     openModalLoan() {
-      this.modalRequest.show = true;
+      this.modalRequest.show = true
     },
     closeModalLoan(status) {
-      //Just is a new loan
+      // Just is a new loan
       if (status) {
-        this.$store.commit("loans-store/ADD_ONE_RESEARCH");
-        this.$store.dispatch("loans-store/loadCounterTab");
+        this.$store.commit('loans-store/ADD_ONE_RESEARCH')
       }
 
-      this.modalRequest.show = false;
-    }
+      this.modalRequest.show = false
+    },
   },
-  mounted() {
-    this.modalRequest.tab = this.tab;
-  }
-};
+}
 </script>
 
 <style>
