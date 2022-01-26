@@ -11,7 +11,7 @@ class Call {
   }
   async postCall (body) {
     try {
-      const data = await amgApi.post('updateCall', body)
+      const data = await amgApi.post('/lead/update-call', body)
       return data
     } catch (error) {
       throw error

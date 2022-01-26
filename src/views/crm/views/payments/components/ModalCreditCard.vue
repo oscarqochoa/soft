@@ -203,7 +203,7 @@ export default {
 
     openModalCard(id) {
       amgApi
-        .post("/card/get-card-data-by-id", {
+        .post("/cards/get-cards-data-by-id", {
           id: id,
         })
         .then((response) => {
