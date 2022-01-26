@@ -1,31 +1,17 @@
 <template>
   <div>
-    <b-card>
-      <b-row>
-        <b-col lg="6">
-          <h2>Loans</h2>
-        </b-col>
-        <b-col
-          lg="6"
-          :class="[positionResponsive]"
-        >
-          <b-button
-            v-if="isManagement"
-            variant="info"
-            :block="!bigWindow"
-            class="mr-1"
-            @click="openModalImportLoan"
-          >Import Loan</b-button>
-          <b-button
-            variant="primary"
-            :block="!bigWindow"
-            @click="openModalLoan()"
-          >
-            Request Loan
-          </b-button>
-        </b-col>
-      </b-row>
-    </b-card>
+    <header-slot>
+      <template #actions>
+        <b-button
+          v-if="isManagement"
+          variant="info"
+          :block="!bigWindow"
+          class="mr-1"
+          @click="openModalImportLoan"
+        >Import Loan</b-button>
+        <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()">Request Loan</b-button>
+      </template>
+    </header-slot>
 
     <b-card body-class="pb-0">
       <b-nav pills>
@@ -37,10 +23,7 @@
           link-classes="ml-1 border-secondary hover-primary"
         >
           Loans
-          <span
-            v-if="counterTab.management>0"
-            class="ml-1"
-          >
+          <span v-if="counterTab.management>0" class="ml-1">
             <feather-icon
               icon
               :badge="counterTab.management > 99 ? '99+' : counterTab.management"
@@ -56,10 +39,7 @@
           link-classes="ml-1 border-secondary hover-primary"
         >
           Loans by Module
-          <span
-            v-if="counterTab.supervisor>0"
-            class="ml-1"
-          >
+          <span v-if="counterTab.supervisor>0" class="ml-1">
             <feather-icon
               icon
               :badge="counterTab.supervisor > 99 ? '99+' : counterTab.supervisor"
@@ -74,10 +54,7 @@
           link-classes="ml-1 border-secondary hover-primary"
         >
           My Loans
-          <span
-            v-if="counterTab.my_loan>0"
-            class="ml-1"
-          >
+          <span v-if="counterTab.my_loan>0" class="ml-1">
             <feather-icon
               icon
               :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
@@ -89,78 +66,74 @@
 
       <router-view :key="this.$route.name" />
     </b-card>
-    <ModalRequestLoan
-      v-if="modalRequest.show"
-      :info="modalRequest"
-      @hide="closeModalLoan"
-    />
+    <ModalRequestLoan v-if="modalRequest.show" :info="modalRequest" @hide="closeModalLoan" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ModalRequestLoan from './modals/ModalRequestLoan.vue'
+import { mapGetters } from "vuex";
+import ModalRequestLoan from "./modals/ModalRequestLoan.vue";
 
 export default {
-  name: 'LoansComponent',
+  name: "LoansComponent",
   components: {
-    ModalRequestLoan,
+    ModalRequestLoan
   },
 
   data() {
     return {
       tab: this.$route.meta.tab,
 
-      routeVar: this.$route.name,
-    }
+      routeVar: this.$route.name
+    };
   },
   created() {
-    this.$store.dispatch('loans-store/loadCounterTab')
+    this.$store.dispatch("loans-store/loadCounterTab");
   },
   computed: {
     ...mapGetters({
-      bigWindow: 'app/bigWindow',
-      currentUser: 'auth/currentUser',
-      researchLoans: 'loans-store/researchLoans',
-      counterTab: 'loans-store/counterTab',
-      modalRequest: 'loans-store/modalRequest',
-      isSupervisor: 'auth/isSupervisor',
+      bigWindow: "app/bigWindow",
+      currentUser: "auth/currentUser",
+      researchLoans: "loans-store/researchLoans",
+      counterTab: "loans-store/counterTab",
+      modalRequest: "loans-store/modalRequest",
+      isSupervisor: "auth/isSupervisor"
     }),
     positionResponsive() {
-      return this.bigWindow ? 'text-right' : ''
+      return this.bigWindow ? "text-right" : "";
     },
     isManagement() {
-      return this.$route.meta.module == 16
+      return this.$route.meta.module == 16;
     },
     route() {
-      return this.$route.meta.route
-    },
+      return this.$route.meta.route;
+    }
   },
   mounted() {
-    this.modalRequest.tab = this.tab
+    this.modalRequest.tab = this.tab;
   },
   methods: {
     openModalImportLoan() {
-      this.showImportLoan = true
+      this.showImportLoan = true;
     },
     closeModalImportLoan() {
-      this.$refs.loanTabOne.refresh()
-      this.showImportLoan = false
+      this.$refs.loanTabOne.refresh();
+      this.showImportLoan = false;
     },
 
     openModalLoan() {
-      this.modalRequest.show = true
+      this.modalRequest.show = true;
     },
     closeModalLoan(status) {
       // Just is a new loan
       if (status) {
-        this.$store.commit('loans-store/ADD_ONE_RESEARCH')
+        this.$store.commit("loans-store/ADD_ONE_RESEARCH");
       }
 
-      this.modalRequest.show = false
-    },
-  },
-}
+      this.modalRequest.show = false;
+    }
+  }
+};
 </script>
 
 <style>

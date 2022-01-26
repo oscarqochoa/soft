@@ -22,6 +22,14 @@ export default [
         name: "lead-crm-lead-list",
         meta: {
           route: "crm",
+          pageTitle: "Leads",
+          breadcrumb: [
+            {
+              text: "Leads",
+              to: "/crm/leads",
+              active: true,
+            },
+          ],
         },
       },
       {
@@ -30,6 +38,14 @@ export default [
         name: "lead-crm-lead-sn-list",
         meta: {
           route: "crm",
+          pageTitle: "Leads",
+          breadcrumb: [
+            {
+              text: "Leads Sn",
+              to: "/crm/leads/sn",
+              active: true,
+            },
+          ],
         },
       },
       {
@@ -38,6 +54,15 @@ export default [
         name: "lead-crm-lead-w-potential-list",
         meta: {
           route: "crm",
+          permittedRoles: [1, 2],
+          pageTitle: "Leads",
+          breadcrumb: [
+            {
+              text: "Leads W Potential",
+              to: "/crm/leads/w-potential",
+              active: true,
+            },
+          ],
         },
       },
     ],

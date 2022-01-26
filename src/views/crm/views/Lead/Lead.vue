@@ -1,11 +1,8 @@
 <template>
   <div>
     <lead-list-add-new :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive" />
-    <b-card>
-      <div class="card-header">
-        <div>
-          <b-card-title>Leads</b-card-title>
-        </div>
+    <header-slot>
+      <template #actions>
         <div>
           <b-button
             v-if="!isOnlyLead"
@@ -25,7 +22,9 @@
             <b-dropdown-item @click="exportExcel(1, 3)">Export Selection</b-dropdown-item>
           </b-dropdown>
         </div>
-      </div>
+      </template>
+    </header-slot>
+    <b-card>
       <b-nav pills>
         <b-nav-item
           exact-active-class="active"
