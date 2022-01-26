@@ -28,7 +28,7 @@ class EventService {
   }
   async updateEvent(body) {
     try {
-      const data = await amgApi.post("/updateevent", body);
+      const data = await amgApi.post("/commons/calendar/update-event-calendar", body);
       return data;
     } catch (error) {
       throw error;

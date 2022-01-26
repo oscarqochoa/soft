@@ -238,7 +238,7 @@ class CrmLead {
 
   async postUniquesSsn(body) {
     try {
-      const data = await amgApi.post("/uniquessn", body);
+      const data = await amgApi.post("/clients/unique-ssn", body);
       return data;
     } catch (error) {
       throw error;
