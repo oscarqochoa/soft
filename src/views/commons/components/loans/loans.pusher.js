@@ -2,7 +2,7 @@
 // import router from '@/router/index'
 export const insertLoan = () => {
     pusher.bind("reload-counter-loan", (data) => {
-        alert('se inserto nuevo loan')
+        //alert('se inserto nuevo loan')
         // const callback = () => {
         //     window.focus();
         //     router.push('/messages')

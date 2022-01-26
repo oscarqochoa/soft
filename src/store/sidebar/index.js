@@ -1,24 +1,25 @@
-import navMenuItems from "@/navigation/vertical";
-
+import navMenuItems from '@/navigation/vertical'
 
 export default {
-    namespaced: true,
-    state: {
-        S_SIDEBAR_ITEMS: navMenuItems
-    },
-    getters: {
+  namespaced: true,
+  state: {
+    S_SIDEBAR_ITEMS: navMenuItems,
+  },
+  getters: {
 
-    },
-    mutations: {
-        UPDATE_SIDEBAR_ITEM_PROPERTY(state, payload) {
-            state.S_SIDEBAR_ITEMS.forEach(item => {
-                if (item?.route === payload.routeName) {
-                    item.tag = payload.tag
-                }
-            })
+  },
+  mutations: {
+    UPDATE_SIDEBAR_ITEM_PROPERTY({ state }, payload) {
+      // eslint-disable-next-line array-callback-return
+      state.S_SIDEBAR_ITEMS.map(item => {
+        if (item?.route === payload.routeName) {
+          // eslint-disable-next-line no-param-reassign
+          item.tag = payload.tag
         }
+      })
     },
-    actions: {
+  },
+  actions: {
 
-    },
+  },
 }
