@@ -15,8 +15,8 @@
           <b-form-group>
             <b-input-group prepend="Leads">
               <div class="form-control h-auto bg-transparent border-secondary sms-container">
-                <template v-for="item in nameLeads">
-                  <span :key="item.id">
+                <template v-for="(item, index) in nameLeads">
+                  <span :key="index">
                     <span
                       v-if="modul == 15"
                     >{{ item.nick }} ({{ item.name == item.nick ? '' : item.name }})</span>
@@ -361,6 +361,7 @@ export default {
               this.smsImage.switch == true ? this.smsImage.img : ""
             );
             const response = await this.A_SEND_MESSAGE_LEAD(formData);
+            this.hideModal(false)
             this.removePreloader();
             this.showToast(
               "success",
