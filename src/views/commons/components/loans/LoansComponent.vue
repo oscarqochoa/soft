@@ -1,22 +1,17 @@
 <template>
   <div>
-    <b-card>
-      <b-row>
-        <b-col lg="6">
-          <h2>Loans</h2>
-        </b-col>
-        <b-col lg="6" :class="[positionResponsive]">
-          <b-button
-            v-if="isManagement"
-            variant="info"
-            :block="!bigWindow"
-            class="mr-1"
-            @click="openModalImportLoan"
-          >Import Loan</b-button>
-          <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()">Request Loan</b-button>
-        </b-col>
-      </b-row>
-    </b-card>
+    <header-slot>
+      <template #actions>
+        <b-button
+          v-if="isManagement"
+          variant="info"
+          :block="!bigWindow"
+          class="mr-1"
+          @click="openModalImportLoan"
+        >Import Loan</b-button>
+        <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()">Request Loan</b-button>
+      </template>
+    </header-slot>
 
     <b-card body-class="pb-0">
       <b-nav pills>
