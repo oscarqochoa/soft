@@ -1,22 +1,27 @@
 <template>
-  <b-container>
-    <b-row>
-      <b-col class="pl-0 d-flex align-items-center justify-content-start">
-        <feather-icon
-          v-b-tooltip.hover
-          :title="selectedView ? 'Change to list' : 'Change to explorer'"
-          class="cursor-pointer text-important"
-          size="25"
-          :icon="selectedView ? 'ListIcon' : 'FolderIcon'"
-          @click="selectedView = !selectedView"
-        />
-      </b-col>
-      <b-col cols="10" class="d-flex align-items-center justify-content-end pr-0">
-        <b-button class="mr-1" variant="important" @click="openModalNewFolder">New Folder</b-button>
-        <b-button variant="info" @click="openUploadFileMoadl">Add Files</b-button>
-      </b-col>
-    </b-row>
-    <b-row class="my-1">
+  <div>
+    <header-slot>
+      <template #actions>
+        <b-row>
+          <b-col class="d-flex align-items-center justify-content-start">
+            <feather-icon
+              v-b-tooltip.hover
+              :title="selectedView ? 'Change to list' : 'Change to explorer'"
+              class="cursor-pointer text-important"
+              size="25"
+              :icon="selectedView ? 'ListIcon' : 'FolderIcon'"
+              @click="selectedView = !selectedView"
+            />
+          </b-col>
+          <b-col cols="10" class="d-flex align-items-center justify-content-end">
+            <b-button class="mr-1" variant="important" @click="openModalNewFolder">New Folder</b-button>
+            <b-button variant="info" @click="openUploadFileMoadl">Add Files</b-button>
+          </b-col>
+        </b-row>
+      </template>
+    </header-slot>
+
+    <b-row class="mb-1 pl-1">
       <template v-for="(route, index) in history">
         <div
           :key="index"
@@ -55,7 +60,7 @@
         />
       </b-col>
     </b-row>
-    <b-row v-else>
+    <b-card v-else>
       <b-table :fields="fields" :items="currentFiles" responsive small>
         <template #cell(file_name)="data">
           <span
@@ -125,7 +130,7 @@
           </b-row>
         </template>
       </b-table>
-    </b-row>
+    </b-card>
     <b-sidebar id="sidebar-right" right bg-variant="white" lazy backdrop>
       <b-container>
         <b-row class="mb-1">
@@ -224,7 +229,7 @@
         <b-button v-show="files.length" variant="primary" @click="onUploadFile">Upload</b-button>
       </template>
     </b-modal>
-  </b-container>
+  </div>
 </template>
 
 <script>

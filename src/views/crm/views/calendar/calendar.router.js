@@ -16,11 +16,29 @@ export default [
         path: "appointment",
         component: CalendarAppointment,
         name: "crm-calendar-appointment",
+        meta: {
+          pageTitle: "Calendar",
+          breadcrumb: [
+            {
+              text: "Appointments",
+              active: true,
+            },
+          ],
+        },
       },
       {
         path: "task",
         component: CalendarTask,
         name: "crm-calendar-task",
+        meta: {
+          pageTitle: "Calendar",
+          breadcrumb: [
+            {
+              text: "Tasks",
+              active: true,
+            },
+          ],
+        },
       },
     ],
     meta: {
