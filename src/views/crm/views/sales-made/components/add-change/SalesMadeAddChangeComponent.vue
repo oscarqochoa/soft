@@ -1122,7 +1122,7 @@ export default {
           showCancelButton: true
         });
         if (swal.isConfirmed) {
-          const response = await amgApi.post("/sales-made/annull-sale", {
+          const response = await amgApi.post("/sales-made/annul-sale", {
             id: sale.id,
             id_event: sale.event_id,
             user: this.currentUser.user_id

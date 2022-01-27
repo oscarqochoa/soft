@@ -35,7 +35,13 @@
               >
                 <b-row class="mt-2">
                   <template v-for="(rate, index) in rates">
-                    <b-col v-if="rate.type === '1'" :key="index" lg="4" md="6" xs="12">
+                    <b-col
+                      v-if="rate.type === '1'"
+                      :key="index"
+                      lg="4"
+                      md="6"
+                      xs="12"
+                    >
                       <b-card
                         class="font-weight-bolder hover-card"
                         :class="{'cursor-pointer': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
@@ -44,12 +50,16 @@
                       >
                         <b-row>
                           <b-col>
-                            <p class="text-center">{{ rate.description }}</p>
+                            <p class="text-center">
+                              {{ rate.description }}
+                            </p>
                           </b-col>
                         </b-row>
                         <b-row>
                           <b-col v-if="rate.id !== 63 && rate.id !== 34">
-                            <p class="text-center">$ {{ rate.price }}.00</p>
+                            <p class="text-center">
+                              $ {{ rate.price }}.00
+                            </p>
                           </b-col>
                           <b-col v-if="rate.id === 63">
                             <ValidationProvider
@@ -73,7 +83,9 @@
                             </ValidationProvider>
                           </b-col>
                           <b-col v-if="rate.id === 34">
-                            <p class="text-center">$ {{ otherTotalS }}</p>
+                            <p class="text-center">
+                              $ {{ otherTotalS }}
+                            </p>
                           </b-col>
                         </b-row>
                       </b-card>
@@ -98,12 +110,16 @@
                         >
                           <b-row>
                             <b-col>
-                              <p class="text-center">{{ rate.description }}</p>
+                              <p class="text-center">
+                                {{ rate.description }}
+                              </p>
                             </b-col>
                           </b-row>
                           <b-row>
                             <b-col v-if="rate.id !== 63 && rate.id !== 34">
-                              <p class="text-center">$ {{ rate.price }}.00</p>
+                              <p class="text-center">
+                                $ {{ rate.price }}.00
+                              </p>
                             </b-col>
                           </b-row>
                         </b-card>
@@ -113,7 +129,10 @@
                 </b-row>
                 <!-- Others Single Payments -->
                 <transition name="fade">
-                  <b-row v-if="option === 34" class="mt-1 options">
+                  <b-row
+                    v-if="option === 34"
+                    class="mt-1 options"
+                  >
                     <template v-for="(rate, index) in rates_others">
                       <b-col
                         :key="index"
@@ -131,7 +150,9 @@
                                 @change="sumOfPrices()"
                               />
                             </div>
-                            <div class="text-center">{{ rate.description }}</div>
+                            <div class="text-center">
+                              {{ rate.description }}
+                            </div>
                             <div>${{ rate.price }}.00</div>
                           </b-col>
                         </b-row>
@@ -151,7 +172,13 @@
               >
                 <b-row class="mt-2">
                   <template v-for="(rate, index) in rates">
-                    <b-col v-if="rate.type==2" :key="index" lg="4" md="6" xs="12">
+                    <b-col
+                      v-if="rate.type==2"
+                      :key="index"
+                      lg="4"
+                      md="6"
+                      xs="12"
+                    >
                       <b-card
                         class="font-weight-bolder hover-card"
                         :class="{'cursor-pointer': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
@@ -160,12 +187,16 @@
                       >
                         <b-row>
                           <b-col>
-                            <p class="text-center">{{ rate.description }}</p>
+                            <p class="text-center">
+                              {{ rate.description }}
+                            </p>
                           </b-col>
                         </b-row>
                         <b-row>
                           <b-col v-if="rate.id !== 64 && rate.id !== 35">
-                            <p class="text-center">$ {{ rate.price }}.00</p>
+                            <p class="text-center">
+                              $ {{ rate.price }}.00
+                            </p>
                           </b-col>
                           <b-col v-if="rate.id === 64">
                             <ValidationProvider
@@ -189,7 +220,9 @@
                             </ValidationProvider>
                           </b-col>
                           <b-col v-if="rate.id === 35">
-                            <p class="text-center">$ {{ otherTotalM }}</p>
+                            <p class="text-center">
+                              $ {{ otherTotalM }}
+                            </p>
                           </b-col>
                         </b-row>
                       </b-card>
@@ -214,12 +247,16 @@
                         >
                           <b-row>
                             <b-col>
-                              <p class="text-center">{{ rate.description }}</p>
+                              <p class="text-center">
+                                {{ rate.description }}
+                              </p>
                             </b-col>
                           </b-row>
                           <b-row>
                             <b-col v-if="rate.id !== 63 && rate.id !== 34">
-                              <p class="text-center">$ {{ rate.price }}.00</p>
+                              <p class="text-center">
+                                $ {{ rate.price }}.00
+                              </p>
                             </b-col>
                           </b-row>
                         </b-card>
@@ -231,7 +268,13 @@
                 <transition name="fade">
                   <b-row v-if="option === 35">
                     <template v-for="(rate, index) in rates">
-                      <b-col v-if="rate.type == 3" :key="index" lg="4" md="12" class="py-1 px-1">
+                      <b-col
+                        v-if="rate.type == 3"
+                        :key="index"
+                        lg="4"
+                        md="12"
+                        class="py-1 px-1"
+                      >
                         <b-row>
                           <b-col class="d-flex align-items-center justify-content-between">
                             <div>
@@ -242,7 +285,9 @@
                                 @change="sumOfPrices()"
                               />
                             </div>
-                            <div class="text-center">{{ rate.description }}</div>
+                            <div class="text-center">
+                              {{ rate.description }}
+                            </div>
                             <div>${{ rate.price }}.00</div>
                           </b-col>
                         </b-row>
@@ -265,10 +310,16 @@
                 <b-col>
                   <!-- Fee -->
                   <b-row class="d-flex justify-content-start align-items-center">
-                    <ValidationProvider v-slot="{errors}" rules="required|money-1">
+                    <ValidationProvider
+                      v-slot="{errors}"
+                      rules="required|money-1"
+                    >
                       <b-col class="p-2 rounded">
                         <b-row class="w-100 d-flex align-items-center">
-                          <b-col cols="4" class="text-right font-weight-bold font-medium-2">
+                          <b-col
+                            cols="4"
+                            class="text-right font-weight-bold font-medium-2"
+                          >
                             <div>FEE $</div>
                           </b-col>
                           <b-col cols="8">
@@ -292,15 +343,31 @@
                 </b-col>
               </b-row>
             </b-col>
-            <b-col v-if="!isModalShow" cols="4">
+            <b-col
+              v-if="!isModalShow"
+              cols="4"
+            >
               <b-col>
                 <b-row>
-                  <b-col v-if="!isModalAdd" class="d-flex justify-content-end align-items-center">
-                    <button-save class="mr-1" @click="saveRates()" />
+                  <b-col
+                    v-if="!isModalAdd"
+                    class="d-flex justify-content-end align-items-center"
+                  >
+                    <button-save
+                      class="mr-1"
+                      @click="saveRates()"
+                    />
                     <button-cancel @click="hideModal(false,0)" />
                   </b-col>
-                  <b-col v-else class="d-flex justify-content-center align-items-center">
-                    <b-button class="rounded ml-1" variant="success" @click="saveRates()">
+                  <b-col
+                    v-else
+                    class="d-flex justify-content-center align-items-center"
+                  >
+                    <b-button
+                      class="rounded ml-1"
+                      variant="success"
+                      @click="saveRates()"
+                    >
                       Continue
                       <feather-icon icon="ChevronsRightIcon" />
                     </b-button>
@@ -317,50 +384,50 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import ModalServiceHeader from "@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue";
-import ButtonCancel from "@/views/commons/utilities/ButtonCancel";
-import ButtonSave from "@/views/commons/utilities/ButtonSave";
+import { mapGetters } from 'vuex'
+import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
   components: {
     ButtonSave,
     ButtonCancel,
-    ModalServiceHeader
+    ModalServiceHeader,
   },
   props: {
     modalServices: {
       type: Boolean,
-      default: false
+      default: false,
     },
     salesClient: {
       type: Object,
       default: () => ({
-        event_id: "",
-        account_id: "",
-        id: "",
-        lead_id: ""
-      })
+        event_id: '',
+        account_id: '',
+        id: '',
+        lead_id: '',
+      }),
       // 1: complete rates crm, 2: detail of sale crm, 3: add Services
       // 4: change Services, 5 show add change Services, 6  add  services to lead from programs
     },
     typeModal: {
       type: Number,
-      default: 1
+      default: 1,
       // 1: complete rates, 2: detail of sale
     },
     usersServices: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     programsAll: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     headerS: {
       type: Object,
-      default: () => ({ program: "", seller: "", captured: "" })
-    }
+      default: () => ({ program: '', seller: '', captured: '' }),
+    },
   },
   data() {
     return {
@@ -368,7 +435,7 @@ export default {
       program: 1,
       option: null,
       rates: [],
-      observation: "Services",
+      observation: 'Services',
       othersPayments: [],
       add_json_ce: [],
       rate_selected: [],
@@ -381,130 +448,125 @@ export default {
       rates_others: [],
       fee: 0,
       vMoney: {
-        decimal: ".",
-        thousands: ",",
-        prefix: "$  ",
+        decimal: '.',
+        thousands: ',',
+        prefix: '$  ',
         precision: 2,
-        masked: false
+        masked: false,
       },
       validateMoney: false,
       score_id: null,
-      json_ce: null
-    };
+      json_ce: null,
+    }
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-      skin: "appConfig/skin"
+      currentUser: 'auth/currentUser',
+      skin: 'appConfig/skin',
     }),
     isModalShow() {
-      return this.typeModal === 2 || this.typeModal === 5;
+      return this.typeModal === 2 || this.typeModal === 5
     },
     isModalAdd() {
       return (
         this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
-      );
+      )
     },
 
     otherTotalS() {
       // Bring only Selected Others
-      let totalSelected = [];
-      const that = this;
-      totalSelected = this.rates_others.filter(item =>
-        that.s_payments.includes(item.id)
-      );
-      const number = totalSelected.reduce((sum, rate) => sum + rate.price, 0);
-      if (number) return (Math.round(number * 100) / 100).toFixed(2).toString();
-      return "0.00";
+      let totalSelected = []
+      const that = this
+      totalSelected = this.rates_others.filter(item => that.s_payments.includes(item.id))
+      const number = totalSelected.reduce((sum, rate) => sum + rate.price, 0)
+      if (number) return (Math.round(number * 100) / 100).toFixed(2).toString()
+      return '0.00'
     },
     otherTotalM() {
       // Bring only Selected Others
-      let totalSelected = [];
-      const that = this;
-      totalSelected = this.rates.filter(item =>
-        that.m_payments.includes(item.id)
-      );
-      const number = totalSelected.reduce((sum, rate) => sum + rate.price, 0);
-      if (number) return (Math.round(number * 100) / 100).toFixed(2).toString();
-      return "0.00";
-    }
+      let totalSelected = []
+      const that = this
+      totalSelected = this.rates.filter(item => that.m_payments.includes(item.id))
+      const number = totalSelected.reduce((sum, rate) => sum + rate.price, 0)
+      if (number) return (Math.round(number * 100) / 100).toFixed(2).toString()
+      return '0.00'
+    },
   },
   async mounted() {
-    this.client = this.salesClient;
+    this.client = this.salesClient
     if (this.program) {
-      await this.searchRate();
+      await this.searchRate()
     }
 
     if (this.isModalAdd) {
-      await this.getScore();
+      await this.getScore()
     }
-    this.ownControl = true;
+    this.ownControl = true
   },
   methods: {
     /* PRELOADER */
     addPreloader() {
-      this.$store.commit("app/SET_LOADING", true);
+      this.$store.commit('app/SET_LOADING', true)
     },
     removePreloader() {
-      this.$store.commit("app/SET_LOADING", false);
+      this.$store.commit('app/SET_LOADING', false)
     },
 
     async saveRates() {
-      this.validateMoney = true;
+      this.validateMoney = true
       // Validate Money
-      const success = await this.$refs.form.validate();
+      const success = await this.$refs.form.validate()
       if (success) {
-        let message = "";
-        let route = "";
-        const prices = [];
+        let message = ''
+        let route = ''
+        const prices = []
 
-        prices.push({ item: this.option.toString(), cant: 1 });
+        prices.push({ item: this.option.toString(), cant: 1 })
 
         // For others or business credit
-        this.othersPayments =
-          this.option == 34
-            ? this.s_payments
-            : this.option == 35
+        this.othersPayments = this.option == 34
+          ? this.s_payments
+          : this.option == 35
             ? this.m_payments
-            : [];
+            : []
         switch (this.option) {
           case 34:
-            this.suggested = this.otherTotalS;
-            break;
+            this.suggested = this.otherTotalS
+            break
           case 35:
-            this.suggested = this.otherTotalM;
-            break;
+            this.suggested = this.otherTotalM
+            break
           case 63:
-            this.suggested = this.businessCreditS;
-            break;
+            this.suggested = this.businessCreditS
+            break
           case 64:
-            this.suggested = this.businessCreditM;
-            break;
+            this.suggested = this.businessCreditM
+            break
           default:
-            break;
+            break
         }
         // Depends of the Modal type
         switch (this.typeModal) {
           case 1:
-            message = "complete Rates";
-            route = "/sales-made/attendend-sale";
-            break;
+            message = 'complete Rates'
+            route = '/sales-made/attendend-sale'
+            break
           case 3:
-            message = "add new service";
-            route = "/sales-made/attendend-saleprogram";
-            this.typeADD = 1;
-            break;
+            message = 'add new service'
+            route = '/sales-made/attendend-saleprogram'
+            this.typeADD = 1
+            break
           case 4:
-            message = "change service";
-            route = "/sales-made/attendend-saleprogram";
-            this.typeADD = 2;
-            break;
+            message = 'change service'
+            route = '/sales-made/attendend-saleprogram'
+            this.typeADD = 2
+            break
           case 6:
-            message = "add new service";
-            route = "/sale/insert-lead-attendance";
-            break;
+            message = 'add new service'
+            route = '/sale/insert-lead-attendance'
+            break
           default:
-            break;
+            break
         }
         const param = {
           prices,
@@ -520,18 +582,18 @@ export default {
 
           // D
           id_score: this.score_id,
-          json_ce: this.json_ce
-        };
+          json_ce: this.json_ce,
+        }
 
         const result = await this.showConfirmSwal(
-          `Are you sure you want to ${message}`
-        );
+          `Are you sure you want to ${message}`,
+        )
         if (result.value) {
-          this.addPreloader();
-          const response = await amgApi.post(`${route}`, param);
+          this.addPreloader()
+          const response = await amgApi.post(`${route}`, param)
           if (response.status === 200) {
-            this.removePreloader();
-            this.hideModal(true, this.program);
+            this.removePreloader()
+            this.hideModal(true, this.program)
           }
         }
       }
@@ -540,20 +602,20 @@ export default {
     /* Changes */
 
     changeRate(rate) {
-      this.fee = rate.price;
-      this.suggested = rate.price;
-      this.businessCreditS = 0;
-      this.businessCreditM = 0;
-      this.s_payments = [];
-      this.m_payments = [];
-      this.option = rate.id;
+      this.fee = rate.price
+      this.suggested = rate.price
+      this.businessCreditS = 0
+      this.businessCreditM = 0
+      this.s_payments = []
+      this.m_payments = []
+      this.option = rate.id
     },
     addPrice(price) {
-      this.fee = price;
+      this.fee = price
     },
     sumOfPrices() {
-      if (this.option === 34) this.fee = this.otherTotalS;
-      else this.fee = this.otherTotalM;
+      if (this.option === 34) this.fee = this.otherTotalS
+      else this.fee = this.otherTotalM
     },
 
     /* Rates */
@@ -562,30 +624,30 @@ export default {
       try {
         const response = await amgApi.post('/rates/get-rates-by-programs', { id: this.program })
         if (response.status === 200) {
-          const rates = response.data;
+          const rates = response.data
           // Order by order
-          rates.sort((a, b) => a.order - b.order);
-          this.rates = rates;
+          rates.sort((a, b) => a.order - b.order)
+          this.rates = rates
 
           // Not reactivity
-          let rateSelected = [];
-          rateSelected = JSON.parse(JSON.stringify(this.rates));
+          let rateSelected = []
+          rateSelected = JSON.parse(JSON.stringify(this.rates))
           rateSelected.forEach(rate => {
             if (rate.type == 3) {
               // Others for single Payment
-              rate.price -= (rate.price * 10) / 100;
-              this.rates_others.push(rate);
+              rate.price -= (rate.price * 10) / 100
+              this.rates_others.push(rate)
             }
-          });
+          })
           if (!this.isModalShow) {
-            this.removePreloader();
+            this.removePreloader()
           }
           if (this.isModalShow) {
-            await this.showRates();
+            await this.showRates()
           }
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
 
@@ -593,53 +655,53 @@ export default {
       try {
         const response = await amgApi.post('/sales-made/get-details-sales-made', { id: this.salesClient.id })
         if (response.status === 200) {
-          this.fee = response.data[0].fee;
+          this.fee = response.data[0].fee
           this.rate_selected = response.data[0].rate_selected
-            ? JSON.parse(response.data[0].rate_selected)
-            : "";
-          this.option = this.rate_selected ? this.rate_selected[0].rate_id : 0;
+            ? response.data[0].rate_selected
+            : ''
+          this.option = this.rate_selected ? this.rate_selected[0].rate_id : 0
           switch (this.option) {
             case 34:
-              this.s_payments = JSON.parse(response.data[0].others_prices);
-              break;
+              this.s_payments = JSON.parse(response.data[0].others_prices)
+              break
             case 35:
-              this.m_payments = JSON.parse(response.data[0].others_prices);
-              break;
+              this.m_payments = JSON.parse(response.data[0].others_prices)
+              break
             case 63:
-              this.businessCreditS = response.data[0].suggeste;
-              break;
+              this.businessCreditS = response.data[0].suggeste
+              break
             case 64:
-              this.businessCreditM = response.data[0].suggeste;
-              break;
+              this.businessCreditM = response.data[0].suggeste
+              break
             default:
-              break;
+              break
           }
-          this.removePreloader();
+          this.removePreloader()
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
     changeProgram(headerS) {
-      this.$emit("changeProgram", headerS);
+      this.$emit('changeProgram', headerS)
     },
     hideModal(refresh, programSelect) {
-      this.$emit("closeModal", refresh, programSelect);
+      this.$emit('closeModal', refresh, programSelect)
     },
     async getScore() {
       try {
-        const response = await amgApi.post("/attend/get-score-attend", {
-          lead_id: this.salesClient.lead_id
-        });
+        const response = await amgApi.post('/attend/get-score-attend', {
+          lead_id: this.salesClient.lead_id,
+        })
         if (response.status === 200) {
-          this.score_id = response.data.score_id;
+          this.score_id = response.data.score_id
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style scoped>

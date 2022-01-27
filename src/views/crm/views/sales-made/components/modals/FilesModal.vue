@@ -361,7 +361,7 @@ export default {
         reader.readAsDataURL(this.file);
         reader.onload = async file => {
           body.image = file.target.result;
-          const response = await amgApi.post("savefiledocu", body);
+          const response = await amgApi.post("/sales-made/save-document-file", body);
           if (response.status === 200) {
             this.showSuccessSwal();
             this.doe = "";

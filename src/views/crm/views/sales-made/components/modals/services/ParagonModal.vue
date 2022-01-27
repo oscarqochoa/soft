@@ -27,7 +27,10 @@
         <b-container fluid>
           <b-row>
             <template v-for="(name, index) in packsName">
-              <b-col :key="index" lg="4">
+              <b-col
+                :key="index"
+                lg="4"
+              >
                 <b-card
                   :header="name"
                   header-class="border-bottom"
@@ -40,7 +43,7 @@
                       v-for="(row, index) in rates.filter(rate => rate.type === (index + 1).toString())"
                     >
                       <div
-                        :key=index
+                        :key="index"
                         class="d-flex w-100 px-1 py-1 cursor-pointer"
                         :class="{'bg-info text-white font-weight-bolder': option === row.id}"
                         @click="!isModalShow && addFee(row)"
@@ -65,10 +68,16 @@
                 <b-col>
                   <!-- Fee -->
                   <b-row class="d-flex justify-content-start align-items-center">
-                    <ValidationProvider v-slot="{errors}" rules="required|money-1">
+                    <ValidationProvider
+                      v-slot="{errors}"
+                      rules="required|money-1"
+                    >
                       <b-col class="p-2 rounded">
                         <b-row class="w-100 d-flex align-items-center">
-                          <b-col cols="4" class="text-right font-weight-bold font-medium-2">
+                          <b-col
+                            cols="4"
+                            class="text-right font-weight-bold font-medium-2"
+                          >
                             <div>FEE $</div>
                           </b-col>
                           <b-col cols="8">
@@ -92,15 +101,33 @@
                 </b-col>
               </b-row>
             </b-col>
-            <b-col v-if="!isModalShow" cols="4">
+            <b-col
+              v-if="!isModalShow"
+              cols="4"
+            >
               <b-col>
                 <b-row>
-                  <b-col v-if="!isModalAdd" class="d-flex justify-content-end align-items-center">
-                    <button-cancel class="mr-1" @click="hideModal(false,0)" />
+                  <b-col
+                    v-if="!isModalAdd"
+                    class="d-flex justify-content-end align-items-center"
+                  >
+                    <button-cancel
+                      class="mr-1"
+                      @click="hideModal(false,0)"
+                    />
                     <button-save @click="saveRates()" />
                   </b-col>
-                  <b-col v-else class="d-flex justify-content-center align-items-center">
-                    <b-button class="rounded" variant="success" @click="saveRates()">Continue</b-button>
+                  <b-col
+                    v-else
+                    class="d-flex justify-content-center align-items-center"
+                  >
+                    <b-button
+                      class="rounded"
+                      variant="success"
+                      @click="saveRates()"
+                    >
+                      Continue
+                    </b-button>
                   </b-col>
                 </b-row>
               </b-col>
@@ -114,44 +141,44 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import ModalServiceHeader from "@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue";
-import ButtonCancel from "@/views/commons/utilities/ButtonCancel";
-import ButtonSave from "@/views/commons/utilities/ButtonSave";
+import { mapGetters } from 'vuex'
+import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
+import ButtonCancel from '@/views/commons/utilities/ButtonCancel'
+import ButtonSave from '@/views/commons/utilities/ButtonSave'
 
 export default {
   components: { ButtonSave, ButtonCancel, ModalServiceHeader },
   props: {
     modalServices: {
       type: Boolean,
-      default: false
+      default: false,
     },
     salesClient: {
       type: Object,
       default: () => ({
-        event_id: "",
-        account_id: "",
-        id: "",
-        lead_id: ""
-      })
+        event_id: '',
+        account_id: '',
+        id: '',
+        lead_id: '',
+      }),
     },
     typeModal: {
       type: Number,
-      default: 1
+      default: 1,
       // 1: complete rates, 2: detail of sale
     },
     usersServices: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     programsAll: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     headerS: {
       type: Object,
-      default: () => ({ program: "", seller: "", captured: "" })
-    }
+      default: () => ({ program: '', seller: '', captured: '' }),
+    },
   },
   data() {
     return {
@@ -160,7 +187,7 @@ export default {
       program: 9,
       option: null,
       rates: [],
-      observation: "Services",
+      observation: 'Services',
       otherspayments: [],
       add_json_ce: [],
       rate_selected: [],
@@ -168,92 +195,92 @@ export default {
       rates_others: [],
       fee: 0,
       packsName: [
-        "WEBSITE",
-        "WEBSITE + LOGO",
-        "SOCIAL NETWORK",
-        "SOCIAL NETWORK + LOGO",
-        "PACKS"
+        'WEBSITE',
+        'WEBSITE + LOGO',
+        'SOCIAL NETWORK',
+        'SOCIAL NETWORK + LOGO',
+        'PACKS',
       ],
       vMoney: {
-        decimal: ".",
-        thousands: ",",
-        prefix: "",
+        decimal: '.',
+        thousands: ',',
+        prefix: '',
         precision: 2,
-        masked: false
+        masked: false,
       },
       validateMoney: false,
       score_id: null,
-      json_ce: null
-    };
+      json_ce: null,
+    }
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-      skin: "appConfig/skin"
+      currentUser: 'auth/currentUser',
+      skin: 'appConfig/skin',
     }),
     isModalShow() {
-      return this.typeModal === 2 || this.typeModal === 5;
+      return this.typeModal === 2 || this.typeModal === 5
     },
     isModalAdd() {
       return (
         this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
-      );
-    }
+      )
+    },
   },
   async mounted() {
-    this.client = this.salesClient;
+    this.client = this.salesClient
     if (this.program) {
-      await this.searchRate();
+      await this.searchRate()
     }
     if (this.isModalAdd) {
-      await this.getScore();
+      await this.getScore()
     }
-    this.ownControl = true;
+    this.ownControl = true
   },
   methods: {
     /* PRELOADER */
     addPreloader() {
-      this.$store.commit("app/SET_LOADING", true);
+      this.$store.commit('app/SET_LOADING', true)
     },
     removePreloader() {
-      this.$store.commit("app/SET_LOADING", false);
+      this.$store.commit('app/SET_LOADING', false)
     },
     addFee(item) {
-      this.option = item.id;
-      this.fee = item.price;
+      this.option = item.id
+      this.fee = item.price
     },
     async saveRates() {
-      this.validateMoney = true;
+      this.validateMoney = true
       // Validate Money
-      const success = await this.$refs.form.validate();
+      const success = await this.$refs.form.validate()
       if (success) {
-        let message = "";
-        let route = "";
-        let typeADD = "";
-        const prices = [];
-        prices.push({ item: this.option.toString(), cant: 1 });
+        let message = ''
+        let route = ''
+        let typeADD = ''
+        const prices = []
+        prices.push({ item: this.option.toString(), cant: 1 })
         // Depends of the Modal type
         switch (this.typeModal) {
           case 1:
-            message = "complete Rates";
-            route = "/sales-made/attendend-sale";
-            break;
+            message = 'complete Rates'
+            route = '/sales-made/attendend-sale'
+            break
           case 3:
-            message = "add new service";
-            route = "/sales-made/attendend-saleprogram";
-            typeADD = 1;
-            break;
+            message = 'add new service'
+            route = '/sales-made/attendend-saleprogram'
+            typeADD = 1
+            break
           case 4:
-            message = "change service";
-            route = "/sales-made/attendend-saleprogram";
-            typeADD = 2;
-            break;
+            message = 'change service'
+            route = '/sales-made/attendend-saleprogram'
+            typeADD = 2
+            break
           case 6:
-            message = "add new service";
-            route = "/sale/insert-lead-attendance";
-            break;
+            message = 'add new service'
+            route = '/sale/insert-lead-attendance'
+            break
           default:
-            break;
+            break
         }
 
         const param = {
@@ -271,24 +298,24 @@ export default {
           // Diferents to add change Services
           account: this.salesClient.account_id
             ? this.salesClient.account_id
-            : "",
+            : '',
           captured: this.headerS.captured,
           seller: this.headerS.seller,
           type: typeADD,
           user_id: this.currentUser.user_id,
           module: this.currentUser.modul_id,
           id_score: this.score_id,
-          json_ce: this.json_ce
-        };
+          json_ce: this.json_ce,
+        }
 
         const result = await this.showConfirmSwal(
-          `Are you sure you want to ${message}`
-        );
+          `Are you sure you want to ${message}`,
+        )
         if (result.value) {
-          this.addPreloader();
-          const response = await amgApi.post(`${route}`, param);
+          this.addPreloader()
+          const response = await amgApi.post(`${route}`, param)
           if (response.status === 200) {
-            this.hideModal(true, this.program);
+            this.hideModal(true, this.program)
           }
         }
       }
@@ -300,16 +327,16 @@ export default {
       try {
         const response = await amgApi.post('/rates/get-rates-by-programs', { id: this.program })
         if (response.status === 200) {
-          this.rates = response.data;
+          this.rates = response.data
           if (!this.isModalShow) {
-            this.removePreloader();
+            this.removePreloader()
           }
           if (this.isModalShow) {
-            await this.showRates();
+            await this.showRates()
           }
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
 
@@ -317,36 +344,36 @@ export default {
       try {
         const response = await amgApi.post('/sales-made/get-details-sales-made', { id: this.salesClient.id })
         if (response.status === 200) {
-          this.fee = response.data[0].fee;
-          this.rate_selected = JSON.parse(response.data[0].rate_selected);
-          this.option = this.rate_selected[0].rate_id;
-          this.removePreloader();
+          this.fee = response.data[0].fee
+          this.rate_selected = response.data[0].rate_selected
+          this.option = this.rate_selected[0].rate_id
+          this.removePreloader()
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
 
     hideModal(refresh, programSelect) {
-      this.$emit("closeModal", refresh, programSelect);
+      this.$emit('closeModal', refresh, programSelect)
     },
     changeProgram(headerS) {
-      this.$emit("changeProgram", headerS);
+      this.$emit('changeProgram', headerS)
     },
     async getScore() {
       try {
-        const response = await amgApi.post("/attend/get-score-attend", {
-          lead_id: this.salesClient.lead_id
-        });
+        const response = await amgApi.post('/attend/get-score-attend', {
+          lead_id: this.salesClient.lead_id,
+        })
         if (response.status === 200) {
-          this.score_id = response.data.score_id;
+          this.score_id = response.data.score_id
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style scoped>
