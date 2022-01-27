@@ -34,10 +34,12 @@
         <b-card
           no-body
           class="m-2"
+          
           style="
             box-shadow: 0px 4px 4 px 0 rgb(200 200 200 /10%);
-            background-color: floralwhite;
+            
           "
+          :style="`${classAdd}`"
         >
           <div class="m-2">
             <h3 style="color: #ff9f43 !important; display: inline-block">
@@ -398,6 +400,12 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      skin: "appConfig/skin"
+    }),
+    classAdd() { 
+      return this.skin == "dark" ? "background-color:#333B51" : "background-color: floralwhite;";
+    },
     getRoles() {
       return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
         ? true
