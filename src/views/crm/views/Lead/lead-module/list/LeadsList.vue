@@ -115,11 +115,15 @@
           <template #cell(programs)="data">
             <div v-if="data.item.programs" class="d-flex flex-column" style="gap: .5rem">
               <template v-for="(program, key) in JSON.parse(data.item.programs)">
-                <div
+                <b-img
+                  v-if="program.logo"
                   :key="key"
-                  style="width: 50px;height: 50px;background-position: center;background-repeat: no-repeat;background-size: contain;"
-                  :style="{ backgroundImage: `url(${baseUrl + program.logo})` }"
+                  thumbnail
+                  fluid
+                  :src="baseUrl + program.logo"
+                  style="width: 50px"
                 />
+                <span :key="key" v-else>{{ program.value }}</span>
               </template>
             </div>
           </template>
@@ -261,6 +265,7 @@ export default {
     }
   },
   created() {
+    this.addPaddingTd();
     this.myProvider();
     this.setOptionsOnFilters();
   },
@@ -273,6 +278,11 @@ export default {
       A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS",
       A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST"
     }),
+    addPaddingTd() {
+      this.fields.map(field => {
+        field.tdClass = "py-1";
+      });
+    },
     resolveUserStatusVariant(status) {
       if (status === "Pending") return "warning";
       if (status === "Active") return "success";
