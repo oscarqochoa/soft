@@ -1,4 +1,5 @@
-import loansService from "@/views/commons/components/loans/services/loans.service";
+import loansService from '@/views/commons/components/loans/services/loans.service'
+
 export default {
   namespaced: true,
   state: {
@@ -11,17 +12,17 @@ export default {
     },
   },
   getters: {
-    researchLoans: (state) => state.researchLoans,
-    modalRequest: (state) => state.modalRequest,
-    counterTab: (state) => state.counterTab,
+    researchLoans: state => state.researchLoans,
+    modalRequest: state => state.modalRequest,
+    counterTab: state => state.counterTab,
   },
   mutations: {
     ADD_ONE_RESEARCH(state) {
-      //plus one
-      ++state.researchLoans;
+      // plus one
+      state.researchLoans += 1
     },
     SET_COUNTER_TAB(state, payload) {
-      state.counterTab = payload;
+      state.counterTab = payload
     },
   },
   actions: {
@@ -29,10 +30,11 @@ export default {
       const params = {
         id_user: rootState.auth.currentUser.user_id,
         id_module: rootState.auth.currentUser.modul_id,
-      };
-      const response = await loansService.getCounterLoanTab(params);
+      }
+      const response = await loansService.getCounterLoanTab(params)
+      commit('SET_COUNTER_TAB', response[0])
 
-      commit("SET_COUNTER_TAB", response[0]);
+      return response
     },
   },
-};
+}

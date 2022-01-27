@@ -16,7 +16,7 @@ class CreditReport {
   async getCreditReportPendings(body) {
     try {
       const data = await amgApi.post(
-        "/lead/credit-report/search-credit-reports-pending",
+        "/credit-report/search-credit-reports-pending",
         body
       );
       return data;

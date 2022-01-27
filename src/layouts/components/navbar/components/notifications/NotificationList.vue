@@ -5,8 +5,6 @@
         <b-list-group-item
           v-for="notification in S_ALL_USER_NOTIFICATIONS"
           :key="notification.id"
-          :disabled="notification.status == 1"
-          class="cursor-pointer"
           @click="
             notification.status == 1 ? null : updateNotification(notification)
           "
@@ -15,6 +13,10 @@
             <b-media no-body>
               <b-media-aside class="mr-2">
                 <b-avatar
+                  :class="
+                    notification.status == 1
+                      ? ''
+                      : 'cursor-pointer'"
                   size="30"
                   :variant="
                     notification.status == 1 ? 'light-primary' : 'primary'
@@ -36,22 +38,17 @@
                   />
                 </b-avatar>
               </b-media-aside>
-              <b-media-body
-                class="my-auto"
-                @click.stop="$log(notification, 'notification')"
-              >
+              <b-media-body class="my-auto" @click="closeNotifications()">
                 <b-link
                   :class="[
                     'font-weight-bold mb-0 h5',
                     notification.status == 0 ? (skin=='dark'?'text-light':'text-dark') : '',
                   ]"
                   class="d-flex"
+                  :to="notification.link"
                 >
                   <p v-html="notification.notification"></p>
-                  <amg-icon
-                    style="margin-left: 4px;margin-top: 3px;"
-                    icon="ExternalLinkIcon"
-                  ></amg-icon>
+                  <amg-icon style="margin-left: 4px;margin-top: 3px;" icon="ExternalLinkIcon"></amg-icon>
                 </b-link>
               </b-media-body>
             </b-media>
@@ -69,7 +66,7 @@
               <b-media-aside class="mr-2" width="100%">
                 <b-skeleton type="avatar" size="30px"></b-skeleton>
               </b-media-aside>
-              <b-media-body class="my-auto" >
+              <b-media-body class="my-auto">
                 <b-skeleton style="margin-top: 9px;"></b-skeleton>
               </b-media-body>
             </b-media>
@@ -83,25 +80,17 @@
         <b-col
           cols="12"
           sm="6"
-          class="
-            d-flex
-            align-items-center
-            justify-content-center justify-content-sm-start
-          "
+          class="d-flex align-items-center justify-content-center justify-content-sm-start"
         >
-          <span class="text-muted">
-            Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries
-          </span>
+          <span
+            class="text-muted"
+          >Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries</span>
         </b-col>
         <!-- Pagination -->
         <b-col
           cols="12"
           sm="6"
-          class="
-            d-flex
-            align-items-center
-            justify-content-center justify-content-sm-end
-          "
+          class="d-flex align-items-center justify-content-center justify-content-sm-end"
         >
           <b-pagination
             v-model="currentPage"
@@ -139,7 +128,7 @@ export default {
       totalData: 0,
       startPage: 0,
       toPage: 0,
-      loading: false,
+      loading: false
     };
   },
   computed: {
@@ -148,41 +137,42 @@ export default {
       skin: "appConfig/skin"
     }),
     ...mapState({
-      S_ALL_USER_NOTIFICATIONS: (state) =>
-        state.NotificationStore.S_ALL_USER_NOTIFICATIONS,
-    }),
+      S_ALL_USER_NOTIFICATIONS: state =>
+        state.NotificationStore.S_ALL_USER_NOTIFICATIONS
+    })
   },
   methods: {
     ...mapActions({
       A_GET_ALL_USER_NOTIFICATIONS:
         "NotificationStore/A_GET_ALL_USER_NOTIFICATIONS",
-      A_UPDATE_NOTIFICATION: "NotificationStore/A_UPDATE_NOTIFICATION",
+      A_UPDATE_NOTIFICATION: "NotificationStore/A_UPDATE_NOTIFICATION"
     }),
     ...mapMutations({
-      DECREASE_NOTIFICATION_COUNTER: "NotificationStore/DECREASE_NOTIFICATION_COUNTER",
+      DECREASE_NOTIFICATION_COUNTER:
+        "NotificationStore/DECREASE_NOTIFICATION_COUNTER"
     }),
     async getAllUserNotifications(page = 1) {
       this.loading = true;
       try {
         const data = await this.A_GET_ALL_USER_NOTIFICATIONS({
           id: this.currentUser.user_id,
-          page,
+          page
         });
         this.currentPage = data.current_page;
         this.perPage = data.per_page;
         this.totalData = data.total;
         this.startPage = data.from;
         this.toPage = data.to;
-        this.loading = false
+        this.loading = false;
       } catch (error) {
         console.log(error);
-        this.loading = false
+        this.loading = false;
       }
     },
     async updateNotification(notification) {
       try {
         await this.A_UPDATE_NOTIFICATION({
-          id: notification.id,
+          id: notification.id
         });
         notification.status = 1;
         this.DECREASE_NOTIFICATION_COUNTER();
@@ -190,12 +180,15 @@ export default {
         console.log(error);
       }
     },
+    closeNotifications() {
+      this.$emit("closeNotifications");
+    }
   },
   watch: {
     currentPage(newVal, oldVal) {
       this.getAllUserNotifications(newVal);
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -100,10 +100,10 @@
                       class="form-control"
                       :class="{'border border-danger':(errors[0] && vmoneyValidate) || isOverPay || isPendingApprove}"
                     ></money>
-                    <div v-if="isOverPay" class="red-text-2">The amount is over the balance</div>
+                    <div v-if="isOverPay" class="text-danger">The amount is over the balance</div>
                     <div
                       v-if="isPendingApprove"
-                      class="red-text-2"
+                      class="text-danger"
                       style="color:#d0a62a !important"
                     >You have an amount pending for approval.</div>
                   </b-form-group>

@@ -344,48 +344,15 @@
         :lead-name="modalData.historySms.leadName"
       />
     </b-modal>
-    <b-modal
-      id="modal-send-sms"
-      ok-only
-      modal-class="modal-primary"
-      centered
-      size="lg"
-      title="SEND SMS"
-      no-close-on-backdrop
-    >
-      <modal-send-sms
-        :smss="modalData.sendSms.leads_sms"
-        :modul="currentUser.modul_id"
-        :typesms="modalData.sendSms.typesms"
-        :sms="modalData.sendSms.leads_sms_o"
-        :name-leads="modalData.sendSms.name_leads_arr"
-      />
-
-      <template #modal-footer>
-        <b-form-group label="VARS" class="w-100">
-          <b-row>
-            <b-col sm="3">
-              <b-input-group size="sm">
-                <b-input-group-prepend is-text>@1</b-input-group-prepend>
-                <b-form-input placeholder="FIRST NAME" readonly />
-              </b-input-group>
-            </b-col>
-            <b-col sm="3">
-              <b-input-group size="sm">
-                <b-input-group-prepend is-text>@2</b-input-group-prepend>
-                <b-form-input placeholder="LAST NAME" readonly />
-              </b-input-group>
-            </b-col>
-            <b-col v-if="currentUser.modul_id == 15" sm="3">
-              <b-input-group size="sm">
-                <b-input-group-prepend is-text>@3</b-input-group-prepend>
-                <b-form-input placeholder="LAST NAME" readonly />
-              </b-input-group>
-            </b-col>
-          </b-row>
-        </b-form-group>
-      </template>
-    </b-modal>
+    <modal-send-sms
+      v-if="modal.modalSms"
+      :smss="modalData.sendSms.leads_sms"
+      :modul="currentUser.modul_id"
+      :typesms="modalData.sendSms.typesms"
+      :sms="modalData.sendSms.leads_sms_o"
+      :name-leads="modalData.sendSms.name_leads_arr"
+      @hide="modalSmsClose"
+    />
     <tracking-modal :modal="modal" :tracking="modalData.tracking" />
     <component
       :is="modalData.programs.programSelected"
@@ -534,7 +501,8 @@ export default {
         revission: false,
         url: false,
         contract_fee: false,
-        notes: false
+        notes: false,
+        modalSms: false,
       },
       modalData: {
         historySms: {
@@ -706,7 +674,7 @@ export default {
       this.modalData.sendSms.name_leads_arr = [
         { name: item.client, id: item.lead_id }
       ];
-      this.$bvModal.show("modal-send-sms");
+      this.modal.modalSms = true
     },
     modalSmssOpen() {
       this.modalData.sendSms.typesms = 0;
@@ -716,7 +684,10 @@ export default {
       }));
       this.modalData.sendSms.leads_sms = this.selected.map(el => el.lead_id);
       console.log(this.modalData.sendSms.name_leads_arr);
-      this.$bvModal.show("modal-send-sms");
+      this.modal.modalSms = true
+    },
+    modalSmsClose() {
+      this.modal.modalSms = false
     },
     modalHistorySmsOpen(item) {
       this.modalData.historySms.leadName = item.client;

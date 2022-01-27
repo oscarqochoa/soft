@@ -39,7 +39,10 @@
             </div>
           </template>
           <template #cell(lead_name)="data">
-            <a class="text-important" @click="openEditLeads(data.item.lead_id)">{{data.value}}</a>
+            <a
+              class="text-important"
+              @click="openEditLeads(data.item.lead_id, data.index)"
+            >{{data.value}}</a>
           </template>
           <template #cell(accounts2)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
@@ -139,6 +142,7 @@
       :typeEdit="typeEdit"
       :lead="S_LEAD_EDIT"
       :is-add-new-user-sidebar-active.sync="isAddUpdateUserSidebarActive"
+      @update-lead="updateLead"
     />
   </div>
 </template>
@@ -361,7 +365,9 @@ export default {
         }
       ],
       filterController: false,
-      programs: []
+      programs: [],
+      items: [],
+      editSelectedIndex: null
     };
   },
   mounted() {
@@ -378,7 +384,9 @@ export default {
       return this.$route.meta.module;
     },
     clientRoute() {
-      return this.$route.meta.isClientsTab ? "/clients/search-clients" : "/clients/search-share-clients";
+      return this.$route.meta.isClientsTab
+        ? "/clients/search-clients"
+        : "/clients/search-share-clients";
     },
     visibleFields() {
       return this.arrayColumns.filter(column => column.visible);
@@ -432,7 +440,8 @@ export default {
     ...mapMutations({
       M_STATUS_LEADS_CLIENT: "CrmLeadStore/M_STATUS_LEADS_CLIENT"
     }),
-    async openEditLeads(leadId) {
+    async openEditLeads(leadId, index) {
+      this.editSelectedIndex = index;
       this.addPreloader();
       try {
         //All promises
@@ -485,7 +494,7 @@ export default {
         modul: this.modul
       };
       const data = await ClientService.getCrmUsers(params);
-      const items = data.data;
+      this.items = data.data;
       this.startPage = data.from;
       this.paginate.currentPage = data.current_page;
       this.paginate.perPage = data.per_page;
@@ -493,8 +502,14 @@ export default {
       this.endPage = data.last_page;
       this.totalRows = data.total;
       this.toPage = data.to;
-      // Must return an array of items or an empty array if an error occurred
-      return items || [];
+      // Must return an arthis.items or an empty array if an error occurred
+      return this.items || [];
+    },
+    updateLead(lead) {
+      this.items[
+        this.editSelectedIndex
+      ].lead_name = `${lead.first_name} ${lead.middle_name} ${lead.last_name}`;
+      this.items[this.editSelectedIndex].mobile = lead.mobile;
     },
     async getAllPrograms() {
       const data = await ClientService.getAllPrograms();

@@ -1139,7 +1139,7 @@ export default {
     },
     async statesleads() {
       try {
-        const response = await amgApi.get("/leads/get-state-leads");
+        const response = await amgApi.get("/lead/get-state-leads");
         this.states_leads = response.data;
       } catch (error) {
         console.error(error);

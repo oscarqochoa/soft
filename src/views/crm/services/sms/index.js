@@ -43,7 +43,7 @@ class CrmSms {
 
   async postSendMessageLead(body) {
     try {
-      const data = await amgApi.post("/messages/send-message-lead", body);
+      const data = await amgApi.post("/messages/send-mass-message", body);
       return data;
     } catch (error) {
       console.log("Something went wrong on postSendMessageLead:", error);

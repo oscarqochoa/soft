@@ -176,6 +176,7 @@
 /* eslint-disable global-require */
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import VuexyLogo from "@core/layouts/components/Logo.vue";
+import subscribePusher from '@/pusher'
 import {
   BRow,
   BCol,
@@ -228,7 +229,7 @@ export default {
   data() {
     return {
       status: "",
-      password: "Soft@@2021",
+      password: "Soft@@2022",
       userEmail: "rogerdtfs@gmail.com",
       sideImg: require("@/assets/images/pages/login-v2.svg"),
 
@@ -280,6 +281,7 @@ export default {
               this.$router
                 .replace(getHomeRouteForLoggedInUser(userData.roleName))
                 .then(() => {
+                  subscribePusher()
                   this.$toast({
                     component: ToastificationContent,
                     position: "top-right",

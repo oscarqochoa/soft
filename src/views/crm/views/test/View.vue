@@ -1,52 +1,73 @@
 <template>
   <div>
+    <b-button
+      @click="clickHola"
+    >
+      holaa
+    </b-button>
     <pre>{{ currentUser }}</pre>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import CrmService from "../../services/crm.service";
+import { mapGetters, mapMutations, mapState } from 'vuex'
+import CrmService from '../../services/crm.service'
 
 export default {
-  name: "Test",
+  name: 'Test',
   data() {
     return {
-      message: "Hello World 2!"
-    };
+      message: 'Hello World 2!',
+    }
   },
   mounted() {
-    amgApi.get("/welcome/welcome").then(response => {
-      console.log(response);
-    });
+    amgApi.get('/welcome/welcome').then(response => {
+      console.log(response)
+    })
   },
   async created() {
     try {
-      await CrmService.getAlgo();
+      await CrmService.getAlgo()
     } catch (error) {
-      console.log("Somthing went wrong created:", error);
+      console.log('Somthing went wrong created:', error)
       this.showToast(
-        "danger",
-        "top-right",
-        "Oop!",
-        "AlertOctagonIcon",
-        this.getInternalErrors(error)
-      );
+        'danger',
+        'top-right',
+        'Oop!',
+        'AlertOctagonIcon',
+        this.getInternalErrors(error),
+      )
     }
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-      token: "auth/token",
-      userRole: "auth/userRole"
-    })
+      currentUser: 'auth/currentUser',
+      token: 'auth/token',
+      userRole: 'auth/userRole',
+    }),
+    ...mapState({
+      navMenuItems: state => state.SidebarStore.S_SIDEBAR_ITEMS,
+    }),
   },
   methods: {
+    ...mapMutations({
+      updateNcrTag: 'SidebarStore/UPDATE_SIDEBAR_ITEM_PROPERTY',
+    }),
     click() {
-      alert("aaa");
-    }
-  }
-};
+      alert('aaa')
+    },
+    clickHola() {
+      console.log(this.navMenuItems, 'this.navMenuItems')
+      const [ncr] = this.navMenuItems.filter(val => val.title === 'Sales Made')
+      console.log(ncr, 'this.navMenuItems.filter')
+      if (ncr.tag) {
+        ncr.tag = Number(ncr.tag)
+        ncr.tag += 1
+      } else ncr.tag = 1
+      this.updateNcrTag(ncr)
+    },
+  },
+}
 </script>
 
 <style>

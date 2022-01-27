@@ -293,7 +293,7 @@ export default {
         this.user = this.currentUser.user_id
     },
   mounted() {
-    amgApi.get("/stateseeuu").then((response) => {
+    amgApi.get("/commons/get-eeuu-states").then((response) => {
       this.states = response.data;
     });
   },
@@ -348,7 +348,7 @@ export default {
           .then((result) => {
             if (result.isConfirmed) {
                 this.$store.commit("app/SET_LOADING", true);
-              amgApi.post("/createcard", this.form).then((response) => {
+              amgApi.post("/cards/create-cards", this.form).then((response) => {
                 this.cards = response.data;
                 this.$emit("closeModalCard", false);
                  this.$emit('onReloadCards', response.data)

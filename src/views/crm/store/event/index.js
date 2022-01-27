@@ -28,6 +28,7 @@ const mutations = {
     state[params.destination].push(params.data)
   },
   UNSHIFT_DATA (state, params) {
+    console.log(state, 'state[params.destination]')
     state[params.destination].unshift(params.data)
   },
   REMOVE_DATA (state, params) {
@@ -51,6 +52,7 @@ const actions = {
       const response = await eventService.getEvents(params)
       /* console.log('A_GET_EVENTS response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
+        console.log('A_GET_EVENTS response', response)
         commit('SET_DATA', {
           destination: 'S_EVENTS',
           data: response.data.data
@@ -78,12 +80,9 @@ const actions = {
   async A_SET_EVENT ({ commit }, body) {
     try {
       const response = await eventService.postEvent(body)
-      /* console.log('A_SET_EVENT response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
-        response.data.user = {
-          first_name: body.seller,
-          lastname: ''
-        }
+        response.data.name_user = body.seller;
+        console.log(response.data, 'response.data')
         commit('UNSHIFT_DATA', {
           destination: 'S_EVENTS',
           data: response.data

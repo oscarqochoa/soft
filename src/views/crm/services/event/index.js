@@ -4,7 +4,7 @@ class EventService {
   async getEvents(params) {
     try {
       if (params.idLead) {
-        const data = await amgApi.get(
+        const data = await amgApi.post(
           `/crm/event/crm-events/${params.idLead}/event`,
           { params }
         );
@@ -28,7 +28,7 @@ class EventService {
   }
   async updateEvent(body) {
     try {
-      const data = await amgApi.post("/updateevent", body);
+      const data = await amgApi.post("/commons/calendar/update-event-calendar", body);
       return data;
     } catch (error) {
       throw error;

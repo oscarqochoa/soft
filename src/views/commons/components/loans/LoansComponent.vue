@@ -1,22 +1,17 @@
 <template>
   <div>
-    <b-card>
-      <b-row>
-        <b-col lg="6">
-          <h2>Loans</h2>
-        </b-col>
-        <b-col lg="6" :class="[positionResponsive]">
-          <b-button
-            v-if="isManagement"
-            variant="info"
-            :block="!bigWindow"
-            class="mr-1"
-            @click="openModalImportLoan"
-          >Import Loan</b-button>
-          <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()">Request Loan</b-button>
-        </b-col>
-      </b-row>
-    </b-card>
+    <header-slot>
+      <template #actions>
+        <b-button
+          v-if="isManagement"
+          variant="info"
+          :block="!bigWindow"
+          class="mr-1"
+          @click="openModalImportLoan"
+        >Import Loan</b-button>
+        <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()">Request Loan</b-button>
+      </template>
+    </header-slot>
 
     <b-card body-class="pb-0">
       <b-nav pills>
@@ -28,7 +23,7 @@
           link-classes="ml-1 border-secondary hover-primary"
         >
           Loans
-          <span class="ml-1" v-if="counterTab.management>0">
+          <span v-if="counterTab.management>0" class="ml-1">
             <feather-icon
               icon
               :badge="counterTab.management > 99 ? '99+' : counterTab.management"
@@ -44,7 +39,7 @@
           link-classes="ml-1 border-secondary hover-primary"
         >
           Loans by Module
-          <span class="ml-1" v-if="counterTab.supervisor>0">
+          <span v-if="counterTab.supervisor>0" class="ml-1">
             <feather-icon
               icon
               :badge="counterTab.supervisor > 99 ? '99+' : counterTab.supervisor"
@@ -59,7 +54,7 @@
           link-classes="ml-1 border-secondary hover-primary"
         >
           My Loans
-          <span class="ml-1" v-if="counterTab.my_loan>0">
+          <span v-if="counterTab.my_loan>0" class="ml-1">
             <feather-icon
               icon
               :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
@@ -76,15 +71,13 @@
 </template>
 
 <script>
-import ModalRequestLoan from "./modals/ModalRequestLoan.vue";
 import { mapGetters } from "vuex";
+import ModalRequestLoan from "./modals/ModalRequestLoan.vue";
+
 export default {
   name: "LoansComponent",
   components: {
     ModalRequestLoan
-  },
-  created() {
-    this.$store.dispatch("loans-store/loadCounterTab");
   },
 
   data() {
@@ -93,6 +86,9 @@ export default {
 
       routeVar: this.$route.name
     };
+  },
+  created() {
+    this.$store.dispatch("loans-store/loadCounterTab");
   },
   computed: {
     ...mapGetters({
@@ -113,12 +109,15 @@ export default {
       return this.$route.meta.route;
     }
   },
+  mounted() {
+    this.modalRequest.tab = this.tab;
+  },
   methods: {
     openModalImportLoan() {
       this.showImportLoan = true;
     },
     closeModalImportLoan() {
-      this.$refs.loanTabOne.search();
+      this.$refs.loanTabOne.refresh();
       this.showImportLoan = false;
     },
 
@@ -126,17 +125,13 @@ export default {
       this.modalRequest.show = true;
     },
     closeModalLoan(status) {
-      //Just is a new loan
+      // Just is a new loan
       if (status) {
         this.$store.commit("loans-store/ADD_ONE_RESEARCH");
-        this.$store.dispatch("loans-store/loadCounterTab");
       }
 
       this.modalRequest.show = false;
     }
-  },
-  mounted() {
-    this.modalRequest.tab = this.tab;
   }
 };
 </script>

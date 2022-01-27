@@ -7,6 +7,7 @@
       :title="requestTitle"
       :hide-footer="hideFooter"
       modal-class="modal-primary "
+      scrollable
       @hidden="hideModal(false)"
     >
       <div>

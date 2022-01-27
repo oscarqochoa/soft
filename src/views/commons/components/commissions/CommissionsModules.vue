@@ -1,8 +1,6 @@
 <template>
   <div>
-    <b-card>
-      <h2>Commissions</h2>
-    </b-card>
+    <header-slot></header-slot>
     <b-card>
       <!-- Tabs for Supervisor CRM -->
       <b-tabs v-if="isSupervisorCrm" pills active-nav-item-class="border-primary-i">

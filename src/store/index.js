@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 // Modules
 import ecommerceStoreModule from '@/views/apps/e-commerce/eCommerceStoreModule'
 import app from '@/store/app'
@@ -22,6 +21,7 @@ import MessageStore from '@/store/message'
 import SidebarStore from '@/store/sidebar'
 
 import SocialNetworkStore from '@/views/social-network/store'
+import LoansService from '@/views/commons/components/loans/services/loans.service'
 
 Vue.use(Vuex)
 
@@ -70,6 +70,9 @@ export default new Vuex.Store({
         Object.assign(state[key], initialState[key])
       })
     },
+  },
+  actions: {
+
   },
   strict: process.env.DEV,
 })
