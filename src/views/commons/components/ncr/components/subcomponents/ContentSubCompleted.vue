@@ -57,7 +57,7 @@
         <template #cell(status)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-if="data.item.status_id == 1"
               style="
                 background-color: #38c172;
@@ -68,7 +68,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 2"
               style="
                 background-color: #3490dc;
@@ -79,7 +79,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 3"
               style="
                 background-color: #e13232;
@@ -90,7 +90,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 4"
               style="
                 background-color: #ffd46a;
@@ -101,7 +101,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 5"
               style="
                 background-color: #ffd46a;
@@ -112,7 +112,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 6"
               style="
                 background-color: #e13232;
@@ -123,7 +123,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 7"
               style="
                 background-color: #eabc73;
@@ -134,7 +134,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 8"
               style="
                 background-color: #eabc73;
@@ -145,7 +145,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 9"
               style="
                 background-color: #e13232;
@@ -156,7 +156,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 10"
               style="
                 background-color: #e13232;

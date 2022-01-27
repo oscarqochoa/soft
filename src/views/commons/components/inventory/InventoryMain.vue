@@ -30,38 +30,45 @@
         </b-row>
       </div>
     </b-card>
-    <b-nav pills>
-      <b-nav-item
-        :to="{ name: 'inventory-crm-equipment' }"
-        exact
-        exact-active-class="active"
-        link-classes="ml-1 border-secondary hover-primary"
-        >Equipment</b-nav-item
-      >
-      <b-nav-item
-        :to="{ name: 'inventory-crm-equipment-request' }"
-        exact
-        exact-active-class="active"
-        link-classes="ml-1 border-secondary hover-primary"
-        >Equipment Request
-        <span class="ml-1" v-if="countRequest > 0">
+    <b-card no-body class="mb-1">
+      <div>
+        <b-row style="height: 20px"></b-row>
+      </div>
+      <b-nav pills>
+        <b-nav-item
+          :to="{ name: 'inventory-crm-equipment' }"
+          exact
+          exact-active-class="active"
+          link-classes="ml-1 border-secondary hover-primary"
+          >Equipment</b-nav-item
+        >
+        <b-nav-item
+          :to="{ name: 'inventory-crm-equipment-request' }"
+          exact
+          exact-active-class="active"
+          link-classes="ml-1 border-secondary hover-primary"
+          >Equipment Request
+          <span class="ml-1" v-if="countRequest > 0">
             <feather-icon
               icon
               :badge="countRequest > 99 ? '+99' : countRequest"
               badge-classes="badge-important"
             />
           </span>
-        </b-nav-item
-      >
-      <b-nav-item
-        v-if="[12, 19].includes($route.meta.module)"
-        :to="{ name: 'inventory-crm-assign' }"
-        exact
-        exact-active-class="active"
-        link-classes="ml-1 border-secondary hover-primary"
-        >To Assigned</b-nav-item
-      >
-    </b-nav>
+        </b-nav-item>
+        <b-nav-item
+          v-if="[12, 19].includes($route.meta.module)"
+          :to="{ name: 'inventory-crm-assign' }"
+          exact
+          exact-active-class="active"
+          link-classes="ml-1 border-secondary hover-primary"
+          >To Assigned</b-nav-item
+        >
+      </b-nav>
+
+      <p>{{ statusUpdateRequestEquip }}</p>
+      <router-view :key="$route.name"></router-view>
+    </b-card>
     <request-equipment
       v-if="modalRequest"
       :modalRequest="modalRequest"
@@ -69,15 +76,13 @@
       :module="$route.meta.module"
       @closeModalRequest="closeModalRequest"
     ></request-equipment>
-    <p>{{statusUpdateRequestEquip}}</p>
-    <router-view :key="$route.name"></router-view>
   </div>
 </template>
 
 <script>
 import RequestEquipment from "./modal/RequestEquipment.vue";
 import { mapGetters } from "vuex";
-import { amgApi } from '@/service/axios';
+import { amgApi } from "@/service/axios";
 export default {
   components: {
     RequestEquipment,
@@ -93,9 +98,9 @@ export default {
       currentUser: "auth/currentUser",
     }),
     ...mapGetters("inventory-store", ["updateRequestEquip"]),
-    statusUpdateRequestEquip(){
-      if(this.updateRequestEquip){
-        this.countRequestEquipment()
+    statusUpdateRequestEquip() {
+      if (this.updateRequestEquip) {
+        this.countRequestEquipment();
       }
     },
   },
@@ -120,11 +125,10 @@ export default {
           }
         });
     },
-    
   },
-  created(){
-      this.countRequestEquipment()
-    }
+  created() {
+    this.countRequestEquipment();
+  },
 };
 </script>
 
