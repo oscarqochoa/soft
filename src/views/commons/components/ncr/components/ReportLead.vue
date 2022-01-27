@@ -908,6 +908,7 @@
                           v-for="reason in reasons"
                           :key="reason.id"
                           :value="reason.id"
+                          :reduce="val => val.id"
                         >{{ reason.value }}</option>
                       </select>
                     </b-form-group>
@@ -970,7 +971,7 @@
                         label="value"
                         v-model="value.status"
                       ></v-select>
-
+                     <!-- <span v-if="header.key == 'status' && value.a_number.length > 3">Yp franco</span> -->
                       <span v-else-if="header.key != 'status' && !value.edit">
                         {{
                         valueItem

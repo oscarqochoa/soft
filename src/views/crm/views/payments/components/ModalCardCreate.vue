@@ -339,22 +339,24 @@ export default {
           } else {
             this.form.street = "";
           }
-          console.log(this.form)
-        this.showConfirmSwal()
-          .then((result) => {
-            if (result.isConfirmed) {
-              this.$store.commit("app/SET_LOADING", true);
-              amgApi.post("/cards/create-cards", this.form).then((response) => {
+        console.log(this.form);
+        this.showConfirmSwal().then(result => {
+          if (result.isConfirmed) {
+            this.$store.commit("app/SET_LOADING", true);
+            amgApi
+              .post("/commons/create-card", this.form)
+              .then(response => {
                 this.cards = response.data;
                 this.$emit("new", this.cards);
                 this.$emit("click", false);
                 this.$store.commit("app/SET_LOADING", false);
                 this.$swal.fire({
                   icon: "success",
-                  title: "Card Created Successfully",
+                  title: "Card Created Successfully"
                 });
-              }).catch(error => {
-                console.error(error)
+              })
+              .catch(error => {
+                console.error(error);
                 this.$store.commit("app/SET_LOADING", false);
                 this.showToast(
                   "danger",
@@ -364,10 +366,8 @@ export default {
                   "Something went wrong!"
                 );
               });
-            }
-          });
-      
-      
+          }
+        });
       });
     },
     closeModal() {

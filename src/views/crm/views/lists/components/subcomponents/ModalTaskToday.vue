@@ -117,7 +117,7 @@ export default {
   },
   computed:{
     clientRoute() {
-      return "/searchtasktoday";
+      return "/tasks/search-task-today";
     },
     ...mapGetters({
       currentUser: "auth/currentUser",

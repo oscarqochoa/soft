@@ -18,7 +18,9 @@
             style="border: 2px solid #0aafdb;"
             :style="`color: ${ colorScoreTransunion(score.transunion) };`"
           >
-            {{ score.transunion }}
+            <!-- {{ score.transunion }} -->
+            <!-- {{2}} -->
+            {{score.transunion.charAt(0) =='N'? '-': score.transunion}}
           </span>
         </b-col>
         <b-col
@@ -34,7 +36,7 @@
             style="border: 2px solid #0566b7;"
             :style="`color: ${ colorScoreTransunion(score.experian) };`"
           >
-            {{ score.experian }}
+            {{ score.experian.charAt(0) =='N'? '-': score.experian }}
           </span>
         </b-col>
         <b-col
@@ -50,7 +52,7 @@
             style="border: 2px solid #f31414;"
             :style="`color: ${ colorScoreTransunion(score.equifax) };`"
           >
-            {{ score.equifax }}
+            {{ score.equifax.charAt(0) =='N'? '-': score.equifax }}
           </span>
         </b-col>
       </b-row>

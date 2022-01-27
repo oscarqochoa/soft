@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p>{{ statusUpdateRequestEquip }}</p>
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -38,16 +39,16 @@
         <template #cell(programs_to_install)="data">
           <div>
             <ul id="v-for-object" class="demo">
-              <li v-for="value in data.item.programs_to_install" :key="value">{{ value }}</li>
+              <li v-for="value in data.item.programs_to_install" :key="value">
+                {{ value }}
+              </li>
             </ul>
           </div>
         </template>
         <template #cell(commentary)="data">
-          <span style="display: block; width: 150px; word-wrap: break-word">
-            {{
-            data.item.commentary
-            }}
-          </span>
+          <div class="tdbreak">
+              {{ data.item.commentary }}
+          </div>
         </template>
         <template #cell(status)="data">
           <p
@@ -58,7 +59,9 @@
                 ? 'color: #FF0000'
                 : 'color: rgb(255 177 0)'
             "
-          >{{ data.item.status }}</p>
+          >
+            {{ data.item.status }}
+          </p>
         </template>
         <template #cell(created_at)="data">
           {{ data.item.created_by }}
@@ -93,36 +96,37 @@
 import vSelect from "vue-select";
 import ModalViewTrackingRequest from "../../modal/ModalViewTrackingRequest.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-
+import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   props: {
     global: {
-      type: Object
+      type: Object,
     },
     module: {
-      type: [Number, String]
+      type: [Number, String],
     },
     statusEquipment: {
-      type: [Number, String]
-    }
+      type: [Number, String],
+    },
   },
   components: {
     vSelect,
     ModalViewTrackingRequest,
-    FilterSlot
+    FilterSlot,
   },
   data() {
     return {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: ""
+        model: "",
       },
       startPage: null,
       toPage: null,
@@ -135,54 +139,54 @@ export default {
           key: "equipment",
           label: "Equipment",
           class: "text-left",
-          sortable: false
+          sortable: false,
         },
         {
           key: "cant",
           label: "Quantity",
           class: "text-left",
-          sortable: false
+          sortable: false,
         },
         {
           key: "name_operator",
           label: "Assign To ",
           class: "text-left",
-          sortable: false
+          sortable: false,
         },
         {
           key: "programs_to_install",
           label: "Programs to Install",
           class: "text-left",
-          sortable: false
+          sortable: false,
         },
         {
           key: "commentary",
           label: "Comment",
           class: "text-left",
-          sortable: false
+          sortable: false,
         },
         {
           key: "status",
           label: "Status",
           class: "text-left",
-          sortable: true
+          sortable: true,
         },
         {
           key: "created_at",
           label: "Created By",
           class: "text-left",
-          sortable: true
+          sortable: true,
         },
         {
           key: "tracking",
           label: "Tracking",
-          class: "text-left"
+          class: "text-left",
         },
         {
           key: "actions",
           label: "Actions",
-          class: "text-left"
-        }
+          class: "text-left",
+        },
       ],
       modalTrackingRequest: false,
       requestId: "",
@@ -200,9 +204,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric"
+            day: "numeric",
           },
-          cols: 6
+          cols: 6,
         },
         {
           type: "datepicker",
@@ -216,14 +220,29 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric"
+            day: "numeric",
           },
-          cols: 6
-        }
-      ]
+          cols: 6,
+        },
+      ],
     };
   },
+  computed: {
+    ...mapGetters("inventory-store", ["updateRequestEquip"]),
+    statusUpdateRequestEquip() {
+      if (this.updateRequestEquip) {
+        this.$refs.refClientsList.refresh();
+        this.UpdateRequEquip();
+      }
+    },
+  },
   methods: {
+    ...mapActions("inventory-store", ["UPDATE_REQUEST_EQUIPMENT"]),
+    UpdateRequEquip() {
+      if (this.updateRequestEquip) {
+        this.UPDATE_REQUEST_EQUIPMENT(false);
+      }
+    },
     resetSearch() {
       this.fromToObject.from = null;
       this.fromToObject.to = null;
@@ -237,11 +256,11 @@ export default {
         order: ctx.sortBy == "" ? "created_at" : ctx.sortBy,
         orderby: ctx.sortDesc == 1 ? "desc" : "asc",
         module_id: this.module,
-        statusRequest: null
+        statusRequest: null,
         // statusRequest: this.filters[0].model,
       });
       // Must return a promise that resolves to an array of items
-      return promise.then(data => {
+      return promise.then((data) => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
         this.startPage = data.data.from;
@@ -262,13 +281,17 @@ export default {
     },
     closeModalTrackingRequest() {
       this.modalTrackingRequest = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
 
 <style lang="scss" scoped>
+.tdbreak {
+  word-break: break-all;
+  // width: 10em;
+}
 .per-page-selector {
   width: 90px;
 }

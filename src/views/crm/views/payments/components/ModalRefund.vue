@@ -161,15 +161,16 @@ export default {
               "You won't be able to revert this!"
             ).then((result) => {
               if (result.value) {
-              
+                this.$store.commit("app/SET_LOADING", true);
                 amgApi
-                  .post("/voidtransaction", {
+                  .post("/authorize/void-transaction", {
                     idtransaction: this.dataVoid.idtransaction,
                     idmerchant: this.dataVoid.idmerchant,
                     comment: this.comment,
                     iduser: this.currentUser.user_id,
                   })
                   .then((response) => {
+                    this.$store.commit("app/SET_LOADING", false);
                     if (response.status == 200) {
                       if (response.data.code == 1) {
                         this.closeModal();
@@ -177,9 +178,10 @@ export default {
                           .fire({
                             icon: "success",
                             title: "OPERATION SUCCESSFULLY",
-                          }).then((res) => {
+                          })
+                          .then((res) => {
                             if (res) {
-                             this.updateGrid()
+                              this.updateGrid();
                             }
                           });
                       } else {
@@ -191,7 +193,7 @@ export default {
                           .then((res) => {
                             if (res) {
                               this.closeModal();
-                              this.updateGrid()
+                              this.updateGrid();
                             }
                           });
                       }
@@ -204,10 +206,20 @@ export default {
                         .then((res) => {
                           if (res) {
                             this.closeModal();
-                            this.updateGrid()
+                            this.updateGrid();
                           }
                         });
                     }
+                  })
+                  .catch((errors) => {
+                    this.$store.commit("app/SET_LOADING", false);
+                    this.showToast(
+                      "danger",
+                      "top-right",
+                      "Error",
+                      "XIcon",
+                      "Something went wrong!"
+                    );
                   });
               }
             });
@@ -227,8 +239,9 @@ export default {
               })
               .then((result) => {
                 if (result.value) {
+                  this.$store.commit("app/SET_LOADING", true);
                   amgApi
-                    .post("/refundtransaction", {
+                    .post("/authorize/refund-transaction", {
                       idtransaction: this.dataVoid.idtransaction,
                       idmerchant: this.dataVoid.idmerchant,
                       comment: this.comment,
@@ -236,6 +249,7 @@ export default {
                       amount: this.dataVoid.amount,
                     })
                     .then((response) => {
+                      this.$store.commit("app/SET_LOADING", false);
                       if (response.status == 200) {
                         if (response.data.code == 1) {
                           this.closeModal();
@@ -277,7 +291,16 @@ export default {
                       }
                     });
                 }
-              });
+              }).catch((errors) => {
+                    this.$store.commit("app/SET_LOADING", false);
+                    this.showToast(
+                      "danger",
+                      "top-right",
+                      "Error",
+                      "XIcon",
+                      "Something went wrong!"
+                    );
+                  });
           }
         }
       });

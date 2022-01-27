@@ -61,14 +61,14 @@
             >$ ({{ data.item.amount }})</span>
             <feather-icon
               icon="EyeIcon"
-              style="cursor: pointer;position: absolute; left: 80px;"
+              style="cursor: pointer;position: absolute; left: 70px;"
               v-if="data.item.type_t == 39 || data.item.type_t == 40"
               class="text-primary"
               @click="getVoidRefund(data.item.transaction_id)"
             ></feather-icon>
             <img
               :src="assetsImg + '/images/icons/void.ico'"
-              style="cursor: pointer; color: red;position: absolute; left: 80px;"
+              style="cursor: pointer; color: red;position: absolute; left: 70px;"
               title="Void"
               @click="voidAuthorize( data.item.transaction_id,
                   data.item.merchant,
@@ -86,7 +86,7 @@
             />
             <img
               :src="assetsImg + '/images/icons/refund.ico'"
-              style="cursor: pointer; color: green;position: absolute; left: 80px;"
+              style="cursor: pointer; color: green;position: absolute; left: 70px;"
               title="Refund"
               v-if="
                 data.item.type_t != 39 &&

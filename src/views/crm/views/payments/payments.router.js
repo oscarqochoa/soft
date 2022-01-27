@@ -1,6 +1,6 @@
 export default [
     {
-        path: '/payments',
+        path: '/crm/payments',
         name: 'payments-crm',
         component: () => import('@/views/crm/views/payments/PaymentClient.vue'),
         meta:{

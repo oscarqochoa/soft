@@ -58,7 +58,7 @@
         <template #cell(status)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-if="data.item.status_id == 1"
               style="
                 background-color: #38c172;
@@ -69,7 +69,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 2"
               style="
                 background-color: #3490dc;
@@ -80,7 +80,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 3"
               style="
                 background-color: #e13232;
@@ -91,7 +91,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 4"
               style="
                 background-color: #ffd46a;
@@ -102,7 +102,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 5"
               style="
                 background-color: #ffd46a;
@@ -113,7 +113,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 6"
               style="
                 background-color: #e13232;
@@ -124,7 +124,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 7"
               style="
                 background-color: #eabc73;
@@ -135,7 +135,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 8"
               style="
                 background-color: #eabc73;
@@ -146,7 +146,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 9"
               style="
                 background-color: #e13232;
@@ -157,7 +157,7 @@
               "
             >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 10"
               style="
                 background-color: #e13232;
@@ -221,7 +221,7 @@
         </template>
         <template #cell(cr)="data">
           <div>
-            <a
+            <!-- <a
               v-if="data.item.cr == 1"
               :href="
                 'http://127.0.0.1:8000/crm/leads/report/' +
@@ -233,7 +233,22 @@
               style="cursor: pointer"
             >
               <img :src="assetsImg + '/images/icons/report2.ico'" />
-            </a>
+            </a> -->
+            <router-link v-if="data.item.cr == 1"
+              :to="{
+                name: 'report-lead',
+                params: {idfile:data.item.score_id,idlead:data.item.lead_id,
+                  modul: 2,
+                  global: {
+                    idfile: data.item.score_id,
+                    idlead: data.item.lead_id,
+                  },
+                },
+              }"
+              target="_blank"
+            >
+              <img :src="assetsImg + '/images/icons/report2.ico'" />
+            </router-link>
           </div>
         </template>
         <template #cell(route_pdf)="data">

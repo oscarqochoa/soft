@@ -21,8 +21,12 @@
             sm="6"
             class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
           >
-            <b-button variant="info" v-if="add" @click="addlist">CREATE LIST</b-button>
-            <b-button variant="danger" v-if="cancelList" @click="closelist">CANCEL</b-button>
+            <b-button variant="info" v-if="add" @click="addlist"
+              >CREATE LIST</b-button
+            >
+            <b-button variant="danger" v-if="cancelList" @click="closelist"
+              >CANCEL</b-button
+            >
           </b-col>
         </b-row>
       </div>
@@ -36,22 +40,41 @@
           "
         >
           <div class="m-2">
-            <h3 style="color: #ff9f43 !important; display: inline-block">CREATE LIST</h3>
+            <h3 style="color: #ff9f43 !important; display: inline-block">
+              CREATE LIST
+            </h3>
             <ValidationObserver ref="form">
               <b-row>
                 <b-col md="7">
                   <b-form-group label="Selec User">
-                    <ValidationProvider name="comment" rules="required" v-slot="{ errors }">
-                      <v-select v-model="value" multiple :options="options" label="user_name"></v-select>
-                      <small v-if="errors[0]" class="text-danger text-center">User {{ errors[0] }}</small>
+                    <ValidationProvider
+                      name="comment"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
+                      <v-select
+                        v-model="value"
+                        multiple
+                        :options="options"
+                        label="user_name"
+                      ></v-select>
+                      <small v-if="errors[0]" class="text-danger text-center"
+                        >User {{ errors[0] }}</small
+                      >
                     </ValidationProvider>
                   </b-form-group>
                 </b-col>
                 <b-col md="5">
                   <b-form-group label="Number of leads by user">
-                    <ValidationProvider name="comment" rules="required" v-slot="{ errors }">
+                    <ValidationProvider
+                      name="comment"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
                       <b-form-input v-model="number" type="number" />
-                      <small v-if="errors[0]" class="text-danger text-center">Number {{ errors[0] }}</small>
+                      <small v-if="errors[0]" class="text-danger text-center"
+                        >Number {{ errors[0] }}</small
+                      >
                     </ValidationProvider>
                   </b-form-group>
                 </b-col>
@@ -116,7 +139,9 @@
             </div>
           </template>
           <template #cell(users)="data" v-if="getRoles">
-            <div class="d-flex flex-column justify-content-start align-items-start">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
               <b-button
                 variant="flat-primary"
                 style="
@@ -128,12 +153,18 @@
                 v-for="(user, index) in JSON.parse(data.item.users)"
                 :key="index"
                 @click="modalopen(user.user_name, user.id, data.item.id)"
-              >{{ user.user_name }}</b-button>
+                >{{ user.user_name }}</b-button
+              >
             </div>
           </template>
           <template #cell(action)="data">
             <div
-              class="d-flex flex-column justify-content-center align-items-center"
+              class="
+                d-flex
+                flex-column
+                justify-content-center
+                align-items-center
+              "
               v-if="getRoles"
             >
               <b-button
@@ -145,7 +176,12 @@
               </b-button>
             </div>
             <div
-              class="d-flex flex-column justify-content-center align-items-start"
+              class="
+                d-flex
+                flex-column
+                justify-content-center
+                align-items-start
+              "
               v-if="!getRoles"
             >
               <b-button
@@ -211,7 +247,7 @@ import { mapGetters } from "vuex";
 import ModalByUser from "./subcomponents/ModalByUser.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 import Button from "@/views/components/button/Button.vue";
-import ModalTaskToday from "./subcomponents/ModalTaskToday.vue"
+import ModalTaskToday from "./subcomponents/ModalTaskToday.vue";
 
 export default {
   components: {
@@ -227,13 +263,13 @@ export default {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: ""
+        model: "",
       },
       id: null,
       nameUser: "",
@@ -256,65 +292,65 @@ export default {
           key: "created_at",
           label: "Create Date",
           sortable: true,
-          visible: true
+          visible: true,
         },
         {
           key: "create_name",
           label: "Create By",
-          visible: true
+          visible: true,
         },
         {
           key: "cant",
           label: "Number of Leads by user",
-          visible: true
+          visible: true,
         },
         {
           key: "users",
           label: "Users",
-          visible: true
+          visible: true,
         },
         {
           key: "done",
           label: "Done",
-          visible: true
+          visible: true,
         },
         {
           key: "action",
           label: "Actions",
-          visible: true
-        }
+          visible: true,
+        },
       ],
       arrayColumnsTwo: [
         {
           key: "created_at",
           label: "Create Date",
           sortable: true,
-          visible: true
+          visible: true,
         },
         {
           key: "create_name",
           label: "Create By",
-          visible: true
+          visible: true,
         },
         {
           key: "cant",
           label: "Number of Leads by user",
-          visible: true
+          visible: true,
         },
         {
           key: "done",
           label: "Done",
-          visible: true
+          visible: true,
         },
         {
           key: "action",
           label: "Actions",
-          visible: true
-        }
+          visible: true,
+        },
       ],
       fromToObject: {
         from: null,
-        to: null
+        to: null,
       },
       filters: [],
       count_alltask: 0,
@@ -338,9 +374,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric"
+            day: "numeric",
           },
-          cols: 6
+          cols: 6,
         },
         {
           type: "datepicker",
@@ -354,11 +390,11 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric"
+            day: "numeric",
           },
-          cols: 6
-        }
-      ]
+          cols: 6,
+        },
+      ],
     };
   },
   computed: {
@@ -377,11 +413,11 @@ export default {
         : this.arrayColumnsTwo.filter((column) => column.visible);
     },
     ...mapGetters({
-      currentUser: "auth/currentUser"
-    })
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
-    updatingTasks(){
+    updatingTasks() {
       this.$refs.refClientsList.refresh();
     },
     openModalTaskToday() {
@@ -423,10 +459,10 @@ export default {
             ? null
             : this.currentUser.user_id,
         from: this.filter[0].model,
-        to: this.filter[1].model
+        to: this.filter[1].model,
       });
       // Must return a promise that resolves to an array of items
-      return promise.then(data => {
+      return promise.then((data) => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
         this.startPage = data.data.from;
@@ -451,7 +487,7 @@ export default {
             created_at: "Today",
             create_name: "System",
             cant: this.count_alltask,
-            done: this.count_donetask
+            done: this.count_donetask,
           };
           // let newData = data.data;
           items.unshift(firstOption);
@@ -470,9 +506,9 @@ export default {
               ? null
               : this.currentUser.user_id,
           from: this.from,
-          to: this.to
+          to: this.to,
         })
-        .then(response => {
+        .then((response) => {
           if (response.status == 200) {
             this.lists = response.data.data;
             this.start_page = response.data.current_page;
@@ -495,42 +531,41 @@ export default {
         });
     },
     deleteuser(id) {
-      this.showConfirmSwal()
-        .then((result) => {
-          // Send request to the server
-          if (result.value) {
-            this.$store.commit("app/SET_LOADING", true);
-            amgApi
-              .post("/commons/list-users/delete-list-of-user", {
-                id: id
-              })
-              .then(response => {
-                this.$store.commit("app/SET_LOADING", false);
-                this.$swal
-                  .fire("Deleted!", "Your file has been deleted.", "success")
-                  .then(res => {
-                    if (res) {
-                      this.resetSearch();
-                    }
-                  });
-              })
-              .catch(() => {
-                this.$store.commit("app/SET_LOADING", false);
-                swal("Failed!", "There was something wronge.", "warning");
-              });
-          }
-        });
+      this.showConfirmSwal().then((result) => {
+        // Send request to the server
+        if (result.value) {
+          this.$store.commit("app/SET_LOADING", true);
+          amgApi
+            .post("/commons/list-users/delete-list-of-user", {
+              id: id,
+            })
+            .then((response) => {
+              this.$store.commit("app/SET_LOADING", false);
+              this.$swal
+                .fire("Deleted!", "Your file has been deleted.", "success")
+                .then((res) => {
+                  if (res) {
+                    this.resetSearch();
+                  }
+                });
+            })
+            .catch(() => {
+              this.$store.commit("app/SET_LOADING", false);
+              swal("Failed!", "There was something wronge.", "warning");
+            });
+        }
+      });
     },
     groupusers() {
       amgApi
         .post("/commons/sellerall/2", {
           roles: "[]",
-          type: "1"
+          type: "1",
         })
-        .then(response => {
+        .then((response) => {
           this.options = response.data;
         })
-        .catch(resp => {
+        .catch((resp) => {
           this.showToast(
             "danger",
             "top-right",
@@ -541,41 +576,35 @@ export default {
         });
     },
     savegroup() {
-      this.$refs.form.validate().then(success => {
+      this.$refs.form.validate().then((success) => {
         if (!success) {
           return;
         } else {
-          this.$swal
-            .fire({
-              title: "Are you Sure ?",
-              text: "Do you want to create a List?",
-              icon: "warning",
-              showCancelButton: true,
-              customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-danger "
-              },
-              confirmButtonText: "Yes"
-            })
-            .then(result => {
+          
+          this.showConfirmSwal("Are you sure?", "Do you want to create a List?")
+            .then((result) => {
               if (result.value) {
                 const params = {
-                  users: this.value.map(user => {
+                  users: this.value.map((user) => {
                     return user.id;
                   }),
                   number: this.number,
-                  create_id: this.currentUser.user_id
+                  create_id: this.currentUser.user_id,
                 };
+                this.$store.commit("app/SET_LOADING", true);
                 amgApi
-                  .post("/commons/list-users/create-list-of-user", params)
-                  .then(response => {
+                  .post("/commons/list-users/save-group", params)
+                  .then((response) => {
+                    this.value = [];
+                    this.number = "";
                     this.$refs.refClientsList.refresh();
+                    this.$store.commit("app/SET_LOADING", false);
                     this.$swal
                       .fire({
                         icon: "success",
-                        title: "List Created in successfully"
+                        title: "List Created in successfully",
                       })
-                      .then(res => {
+                      .then((res) => {
                         if (res) {
                           // (this.value = []), (this.number = "");
                           // (this.cancelList = false), (this.add = true);
@@ -584,6 +613,10 @@ export default {
                       });
                   });
               }
+            })
+            .catch((err) => {
+              console.error(err);
+              this.$store.commit("app/SET_LOADING", false);
             });
         }
       });
@@ -600,13 +633,13 @@ export default {
     },
     closeModal() {
       this.modalChanging = false;
-    }
+    },
   },
   created() {
     this.groupusers();
     this.statusRol();
     this.listsgroups();
-  }
+  },
 };
 </script>
 
