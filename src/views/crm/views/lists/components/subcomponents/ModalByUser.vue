@@ -176,8 +176,8 @@ export default {
       return "/commons/list-users/get-list-of-leads";
     },
     rolByUser() {
-      return this.currentUser.arrRoles[0].role_id == 1 ||
-        this.currentUser.arrRoles[0].role_id == 2
+      return this.currentUser.arrRoles.role_id == 1 ||
+        this.currentUser.arrRoles.role_id == 2
         ? true
         : false;
     },

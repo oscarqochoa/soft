@@ -1453,7 +1453,7 @@ export default {
     ...mapGetters({
       skin: "appConfig/skin"
     }),
-    classAdd() {
+    classAdd() { 
       return this.skin == "dark" ? "dark" : "light";
     },
     statusValue() {
