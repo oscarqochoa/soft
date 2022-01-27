@@ -465,7 +465,7 @@ export default {
     /* Rates */
     async getSelects() {
       try {
-        const response = await amgApi.get("selectratesce");
+        const response = await amgApi.get("/rates/get-rates-options");
         if (response.status === 200) {
           this.forSelectCe(response.data);
           this.select_option[0] = 1;
@@ -488,7 +488,7 @@ export default {
     async getSelected() {
       if (this.isModalShow) {
         try {
-          const response = await amgApi.post("getjsonattendce", {
+          const response = await amgApi.post("/attend/get-attend", {
             sale_id: this.salesClient.id
           });
           if (response.status === 200) {
@@ -513,7 +513,7 @@ export default {
     },
     async searchRate() {
       try {
-        const response = await amgApi.post("searchprogram", {
+        const response = await amgApi.post("/rates/get-rates-by-programs", {
           id: this.program
         });
         if (response.status === 200) {
@@ -539,7 +539,7 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post("searchprogramsalemade", {
+        const response = await amgApi.post("/sales-made/get-details-sales-made", {
           id: this.salesClient.id
         });
         if (response.status === 200) {
