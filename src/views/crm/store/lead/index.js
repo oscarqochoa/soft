@@ -474,7 +474,6 @@ const actions = {
   async A_SET_POTENTIAL({ commit }, body) {
     try {
       const response = await crmLead.postSetPotential(body);
-      /* console.log('A_SET_POTENTIAL response', response) */
       return response;
     } catch (error) {
       console.log("ERROR_SET_POTENTIAL [ACTION]", error);

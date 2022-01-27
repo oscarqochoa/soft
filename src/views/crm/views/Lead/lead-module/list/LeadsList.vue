@@ -278,11 +278,6 @@ export default {
       A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS",
       A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST"
     }),
-    addPaddingTd() {
-      this.fields.map(field => {
-        field.tdClass = "py-1";
-      });
-    },
     resolveUserStatusVariant(status) {
       if (status === "Pending") return "warning";
       if (status === "Active") return "success";

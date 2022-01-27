@@ -307,5 +307,11 @@ export default {
     isPreloading(state = true) {
       this.$store.commit("app/SET_LOADING", state);
     },
+    //Add Padding To   td en small tables
+    addPaddingTd() {
+      this.fields.map((field) => {
+        field.tdClass = "py-1";
+      });
+    },
   },
 };
