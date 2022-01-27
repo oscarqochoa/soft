@@ -102,6 +102,7 @@ export default {
       A_GET_STATE_LEADS: "CrmLeadStore/A_GET_STATE_LEADS",
       A_GET_STATUS_LEADS: "CrmLeadStore/A_GET_STATUS_LEADS",
       A_GET_SOURCE_LEADS: "CrmLeadStore/A_GET_SOURCE_LEADS",
+      A_EXPORT_LEADS_TO_EXCEL: "CrmLeadStore/A_EXPORT_LEADS_TO_EXCEL",
       A_GET_OWNERS: "CrmGlobalStore/A_GET_OWNERS",
       A_GET_PROGRAMS: "CrmGlobalStore/A_GET_PROGRAMS",
       A_GET_SOURCE_NAMES: "CrmGlobalStore/A_GET_SOURCE_NAMES",
@@ -256,7 +257,7 @@ export default {
         );
       }
     },
-    exportExcel(Export, TypeExport) {
+    async exportExcel(Export, TypeExport) {
       const jsonString = JSON.stringify(this.S_SELECTED_LEADS.map(el => el.id));
       const name_text = this.S_FILTERS_LEADS.searchQuery
         ? this.S_FILTERS_LEADS.searchQuery
@@ -293,9 +294,28 @@ export default {
       const orderby = this.dato2 == null ? 10 : this.dato2;
       const order = this.dato1 == null ? "desc" : this.dato1;
       const dataExport = `name_text=${name_text}&lead_status=${this.S_FILTERS_LEADS.statusLead}&cr=${this.S_FILTERS_LEADS.cr}&program=${this.S_FILTERS_LEADS.program}&date_from=${date_from}&date_to=${date_to}&orderby=${orderby}&order=${order}&user_owner=${this.S_FILTERS_LEADS.owner}&assign_to=${this.S_FILTERS_LEADS.assignTo}&sourcename=${this.S_FILTERS_LEADS.sourceName}&Export=${Export}&TypeExport=${TypeExport}&current_pageE=${this.S_FILTERS_LEADS.currentPage}&id_leads=${jsonString}`;
-      window.open(
-        `${process.env.VUE_APP_BASE_URL}/lead/export-lead-to-excel?${dataExport}`
-      );
+      const params = {
+        type_export,
+        current_page: this.S_FILTERS_LEADS.currentPage,
+        id_leads,
+        name_text,
+        lead_status,
+        cr,
+        program,
+        date_from,
+        date_to,
+        orderby,
+        order,
+        user_owner,
+        assign_to,
+        sourcename,
+        typedoc,
+        iduser,
+        idrole,
+        state_h,
+        origin_module
+      };
+      const response = await this.A_EXPORT_LEADS_TO_EXCEL(dataExport);
     }
   },
   watch: {

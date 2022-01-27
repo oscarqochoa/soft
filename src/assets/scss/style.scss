@@ -196,11 +196,11 @@ $borderamg: #efb911;
 //Modal XMD
 
 .modal .modal-xmd {
-  max-width: 65vw;
+  min-width: 65vw;
   width: 100%;
 }
 .modal .modal-xlg {
-  max-width: 80vw;
+  min-width: 80vw;
   width: 100%;
 }
 

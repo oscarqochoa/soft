@@ -547,6 +547,14 @@ const actions = {
       throw error;
     }
   },
+  async A_EXPORT_LEADS_TO_EXCEL({ commit }, body) {
+    try {
+      const response = await crmLead.exportLeadsToExcel(body);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 export default {
   namespaced: true,

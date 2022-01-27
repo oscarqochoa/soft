@@ -334,6 +334,16 @@ class CrmLead {
       throw error;
     }
   }
+  async exportLeadsToExcel(body) {
+    try {
+      const { data } = await amgApi.post("/lead/export-lead-to-excel", body, {
+        responseType: "blob",
+      });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new CrmLead();
