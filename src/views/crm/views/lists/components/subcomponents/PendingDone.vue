@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="px-1">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -10,7 +10,6 @@
       :send-multiple-sms="false"
       @reload="$refs['refClientsList'].refresh()"
     >
-  
       <b-table
         v-scrollbar
         slot="table"
@@ -220,8 +219,7 @@ export default {
       currentUser: "auth/currentUser"
     })
   },
-  created() {
-  },
+  created() {},
   methods: {
     update() {
       this.modalChanging = false;

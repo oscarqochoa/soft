@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="px-1">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"

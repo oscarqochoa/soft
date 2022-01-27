@@ -309,5 +309,11 @@ export default {
     returnThis() {
       return this
     },
+    //Add Padding To   td en small tables
+    addPaddingTd() {
+      this.fields.map((field) => {
+        field.tdClass = "py-1";
+      });
+    },
   },
 }

@@ -92,21 +92,14 @@
           <!-- Column: Actions -->
           <template #cell(actions)="data">
             <div class="d-flex justify-content-center">
-              <b-button
-                variant="outline-primary"
-                size="sm"
-                @click="showModal(data.item.lead_id)"
-                class="mr-1"
+              <b-dropdown
+                v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+                text="Select Potential"
+                variant="flat-primary"
               >
-                <feather-icon icon="EditIcon" />
-              </b-button>
-              <b-button
-                variant="outline-danger"
-                size="sm"
-                @click="showModalDelete(data.item.lead_id)"
-              >
-                <feather-icon icon="TrashIcon" />
-              </b-button>
+                <b-dropdown-item @click="setPotential('Without', data.item)">Wihout Potential</b-dropdown-item>
+                <b-dropdown-item @click="setPotential('With', data.item)">With Potential</b-dropdown-item>
+              </b-dropdown>
             </div>
           </template>
         </b-table>
@@ -120,10 +113,14 @@ import { mapGetters, mapActions } from "vuex";
 import dataFields from "@/views/crm/views/Lead/lead-table/fields.data";
 import dataFilters from "@/views/crm/views/Lead/lead-table/filtersLeadSn.data";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import Ripple from "vue-ripple-directive";
 
 export default {
   components: {
     FilterSlot
+  },
+  directives: {
+    Ripple
   },
   computed: {
     ...mapGetters({
@@ -179,7 +176,8 @@ export default {
   methods: {
     ...mapActions({
       A_GET_W_POTENTIAL_LEADS: "CrmLeadStore/A_GET_W_POTENTIAL_LEADS",
-      A_GET_OWNERS: "CrmGlobalStore/A_GET_OWNERS"
+      A_GET_OWNERS: "CrmGlobalStore/A_GET_OWNERS",
+      A_SET_POTENTIAL: "CrmLeadStore/A_SET_POTENTIAL"
     }),
     resolveLeadSnStatusVariant(status) {
       if (status === 2) return "success";
@@ -234,6 +232,33 @@ export default {
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;
       this.myProvider();
+    },
+    async setPotential(typePotential, lead) {
+      const confirm = await this.showConfirmSwal(
+        `Are you sure to change the Potential of  <b>${lead.nickname}</b> ?`,
+        `You are going to change to ${typePotential} Potential`
+      );
+      if (confirm.isConfirmed) {
+        try {
+          this.addPreloader();
+          const response = await this.A_SET_POTENTIAL({
+            id: lead.lead_id,
+            potential: typePotential === "With" ? "null" : "2"
+          });
+          this.removePreloader();
+          this.$refs.refUserListTable.refresh();
+          this.showToast(
+            "success",
+            "top-right",
+            "Success!",
+            "AlertOctagonIcon",
+            "Lead updated successfully"
+          );
+        } catch (error) {
+          this.showErrorSwal(error);
+          this.removePreloader();
+        }
+      }
     }
   }
 };
