@@ -12,14 +12,28 @@
           >
             <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
           </b-button>
-          <b-dropdown v-if="[1, 2].includes(currentUser.role_id)" id="dropdown-6" variant="info">
+          <b-dropdown
+            v-if="[1, 2].includes(currentUser.role_id)"
+            id="dropdown-6"
+            variant="info"
+            :disabled="isLoading"
+          >
             <template #button-content>
-              <feather-icon icon="DownloadIcon" size="16" class="align-middle" />
+              <template v-if="isLoading">
+                <b-spinner small />
+              </template>
+              <template v-else>
+                <feather-icon icon="DownloadIcon" size="16" class="align-middle" />
+              </template>
               <span class="ml-1">Export To Excel</span>
             </template>
+
             <b-dropdown-item @click="exportExcel(1, 1)">Export Current Page</b-dropdown-item>
             <b-dropdown-item @click="exportExcel(1, 2)">Export All Page</b-dropdown-item>
-            <b-dropdown-item @click="exportExcel(1, 3)">Export Selection</b-dropdown-item>
+            <b-dropdown-item
+              :disabled="!S_SELECTED_LEADS.length"
+              @click="exportExcel(1, 3)"
+            >Export Selection</b-dropdown-item>
           </b-dropdown>
         </div>
       </template>
@@ -80,7 +94,8 @@ export default {
       isAddNewUserSidebarActive: false,
       preloading: true,
       dato1: "desc",
-      dato2: 10
+      dato2: 10,
+      isLoading: false
     };
   },
   async created() {
@@ -258,34 +273,13 @@ export default {
       }
     },
     async exportExcel(Export, TypeExport) {
-      const jsonString = JSON.stringify(this.S_SELECTED_LEADS.map(el => el.id));
+      const id_leads = this.S_SELECTED_LEADS.map(el => el.id);
       const name_text = this.S_FILTERS_LEADS.searchQuery
         ? this.S_FILTERS_LEADS.searchQuery
         : null;
-
+      console.log(this.S_SELECTED_LEADS);
+      console.log(this.S_FILTERS_LEADS);
       this.dato2 = this.S_FILTERS_LEADS.perPage;
-
-      if (this.dato2 == 10) {
-        if (this.dato1 == "desc") {
-          this.oneDateLead = false;
-          this.orderDateDesc = true;
-          this.orderDateAsc = false;
-        } else {
-          this.orderDateAsc = true;
-          this.orderDateDesc = false;
-          this.oneDateLead = false;
-        }
-      } else if (this.dato2 == 2) {
-        if (this.dato1 == "desc") {
-          this.oneEventLead = false;
-          this.orderLeadDesc = true;
-          this.orderLeadAsc = false;
-        } else {
-          this.orderLeadAsc = true;
-          this.orderLeadDesc = false;
-          this.oneEventLead = false;
-        }
-      }
 
       const date_from =
         this.S_FILTERS_LEADS.from == "" ? null : this.S_FILTERS_LEADS.from;
@@ -293,29 +287,32 @@ export default {
         this.S_FILTERS_LEADS.to == "" ? null : this.S_FILTERS_LEADS.to;
       const orderby = this.dato2 == null ? 10 : this.dato2;
       const order = this.dato1 == null ? "desc" : this.dato1;
-      const dataExport = `name_text=${name_text}&lead_status=${this.S_FILTERS_LEADS.statusLead}&cr=${this.S_FILTERS_LEADS.cr}&program=${this.S_FILTERS_LEADS.program}&date_from=${date_from}&date_to=${date_to}&orderby=${orderby}&order=${order}&user_owner=${this.S_FILTERS_LEADS.owner}&assign_to=${this.S_FILTERS_LEADS.assignTo}&sourcename=${this.S_FILTERS_LEADS.sourceName}&Export=${Export}&TypeExport=${TypeExport}&current_pageE=${this.S_FILTERS_LEADS.currentPage}&id_leads=${jsonString}`;
       const params = {
-        type_export,
+        type_export: TypeExport,
         current_page: this.S_FILTERS_LEADS.currentPage,
         id_leads,
         name_text,
-        lead_status,
-        cr,
-        program,
+        lead_status: this.S_FILTERS_LEADS.statusLead,
+        cr: this.S_FILTERS_LEADS.cr,
+        program: this.S_FILTERS_LEADS.program,
         date_from,
         date_to,
         orderby,
         order,
-        user_owner,
-        assign_to,
-        sourcename,
-        typedoc,
-        iduser,
-        idrole,
-        state_h,
-        origin_module
+        per_page: this.dato2,
+        user_owner: this.S_FILTERS_LEADS.owner,
+        assign_to: this.S_FILTERS_LEADS.assignTo,
+        sourcename: this.S_FILTERS_LEADS.sourceName
       };
-      const response = await this.A_EXPORT_LEADS_TO_EXCEL(dataExport);
+      try {
+        this.isLoading = true;
+        const response = await this.A_EXPORT_LEADS_TO_EXCEL(params);
+        await this.forceFileDownload(response, "leads.xlsx");
+        this.isLoading = false;
+      } catch (error) {
+        this.showErrorSwal(error);
+        this.isLoading = false;
+      }
     }
   },
   watch: {
