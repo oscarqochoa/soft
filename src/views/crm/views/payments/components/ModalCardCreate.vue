@@ -339,7 +339,6 @@ export default {
           } else {
             this.form.street = "";
           }
-        console.log(this.form);
         this.showConfirmSwal().then(result => {
           if (result.isConfirmed) {
             this.$store.commit("app/SET_LOADING", true);

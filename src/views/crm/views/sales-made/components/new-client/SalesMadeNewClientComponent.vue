@@ -714,7 +714,7 @@ export default {
         contract_fee: false,
         notes: false,
         approveSupervisorModal: false,
-        modalSms: false,
+        modalSms: false
       },
       modalData: {
         historySms: {
@@ -916,7 +916,7 @@ export default {
       this.modalData.sendSms.name_leads_arr = [
         { name: item.client, id: item.lead_id }
       ];
-      this.modal.modalSms = true
+      this.modal.modalSms = true;
     },
     modalSmssOpen() {
       this.modalData.sendSms.typesms = 0;
@@ -925,11 +925,10 @@ export default {
         id: el.lead_id
       }));
       this.modalData.sendSms.leads_sms = this.selected.map(el => el.lead_id);
-      console.log(this.modalData.sendSms.name_leads_arr);
-      this.modal.modalSms = true
+      this.modal.modalSms = true;
     },
     modalSmsClose() {
-      this.modal.modalSms = false
+      this.modal.modalSms = false;
     },
     modalHistorySmsOpen(item) {
       this.modalData.historySms.leadName = item.client;
@@ -1074,7 +1073,6 @@ export default {
       this.modal.notes = true;
     },
     closeModalNotes(status) {
-      console.log(status);
       this.modal.notes = false;
       if (status) {
         this.$refs["new-client-done-table"].refresh();
@@ -1346,7 +1344,7 @@ export default {
             user: this.currentUser.user_id
           });
           if (response.status === 200) {
-            this.showSuccessSwal()
+            this.showSuccessSwal();
           } else return;
           // eslint-disable-next-line no-param-reassign
           user.fee = user.feeNew;

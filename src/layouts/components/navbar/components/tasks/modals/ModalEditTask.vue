@@ -197,7 +197,6 @@ export default {
       }
     },
     selectQuickTask() {
-      console.log(this.quickTask);
       this.task.subject = this.quickTask.title;
       this.task.content = this.quickTask.body;
     },

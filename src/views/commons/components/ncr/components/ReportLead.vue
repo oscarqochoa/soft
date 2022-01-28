@@ -971,7 +971,7 @@
                         label="value"
                         v-model="value.status"
                       ></v-select>
-                     <!-- <span v-if="header.key == 'status' && value.a_number.length > 3">Yp franco</span> -->
+                      <!-- <span v-if="header.key == 'status' && value.a_number.length > 3">Yp franco</span> -->
                       <span v-else-if="header.key != 'status' && !value.edit">
                         {{
                         valueItem
@@ -1453,7 +1453,7 @@ export default {
     ...mapGetters({
       skin: "appConfig/skin"
     }),
-    classAdd() { 
+    classAdd() {
       return this.skin == "dark" ? "dark" : "light";
     },
     statusValue() {
@@ -2631,10 +2631,7 @@ export default {
         instruction: []
       };
     },
-    showData() {
-      console.log(this.datos);
-      console.log(this.global);
-    }
+    showData() {}
   }
 };
 </script>

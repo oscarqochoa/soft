@@ -112,7 +112,6 @@ export default {
         const response = await TaskService.editTaskCredit(params);
         this.task = response[0];
         this.modalUp = true;
-        console.log(this.task);
         this.removePreloader();
       } catch (error) {
         this.showErrorSwal(error);

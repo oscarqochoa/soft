@@ -538,7 +538,6 @@ export default {
         try {
           const service =
             type == "insert" ? "insertFirstNote" : "updateFirstNote";
-            console.log(NotesServices[service], 'service')
           const response = await NotesServices[service](this.paramsNote());
           this.hideModal(true);
         } catch (error) {
@@ -698,7 +697,6 @@ export default {
 
     /* File */
     onAudioChange() {
-      console.log(this.audioCall);
       const file = this.audioCall;
       const reader = new FileReader();
       reader.onload = e => {

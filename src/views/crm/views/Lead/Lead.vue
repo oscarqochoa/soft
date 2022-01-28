@@ -277,8 +277,6 @@ export default {
       const name_text = this.S_FILTERS_LEADS.searchQuery
         ? this.S_FILTERS_LEADS.searchQuery
         : null;
-      console.log(this.S_SELECTED_LEADS);
-      console.log(this.S_FILTERS_LEADS);
       this.dato2 = this.S_FILTERS_LEADS.perPage;
 
       const date_from =

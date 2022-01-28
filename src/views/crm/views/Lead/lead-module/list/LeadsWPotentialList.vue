@@ -189,7 +189,6 @@ export default {
     },
     async myProvider(ctx) {
       try {
-        console.log(ctx);
         this.isBusy = true;
         const response = await this.A_GET_W_POTENTIAL_LEADS({
           potential: 1,
