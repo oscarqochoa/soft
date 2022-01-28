@@ -377,13 +377,11 @@ const actions = {
   async A_DELETE_LEADS({ commit }, body) {
     try {
       const response = await crmLead.postDeleteLead(body);
-      /* console.log('A_DELETE_LEADS response', response) */
-      if (mixins.methods.isResponseSuccess(response)) {
-        commit("REMOVE_LEAD_DATA", {
-          destination: "S_LEADS",
-          id: body.leadid,
-        });
-      }
+
+      commit("REMOVE_LEAD_DATA", {
+        destination: "S_LEADS",
+        id: body.lead_id,
+      });
       return response;
     } catch (error) {
       console.log("ERROR_DELETE_LEADS [ACTION]", error);
