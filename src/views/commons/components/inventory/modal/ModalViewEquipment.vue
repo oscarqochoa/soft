@@ -435,7 +435,6 @@ export default {
       reader.readAsDataURL(file);
     },
     searchEquipmentById() {
-      console.log(this.idEquipment);
       amgApi
         .post("/logistics/inventory/get-equipment-data-by-id", {
           equipmentId: this.idEquipment

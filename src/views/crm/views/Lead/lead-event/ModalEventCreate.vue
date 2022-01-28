@@ -235,9 +235,6 @@ export default {
       this.setInitialFrom()
     ]);
 
-    console.log(this.event);
-    console.log(this.lead);
-
     this.removePreloader();
   },
   computed: {
@@ -315,7 +312,6 @@ export default {
           item => item.value === this.event.user_id
         )[0].label;
         const response = await this.A_SET_EVENT(this.event);
-        console.log(response)
         if (this.isResponseSuccess(response)) {
           this.showToast(
             "success",
@@ -404,7 +400,6 @@ export default {
   watch: {
     "event.from"(newVal, oldVal) {
       if (newVal) {
-        console.log("bew", newVal, oldVal);
         this.setInitialTo(newVal);
       }
     }

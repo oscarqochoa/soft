@@ -7,21 +7,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'Test',
-  created() {
-    console.log(this.$route)
-  },
+  name: "Test",
+  created() {},
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-    }),
-  },
-}
+      currentUser: "auth/currentUser"
+    })
+  }
+};
 </script>
 
 <style scoped>
-
 </style>

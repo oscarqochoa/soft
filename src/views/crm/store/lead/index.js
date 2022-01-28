@@ -523,7 +523,6 @@ const actions = {
   async A_GET_ALL_TRAKING_FIELDS_LEAD({ commit }, body) {
     try {
       const response = await crmLead.postAllTrackingChangeLeads(body);
-      /* console.log('A_GET_ALL_TRAKING_FIELDS_LEAD response', response) */
       return response;
     } catch (error) {
       console.log("ERROR_GET_ALL_TRAKING_FIELDS_LEAD [ACTION]", error);

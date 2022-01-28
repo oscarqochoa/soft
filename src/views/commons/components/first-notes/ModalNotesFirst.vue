@@ -497,7 +497,6 @@ export default {
       return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller;
     },
     newNote() {
-      console.log(this.noteInfo.created > "2021-05-16 00:00:00");
       return this.noteInfo.created > "2021-05-16 00:00:00";
     },
     emptyNote() {
@@ -557,7 +556,6 @@ export default {
     }
   },
   async created() {
-    console.log(this.noteInfo);
     await this.getFirstNote();
     await this.listTypeBusiness();
     await this.getCountries();
@@ -659,7 +657,6 @@ export default {
     },
     getDetailsAnswers(note) {
       note.forEach(answer => {
-        console.log(answer);
         if (answer.answer != "null") {
           if (answer.question_id === 1002)
             this.note.businessIdentification.value = answer.answer;

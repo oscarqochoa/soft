@@ -209,10 +209,6 @@ export default {
         ];
       };
       this.calendarOptions.eventClick = ({ event: clickedEvent }) => {
-        console.log(
-          clickedEvent._def.extendedProps,
-          "clickedEvent._def.extendedProps gaaa"
-        );
         // eslint-disable-next-line no-underscore-dangle
         this.lead = { lead_name: clickedEvent._def.extendedProps.lead_name };
         // eslint-disable-next-line no-underscore-dangle
@@ -325,7 +321,6 @@ export default {
   },
   mounted() {
     this.calendarApi = this.$refs.refCalendar.getApi();
-    console.log(this.calendarApi);
   },
   props: {
     isModal: {

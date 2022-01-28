@@ -65,9 +65,7 @@
           </div>
         </template>
         <template #cell(done)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center">
             <b-form-checkbox
               :disabled="rolByUser"
               v-model="data.item.done"
@@ -80,8 +78,7 @@
                   data.item.user_id
                 )
               "
-            >
-            </b-form-checkbox>
+            ></b-form-checkbox>
           </div>
         </template>
       </b-table>
@@ -103,10 +100,10 @@ export default {
       type: Object
     },
     nameUser: {
-      type: String,
+      type: String
     },
     id: {
-      type: [Number, String],
+      type: [Number, String]
     },
     ifModalCard: {
       type: Boolean
@@ -186,9 +183,7 @@ export default {
     })
   },
   methods: {
-    checkveri(state) {
-      console.log(state);
-    },
+    checkveri(state) {},
     closeModal() {
       this.$emit("close", false);
     },
@@ -204,7 +199,7 @@ export default {
         if (items.length != 0) {
           this.totalMissing = items[0].quantity_pending;
           this.totalDone = items[0].quantity_done;
-          items.map((item) => {
+          items.map(item => {
             item.selected = false;
           });
         } else {

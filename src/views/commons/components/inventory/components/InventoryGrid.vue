@@ -435,8 +435,6 @@ export default {
     },
     openValidate(param1, param2, param3, moduleId, num) {
       if (num == 2) {
-        // this.openModalRepairEquipment(param1, param2, param3, num);
-        console.log("num==2");
       } else {
         this.$swal
           .fire({
