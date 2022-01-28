@@ -18,5 +18,13 @@ class ScheduleService {
         const data = await amgApi.post('/schedules/send-justify-late', formData);
         return data.data;
     }
+    async getHourReport(params) {
+        const data = await amgApi.post('/schedules/get-hour-report-user', params);
+        return data.data;
+    }
+    async getDetailsSchedule(params){
+        const data = await amgApi.post('/schedules/get-details-schedule', params);
+        return data.data;
+    }
 }
 export default new ScheduleService()
