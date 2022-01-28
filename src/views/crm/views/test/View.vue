@@ -1,14 +1,16 @@
 <template>
-<div>
-  <h1>{{message}}</h1>
-  <pre>{{currentUser}}</pre>
-  <pre>{{ userRole }}</pre>
-</div>
-
+  <div>
+    <b-button
+      @click="clickHola"
+    >
+      holaa
+    </b-button>
+    <pre>{{ currentUser }}</pre>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import CrmService from '../../services/crm.service'
 
 export default {
@@ -19,18 +21,22 @@ export default {
     }
   },
   mounted() {
-    amgApi
-      .get('/welcome')
-      .then(response => {
-        console.log(response)
-      })
+    amgApi.get('/welcome/welcome').then(response => {
+      console.log(response)
+    })
   },
   async created() {
     try {
       await CrmService.getAlgo()
     } catch (error) {
       console.log('Somthing went wrong created:', error)
-      this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
+      this.showToast(
+        'danger',
+        'top-right',
+        'Oop!',
+        'AlertOctagonIcon',
+        this.getInternalErrors(error),
+      )
     }
   },
   computed: {
@@ -39,6 +45,27 @@ export default {
       token: 'auth/token',
       userRole: 'auth/userRole',
     }),
+    ...mapState({
+      navMenuItems: state => state.SidebarStore.S_SIDEBAR_ITEMS,
+    }),
+  },
+  methods: {
+    ...mapMutations({
+      updateNcrTag: 'SidebarStore/UPDATE_SIDEBAR_ITEM_PROPERTY',
+    }),
+    click() {
+      alert('aaa')
+    },
+    clickHola() {
+      console.log(this.navMenuItems, 'this.navMenuItems')
+      const [ncr] = this.navMenuItems.filter(val => val.title === 'Sales Made')
+      console.log(ncr, 'this.navMenuItems.filter')
+      if (ncr.tag) {
+        ncr.tag = Number(ncr.tag)
+        ncr.tag += 1
+      } else ncr.tag = 1
+      this.updateNcrTag(ncr)
+    },
   },
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <feather-icon  icon="DollarSignIcon" size="19" />
+    <feather-icon icon="DollarSignIcon" size="19" />
     <b-tooltip
       triggers="hover"
       :target="`bookmark-pay-stub`"
@@ -11,7 +11,9 @@
       v-model="payStubModalController"
       title="Pay Stub"
       size="lg"
+      title-class="h3 text-white"
       hide-footer
+      modal-class="modal-primary"
     >
       <pay-stub-grid></pay-stub-grid>
     </b-modal>
@@ -19,21 +21,21 @@
 </template>
 
 <script>
-import PayStubGrid from './PayStubGrid.vue';
+import PayStubGrid from "./PayStubGrid.vue";
 export default {
-  data(){
-    return{
-      payStubModalController: false,
-    }
+  data() {
+    return {
+      payStubModalController: false
+    };
   },
   components: {
-    PayStubGrid,
+    PayStubGrid
   },
   methods: {
-    openPayStubModal(){
+    openPayStubModal() {
       this.payStubModalController = true;
-    },
-  },
+    }
+  }
 };
 </script>
 

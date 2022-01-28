@@ -104,12 +104,8 @@
                     <b-col
                       cols="2"
                       class="d-flex align-items-center justify-content-end pr-0"
-                    >
-                      TOTAL $
-                    </b-col>
-                    <b-col
-                      cols="3"
-                    >
+                    >TOTAL $</b-col>
+                    <b-col cols="3">
                       <money
                         v-model.lazy="totalAmount"
                         v-bind="vMoney"
@@ -135,9 +131,7 @@
                     >
                       FEE $
                     </b-col>
-                    <b-col
-                      cols="3"
-                    >
+                    <b-col cols="3">
                       <money
                         v-model="fee"
                         v-bind="vMoney"
@@ -326,21 +320,21 @@ export default {
         switch (this.typeModal) {
           case 1:
             message = 'complete Rates'
-            route = '/attendend'
+            route = '/sales-made/attendend-sale'
             break
           case 3:
             message = 'add new service'
-            route = '/attendendprogram'
+            route = '/sales-made/attendend-saleprogram'
             this.typeADD = 1
             break
           case 4:
             message = 'change service'
-            route = '/attendendprogram'
+            route = '/sales-made/attendend-saleprogram'
             this.typeADD = 2
             break
           case 6:
             message = 'add new service'
-            route = '/leadattendend'
+            route = '/sale/insert-lead-attendance'
             break
           default:
             break
@@ -383,7 +377,9 @@ export default {
           json_ce: this.json_ce,
         }
 
-        const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
+        const result = await this.showConfirmSwal(
+          `Are you sure you want to ${message}`,
+        )
         if (result.value) {
           this.addPreloader()
           const response = await amgApi.post(`${route}`, param)
@@ -397,14 +393,17 @@ export default {
     /* Changes */
     calculateSubtotal(index) {
       this.rates[index].subtotal = this.rates[index].price * this.rates[index].quantity
-      this.totalAmount = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
+      this.totalAmount = this.rates.reduce(
+        (sum, rate) => sum + rate.subtotal,
+        0,
+      )
     },
 
     /* Rates */
 
     async searchRate() {
       try {
-        const response = await amgApi.post('/searchprogram', {
+        const response = await amgApi.post('/rates/get-rates-by-programs', {
           id: this.program,
         })
         if (response.status === 200) {
@@ -430,12 +429,12 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post('/searchprogramsalemade', {
+        const response = await amgApi.post('/sales-made/get-details-sales-made', {
           id: this.salesClient.id,
         })
         if (response.status === 200) {
           this.fee = response.data[0].fee
-          this.rate_selected = JSON.parse(response.data[0].rate_selected)
+          this.rate_selected = response.data[0].rate_selected
 
           for (let i = 0; i < this.rates.length; i++) {
             for (let y = 0; y < this.rate_selected.length; y++) {
@@ -461,7 +460,7 @@ export default {
     },
     async getScore() {
       try {
-        const response = await amgApi.post('/getscoreattend', {
+        const response = await amgApi.post('/attend/get-score-attend', {
           lead_id: this.salesClient.lead_id,
         })
         if (response.status == 200) {

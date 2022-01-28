@@ -3,11 +3,11 @@
     <template v-for="item in items">
       <component
         :is="resolveNavItemComponent(item)"
-        v-if="showTabNavigation(item)"
-        :key="item.header || item.title"
+        v-if="item.route ? showTabNavigation(item) && onSameModuleItem(item): onSameModuleHeader(item)"
+        :key="item.header || item.route"
         :item="item"
-        :isMouseHovered="isMouseHovered"
-        :isVerticalMenuCollapsed="isVerticalMenuCollapsed"
+        :is-mouse-hovered="isMouseHovered"
+        :is-vertical-menu-collapsed="isVerticalMenuCollapsed"
       />
     </template>
   </ul>
@@ -27,12 +27,28 @@ export default {
     VerticalNavMenuLink,
     VerticalNavMenuGroup,
   },
+  data() {
+    return {
+      enviroment: process.env.VUE_APP_ENVIROMENT,
+      registeredHeaders: ['C.R.M.', 'SOCIAL NETWORK'],
+    }
+  },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
     }),
   },
   methods: {
+    onSameModuleHeader(item) {
+      if (this.currentUser.module_name === item.header) {
+        return true
+      }
+      return !this.registeredHeaders.includes(item.header) && this.enviroment === 'develop'
+    },
+    onSameModuleItem(item) {
+      const { route } = this.$router.resolve({ name: item.route })
+      return route.meta.module === this.currentUser.modul_id
+    },
     showTabNavigation(item) {
       const { route } = this.$router.resolve({ name: item.route })
       if (route.meta === {}) return true
@@ -56,7 +72,6 @@ export default {
   },
   setup() {
     provide('openGroups', ref([]))
-
     return {
       resolveNavItemComponent,
     }

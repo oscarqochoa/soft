@@ -5,7 +5,6 @@ export default {
   state: {
     sellersCrm: {},
     capturedCrm: [],
-    //TODO Hacerlo global
     programs: {},
     sources: {},
     states: {},
@@ -41,7 +40,7 @@ export default {
     SET_CAPTURED_CRM(state, capturedCrm) {
       state.capturedCrm = capturedCrm;
     },
-    //TODO Hacerlo global
+    // TODO Hacerlo global
     SET_PROGRAMS(state, programs) {
       state.programs = programs;
     },
@@ -53,6 +52,31 @@ export default {
     },
   },
   actions: {
+    // eslint-disable-next-line consistent-return
+    async A_GET_USERS_BY_MODULE({}, moduleId) {
+      try {
+        const params = {
+          roles: "[]",
+          type: "1",
+        };
+        const response = await GlobalServices.getUsersByModuleAndRoles(
+          moduleId,
+          params
+        );
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async A_GET_HOUR_SYSTEM({}, body) {
+      try {
+        const response = await GlobalServices.getHourSystem(body);
+        return response;
+      } catch (error) {
+        throw error;
+      }
+    },
     async getSellers({ commit }) {
       const sellers = await GlobalServices.getSellersCrm();
       const formatedSellers = sellers.map((seller) => ({
@@ -69,7 +93,7 @@ export default {
       }));
       commit("SET_CAPTURED_CRM", formatedCaptured);
     },
-    //TODO Hacerlo global
+    // TODO Hacerlo global
     async getPrograms({ commit }) {
       const programs = await GlobalServices.getPrograms();
       const formatedPrograms = programs.map((pro) => ({

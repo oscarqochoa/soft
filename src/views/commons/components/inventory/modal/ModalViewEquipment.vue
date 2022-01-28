@@ -14,7 +14,9 @@
       <div class="demo-spacing-0">
         <b-alert variant="primary" show>
           <div class="alert-body">
-            <span><strong>IMPORTANT INFORMATION</strong></span>
+            <span>
+              <strong>IMPORTANT INFORMATION</strong>
+            </span>
           </div>
         </b-alert>
       </div>
@@ -27,10 +29,7 @@
                   <b-col sm="8">
                     <b-row>
                       <b-col sm="6">
-                        <ValidationProvider
-                          rules="required"
-                          v-slot="{ errors }"
-                        >
+                        <ValidationProvider rules="required" v-slot="{ errors }">
                           <b-form-group label="CATEGORY:">
                             <v-select
                               v-model="category"
@@ -41,27 +40,18 @@
                               label="name"
                               class="w-100"
                               :class="{ 'border border-danger': errors[0] }"
-                            >
-                            </v-select>
+                            ></v-select>
                           </b-form-group>
                         </ValidationProvider>
                       </b-col>
                       <b-col sm="6">
-                        <ValidationProvider
-                          rules="required|validate-amount"
-                          v-slot="{ errors }"
-                        >
+                        <ValidationProvider rules="required|validate-amount" v-slot="{ errors }">
                           <b-form-group label="PRICE:">
                             <money
                               v-bind="money"
                               v-model="price"
                               style="height: 37px"
-                              class="
-                                form-control
-                                input-form
-                                fond-white
-                                border-hover
-                              "
+                              class="form-control input-form fond-white border-hover"
                               disabled
                               :class="{
                                 'border border-danger':
@@ -72,22 +62,14 @@
                         </ValidationProvider>
                       </b-col>
                       <b-col sm="6">
-                        <ValidationProvider
-                          rules="required"
-                          v-slot="{ errors }"
-                        >
+                        <ValidationProvider rules="required" v-slot="{ errors }">
                           <b-form-group label="MODEL:">
                             <b-form-input
                               v-model="model"
                               placeholder="Model"
                               size="sm"
                               style="height: 38px"
-                              class="
-                                form-control
-                                input-form
-                                fond-white
-                                background-white
-                              "
+                              class="form-control input-form fond-white background-white"
                               disabled
                               :class="{ 'border border-danger': errors[0] }"
                             ></b-form-input>
@@ -95,10 +77,7 @@
                         </ValidationProvider>
                       </b-col>
                       <b-col sm="6">
-                        <ValidationProvider
-                          rules="required"
-                          v-slot="{ errors }"
-                        >
+                        <ValidationProvider rules="required" v-slot="{ errors }">
                           <b-form-group label="CONDITION:">
                             <v-select
                               v-model="condition"
@@ -109,16 +88,12 @@
                               label="text"
                               class="w-100"
                               :class="{ 'border border-danger': errors[0] }"
-                            >
-                            </v-select>
+                            ></v-select>
                           </b-form-group>
                         </ValidationProvider>
                       </b-col>
                       <b-col sm="6">
-                        <ValidationProvider
-                          rules="required"
-                          v-slot="{ errors }"
-                        >
+                        <ValidationProvider rules="required" v-slot="{ errors }">
                           <b-form-group label="BRAND:">
                             <v-select
                               v-model="brand"
@@ -129,16 +104,12 @@
                               label="name"
                               class="w-100"
                               :class="{ 'border border-danger': errors[0] }"
-                            >
-                            </v-select>
+                            ></v-select>
                           </b-form-group>
                         </ValidationProvider>
                       </b-col>
                       <b-col sm="6">
-                        <ValidationProvider
-                          rules="required"
-                          v-slot="{ errors }"
-                        >
+                        <ValidationProvider rules="required" v-slot="{ errors }">
                           <!-- <b-form-group label="PURCHASE DATE:">
                             <b-form-datepicker
                               v-model="dateRegister"
@@ -147,7 +118,7 @@
                               disabled
                               :class="{ 'border border-danger': errors[0] }"
                             ></b-form-datepicker>
-                          </b-form-group> -->
+                          </b-form-group>-->
                           <b-form-group label="PURCHASE DATE:">
                             <b-form-datepicker
                               v-model="dateRegister"
@@ -207,10 +178,7 @@
                           v-if="[12, 16, 19].includes($route.meta.module)"
                           @click="replaceImage(1)"
                         >
-                          <i
-                            class="fas fa-edit"
-                            style="font-size: 20px; color: blue"
-                          ></i>
+                          <i class="fas fa-edit" style="font-size: 20px; color: blue"></i>
                         </button>
                       </div>
                       <div v-else>
@@ -225,20 +193,10 @@
                           "
                           @click="saveReplaceImage()"
                         >
-                          <i
-                            class="fas fa-save"
-                            style="font-size: 20px; color: limegreen"
-                          ></i>
+                          <i class="fas fa-save" style="font-size: 20px; color: limegreen"></i>
                         </button>
-                        <button
-                          type="button"
-                          class="mt-2"
-                          @click="replaceImage(2)"
-                        >
-                          <i
-                            class="fas fa-times-circle"
-                            style="font-size: 20px; color: red"
-                          ></i>
+                        <button type="button" class="mt-2" @click="replaceImage(2)">
+                          <i class="fas fa-times-circle" style="font-size: 20px; color: red"></i>
                         </button>
                       </div>
                     </div>
@@ -246,109 +204,78 @@
                 </b-row>
               </div>
 
-              <div
-                v-if="category == 1"
+              <!-- <div
+                
                 style="background: #f7f6f2; color: #706d7d; padding: 10px"
               >
                 SECONDARY INFORMATION
-              </div>
-              <div v-if="category == 1" class="p-4 mt-3 pt-1 pb-3">
+              </div>-->
+              <b-alert variant="primary" v-if="category == 1" show>
+                <div class="alert-body">
+                  <span>
+                    <strong>SECONDARY INFORMATION</strong>
+                  </span>
+                </div>
+              </b-alert>
+              <div v-if="category == 1" class="p-4 pb-3">
                 <b-row>
-                  <b-col sm="6">
-                    <b-form-group
-                      id="input-group-2"
-                      label="SERIE:"
-                      style="color: #706d7d"
-                      label-for="input-2"
-                    >
+                  <b-col sm="6" cols="12">
+                    <b-form-group id="input-group-2" label="SERIE:">
                       <b-form-input
                         v-model="serie"
                         placeholder="..."
-                        size="sm"
                         :disabled="disabled"
                         class="input-background-white"
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
                   <b-col sm="6">
-                    <b-form-group
-                      id="input-group-2"
-                      label="PROCESSOR:"
-                      label-for="input-2"
-                    >
+                    <b-form-group id="input-group-2" label="PROCESSOR:">
                       <b-form-input
                         v-model="processor"
                         placeholder="..."
-                        size="sm"
                         class="input-background-white"
                         :disabled="disabled"
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
                   <b-col sm="4">
-                    <b-form-group
-                      id="input-group-3"
-                      label="RAM:"
-                      style="color: #706d7d"
-                      label-for="input-3"
-                    >
-                      <b-form-select
+                    <b-form-group id="input-group-3" label="RAM:" style="color: #706d7d">
+                      <v-select
                         v-model="ram"
                         :options="optionsRam"
-                        size="sm"
+                        label="text"
+                        class="w-100"
+                        :reduce="(val) => val.text"
+                        placeholder="Select"
                         :disabled="disabled"
-                        class="select-icon-none input-background-white"
-                      >
-                        <template #first>
-                          <b-form-select-option :value="null" disabled
-                            >Please select an option</b-form-select-option
-                          >
-                        </template>
-                      </b-form-select>
+                      />
                     </b-form-group>
                   </b-col>
                   <b-col sm="4">
-                    <b-form-group
-                      id="input-group-3"
-                      label="DISC:"
-                      style="color: #706d7d"
-                      label-for="input-3"
-                    >
-                      <b-form-select
+                    <b-form-group id="input-group-3" label="DISC:" style="color: #706d7d">
+                      <v-select
                         v-model="disc"
                         :options="optionsDisc"
-                        size="sm"
+                        label="text"
+                        class="w-100"
+                        :reduce="(val) => val.text"
+                        placeholder="Select"
                         :disabled="disabled"
-                        class="select-icon-none input-background-white"
-                      >
-                        <template #first>
-                          <b-form-select-option :value="null" disabled
-                            >Please select an option</b-form-select-option
-                          >
-                        </template>
-                      </b-form-select>
+                      />
                     </b-form-group>
                   </b-col>
                   <b-col sm="4">
-                    <b-form-group
-                      id="input-group-3"
-                      label="S.OPERATIONAL:"
-                      style="color: #706d7d"
-                      label-for="input-3"
-                    >
-                      <b-form-select
-                        v-model="so"
+                    <b-form-group id="input-group-3" label="S.OPERATIONAL:" style="color: #706d7d">
+                      <v-select
+                        v-model="disc"
                         :options="optionsSo"
-                        size="sm"
+                        label="text"
+                        class="w-100"
+                        :reduce="(val) => val.text"
+                        placeholder="Select"
                         :disabled="disabled"
-                        class="select-icon-none input-background-white"
-                      >
-                        <template #first>
-                          <b-form-select-option :value="null" disabled
-                            >Please select an option</b-form-select-option
-                          >
-                        </template>
-                      </b-form-select>
+                      />
                     </b-form-group>
                   </b-col>
 
@@ -405,21 +332,21 @@
 import vSelect from "vue-select";
 export default {
   components: {
-    vSelect,
+    vSelect
   },
   props: {
     modalViewEquipment: {
-      type: Boolean,
+      type: Boolean
     },
     idEquipment: {
-      type: [Number, String],
+      type: [Number, String]
     },
     edit: {
-      type: [Number, String],
+      type: [Number, String]
     },
     optionsCat: {
-      type: [],
-    },
+      type: []
+    }
   },
   data() {
     return {
@@ -433,7 +360,7 @@ export default {
         { value: 1, text: "NEW" },
         { value: 2, text: "REPAIRED" },
         { value: 3, text: "USED" },
-        { value: 4, text: "NOT FUNCTIONAL" },
+        { value: 4, text: "NOT FUNCTIONAL" }
       ],
       disc: null,
       optionsDisc: [
@@ -441,7 +368,7 @@ export default {
         { value: "256 GB", text: "256 GB" },
         { value: "512 GB", text: "512 GB" },
         { value: "1 TB", text: "1 TB" },
-        { value: "2 TB", text: "2 TB" },
+        { value: "2 TB", text: "2 TB" }
       ],
       ram: null,
       optionsRam: [
@@ -451,12 +378,12 @@ export default {
         { value: "12 GB", text: "12 GB" },
         { value: "16 GB", text: "16 GB" },
         { value: "32 GB", text: "32 GB" },
-        { value: "64 GB", text: "64 GB" },
+        { value: "64 GB", text: "64 GB" }
       ],
       so: null,
       optionsSo: [
         { value: "WINDOWS 10", text: "WINDOWS 10" },
-        { value: "WINDOWS 11", text: "WINDOWS 11" },
+        { value: "WINDOWS 11", text: "WINDOWS 11" }
       ],
       serie: "",
       processor: "",
@@ -468,13 +395,13 @@ export default {
         thousands: ",",
         prefix: "$ ",
         precision: 2,
-        masked: false,
+        masked: false
       },
       vmoneyValidate: false,
       newCategory: "",
       newBrand: "",
       equipment: {
-        images: "",
+        images: ""
       },
       Image: "/images/inventory.jpg",
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
@@ -483,13 +410,13 @@ export default {
       previousImage: "",
       commentary: "",
       viewImage: "",
-      charge: false,
+      charge: false
     };
   },
   computed: {
     image() {
       return this.viewImage;
-    },
+    }
   },
   methods: {
     closeModal() {
@@ -502,40 +429,40 @@ export default {
     },
     uploadImage(file) {
       let reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         this.viewImage = e.target.result;
       };
       reader.readAsDataURL(file);
     },
     searchEquipmentById() {
+      console.log(this.idEquipment);
       amgApi
-        .post("/inventory/get-equipment-data-by-id", {
-          equipmentId: this.idEquipment,
+        .post("/logistics/inventory/get-equipment-data-by-id", {
+          equipmentId: this.idEquipment
         })
-        .then((response) => {
+        .then(response => {
           if (response.status == 200) {
             this.dataEquipment = response.data[0];
             this.category = this.dataEquipment.category;
             this.brand = this.dataEquipment.brand;
             this.condition = this.dataEquipment.condition;
-            // this.disc = this.dataEquipment["disc"];
-            // this.ram = this.dataEquipment["ram"];
-            // this.so = this.dataEquipment["os"];
-            // this.serie = this.dataEquipment["serie"];
-            // this.processor = this.dataEquipment["process"];
+            this.disc = this.dataEquipment.disc;
+            this.ram = this.dataEquipment.ram;
+            this.so = this.dataEquipment.os;
+            this.serie = this.dataEquipment.serie;
+            this.processor = this.dataEquipment.process;
             this.price = this.dataEquipment.price;
             this.model = this.dataEquipment.model;
             this.dateRegister = this.dataEquipment.purchase_date;
-            // this.commentary = this.dataEquipment["commentary"];
+            this.commentary = this.dataEquipment.commentary;
             this.viewImage =
               this.dataEquipment.url_image == null
                 ? this.assetsImg + this.Image
                 : this.dataEquipment.url_image;
-            // var x = document.getElementById("app");
             this.charge = true;
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
           this.showToast(
             "danger",
@@ -547,27 +474,30 @@ export default {
         });
     },
     getSelectBrand() {
-      amgApi.get("/inventory/get-list-brand", {}).then((response) => {
-        if (response.status == 200) {
-          this.optionsBrand = response.data;
-        }
-      }).catch(error=>{
-        console.error(error)
-        this.showToast(
+      amgApi
+        .get("/logistics/inventory/get-all-equipment-brand", {})
+        .then(response => {
+          if (response.status == 200) {
+            this.optionsBrand = response.data;
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          this.showToast(
             "danger",
             "top-right",
             "Error",
             "XIcon",
             "Something went wrong!"
           );
-      });
-    },
+        });
+    }
   },
   created() {
     this.searchEquipmentById();
     this.getSelectBrand();
   },
-  mounted() {},
+  mounted() {}
 };
 </script>
 

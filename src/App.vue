@@ -9,6 +9,8 @@
       <router-view />
     </component>
 
+    <ModalsContainer :modul="currentModul" />
+
     <scroll-to-top v-if="enableScrollToTop" />
   </div>
 </template>
@@ -24,7 +26,8 @@ import useAppConfig from '@core/app-config/useAppConfig'
 
 import { useWindowSize, useCssVar } from '@vueuse/core'
 
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import ModalsContainer from '@/views/commons/components/modals-container/ModalsContainer.vue'
 import store from '@/store'
 
 const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')
@@ -39,6 +42,7 @@ export default {
     LayoutFull,
 
     ScrollToTop,
+    ModalsContainer,
   },
   // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
   // Currently, router.currentRoute is not reactive and doesn't trigger any change
@@ -52,17 +56,29 @@ export default {
     },
     ...mapGetters({
       loading: 'app/loading',
+      currentUser: 'auth/currentUser',
     }),
   },
   watch: {
     $route() {
       this.updateCurrentUserModuleRole(this.$route.matched[0].meta.module)
+      this.showModalTaskToday()
+      this.A_UPDATE_COUNTERS({ module: this.$route.matched[0].meta.module, role: this.currentUser.role_id })
     },
   },
   methods: {
     ...mapActions({
       updateCurrentUserModuleRole: 'auth/updateCurrentUserModuleRole',
+      A_UPDATE_COUNTERS: 'SidebarStore/A_UPDATE_COUNTERS',
     }),
+    ...mapMutations({
+      showModalTaskToday: 'TaskStore/M_SHOW_TASK_TODAY_MODAL',
+    }),
+  },
+  data() {
+    return {
+      currentModul: null,
+    }
   },
   beforeCreate() {
     // Set colors in theme

@@ -225,7 +225,7 @@
                     v-model="note.incoveniences.value"
                     :disabled="disabled"
                     :options="editorOption"
-                    :class="{'border-danger' : errors[0]}"
+                    :class="{'border-danger rounded' : errors[0]}"
                   />
                 </validation-provider>
               </b-col>
@@ -248,7 +248,7 @@
                 v-model="note.information.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -274,13 +274,15 @@
             </validation-provider>
             <validation-provider
               v-slot="{ errors }"
+              name="recomendationTextArea"
+              :rules="isSelectedOthersOnRecomendations ? 'required' : ''"
             >
               <quill-editor
                 v-model="note.recomendations.value"
                 :disabled="disabled"
                 :options="editorOption"
                 class="mt-1"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </validation-provider>
           </b-form-group>
@@ -301,7 +303,7 @@
                 v-model="note.suggestion.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger' : errors[0]}"
+                :class="{'border-danger rounded' : errors[0]}"
               />
             </b-form-group>
           </validation-provider>
@@ -392,7 +394,7 @@ export default {
               },
             },
             {
-              text: 'ADVISOR\'S RECOMMENDATIONS',
+              text: "ADVISOR'S RECOMMENDATIONS",
               value: {
                 id: 'reco-2',
               },
@@ -587,7 +589,6 @@ export default {
       editorOption: {
         modules: { toolbar: false },
       },
-
     }
   },
   computed: {
@@ -610,18 +611,27 @@ export default {
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller
     },
+    isSelectedOthersOnRecomendations() {
+      return this.note.recomendations.selectedsOptions
+        .map(val => val.id)
+        .includes('reco-4')
+    },
   },
   watch: {
     'note.recomendations.value': {
       handler(newValue) {
-        const include = this.note.recomendations.selectedsOptions.map(val => val.id).includes('reco-4')
+        const include = this.note.recomendations.selectedsOptions
+          .map(val => val.id)
+          .includes('reco-4')
         if (newValue && !include) {
           console.log('add')
           this.note.recomendations.selectedsOptions.push({ id: 'reco-4' })
         }
         if (!newValue && include) {
           console.log('remove')
-          const index = this.note.recomendations.selectedsOptions.indexOf({ id: 'reco-4' })
+          const index = this.note.recomendations.selectedsOptions.indexOf({
+            id: 'reco-4',
+          })
           this.note.recomendations.selectedsOptions.splice(index, 1)
         }
       },
@@ -631,12 +641,14 @@ export default {
       handler(newValue, oldValue) {
         const isRemoved = newValue.length < oldValue.length
         if (isRemoved) {
-          console.log(newValue, oldValue)
-          const includedReco4InNewValue = newValue.map(val => val.id).includes('reco-4')
-          const includedReco4InOldValue = oldValue.map(val => val.id).includes('reco-4')
+          const includedReco4InNewValue = newValue
+            .map(val => val.id)
+            .includes('reco-4')
+          const includedReco4InOldValue = oldValue
+            .map(val => val.id)
+            .includes('reco-4')
           console.log(includedReco4InNewValue, includedReco4InOldValue)
           if (!includedReco4InNewValue && includedReco4InOldValue) {
-            console.log('geeee')
             this.note.recomendations.value = ''
           }
         }
@@ -654,7 +666,9 @@ export default {
   methods: {
     async getNoCredit() {
       try {
-        const response = await amgApi.post('/getjsonnocredit', { sale_id: this.noteInfo.saleId })
+        const response = await amgApi.post('/sales-made/get-program-task-welcome', {
+          sale_id: this.noteInfo.saleId,
+        })
         this.noCredit = response.data
         const middle = this.noCredit.length / 2
         this.note.incoveniences.mid1 = this.noCredit.slice(0, middle + 1)
@@ -743,18 +757,14 @@ export default {
     },
     async getCountries() {
       try {
-        const response = await amgApi.post('/view-countrys', {})
+        const response = await amgApi.post('/commons/get-world-countrys', {})
         this.note.country.options = response.data
       } catch (error) {
         this.showErrorSwal(error)
       }
     },
     initialValidationNote(note) {
-      if (
-        note.length != 0
-          && this.noteInfo.statusSale != 4
-          && !this.noteNull
-      ) {
+      if (note.length != 0 && this.noteInfo.statusSale != 4 && !this.noteNull) {
         this.showUpdate = true
       } else if (this.noteInfo.editmodal == false) {
         this.showSave = false
@@ -771,13 +781,23 @@ export default {
             const response = JSON.parse(answer.answer.replaceAll('\\', '"'))
             response.forEach(ans => {
               if (ans.id === 'reco-4') {
-                this.note.recomendations.selectedsOptions.push({ id: 'reco-4' })
+                this.note.recomendations.selectedsOptions.push({
+                  id: 'reco-4',
+                })
                 this.note.recomendations.value = ans.text
               } else this.note.recomendations.selectedsOptions.push(ans)
             })
           }
-          if (answer.question_id === 24) this.note.pending.value = JSON.parse(answer.answer.replaceAll('\\', '"'))
-          if (answer.question_id === 25) this.note.goals.value = JSON.parse(answer.answer.replaceAll('\\', '"'))
+          if (answer.question_id === 24) {
+            this.note.pending.value = JSON.parse(
+              answer.answer.replaceAll('\\', '"'),
+            )
+          }
+          if (answer.question_id === 25) {
+            this.note.goals.value = JSON.parse(
+              answer.answer.replaceAll('\\', '"'),
+            )
+          }
           if (answer.question_id === 1058) this.note.emergencyContact.value = answer.answer
           if (answer.question_id === 1057) this.note.contactSchedule.value = answer.answer
           if (answer.question_id === 1056) this.note.maritalStatus.value = answer.answer
@@ -792,7 +812,7 @@ export default {
     },
     async listTypeBusiness() {
       try {
-        const response = await amgApi.get('/listtypebusiness')
+        const response = await amgApi.post('/commons/get-all-type-business')
         this.note.typeOfBuisiness.options = response.data
       } catch (error) {
         this.showErrorSwal(error)
@@ -817,7 +837,7 @@ export default {
 </script>
 
 <style scoped>
-.quill-editor{
+.quill-editor {
   height: 100px;
 }
 </style>

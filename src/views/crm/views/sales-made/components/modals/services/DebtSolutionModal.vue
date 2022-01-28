@@ -30,12 +30,8 @@
       class="mb-3"
       @on-complete="formSubmitted"
     >
-
       <!-- accoint details tab -->
-      <tab-content
-        title="CREDITORS'S LIST"
-        :before-change="validationFirstStep"
-      >
+      <tab-content title="CREDITORS'S LIST" :before-change="validationFirstStep">
         <modal-services-d-s-first-step
           v-if="this.state1 == 1 || isFirstStep"
           ref="firstStep"
@@ -49,10 +45,7 @@
         />
       </tab-content>
       <!-- personal details tab -->
-      <tab-content
-        title="ANALYSIS"
-        :before-change="validationSecondStep"
-      >
+      <tab-content title="ANALYSIS" :before-change="validationSecondStep">
         <modal-services-d-s-second-step
           v-if="this.state2 == 1 || isSecondStep"
           :key="key2"
@@ -67,9 +60,7 @@
       </tab-content>
 
       <!-- address  -->
-      <tab-content
-        title="QUESTIONNAIRE"
-      >
+      <tab-content title="QUESTIONNAIRE">
         <modal-services-d-s-third-step
           v-if="state3 == 1 || isThirdStep"
           ref="thirdStep"
@@ -88,12 +79,12 @@
 </template>
 
 <script>
-import { FormWizard, TabContent } from 'vue-form-wizard'
-import ModalServicesDSFirstStep from './debt-solution/ModalServicesDSFirstStep.vue'
-import ModalServicesDSSecondStep from './debt-solution/ModalServicesDSSecondStep.vue'
-import ModalServicesDSThirdStep from './debt-solution/ModalServicesDSThirdStep.vue'
-import ModalServiceHeader from '@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue'
-import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+import { FormWizard, TabContent } from "vue-form-wizard";
+import ModalServicesDSFirstStep from "./debt-solution/ModalServicesDSFirstStep.vue";
+import ModalServicesDSSecondStep from "./debt-solution/ModalServicesDSSecondStep.vue";
+import ModalServicesDSThirdStep from "./debt-solution/ModalServicesDSThirdStep.vue";
+import ModalServiceHeader from "@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader.vue";
+import "vue-form-wizard/dist/vue-form-wizard.min.css";
 
 export default {
   components: {
@@ -102,34 +93,34 @@ export default {
     ModalServicesDSThirdStep,
     ModalServiceHeader,
     FormWizard,
-    TabContent,
+    TabContent
   },
   props: {
     modalServices: {
       type: Boolean,
-      default: false,
+      default: false
     },
     salesClient: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     typeModal: {
       type: Number,
-      default: 1,
+      default: 1
       // 1: create, 2: show
     },
     usersServices: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     programsAll: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     headerS: {
       type: Object,
-      default: () => ({ program: '', seller: '', captured: '' }),
-    },
+      default: () => ({ program: "", seller: "", captured: "" })
+    }
   },
   data() {
     return {
@@ -139,120 +130,153 @@ export default {
       state1: 0,
       state2: 0,
       state3: 0,
-      idleyend: '',
-      leyend: '',
+      idleyend: "",
+      leyend: "",
       key2: 0,
       key3: 100,
-      startIndex: -1,
-    }
+      startIndex: -1
+    };
   },
   computed: {
     isFirstStep() {
-      return this.state1 === 0 && this.state2 === 0 && this.state3 === 0
+      return this.state1 === 0 && this.state2 === 0 && this.state3 === 0;
     },
     isSecondStep() {
-      return this.state1 === 1 && this.state2 === 0 && this.state3 === 0
+      return this.state1 === 1 && this.state2 === 0 && this.state3 === 0;
     },
     isThirdStep() {
-      return this.state1 === 1 && this.state2 === 1 && (this.state3 === 0 || this.state3 === 1)
+      return (
+        this.state1 === 1 &&
+        this.state2 === 1 &&
+        (this.state3 === 0 || this.state3 === 1)
+      );
     },
     isModalShow() {
-      return this.typeModal === 2 || this.typeModal === 5
+      return this.typeModal === 2 || this.typeModal === 5;
     },
     isModalAdd() {
-      return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
-    },
+      return (
+        this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+      );
+    }
   },
   async created() {
-    if (!this.salesClient.account_id) this.salesClient.account_id = this.salesClient.client_account_id
-    await this.leyendDebtsolution()
-    this.ownShow = true
+    if (!this.salesClient.account_id)
+      this.salesClient.account_id = this.salesClient.client_account_id;
+    await this.leyendDebtsolution();
+    this.ownShow = true;
   },
   methods: {
     isLastStep() {
-      if (this.$refs.wizard) return this.$refs.wizard.isLastStep
-      return false
+      if (this.$refs.wizard) return this.$refs.wizard.isLastStep;
+      return false;
     },
     hideModal(refresh, programSelect) {
-      this.$emit('closeModal', refresh, programSelect)
+      this.$emit("closeModal", refresh, programSelect);
     },
     changeProgram(headerS) {
-      this.$emit('changeProgram', headerS)
+      this.$emit("changeProgram", headerS);
     },
     validationFirstStep() {
       return new Promise((resolve, reject) => {
-        if (this.isModalShow) resolve(true)
+        if (this.isModalShow) resolve(true);
         else if (!this.passwordIsCorrect && this.state1 === 1) {
-          this.showToast('danger', 'top-right', 'Validate error', 'XIcon', 'Please validate password')
-          reject()
+          this.showToast(
+            "danger",
+            "top-right",
+            "Validate error",
+            "XIcon",
+            "Please validate password"
+          );
+          reject();
         } else {
-          this.$refs.firstStep.nextfirst(this.idleyend, 1).then(value => {
-            if (value) {
-              this.key2 += 1
-              resolve(true)
-            }
-            reject()
-          }).catch(error => {
-            console.error(error)
-            reject()
-          })
+          this.$refs.firstStep
+            .nextfirst(this.idleyend, 1)
+            .then(value => {
+              if (value) {
+                this.key2 += 1;
+                resolve(true);
+              }
+              reject();
+            })
+            .catch(error => {
+              console.error(error);
+              reject();
+            });
         }
-      })
+      });
     },
     validationSecondStep() {
       return new Promise((resolve, reject) => {
-        this.$refs.secondStep.nextfirst(this.idleyend, 2).then(value => {
-          if (value) {
-            this.key3 += 1
-            resolve(true)
-          }
-          reject()
-        }).catch(error => {
-          console.error(error)
-          reject()
-        })
-      })
+        this.$refs.secondStep
+          .nextfirst(this.idleyend, 2)
+          .then(value => {
+            if (value) {
+              this.key3 += 1;
+              resolve(true);
+            }
+            reject();
+          })
+          .catch(error => {
+            console.error(error);
+            reject();
+          });
+      });
     },
     async formSubmitted() {
-      await this.$refs.thirdStep.nextfirst(this.idleyend, 3)
+      await this.$refs.thirdStep.nextfirst(this.idleyend, 3);
     },
     async leyendDebtsolution() {
       try {
-        const response = await amgApi.post('/leyendds', {
-          event: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? null : this.salesClient.event_id,
-          account: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? this.salesClient.account_id : null,
-        })
+        const response = await amgApi.post(
+          "/sales-made/debt-solution/get-leyend-debt-solution",
+          {
+            event:
+              this.typeModal === 3 ||
+              this.typeModal === 4 ||
+              this.typeModal === 5
+                ? null
+                : this.salesClient.event_id,
+            account:
+              this.typeModal === 3 ||
+              this.typeModal === 4 ||
+              this.typeModal === 5
+                ? this.salesClient.account_id
+                : null
+          }
+        );
         if (response.status === 200) {
           if (response.data.length > 0) {
-            this.leyend = response.data
-            this.idleyend = response.data[0].id
-            this.state1 = response.data[0].state1
-            this.state2 = response.data[0].state2
-            this.state3 = response.data[0].state3
-            this.removePreloader()
+            this.leyend = response.data;
+            this.idleyend = response.data[0].id;
+            this.state1 = response.data[0].state1;
+            this.state2 = response.data[0].state2;
+            this.state3 = response.data[0].state3;
+            this.removePreloader();
           }
         }
         if (this.startIndex === -1) {
-          if (this.state1 === 0 && this.state2 === 0 && this.state3 === 0) this.startIndex = 0
-          if (this.state1 === 1) this.startIndex = 1
-          if (this.state2 === 1) this.startIndex = 2
+          if (this.state1 === 0 && this.state2 === 0 && this.state3 === 0)
+            this.startIndex = 0;
+          if (this.state1 === 1) this.startIndex = 1;
+          if (this.state2 === 1) this.startIndex = 2;
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style lang="scss">
-@import '@core/scss/vue/libs/vue-wizard.scss';
-@import '@core/scss/vue/libs/vue-select.scss';
+@import "@core/scss/vue/libs/vue-wizard.scss";
+@import "@core/scss/vue/libs/vue-select.scss";
 .wizard-tab-content {
-    overflow: auto;
-    height: 300px;
+  overflow: auto;
+  height: 300px;
 }
-.wizard-card-footer{
+.wizard-card-footer {
   padding-top: 15px !important;
 }
 //.wizard-nav{

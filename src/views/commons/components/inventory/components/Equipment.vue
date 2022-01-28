@@ -1,16 +1,17 @@
 <template>
   <div>
-    <b-tabs pills lazy
-        active-nav-item-class="bg-important box-shadow-important border-important">
-      <b-tab title="Available" v-if="[19, 16, 12].includes($route.meta.module)" title-link-class="border-secondary ml-1">
-        <!-- <pending-done active
-         :status="1"
-        /> -->
+    <b-tabs
+      pills
+      lazy
+      active-nav-item-class="bg-important box-shadow-important border-important"
+    >
+      <b-tab
+        title="Available"
+        v-if="[19, 16, 12].includes($route.meta.module)"
+        title-link-class="border-secondary ml-1"
+      >
       </b-tab>
       <b-tab title="Assigned" title-link-class="border-secondary ml-1">
-        <!-- <pending-done
-          :status="2"
-        /> -->
         <b-card no-body>
           <inventory-grid
             :global="currentUser"
@@ -19,10 +20,11 @@
           ></inventory-grid>
         </b-card>
       </b-tab>
-      <b-tab title="To Repair" v-if="[19, 12].includes($route.meta.module)" title-link-class="border-secondary ml-1">
-        <!-- <pending-done
-          :status="2"
-        /> -->
+      <b-tab
+        title="To Repair"
+        v-if="[19, 12].includes($route.meta.module)"
+        title-link-class="border-secondary ml-1"
+      >
       </b-tab>
     </b-tabs>
   </div>

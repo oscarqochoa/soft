@@ -1,7 +1,6 @@
 <template>
   <b-modal
-    v-model="modal.initial_payment"
-    centered
+    v-model="ownControl"
     title-class="h3 text-white font-weight-bolder"
     size="lg"
     title="Initial Payment"
@@ -37,9 +36,7 @@
               v-if="method === 'credit-card'"
               v-model="charge"
               :disabled="valorEdit"
-            >
-              Charge
-            </b-checkbox>
+            >Charge</b-checkbox>
           </b-form-radio-group>
         </b-col>
       </b-row>
@@ -128,15 +125,13 @@
         <b-form-checkbox
           v-if="(method === 'credit-card' && listCards.length === 0 && initial_payment.idtransaction != null) || (method === 'credit-card' && initial_payment.programid == 2)"
           ref="smsgeneral"
-        >
-          Send SMS
-        </b-form-checkbox>
+        >Send SMS</b-form-checkbox>
         <b-button
           variant="success"
           size="sm"
           @click="createCard"
         >
-          <feather-icon icon="PlusIcon" /> ADD
+          <feather-icon icon="PlusIcon" />ADD
         </b-button>
       </b-row>
       <b-row
@@ -173,8 +168,7 @@
           size="sm"
           @click="savePayment"
         >
-          <feather-icon icon="SendIcon" />
-          SUBMIT
+          <feather-icon icon="SendIcon" />SUBMIT
         </b-button>
       </b-row>
     </template>
@@ -203,12 +197,15 @@ import vSelect from 'vue-select'
 import CrmService from '@/views/crm/services/crm.service'
 import ModalCardCreate from '@/views/crm/views/payments/components/ModalCardCreate.vue'
 import DeleteCardModal from '@/views/crm/views/sales-made/components/modals/DeleteCardModal.vue'
-import ProgramClientHeader from '@/views/crm/views/sales-made/components/modals/ProgramClientHeader'
+import ProgramClientHeader from '@/views/crm/views/sales-made/components/modals/ProgramClientHeader.vue'
 
 export default {
   name: 'InitialPaymentModal',
   components: {
-    ProgramClientHeader, DeleteCardModal, ModalCardCreate, vSelect,
+    ProgramClientHeader,
+    DeleteCardModal,
+    ModalCardCreate,
+    vSelect,
   },
   props: {
     modal: {
@@ -241,7 +238,9 @@ export default {
     return {
       method: '',
       deletecardmodal: false,
-      amount: this.initial_payment.payments.amount ? this.initial_payment.payments.amount : 0,
+      amount: this.initial_payment.payments.amount
+        ? this.initial_payment.payments.amount
+        : 0,
       charge: true,
       listCards: [],
       cardId: null,
@@ -369,28 +368,38 @@ export default {
         },
       ],
       notApiCards: false,
+      reloadTable: false,
+      ownControl: false,
+      amount2: 0,
     }
   },
   computed: {
     valorEdit() {
-      return this.initial_payment.type == 1
-          || this.initial_payment.editmodal == false
-          || this.initial_payment.statusSale == 2
-          || this.initial_payment.statusSale == 4
-          || this.initial_payment.valorInitalPaymetn != 1
+      return (
+        this.initial_payment.type == 1
+        || this.initial_payment.editmodal == false
+        || this.initial_payment.statusSale == 2
+        || this.initial_payment.statusSale == 4
+        || this.initial_payment.valorInitalPaymetn != 1
+      )
     },
     amount_camp() {
       return this.method === 'credit-card' || this.method === ''
     },
     method_payment() {
-      return (this.method === 'credit-card') ? 0 : 1
+      return this.method === 'credit-card' ? 0 : 1
     },
   },
   async mounted() {
-    this.method = (this.initial_payment.payments.type_payment == null || this.initial_payment.payments.type_payment == 0) ? 'credit-card' : 'others'
+    this.method = this.initial_payment.payments.type_payment == null
+      || this.initial_payment.payments.type_payment == 0
+      ? 'credit-card'
+      : 'others'
     await this.getListCards()
     // eslint-disable-next-line no-return-assign
-    this.initial_payment.allcards.map(val => val.model = 0)
+    this.initial_payment.allcards.map(val => (val.model = 0))
+    this.ownControl = true
+    this.removePreloader()
   },
   methods: {
     createCard() {
@@ -405,7 +414,9 @@ export default {
     },
     async getListCards() {
       try {
-        this.listCards = await CrmService.getListCards({ sale_id: this.initial_payment.payments.sale_id })
+        this.listCards = await CrmService.getListCards({
+          sale_id: this.initial_payment.payments.sale_id,
+        })
       } catch (error) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
         this.modal.initial_payment = false
@@ -428,12 +439,27 @@ export default {
         refCard = 'campo1'
       }
       if (this.method_payment == 0 && this.initial_payment.programid != 2) {
-        this.amount = this.$refs[refCard].$el.value
+        this.amount2 = this.$refs[refCard].$el.value
+        this.amount2 = this.amount2.replace(this.$refs[refCard].prefix, '')
+      } else {
+        this.amount2 = this.amount
       }
-      if (this.amount == null) {
-        this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Invalid amount value')
+      if (this.amount2 == null) {
+        this.showToast(
+          'danger',
+          'top-right',
+          'Error',
+          'XIcon',
+          'Invalid amount value',
+        )
       } else if (this.method_payment == null) {
-        this.showToast('danger', 'top-right', 'Error', 'XIcon', 'Method payment invalid')
+        this.showToast(
+          'danger',
+          'top-right',
+          'Error',
+          'XIcon',
+          'Method payment invalid',
+        )
       } else if (this.method_payment == 0 || this.method_payment == 1) {
         await this.sendValidatePayment(this.method_payment, refCard, cardId)
       }
@@ -453,31 +479,36 @@ export default {
           if (result.value) {
             this.addPreloader()
             this.sendMessage = true
-            const response = await amgApi.post('/saveinitial', {
-              amount: this.amount.toString(),
-              idcard: this.cardId,
-              method_payment: this.method_payment.toString(),
-              specify: this.initial_payment.payments.specify,
-              sale_id: this.initial_payment.payments.sale_id,
-              user_id: this.initial_payment.sessionId,
-              program_id: this.initial_payment.payments.program_id,
-              modul: this.initial_payment.modul,
-              charge: this.charge == true ? 0 : 1,
-              sendsms: sms === true ? 1 : 0,
-            })
+            const response = await amgApi.post(
+              '/note/first-note/save-initial',
+              {
+                amount: this.amount2.toString(),
+                idcard: this.cardId,
+                method_payment: this.method_payment.toString(),
+                specify: this.initial_payment.payments.specify,
+                sale_id: this.initial_payment.payments.sale_id,
+                user_id: this.initial_payment.sessionId,
+                program_id: this.initial_payment.payments.program_id,
+                modul: this.initial_payment.modul,
+                charge: this.charge == true ? 0 : 1,
+                sendsms: sms === true ? 1 : 0,
+              },
+            )
             if (response.status === 200) {
               this.removePreloader()
               if (response.data.transaction.responseCode === '1') {
                 const res = await this.showSuccessSwal()
-                if (res) {
-                  this.amount = response.data
+                if (res.value) {
+                  this.amount = response.data.data
                   await this.getListCards()
+                  this.reloadTable = true
                   if (this.initial_payment.programid == 2) {
-                    this.$emit('click', false)
+                    this.hideModal()
                   }
                 }
               } else {
-                this.showErroSwal()
+                const errorsAuthorize = response.data.transaction.errors.error
+                this.showErrorSwal(this.getAuthorizeErrors(errorsAuthorize))
               }
             } else {
               this.removePreloader()
@@ -490,21 +521,25 @@ export default {
           if (result.value) {
             this.sendMessage = true
             this.addPreloader()
-            const response = await amgApi.post('/saveinitial', {
-              amount: this.amount.toString(),
-              idcard: this.cardId,
-              method_payment: this.method_payment.toString(),
-              specify: this.initial_payment.payments.specify,
-              sale_id: this.initial_payment.payments.sale_id,
-              user_id: this.initial_payment.sessionId,
-              program_id: this.initial_payment.payments.program_id,
-            })
+            const response = await amgApi.post(
+              '/note/first-note/save-initial',
+              {
+                amount: this.amount.toString(),
+                idcard: this.cardId,
+                method_payment: this.method_payment.toString(),
+                specify: this.initial_payment.payments.specify,
+                sale_id: this.initial_payment.payments.sale_id,
+                user_id: this.initial_payment.sessionId,
+                program_id: this.initial_payment.payments.program_id,
+              },
+            )
             if (response.status === 200) {
               this.removePreloader()
               this.sendMessage = false
               const res = await this.showSuccessSwal()
-              if (res) {
-                this.$emit('click', false)
+              this.reloadTable = true
+              if (res.value) {
+                this.hideModal()
               }
             }
           } else {
@@ -513,16 +548,16 @@ export default {
         }
       } catch (error) {
         this.removePreloader()
-        this.showErroSwal()
+        this.showErrorSwal(error)
       }
     },
     hideModal() {
-      this.$emit('close')
+      this.ownControl = false
+      this.$emit('close', this.reloadTable)
     },
   },
 }
 </script>
 
 <style scoped>
-
 </style>

@@ -1,95 +1,87 @@
 <template>
   <div>
+    <p>{{ statusUpdateRequestEquip }}</p>
     <filter-slot
-        v-scrollbar
-        :filter="filter"
-        :filter-principal="filterPrincipal"
-        :no-visible-principal-filter="true"
-        :total-rows="totalRows"
-        :paginate="paginate"
-        :start-page="startPage"
-        :to-page="toPage"
-        :send-multiple-sms="false"
-        @reload="$refs['refClientsList'].refresh()"
-      >
-      <b-table
-      small
-      slot="table"
-      no-provider-filtering
-      :api-url="'/inventory/search-request-equipments'"
-      ref="refClientsList"
-      :items="myProvider"
-      :fields="arrayColumns"
-      primary-key="id"
-      table-class="text-nowrap"
-      responsive="sm"
-      show-empty
-      sticky-header="50vh"
-      :sort-desc.sync="sortDesc"
-      :current-page="paginate.currentPage"
-        :per-page="paginate.perPage"
+      :filter="filter"
+      :filter-principal="filterPrincipal"
+      :no-visible-principal-filter="true"
+      :total-rows="totalRows"
+      :paginate="paginate"
+      :start-page="startPage"
+      :to-page="toPage"
+      :send-multiple-sms="false"
+      @reload="$refs['refClientsList'].refresh()"
     >
-      <template #table-busy>
-        <div class="text-center text-primary my-2">
-          <b-spinner class="align-middle mr-1"></b-spinner>
-          <strong>Loading ...</strong>
-        </div>
-      </template>
-      <template #cell(programs_to_install)="data">
-        <div>
-          <ul id="v-for-object" class="demo">
-            <li v-for="value in data.item.programs_to_install" :key="value">
-              {{ value }}
-            </li>
-          </ul>
-        </div>
-      </template>
-      <template #cell(commentary)="data">
-        <!-- <b-form-textarea
-          id="textarea"
-          v-model="data.item.commentary"
-          placeholder="Argue Something ..."
-          rows="2"
-          max-rows="2"
-          class="input-background-white"
-          disabled
-        ></b-form-textarea> -->
-        <!-- <b-form-input  v-model="data.item.commentary"  disabled></b-form-input> -->
-        <span>{{data.item.commentary}}</span>
-
-      </template>
-      <template #cell(status)="data">
-        <p
-          :style="
-            data.item.status == 'APPROVED'
-              ? 'color:#00CC00'
-              : data.item.status == 'DISAPPROVED'
-              ? 'color: #FF0000'
-              : 'color: rgb(255 177 0)'
-          "
-        >
-          {{ data.item.status }}
-        </p>
-      </template>
-      <template #cell(created_at)="data">
-        {{ data.item.created_by }}
-        <br />
-        {{ data.item.created_at | myGlobalDay }}
-      </template>
-      <template #cell(tracking)="data">
-        <div>
-          <b-button
-            class="btn-sm"
-            variant="light"
-            @click="openModalTrackingRequest(data.item.id)"
+      <b-table
+        v-scrollbar
+        small
+        slot="table"
+        no-provider-filtering
+        :api-url="'/logistics/inventory/search-request-equipment'"
+        ref="refClientsList"
+        :items="myProvider"
+        :fields="arrayColumns"
+        primary-key="id"
+        table-class="text-nowrap"
+        responsive="sm"
+        show-empty
+        sticky-header="70vh"
+        :sort-desc.sync="sortDesc"
+        :current-page="paginate.currentPage"
+        :per-page="paginate.perPage"
+      >
+        <template #table-busy>
+          <div class="text-center text-primary my-2">
+            <b-spinner class="align-middle mr-1"></b-spinner>
+            <strong>Loading ...</strong>
+          </div>
+        </template>
+        <template #cell(programs_to_install)="data">
+          <div>
+            <ul id="v-for-object" class="demo">
+              <li v-for="value in data.item.programs_to_install" :key="value">
+                {{ value }}
+              </li>
+            </ul>
+          </div>
+        </template>
+        <template #cell(commentary)="data">
+          <div class="tdbreak">
+              {{ data.item.commentary }}
+          </div>
+        </template>
+        <template #cell(status)="data">
+          <p
+            :style="
+              data.item.status == 'APPROVED'
+                ? 'color:#00CC00'
+                : data.item.status == 'DISAPPROVED'
+                ? 'color: #FF0000'
+                : 'color: rgb(255 177 0)'
+            "
           >
-            <span>TRACKING</span>
-          </b-button>
-        </div>
-      </template>
-    </b-table>
+            {{ data.item.status }}
+          </p>
+        </template>
+        <template #cell(created_at)="data">
+          {{ data.item.created_by }}
+          <br />
+          {{ data.item.created_at | myGlobalDay }}
+        </template>
+        <template #cell(tracking)="data">
+          <div>
+            <b-button
+              class="btn-sm"
+              variant="light"
+              @click="openModalTrackingRequest(data.item.id)"
+            >
+              <span>TRACKING</span>
+            </b-button>
+          </div>
+        </template>
+      </b-table>
     </filter-slot>
-    
+
     <modal-view-tracking-request
       v-if="modalTrackingRequest"
       :modalTrackingRequest="modalTrackingRequest"
@@ -102,9 +94,10 @@
 
 <script>
 import vSelect from "vue-select";
-import ModalViewTrackingRequest from "../../modal/ModalViewTrackingRequest.vue"
+import ModalViewTrackingRequest from "../../modal/ModalViewTrackingRequest.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-
+import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   props: {
     global: {
@@ -196,7 +189,7 @@ export default {
         },
       ],
       modalTrackingRequest: false,
-      requestId:"",
+      requestId: "",
       sortDesc: true,
       filter: [
         {
@@ -234,7 +227,22 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapGetters("inventory-store", ["updateRequestEquip"]),
+    statusUpdateRequestEquip() {
+      if (this.updateRequestEquip) {
+        this.$refs.refClientsList.refresh();
+        this.UpdateRequEquip();
+      }
+    },
+  },
   methods: {
+    ...mapActions("inventory-store", ["UPDATE_REQUEST_EQUIPMENT"]),
+    UpdateRequEquip() {
+      if (this.updateRequestEquip) {
+        this.UPDATE_REQUEST_EQUIPMENT(false);
+      }
+    },
     resetSearch() {
       this.fromToObject.from = null;
       this.fromToObject.to = null;
@@ -280,6 +288,10 @@ export default {
 
 
 <style lang="scss" scoped>
+.tdbreak {
+  word-break: break-all;
+  // width: 10em;
+}
 .per-page-selector {
   width: 90px;
 }

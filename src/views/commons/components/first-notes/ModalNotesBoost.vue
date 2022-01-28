@@ -229,6 +229,7 @@
                   :options="editorOption"
                   class="font-small-1"
                   :class="{'border-danger' : errors[0]}"
+                  :disabled="disabledNote"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -249,6 +250,7 @@
                   :options="editorOption"
                   class="font-small-1"
                   :class="{'border-danger' : errors[0]}"
+                  :disabled="disabledNote"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -266,6 +268,7 @@
                   v-model="note.recommendations"
                   :options="editorOption"
                   :class="{'border-danger' : errors[0]}"
+                  :disabled="disabledNote"
                 />
               </b-form-group>
             </ValidationProvider>
@@ -443,10 +446,7 @@ export default {
     this.getOriginCountry();
   },
 
-  mounted() {
-    console.log(this.emptyNote);
-    console.log(this.noteInfo);
-  },
+  mounted() {},
 
   computed: {
     ...mapGetters({
@@ -473,7 +473,7 @@ export default {
       );
     },
     disabledFile() {
-      return this.noteInfo.statusSale == 4;
+      return this.noteInfo.statusSale == 4 || this.noteInfo.notSeller;
     },
     showButtonSave() {
       return this.showSave && !this.noteInfo.notSeller;
@@ -538,6 +538,7 @@ export default {
         try {
           const service =
             type == "insert" ? "insertFirstNote" : "updateFirstNote";
+            console.log(NotesServices[service], 'service')
           const response = await NotesServices[service](this.paramsNote());
           this.hideModal(true);
         } catch (error) {

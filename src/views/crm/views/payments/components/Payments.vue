@@ -2,7 +2,7 @@
   <div>
     <filter-slot
       v-scrollbar
-      :filter="filter"
+      :filter="filterStatus"
       :filter-principal="filterPrincipal"
       :total-rows="totalRows"
       :paginate="paginate"
@@ -12,18 +12,19 @@
       @reload="$refs['refClientsList'].refresh()"
     >
       <b-table
+        v-scrollbar
         small
         slot="table"
         no-provider-filtering
         :api-url="clientRoute"
         ref="refClientsList"
         :items="myProvider"
-        :fields="visibleFields"
+        :fields="fields"
         primary-key="id"
         table-class="text-nowrap"
         responsive="sm"
         show-empty
-        sticky-header="50vh"
+        sticky-header="70vh"
         :busy="isBusy"
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
@@ -37,16 +38,7 @@
           </div>
         </template>
         <template #cell(lead_name)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <!-- <a
-                href="www.google.com"
-                target="_blank"
-                class="select-lead-name text-important"
-              >
-                {{ data.item.lead_name }}</a
-              > -->
+          <div class="d-flex flex-column justify-content-start align-items-start">
             <router-link
               class="select-lead-name text-important"
               :to="{
@@ -54,33 +46,35 @@
                 params: { id: data.item.lead_id },
               }"
               target="_blank"
-            >
-              {{ data.item.lead_name }}
-            </router-link>
+            >{{ data.item.lead_name }}</router-link>
           </div>
         </template>
         <template #cell(amount)="data">
-          <div class="inline">
+          <div class="inline" style="position: relative;">
             <span
               v-if="data.item.type_t != 39 && data.item.type_t != 40"
               class="mr-1"
-              >$ {{ data.item.amount }}</span
-            >
+            >$ {{ data.item.amount }}</span>
             <span
               v-if="data.item.type_t == 39 || data.item.type_t == 40"
               class="mr-1"
-              >$ ({{ data.item.amount }})</span
-            >
+            >$ ({{ data.item.amount }})</span>
             <feather-icon
               icon="EyeIcon"
-              style="cursor: pointer"
+              style="cursor: pointer;position: absolute; left: 70px;"
               v-if="data.item.type_t == 39 || data.item.type_t == 40"
               class="text-primary"
+              @click="getVoidRefund(data.item.transaction_id)"
             ></feather-icon>
             <img
               :src="assetsImg + '/images/icons/void.ico'"
-              style="cursor: pointer; color: red"
+              style="cursor: pointer; color: red;position: absolute; left: 70px;"
               title="Void"
+              @click="voidAuthorize( data.item.transaction_id,
+                  data.item.merchant,
+                  data.item.amount,
+                  data.item.lead_name,
+                  data.item.settlement_date,1)"
               v-if="
                 data.item.type_t != 39 &&
                 data.item.type_t != 40 &&
@@ -92,7 +86,7 @@
             />
             <img
               :src="assetsImg + '/images/icons/refund.ico'"
-              style="cursor: pointer; color: green"
+              style="cursor: pointer; color: green;position: absolute; left: 70px;"
               title="Refund"
               v-if="
                 data.item.type_t != 39 &&
@@ -103,19 +97,22 @@
                 currentUser.role_id == 1 &&
                 data.item.result == 'Approved'
               "
+              @click="
+                voidAuthorize(
+                  data.item.transaction_id,
+                  data.item.merchant,
+                  data.item.amount,
+                  data.item.lead_name,
+                  data.item.settlement_date,
+                  2
+                )
+              "
             />
           </div>
         </template>
         <template #cell(charge)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
-            <b-icon
-              v-if="data.item.charge == 0"
-              icon="check-circle-fill"
-              variant="success"
-            >
-            </b-icon>
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <b-icon v-if="data.item.charge == 0" icon="check-circle-fill" variant="success"></b-icon>
             <feather-icon
               v-if="data.item.charge == 1 || data.item.charge == null"
               icon="XCircleIcon"
@@ -124,15 +121,12 @@
           </div>
         </template>
         <template #cell(result)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center">
             <b-icon
               v-if="data.item.result == 'Approved'"
               icon="check-circle-fill"
               variant="success"
-            >
-            </b-icon>
+            ></b-icon>
             <feather-icon
               v-if="data.item.result == 'Unverified'"
               icon="ClockIcon"
@@ -149,9 +143,7 @@
           </div>
         </template>
         <template #cell(user_name)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
+          <div class="d-flex flex-column justify-content-start align-items-start">
             <span>
               {{ data.item.user_name }} -
               {{ data.item.created_at | myGlobalDay }}
@@ -160,13 +152,7 @@
         </template>
       </b-table>
       <template #footer>
-        <b-col
-          class="
-            d-flex
-            align-items-center
-            justify-content-center justify-content-sm-start
-          "
-        >
+        <b-col class="d-flex align-items-center justify-content-center justify-content-sm-start">
           <div
             style="
               background-color: #3764ff !important;
@@ -184,6 +170,22 @@
         </b-col>
       </template>
     </filter-slot>
+
+    <modal-refund
+      v-if="modalRefund"
+      :modalRefund="modalRefund"
+      :modul="$route.meta.module"
+      :dataVoid="this.dataVoid"
+      :global="this.currentUser"
+      @close="closeModalRefund"
+      @updateGrid="updateGrid"
+    ></modal-refund>
+    <modal-void-refund-info
+      v-if="modalVoidRefund"
+      :modalVoidRefund="modalVoidRefund"
+      :idtransaction="idtransaction"
+      @closeInfo="closeModalVoidRefundInfo"
+    ></modal-void-refund-info>
   </div>
 </template>
 
@@ -192,18 +194,24 @@ import { mapGetters } from "vuex";
 import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+
+import ModalRefund from "@/views/crm/views/payments/components/ModalRefund.vue";
+import ModalVoidRefundInfo from "@/views/crm/views/payments/components/ModalVoidRefundInfo.vue";
 export default {
   components: {
     vSelect,
     FilterSlot,
+    ModalRefund,
+    ModalVoidRefundInfo
   },
   data() {
     return {
+      modalRefund: false,
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10,
+        perPage: 10
       },
       totalAmount: 0,
       sortBy: "created_at",
@@ -213,53 +221,53 @@ export default {
           key: "lead_name",
           label: "Name",
 
-          visible: true,
+          visible: true
         },
         {
           key: "type_transaction",
           label: "Type",
-          visible: true,
+          visible: true
         },
         {
           key: "transaction_id",
           label: "Transaction ID",
-          visible: true,
+          visible: true
         },
         {
           key: "amount",
           label: "Amount",
-          visible: true,
+          visible: true
         },
         {
           key: "charge",
           label: "Charge",
-          visible: true,
+          visible: true
         },
         {
           key: "result",
           label: "Result",
-          visible: true,
+          visible: true
         },
         {
           key: "card_number",
           label: "Credit Card",
-          visible: true,
+          visible: true
         },
         {
           key: "account",
           label: "Account",
-          visible: true,
+          visible: true
         },
         {
           key: "program",
           label: "Program",
-          visible: true,
+          visible: true
         },
         {
           key: "user_name",
           label: "Created By",
-          visible: true,
-        },
+          visible: true
+        }
         // {
         //   key: "created_at",
         //   label: "Creation Date",
@@ -284,7 +292,7 @@ export default {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: "",
+        model: ""
       },
       filter: [
         {
@@ -298,11 +306,11 @@ export default {
             { value: 1, label: "Realtor" },
             { value: 2, label: "Appointment" },
             { value: 3, label: "Inital Payment" },
-            { value: 4, label: "Others" },
+            { value: 4, label: "Others" }
           ],
           reduce: "value",
           selectText: "label",
-          cols: 12,
+          cols: 12
         },
         {
           type: "select",
@@ -314,11 +322,11 @@ export default {
             { value: 0, label: "All" },
             { value: 1, label: "Approved" },
             { value: 2, label: "Declined" },
-            { value: 3, label: "Underview" },
+            { value: 3, label: "Underview" }
           ],
           reduce: "value",
           selectText: "label",
-          cols: 12,
+          cols: 12
         },
         {
           type: "select",
@@ -329,7 +337,7 @@ export default {
           options: [],
           reduce: "id",
           selectText: "user_name",
-          cols: 12,
+          cols: 12
         },
         {
           type: "datepicker",
@@ -343,9 +351,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
+          cols: 6
         },
         {
           type: "datepicker",
@@ -359,29 +367,134 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
+          cols: 6
+        }
+      ],
+      filter2: [
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Type",
+          model: null,
+          options: [
+            { value: 0, label: "All" },
+            { value: 1, label: "Realtor" },
+            { value: 2, label: "Appointment" },
+            { value: 3, label: "Inital Payment" },
+            { value: 4, label: "Others" }
+          ],
+          reduce: "value",
+          selectText: "label",
+          cols: 12
         },
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Result",
+          model: null,
+          options: [
+            { value: 0, label: "All" },
+            { value: 1, label: "Approved" },
+            { value: 2, label: "Declined" },
+            { value: 3, label: "Underview" }
+          ],
+          reduce: "value",
+          selectText: "label",
+          cols: 12
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          },
+          cols: 6
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          },
+          cols: 6
+        }
       ],
       filterController: false,
+      modalRefund: false,
+      dataVoid: [],
+      modalVoidRefund: false,
+      idtransaction: null
     };
   },
   mounted() {
     this.getAllUsers();
+    this.addPaddingTd();
   },
   computed: {
     clientRoute() {
-      return "/payment";
+      return "/crm/payment/get-all-lead-payments";
     },
-    visibleFields() {
-      return this.arrayColumns.filter((column) => column.visible);
+    fields() {
+      return this.arrayColumns.filter(column => column.visible);
     },
     ...mapGetters({
-      currentUser: "auth/currentUser",
+      currentUser: "auth/currentUser"
     }),
+    filterStatus() {
+      return this.currentUser.user_id == 1 || this.currentUser.user_id == 2
+        ? this.filter
+        : this.filter2;
+    }
   },
   methods: {
+    voidAuthorize(
+      idtransaction,
+      idmerchant,
+      amount,
+      client_name,
+      settlement_date,
+      type
+    ) {
+      this.dataVoid = {
+        idtransaction,
+        idmerchant,
+        amount,
+        client_name,
+        settlement_date,
+        type
+      };
+      this.modalRefund = true;
+    },
+    closeModalRefund() {
+      this.modalRefund = false;
+    },
+    getVoidRefund(idtransaction) {
+      this.idtransaction = idtransaction;
+      this.modalVoidRefund = true;
+    },
+    closeModalVoidRefundInfo() {
+      this.modalVoidRefund = false;
+    },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         per_page: ctx.perPage,
@@ -390,21 +503,24 @@ export default {
         to: this.filter[4].model,
         result: this.filter[1].model,
         type: this.filter[0].model,
-        user: this.filter[2].model,
+        user:
+          this.currentUser.user_id == 1 || this.currentUser.user_id == 2
+            ? this.filter[2].model
+            : this.currentUser.user_id
       });
 
       // Must return a promise that resolves to an array of items
-      return promise.then((data) => {
+      return promise.then(data => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
         let value = 0;
         if (items) {
-          items.forEach((element) => {
+          items.forEach(element => {
             value += parseFloat(element.amount);
           });
           const formatter = new Intl.NumberFormat("en-US", {
             style: "currency",
-            currency: "USD",
+            currency: "USD"
           });
 
           this.totalAmount = formatter.format(value);
@@ -429,13 +545,13 @@ export default {
     },
 
     async getAllUsers() {
-      const data = await amgApi.post(`/usermodule/2`, {
+      const data = await amgApi.post(`/commons/user-module/2`, {
         roles: "[1,2,5]",
-        type: "0",
+        type: "0"
       });
       let firstOption = {
         value: "All",
-        id: 0,
+        id: 0
       };
       let newData = data.data;
       newData.unshift(firstOption);
@@ -447,7 +563,10 @@ export default {
       this.fromToObject.to = null;
       this.$refs.refClientsList.refresh();
     },
-  },
+    updateGrid() {
+      this.$refs.refClientsList.refresh();
+    }
+  }
 };
 </script>
 

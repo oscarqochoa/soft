@@ -11,8 +11,9 @@
           :cards="lead.cards"
           :is-busy="isBusyRealtor"
           :method="10"
+          :key="key.realtor"
           :is-loading="isLoading"
-          @onSubmit="onSubmit"
+          @onSubmit="onSubmit($event, 'realtor')"
         />
       </b-col>
       <b-col cols="12" sm="6" md="3">
@@ -22,8 +23,9 @@
           :cards="lead.cards"
           :is-busy="isBusyRealtor"
           :method="41"
+          :key="key.lien"
           :is-loading="isLoading"
-          @onSubmit="onSubmit"
+          @onSubmit="onSubmit($event, 'lien')"
         />
       </b-col>
       <b-col cols="12" sm="6" md="3">
@@ -33,8 +35,9 @@
           :cards="lead.cards"
           :is-busy="isBusyRealtor"
           :method="42"
+          :key="key.court"
           :is-loading="isLoading"
-          @onSubmit="onSubmit"
+          @onSubmit="onSubmit ($event, 'court')"
         />
       </b-col>
       <b-col cols="12" sm="6" md="3">
@@ -44,8 +47,9 @@
           :cards="lead.cards"
           :is-busy="isBusyRealtor"
           :method="12"
+          :key="key.other"
           :is-loading="isLoading"
-          @onSubmit="onSubmit"
+          @onSubmit="onSubmit ($event, 'other')"
         />
       </b-col>
     </b-row>
@@ -53,69 +57,99 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapState } from "vuex";
 
-import { mapActions, mapGetters, mapState,  } from 'vuex'
+import Ripple from "vue-ripple-directive";
 
-import Ripple from 'vue-ripple-directive'
-
-import CardLeadPaymentSection from './CardLeadPaymentSection.vue'
+import CardLeadPaymentSection from "./CardLeadPaymentSection.vue";
 
 export default {
   components: {
-    CardLeadPaymentSection,
+    CardLeadPaymentSection
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      currentUser: "auth/currentUser",
+      token: "auth/token"
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
     })
   },
-  created () {
-    this.authUser = this.currentUser
+  created() {
+    this.authUser = this.currentUser;
   },
-  data () {
+  data() {
     return {
       authUser: {},
-      court: new Object,
+      court: new Object(),
       isBusyRealtor: false,
       isLoading: false,
-      lien: new Object,
-      realtor: new Object,
-      other: new Object,
-    }
+      lien: new Object(),
+      realtor: new Object(),
+      other: new Object(),
+      key: {
+        court: 0,
+        lien: 0,
+        other: 0,
+        realtor: 0
+      }
+    };
   },
   directives: { Ripple },
   methods: {
     ...mapActions({
-      A_LEAD_PAYMENT: 'CrmLeadStore/A_LEAD_PAYMENT'
+      A_LEAD_PAYMENT: "CrmLeadStore/A_LEAD_PAYMENT"
     }),
-    async onSubmit (item) {
+    async onSubmit(item, ref) {
       this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          this.isLoading = true
-          item.amount = item.amount.replaceAll(',', '')
-          item.lead_id = this.lead.id
-          item.user_id = this.authUser.user_id
-          const response = await this.A_LEAD_PAYMENT(item)
-          if (this.isResponseSuccess(response))
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong. ' + response.message)
-          this.isLoading = false
-        }
-      }).catch(error => {
-        console.log('Something went wrong onSubmit', error)
-        this.showErrorSwal()
-        this.isLoading = false
-      })
+        .then(async result => {
+          if (result.value) {
+            this.isLoading = true;
+            item.lead_id = this.lead.id;
+            item.user_id = this.authUser.user_id;
+            this.addPreloader();
+            const response = await this.A_LEAD_PAYMENT(item);
+            if (this.isResponseSuccess(response)) {
+              //AUTHORIZE SUCCESS
+
+              if (response.data.status == 200) {
+                this.key[ref]++;
+                this.showToast(
+                  "success",
+                  "top-right",
+                  "Success!",
+                  "CheckIcon",
+                  "Successful operation"
+                );
+              }
+              //AUTHORIZE ERRORS
+              if (response.data.status == 500) {
+                const errorsAuthorize = response.data.transaction.errors.error;
+                this.showErrorSwal(this.getAuthorizeErrors(errorsAuthorize));
+              }
+            } else
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                "Something went wrong. " + response.message
+              );
+            this.isLoading = false;
+            this.removePreloader();
+          }
+        })
+        .catch(error => {
+          console.log("Something went wrong onSubmit", error);
+          this.showErrorSwal(error);
+          this.isLoading = false;
+          this.removePreloader();
+        });
     }
   },
-  mounted () {},
+  mounted() {},
   props: {
     modul: {
       type: Number,
@@ -130,6 +164,6 @@ export default {
       required: true
     }
   },
-  setup() {},
-}
+  setup() {}
+};
 </script>

@@ -7,6 +7,7 @@
       :title="requestTitle"
       :hide-footer="hideFooter"
       modal-class="modal-primary "
+      scrollable
       @hidden="hideModal(false)"
     >
       <div>
@@ -379,7 +380,6 @@ export default {
   },
   created() {
     this.getInitialData();
-    console.log(this.isSupervisor);
   },
   mounted() {},
   data() {

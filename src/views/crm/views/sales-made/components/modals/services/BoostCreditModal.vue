@@ -44,9 +44,7 @@
                     <b-col
                       cols="2"
                       class="d-flex align-items-center justify-content-center text-success font-medium-5"
-                    >
-                      $
-                    </b-col>
+                    >$</b-col>
                     <b-col>
                       <b-form-select
                         v-model="fee"
@@ -74,9 +72,7 @@
                 class="mr-1"
                 @click="saveRates()"
               />
-              <button-cancel
-                @click="hideModal(false,0)"
-              />
+              <button-cancel @click="hideModal(false,0)" />
             </b-col>
             <b-col v-if="isModalAdd">
               <b-button
@@ -171,7 +167,9 @@ export default {
       return this.typeModal === 2 || this.typeModal === 5
     },
     isModalAdd() {
-      return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+      return (
+        this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+      )
     },
     hideFooter() {
       return this.isModalShow || (this.isModalAdd && this.selectService)
@@ -220,23 +218,24 @@ export default {
           switch (this.typeModal) {
             case 1:
               message = 'complete Rates'
-              route = '/attendend'
+              route = '/sales-made/attendend-sale'
               break
             case 3:
               message = 'add new service'
-              route = '/attendendprogram'
+              route = '/sales-made/attendend-saleprogram'
               typeADD = 1
               break
             case 4:
               message = 'change service'
-              route = '/attendendprogram'
+              route = '/sales-made/attendend-saleprogram'
               typeADD = 2
               break
             case 6:
               message = 'add new service'
-              route = '/leadattendend'
+              route = '/sale/insert-lead-attendance'
               break
-            default: break
+            default:
+              break
           }
           const param = {
             prices,
@@ -263,7 +262,9 @@ export default {
             json_ce: this.json_ce,
           }
 
-          const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
+          const result = await this.showConfirmSwal(
+            `Are you sure you want to ${message}`,
+          )
           if (result.value) {
             this.addPreloader()
             const response = await amgApi.post(`${route}`, param)
@@ -280,7 +281,7 @@ export default {
     /* Rates */
     async showRates() {
       try {
-        const response = await amgApi.post('/searchprogramsalemade', { id: this.salesClient.id })
+        const response = await amgApi.post('/sales-made/get-details-sales-made', { id: this.salesClient.id })
         if (response.status === 200) {
           this.fee = response.data[0].fee
           this.removePreloader()
@@ -291,7 +292,9 @@ export default {
     },
     async getScore() {
       try {
-        const response = await amgApi.post('/getscoreattend', { lead_id: this.salesClient.lead_id })
+        const response = await amgApi.post('/attend/get-score-attend', {
+          lead_id: this.salesClient.lead_id,
+        })
         if (response.status === 200) {
           this.score_id = response.data.score_id
         }

@@ -1,15 +1,13 @@
 <template>
   <div>
-    <b-card>
-      <h2>Commissions</h2>
-    </b-card>
+    <header-slot></header-slot>
     <b-card>
       <!-- Tabs for Supervisor CRM -->
       <b-tabs v-if="isSupervisorCrm" pills active-nav-item-class="border-primary-i">
         <b-tab lazy title="CRM" title-link-class="border-secondary hover-primary">
           <CommissionsComponent :module="$route.meta.module" tab="crm" />
         </b-tab>
-        <b-tab lazy title="Departments" title-link-class="border-secondary ml-1 hover-primary">
+        <b-tab lazy title="Departments" title-link-class="border-secondary  hover-primary">
           <CommissionsComponent :module="$route.meta.module" tab="supervisorCrm" />
         </b-tab>
       </b-tabs>

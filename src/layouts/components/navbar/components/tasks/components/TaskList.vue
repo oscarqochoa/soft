@@ -1,27 +1,22 @@
 <template>
   <div>
-    <b-card no-body class="mb-1">
-      <div class="m-2">
+    <b-card no-body class="mb-1 mt-1">
+      <div class="m-2" v-if="!taskToday">
         <!-- Table Top -->
         <b-row>
           <!-- Per Page -->
-          <b-col cols="12" md="6"> </b-col>
+          <b-col cols="12" md="6"></b-col>
           <!-- Search -->
           <b-col cols="12" md="6">
-            <div
-              class="
-                d-flex
-                align-items-center
-                justify-content-end
-                align-items-center
-              "
-            >
+            <div class="d-flex align-items-center justify-content-end align-items-center">
               <b-button
                 variant="primary"
                 v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                @click="exportExcel"
+                :disabled="exportExcelDisabled"
               >
                 <div class="d-flex justify-content-between">
-                  <span class="text-nowrap"> Export to excel </span>
+                  <span class="text-nowrap">Export to excel</span>
                 </div>
               </b-button>
             </div>
@@ -31,7 +26,7 @@
       <div class="table-responsive">
         <b-table
           ref="refTaskGrid"
-          api-url="/alltasks"
+          api-url="/tasks/get-all-tasks"
           class="position-relative"
           :items="myProvider"
           :fields="arrayColumns"
@@ -55,56 +50,69 @@
             </div>
           </template>
           <template #cell(client_name)="data">
-            <b-link class="text-important">
-              {{ data.item.client_name }}
-            </b-link>
+            <b-link
+              class="text-important"
+              :to="data.item.account_id==null? `/${data.item.route}/leads/${data.item.lead_id}` : `/${data.item.route}/clients/account/'${data.item.account_id}`"
+              target="_blank"
+            >{{ data.item.client_name }}</b-link>
+            <!-- 
+            <b-link class="text-important">{{ data.item.client_name }}</b-link>-->
             <br />
             <span>
-              <amg-icon icon="SmartphoneIcon"></amg-icon> {{ data.item.mobile }}
+              <amg-icon icon="SmartphoneIcon"></amg-icon>
+              {{ data.item.mobile }}
             </span>
           </template>
           <template #cell(due_date)="data">
-            {{ data.item.due_date | myGlobalDay }} <br />
+            {{ data.item.due_date | myGlobalDay }}
+            <br />
             <span style="font-weight: bold">
               {{ data.item.real_time | myGlobalDay }} ({{
-                data.item.state_hour
+              data.item.state_hour
               }})
             </span>
           </template>
           <template #cell(actions)="data">
             <div class="d-flex justify-content-between align-items-center">
               <span v-if="type != 4">
-                <amg-icon
-                  icon="CheckIcon"
-                  size="20"
-                  class="text-success cursor-pointer"
+                <b-button
+                  variant="flat-success"
+                  class="button-little-size rounded-circle"
                   @click="checkTask(data.item.id)"
-                  v-b-tooltip.hover.top="'Complete'"
-                />
+                  v-b-tooltip.hover.top="'Done Task'"
+                >
+                  <feather-icon icon="CheckCircleIcon" />
+                </b-button>
               </span>
               <span v-if="type != 4">
-                <amg-icon
-                  icon="Edit2Icon"
-                  size="16"
-                  class="text-warning cursor-pointer"
-                  v-b-tooltip.hover.top="'Edit'"
-                />
+                <b-button
+                  variant="flat-warning"
+                  class="button-little-size rounded-circle"
+                  @click="openModalEditTask(data.item)"
+                  v-b-tooltip.hover.top="'Edit Task'"
+                >
+                  <feather-icon icon="EditIcon" />
+                </b-button>
               </span>
               <span>
-                <amg-icon
-                  icon="EyeIcon"
-                  size="16"
-                  class="text-info cursor-pointer"
+                <b-button
+                  variant="flat-info"
+                  class="button-little-size rounded-circle"
                   v-b-tooltip.hover.top="'View'"
-                /> </span
-              ><span v-if="type != 4">
-                <amg-icon
-                  icon="TrashIcon"
-                  size="16"
-                  class="text-danger cursor-pointer"
+                  @click="openModalShowTask(data.item)"
+                >
+                  <feather-icon icon="EyeIcon" />
+                </b-button>
+              </span>
+              <span v-if="type != 4">
+                <b-button
+                  variant="flat-danger"
+                  class="button-little-size rounded-circle"
                   v-b-tooltip.hover.top="'Delete'"
                   @click="deleteTask(data.item.id)"
-                />
+                >
+                  <feather-icon icon="Trash2Icon" />
+                </b-button>
               </span>
             </div>
           </template>
@@ -115,25 +123,17 @@
           <b-col
             cols="12"
             sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            "
+            class="d-flex align-items-center justify-content-center justify-content-sm-start"
           >
-            <span class="text-muted">
-              Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries
-            </span>
+            <span
+              class="text-muted"
+            >Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries</span>
           </b-col>
           <!-- Pagination -->
           <b-col
             cols="12"
             sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-end
-            "
+            class="d-flex align-items-center justify-content-center justify-content-sm-end"
           >
             <b-pagination
               v-model="currentPage"
@@ -156,25 +156,35 @@
         </b-row>
       </div>
     </b-card>
+    <ModalEditTask v-if="modalEdit" @hide="closeModalEditTask" :infoTask="infoTask" />
+    <ModalShowTask v-if="modalShow" @hide="closeModalShowTask" :infoTask="infoTask" />
   </div>
 </template>
 <script>
 import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 import TaskService from "@/service/task/index.js";
+import ModalEditTask from "../modals/ModalEditTask.vue";
+import ModalShowTask from "../modals/ModalShowTask.vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
   props: {
     type: {
       type: [Number, String],
-      default: 1,
+      default: 1
     },
+    taskToday: {
+      type: Boolean,
+      default: false
+    }
   },
   directives: {
-    Ripple,
+    Ripple
   },
   components: {
     vSelect,
+    ModalEditTask,
+    ModalShowTask
   },
   data() {
     return {
@@ -185,20 +195,20 @@ export default {
           key: "client_name",
           label: "Client Name",
           sortable: true,
-          visible: true,
+          visible: true
         },
         {
           key: "subject",
           label: "Subject",
           sortable: true,
-          visible: true,
+          visible: true
         },
         {
           key: "due_date",
           label: "Date / Hour",
-          visible: true,
+          visible: true
         },
-        { key: "actions", label: "Actions" },
+        { key: "actions", label: "Actions" }
       ],
       searchInput: "",
       orderby: "",
@@ -212,16 +222,25 @@ export default {
       toPage: "",
       isBusy: false,
       perPageOptions: [10, 25, 50, 100],
+      modalEdit: false,
+      modalShow: false,
+      infoTask: {},
+      exportExcelDisabled: false
     };
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
+      currentUser: "auth/currentUser"
     }),
+
+    routeModule() {
+      return this.$route.meta.route;
+    }
   },
   methods: {
     ...mapActions({
       A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
+      A_EXPORT_TASKS_TO_EXCEL: "TaskStore/A_EXPORT_TASKS_TO_EXCEL"
     }),
     async myProvider(ctx) {
       let params = {
@@ -231,7 +250,7 @@ export default {
         order: ctx.sortDesc == 1 ? "desc" : "asc",
         orderby: 5,
         type: this.type,
-        id: this.currentUser.user_id,
+        id: this.currentUser.user_id
       };
       const data = await TaskService.getAllTask(params);
       const items = data.data;
@@ -277,6 +296,49 @@ export default {
         }
       }
     },
+    async exportExcel() {
+      const confirm = await this.showConfirmSwal(
+        "Are you sure?",
+        "Generating Excel!!!"
+      );
+      if (confirm.isConfirmed) {
+        this.exportExcelDisabled = true;
+        try {
+          const params = {
+            type: this.type,
+            user_id: this.currentUser.user_id
+          };
+          const response = await this.A_EXPORT_TASKS_TO_EXCEL(params);
+          await this.forceFileDownload(response, "tasks.xlsx");
+          setTimeout(() => {
+            this.exportExcelDisabled = false;
+          }, 3000);
+        } catch (error) {
+          this.showErrorSwal(error);
+          this.exportExcelDisabled = false;
+        }
+      }
+    },
+    openModalEditTask(task) {
+      this.addPreloader();
+      this.infoTask = task;
+      this.modalEdit = true;
+    },
+    closeModalEditTask(status) {
+      if (status) {
+        this.resetSearch();
+        this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
+      }
+      this.modalEdit = false;
+    },
+    openModalShowTask(task) {
+      this.addPreloader();
+      this.infoTask = task;
+      this.modalShow = true;
+    },
+    closeModalShowTask() {
+      this.modalShow = false;
+    },
     async deleteTask(taskId) {
       const confirm = await this.showConfirmSwal();
       if (confirm.value) {
@@ -305,8 +367,8 @@ export default {
           throw error;
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

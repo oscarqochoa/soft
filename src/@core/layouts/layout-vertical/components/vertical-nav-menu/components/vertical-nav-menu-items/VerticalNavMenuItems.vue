@@ -34,7 +34,7 @@ export default {
     showTabNavigation(item) {
       const { route } = this.$router.resolve({ name: item.route })
       if (route.meta === {}) return true
-      if (!route.meta.permittedRoles) return true
+      if (!route.meta.permittedRoles) return true 
       return route.meta.permittedRoles.includes(this.currentUser.role_id)
     },
   },

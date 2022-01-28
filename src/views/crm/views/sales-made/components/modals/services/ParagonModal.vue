@@ -39,8 +39,11 @@
                   class="border"
                 >
                   <div class="d-flex flex-column">
-                    <template v-for="(row) in rates.filter(rate => rate.type === (index + 1).toString())">
+                    <template
+                      v-for="(row, index) in rates.filter(rate => rate.type === (index + 1).toString())"
+                    >
                       <div
+                        :key="index"
                         class="d-flex w-100 px-1 py-1 cursor-pointer"
                         :class="{'bg-info text-white font-weight-bolder': option === row.id}"
                         @click="!isModalShow && addFee(row)"
@@ -75,9 +78,7 @@
                             cols="4"
                             class="text-right font-weight-bold font-medium-2"
                           >
-                            <div>
-                              FEE $
-                            </div>
+                            <div>FEE $</div>
                           </b-col>
                           <b-col cols="8">
                             <money
@@ -94,9 +95,7 @@
                       <b-col
                         v-if="errors[0] && validateMoney"
                         class="invalid-feedback ml-4"
-                      >
-                        Fee is {{ errors[0] }}
-                      </b-col>
+                      >Fee is {{ errors[0] }}</b-col>
                     </ValidationProvider>
                   </b-row>
                 </b-col>
@@ -157,7 +156,10 @@ export default {
     salesClient: {
       type: Object,
       default: () => ({
-        event_id: '', account_id: '', id: '', lead_id: '',
+        event_id: '',
+        account_id: '',
+        id: '',
+        lead_id: '',
       }),
     },
     typeModal: {
@@ -192,7 +194,13 @@ export default {
       suggested: 0,
       rates_others: [],
       fee: 0,
-      packsName: ['WEBSITE', 'WEBSITE + LOGO', 'SOCIAL NETWORK', 'SOCIAL NETWORK + LOGO', 'PACKS'],
+      packsName: [
+        'WEBSITE',
+        'WEBSITE + LOGO',
+        'SOCIAL NETWORK',
+        'SOCIAL NETWORK + LOGO',
+        'PACKS',
+      ],
       vMoney: {
         decimal: '.',
         thousands: ',',
@@ -214,7 +222,9 @@ export default {
       return this.typeModal === 2 || this.typeModal === 5
     },
     isModalAdd() {
-      return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+      return (
+        this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+      )
     },
   },
   async mounted() {
@@ -253,23 +263,24 @@ export default {
         switch (this.typeModal) {
           case 1:
             message = 'complete Rates'
-            route = '/attendend'
+            route = '/sales-made/attendend-sale'
             break
           case 3:
             message = 'add new service'
-            route = '/attendendprogram'
+            route = '/sales-made/attendend-saleprogram'
             typeADD = 1
             break
           case 4:
             message = 'change service'
-            route = '/attendendprogram'
+            route = '/sales-made/attendend-saleprogram'
             typeADD = 2
             break
           case 6:
             message = 'add new service'
-            route = '/leadattendend'
+            route = '/sale/insert-lead-attendance'
             break
-          default: break
+          default:
+            break
         }
 
         const param = {
@@ -297,7 +308,9 @@ export default {
           json_ce: this.json_ce,
         }
 
-        const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
+        const result = await this.showConfirmSwal(
+          `Are you sure you want to ${message}`,
+        )
         if (result.value) {
           this.addPreloader()
           const response = await amgApi.post(`${route}`, param)
@@ -312,7 +325,7 @@ export default {
 
     async searchRate() {
       try {
-        const response = await amgApi.post('/searchprogram', { id: this.program })
+        const response = await amgApi.post('/rates/get-rates-by-programs', { id: this.program })
         if (response.status === 200) {
           this.rates = response.data
           if (!this.isModalShow) {
@@ -329,10 +342,10 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post('/searchprogramsalemade', { id: this.salesClient.id })
+        const response = await amgApi.post('/sales-made/get-details-sales-made', { id: this.salesClient.id })
         if (response.status === 200) {
           this.fee = response.data[0].fee
-          this.rate_selected = JSON.parse(response.data[0].rate_selected)
+          this.rate_selected = response.data[0].rate_selected
           this.option = this.rate_selected[0].rate_id
           this.removePreloader()
         }
@@ -349,7 +362,9 @@ export default {
     },
     async getScore() {
       try {
-        const response = await amgApi.post('/getscoreattend', { lead_id: this.salesClient.lead_id })
+        const response = await amgApi.post('/attend/get-score-attend', {
+          lead_id: this.salesClient.lead_id,
+        })
         if (response.status === 200) {
           this.score_id = response.data.score_id
         }

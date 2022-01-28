@@ -293,7 +293,7 @@ export default {
         let letter = element.dayheader.toUpperCase();
         this.fields.push({
           key: "field",
-          label: letter.toUpperCase()
+          label: letter.toUpperCase(),
         });
       });
     },
@@ -377,19 +377,13 @@ export default {
         end_date: this.filter.to,
       };
       const data = await SchedulesServices.getExportExcel(params);
-      this.forceFileDownload(data);
+      let namefile =
+        "schedules_report_" +
+        moment(this.filter.from).format("MM-DD-YYYY") +
+        "_" +
+        moment(this.filter.to).format("MM-DD-YYYY");
+        this.forceFileDownload(data, namefile + ".xlsx");
       this.removePreloader();
-    },
-    forceFileDownload(data) {
-      const url = window.URL.createObjectURL(new Blob([data]));
-      window.open(url);
-      const link = document.createElement("a");
-      link.href = url;
-      let namefile = "schedules_report_";
-      link.setAttribute("download", namefile + ".xlsx");
-      document.body.appendChild(link);
-      link.click();
-      
     },
     getMoreInfo() {
       this.dataSchedule = this.filterUser;

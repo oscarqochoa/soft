@@ -40,10 +40,7 @@
                         {{ user.mobile }}
                       </b-list-group-item>
                     </b-list-group>
-                    <b-list-group
-                      class="autocomplete-results"
-                      v-if="statusSpinner"
-                    >
+                    <b-list-group class="autocomplete-results" v-if="statusSpinner">
                       <div class="text-center">
                         <b-spinner variant="primary" label="Text Centered" />
                       </div>
@@ -71,11 +68,8 @@
                       @click="getcard"
                       :disabled="changeDisable"
                     >
-                      CONTINUE
-                      <feather-icon
-                        icon="ArrowRightIcon"
-                        size="15"
-                      ></feather-icon>
+                      Continue
+                      <feather-icon icon="ArrowRightIcon" size="15"></feather-icon>
                     </b-button>
                   </div>
                 </div>
@@ -93,44 +87,25 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
                   <ValidationProvider
-                    name="comment"
-                    rules="required"
+                    name="price"
+                    rules="required|validate-amount"
                     v-slot="{ errors }"
                   >
                     <b-form-group label="Amount" label-for="v-Amount">
-                      <!-- <b-input-group
-                        prepend="$"
-                        :class="{ 'border border-danger': errors[0] }"
-                      >
-                        <b-form-input
-                          id="campo2"
-                          type="text"
-                          v-model="amount"
-                          v-on:blur="validMounthly(2)"
-                          @keypress="justNumbers"
-                          placeholder="amount"
-                        />
-                        <money  v-bind="money" v-model="amount"></money>
-                      </b-input-group> -->
                       <money
                         v-model="amount"
-                        style="height: 37px"
-                        class="form-control input-form fond-white border-hover"
+                        v-bind="moneyConfig"
+                        name="price"
+                        id="price"
+                        class="form-control"
                         :class="{ 'border border-danger': errors[0] }"
                       ></money>
                     </b-form-group>
                   </ValidationProvider>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
-                  <b-form-group
-                    label="Type of Payment"
-                    label-for="v-TypeOfPayment"
-                  >
-                    <ValidationProvider
-                      name="comment"
-                      rules="required"
-                      v-slot="{ errors }"
-                    >
+                  <b-form-group label="Type of Payment" label-for="v-TypeOfPayment">
+                    <ValidationProvider name="payment" rules="required" v-slot="{ errors }">
                       <b-form-radio-group
                         v-model="payment"
                         :options="options"
@@ -162,9 +137,7 @@
                     <span v-if="responseCode == 3">Error</span>
                     <span v-if="responseCode == 4">Held for Review</span>
                     <ul>
-                      <li v-for="(items, index) in errosAutorize" :key="index">
-                        {{ items.errorText }}
-                      </li>
+                      <li v-for="(items, index) in errosAutorize" :key="index">{{ items.errorText }}</li>
                     </ul>
                   </div>
                 </div>
@@ -185,9 +158,7 @@
                       <li
                         v-for="(items, index) in messageAutorize"
                         :key="index"
-                      >
-                        {{ items.description }}
-                      </li>
+                      >{{ items.description }}</li>
                     </ul>
                   </div>
                 </div>
@@ -200,11 +171,7 @@
                   class="col-lg-9 col-md-9 col-sm-9"
                   v-if="dataLead"
                 >
-                  <ValidationProvider
-                    name="comment"
-                    rules="required"
-                    v-slot="{ errors }"
-                  >
+                  <ValidationProvider name="comment" rules="required" v-slot="{ errors }">
                     <div class="row w-100">
                       <b-form-radio-group
                         v-model="methodpayment"
@@ -220,20 +187,14 @@
                         value="true"
                         @input="chargeStatus()"
                         name="radio-inline"
-                      >
-                        Charge
-                      </b-form-checkbox>
+                      >Charge</b-form-checkbox>
                     </div>
                   </ValidationProvider>
                 </b-form-group>
               </div>
             </div>
             <div class="col-lg-11 col-md-12 col-sm-12 box">
-              <div
-                class="col-lg-12 w-100"
-                style="display: inline-block"
-                v-if="methodpayment == 1"
-              >
+              <div class="col-lg-12 w-100" style="display: inline-block" v-if="methodpayment == 1">
                 <modal-credit-card
                   :key="modalCreditController"
                   :cardsLead="cardsLead"
@@ -242,22 +203,21 @@
               </div>
             </div>
 
-            <div class="row w-100">
-              <div class="col-lg-3 col-xl-2 col-md-4 col-9 ml-2">
-                <b-form-group class="inline">
+            <!-- <div class="row w-100">
+              <div class="col-lg-3 col-xl-3 col-md-4 col-9 ml-2 col-sm-6 ">
                   <b-row>
-                    <b-col cols="5" cols-xl="1" cols-md="1" cols-lg="2">
+                    <b-col cols="4" cols-sm="3" cols-xl="1" cols-md="1" cols-lg="3">
                       <b-button
                         type="submit"
                         variant="primary"
-                        class="mr-1"
+                        class="pr-1"
                         @click="submitAutorize"
                         :disabled="changeDisable"
                       >
-                        SUBMIT
+                        Submit
                       </b-button>
                     </b-col>
-                    <b-col cols="1" class=" " >
+                    <b-col cols="2" cols-sm="2" cols-xl="1"  cols-md="1" cols-lg="2">
                       <b-form-checkbox
                         v-if="methodpayment == 1"
                         v-model="sendsms"
@@ -268,7 +228,25 @@
                       </b-form-checkbox>
                     </b-col>
                   </b-row>
-                </b-form-group>
+              </div>
+            </div>-->
+            <div class="row w-100">
+              <div class="ml-1 pl-1 d-flex">
+                <div class="d-inline-block mr-1">
+                  <b-button
+                    type="submit"
+                    variant="primary"
+                    class="pr-1"
+                    @click="submitAutorize"
+                    :disabled="changeDisable"
+                  >Submit</b-button>
+                </div>
+                <b-form-checkbox
+                  v-if="methodpayment == 1"
+                  v-model="sendsms"
+                  value="true"
+                  class="custom-control-primary"
+                >Send SMS</b-form-checkbox>
               </div>
             </div>
           </div>
@@ -289,20 +267,22 @@ export default {
   name: "process-crm",
   components: {
     vSelect,
-    ModalCreditCard,
+    ModalCreditCard
   },
+
   data() {
     return {
+      price: 0,
       modalCreditController: 0,
       cardsLead: {},
       options: [
         { text: "Realtor", value: "1" },
         { text: "Appointment", value: "2" },
-        { text: "Others", value: "3" },
+        { text: "Others", value: "3" }
       ],
       optionsMethodPay: [
         { text: "Credit Card", value: "1" },
-        { text: "Others", value: "2" },
+        { text: "Others", value: "2" }
       ],
       userfilter: "",
       users: null,
@@ -327,8 +307,19 @@ export default {
       charge: true,
       spinner: false,
       statusSelected: false,
+
+      Amerror: false,
+      moneyConfig: {
+        decimal: ",",
+        thousands: ".",
+        prefix: "$",
+        suffix: "",
+        precision: 2,
+        masked: false
+      }
     };
   },
+
   computed: {
     statusSpinner() {
       return this.spinner;
@@ -343,15 +334,15 @@ export default {
       return this.userfilter == "" ? false : true;
     },
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   methods: {
     getCardsLead() {
       this.cardsLead = {
         lead_id: this.user_id, //user_id
         user_id: this.currentUser.user_id,
-        rol: this.currentUser.arrRoles[0].role_id,
+        rol: this.currentUser.role_id
       };
     },
     chargeStatus() {
@@ -364,11 +355,11 @@ export default {
             showCancelButton: true,
             customClass: {
               confirmButton: "btn btn-primary",
-              cancelButton: "btn btn-danger",
+              cancelButton: "btn btn-danger"
             },
-            confirmButtonText: "Yes",
+            confirmButtonText: "Yes"
           })
-          .then((result) => {
+          .then(result => {
             if (result.value) {
               this.charge = false;
             } else {
@@ -394,7 +385,7 @@ export default {
       }
       return num;
     },
-    justNumbers: function (event) {
+    justNumbers: function(event) {
       var charCode = window.event ? event.which : event.keyCode;
       var RE = /^\d*(\.\d{1})?\d{0,1}$/;
       if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -407,17 +398,17 @@ export default {
         this.spinner = true;
         this.statusSelected = true;
         amgApi
-          .post("/searchlead", {
-            q: this.userfilter,
+          .post("/crm/payment/get-lead-by-id", {
+            q: this.userfilter
           })
-          .then((response) => {
+          .then(response => {
             this.users = response.data;
             if (this.users.length == 0) {
               this.users = null;
             }
             this.spinner = false;
           })
-          .catch((err) => {
+          .catch(err => {
             this.spinner = false;
             this.showToast(
               "danger",
@@ -444,10 +435,10 @@ export default {
     getcard() {
       this.$store.commit("app/SET_LOADING", true);
       amgApi
-        .post("/searchleadpayment", {
-          id: this.user_id,
+        .post("/crm/payment/get-lead-payment-by-id", {
+          id: this.user_id
         })
-        .then((response) => {
+        .then(response => {
           if (response.status == 200) {
             this.cards = response.data;
             this.modalCreditController++;
@@ -463,7 +454,7 @@ export default {
             this.$store.commit("app/SET_LOADING", false);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           this.$store.commit("app/SET_LOADING", false);
           console.log(error);
           this.showToast(
@@ -479,7 +470,7 @@ export default {
       this.subtAutorize();
     },
     subtAutorize() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(success => {
         if (!success) {
           return;
         } else {
@@ -491,15 +482,15 @@ export default {
               showCancelButton: true,
               customClass: {
                 confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-danger ",
+                cancelButton: "btn btn-danger "
               },
-              confirmButtonText: "Yes",
+              confirmButtonText: "Yes"
             })
-            .then((result) => {
+            .then(result => {
               if (result.value) {
                 this.$store.commit("app/SET_LOADING", true);
                 amgApi
-                  .post("/checkoutpayment", {
+                  .post("/authorize/checkout-payment", {
                     idcard: this.card_id,
                     amount: this.amount,
                     merchant: this.merchant,
@@ -509,9 +500,9 @@ export default {
                     methodpayment: this.methodpayment,
                     observationOther: this.observationOther,
                     charge: this.charge == false ? 1 : 0,
-                    sendsms: this.sendsms == true ? 1 : 0,
+                    sendsms: this.sendsms == true ? 1 : 0
                   })
-                  .then((response) => {
+                  .then(response => {
                     if (response.status == 200 && response.data.status == 200) {
                       if (this.methodpayment == 1) {
                         if (response.data.transaction.messages) {
@@ -527,7 +518,7 @@ export default {
                                 ? "Error"
                                 : response.data.transaction.responseCode == 4
                                 ? "Held For Review"
-                                : "",
+                                : ""
                           });
 
                           this.$router.push({ name: "payments-crm-list" });
@@ -545,9 +536,9 @@ export default {
                                   ? "Error"
                                   : response.data.transaction.responseCode == 4
                                   ? "Held For Review"
-                                  : "",
+                                  : ""
                             })
-                            .then((res) => {
+                            .then(res => {
                               this.$store.commit("app/SET_LOADING", false);
                               if (res) {
                                 this.getcard();
@@ -560,9 +551,9 @@ export default {
                         this.$swal
                           .fire({
                             icon: "success",
-                            title: "Transaction Unverified",
+                            title: "Transaction Unverified"
                           })
-                          .then((res) => {
+                          .then(res => {
                             if (res) {
                               this.$store.commit("app/SET_LOADING", false);
                               this.$emit("clickList", true);
@@ -595,9 +586,9 @@ export default {
                                   ? "Error"
                                   : response.data.transaction.responseCode == 4
                                   ? "Held For Review"
-                                  : "",
+                                  : ""
                             })
-                            .then((res) => {
+                            .then(res => {
                               if (res) {
                                 this.getcard();
                                 this.card_id = "";
@@ -618,9 +609,9 @@ export default {
                                 ? "Error"
                                 : response.data.transaction.responseCode == 4
                                 ? "Held For Review"
-                                : "",
+                                : ""
                           })
-                          .then((res) => {
+                          .then(res => {
                             if (res) {
                               this.getcard();
                               this.card_id = "";
@@ -630,7 +621,7 @@ export default {
                       }
                     }
                   })
-                  .catch((error) => {
+                  .catch(error => {
                     this.$store.commit("app/SET_LOADING", false);
                     this.showToast(
                       "danger",
@@ -645,9 +636,9 @@ export default {
             });
         }
       });
-    },
+    }
   },
-  created() {},
+  created() {}
 };
 </script>
 
@@ -681,3 +672,4 @@ export default {
   flex-wrap: wrap;
 }
 </style>
+  

@@ -1,13 +1,7 @@
 <template>
   <div>
     <div class="w-100 text-right">
-      <b-button
-        variant="info"
-        class="mb-2"
-        @click="modalQuickCreateOpen"
-      >
-        CREATE
-      </b-button>
+      <b-button variant="info" class="mb-2" @click="modalQuickCreateOpen">Create</b-button>
     </div>
     <b-table
       show-empty
@@ -27,39 +21,36 @@
 
       <!-- Column: SMS -->
       <template #cell(sms)="data">
-        <div v-html="(data.item.sms.length >= 75 && !data.item.showMore) ? `${data.item.sms.replace(/\n/g, '<br \/>').substr(0, 75)}...` : data.item.sms.replace(/\n/g, '<br \/>')" />
+        <div
+          v-html="(data.item.sms.length >= 75 && !data.item.showMore) ? `${data.item.sms.replace(/\n/g, '<br \/>').substr(0, 75)}...` : data.item.sms.replace(/\n/g, '<br \/>')"
+        />
         <b-button
           v-if="data.item.sms.length > 75"
           variant="flat-info"
           size="sm"
           class="text-nowrap"
           @click="onShowMore(data.item.id)"
-        >
-          {{ (data.item.showMore) ? 'Show Less' : 'Show more' }}
-        </b-button>
+        >{{ (data.item.showMore) ? 'Show Less' : 'Show more' }}</b-button>
       </template>
 
       <!-- Column: CreatedBy -->
       <template #cell(created_by)="data">
         <span>{{ data.item.user_created }}</span>
-        <br>
+        <br />
         <span>{{ data.item.created_at | myDateGlobalWithHour }}</span>
       </template>
 
       <!-- Column: UpdatedBy -->
       <template #cell(updated_by)="data">
         <span>{{ data.item.user_updated }}</span>
-        <br>
-        <span
-          v-if="data.item.updated_at"
-        >
-          {{ data.item.updated_at | myDateGlobalWithHour }}
-        </span>
+        <br />
+        <span v-if="data.item.updated_at">{{ data.item.updated_at | myDateGlobalWithHour }}</span>
       </template>
 
       <!-- Column: Actions -->
       <template #cell(actions)="data">
-        <actions-table :options="[ 'edit', 'delete' ]"
+        <actions-table
+          :options="[ 'edit', 'delete' ]"
           :row-data="data.item"
           @onRowEdit="modalQuickEditOpen(data.item)"
           @onRowDelete="modalQuickDelete(data.item.id)"
@@ -67,28 +58,24 @@
       </template>
     </b-table>
 
-    
     <!-- modal SAVE QUICK SMS -->
     <b-modal
       id="modal-quick-sms-save"
-      ok-only
+      title-class="h4 text-white"
       modal-class="modal-primary"
       centered
       size="lg"
-      :title="(quickData.id) ? 'EDIT QUICK SMS' : 'NEW QUICK SMS'"
+      :title="(quickData.id) ? 'Edit Quick Sms' : 'New Quick Sms'"
       hide-footer
     >
-      <modal-quick-sms-save
-        :modul="modul"
-        :quick-data="quickData"
-      />
+      <modal-quick-sms-save :modul="modul" :quick-data="quickData" />
     </b-modal>
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from "vuex";
 
-import ActionsTable from '../lead-table/ActionsTable.vue'
+import ActionsTable from "../lead-table/ActionsTable.vue";
 
 import ModalQuickSmsSave from "./ModalQuickSmsSave.vue";
 
@@ -105,13 +92,13 @@ export default {
     quicks: {
       type: Array,
       required: true
-    },
+    }
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token'
-    }),
+      currentUser: "auth/currentUser",
+      token: "auth/token"
+    })
   },
   data() {
     return {
@@ -120,37 +107,37 @@ export default {
         sms: "",
         title: ""
       },
-      quickData: new Object,
+      quickData: new Object(),
       userId: null,
       roleId: null,
       isBusy: false,
       fieldsQuicks: [
-        { key: 'title' },
-        { key: 'sms' },
-        { key: 'created_by'},
-        { key: 'updated_by'},
-      ],
-    }
+        { key: "title" },
+        { key: "sms" },
+        { key: "created_by" },
+        { key: "updated_by" }
+      ]
+    };
   },
   methods: {
     ...mapActions({
-      A_DELETE_SMS_QUICK: 'CrmSmsStore/A_DELETE_SMS_QUICK',
+      A_DELETE_SMS_QUICK: "CrmSmsStore/A_DELETE_SMS_QUICK"
     }),
-    onShowMore (id) {
-      const index = this.quicks.map(el => el.id).indexOf(id)
+    onShowMore(id) {
+      const index = this.quicks.map(el => el.id).indexOf(id);
       if (index !== -1) {
-        this.quicks[index].showMore = !this.quicks[index].showMore
+        this.quicks[index].showMore = !this.quicks[index].showMore;
       }
     },
-    modalQuickCreateOpen () {
+    modalQuickCreateOpen() {
       this.quickData = JSON.parse(JSON.stringify(this.blankQuickData));
       this.$bvModal.show("modal-quick-sms-save");
     },
-    modalQuickEditOpen (item) {
+    modalQuickEditOpen(item) {
       this.quickData = item;
       this.$bvModal.show("modal-quick-sms-save");
     },
-    async modalQuickDelete (id) {
+    async modalQuickDelete(id) {
       this.showSwalGeneric(
         "Are you sure?",
         "You won't be able to revert this!",
@@ -188,13 +175,13 @@ export default {
             this.getInternalErrors(error)
           );
         });
-    },
+    }
   },
   created() {
-    this.userId = this.currentUser.user_id
-    this.roleId = this.currentUser.role_id
-    if ([ 1, 2 ].includes(this.roleId) || this.modul == 15)
-      this.fieldsQuicks.push({ key: 'actions' })
-  },
-}
+    this.userId = this.currentUser.user_id;
+    this.roleId = this.currentUser.role_id;
+    if ([1, 2].includes(this.roleId) || this.modul == 15)
+      this.fieldsQuicks.push({ key: "actions" });
+  }
+};
 </script>
