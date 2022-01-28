@@ -96,7 +96,7 @@
 <script>
 import { amgApi } from "@/service/axios.js";
 import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
-
+import PaymentService from "../service/payments.service";
 export default {
   components: {
     ModalCardCreate,
@@ -164,27 +164,6 @@ export default {
     },
   },
   methods: {
-    //Edit and Cancel information
-    editInformation() {
-      this.$swal
-        .fire({
-          title: "Are you Sure ? ",
-          text: "Do you want to edit the information?",
-          icon: "warning",
-          showCancelButton: true,
-          customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-danger ",
-          },
-          confirmButtonText: "Yes",
-        })
-        .then((r) => {
-          if (r.value) {
-            this.returnInformation = JSON.parse(JSON.stringify(this.form));
-            this.edit = true;
-          }
-        });
-    },
 
     //Cards
     openModalCreateCard() {
@@ -201,21 +180,6 @@ export default {
       this.modalCard = false;
     },
 
-    openModalCard(id) {
-      amgApi
-        .post("/cards/get-cards-data-by-id", {
-          id: id,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.card = {
-              valor: response.data[0],
-              role: this.cardsLead.rol,
-            };
-            this.modalCard = true;
-          }
-        });
-    },
 
     openmodaldeletecard(id) {
       this.card_id = id;
@@ -224,36 +188,15 @@ export default {
     closedModalDeleteCar() {
       this.deletecardmodal = false;
     },
-    searchcards() {
-      amgApi
-        .post("/clients/search-cards-clients", {
-          id: this.cardsLead.lead_id,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.cards = response.data;
-            // console.log(this.cards)
-            // this.cards.map(card =>{
-            //   let firstElement = card.cardnumber.charAt(0) 
-            //   console.log(firstElement)
-            //   if(firstElement == '-'){
-            //     card.cardnumber = card.cardnumber.substring(1)
-                
-            //   }
-            // })
-            // console.log("second",this.cards)
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          this.showToast(
-                  "danger",
-                  "top-right",
-                  "Error",
-                  "XIcon",
-                  "Something went wrong!"
-                );
-        });
+    async searchcards() {
+      try{
+        const data = await PaymentService.searchcards({id: this.cardsLead.lead_id,})
+        this.cards = data;
+
+      }catch(error){
+        console.log(error)
+        this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+      }
     },
   },
 };
