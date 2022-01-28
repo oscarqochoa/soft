@@ -18,6 +18,9 @@
             variant="info"
             :disabled="isLoading"
           >
+            <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
+          </b-button>
+          <b-dropdown v-if="[1, 2].includes(currentUser.role_id)" id="dropdown-6" variant="info">
             <template #button-content>
               <template v-if="isLoading">
                 <b-spinner small />
