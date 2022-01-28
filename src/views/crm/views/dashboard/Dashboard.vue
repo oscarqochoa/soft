@@ -14,7 +14,10 @@
                 <span>Leads</span>
               </b-button>
             </div>
-            <div class="row" style="height: 10px" />
+            <div
+              class="row"
+              style="height: 10px"
+            />
             <div>
               <b-card-body>
                 <div class="row item-wrapper">
@@ -42,7 +45,10 @@
                 <span>Appointments</span>
               </b-button>
             </div>
-            <div class="row" style="height: 10px" />
+            <div
+              class="row"
+              style="height: 10px"
+            />
             <div>
               <b-card-body>
                 <div class="row">
@@ -70,7 +76,10 @@
                 <span>Tasks</span>
               </b-button>
             </div>
-            <div class="row" style="height: 10px" />
+            <div
+              class="row"
+              style="height: 10px"
+            />
             <div>
               <b-card-body>
                 <div class="row">
@@ -98,7 +107,10 @@
                 <span>Sales</span>
               </b-button>
             </div>
-            <div class="row" style="height: 10px" />
+            <div
+              class="row"
+              style="height: 10px"
+            />
             <div>
               <b-card-body>
                 <div class="row">
@@ -126,7 +138,10 @@
                 <span>Capturated</span>
               </b-button>
             </div>
-            <div class="row" style="height: 10px" />
+            <div
+              class="row"
+              style="height: 10px"
+            />
             <div>
               <b-card-body>
                 <div class="row">
@@ -349,14 +364,25 @@
         </div>
       </div>-->
       <div class="row">
-        <b-card :title="`${nameOfTab} Balance`" class="col-12">
+        <b-card
+          :title="`${nameOfTab} Balance`"
+          class="col-12"
+        >
           <div class="d-flex justify-content-between flex-wrap row">
             <div class="mb-1 mb-sm-0 d-inline col-lg-7">
               <b-row>
-                <b-col cols="12" sm="4" md="4">
+                <b-col
+                  cols="12"
+                  sm="4"
+                  md="4"
+                >
                   <span class="text-muted w-100">MONTHLY GRAPHICS</span>
                 </b-col>
-                <b-col cols="12" sm="3" md="3">
+                <b-col
+                  cols="12"
+                  sm="3"
+                  md="3"
+                >
                   <v-select
                     v-model="year"
                     class="per-page-selector"
@@ -366,7 +392,11 @@
                     @input="filtrocont()"
                   />
                 </b-col>
-                <b-col cols="12" sm="4" md="4">
+                <b-col
+                  cols="12"
+                  sm="4"
+                  md="4"
+                >
                   <v-select
                     v-if="[1,2].includes(currentUser.role_id)"
                     v-model="userfilter"
@@ -382,13 +412,18 @@
               </b-row>
             </div>
             <div class="d-flex align-content-center mb-1 mb-sm-0 col-lg-3">
-              <h1 class="font-weight-bolder">TOTAL: {{ total_year }}</h1>
+              <h1 class="font-weight-bolder">
+                TOTAL: {{ total_year }}
+              </h1>
               <div class="pt-25 ml-75" />
             </div>
           </div>
-          <br />
-          <br />
-          <app-echart-line-crm :key="idEchart" :option-data="option" />
+          <br>
+          <br>
+          <app-echart-line-crm
+            :key="idEchart"
+            :option-data="option"
+          />
         </b-card>
       </div>
     </div>
@@ -405,7 +440,7 @@ import AppEchartLineCrm from "./components/AppEchartLineCrm.vue";
 import { amgApi } from "@/service/axios";
 
 export default {
-  name: "DashboardCrm",
+  name: 'DashboardCrm',
   components: {
     BCard,
     BButton,
@@ -444,12 +479,12 @@ export default {
       calls: [],
       sales: [],
       captur: [],
-      userfilter: "",
-      value: "",
+      userfilter: '',
+      value: '',
       total_year: 0,
       index: 0,
       users: [],
-      year: moment().format("YYYY"),
+      year: moment().format('YYYY'),
       years: [],
       nameOfTab: "Leads"
     };
@@ -460,46 +495,46 @@ export default {
     })
   },
   created() {
-    this.userCreator();
-    this.allData();
-    this.year_select();
+    this.userCreator()
+    this.allData()
+    this.year_select()
   },
   methods: {
     chargeDataToEchart(array, name) {
-      this.option.series.name = name;
-      this.option.series.data = array;
-      this.idEchart++;
+      this.option.series.name = name
+      this.option.series.data = array
+      this.idEchart++
     },
     change_tab(index) {
       switch (index) {
         case 0:
-          this.total_year = this.global.leads_year;
-          this.chargeDataToEchart(this.leads, "Total leads");
-          this.nameOfTab = "Leads";
-          break;
+          this.total_year = this.global.leads_year
+          this.chargeDataToEchart(this.leads, 'Total leads')
+          this.nameOfTab = 'Leads'
+          break
         case 1:
-          this.total_year = this.global.quotes_year;
-          this.chargeDataToEchart(this.quotes, "Total Appointments");
-          this.nameOfTab = "Appointments";
-          break;
+          this.total_year = this.global.quotes_year
+          this.chargeDataToEchart(this.quotes, 'Total Appointments')
+          this.nameOfTab = 'Appointments'
+          break
         case 2:
-          this.total_year = this.global.calls_year;
-          this.chargeDataToEchart(this.calls, "Total Calls");
-          this.nameOfTab = "Tasks";
-          break;
+          this.total_year = this.global.calls_year
+          this.chargeDataToEchart(this.calls, 'Total Calls')
+          this.nameOfTab = 'Tasks'
+          break
         case 3:
-          this.total_year = this.global.sales_year;
-          this.chargeDataToEchart(this.sales, "Total Sales");
-          this.nameOfTab = "Sales";
-          break;
+          this.total_year = this.global.sales_year
+          this.chargeDataToEchart(this.sales, 'Total Sales')
+          this.nameOfTab = 'Sales'
+          break
         case 4:
-          this.total_year = this.global.clients_year;
-          this.chargeDataToEchart(this.captur, "Total Captured");
-          this.nameOfTab = "Captured";
+          this.total_year = this.global.clients_year
+          this.chargeDataToEchart(this.captur, 'Total Captured')
+          this.nameOfTab = 'Captured'
 
-          break;
+          break
       }
-      this.index = index;
+      this.index = index
     },
     allData() {
       this.$store.commit("app/SET_LOADING", true);
@@ -528,18 +563,19 @@ export default {
         .catch(error => {
           this.$store.commit("app/SET_LOADING", false);
           this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong!"
-          );
-          console.error(error);
-        });
+            'danger',
+            'top-right',
+            'Error',
+            'XIcon',
+            'Something went wrong!',
+          )
+          console.error(error)
+        })
     },
     filtrocont() {
+      console.log(this.global)
       if (this.userfilter != null) {
-        this.$store.commit("app/SET_LOADING", true);
+        this.$store.commit('app/SET_LOADING', true)
         amgApi
           .post("/crm/get-data-dashboard", {
             created_id: this.userfilter,
@@ -559,17 +595,17 @@ export default {
           .catch(error => {
             this.$store.commit("app/SET_LOADING", false);
             this.showToast(
-              "danger",
-              "top-right",
-              "Error",
-              "XIcon",
-              "Something went wrong!"
-            );
-            console.error(error);
-          });
+              'danger',
+              'top-right',
+              'Error',
+              'XIcon',
+              'Something went wrong!',
+            )
+            console.error(error)
+          })
       } else {
-        this.allData();
-        this.year = "2021";
+        this.allData()
+        this.year = '2021'
       }
     },
     userCreator() {
@@ -583,18 +619,18 @@ export default {
         })
         .catch(error => {
           this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong with users!"
-          );
-          console.error(error);
-        });
+            'danger',
+            'top-right',
+            'Error',
+            'XIcon',
+            'Something went wrong with users!',
+          )
+          console.error(error)
+        })
     },
     year_select() {
-      for (let x = 2014; x <= moment().format("YYYY"); x++) {
-        this.years.push(x);
+      for (let x = 2014; x <= moment().format('YYYY'); x++) {
+        this.years.push(x)
       }
     }
   }

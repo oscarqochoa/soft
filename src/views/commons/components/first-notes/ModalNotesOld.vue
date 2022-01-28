@@ -72,6 +72,10 @@ export default {
     HeaderModalNotes,
     vSelect
   },
+  components: {
+    HeaderModalNotes,
+    vSelect,
+  },
   data() {
     return {
       modalUp: true,

@@ -55,7 +55,7 @@ export default {
       const [schedulesNav] = state.S_SIDEBAR_ITEMS.filter(nav => nav.title === 'Schedules')
       if (payload.role === 1 || payload.role === 2 || payload.role === 1) {
         const params = { moduleid: payload.module }
-        const response = await window.amgApi.post('/schedules/total_counter', params)
+        const response = await window.amgApi.post('/schedules/get-all-counters', params)
         if (GeneralMixins.methods.isResponseSuccess(response)) {
           schedulesNav.tag = response.data.grandTotal
         }
