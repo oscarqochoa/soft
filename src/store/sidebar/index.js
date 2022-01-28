@@ -1,6 +1,7 @@
 import navMenuItems from '@/navigation/vertical'
 import LoansService from '@/views/commons/components/loans/services/loans.service'
 import GeneralMixins from '@/mixins/general'
+import store from '@/store'
 
 export default {
   namespaced: true,
@@ -33,7 +34,8 @@ export default {
       loanNav.tag = response.counter
     },
     async M_UPDATE_COUNTER_NCR(state, payload = { module: 2, role: 1, userId: 1 }) {
-      const [ncrNav] = state.S_SIDEBAR_ITEMS.filter(nav => nav.title === 'NCR')
+      console.log(state.S_SIDEBAR_ITEMS)
+      const [ncrNav] = state.S_SIDEBAR_ITEMS.filter(nav => (nav.title ? nav.title === 'NCR' : false))
       if (payload.role !== 1) {
         const response = await window.amgApi.post('/lead/ncr/ncr-leads-count-in-process', {
           user_id: payload.userId,
@@ -58,6 +60,7 @@ export default {
         const response = await window.amgApi.post('/schedules/get-all-counters', params)
         if (GeneralMixins.methods.isResponseSuccess(response)) {
           schedulesNav.tag = response.data.grandTotal
+          await store.dispatch('SchedulesStore/A_SET_COUNTERS_TABS_SCHEDULES', response.data)
         }
       } else {
         schedulesNav.tag = 0
