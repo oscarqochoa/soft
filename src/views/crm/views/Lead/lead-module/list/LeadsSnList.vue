@@ -171,11 +171,6 @@ export default {
       if (status === 7) return "danger";
       return "primary";
     },
-    addPaddingTd() {
-      this.fields.map(field => {
-        field.tdClass = "py-1";
-      });
-    },
     async myProvider() {
       try {
         this.isBusy = true;

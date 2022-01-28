@@ -19,7 +19,7 @@
         :api-url="clientRoute"
         ref="refClientsList"
         :items="myProvider"
-        :fields="visibleFields"
+        :fields="fields"
         primary-key="id"
         table-class="text-nowrap"
         responsive="sm"
@@ -384,11 +384,11 @@ export default {
             { value: 1, label: "Realtor" },
             { value: 2, label: "Appointment" },
             { value: 3, label: "Inital Payment" },
-            { value: 4, label: "Others" },
+            { value: 4, label: "Others" }
           ],
           reduce: "value",
           selectText: "label",
-          cols: 12,
+          cols: 12
         },
         {
           type: "select",
@@ -400,11 +400,11 @@ export default {
             { value: 0, label: "All" },
             { value: 1, label: "Approved" },
             { value: 2, label: "Declined" },
-            { value: 3, label: "Underview" },
+            { value: 3, label: "Underview" }
           ],
           reduce: "value",
           selectText: "label",
-          cols: 12,
+          cols: 12
         },
         {
           type: "datepicker",
@@ -418,9 +418,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
+          cols: 6
         },
         {
           type: "datepicker",
@@ -434,10 +434,10 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
-        },
+          cols: 6
+        }
       ],
       filterController: false,
       modalRefund: false,
@@ -448,19 +448,22 @@ export default {
   },
   mounted() {
     this.getAllUsers();
+    this.addPaddingTd();
   },
   computed: {
     clientRoute() {
       return "/crm/payment/get-all-lead-payments";
     },
-    visibleFields() {
+    fields() {
       return this.arrayColumns.filter(column => column.visible);
     },
     ...mapGetters({
-      currentUser: "auth/currentUser",
+      currentUser: "auth/currentUser"
     }),
-    filterStatus(){
-      return this.currentUser.user_id == 1 || this.currentUser.user_id ==2? this.filter : this.filter2
+    filterStatus() {
+      return this.currentUser.user_id == 1 || this.currentUser.user_id == 2
+        ? this.filter
+        : this.filter2;
     }
   },
   methods: {
@@ -500,7 +503,10 @@ export default {
         to: this.filter[4].model,
         result: this.filter[1].model,
         type: this.filter[0].model,
-        user:  this.currentUser.user_id == 1 || this.currentUser.user_id ==2? this.filter[2].model:this.currentUser.user_id
+        user:
+          this.currentUser.user_id == 1 || this.currentUser.user_id == 2
+            ? this.filter[2].model
+            : this.currentUser.user_id
       });
 
       // Must return a promise that resolves to an array of items

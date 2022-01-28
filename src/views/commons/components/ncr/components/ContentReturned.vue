@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="px-1">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -233,8 +233,9 @@
               style="cursor: pointer"
             >
               <img :src="assetsImg + '/images/icons/report2.ico'" />
-            </a> -->
-            <router-link v-if="data.item.cr == 1"
+            </a>-->
+            <router-link
+              v-if="data.item.cr == 1"
               :to="{
                 name: 'report-lead',
                 params: {idfile:data.item.score_id,idlead:data.item.lead_id,

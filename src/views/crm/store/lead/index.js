@@ -474,7 +474,6 @@ const actions = {
   async A_SET_POTENTIAL({ commit }, body) {
     try {
       const response = await crmLead.postSetPotential(body);
-      /* console.log('A_SET_POTENTIAL response', response) */
       return response;
     } catch (error) {
       console.log("ERROR_SET_POTENTIAL [ACTION]", error);
@@ -543,6 +542,14 @@ const actions = {
   async A_ADD_SELLER_LIST({ commit }, body) {
     try {
       const response = await crmLead.createSellerList(body);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async A_EXPORT_LEADS_TO_EXCEL({ commit }, body) {
+    try {
+      const response = await crmLead.exportLeadsToExcel(body);
       return response;
     } catch (error) {
       throw error;

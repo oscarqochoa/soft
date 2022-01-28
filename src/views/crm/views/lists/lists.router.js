@@ -1,27 +1,40 @@
 export default [
-    {
-        path: '/lists',
-        name: 'lists-crm',
-        component: () => import('@/views/crm/views/lists/ListsCrm.vue'),
-        children: [
+  {
+    path: "/lists",
+    name: "lists-crm",
+    component: () => import("@/views/crm/views/lists/ListsCrm.vue"),
+    children: [
+      {
+        path: "",
+        name: "lists-crm-mylist",
+        component: () =>
+          import("@/views/crm/views/lists/components/MyList.vue"),
+        meta: {
+          isClientsTab: true,
+          pageTitle: "Lists",
+          breadcrumb: [
             {
-                path: '',
-                name: 'lists-crm-mylist',
-                component: () => import('@/views/crm/views/lists/components/MyList.vue'),
-                meta:{
-                    isClientsTab: true
-                },
-                
+              text: "My List",
+              active: true,
             },
+          ],
+        },
+      },
+      {
+        path: " ",
+        name: "lists-crm-list",
+        component: () => import("@/views/crm/views/lists/components/List.vue"),
+        meta: {
+          isClientsTab: false,
+          pageTitle: "Lists",
+          breadcrumb: [
             {
-                path: ' ',
-                name: 'lists-crm-list',
-                component: () => import('@/views/crm/views/lists/components/List.vue'),
-                meta:{
-                    isClientsTab: false
-                }
+              text: "List",
+              active: true,
             },
-        ],
-        
-    }
-]
+          ],
+        },
+      },
+    ],
+  },
+];
