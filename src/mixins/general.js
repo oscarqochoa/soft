@@ -225,7 +225,7 @@ export default {
     },
     showErrorSwal(error) {
       this.$swal({
-        html: `<h4><b>Sorry, there was an error... try again or contact support !!!</b></h4> <br/> <span class="font-small-3">${error}</span>`,
+        html: `<h4><b>Sorry, there was an error... try again or contact support !!!</b></h4> <br/> <span class="font-small-3 text-danger">${error}</span>`,
         imageUrl: "/assets/images/icons/swal/error.svg",
         imageWidth: 70,
         confirmButtonText: "Ok",

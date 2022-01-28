@@ -1,6 +1,10 @@
 <template>
   <div>
-    <lead-list-add-new :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive" />
+    <lead-list-add-new
+      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
+      :key="keyCreateList"
+      @saveLead="keyCreateList = Math.random()"
+    />
     <header-slot>
       <template #actions>
         <div>
@@ -10,14 +14,10 @@
             class="mr-1"
             @click="isAddNewUserSidebarActive = true"
           >
-            <feather-icon
-              icon="PlusIcon"
-              size="15"
-              class="mr-50 text-white"
-            />Create
+            <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
           </b-button>
           <b-dropdown
-            v-if="[1, 2].includes(currentUser.role_id)"
+            v-if="[1, 2].includes(currentUser.role_id) && isLeadsRoute"
             id="dropdown-6"
             variant="info"
             :disabled="isLoading"
@@ -27,21 +27,13 @@
                 <b-spinner small />
               </template>
               <template v-else>
-                <feather-icon
-                  icon="DownloadIcon"
-                  size="16"
-                  class="align-middle"
-                />
+                <feather-icon icon="DownloadIcon" size="16" class="align-middle" />
               </template>
               <span class="ml-1">Export To Excel</span>
             </template>
 
-            <b-dropdown-item @click="exportExcel(1, 1)">
-              Export Current Page
-            </b-dropdown-item>
-            <b-dropdown-item @click="exportExcel(1, 2)">
-              Export All Page
-            </b-dropdown-item>
+            <b-dropdown-item @click="exportExcel(1, 1)">Export Current Page</b-dropdown-item>
+            <b-dropdown-item @click="exportExcel(1, 2)">Export All Page</b-dropdown-item>
             <b-dropdown-item
               :disabled="!S_SELECTED_LEADS.length"
               @click="exportExcel(1, 3)"
@@ -78,225 +70,231 @@
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState, mapActions } from "vuex";
 
-import LeadListAddNew from './lead-module/save/LeadListAddNew.vue'
+import LeadListAddNew from "./lead-module/save/LeadListAddNew.vue";
 
 export default {
   components: {
-    LeadListAddNew,
+    LeadListAddNew
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token',
-      G_STATE_LEADS: 'CrmLeadStore/G_STATE_LEADS',
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      G_STATE_LEADS: "CrmLeadStore/G_STATE_LEADS"
     }),
     ...mapState({
       S_SELECTED_LEADS: state => state.CrmLeadStore.S_SELECTED_LEADS,
-      S_FILTERS_LEADS: state => state.CrmLeadStore.S_FILTERS_LEADS,
+      S_FILTERS_LEADS: state => state.CrmLeadStore.S_FILTERS_LEADS
     }),
     routeModule() {
-      return this.$route.meta.route
+      return this.$route.meta.route;
     },
+    isLeadsRoute() {
+      return this.$route.path === `/${this.routeModule}/leads/`;
+    }
   },
   data() {
     return {
       isOnlyLead: false,
       isAddNewUserSidebarActive: false,
       preloading: true,
-      dato1: 'desc',
+      dato1: "desc",
       dato2: 10,
       isLoading: false,
-    }
+      keyCreateList: 0
+    };
   },
   async created() {
-    this.preloading = false
-    await this.getStateLeads()
-    await this.getStatusLeads()
-    await this.getSourceLeads()
-    await this.getOwners()
-    await this.getPrograms()
-    await this.getSourceNames()
-    await this.getStates()
-    await this.getEeuuStates()
-    await this.getCountries()
-    await this.getSellers()
-    this.preloading = true
+    this.preloading = false;
+    await this.getStateLeads();
+    await this.getStatusLeads();
+    await this.getSourceLeads();
+    await this.getOwners();
+    await this.getPrograms();
+    await this.getSourceNames();
+    await this.getStates();
+    await this.getEeuuStates();
+    await this.getCountries();
+    await this.getSellers();
+    this.preloading = true;
   },
   methods: {
     ...mapActions({
-      A_GET_STATE_LEADS: 'CrmLeadStore/A_GET_STATE_LEADS',
-      A_GET_STATUS_LEADS: 'CrmLeadStore/A_GET_STATUS_LEADS',
-      A_GET_SOURCE_LEADS: 'CrmLeadStore/A_GET_SOURCE_LEADS',
-      A_EXPORT_LEADS_TO_EXCEL: 'CrmLeadStore/A_EXPORT_LEADS_TO_EXCEL',
-      A_GET_OWNERS: 'CrmGlobalStore/A_GET_OWNERS',
-      A_GET_PROGRAMS: 'CrmGlobalStore/A_GET_PROGRAMS',
-      A_GET_SOURCE_NAMES: 'CrmGlobalStore/A_GET_SOURCE_NAMES',
-      A_GET_STATES: 'CrmGlobalStore/A_GET_STATES',
-      A_GET_EEUU_STATES: 'CrmGlobalStore/A_GET_EEUU_STATES',
-      A_GET_COUNTRIES: 'CrmGlobalStore/A_GET_COUNTRIES',
-      A_GET_SELLERS: 'CrmGlobalStore/A_GET_SELLERS',
+      A_GET_STATE_LEADS: "CrmLeadStore/A_GET_STATE_LEADS",
+      A_GET_STATUS_LEADS: "CrmLeadStore/A_GET_STATUS_LEADS",
+      A_GET_SOURCE_LEADS: "CrmLeadStore/A_GET_SOURCE_LEADS",
+      A_EXPORT_LEADS_TO_EXCEL: "CrmLeadStore/A_EXPORT_LEADS_TO_EXCEL",
+      A_GET_OWNERS: "CrmGlobalStore/A_GET_OWNERS",
+      A_GET_PROGRAMS: "CrmGlobalStore/A_GET_PROGRAMS",
+      A_GET_SOURCE_NAMES: "CrmGlobalStore/A_GET_SOURCE_NAMES",
+      A_GET_STATES: "CrmGlobalStore/A_GET_STATES",
+      A_GET_EEUU_STATES: "CrmGlobalStore/A_GET_EEUU_STATES",
+      A_GET_COUNTRIES: "CrmGlobalStore/A_GET_COUNTRIES",
+      A_GET_SELLERS: "CrmGlobalStore/A_GET_SELLERS"
     }),
     async getStateLeads() {
       try {
-        await this.A_GET_STATE_LEADS()
+        await this.A_GET_STATE_LEADS();
       } catch (error) {
-        console.log('Something went wrong getStateLeads:', error)
+        console.log("Something went wrong getStateLeads:", error);
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
     async getStatusLeads() {
       try {
-        await this.A_GET_STATUS_LEADS()
+        await this.A_GET_STATUS_LEADS();
       } catch (error) {
-        console.log('Something went wrong getStatusLeads:', error)
+        console.log("Something went wrong getStatusLeads:", error);
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
     async getSourceLeads() {
       try {
-        await this.A_GET_SOURCE_LEADS()
+        await this.A_GET_SOURCE_LEADS();
       } catch (error) {
-        console.log('Something went wrong getSourceLeads:', error)
+        console.log("Something went wrong getSourceLeads:", error);
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
     async getOwners() {
       try {
         await this.A_GET_OWNERS({
           modul: this.currentUser.modul_id,
-          body: { roles: '[1,2,5]', type: '1' },
-        })
+          body: { roles: "[1,2,5]", type: "1" }
+        });
       } catch (error) {
-        console.log('Something went wrong getOwners:', error)
+        console.log("Something went wrong getOwners:", error);
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
     async getPrograms() {
       try {
-        await this.A_GET_PROGRAMS()
+        await this.A_GET_PROGRAMS();
       } catch (error) {
-        console.log('Something went wrong getPrograms:', error)
+        console.log("Something went wrong getPrograms:", error);
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
     async getSourceNames() {
       try {
-        await this.A_GET_SOURCE_NAMES()
+        await this.A_GET_SOURCE_NAMES();
       } catch (error) {
-        console.log('Something went wrong getSourceNames:', error)
+        console.log("Something went wrong getSourceNames:", error);
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
     async getStates() {
       try {
-        await this.A_GET_STATES({ type: 1 })
+        await this.A_GET_STATES({ type: 1 });
       } catch (error) {
-        console.log('Something went wrong getStates:', error)
+        console.log("Something went wrong getStates:", error);
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
     async getEeuuStates() {
       try {
-        await this.A_GET_EEUU_STATES()
+        await this.A_GET_EEUU_STATES();
       } catch (error) {
-        console.log('Something went wrong getEeuuStates:', error)
+        console.log("Something went wrong getEeuuStates:", error);
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
     async getCountries() {
       try {
-        await this.A_GET_COUNTRIES()
+        await this.A_GET_COUNTRIES();
       } catch (error) {
-        console.log('Something went wrong getCountries:', error)
+        console.log("Something went wrong getCountries:", error);
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
     async getSellers() {
       try {
         await this.A_GET_SELLERS({
           modul: this.currentUser.modul_id,
-          body: { roles: '[]', type: '1' },
-        })
+          body: { roles: "[]", type: "1" }
+        });
       } catch (error) {
-        console.log('Something went wrong getSellers:', error)
+        console.log("Something went wrong getSellers:", error);
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
     async exportExcel(Export, TypeExport) {
-      const id_leads = this.S_SELECTED_LEADS.map(el => el.id)
+      const id_leads = this.S_SELECTED_LEADS.map(el => el.id);
       const name_text = this.S_FILTERS_LEADS.searchQuery
         ? this.S_FILTERS_LEADS.searchQuery
-        : null
-      console.log(this.S_SELECTED_LEADS)
-      console.log(this.S_FILTERS_LEADS)
-      this.dato2 = this.S_FILTERS_LEADS.perPage
+        : null;
+      console.log(this.S_SELECTED_LEADS);
+      console.log(this.S_FILTERS_LEADS);
+      this.dato2 = this.S_FILTERS_LEADS.perPage;
 
-      const date_from = this.S_FILTERS_LEADS.from == '' ? null : this.S_FILTERS_LEADS.from
-      const date_to = this.S_FILTERS_LEADS.to == '' ? null : this.S_FILTERS_LEADS.to
-      const orderby = this.dato2 == null ? 10 : this.dato2
-      const order = this.dato1 == null ? 'desc' : this.dato1
+      const date_from =
+        this.S_FILTERS_LEADS.from == "" ? null : this.S_FILTERS_LEADS.from;
+      const date_to =
+        this.S_FILTERS_LEADS.to == "" ? null : this.S_FILTERS_LEADS.to;
+      const orderby = this.dato2 == null ? 10 : this.dato2;
+      const order = this.dato1 == null ? "desc" : this.dato1;
       const params = {
         type_export: TypeExport,
         current_page: this.S_FILTERS_LEADS.currentPage,
@@ -312,25 +310,25 @@ export default {
         per_page: this.dato2,
         user_owner: this.S_FILTERS_LEADS.owner,
         assign_to: this.S_FILTERS_LEADS.assignTo,
-        sourcename: this.S_FILTERS_LEADS.sourceName,
-      }
+        sourcename: this.S_FILTERS_LEADS.sourceName
+      };
       try {
-        this.isLoading = true
-        const response = await this.A_EXPORT_LEADS_TO_EXCEL(params)
-        await this.forceFileDownload(response, 'leads.xlsx')
-        this.isLoading = false
+        this.isLoading = true;
+        const response = await this.A_EXPORT_LEADS_TO_EXCEL(params);
+        await this.forceFileDownload(response, "leads.xlsx");
+        this.isLoading = false;
       } catch (error) {
-        this.showErrorSwal(error)
-        this.isLoading = false
+        this.showErrorSwal(error);
+        this.isLoading = false;
       }
-    },
+    }
   },
   watch: {
     preloading(current, old) {
-      this.isPreloading(old)
-    },
-  },
-}
+      this.isPreloading(old);
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

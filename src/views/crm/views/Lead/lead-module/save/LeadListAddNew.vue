@@ -391,6 +391,7 @@ export default {
             this.$emit("update:is-add-new-user-sidebar-active", false);
             this.resetuserData();
             /* this.$router.push({ name: route, params: { id: response.data.id } }) */
+            this.$emit("saveLead");
             this.showToast(
               "success",
               "top-right",
