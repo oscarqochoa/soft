@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header-slot></header-slot>
+    <header-slot />
     <b-card body-class="pb-0">
       <div>
         <b-nav pills>
@@ -24,20 +24,11 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations } from 'vuex'
+
 export default {
-  methods: {
-    ...mapMutations({
-      UPDATE_SIDEBAR_ITEM_PROPERTY: "SidebarStore/UPDATE_SIDEBAR_ITEM_PROPERTY"
-    })
-  },
-  mounted() {
-    this.UPDATE_SIDEBAR_ITEM_PROPERTY({
-      routeName: "sales-made-crm-new-client",
-      tag: 10
-    });
-  }
-};
+
+}
 </script>
 
 <style>
