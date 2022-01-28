@@ -8,27 +8,20 @@
     @hide="hideModal(false)"
   >
     <template #modal-header>
-      <header-modal-notes
-        program=""
-        :info="noteInfo"
-        @close="hideModal(false)"
-      />
+      <header-modal-notes program :info="noteInfo" @close="hideModal(false)" />
     </template>
     <div>
-      <b-row >
+      <b-row>
         <b-col>
           <b-form-group label="Contact Schedule" label-class="font-weight-bolder">
-          <b-form-input :disabled="valorEdit" v-model="contact_schedule" />
-        </b-form-group>
+            <b-form-input :disabled="valorEdit" v-model="contact_schedule" />
+          </b-form-group>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <b-form-group
-            label="Origin Country"
-            label-class="font-weight-bolder"
-          >
-          <v-select :options="countries" label="name"/>
+          <b-form-group label="Origin Country" label-class="font-weight-bolder">
+            <v-select :options="countries" label="name" />
           </b-form-group>
         </b-col>
         <b-col></b-col>
@@ -45,7 +38,7 @@ export default {
   name: "ModalNotesOld",
   props: {
     dato: {
-      type: Boolean,
+      type: Boolean
     },
     noteInfo: {
       type: Object,
@@ -71,27 +64,26 @@ export default {
         sellerName: null,
         trackings: null,
         notes_status: null,
-        notes_status_new: null,
-      }),
-    },
+        notes_status_new: null
+      })
+    }
   },
   components: {
     HeaderModalNotes,
-    vSelect,
+    vSelect
   },
   data() {
     return {
       modalUp: true,
       countries: [],
       contact_schedule: null,
-      valorEdit: false,
+      valorEdit: false
     };
   },
 
   created() {
     // this.modalUp = true
     this.getCountries();
-    console.log(this.noteInfo);
   },
   methods: {
     hideModal(status) {
@@ -108,8 +100,8 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

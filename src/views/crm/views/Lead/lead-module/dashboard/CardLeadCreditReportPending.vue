@@ -125,7 +125,6 @@ export default {
     }),
     onOpenTrackingStatus(scoreId) {
       this.scoreId = scoreId;
-      console.log("this.scoreId", this.scoreId);
       this.$bvModal.show("modal-tracking-status");
     },
     async countPendingTab() {

@@ -146,7 +146,6 @@ export default {
         .then(async result => {
           if (result.value) {
             const response = await this.A_DELETE_SMS_QUICK({ id });
-            console.log("response postDeleteQuickSms", response);
             if (response.status == 200) {
               this.showToast(
                 "success",

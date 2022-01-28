@@ -317,7 +317,6 @@ export default {
   },
   mounted() {
     this.calendarApi = this.$refs.refCalendar.getApi();
-    console.log(this.calendarApi);
   },
   props: {
     isModal: {
