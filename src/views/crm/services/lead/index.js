@@ -284,7 +284,7 @@ class CrmLead {
     }
   }
 
-  async postTrackingStatusLeads(body) {
+  async getTrakingStatusLeads(body) {
     try {
       const data = await amgApi.post(
         "/lead/ncr/get-lead-tracking-status-by-id",
@@ -329,6 +329,16 @@ class CrmLead {
         "/commons/list-users/create-seller-list",
         body
       );
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async exportLeadsToExcel(body) {
+    try {
+      const { data } = await amgApi.post("/lead/export-lead-to-excel", body, {
+        responseType: "blob",
+      });
       return data;
     } catch (error) {
       throw error;

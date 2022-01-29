@@ -239,7 +239,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER"
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
+      A_EXPORT_TASKS_TO_EXCEL: "TaskStore/A_EXPORT_TASKS_TO_EXCEL"
     }),
     async myProvider(ctx) {
       let params = {
@@ -302,10 +303,20 @@ export default {
       );
       if (confirm.isConfirmed) {
         this.exportExcelDisabled = true;
-        location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/tasks/export-task-to-excel/${this.currentUser.user_id}/${this.type}`;
-        setTimeout(() => {
+        try {
+          const params = {
+            type: this.type,
+            user_id: this.currentUser.user_id
+          };
+          const response = await this.A_EXPORT_TASKS_TO_EXCEL(params);
+          await this.forceFileDownload(response, "tasks.xlsx");
+          setTimeout(() => {
+            this.exportExcelDisabled = false;
+          }, 3000);
+        } catch (error) {
+          this.showErrorSwal(error);
           this.exportExcelDisabled = false;
-        }, 10000);
+        }
       }
     },
     openModalEditTask(task) {

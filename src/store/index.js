@@ -21,7 +21,7 @@ import MessageStore from '@/store/message'
 import SidebarStore from '@/store/sidebar'
 
 import SocialNetworkStore from '@/views/social-network/store'
-import LoansService from '@/views/commons/components/loans/services/loans.service'
+import SchedulesStore from '@/views/commons/components/schedules/store'
 
 Vue.use(Vuex)
 
@@ -40,6 +40,7 @@ const initialState = {
   UserStore: { ...UserStore.state },
   MessageStore: { ...MessageStore.state },
   SidebarStore: { ...SidebarStore.state },
+  SchedulesStore: { ...SchedulesStore.state },
 }
 
 export default new Vuex.Store({
@@ -63,6 +64,7 @@ export default new Vuex.Store({
     UserStore,
     MessageStore,
     SidebarStore,
+    SchedulesStore,
   },
   mutations: {
     resetState(state) {

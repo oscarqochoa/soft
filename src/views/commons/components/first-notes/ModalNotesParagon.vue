@@ -454,7 +454,6 @@ export default {
       return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller;
     },
     newNote() {
-      console.log(this.noteInfo.created > "2021-05-16 00:00:00");
       return this.noteInfo.created > "2021-05-16 00:00:00";
     },
     emptyNote() {
@@ -713,12 +712,8 @@ export default {
             this.note.details.value =
               answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
           if (answer.question_id === 1076) {
-            console.log(
-              answer.answer === 0 || answer.answer === "0" ? "" : answer.answer
-            );
             this.note.facebook.link =
               answer.answer === 0 || answer.answer === "0" ? "" : answer.answer;
-            console.log(this.note.facebook.link);
           }
           if (answer.question_id === 1077)
             this.note.facebook.likes =
@@ -755,7 +750,6 @@ export default {
         const response = await NotesServices.getFirstNote(params);
         await this.getDetailsAnswers(response);
         await this.initialValidationNote(response);
-        console.log(response);
         this.modalUp = true;
         this.removePreloader();
       } catch (error) {

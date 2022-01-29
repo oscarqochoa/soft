@@ -355,7 +355,6 @@ export default {
         });
         if (this.isResponseSuccess(response)) {
           this.itemsTrackingChange = response.data.map(attribute.mapFunction);
-          console.log("itemsTrackingChange", this.itemsTrackingChange);
         } else
           this.showToast(
             "warning",

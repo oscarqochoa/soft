@@ -19,25 +19,18 @@
           <strong>Loading ...</strong>
         </div>
       </template>
-      
+
       <template #cell(file_name)="data">
         <a v-if="data.item.isDisabled" :href="data.item.route" target="_blank">
-          <b-icon :variant="getIcon(data.item.extension).color" :icon="getIcon(data.item.extension).icon" />
+          <b-icon
+            :variant="getIcon(data.item.extension).color"
+            :icon="getIcon(data.item.extension).icon"
+          />
           {{ data.item.file_name }}.{{ data.item.extension }}
         </a>
-        <validation-observer
-          v-else
-          :ref="`refFormObserver${ data.index }`"
-        >
-          <validation-provider
-            #default="validationContext"
-            name="File Name"
-            rules="required"
-          >
-            <b-input-group
-              label-for="file-name"
-              class="input-group-sm"
-            >
+        <validation-observer v-else :ref="`refFormObserver${ data.index }`">
+          <validation-provider #default="validationContext" name="File Name" rules="required">
+            <b-input-group label-for="file-name" class="input-group-sm">
               <b-form-input
                 id="file-name"
                 :ref="`fileName${ data.index }`"
@@ -68,7 +61,7 @@
           </validation-provider>
         </validation-observer>
       </template>
-      
+
       <template #cell(created_by)="data">
         <div style="white-space: nowrap;">
           {{ data.item.user_upload }}
@@ -76,7 +69,7 @@
           <span>{{ data.item.created_at | myGlobalWithHour }}</span>
         </div>
       </template>
-      
+
       <template #cell(actions)="data">
         <div class="w-100 text-center">
           <b-button
@@ -85,10 +78,7 @@
             :disabled="isLoading"
             @click="data.item.isDisabled = !data.item.isDisabled; data.item.custom_file_name = data.item.file_name"
           >
-            <feather-icon
-              v-if="!isLoading"
-              icon="Edit2Icon"
-            />
+            <feather-icon v-if="!isLoading" icon="Edit2Icon" />
             <b-spinner v-else small />
           </b-button>
           <b-button
@@ -97,15 +87,11 @@
             :disabled="isLoading"
             @click="onDeleteFile(data.item)"
           >
-            <feather-icon
-              v-if="!isLoading"
-              icon="Trash2Icon"
-            />
+            <feather-icon v-if="!isLoading" icon="Trash2Icon" />
             <b-spinner v-else small />
           </b-button>
         </div>
       </template>
-
     </b-table>
 
     <template v-if="modul === 15" #footer>
@@ -136,10 +122,7 @@
           variant="primary"
           @click="onUploadFile"
         >
-          <amg-icon
-            icon="UploadIcon"
-            class="mr-50"
-          />
+          <amg-icon icon="UploadIcon" class="mr-50" />
           <span class="align-middle">Upload</span>
         </b-button>
       </template>
@@ -148,157 +131,207 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapState } from "vuex";
 
-import { mapActions, mapGetters, mapState,  } from 'vuex'
+import Ripple from "vue-ripple-directive";
 
-import Ripple from 'vue-ripple-directive'
-
-import formValidation from '@core/comp-functions/forms/form-validation'
+import formValidation from "@core/comp-functions/forms/form-validation";
 
 import DragAndDrop from "@/views/commons/utilities/DragAndDrop.vue";
-import Button from '@/views/components/button/Button.vue';
+import Button from "@/views/components/button/Button.vue";
 
 export default {
   components: {
     DragAndDrop,
-    Button,
+    Button
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      currentUser: "auth/currentUser",
+      token: "auth/token"
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       S_FILES_LEADS: event => event.CrmLeadStore.S_FILES_LEADS
-    }),
+    })
   },
-  created () {
-    this.authUser = this.currentUser
-    this.getFilesLeads()
+  created() {
+    this.authUser = this.currentUser;
+    this.getFilesLeads();
   },
-  data () {
+  data() {
     return {
       authUser: {},
       fields: [
-        { key: 'file_name' },
-        { key: 'created_by' },
-        (this.modul === 15) ? { key: 'actions' } : null,
+        { key: "file_name" },
+        { key: "created_by" },
+        this.modul === 15 ? { key: "actions" } : null
       ],
       files: [],
       isBusy: false,
-      isLoading: false,
-    }
+      isLoading: false
+    };
   },
   directives: { Ripple },
   methods: {
     ...mapActions({
-      A_GET_FILES_LEADS: 'CrmLeadStore/A_GET_FILES_LEADS',
-      A_UPDATE_FILE_NAME_LEAD: 'CrmLeadStore/A_UPDATE_FILE_NAME_LEAD',
-      A_SET_FILE_LEAD: 'CrmLeadStore/A_SET_FILE_LEAD',
-      A_DELETE_FILES_LEADS: 'CrmLeadStore/A_DELETE_FILES_LEADS',
+      A_GET_FILES_LEADS: "CrmLeadStore/A_GET_FILES_LEADS",
+      A_UPDATE_FILE_NAME_LEAD: "CrmLeadStore/A_UPDATE_FILE_NAME_LEAD",
+      A_SET_FILE_LEAD: "CrmLeadStore/A_SET_FILE_LEAD",
+      A_DELETE_FILES_LEADS: "CrmLeadStore/A_DELETE_FILES_LEADS"
     }),
-    async getFilesLeads (orderby, order) {
+    async getFilesLeads(orderby, order) {
       try {
-        this.isBusy = true
+        this.isBusy = true;
         await this.A_GET_FILES_LEADS({
           id_lead: this.lead.id,
           orderby: orderby || 2,
-          order: order || 'asc',
-        })
-        this.isBusy = false
+          order: order || "asc"
+        });
+        this.isBusy = false;
       } catch (error) {
-        console.log('Something went wrong getFilesLeads', error)
-        this.showToast('danger', 'top-right', 'Oop!', 'AlertOctagonIcon', this.getInternalErrors(error))
-        this.isBusy = false
+        console.log("Something went wrong getFilesLeads", error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
+        this.isBusy = false;
       }
     },
-    getIcon (extension) {
+    getIcon(extension) {
       switch (true) {
-        case (extension === 'pdf'): return { icon: 'file-pdf', color: 'danger' }
-        case (['ppt', 'pptx'].includes(extension)): return { icon: 'file-ppt', color: 'warning' }
-        case (['xlsx', 'csv'].includes(extension)): return { icon: 'file-excel', color: 'success' }
-        case (extension === 'docx'): return { icon: 'file-word', color: '' }
-        case (['png', 'jpg', 'jpeg', 'ico'].includes(extension)): return { icon: 'file-image', color: 'info' }
+        case extension === "pdf":
+          return { icon: "file-pdf", color: "danger" };
+        case ["ppt", "pptx"].includes(extension):
+          return { icon: "file-ppt", color: "warning" };
+        case ["xlsx", "csv"].includes(extension):
+          return { icon: "file-excel", color: "success" };
+        case extension === "docx":
+          return { icon: "file-word", color: "" };
+        case ["png", "jpg", "jpeg", "ico"].includes(extension):
+          return { icon: "file-image", color: "info" };
       }
-      return { icon: 'file', color: 'defult' }
+      return { icon: "file", color: "defult" };
     },
-    async onSubmit (index, item) {
-      if (await this.$refs[`refFormObserver${ index }`].validate()) {
+    async onSubmit(index, item) {
+      if (await this.$refs[`refFormObserver${index}`].validate()) {
         this.showConfirmSwal()
+          .then(async result => {
+            if (result.value) {
+              this.isLoading = true;
+
+              const response = await this.A_UPDATE_FILE_NAME_LEAD({
+                file_id: item.id,
+                name_file: item.custom_file_name,
+                user_id: this.authUser.user_id
+              });
+              if (this.isResponseSuccess(response)) {
+                this.S_FILES_LEADS[index].file_name = item.custom_file_name;
+                this.S_FILES_LEADS[index].isDisabled = true;
+                this.showToast(
+                  "success",
+                  "top-right",
+                  "Success!",
+                  "CheckIcon",
+                  "Successful operation"
+                );
+              } else
+                this.showToast(
+                  "warning",
+                  "top-right",
+                  "Warning!",
+                  "AlertTriangleIcon",
+                  "Something went wrong.",
+                  response.message
+                );
+              this.isLoading = false;
+            }
+          })
+          .catch(error => {
+            console.log("Something went wrong onSubmit", error);
+            this.showErrorSwal();
+          });
+      }
+    },
+    async onUploadFile() {
+      try {
+        this.addPreloader();
+        const body = new FormData();
+        this.files.forEach(file => {
+          body.append("images[]", file, file.name);
+        });
+        body.append("user_id", this.authUser.user_id);
+        body.append("id_lead", this.lead.id);
+        body.append("module_id", this.modul);
+        const response = await this.A_SET_FILE_LEAD(body);
+        if (this.isResponseSuccess(response)) {
+          await this.getFilesLeads();
+          this.files = [];
+          this.$bvModal.hide("modal-upload-file");
+          this.removePreloader();
+          this.showToast(
+            "success",
+            "top-right",
+            "Success!",
+            "CheckIcon",
+            "Successful operation"
+          );
+        } else
+          this.showToast(
+            "warning",
+            "top-right",
+            "Warning!",
+            "AlertTriangleIcon",
+            "Something went wrong.",
+            response.message
+          );
+        this.removePreloader();
+      } catch (error) {
+        console.log("Something went wrong onUploadFile", error);
+        this.showErrorSwal();
+        this.removePreloader();
+      }
+    },
+    onDeleteFile(item) {
+      this.showConfirmSwal()
         .then(async result => {
           if (result.value) {
-            this.isLoading = true
-            console.log('this.$refs[`fileName${ index }`].value', this.$refs[`fileName${ index }`])
-            const response = await this.A_UPDATE_FILE_NAME_LEAD({
+            this.addPreloader();
+            const response = await this.A_DELETE_FILES_LEADS({
               file_id: item.id,
-              name_file: item.custom_file_name,
               user_id: this.authUser.user_id
-            })
-            if (this.isResponseSuccess(response)) {
-              this.S_FILES_LEADS[index].file_name = item.custom_file_name
-              this.S_FILES_LEADS[index].isDisabled = true
-              this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-            } else
-              this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.', response.message)
-            this.isLoading = false
+            });
+            if (response)
+              this.showToast(
+                "success",
+                "top-right",
+                "Success!",
+                "CheckIcon",
+                "Successful operation"
+              );
+            else
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                "Something went wrong.",
+                response.message
+              );
+            this.removePreloader();
           }
-        }).catch(error => {
-          console.log('Something went wrong onSubmit', error)
-          this.showErrorSwal()
         })
-      }
-    },
-    async onUploadFile () {
-      try {
-        this.addPreloader()
-        const body = new FormData()
-        this.files.forEach((file) => {
-          console.log('file', file)
-          body.append('images[]', file, file.name)
-        })
-        body.append('user_id', this.authUser.user_id)
-        body.append('id_lead', this.lead.id)
-        body.append('module_id', this.modul)
-        const response = await this.A_SET_FILE_LEAD(body)
-        if (this.isResponseSuccess(response)) {
-          await this.getFilesLeads()
-          this.files = []
-          this.$bvModal.hide('modal-upload-file')
-          this.removePreloader()
-          this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-        } else
-          this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.', response.message)
-        this.removePreloader()
-      } catch (error) {
-        console.log('Something went wrong onUploadFile', error)
-        this.showErrorSwal()
-        this.removePreloader()
-      }
-    },
-    onDeleteFile (item) {
-      this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          this.addPreloader()
-          const response = await this.A_DELETE_FILES_LEADS({
-            file_id: item.id,
-            user_id: this.authUser.user_id
-          })
-          if (response)
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.', response.message)
-          this.removePreloader()
-        }
-      }).catch(error => {
-        console.log('Something went wrong onDeleteFile', error)
-        this.showErrorSwal()
-        this.removePreloader()
-      })
+        .catch(error => {
+          console.log("Something went wrong onDeleteFile", error);
+          this.showErrorSwal();
+          this.removePreloader();
+        });
     }
   },
-  mounted () {},
+  mounted() {},
   props: {
     modul: {
       type: Number,
@@ -307,18 +340,15 @@ export default {
     lead: {
       type: Object,
       required: true
-    },
+    }
   },
-  setup () {
-    const {
-      refFormObserver,
-      getValidationState,
-    } = formValidation(() => {})
+  setup() {
+    const { refFormObserver, getValidationState } = formValidation(() => {});
 
     return {
       refFormObserver,
       getValidationState
-    }
-  },
-}
+    };
+  }
+};
 </script>

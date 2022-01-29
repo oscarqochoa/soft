@@ -113,7 +113,6 @@ const mutations = {
   },
   M_KEY_UPDATE_DETAILS_LEAD(state) {
     state.S_KEY_UPDATE_DETAILS_LEAD++;
-    console.log(state.S_KEY_UPDATE_DETAILS_LEAD, "keyUpdateDetailsLead");
   },
 };
 const actions = {
@@ -284,6 +283,20 @@ const actions = {
     }
   },
 
+  async A_GET_TRAKING_STATUS_LEADS({ commit }, body) {
+    try {
+      const response = await crmLead.getTrakingStatusLeads(body);
+      commit("SET_DATA", {
+        destination: "S_TRAKING_STATUS_LEADS",
+        data: response.data,
+      });
+      return response;
+    } catch (error) {
+      console.log("ERROR_GET_TRAKING_STATUS_LEADS [ACTION]", error);
+      throw error;
+    }
+  },
+
   /* SETS */
 
   A_SET_SELECTED_LEADS({ commit }, data) {
@@ -377,13 +390,11 @@ const actions = {
   async A_DELETE_LEADS({ commit }, body) {
     try {
       const response = await crmLead.postDeleteLead(body);
-      /* console.log('A_DELETE_LEADS response', response) */
-      if (mixins.methods.isResponseSuccess(response)) {
-        commit("REMOVE_LEAD_DATA", {
-          destination: "S_LEADS",
-          id: body.leadid,
-        });
-      }
+
+      commit("REMOVE_LEAD_DATA", {
+        destination: "S_LEADS",
+        id: body.lead_id,
+      });
       return response;
     } catch (error) {
       console.log("ERROR_DELETE_LEADS [ACTION]", error);
@@ -523,7 +534,6 @@ const actions = {
   async A_GET_ALL_TRAKING_FIELDS_LEAD({ commit }, body) {
     try {
       const response = await crmLead.postAllTrackingChangeLeads(body);
-      /* console.log('A_GET_ALL_TRAKING_FIELDS_LEAD response', response) */
       return response;
     } catch (error) {
       console.log("ERROR_GET_ALL_TRAKING_FIELDS_LEAD [ACTION]", error);
@@ -542,6 +552,14 @@ const actions = {
   async A_ADD_SELLER_LIST({ commit }, body) {
     try {
       const response = await crmLead.createSellerList(body);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async A_EXPORT_LEADS_TO_EXCEL({ commit }, body) {
+    try {
+      const response = await crmLead.exportLeadsToExcel(body);
       return response;
     } catch (error) {
       throw error;

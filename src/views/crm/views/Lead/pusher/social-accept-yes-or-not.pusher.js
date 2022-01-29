@@ -38,7 +38,7 @@ const acceptLeadFromSocialNetwork = () => {
         },
       })
       if (result.isConfirmed) {
-        NotificationMixin.methods.showWindowNotification(`${data.lead_name}`, 'New Appoiment', '/images/icons/dashboard/CRM-leads.ico', `newAppoiment2${data.lead_id}`, () => { window.focus() })
+        NotificationMixin.methods.showWindowNotification(`${data.lead_name}`, 'New Appoiment', `${process.env.VUE_APP_BASE_URL_ASSETS}/images/icons/dashboard/CRM-leads.ico`, `newAppoiment2${data.lead_id}`, () => { window.focus() })
         store.commit('app/SET_LOADING', true)
         const response = await window.amgApi.post(`${process.env.VUE_APP_BASE_URL_FRONT}/lead/social-network/accept-lead-social-network`, data)
         if (GeneralMixin.methods.isResponseSuccess(response)) {
@@ -62,6 +62,7 @@ const acceptLeadFromSocialNetwork = () => {
         await window.amgApi.post('/api/findsellerlead', data)
       }
     }
+    await window.amgApi.post('/commons/close-all-swal', data)
   })
 }
 export default acceptLeadFromSocialNetwork
