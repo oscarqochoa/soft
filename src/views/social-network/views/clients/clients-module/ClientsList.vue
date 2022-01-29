@@ -4,6 +4,7 @@
       no-body
       class="mb-0"
     >
+
       <filter-slot
 
         :filter="filter"
@@ -20,19 +21,17 @@
           slot="table"
           ref="clientsList"
           v-scrollbar
-          class="position-relative"
-          table-class="text-nowrap"
-          responsive="sm"
           sticky-header="50vh"
-          small
           no-provider-filtering
           :busy.sync="isBusy"
           :items="search"
           :fields="filteredFields"
           :per-page="paginate.perPage"
           :current-page="paginate.currentPage"
-
           :filter="filter"
+
+          responsive="sm"
+          small
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -41,9 +40,12 @@
             </div>
           </template>
           <template v-slot:cell(name)="data">
-            <p class="mb-0 font-weight-bold">
-              {{ data.item.lead_name }}
-            </p>
+            <div class="d-flex flex-column justify-content-start align-items-start">
+              <p class="mb-0 font-weight-bold">
+                {{ data.item.lead_name }}
+              </p>
+            </div>
+
           </template>
 
           <template v-slot:cell(mobile)="data">
@@ -60,7 +62,7 @@
               class="d-flex flex-column justify-content-start align-items-start"
             >
               <span
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
+                v-for="(account, index) in data.item.accounts"
                 :key="index"
               >{{ account.account }}</span>
             </div>
@@ -73,7 +75,7 @@
               class="d-flex flex-column justify-content-start align-items-start"
             >
               <template
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
+                v-for="(account, index) in data.item.accounts"
               >
                 <span
                   :key="index"
@@ -135,25 +137,57 @@
               class="d-flex flex-column justify-content-start align-items-start"
             >
               <span
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
+                v-for="(account, index) in data.item.accounts"
                 :key="index"
-              >{{ account.advisor_name }}</span>
+              > <span>
+                <feather-icon
+                  v-if="account.state_advisor === 1"
+                  icon="CircleIcon"
+                  size="13"
+                  :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                />
+                <feather-icon
+                  v-if="account.state_advisor === 2"
+                  icon="CircleIcon"
+                  size="13"
+                  :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                />
+                <feather-icon
+                  v-if="account.state_advisor === 0"
+                  icon="CircleIcon"
+                  size="13"
+                  :style="`color: rgb(204, 204, 204); border-color: #00CC00; background: rgb(204, 204, 204); border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                />
+              </span>{{ account.advisor_name }}</span>
             </div>
           </template>
 
           <template #cell(creation_date)="data">
-            {{
-              data.item.created_at | myGlobal
-            }}</template>
-
-          <template #cell(fee_charges)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
             >
               <span
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
+                v-for="(account, index) in data.item.accounts"
                 :key="index"
-              >{{ account.charges }}</span>
+              >{{ account.created_at | myGlobal }}</span>
+            </div>
+          </template>
+
+          <template #cell(fee_charges)="data">
+            <div>
+              <a
+                v-for="(account, index) in data.item.accounts"
+                :key="index"
+              ><money
+                v-model="account.charges"
+                class="form-control form-control-sm border-0 text-center"
+                v-bind="{prefix: ' $ ', precision: 2}"
+                style="width: 90px !important; padding-left: 10px; opacity: 1; size: 40px"
+                disabled
+                value="0"
+              />
+
+              </a>
             </div>
           </template>
 
@@ -161,10 +195,17 @@
             <div
               class="d-flex flex-column justify-content-start align-items-start"
             >
-              <span
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
+              <a
+                v-for="(account, index) in data.item.accounts"
                 :key="index"
-              >{{ account.monthly_amount }}</span>
+              >  <money
+                v-model="account.monthly_amount"
+                class="form-control form-control-sm border-0 text-center"
+                v-bind="{prefix: ' $ ', precision: 2}"
+                style="width: 70px !important; padding-left: 10px; opacity: 1"
+                disabled
+              /></a>
+
             </div>
           </template>
 
@@ -173,14 +214,47 @@
               class="d-flex flex-column justify-content-start align-items-start"
             >
               <span
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
+                v-for="(account, index) in data.item.accounts"
                 :key="index"
-              >{{ account.monthly_amount }}</span>
+              >
+
+                <b-img
+                  v-if="account.type_payment == 'PA' && account.status_payment == '1' && account.srb == 'ACTIVE'"
+                  :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-auto.ico`"
+                  style="height: 20px"
+                />
+
+                <b-img
+                  v-if="account.type_payment == 'PA' && account.status_payment == '0' && account.srb != 'ACTIVE'"
+                  :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-auto-no.ico`"
+                  style="height: 20px"
+                />
+                <b-img
+                  v-if="account.type_payment == 'PA' && account.status_payment == '1' && account.srb != 'ACTIVE'"
+                  :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-auto-no.ico`"
+                  style="height: 20px"
+                />
+
+                <b-img
+                  v-if="account.type_payment == 'MA'"
+                  :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-manual.ico`"
+                  style="height: 20px"
+                />
+
+                <b-img
+                  v-if="account.type_payment == 'OT'"
+                  :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-others.ico`"
+                  style="height: 20px"
+                />
+                <span v-if="account.day_payment!=null">({{ account.day_payment }})</span>
+
+              </span>
             </div>
           </template>
         </b-table>
 
       </filter-slot>
+
     </b-card>
   </div>
 </template>
@@ -221,6 +295,7 @@ export default {
       startPage: null,
       toPage: null,
       items: [],
+      baseImg: process.env.VUE_APP_BASE_URL_FRONT,
     }
   },
 
@@ -233,61 +308,66 @@ export default {
       token: 'auth/token',
 
     }),
+
   },
 
   methods: {
+
     async search(ctx) {
       try {
         let orderBy = 5
         let sortDirection = 'desc'
-        if (ctx.sortBy === 'program') {
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
-          orderBy = 3
-        } else if (ctx.sortBy === 'campaign') {
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
-          orderBy = 10
-        } else if (ctx.sortBy === 'name') {
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
-          orderBy = 17
-        } else if (ctx.sortBy === 'replies') {
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
-          orderBy = 20
-        } else if (ctx.sortBy === 'new_replies') {
-          if (ctx.sortDesc) sortDirection = 'desc'
-          else sortDirection = 'asc'
-          orderBy = 21
-        } else if (ctx.sortBy === 'publication_date') {
+        if (ctx.sortBy === 'name') {
           if (ctx.sortDesc) sortDirection = 'desc'
           else sortDirection = 'asc'
           orderBy = 2
-        } else if (ctx.sortBy === 'created_by') {
+        } else if (ctx.sortBy === 'account') {
           if (ctx.sortDesc) sortDirection = 'desc'
           else sortDirection = 'asc'
-          orderBy = 1
+          orderBy = 4
+        } else if (ctx.sortBy === 'fee_charges') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 42
+        } else if (ctx.sortBy === 'pt') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 48
+        } else if (ctx.sortBy === 'mp') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 43
+        } else if (ctx.sortBy === 'creation_date') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+          orderBy = 5
         }
 
         const params = {
-          perPage: this.paginate.perPage,
+          per_page: this.paginate.perPage,
           orderby: orderBy,
           order: sortDirection,
           from: this.filter[0].model,
           to: this.filter[1].model,
-          program: this.filter[2].model,
-          state: this.filter[3].model,
           text: this.filterPrincipal.model,
-          status: this.status,
+          state: this.state,
+          status: this.filter[3].model,
+          advisor: this.filter[2].model,
           type: this.paymentType,
           day: this.paymentDay,
           rol_id: this.currentUser.arrRoles.find(rol => rol.module_id == 2)
             .role_id,
           session: this.currentUser.user_id,
-          modul: 2,
+          modul: this.modul,
         }
         const data = await ClientService.getClients(params, ctx.currentPage)
+        data.data.data.map(data => {
+          // eslint-disable-next-line no-param-reassign
+          data.accounts = JSON.parse(data.accounts)
+          data.accounts.map(val => {
+            if (!val) val = 0
+          })
+        })
         this.items = data.data.data
         // Must return an array of items or an empty array if an error occurred
 

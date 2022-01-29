@@ -22,17 +22,17 @@ export default [
   {
     key: 'fee_charges',
     sortable: true,
-    label: 'Fee & Charges',
+    label: 'Fee & Charges ($)',
   },
   {
     key: 'mp',
     sortable: true,
-    label: 'MP',
+    label: 'MP ($)',
   },
   {
     key: 'pt',
     sortable: true,
-    label: 'PT',
+    label: 'PT ',
   },
   {
     key: 'advisor',
