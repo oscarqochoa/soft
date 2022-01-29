@@ -148,7 +148,6 @@ const mutations = {
   M_STATUS_LEADS_CLIENT(state) {
     const statusLeadClient = { label: "client", value: 7 };
     state.S_STATUS_LEADS.push(statusLeadClient);
-    console.log(state.S_STATUS_LEADS, "sourceLeads");
   },
 };
 const actions = {

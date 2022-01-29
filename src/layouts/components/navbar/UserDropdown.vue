@@ -6,9 +6,7 @@
   >
     <template #button-content>
       <div class="d-sm-flex d-none user-nav">
-        <p class="user-name font-weight-bolder mb-0">
-          {{ userData.fullName || userData.username }}
-        </p>
+        <p class="user-name font-weight-bolder mb-0">{{ userData.fullName || userData.username }}</p>
         <span class="user-status">{{ userData.roleName }}</span>
       </div>
       <b-avatar
@@ -23,17 +21,11 @@
       </b-avatar>
     </template>
 
-    <b-dropdown-item
-      :to="{ name: 'users-my-profile' }"
-      link-class="d-flex align-items-center"
-    >
+    <b-dropdown-item :to="{ name: 'users-my-profile' }" link-class="d-flex align-items-center">
       <feather-icon size="16" icon="UserIcon" class="mr-50" />
       <span>My Profile</span>
     </b-dropdown-item>
-    <b-dropdown-item
-      link-class="d-flex align-items-center"
-      :to="{ name: 'amg-messages' }"
-    >
+    <b-dropdown-item link-class="d-flex align-items-center" :to="{ name: 'amg-messages' }">
       <messages class="mr-50"></messages>
       <span>Messages</span>
     </b-dropdown-item>
@@ -90,17 +82,17 @@ export default {
     Messages,
     Messenger,
     PayStub,
-    SchedulesReport,
+    SchedulesReport
   },
   data() {
     return {
       userData: JSON.parse(localStorage.getItem("userData")),
-      avatarText,
+      avatarText
     };
   },
   methods: {
     ...mapMutations({
-      resetState: "resetState",
+      resetState: "resetState"
     }),
     logout() {
       // Remove userData from localStorage
@@ -110,14 +102,12 @@ export default {
 
       // Remove userData from localStorage
       this.resetState();
-      // this.$store.commit('resetState');
-      console.log(this.$store.commit("resetState"), "store");
       // Reset ability
       this.$ability.update(initialAbility);
 
       // Redirect to login page
       this.$router.push({ name: "auth-login" });
-    },
-  },
+    }
+  }
 };
 </script>

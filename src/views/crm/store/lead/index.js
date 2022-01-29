@@ -113,7 +113,6 @@ const mutations = {
   },
   M_KEY_UPDATE_DETAILS_LEAD(state) {
     state.S_KEY_UPDATE_DETAILS_LEAD++;
-    console.log(state.S_KEY_UPDATE_DETAILS_LEAD, "keyUpdateDetailsLead");
   },
 };
 const actions = {
@@ -280,6 +279,20 @@ const actions = {
       return response;
     } catch (error) {
       console.log("ERROR_GET_LEAD_DOCUMENTS [ACTION]", error);
+      throw error;
+    }
+  },
+
+  async A_GET_TRAKING_STATUS_LEADS({ commit }, body) {
+    try {
+      const response = await crmLead.getTrakingStatusLeads(body);
+      commit("SET_DATA", {
+        destination: "S_TRAKING_STATUS_LEADS",
+        data: response.data,
+      });
+      return response;
+    } catch (error) {
+      console.log("ERROR_GET_TRAKING_STATUS_LEADS [ACTION]", error);
       throw error;
     }
   },

@@ -326,5 +326,6 @@ export default {
       document.body.appendChild(link);
       link.click();
     },
+    $evaluate: (param) => eval("this." + param),
   },
 };
