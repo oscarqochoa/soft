@@ -8,10 +8,10 @@ export const paragonNewCommentNotification = () => {
     const callback = () => {
       window.focus()
     }
-
+    console.log('ga', data.to_id[0].user_id)
     // eslint-disable-next-line array-callback-return
 
-    if (data.to_id.user_id[0] === store.state.auth.currentUser.user_id) {
+    if (data.to_id[0].user_id === store.state.auth.currentUser.user_id) {
       NotificationMixin.methods.showWindowNotification(
         data.title,
         data.body,

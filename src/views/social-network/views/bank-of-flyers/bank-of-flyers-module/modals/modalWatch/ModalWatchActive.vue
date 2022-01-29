@@ -52,86 +52,46 @@
       @hidden="closeModal"
     >
       <div>
-        <ValidationObserver ref="form">
-          <b-form>
-            <b-container fluid>
-              <b-row
-
-                class="inline"
-              >
-
-                <b-col
-                  v-if="status===2 && info ===1"
-                  lg="3"
-                >
-                  <drag-and-drop
-                    v-model="new_item.files"
-                    :files-array="new_item.files"
-                  />
-                </b-col>
-                <b-col
-                  v-if="status===1 || status===0 || info ===2"
-                  lg="3"
-                >
-                  <b-img-lazy
-                    class="img-content-table-ti"
-                    v-bind="mainProps"
-                    :src="item.route_thumb"
-                  />
-                </b-col>
-
-                <b-col lg="9">
-                  <b-row class="inline">
-
-                    <b-col
-                      md="3"
-                      class="d-flex align-items-center justify-content-start p-0"
-                    >
-                      <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
-                        PROGRAM:
-                      </span>
-                    </b-col>
-
-                    <b-col
-                      v-if="status===2 && info ===1"
-                      md="9"
-                    >
-                      <div
-                        v-for="program in programs"
-                        :key="program.id"
-                        class="mr-1"
-                        style="display: inline-flex"
+        <ValidationObserver ref="form" />
+        <b-row>
+          <b-col
+            class="p-2"
+            lg="4"
+            xs="5"
+          >
+            <b-img-lazy
+              class="img-content-table-ti"
+              v-bind="mainProps"
+              :src="item.route_thumb"
+            />
+          </b-col>
+          <b-col
+            lg="7"
+            xs="7"
+            class="pt-2"
+          >
+            <b-row>
+              <b-col lg="12">
+                <b-form-group class>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text
+                        class="bg-primary text-white"
+                        style="padding-right: 5.25em"
                       >
-                        <b-form-radio
-                          v-model="new_item.program_id"
-                          plain
-
-                          :value="program.id"
-                          name="program"
-                          :disabled="disabled"
-                        >
-
-                          <b-img
-                            :src="`${baseImg}/assets${program.logo}`"
-                            style="height: 40px"
-                          />
-
-                        </b-form-radio></div>
-                    </b-col>
-                    <b-col
-                      v-if="status===1 || status===0 || info ===2"
-                      md="9"
-                    >
+                        <span>PROGRAM</span>
+                      </b-input-group-text>
+                    </b-input-group-prepend>
+                    <div class="d-flex align-items-center justify-content-around w-75">
                       <div
                         v-for="program in programs"
                         :key="program.id"
-                        class="mr-1"
-                        style="display: inline-flex"
+                        class="ml-1 "
                       >
                         <b-form-radio
                           v-model="item.program"
                           plain
-
+                          class="mr-1 "
                           :value="program.value"
                           name="program"
                           :disabled="disabled"
@@ -139,295 +99,184 @@
 
                           <b-img
                             :src="`${baseImg}/assets${program.logo}`"
-                            style="height: 40px"
+                            style="height: 30px"
                           />
 
                         </b-form-radio></div>
-                    </b-col>
-
-                    <b-col
-                      md="3"
-                      class="d-flex align-items-center justify-content-start p-0"
+                    </div>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col lg="12">
+                <b-form-group class>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text
+                        class="bg-primary text-white "
+                        style="padding-right: 7.15em"
+                      >
+                        <span>STATE</span>
+                      </b-input-group-text>
+                    </b-input-group-prepend>
+                    <div
+                      class="ml-1 w-75"
                     >
-                      <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
-                        STATE:
-                      </span>
-                    </b-col>
-
-                    <b-col
-                      v-if="status===2 && info ===1"
-                      md="9"
-                      class="mt-1"
-                    >
-                      <b-form-group>
-
-                        <v-select
-
-                          v-model="new_item.state"
-                          :options="states"
-                          label="label"
-                          :reduce="val=>val.value"
-                          class="w-100"
-                          :disabled="disabled"
-                        />
-                      </b-form-group>
-                    </b-col>
-                    <b-col
-                      v-if="status===1 || status===0 || info ===2"
-                      md="9"
-                      class="mt-1"
-                    >
-
-                      <b-form-group>
-                        <v-select
-                          v-model="item.state"
-                          :options="states"
-                          label="state"
-                          :reduce="val=>val.slug"
-                          class="w-100"
-                          :disabled="disabled"
-                        />
-                      </b-form-group>
-                    </b-col>
-
-                    <b-col
-                      md="3"
-                      class="d-flex align-items-center justify-content-start p-0"
-                    >
-                      <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
-                        CAMPAIGN:
-                      </span>
-                    </b-col>
-
-                    <b-col
-                      v-if="status===2 && info ===1"
-                      md="8"
-                    >
-                      <b-form-group>
-                        <v-select
-                          v-model="new_item.campaign"
-                          label="value"
-                          :reduce="val=>val.id"
-                          :options="campaigns"
-                          class="w-100"
-                          :disabled="disabled"
-                        /></b-form-group>
-                    </b-col>
-                    <b-col
-                      v-if="status===1 || status===0 || info ===2"
-                      md="8"
-                    >
-                      <b-form-group>
-
-                        <v-select
-                          v-model="item.campaign"
-                          :options="items"
-                          label="campaign"
-                          :reduce="val=>val.campaign"
-                          class="w-100"
-                          :disabled="disabled"
-                        /></b-form-group>
-                    </b-col>
-
-                    <b-col
-                      md="1"
-                      class="d-flex align-items-start justify-content-center "
-                      style="margin-top: 10px"
+                      <v-select
+                        v-model="item.state"
+                        :options="states"
+                        label="state"
+                        :reduce="val=>val.slug"
+                        :placeholder="item.state"
+                        :disabled="disabled"
+                      />
+                    </div>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col lg="12">
+                <b-form-group class>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text
+                        class="bg-primary text-white"
+                        style="padding-right: 5em"
+                      >
+                        <span>CAMPAIGN</span>
+                      </b-input-group-text>
+                    </b-input-group-prepend>
+                    <div
+                      class="ml-1 w-75"
                     >
 
-                      <amg-icon
-                        v-if="addCampaignOn"
-                        icon="PlusCircleIcon"
-                        title="PLUS"
+                      <v-select
+                        v-model="item.campaign"
+                        :options="items"
+                        label="campaign"
+                        :reduce="val=>val.campaign"
+                        :placeholder="item.campaign"
+                        :disabled="disabled"
+                      />
+                    </div>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col lg="12">
+                <b-form-group class>
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text
+                        class="bg-primary text-white"
+                        style="padding-right: 4em"
+                      >
+                        <span>FLYER NAME</span>
+                      </b-input-group-text>
+                    </b-input-group-prepend>
+                    <div class="ml-1 w-75">
+                      <b-input
+                        v-model="item.flyer_name"
+                        style="padding-right: 8em"
+                        type="text"
+                        :disabled="disabled"
+                      />
+                    </div>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col lg="12">
 
-                        size="20"
-                        class="cursor-pointer"
-                        @click="OpenInsertModal"
+                <b-form-group>
+
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-input-group-text
+                        class="bg-primary text-white"
+                        style="padding-right: 6.35em"
+                      >
+                        <span>STATUS</span>
+                      </b-input-group-text>
+                    </b-input-group-prepend>
+                    <div class="ml-1 w-75 ">
+                      <v-select
+                        v-model="optionsStatus"
+                        :options="['PREACTIVE','ACTIVE', 'INACTIVE']"
+                        label="active"
+                        :disabled="disabled"
+                        @click="convert(item)"
                       />
 
-                      <amg-icon
-                        v-if="new_item.campaign"
-                        icon="MinusCircleIcon"
-                        title="PLUS"
-                        size="20"
-                        class="cursor-pointer"
-                        @click="deleteCampaigns"
+                    </div>
+
+                  </b-input-group>
+
+                </b-form-group>
+                <b-form-group>
+
+                  <b-input-group>
+
+                    <b-input-group-prepend>
+                      <b-input-group-text
+                        class="bg-primary text-white "
+                      >
+                        <span>PUBLICATION DATE</span>
+                      </b-input-group-text>
+                    </b-input-group-prepend>
+                    <div class="w-75">
+                      <b-form-datepicker
+                        v-model="item.publication_date"
+                        :disabled="disabled"
+                        class="ml-1"
+                        locale="en"
+                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                       />
-                    </b-col>
 
-                    <b-col
-                      md="3"
-                      class="d-flex align-items-center justify-content-start p-0 "
-                    >
-                      <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
-                        FLYER NAME:
-                      </span>
-                    </b-col>
+                    </div>
 
-                    <b-col
-                      v-if="status===2 && info ===1"
-                      md="9"
-                    >
-                      <b-form-group>
+                  </b-input-group>
 
-                        <b-input
-                          v-model="new_item.flyer_name"
-                          type="text"
-                          :disabled="disabled"
-                        />
-                      </b-form-group>
-                    </b-col>
-                    <b-col
-                      v-if="status===1 || status===0 || info ===2"
-                      md="9"
-                    >
-                      <b-form-group>
+                </b-form-group>
+              </b-col>
+            </b-row>
 
-                        <b-input
-                          v-model="item.flyer_name"
-                          type="text"
-                          :disabled="disabled"
-                        />
-                      </b-form-group>
-                    </b-col>
+          </b-col>
 
-                    <b-col
-                      md="3"
-                      class="d-flex align-items-center justify-content-start p-0"
-                    >
-                      <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
-                        PUBLICATION DATE:
-                      </span>
-                    </b-col>
-                    <b-col
-                      v-if="status===2 && info ===1"
-                      md="4"
-                    >
-                      <b-form-group>
+        </b-row>
 
-                        <b-form-datepicker
-                          v-model="new_item.publication_date"
-                          locale="en"
-                          :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                          :disabled="disabled"
-                        />
-                      </b-form-group>
-
-                    </b-col>
-                    <b-col
-                      v-if="status===1 || status===0 || info ===2"
-                      md="3"
-                    >
-                      <b-form-group>
-
-                        <b-form-datepicker
-                          v-model="item.publication_date"
-                          locale="en"
-                          :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                          :disabled="disabled"
-                        />
-                      </b-form-group>
-
-                    </b-col>
-
-                    <b-col
-                      v-if="status===1 || status===0"
-                      md="3"
-                      class="d-flex align-items-center justify-content-end p-0"
-                    >
-                      <span class="rounded-left border-primary bg-primary text-white text-center px-1">
-                        ACTIVE:
-                      </span>
-                    </b-col>
-                    <b-col
-                      v-if="status===4"
-                      md="3"
-                      class="d-flex align-items-end justify-content-start"
-                    >
-                      <b-form-group>
-
-                        <VueToggles
-                          checked-text="YES"
-                          unchecked-text="NO"
-                          checked-bg="#0589A6"
-                          unchecked-bg="lightgrey"
-                          font-weight="bold"
-                          :disabled="disabled"
-                          :value="new_item.active"
-                          @click="new_item.active = !new_item.active"
-                        />
-                      </b-form-group>
-
-                    </b-col>
-                    <b-col
-                      v-if="status===1 || status===0 "
-                      md="3"
-                      class="d-flex align-items-end justify-content-start"
-                    >
-                      <b-form-group>
-
-                        <VueToggles
-                          checked-text="YES"
-                          unchecked-text="NO"
-                          checked-bg="#0589A6"
-                          unchecked-bg="lightgrey"
-                          font-weight="bold"
-                          :disabled="disabled"
-                          :value="item.active === 1"
-                          @click="item.active = !item.active"
-                        />
-                      </b-form-group>
-
-                    </b-col>
-
-                  </b-row>
-
-                </b-col>
-              </b-row>
-              <b-row>
-
-                <b-col
-                  lg="3"
-
-                  class="d-flex align-items-center justify-content-lg-center p-0"
-                >
-                  <span class="rounded-left border-primary  bg-primary text-white text-center px-1">
-                    OBSERVATION:
-                  </span>
-                </b-col>
-
-                <b-col
-                  v-if="status===2 && info ===1"
-                  lg="9"
-                  class="d-flex align-items-center  p-0"
-                >
-                  <b-form-textarea
-                    v-model="new_item.observation"
-
-                    class="input-form"
-                    :disabled="disabled"
-                  />
-
-                </b-col>
-                <b-col
-                  v-if="status===1 || status===0 || info ===2"
-                  lg="9"
-                  class="d-flex align-items-center  p-0"
-                >
+        <b-row class="pt-1 ">
+          <b-col
+            class="pr-5"
+            lg="12"
+            xs="12"
+          >
+            <b-form-group class>
+              <b-input-group>
+                <b-input-group-prepend>
+                  <b-input-group-text
+                    class="bg-primary text-white pr-5"
+                  >
+                    <span>OBSERVATION</span>
+                  </b-input-group-text>
+                </b-input-group-prepend>
+                <div style="width: 79%;">
                   <b-form-textarea
                     v-model="item.observation"
 
-                    class="input-form"
+                    class="input-form ml-1"
                     :disabled="disabled"
                   />
+                </div>
+              </b-input-group>
+            </b-form-group>
+          </b-col>
+        </b-row>
 
-                </b-col>
-
-              </b-row>
-            </b-container>
-
-          </b-form>
-        </validationobserver>
       </div>
 
       <template
@@ -472,11 +321,11 @@ export default {
       ownInsertControl: false,
       campaigns: [],
       mainProps: {
-        center: false,
+        center: true,
         fluidGrow: false,
         blank: true,
         blankColor: '#bbb',
-        height: 73,
+        height: 50,
         block: false,
         fluid: true,
         rounded: true,
@@ -490,13 +339,29 @@ export default {
       disabled: false,
       flyer_name: null,
       addCampaignOn: false,
+      optionsStatus: '',
     }
   },
   created() {
     this.validation()
     this.ownControl = true
+    this.convert(this.item)
   },
   methods: {
+
+    // eslint-disable-next-line consistent-return
+    convert(item) {
+      if (item.active === 0) {
+        this.optionsStatus = 'INACTIVE'
+      } else if (item.active === 1) {
+        console.log(item.active)
+        this.optionsStatus = 'ACTIVE'
+      } else if (item.active === 2) {
+        this.optionsStatus = 'PREACTIVE'
+      }
+      console.log('fasdas', this.optionsStatus)
+      return this.optionsStatus
+    },
     // eslint-disable-next-line consistent-return
     async getCampaigns() {
       try {
@@ -666,4 +531,7 @@ export default {
 
 <style scoped>
 
+.v-select .v-input__control {
+  overflow: hidden;
+}
 </style>

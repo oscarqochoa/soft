@@ -1,21 +1,21 @@
 <template>
   <div>
     <b-modal
-      v-model="modalUp"
-      title-class="h2 text-white "
-      size="lg"
-      :title="requestTitle"
-      :hide-footer="hideFooter"
-      modal-class="modal-primary "
-      @hidden="hideModal(false)"
+        v-model="modalUp"
+        title-class="h2 text-white "
+        size="lg"
+        :title="requestTitle"
+        :hide-footer="hideFooter"
+        modal-class="modal-primary "
+        @hidden="hideModal(false)"
     >
       <div>
         <div style="margin: 0px 8px;" v-if="isLoadData">
           <div v-if="!isDataComplete" class="text-center">
             <div class="text-center mb-5">
               <p
-                class="badge-loan font-weight-bold"
-                style="color:#ec660b"
+                  class="badge-loan font-weight-bold"
+                  style="color:#ec660b"
               >The request cannot be continued... Contact with your supervisor.</p>
             </div>
             <b-img-lazy src="/assets/images/icons/not-found.png" style="width:60%;" class="mb-2"></b-img-lazy>
@@ -98,30 +98,30 @@
                   <b-row>
                     <b-col lg="12">
                       <ValidationProvider
-                        name="amount"
-                        rules="required|validate-amount"
-                        v-slot="{errors}"
+                          name="amount"
+                          rules="required|validate-amount"
+                          v-slot="{errors}"
                       >
                         <b-form-group class>
                           <b-input-group>
                             <b-input-group-prepend class="w-35">
                               <b-input-group-text
-                                class="w-100"
-                                :class="isLoanActive ? '' : 'bg-primary text-light'"
+                                  class="w-100"
+                                  :class="isLoanActive ? '' : 'bg-primary text-light'"
                               >
                                 <span>Amount</span>
                               </b-input-group-text>
                             </b-input-group-prepend>
                             <money
-                              v-model="loan.amount"
-                              v-bind="vMoney"
-                              class="form-control"
-                              :disabled="isLoanActive"
-                              :class="{'border-danger':(errors[0] && vmoneyValidate) || (isOverProvision && !isSupervisorLoan)}"
+                                v-model="loan.amount"
+                                v-bind="vMoney"
+                                class="form-control"
+                                :disabled="isLoanActive"
+                                :class="{'border-danger':(errors[0] && vmoneyValidate) || (isOverProvision && !isSupervisorLoan)}"
                             ></money>
                             <span
-                              v-if="isOverProvision && !isSupervisorLoan"
-                              class="text-danger"
+                                v-if="isOverProvision && !isSupervisorLoan"
+                                class="text-danger"
                             >The amount is over the middle provision.</span>
                           </b-input-group>
                         </b-form-group>
@@ -150,17 +150,17 @@
                     <b-input-group>
                       <b-input-group-prepend class="w-35">
                         <b-input-group-text
-                          class="w-100"
-                          :class="isLoanActive ? '' : 'bg-primary text-light'"
+                            class="w-100"
+                            :class="isLoanActive ? '' : 'bg-primary text-light'"
                         >
                           <span>Interest</span>
                         </b-input-group-text>
                       </b-input-group-prepend>
                       <b-form-checkbox
-                        v-model="selectedInterest"
-                        class="pl-1 form-control bg-transparent"
-                        :disabled="isLoanActive"
-                        switch
+                          v-model="selectedInterest"
+                          class="pl-1 form-control bg-transparent"
+                          :disabled="isLoanActive"
+                          switch
                       >
                         Selected Interest
                         <b>(Interest: {{ selectedInterest ? '0%' : `${userData.interest_real}%` }})</b>
@@ -176,37 +176,37 @@
                       <b-input-group>
                         <b-input-group-prepend class="w-35">
                           <b-input-group-text
-                            class="w-100"
-                            :class="isLoanActive ? '' : 'bg-primary text-light'"
+                              class="w-100"
+                              :class="isLoanActive ? '' : 'bg-primary text-light'"
                           >
                             <span>Monthly Payment</span>
                           </b-input-group-text>
                         </b-input-group-prepend>
                         <b-radio-group
-                          v-model="loan.payment"
-                          class="form-control text-center bg-transparent"
-                          :style="bigWindow? '' : 'height: 4rem;'"
-                          :class="{'border-danger':errors[0]}"
+                            v-model="loan.payment"
+                            class="form-control text-center bg-transparent"
+                            :style="bigWindow? '' : 'height: 4rem;'"
+                            :class="{'border-danger':errors[0]}"
                         >
                           <b-form-radio
-                            value="20"
-                            :disabled="loan.amount < 20 || isLoanActive"
+                              value="20"
+                              :disabled="loan.amount < 20 || isLoanActive"
                           >$20.00</b-form-radio>
                           <b-form-radio
-                            value="40"
-                            :disabled="loan.amount < 40 || isLoanActive"
+                              value="40"
+                              :disabled="loan.amount < 40 || isLoanActive"
                           >$40.00</b-form-radio>
                           <b-form-radio
-                            value="60"
-                            :disabled="loan.amount < 60 || isLoanActive"
+                              value="60"
+                              :disabled="loan.amount < 60 || isLoanActive"
                           >$60.00</b-form-radio>
                           <b-form-radio
-                            value="80"
-                            :disabled="loan.amount < 80 || isLoanActive"
+                              value="80"
+                              :disabled="loan.amount < 80 || isLoanActive"
                           >$80.00</b-form-radio>
                           <b-form-radio
-                            value="100"
-                            :disabled="loan.amount < 100 || isLoanActive"
+                              value="100"
+                              :disabled="loan.amount < 100 || isLoanActive"
                           >$100.00</b-form-radio>
                         </b-radio-group>
                       </b-input-group>
@@ -226,10 +226,10 @@
                             </b-input-group-text>
                           </b-input-group-prepend>
                           <money
-                            v-model="userData.salary"
-                            v-bind="vMoney"
-                            class="form-control"
-                            disabled
+                              v-model="userData.salary"
+                              v-bind="vMoney"
+                              class="form-control"
+                              disabled
                           ></money>
                         </b-input-group>
                       </b-form-group>
@@ -247,16 +247,16 @@
                             </b-input-group-text>
                           </b-input-group-prepend>
                           <money
-                            v-model="userData.provision"
-                            v-bind="vMoney"
-                            class="form-control"
-                            disabled
+                              v-model="userData.provision"
+                              v-bind="vMoney"
+                              class="form-control"
+                              disabled
                           ></money>
                         </b-input-group>
                       </b-form-group>
                       <span
-                        v-if="userData.currency_provision == 2"
-                        style="color:blue;"
+                          v-if="userData.currency_provision == 2"
+                          style="color:blue;"
                       >His provision was converted to a dollar</span>
                     </b-col>
                   </b-row>
@@ -266,9 +266,9 @@
                 <b-col lg="12">
                   <b-row class="class-inline px-1">
                     <b-col
-                      lg="5"
-                      class="class-campo-icon add-class-campo-icon border-title-text"
-                      :class="isLoanActive ? '' : 'bg-primary  text-light'"
+                        lg="5"
+                        class="class-campo-icon add-class-campo-icon border-title-text"
+                        :class="isLoanActive ? '' : 'bg-primary  text-light'"
                     >
                       <span>Motive</span>
                     </b-col>
@@ -278,11 +278,11 @@
                   <ValidationProvider name="description" rules="required" v-slot="{errors}">
                     <div class="form-group mt-0">
                       <textarea
-                        v-model="loan.motive"
-                        class="textarea-style form-control bg-transparent"
-                        style="border-radius: 0px 10px 10px 10px"
-                        :class="{'border-danger':errors[0]}"
-                        :disabled="isLoanActive"
+                          v-model="loan.motive"
+                          class="textarea-style form-control bg-transparent"
+                          style="border-radius: 0px 10px 10px 10px"
+                          :class="{'border-danger':errors[0]}"
+                          :disabled="isLoanActive"
                       ></textarea>
                     </div>
                   </ValidationProvider>
@@ -299,9 +299,9 @@
                 <b-col lg="12">
                   <div class="form-group mt-0">
                     <div
-                      class="textarea-style bg-transparent"
-                      style="border-radius: 0px 10px 10px 10px"
-                      disabled
+                        class="textarea-style bg-transparent"
+                        style="border-radius: 0px 10px 10px 10px"
+                        disabled
                     >
                       <ul>
                         <li>The Loan have a rate {{userData.interest_real}}%</li>
@@ -325,15 +325,15 @@
         <b-row v-if="isNotUserLoan && (isShowSupervisor || isShowRrhh || isShowManagement)">
           <b-col lg="12" style="text-align: center;">
             <b-button
-              variant="success"
-              :disabled="noSend"
-              class="mr-1"
-              @click="changeStatus(1)"
+                variant="success"
+                :disabled="noSend"
+                class="mr-1"
+                @click="changeStatus(1)"
             >Accept Loan</b-button>
             <b-button
-              variant="outline-danger"
-              :disabled="noSend"
-              @click="changeStatus(2)"
+                variant="outline-danger"
+                :disabled="noSend"
+                @click="changeStatus(2)"
             >Decline Loan</b-button>
           </b-col>
         </b-row>
@@ -345,10 +345,10 @@
         <div class="form-group mt-0">
           <ValidationProvider name="comment" rules="required" v-slot="{errors}">
             <textarea
-              v-model="acceptOrDeny.comment"
-              class="textarea-style form-control"
-              style="border-radius: 0px 10px 10px 10px"
-              :class="{'border-danger':errors[0]}"
+                v-model="acceptOrDeny.comment"
+                class="textarea-style form-control"
+                style="border-radius: 0px 10px 10px 10px"
+                :class="{'border-danger':errors[0]}"
             ></textarea>
           </ValidationProvider>
         </div>
@@ -434,19 +434,19 @@ export default {
     },
     isDataComplete() {
       return (
-        this.userData &&
-        this.userData.provision &&
-        this.userData.userName &&
-        this.userData.salary
+          this.userData &&
+          this.userData.provision &&
+          this.userData.userName &&
+          this.userData.salary
       );
     },
     hideFooter() {
       return (
-        !(
-          !this.isLoanActive ||
-          (this.isNotUserLoan &&
-            (this.isShowSupervisor || this.isShowRrhh || this.isShowManagement))
-        ) || !this.isDataComplete
+          !(
+              !this.isLoanActive ||
+              (this.isNotUserLoan &&
+                  (this.isShowSupervisor || this.isShowRrhh || this.isShowManagement))
+          ) || !this.isDataComplete
       );
     },
     isOverProvision() {
@@ -460,8 +460,8 @@ export default {
     },
     isShowSupervisor() {
       return (
-        (this.isSupervisor && this.loan.process == 1) ||
-        (this.isCeo && this.loan.process == 1)
+          (this.isSupervisor && this.loan.process == 1) ||
+          (this.isCeo && this.loan.process == 1)
       );
     },
     isSupervisorLoan() {
@@ -470,8 +470,8 @@ export default {
 
     isShowManagement() {
       return (
-        (this.moduleId == 16 && this.loan.process == 2) ||
-        (this.isCeo && this.loan.process == 2 && this.moduleId == 16)
+          (this.moduleId == 16 && this.loan.process == 2) ||
+          (this.isCeo && this.loan.process == 2 && this.moduleId == 16)
       );
     },
     prefixSalary() {
@@ -553,8 +553,8 @@ export default {
             this.addPreloader();
             this.noSend = true;
             this.loan.interest = this.selectedInterest
-              ? 0
-              : this.userData.interest_real;
+                ? 0
+                : this.userData.interest_real;
             const params = {
               id_user: this.userSession,
               id_module: this.moduleId,
@@ -651,8 +651,8 @@ export default {
 }
 
 .custom-radio
-  .custom-control-input:disabled:checked
-  ~ .custom-control-label::before {
+.custom-control-input:disabled:checked
+~ .custom-control-label::before {
   background-color: rgb(99 99 99);
 }
 .add-class-campo-icon {

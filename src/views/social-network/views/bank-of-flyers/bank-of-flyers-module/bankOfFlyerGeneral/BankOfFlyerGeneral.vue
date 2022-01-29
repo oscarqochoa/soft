@@ -192,7 +192,8 @@
           :items="items"
           :status="status"
           :info="info"
-
+          no-close-on-esc="false"
+          no-close-on-backdrop="false"
           @close="closeWatchModal"
         />
 
