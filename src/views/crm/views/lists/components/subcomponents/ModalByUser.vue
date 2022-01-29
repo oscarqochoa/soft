@@ -69,7 +69,7 @@
             class="d-flex flex-column justify-content-center align-items-center"
           >
             <b-form-checkbox
-              :disabled="rolByUser"
+              :disabled="rolByUser" 
               v-model="data.item.done"
               :value="1"
               @change="
