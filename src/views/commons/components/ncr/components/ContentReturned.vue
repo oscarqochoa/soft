@@ -351,6 +351,7 @@ import vSelect from "vue-select";
 import ModalQuestionnaire from "../modal/ModalQuestionnaire.vue";
 import ModalTrackingStatus from "../modal/ModalTrackingStatus.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import NrcService from "../service/ncr.service"
 import ncrmixin from "../mixin";
 export default {
   mixins: [ncrmixin],
@@ -586,26 +587,25 @@ export default {
             cancelButton: "btn btn-outline-danger  "
           }
         })
-        .then(result => {
+        .then(async result => {
           if (result.value) {
-            this.$store.commit("app/SET_LOADING", true);
-            amgApi
-              .post("/lead/ncr/change-status", {
+            try{
+              this.addPreloader();
+              const response = await NrcService.changeStatus({
                 user_id: this.currentUser.user_id,
                 score_id: score_id,
                 status_id: status_id,
                 text: result.value
               })
-              .then(response => {
-                if (response.status == 200) {
+              if (response.status == 200) {
                   this.resetSearch();
-                  this.$store.commit("app/SET_LOADING", false);
+                  this.removePreloader();
                   this.showSuccessSwal("OPERATION SUCCESSFULLY");
                 }
-              })
-              .catch(error => {
-                this.$store.commit("app/SET_LOADING", false);
-                console.error(error);
+
+            }catch(error){
+              this.removePreloader();
+              console.error(error);
                 this.showToast(
                   "danger",
                   "top-right",
@@ -613,7 +613,22 @@ export default {
                   "XIcon",
                   "Something went wrong!"
                 );
-              });
+            }
+            
+            // amgApi
+            //   .post("/lead/ncr/change-status", {
+            //     user_id: this.currentUser.user_id,
+            //     score_id: score_id,
+            //     status_id: status_id,
+            //     text: result.value
+            //   })
+            //   .then(response => {
+                
+            //   })
+            //   .catch(error => {
+            //     this.$store.commit("app/SET_LOADING", false);
+                
+            //   });
           }
         });
     }
