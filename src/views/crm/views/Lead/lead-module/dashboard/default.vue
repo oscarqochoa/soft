@@ -1,7 +1,7 @@
 <template>
   <b-row class="card-group">
     <lead-update
-      v-if="isAddUpdateUserSidebarActive"
+      v-if="Object.keys(S_LEAD_EDIT).length"
       :modul="modul"
       :lead="S_LEAD_EDIT"
       :is-add-new-user-sidebar-active.sync="isAddUpdateUserSidebarActive"

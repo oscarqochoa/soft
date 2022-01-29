@@ -311,14 +311,10 @@ export default {
             }))
           };
           this.addPreloader();
-          await Promise.all([
-            this.A_UPDATE_LEAD({ id: this.lead.id, body }),
-            this.A_GET_LEAD({ id: this.lead.id, body })
-          ]);
+          await this.A_UPDATE_LEAD({ id: this.lead.id, body });
+          await this.A_GET_LEAD({ id: this.lead.id, body });
           this.M_KEY_UPDATE_DETAILS_LEAD();
           this.removePreloader();
-          /* const response = await this.A_UPDATE_LEAD({ id: this.lead.id, body });
-          await this.A_UPDATE_LEAD({ id: this.lead.id, body }); */
 
           this.isLoading = false;
           this.$refs.refFormObserver.reset();
