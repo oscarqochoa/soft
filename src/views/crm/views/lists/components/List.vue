@@ -183,7 +183,7 @@
               v-if="!getRoles"
             >
               <b-button
-                v-if="data.item.cant > 0"
+                v-if="data.item.cant > 0 && data.item.created_at != 'Today'"
                 variant="warning"
                 class="ml-1 reset-radius btn-sm"
                 @click="
@@ -198,7 +198,7 @@
               </b-button>
 
               <b-button
-                v-if="data.item.created_at == 'Today'"
+                v-if="data.item.created_at == 'Today' && count_alltask>0"
                 variant="warning"
                 class="ml-1 reset-radius btn-sm"
                 @click="openModalTaskToday()"
