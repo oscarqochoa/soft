@@ -118,7 +118,6 @@ const actions = {
   async A_GET_PROGRAMS({ commit }, params) {
     try {
       const response = await crmGlobal.getPrograms(params);
-      console.log("A_GET_PROGRAMS response", response);
       commit("SET_DATA", {
         destination: "S_PROGRAMS",
         data: response.data,
