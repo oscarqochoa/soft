@@ -534,13 +534,7 @@ export default {
         this.options = data;
       } catch (error) {
         console.error(error);
-        this.showToast(
-          "danger",
-          "top-right",
-          "Error",
-          "XIcon",
-          "Something went wrong!"
-        );
+        this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
       }
     },
     savegroup() {

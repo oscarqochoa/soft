@@ -173,28 +173,21 @@ export default {
                 if (data.status == 200) {
                   if (data.data.code == 1) {
                     this.closeModal();
+                    this.updateGrid();
                     this.$swal
                       .fire({
                         icon: "success",
                         title: "OPERATION SUCCESSFULLY",
                       })
-                      .then((res) => {
-                        if (res) {
-                          this.updateGrid();
-                        }
-                      });
+                      
                   } else {
                     this.$swal
                       .fire({
                         icon: "warning",
                         title: data.data.message,
                       })
-                      .then((res) => {
-                        if (res) {
-                          this.closeModal();
-                          this.updateGrid();
-                        }
-                      });
+                      this.closeModal();
+                      this.updateGrid();
                   }
                 } else {
                   this.$swal
@@ -202,12 +195,8 @@ export default {
                       icon: "warning",
                       title: data.data.message,
                     })
-                    .then((res) => {
-                      if (res) {
-                        this.closeModal();
-                        this.updateGrid();
-                      }
-                    });
+                    this.closeModal();
+                    this.updateGrid();
                 }
               } catch (error) {
                 this.removePreloader();
@@ -239,23 +228,15 @@ export default {
                         icon: "success",
                         title: "OPERATION SUCCESSFULLY",
                       })
-                      .then((res) => {
-                        if (res) {
-                          this.updateGrid();
-                        }
-                      });
+                      this.updateGrid();
                   } else {
                     this.$swal
                       .fire({
                         icon: "warning",
                         title: data.data.message,
                       })
-                      .then((res) => {
-                        if (res) {
-                          this.closeModal();
-                          this.updateGrid();
-                        }
-                      });
+                      this.closeModal();
+                      this.updateGrid();
                   }
                 } else {
                   this.$swal
@@ -263,12 +244,8 @@ export default {
                       icon: "warning",
                       title: data.data.message,
                     })
-                    .then((res) => {
-                      if (res) {
-                        this.closeModal();
-                        this.updateGrid();
-                      }
-                    });
+                    this.closeModal();
+                    this.updateGrid();
                 }
               } catch (error) {
                 this.removePreloader();

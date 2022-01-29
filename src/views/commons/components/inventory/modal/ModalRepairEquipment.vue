@@ -42,7 +42,8 @@
                     border-color: rgb(255, 127, 0);
                   "
                   type="submit"
-                >{{ statusButton }}</b-button>
+                  >{{ statusButton }}</b-button
+                >
               </b-form-group>
             </div>
           </form>
@@ -53,26 +54,27 @@
 </template>
 
 <script>
+import InventoryService from "../service/inventory.service";
 export default {
   props: {
     modalRepairEquipment: {
-      type: Boolean
+      type: Boolean,
     },
     global: {
-      type: Object
+      type: Object,
     },
     idEquipment: {
-      type: [Number, String]
+      type: [Number, String],
     },
     statusNewEquipment: {
-      type: [Number, String]
+      type: [Number, String],
     },
     assignedTo: {
-      type: [Number, String]
+      type: [Number, String],
     },
     num: {
-      type: [Number, String]
-    }
+      type: [Number, String],
+    },
   },
   components: {},
   computed: {
@@ -85,12 +87,12 @@ export default {
       return [1, 2].includes(this.statusNewEquipment)
         ? "RETURN "
         : "SEND FOR REPAIR";
-    }
+    },
   },
   data() {
     return {
       mutableIfModalEquipment: this.modalRepairEquipment,
-      commentary: ""
+      commentary: "",
     };
   },
   methods: {
@@ -98,53 +100,53 @@ export default {
       this.$emit("closeModalRepairEquipment", false);
     },
     saveAssignEquipment() {
-      this.$refs.form.validate().then(success => {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
         } else {
-          this.showConfirmSwal(
+          const confirm = await this.showConfirmSwal(
             "Are you sure?",
             "You won't be able to revert this!"
-          ).then(result => {
-            if (result.value) {
-              amgApi
-                .post("/logistics/inventory/save-repair-equipment", {
-                  userId: this.global.user_id,
-                  equipmentId: this.idEquipment,
-                  commentary: this.commentary,
-                  statusNewEquipment: this.statusNewEquipment,
-                  assignedTo: this.assignedTo,
-                  num: this.num
-                })
-                .then(response => {
-                  if (response.status == 200) {
-                    this.$swal({
-                      icon: "success",
-                      title: "SENT TO REPAIR",
-                      customClass: {
-                        confirmButton: "btn btn-success"
-                      }
-                    });
-
-                    this.$emit("closeModalRepairEquipment", false);
-                    this.$emit("updateRepairEquipment", false);
-                  }
-                })
-                .catch(error => {
-                  console.error(error);
-                  this.showToast(
-                    "danger",
-                    "top-right",
-                    "Error",
-                    "XIcon",
-                    "Something went wrong!"
-                  );
+          );
+          if (confirm.isConfirmed) {
+            try {
+              this.addPreloader();
+              const response = await InventoryService.saveAssignEquipment({
+                userId: this.global.user_id,
+                equipmentId: this.idEquipment,
+                commentary: this.commentary,
+                statusNewEquipment: this.statusNewEquipment,
+                assignedTo: this.assignedTo,
+                num: this.num,
+              });
+              if (response.status == 200) {
+                this.removePreloader();
+                this.$swal({
+                  icon: "success",
+                  title: "SENT TO REPAIR",
+                  customClass: {
+                    confirmButton: "btn btn-success",
+                  },
                 });
+
+                this.$emit("closeModalRepairEquipment", false);
+                this.$emit("updateRepairEquipment", false);
+              }
+            } catch (error) {
+              this.removePreloader();
+              console.error(error);
+              this.showToast(
+                "danger",
+                "top-right",
+                "Error",
+                "XIcon",
+                "Something went wrong!"
+              );
             }
-          });
+          }
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>

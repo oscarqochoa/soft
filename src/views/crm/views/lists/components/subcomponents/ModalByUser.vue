@@ -91,9 +91,10 @@
 
 
 <script>
-import { amgApi } from "@/service/axios";
+import ListService from "../../service/lists.service";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
+
 export default {
   components: {
     vSelect
@@ -176,8 +177,8 @@ export default {
       return "/commons/list-users/get-list-of-leads";
     },
     rolByUser() {
-      return this.currentUser.arrRoles.role_id == 1 ||
-        this.currentUser.arrRoles.role_id == 2
+      return this.currentUser.role_id == 1 ||
+        this.currentUser.role_id == 2
         ? true
         : false;
     },
@@ -214,36 +215,25 @@ export default {
         return items || [];
       });
     },
-    callead(state, idlead, idlist, iduser) {
+    async callead(state, idlead, idlist, iduser) {
       if (state == "1") {
-        amgApi
-          .post("/commons/list-users/get-lead", {
-            idlead: idlead,
-            idlist: idlist,
-            iduser: iduser,
-            status: 1,
-            filter: this.datafilter
-          })
-          .then(() => {
-            this.$refs.refClientsList.refresh();
-            this.$emit("updateList", false);
-            // this.listsgroups(1);
-            // this.modalopen(this.idlist, this.listmodal, this.datafilter);
-          });
+        try{
+          const data = await ListService.getLead({idlead: idlead,idlist: idlist,iduser: iduser,status: 1,filter: this.datafilter})
+          this.$refs.refClientsList.refresh();
+          this.$emit("updateList", false);
+        }catch(error){
+          console.error(error)
+          this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+        }
       } else {
-        amgApi
-          .post("/commons/list-users/get-lead", {
-            idlead: idlead,
-            idlist: idlist,
-            iduser: iduser,
-            status: 0
-          })
-          .then(response => {
-            this.$refs.refClientsList.refresh();
-            this.$emit("updateList", false);
-            // this.listsgroups(1);
-            // this.modalopen(this.idlist, this.listmodal, this.datafilter);
-          });
+        try{
+          const data = ListService.getLead({ idlead: idlead,idlist: idlist,iduser: iduser,status: 0})
+          this.$refs.refClientsList.refresh();
+          this.$emit("updateList", false);
+        }catch(error){
+          console.error(error)
+          this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+        }
       }
     }
   },
