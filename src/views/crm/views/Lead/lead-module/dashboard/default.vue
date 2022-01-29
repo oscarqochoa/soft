@@ -163,6 +163,7 @@ export default {
     this.getCreditReportPendings()
     this.getEvents()
     this.getCalls(10)
+    this.getPrograms()
   },
   computed: {
     ...mapGetters({
