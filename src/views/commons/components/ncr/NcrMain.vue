@@ -39,6 +39,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import NrcService from "./service/ncr.service"
 export default {
   data() {
     return {
@@ -51,23 +52,20 @@ export default {
     })
   },
   methods: {
-    countReturned() {
+    async countReturned() {
       if (this.currentUser.role_id != 1) {
-        amgApi
-          .post("/lead/ncr/ncr-leads-count-in-process", {
+        try{
+          const response = await  NrcService.ncrLeadsCountInProcess({
             user_id: this.currentUser.user_id,
-            modul: this.$route.meta.module
-          })
-          .then(response => {
-            if (response.status == 200) {
+            modul: this.$route.meta.module})
+          if (response.status == 200) {
               this.countData =
                 response.data[0].countReturned > 99
                   ? "+99"
                   : response.data[0].countReturned;
-            }
-          })
-          .catch(error => {
-            console.error(error);
+          }
+        }catch(error){
+          console.error(error);
             this.showToast(
               "danger",
               "top-right",
@@ -75,7 +73,8 @@ export default {
               "XIcon",
               "Something went wrong!"
             );
-          });
+
+        }
       }
     }
   },

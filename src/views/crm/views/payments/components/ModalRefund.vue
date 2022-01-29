@@ -97,7 +97,7 @@
 <script>
 import { mapGetters } from "vuex";
 import moment from "moment";
-import { amgApi } from "@/service/axios";
+import PaymentService from "../service/payments.service";
 export default {
   props: {
     modalRefund: {
@@ -150,157 +150,109 @@ export default {
       this.$emit("updateGrid", false);
     },
     sendVoid() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
         } else {
           if (this.dataVoid.type == 1) {
             //Void
-            this.showConfirmSwal(
+            const confirm = await this.showConfirmSwal(
               "Are you sure?",
               "You won't be able to revert this!"
-            ).then((result) => {
-              if (result.value) {
-                this.$store.commit("app/SET_LOADING", true);
-                amgApi
-                  .post("/authorize/void-transaction", {
-                    idtransaction: this.dataVoid.idtransaction,
-                    idmerchant: this.dataVoid.idmerchant,
-                    comment: this.comment,
-                    iduser: this.currentUser.user_id,
-                  })
-                  .then((response) => {
-                    this.$store.commit("app/SET_LOADING", false);
-                    if (response.status == 200) {
-                      if (response.data.code == 1) {
-                        this.closeModal();
-                        this.$swal
-                          .fire({
-                            icon: "success",
-                            title: "OPERATION SUCCESSFULLY",
-                          })
-                          .then((res) => {
-                            if (res) {
-                              this.updateGrid();
-                            }
-                          });
-                      } else {
-                        this.$swal
-                          .fire({
-                            icon: "warning",
-                            title: response.data.message,
-                          })
-                          .then((res) => {
-                            if (res) {
-                              this.closeModal();
-                              this.updateGrid();
-                            }
-                          });
-                      }
-                    } else {
-                      this.$swal
-                        .fire({
-                          icon: "warning",
-                          title: response.data.message,
-                        })
-                        .then((res) => {
-                          if (res) {
-                            this.closeModal();
-                            this.updateGrid();
-                          }
-                        });
-                    }
-                  })
-                  .catch((errors) => {
-                    this.$store.commit("app/SET_LOADING", false);
-                    this.showToast(
-                      "danger",
-                      "top-right",
-                      "Error",
-                      "XIcon",
-                      "Something went wrong!"
-                    );
-                  });
+            );
+            if (confirm.isConfirmed) {
+              try {
+                this.addPreloader();
+                const data = await PaymentService.voidTransaction({
+                  idtransaction: this.dataVoid.idtransaction,
+                  idmerchant: this.dataVoid.idmerchant,
+                  comment: this.comment,
+                  iduser: this.currentUser.user_id,
+                });
+                this.removePreloader();
+                if (data.status == 200) {
+                  if (data.data.code == 1) {
+                    this.closeModal();
+                    this.updateGrid();
+                    this.$swal
+                      .fire({
+                        icon: "success",
+                        title: "OPERATION SUCCESSFULLY",
+                      })
+                      
+                  } else {
+                    this.$swal
+                      .fire({
+                        icon: "warning",
+                        title: data.data.message,
+                      })
+                      this.closeModal();
+                      this.updateGrid();
+                  }
+                } else {
+                  this.$swal
+                    .fire({
+                      icon: "warning",
+                      title: data.data.message,
+                    })
+                    this.closeModal();
+                    this.updateGrid();
+                }
+              } catch (error) {
+                this.removePreloader();
+                this.showErrorSwal(error);
               }
-            });
+            }
           } else {
             //Refund
-            this.$swal
-              .fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                customClass: {
-                  confirmButton: "btn btn-primary",
-                  cancelButton: "btn btn-danger ",
-                },
-                confirmButtonText: "Yes",
-              })
-              .then((result) => {
-                if (result.value) {
-                  this.$store.commit("app/SET_LOADING", true);
-                  amgApi
-                    .post("/authorize/refund-transaction", {
-                      idtransaction: this.dataVoid.idtransaction,
-                      idmerchant: this.dataVoid.idmerchant,
-                      comment: this.comment,
-                      iduser: this.currentUser.user_id,
-                      amount: this.dataVoid.amount,
+            const confirm = await this.showConfirmSwal(
+              "Are you sure?",
+              "You won't be able to revert this!"
+            );
+            if (confirm.isConfirmed) {
+              try {
+                this.addPreloader();
+                const data = await PaymentService.refundTransaction({
+                  idtransaction: this.dataVoid.idtransaction,
+                  idmerchant: this.dataVoid.idmerchant,
+                  comment: this.comment,
+                  iduser: this.currentUser.user_id,
+                  amount: this.dataVoid.amount,
+                });
+                this.removePreloader();
+                if (data.status == 200) {
+                  if (data.data.code == 1) {
+                    this.closeModal();
+                    this.$swal
+                      .fire({
+                        icon: "success",
+                        title: "OPERATION SUCCESSFULLY",
+                      })
+                      this.updateGrid();
+                  } else {
+                    this.$swal
+                      .fire({
+                        icon: "warning",
+                        title: data.data.message,
+                      })
+                      this.closeModal();
+                      this.updateGrid();
+                  }
+                } else {
+                  this.$swal
+                    .fire({
+                      icon: "warning",
+                      title: data.data.message,
                     })
-                    .then((response) => {
-                      this.$store.commit("app/SET_LOADING", false);
-                      if (response.status == 200) {
-                        if (response.data.code == 1) {
-                          this.closeModal();
-                          this.$swal
-                            .fire({
-                              icon: "success",
-                              title: "OPERATION SUCCESSFULLY",
-                            })
-                            .then((res) => {
-                              if (res) {
-                                this.updateGrid();
-                              }
-                            });
-                        } else {
-                          this.$swal
-                            .fire({
-                              icon: "warning",
-                              title: response.data.message,
-                            })
-                            .then((res) => {
-                              if (res) {
-                                this.closeModal();
-                                this.updateGrid();
-                              }
-                            });
-                        }
-                      } else {
-                        this.$swal
-                          .fire({
-                            icon: "warning",
-                            title: response.data.message,
-                          })
-                          .then((res) => {
-                            if (res) {
-                              this.closeModal();
-                              this.updateGrid();
-                            }
-                          });
-                      }
-                    });
+                    this.closeModal();
+                    this.updateGrid();
                 }
-              }).catch((errors) => {
-                    this.$store.commit("app/SET_LOADING", false);
-                    this.showToast(
-                      "danger",
-                      "top-right",
-                      "Error",
-                      "XIcon",
-                      "Something went wrong!"
-                    );
-                  });
+              } catch (error) {
+                this.removePreloader();
+                this.showErrorSwal(error);
+              }
+            }
+            
           }
         }
       });

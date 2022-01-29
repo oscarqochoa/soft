@@ -8,7 +8,11 @@
       <b-row />
       <b-row>
         <b-col cols="6" sm="3" md="4" lg="3" xl="2">
-          <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
+          <b-card
+            class="ecommerce-card col-lg-12 h-200"
+            style="height: 11rem"
+            no-body
+          >
             <div class="text-center pt-1">
               <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(0)">
                 <span>Leads</span>
@@ -21,7 +25,9 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label class="item-name" for>TODAY</label>
-                      <p class="borde-count" style="color: #baa345">{{ global.leadday }}</p>
+                      <p class="borde-count" style="color: #baa345">
+                        {{ global.leadday }}
+                      </p>
                     </div>
                   </div>
                   <div class="col-6">
@@ -36,7 +42,11 @@
           </b-card>
         </b-col>
         <b-col cols="6" sm="3" md="4" lg="3" xl="2">
-          <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
+          <b-card
+            class="ecommerce-card col-lg-12 h-200"
+            style="height: 11rem"
+            no-body
+          >
             <div class="text-center pt-1">
               <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(1)">
                 <span>Appointments</span>
@@ -49,7 +59,9 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>TODAY</label>
-                      <p class="borde-count" style="color: #baa345">{{ global.eventday }}</p>
+                      <p class="borde-count" style="color: #baa345">
+                        {{ global.eventday }}
+                      </p>
                     </div>
                   </div>
                   <div class="col-6">
@@ -64,7 +76,11 @@
           </b-card>
         </b-col>
         <b-col cols="6" sm="3" md="4" lg="3" xl="2">
-          <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
+          <b-card
+            class="ecommerce-card col-lg-12 h-200"
+            style="height: 11rem"
+            no-body
+          >
             <div class="text-center pt-1">
               <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(2)">
                 <span>Tasks</span>
@@ -77,7 +93,9 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>TODAY</label>
-                      <p class="borde-count" style="color: #baa345">{{ global.taskday }}</p>
+                      <p class="borde-count" style="color: #baa345">
+                        {{ global.taskday }}
+                      </p>
                     </div>
                   </div>
                   <div class="col-6">
@@ -92,7 +110,11 @@
           </b-card>
         </b-col>
         <b-col cols="6" sm="3" md="4" lg="3" xl="2">
-          <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
+          <b-card
+            class="ecommerce-card col-lg-12 h-200"
+            style="height: 11rem"
+            no-body
+          >
             <div class="text-center pt-1">
               <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(3)">
                 <span>Sales</span>
@@ -105,7 +127,9 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>TODAY</label>
-                      <p class="borde-count" style="color: #baa345">{{ global.vendioday }}</p>
+                      <p class="borde-count" style="color: #baa345">
+                        {{ global.vendioday }}
+                      </p>
                     </div>
                   </div>
                   <div class="col-6">
@@ -120,7 +144,11 @@
           </b-card>
         </b-col>
         <b-col cols="6" sm="3" md="4" lg="3" xl="2">
-          <b-card class="ecommerce-card col-lg-12 h-200" style="height:11rem;" no-body>
+          <b-card
+            class="ecommerce-card col-lg-12 h-200"
+            style="height: 11rem"
+            no-body
+          >
             <div class="text-center pt-1">
               <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(4)">
                 <span>Capturated</span>
@@ -133,7 +161,9 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>TODAY</label>
-                      <p class="borde-count" style="color: #baa345">{{ global.clientday }}</p>
+                      <p class="borde-count" style="color: #baa345">
+                        {{ global.clientday }}
+                      </p>
                     </div>
                   </div>
                   <div class="col-6">
@@ -368,14 +398,14 @@
                 </b-col>
                 <b-col cols="12" sm="4" md="4">
                   <v-select
-                    v-if="[1,2].includes(currentUser.role_id)"
+                    v-if="[1, 2].includes(currentUser.role_id)"
                     v-model="userfilter"
                     class="per-page-selector-user"
                     style="font-size: 15px"
                     placeholder="Select User"
                     label="user_name"
                     :options="users"
-                    :reduce="val => val.id"
+                    :reduce="(val) => val.id"
                     @input="filtrocont()"
                   />
                 </b-col>
@@ -402,8 +432,7 @@ import moment from "moment";
 import AppEchartLine from "@core/components/charts/echart/AppEchartLine.vue";
 import { mapGetters } from "vuex";
 import AppEchartLineCrm from "./components/AppEchartLineCrm.vue";
-import { amgApi } from "@/service/axios";
-
+import DashboardService from "./service/dashboard.service";
 export default {
   name: "DashboardCrm",
   components: {
@@ -431,12 +460,12 @@ export default {
           "September",
           "October",
           "November",
-          "December"
+          "December",
         ],
         series: {
           name: "",
-          data: []
-        }
+          data: [],
+        },
       },
       global: [],
       leads: [],
@@ -451,13 +480,13 @@ export default {
       users: [],
       year: moment().format("YYYY"),
       years: [],
-      nameOfTab: "Leads"
+      nameOfTab: "Leads",
     };
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser"
-    })
+      currentUser: "auth/currentUser",
+    }),
   },
   created() {
     this.userCreator();
@@ -501,102 +530,82 @@ export default {
       }
       this.index = index;
     },
-    allData() {
-      this.$store.commit("app/SET_LOADING", true);
-      let { user_id } = this.currentUser;
-      if (this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
-        user_id = 0;
+    async allData() {
+      try {
+        this.addPreloader();
+        let { user_id } = this.currentUser;
+        if (this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
+          user_id = 0;
+        }
+        const response = await DashboardService.getDashboardData({created_id: user_id,})
+        this.userfilter = response.data.usercreate;
+        this.global = response.data;
+        this.leads = response.data.leads.map((list) => list);
+        this.quotes = response.data.quotes.map((list) => list);
+        this.calls = response.data.calls.map((list) => list);
+        this.sales = response.data.sales.map((list) => list);
+        this.captur = response.data.vendio.map((list) => list); // error
+        this.removePreloader();
+        this.chargeDataToEchart(this.leads, "Total Leads");
+        this.total_year = this.global.leads_year;
+        this.nameOfTab = "Leads";
+      } catch (error) {
+        console.log(error);
+        this.removePreloader();
+        this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
       }
-      amgApi
-        .post("/crm/get-data-dashboard", {
-          created_id: user_id
-        })
-        .then(response => {
-          this.userfilter = response.data.usercreate;
+    },
+    async filtrocont() {
+      if (this.userfilter != null) {
+        try{
+          this.addPreloader();
+          const response = await DashboardService.getDashboardData({created_id: this.userfilter,anio: this.year,})
           this.global = response.data;
-          this.leads = response.data.leads.map(list => list);
-          this.quotes = response.data.quotes.map(list => list);
-          this.calls = response.data.calls.map(list => list);
-          this.sales = response.data.sales.map(list => list);
-          this.captur = response.data.vendio.map(list => list); // error
-          this.$store.commit("app/SET_LOADING", false);
+          this.leads = response.data.leads.map((list) => list);
+          this.quotes = response.data.quotes.map((list) => list);
+          this.calls = response.data.calls.map((list) => list);
+          this.sales = response.data.sales.map((list) => list);
+          this.captur = response.data.vendio.map((list) => list);
           this.chargeDataToEchart(this.leads, "Total Leads");
           this.total_year = this.global.leads_year;
-          this.nameOfTab = "Leads";
-        })
-        .catch(error => {
-          this.$store.commit("app/SET_LOADING", false);
-          this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong!"
-          );
-          console.error(error);
-        });
-    },
-    filtrocont() {
-      if (this.userfilter != null) {
-        this.$store.commit("app/SET_LOADING", true);
-        amgApi
-          .post("/crm/get-data-dashboard", {
-            created_id: this.userfilter,
-            anio: this.year
-          })
-          .then(response => {
-            this.global = response.data;
-            this.leads = response.data.leads.map(list => list);
-            this.quotes = response.data.quotes.map(list => list);
-            this.calls = response.data.calls.map(list => list);
-            this.sales = response.data.sales.map(list => list);
-            this.captur = response.data.vendio.map(list => list);
-            this.chargeDataToEchart(this.leads, "Total Leads");
-            this.total_year = this.global.leads_year;
-            this.$store.commit("app/SET_LOADING", false);
-          })
-          .catch(error => {
-            this.$store.commit("app/SET_LOADING", false);
-            this.showToast(
-              "danger",
-              "top-right",
-              "Error",
-              "XIcon",
-              "Something went wrong!"
-            );
-            console.error(error);
-          });
+          this.removePreloader();
+
+
+        }catch(error){
+            console.error(error)
+            this.removePreloader();
+            this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+        }
+          
       } else {
         this.allData();
         this.year = "2021";
       }
     },
-    userCreator() {
-      amgApi
-        .post("/commons/sellerall/2", {
+    async userCreator() {
+      try {
+        const data = await DashboardService.userCreator({
           roles: "",
-          type: "1"
-        })
-        .then(response => {
-          this.users = response.data;
-        })
-        .catch(error => {
-          this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong with users!"
-          );
-          console.error(error);
+          type: "1",
         });
+        this.users = data;
+      } catch (error) {
+        console.log(error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong!"
+        );
+      }
     },
     year_select() {
       for (let x = 2014; x <= moment().format("YYYY"); x++) {
         this.years.push(x);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

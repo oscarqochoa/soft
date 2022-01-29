@@ -50,7 +50,11 @@
                   </b-col>
                   <b-col sm="2">
                     <ValidationProvider rules="required" v-slot="{ errors }">
-                      <b-form-group id="input-group-2" label="NUMBER:" style="color: #706d7d">
+                      <b-form-group
+                        id="input-group-2"
+                        label="NUMBER:"
+                        style="color: #706d7d"
+                      >
                         <b-form-input
                           style="width: 100%"
                           type="number"
@@ -64,7 +68,11 @@
                     </ValidationProvider>
                   </b-col>
                   <b-col sm="12" v-if="category == 1">
-                    <b-form-group label="PROGRAMS:" style="color: #706d7d" label-for="input-1">
+                    <b-form-group
+                      label="PROGRAMS:"
+                      style="color: #706d7d"
+                      label-for="input-1"
+                    >
                       <b-form-checkbox-group
                         id="checkbox-group-1"
                         v-model="programs"
@@ -97,7 +105,9 @@
               </div>
 
               <b-form-group>
-                <b-button variant="primary" style="float: right" type="submit">Send</b-button>
+                <b-button variant="primary" style="float: right" type="submit"
+                  >Send</b-button
+                >
               </b-form-group>
             </div>
           </form>
@@ -108,27 +118,27 @@
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
+import InventoryService from "../service/inventory.service";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
 import vSelect from "vue-select";
 export default {
   props: {
     modalRequest: {
-      type: Boolean
+      type: Boolean,
     },
     global: {
-      type: Object
+      type: Object,
     },
     module: {
-      type: [Number, String]
-    }
+      type: [Number, String],
+    },
   },
   components: {
-    vSelect
+    vSelect,
   },
   computed: {
-    ...mapGetters("inventory-store", ["listCategoryAll"])
+    ...mapGetters("inventory-store", ["listCategoryAll"]),
   },
   data() {
     return {
@@ -147,52 +157,31 @@ export default {
         { text: "RING CENTRAL", value: "RING CENTRAL" },
         { text: "ONE DRIVE", value: "ONE DRIVE" },
         { text: "VPN", value: "VPN" },
-        { text: "USER SOFT", value: "USER SOFT" }
-      ]
+        { text: "USER SOFT", value: "USER SOFT" },
+      ],
     };
   },
   methods: {
     closeModal() {
       this.$emit("closeModalRequest", false);
     },
-    ...mapActions("inventory-store", ["LIST_CATEGORIES","UPDATE_REQUEST_EQUIPMENT"]),
-    getSelectCategory() {
+    ...mapActions("inventory-store", [
+      "LIST_CATEGORIES",
+      "UPDATE_REQUEST_EQUIPMENT",
+    ]),
+    async getSelectCategory() {
       if (this.listCategoryAll != null) {
         this.optionsCategory = this.listCategoryAll;
       } else {
-        amgApi
-          .get("/logistics/inventory/get-all-equipment-category", {})
-          .then(response => {
-            if (response.status == 200) {
-              this.optionsCategory = response.data;
-              if (this.listCategoryAll == null) {
-                this.LIST_CATEGORIES(this.optionsCategory);
-              }
-            }
-          })
-          .catch(error => {
-            console.log(error);
-            this.showToast(
-              "danger",
-              "top-right",
-              "Error",
-              "XIcon",
-              "Something went wrong!"
-            );
-          });
-      }
-    },
-    getSelectUsers() {
-      amgApi
-        .post("/logistics/inventory/get-list-users-by-module-id", {
-          moduleId: this.module
-        })
-        .then(response => {
+        try {
+          const response = await InventoryService.getSelectCategory({});
           if (response.status == 200) {
-            this.optionsEmployees = response.data;
+            this.optionsCategory = response.data;
+            if (this.listCategoryAll == null) {
+              this.LIST_CATEGORIES(this.optionsCategory);
+            }
           }
-        })
-        .catch(error => {
+        } catch (error) {
           console.error(error);
           this.showToast(
             "danger",
@@ -201,58 +190,78 @@ export default {
             "XIcon",
             "Something went wrong!"
           );
+        }
+      }
+    },
+    async getSelectUsers() {
+      try {
+        const response = await InventoryService.getSelectUsers({
+          moduleId: this.module,
         });
+        if (response.status == 200) {
+          this.optionsEmployees = response.data;
+        }
+      } catch (error) {
+        console.error(error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong!"
+        );
+      }
     },
     saveRequest() {
-      this.$refs.form.validate().then(success => {
+      this.$refs.form.validate().then(async(success) => {
         if (!success) {
           return;
         } else {
-          this.showConfirmSwal(
+          const confirm = await this.showConfirmSwal(
             "Are you sure?",
             "You won't be able to revert this!"
-          ).then(result => {
-            if (result.value) {
-              amgApi
-                .post("/logistics/inventory/save-request-equipment", {
-                  userId: this.global.user_id,
-                  categoryId: this.category,
-                  employessId: this.employess,
-                  selectedOperator: this.selectedOperator,
-                  cant: this.cant,
-                  commentary: this.commentary,
-                  moduleId: this.module,
-                  programsToInstall: this.programs
-                })
-                .then(response => {
-                  if (response.status == 200) {
-                    this.$swal.fire({
-                      icon: "success",
-                      title: "REQUEST SEND"
-                    });
-                    this.$emit("closeModalRequest");
-                    this.UPDATE_REQUEST_EQUIPMENT(true);
-                  }
-                })
-                .catch(error => {
-                  console.error(error);
-                  this.showToast(
-                    "danger",
-                    "top-right",
-                    "Error",
-                    "XIcon",
-                    "Something went wrong!"
-                  );
+          );
+          if (confirm.isConfirmed) {
+            try {
+              this.addPreloader();
+              const response = await InventoryService.saveRequest({
+                userId: this.global.user_id,
+                categoryId: this.category,
+                employessId: this.employess,
+                selectedOperator: this.selectedOperator,
+                cant: this.cant,
+                commentary: this.commentary,
+                moduleId: this.module,
+                programsToInstall: this.programs,
+              });
+              if (response.status == 200) {
+                this.removePreloader();
+                this.$swal.fire({
+                  icon: "success",
+                  title: "REQUEST SEND",
                 });
+                this.$emit("closeModalRequest");
+                this.UPDATE_REQUEST_EQUIPMENT(true);
+              }
+            } catch (error) {
+              this.removePreloader();
+              console.error(error);
+              this.showToast(
+                "danger",
+                "top-right",
+                "Error",
+                "XIcon",
+                "Something went wrong!"
+              );
             }
-          });
+          }
         }
       });
-    }
+    },
   },
   created() {
     this.getSelectCategory();
     this.getSelectUsers();
-  }
+  },
 };
 </script>

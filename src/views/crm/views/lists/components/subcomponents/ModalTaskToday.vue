@@ -142,7 +142,7 @@ export default {
         .then((result) => {
           if (result.value) {
             amgApi
-              .post("/donetasktoday", {
+              .post("/lead/done-task-today", {
                 id: id,
                 user_id: this.currentUser.user_id,
                 done: done == 1 ? 0 : 1,
