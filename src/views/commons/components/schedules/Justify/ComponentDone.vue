@@ -101,38 +101,38 @@ export default {
       fields: [
         {
           key: "module",
-          label: "module",
+          label: "module"
         },
         {
           key: "user_name",
-          label: "user",
+          label: "user"
         },
         {
           key: "date",
-          label: "date",
+          label: "date"
         },
         {
           key: "type",
-          label: "type",
+          label: "type"
         },
         {
           key: "files",
-          label: "files",
+          label: "files"
         },
         {
           key: "tracking",
-          label: "tracking",
+          label: "tracking"
         },
         {
           key: "status",
-          label: "status",
-        },
+          label: "status"
+        }
       ],
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "User...",
-        model: null,
+        model: null
       },
       items: [],
       filter: dataFilters,
@@ -141,7 +141,7 @@ export default {
         currentPage: 1,
         startPage: null,
         toPage: null,
-        totalRows: 0,
+        totalRows: 0
       },
       isBusy: false,
       modalFiles: false,
@@ -149,14 +149,14 @@ export default {
       modalTracking: false,
       item: {},
       files: [],
-      tracking: [],
+      tracking: []
     };
   },
   mounted() {},
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   methods: {
     async myProvider(ctx) {
@@ -168,7 +168,7 @@ export default {
           user_name: this.filterPrincipal.model,
           modul_id: this.currentUser.modul_id,
           per_page: this.paginate.perPage,
-          page: ctx.currentPage,
+          page: ctx.currentPage
         };
         const data = await SchedulesServices.getDoneJustify(params);
         this.paginate.startPage = data.from;
@@ -177,7 +177,7 @@ export default {
           this.paginate.totalRows = data.total;
         let array = data.data;
         let items = [];
-        array.forEach((element) => {
+        array.forEach(element => {
           items.push({
             id: element.id,
             user_id: element.id_user,
@@ -189,7 +189,7 @@ export default {
             type: element.type,
             motive: element.motive,
             status_rrhh: element.appvrrhh,
-            seen_status: element.seen_status,
+            seen_status: element.seen_status
           });
         });
         this.removePreloader();
@@ -221,7 +221,6 @@ export default {
         item.seen_status = 1;
         this.updateSeenStatus(item);
       }
-      console.log(item.seen_status == 0);
       this.removePreloader();
     },
     iconStatus(item) {
@@ -247,8 +246,8 @@ export default {
     async updateSeenStatus(item) {
       const params = { id: item.id, type: 1 };
       await SchedulesServices.updateSeendStatus(params);
-    },
-  },
+    }
+  }
 };
 </script>
 

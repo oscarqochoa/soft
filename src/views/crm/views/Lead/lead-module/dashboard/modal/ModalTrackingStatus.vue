@@ -82,11 +82,11 @@ export default {
     }),
     async getTrackingStatus() {
       try {
-        this.isBusy = true
-        await this.A_GET_TRAKING_STATUS_LEADS({
+        this.isBusy = true;
+        const response = await this.A_GET_TRAKING_STATUS_LEADS({
           score_id: this.idScore
-        })
-        this.isBusy = false
+        });
+        this.isBusy = false;
       } catch (error) {
         console.log("Something went wrong getHistoryTasks", error);
         this.showToast(
@@ -111,11 +111,11 @@ export default {
     },
     lead: {
       type: Object,
-      required: true,
+      required: true
     },
     idScore: {
       type: Number,
-      required: true,
+      required: true
     }
   },
   setup() {}

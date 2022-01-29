@@ -22,9 +22,7 @@ export default {
   components: {
     CommissionsComponent
   },
-  mounted() {
-    console.log(this.$route.meta);
-  },
+  mounted() {},
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser"

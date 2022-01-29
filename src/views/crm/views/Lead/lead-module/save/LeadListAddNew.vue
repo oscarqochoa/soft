@@ -28,26 +28,38 @@
     </template>
 
     <template #footer>
-      <div class="d-flex justify-content-end px-3 py-2">
-        <b-button
-          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-          variant="primary"
-          class="mr-2"
-          @click="onSubmit"
-        >
-          <template v-if="isLoading">
-            <b-spinner small />
-            <span>Loading...</span>
-          </template>
-          <span v-else>Save</span>
-        </b-button>
-        <b-button
-          v-ripple.400="'rgba(186, 191, 199, 0.15)'"
-          type="button"
-          variant="outline-secondary"
-          @click="resetuserData(); $refs.refFormObserver.reset(); $emit('update:is-add-new-user-sidebar-active', false)"
-        >Cancel</b-button>
-      </div>
+      <b-row class="px-3 py-2">
+        <b-col lg="6">
+          <b-button
+            v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+            type="button"
+            variant="info"
+            @click="resetuserData(); $refs.refFormObserver.reset()"
+          >Reset</b-button>
+        </b-col>
+        <b-col lg="6">
+          <div class="d-flex justify-content-end">
+            <b-button
+              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+              variant="primary"
+              class="mr-2"
+              @click="onSubmit"
+            >
+              <template v-if="isLoading">
+                <b-spinner small />
+                <span>Loading...</span>
+              </template>
+              <span v-else>Save</span>
+            </b-button>
+            <b-button
+              v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+              type="button"
+              variant="outline-secondary"
+              @click="resetuserData(); $refs.refFormObserver.reset(); $emit('update:is-add-new-user-sidebar-active', false)"
+            >Cancel</b-button>
+          </div>
+        </b-col>
+      </b-row>
     </template>
   </b-sidebar>
 </template>
@@ -391,6 +403,7 @@ export default {
             this.$emit('update:is-add-new-user-sidebar-active', false)
             this.resetuserData()
             /* this.$router.push({ name: route, params: { id: response.data.id } }) */
+            this.$emit("saveLead");
             this.showToast(
               'success',
               'top-right',

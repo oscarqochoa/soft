@@ -1,7 +1,7 @@
 <template>
   <b-row class="card-group">
     <lead-update
-      v-if="Object.keys(S_LEAD_EDIT).length"
+      v-if="isAddUpdateUserSidebarActive"
       :modul="modul"
       :lead="S_LEAD_EDIT"
       :is-add-new-user-sidebar-active.sync="isAddUpdateUserSidebarActive"
@@ -12,7 +12,7 @@
         :modul="modul"
         :only-read="onlyRead"
         :lead="S_LEAD"
-        @onEditLead="isAddUpdateUserSidebarActive = true"
+        @onEditLead="openEditLead()"
         @reloadLead="getLead"
         :key="S_KEY_UPDATE_DETAILS_LEAD"
       />
@@ -119,26 +119,16 @@ export default {
       isBusyAppointment: false,
       isBusyCall: false,
       isBusyCreditReportObtained: false,
-      isBusyCreditReportPending: false
+      isBusyCreditReportPending: false,
+      editSidebar: "first"
     };
   },
   created() {
     this.getLead();
-    this.getLeadEdit();
     this.getCreditReports();
     this.getCreditReportPendings();
     this.getEvents();
     this.getCalls(10);
-    this.getOwners();
-    this.getPrograms();
-    this.getStateLeads();
-    this.getStatusLeads();
-    this.getSourceLeads();
-    this.getSourceNames();
-    this.getStates();
-    this.getEeuuStates();
-    this.getCountries();
-    this.getSellers();
   },
   computed: {
     ...mapGetters({
@@ -179,6 +169,28 @@ export default {
       A_GET_COUNTRIES: "CrmGlobalStore/A_GET_COUNTRIES",
       A_GET_SELLERS: "CrmGlobalStore/A_GET_SELLERS"
     }),
+    async openEditLead() {
+      //await all promises
+      if (this.editSidebar === "first") {
+        this.addPreloader();
+        await Promise.all([
+          this.getLeadEdit(),
+          this.getPrograms(),
+          this.getStateLeads(),
+          this.getStatusLeads(),
+          this.getSourceLeads(),
+          this.getSourceNames(),
+          this.getStates(),
+          this.getEeuuStates(),
+          this.getCountries(),
+          this.getOwners()
+        ]);
+        this.removePreloader();
+        this.editSidebar = "second";
+      }
+
+      this.isAddUpdateUserSidebarActive = true;
+    },
     async getLead() {
       try {
         this.isPreloading(true);

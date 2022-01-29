@@ -77,6 +77,7 @@
 
 <script>
 import moment from "moment";
+import PaymentService from "../service/payments.service";
 export default {
   props: {
     modalVoidRefund: {
@@ -118,22 +119,18 @@ export default {
     closeModal() {
       this.$emit("closeInfo", false);
     },
-    getVoidRefund(idtransaction) {
-      this.$store.commit("app/SET_LOADING", true);
-      amgApi
-        .post("/crm/payment/get-void-refund", {
-          idtransaction: idtransaction,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.$store.commit("app/SET_LOADING", false);
-            this.dataVoidRefund = response.data[0];
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          this.$store.commit("app/SET_LOADING", false);
-        });
+    async getVoidRefund(idtransaction) {
+      try{
+        this.addPreloader();
+        const data = await PaymentService.getVoidRefund({idtransaction: idtransaction,})
+        this.dataVoidRefund = data[0];
+        this.removePreloader();
+
+      }catch(error){
+        console.error(error)
+        this.showToast("success","top-right","Success","CheckIcon","Glossary Deleted");
+        this.removePreloader();
+      }
     },
   },
   created() {
