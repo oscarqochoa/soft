@@ -563,7 +563,7 @@
             variant="outline-info"
             size="sm"
             @click="returnDone(data.item.event_id, null)"
-          >Return</b-btn>
+          >Done</b-btn>
         </template>
       </b-table>
     </filter-slot>
