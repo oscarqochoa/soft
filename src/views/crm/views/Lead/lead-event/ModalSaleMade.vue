@@ -154,10 +154,9 @@ export default {
     }),
     onSubmit() {
       this.isLoading = true
-      this.showSwalGeneric(
+      this.showConfirmSwal(
         'Attending appointment?',
         "You won't be able to revert this!",
-        'warning',
       )
         .then(async result => {
           if (result.value) {

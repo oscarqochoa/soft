@@ -352,10 +352,7 @@ export default {
                 this.$emit("new", this.cards);
                 this.$emit("click", false);
                 this.$store.commit("app/SET_LOADING", false);
-                this.$swal.fire({
-                  icon: "success",
-                  title: "Card Created Successfully"
-                });
+                this.showSuccessSwal()
               })
               .catch(error => {
                 console.error(error);

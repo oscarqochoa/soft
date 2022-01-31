@@ -33,14 +33,16 @@ export default {
   },
   methods: {
     openModalReport() {
-      if (this.currentUser.user_id == 1) {
+      if (this.$route.name == "amg-menu") {
         this.showToast(
           "info",
           "top-right",
           "Oops!",
           "XIcon",
-          "NO DATA FOUND"
+          "ENTER YOUR MODULE"
         );
+      } else if (this.currentUser.user_id == 1) {
+        this.showToast("info", "top-right", "Oops!", "XIcon", "NO DATA FOUND");
       } else {
         this.modal = true;
       }

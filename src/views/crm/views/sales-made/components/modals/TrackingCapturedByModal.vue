@@ -5,7 +5,9 @@
     centered
     title-class="h3 text-white font-weight-bolder"
     size="lg"
-    :title="'TRACKING ' + capturedByTracking.tittle"
+    modal-class="modal-primary"
+    :title="'Tracking ' + capturedByTracking.tittle.toLowerCase()
+      .replace(/\w/, firstLetter => firstLetter.toUpperCase())"
     hide-footer
     scrollable
   >

@@ -15,14 +15,23 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-table :fields="fields" :items="creditors">
+      <b-table
+        :fields="fields"
+        :items="creditors"
+      >
         <template v-slot:cell(unsecured)="data">
           <div class="w-100 text-center">
-            <feather-icon v-if="data.item.unsecured == 1" icon="CircleIcon" />
+            <feather-icon
+              v-if="data.item.unsecured == 1"
+              icon="CircleIcon"
+            />
           </div>
         </template>
         <template v-slot:cell(actions)="data">
-          <div v-if="!isModalShow" class="d-flex align-items-center justify-content-center">
+          <div
+            v-if="!isModalShow"
+            class="d-flex align-items-center justify-content-center"
+          >
             <feather-icon
               class="cursor-pointer text-info font-medium-4 mr-1"
               icon="EditIcon"
@@ -41,10 +50,14 @@
             <div>Total</div>
           </td>
           <td>
-            <div style="padding-left: 10px">{{ "$ " + total_balance }}</div>
+            <div style="padding-left: 10px">
+              {{ "$ " + total_balance }}
+            </div>
           </td>
           <td>
-            <div style="padding-left: 12px">{{ "$ " + total_monthly }}</div>
+            <div style="padding-left: 12px">
+              {{ "$ " + total_monthly }}
+            </div>
           </td>
           <td colspan="1" />
           <td>
@@ -62,10 +75,20 @@
             :style="errorPassword == true ? 'border:1px solid red' : 'border: 2px solid #ccc'"
           />
           <b-input-group-append>
-            <b-button v-if="!show" variant="info" size="sm" @click="verifyPassword">
+            <b-button
+              v-if="!show"
+              variant="info"
+              size="sm"
+              @click="verifyPassword"
+            >
               <feather-icon icon="CheckIcon" />Approve Supervisor
             </b-button>
-            <b-button v-else size="sm" variant="info" disabled>
+            <b-button
+              v-else
+              size="sm"
+              variant="info"
+              disabled
+            >
               <b-spinner small />Loading...
             </b-button>
           </b-input-group-append>
@@ -92,7 +115,13 @@
       />
       <template #modal-footer="{ ok, cancel }">
         <div style="display: flex; justify-content: end; align-items: center">
-          <b-button variant="secondary" class="rounded mr-2" @click="cancel()">CANCEL</b-button>
+          <b-button
+            variant="secondary"
+            class="rounded mr-2"
+            @click="cancel()"
+          >
+            CANCEL
+          </b-button>
           <b-button
             variant="primary"
             class="rounded"
@@ -106,258 +135,258 @@
 </template>
 
 <script>
-import ModalAddCreditorNew from "@/views/crm/views/sales-made/components/modals/services/debt-solution/ModalAddCreditorNew.vue";
-import ButtonExportPdf from "@/views/commons/utilities/ButtonExportPdf";
+import ModalAddCreditorNew from '@/views/crm/views/sales-made/components/modals/services/debt-solution/ModalAddCreditorNew.vue'
+import ButtonExportPdf from '@/views/commons/utilities/ButtonExportPdf'
 
 export default {
   components: {
     ButtonExportPdf,
-    ModalAddCreditorNew
+    ModalAddCreditorNew,
   },
   props: {
     salesClient: Object,
     idleyend: String,
     typeModal: {
       type: Number,
-      default: 1
+      default: 1,
       // 1: create, 2: show
     },
     isModalShow: Boolean,
-    isModalAdd: Boolean
+    isModalAdd: Boolean,
   },
   data() {
     return {
       blocking: true,
       creditors: [],
       openmodal: false,
-      idcreditor: "",
-      statemodal: "",
+      idcreditor: '',
+      statemodal: '',
       errorPassword: false,
       okPassword: false,
-      password: "",
+      password: '',
       validatenext1: false,
       show: false,
-      total_balance: "",
-      total_monthly: "",
-      total_interest: "",
-      id_history: "",
-      id_analisis: "",
+      total_balance: '',
+      total_monthly: '',
+      total_interest: '',
+      id_history: '',
+      id_analisis: '',
       exportPdfDisabled: false,
       fields: [
         {
-          label: "Creditors Name",
-          key: "credit"
+          label: 'Creditors Name',
+          key: 'credit',
         },
         {
-          label: "# Account",
-          key: "account"
+          label: '# Account',
+          key: 'account',
         },
         {
-          label: "Total Balance",
-          key: "balance",
-          formatter: value => `$ ${value}`
+          label: 'Total Balance',
+          key: 'balance',
+          formatter: value => `$ ${value}`,
         },
         {
-          label: "Monthly Current Payment",
-          key: "monthly",
-          formatter: value => `$ ${value}`
+          label: 'Monthly Current Payment',
+          key: 'monthly',
+          formatter: value => `$ ${value}`,
         },
         {
-          label: "Months Behind",
-          key: "months"
+          label: 'Months Behind',
+          key: 'months',
         },
         {
-          label: "Interest Rate",
-          key: "interest",
-          formatter: value => `${value} %`
+          label: 'Interest Rate',
+          key: 'interest',
+          formatter: value => `${value} %`,
         },
         {
-          label: "Type",
-          key: "typt"
+          label: 'Type',
+          key: 'typt',
         },
         {
-          label: "Unsecured",
-          key: "unsecured"
+          label: 'Unsecured',
+          key: 'unsecured',
         },
         {
-          label: "Actions",
-          key: "actions"
-        }
-      ]
-    };
+          label: 'Actions',
+          key: 'actions',
+        },
+      ],
+    }
   },
   computed: {
     passwordIsCorrectAndCreditorLength() {
       return (
-        (this.okPassword && this.creditors.length > 0) ||
-        this.creditors.filter(element => element.state1 == 1).length > 0
-      );
+        (this.okPassword && this.creditors.length > 0)
+        || this.creditors.filter(element => element.state1 == 1).length > 0
+      )
     },
     isModalAddThis() {
       return (
-        this.typeModal === 1 ||
-        this.typeModal === 3 ||
-        this.typeModal === 4 ||
-        this.typeModal === 6
-      );
-    }
+        this.typeModal === 1
+        || this.typeModal === 3
+        || this.typeModal === 4
+        || this.typeModal === 6
+      )
+    },
   },
   watch: {
     passwordIsCorrectAndCreditorLength(newVal) {
-      this.$emit("input", newVal);
-    }
+      this.$emit('input', newVal)
+    },
   },
   async created() {
-    await this.allDebtSolution();
+    await this.allDebtSolution()
   },
   methods: {
     addNewCreditor() {
-      this.openmodal = true;
-      this.statemodal = 1;
+      this.openmodal = true
+      this.statemodal = 1
     },
     async allDebtSolution() {
       try {
         const response = await amgApi.post(
-          "/sales-made/debt-solution/get-credits-debt-solution",
+          '/sales-made/debt-solution/get-credits-debt-solution',
           {
             event:
-              this.typeModal === 3 ||
-              this.typeModal === 4 ||
-              this.typeModal === 5
+              this.typeModal === 3
+              || this.typeModal === 4
+              || this.typeModal === 5
                 ? null
                 : this.salesClient.event_id,
             account:
-              this.typeModal === 3 ||
-              this.typeModal === 4 ||
-              this.typeModal === 5
+              this.typeModal === 3
+              || this.typeModal === 4
+              || this.typeModal === 5
                 ? this.salesClient.account_id
-                : null
-          }
-        );
+                : null,
+          },
+        )
         if (response.status === 200) {
-          this.creditors = response.data;
+          this.creditors = response.data
           if (this.creditors.length > 0) {
-            this.total_balance = this.creditors[0].total_balance;
-            this.total_monthly = this.creditors[0].total_monthly;
-            this.total_interest = this.creditors[0].total_interest;
-            this.id_history = this.creditors[0].id_history;
-            this.id_analisis = this.creditors[0].id_analisis;
+            this.total_balance = this.creditors[0].total_balance
+            this.total_monthly = this.creditors[0].total_monthly
+            this.total_interest = this.creditors[0].total_interest
+            this.id_history = this.creditors[0].id_history
+            this.id_analisis = this.creditors[0].id_analisis
           }
-          this.removePreloader();
+          this.removePreloader()
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
     async editCreditor(id) {
       try {
         const result = await this.showConfirmSwal(
-          "Are you Sure?",
-          "Before finalizing you must save."
-        );
+          'Are you Sure?',
+          'Before finalizing you must save.',
+        )
         if (result.value) {
-          this.openmodal = true;
-          this.statemodal = 0;
-          this.idcreditor = id;
+          this.openmodal = true
+          this.statemodal = 0
+          this.idcreditor = id
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
     async closemodal1() {
-      this.openmodal = false;
-      await this.allDebtSolution();
+      this.openmodal = false
+      await this.allDebtSolution()
     },
     async deleteCreditor(id) {
       try {
         const result = await this.showConfirmSwal(
-          "Are you Sure?",
-          "Before finalizing you must save."
-        );
+          'Are you Sure?',
+          'Before finalizing you must save.',
+        )
         if (result.value) {
           const response = await amgApi.post(
-            "/sales-made/debt-solution/delete-credit",
-            { id }
-          );
+            '/sales-made/debt-solution/delete-credit',
+            { id },
+          )
           if (response.status === 200) {
-            await this.allDebtSolution();
+            await this.allDebtSolution()
           }
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
     async verifyPassword() {
       try {
-        this.show = true;
-        const response = await amgApi.post("/commons/get-password-supervisor", {
+        this.show = true
+        const response = await amgApi.post('/commons/get-password-supervisor', {
           module_id: 2,
           field_pass: this.password,
-          type: 0
-        });
+          type: 0,
+        })
         if (response.status === 200) {
           if (response.data) {
-            this.getPassSuper = response.data;
-            if (this.getPassSuper === "ok") {
-              this.errorPassword = false;
-              this.okPassword = true;
-              this.password = "";
-              this.validatenext1 = true;
-              this.show = false;
+            this.getPassSuper = response.data
+            if (this.getPassSuper === 'ok') {
+              this.errorPassword = false
+              this.okPassword = true
+              this.password = ''
+              this.validatenext1 = true
+              this.show = false
               this.showToast(
-                "success",
-                "top-right",
-                "Success",
-                "CheckIcon",
-                "Password correct"
-              );
+                'success',
+                'top-right',
+                'Success',
+                'CheckIcon',
+                'Password correct',
+              )
             } else {
-              this.validatenext1 = false;
-              this.show = false;
-              this.errorPassword = true;
+              this.validatenext1 = false
+              this.show = false
+              this.errorPassword = true
               this.showToast(
-                "danger",
-                "top-right",
-                "Danger",
-                "XIcon",
-                "Incorrect password"
-              );
+                'danger',
+                'top-right',
+                'Danger',
+                'XIcon',
+                'Incorrect password',
+              )
             }
           }
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
     async nextfirst(id, type) {
       // eslint-disable-next-line no-useless-catch
       try {
-        if (this.isModalShow) return true;
+        if (this.isModalShow) return true
         if (type == 1 || type == 2) {
-          return await this.axiosNext(id, type);
+          return await this.axiosNext(id, type)
         }
         if (type == 4) {
-          return await this.saveant(id, type);
+          return await this.saveant(id, type)
         }
-        if (this.dato12 == null || this.dato12 == "") {
-          this.errorGoal = true;
-          return false;
+        if (this.dato12 == null || this.dato12 == '') {
+          this.errorGoal = true
+          return false
         }
-        this.errorGoal = false;
-        if (this.date3 == null || this.date3 == "") {
-          this.errorDate = true;
-          return false;
+        this.errorGoal = false
+        if (this.date3 == null || this.date3 == '') {
+          this.errorDate = true
+          return false
         }
-        this.errorDate = false;
-        return await this.axiosNext(id, type);
+        this.errorDate = false
+        return await this.axiosNext(id, type)
       } catch (error) {
-        throw error;
+        throw error
       }
     },
     async saveant(id, type) {
       try {
         const response = await amgApi.post(
-          "/sales-made/debt-solution/save-first-debt-solution",
+          '/sales-made/debt-solution/save-first-debt-solution',
           {
             type,
             id,
@@ -429,29 +458,29 @@ export default {
             montoutlity: this.montoutlity,
             valorothers: this.valorothers,
             montoothers: this.montoothers,
-            housing: this.housing == false ? 0 : 1
-          }
-        );
+            housing: this.housing == false ? 0 : 1,
+          },
+        )
         if (response.status === 200) {
-          await this.allDebtSolution();
-          return true;
+          await this.allDebtSolution()
+          return true
         }
-        return false;
+        return false
       } catch (error) {
-        console.error(error);
-        return false;
+        console.error(error)
+        return false
       }
     },
     async axiosNext(id, type) {
       try {
         const result = await this.showConfirmSwal(
-          "Are you sure of continue ?",
-          "Before finalizing you must save."
-        );
+          'Are you sure of continue ?',
+          'Before finalizing you must save.',
+        )
         if (result.value) {
-          this.addPreloader();
+          this.addPreloader()
           const response = await amgApi.post(
-            "/sales-made/debt-solution/save-first-debt-solution",
+            '/sales-made/debt-solution/save-first-debt-solution',
             {
               type,
               id,
@@ -462,36 +491,36 @@ export default {
               account:
                 this.typeModal == 3 || this.typeModal == 4
                   ? this.salesClient.account_id
-                  : null
-            }
-          );
-          if (response.status === 200) this.$emit("nextStep");
-          return true;
+                  : null,
+            },
+          )
+          if (response.status === 200) this.$emit('nextStep')
+          return true
         }
-        return false;
+        return false
       } catch (error) {
-        console.error(error);
-        return false;
+        console.error(error)
+        return false
       }
     },
     downloadPdf() {
-      this.exportPdfDisabled = true;
+      this.exportPdfDisabled = true
       // eslint-disable-next-line no-restricted-globals
-      location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/imprimirfileappotc/?id=${this.salesClient.account_id}`;
+      location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/imprimirfileappotc/?id=${this.salesClient.account_id}`
       setTimeout(() => {
-        this.exportPdfDisabled = false;
-      }, 10000);
+        this.exportPdfDisabled = false
+      }, 10000)
     },
     downloadPdfEvent() {
-      this.exportPdfDisabled = true;
+      this.exportPdfDisabled = true
       // eslint-disable-next-line no-restricted-globals
-      location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/imprimirfileappot/?id=${this.salesClient.event_id}`;
+      location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/imprimirfileappot/?id=${this.salesClient.event_id}`
       setTimeout(() => {
-        this.exportPdfDisabled = false;
-      }, 10000);
-    }
-  }
-};
+        this.exportPdfDisabled = false
+      }, 10000)
+    },
+  },
+}
 </script>
 
 <style>
