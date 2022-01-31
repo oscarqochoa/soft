@@ -227,7 +227,7 @@
                         variant="info"
                         size="sm"
                         target="_blank"
-                        :href="base_url + '/dowloadfile?route='+data.item.route +'/'+data.item.file_name+'&file='+data.item.file_name"
+                        :href="data.item.url"
                         class="btn-icon rounded-circle"
                       >
                         <feather-icon icon="DownloadIcon" />

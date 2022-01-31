@@ -32,7 +32,7 @@
           <b-col>
             <b-card
               header="FEE"
-              header-bg-variant="important"
+              header-bg-variant="info"
               header-class="text-white"
             >
               <b-row class="mt-1">
