@@ -22,7 +22,7 @@ const mutations = {
     state[params.destination].push(params.data)
   },
   UNSHIFT_DATA (state, params) {
-    state[params.destination].unshift(params.data)
+    state[params.destination].unshift(params.data) 
   },
   REMOVE_DATA (state, params) {
     const index = state[params.destination].map(el => el.id).indexOf(params.id)
