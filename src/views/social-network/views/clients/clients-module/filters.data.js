@@ -28,10 +28,12 @@ export default [
     margin: true,
     showLabel: true,
     label: 'Advisor',
-    options: [],
+    options: [
+      { value: 0, label: 'All' },
+    ],
     model: null,
-    reduce: 'id',
-    selectText: 'user_name',
+    reduce: 'value',
+    selectText: 'label',
     cols: 12,
     md: 2,
 

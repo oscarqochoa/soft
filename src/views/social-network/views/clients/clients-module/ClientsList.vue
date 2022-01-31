@@ -13,6 +13,7 @@
         :paginate="paginate"
         :start-page="startPage"
         :to-page="toPage"
+        @reset-all-filters="resetAllFilters"
         @reload="$refs['clientsList'].refresh()"
       >
 
@@ -39,6 +40,7 @@
               <strong>Loading ...</strong>
             </div>
           </template>
+
           <template v-slot:cell(name)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
               <p class="mb-0 font-weight-bold">
@@ -308,11 +310,49 @@ export default {
       token: 'auth/token',
 
     }),
+    paymentType: {
+      get() {
+        return this.filter[4].model
+      },
+      set(value) {
+        this.filter[4].model = value
+      },
+    },
+    paymentDay: {
+      get() {
+        return this.filter[5].model
+      },
+      set(value) {
+        this.filter[5].visible = value
+      },
+    },
+  },
 
+  watch: {
+
+    paymentType(newVal) {
+      if (newVal == 1) {
+        this.paymentDay = true
+      } else {
+        this.paymentDay = false
+        this.filter[5].model = 0
+      }
+    },
   },
 
   methods: {
 
+    resetAllFilters() {
+      this.filter.forEach(filter => {
+        filter.model = null
+      })
+      this.filterPrincipal.model = null
+      this.$refs.clientsList.refresh()
+    },
+    resetSearch() {
+      this.searchInput = ''
+      this.$refs.clientsList.refresh()
+    },
     async search(ctx) {
       try {
         let orderBy = 5
@@ -365,7 +405,8 @@ export default {
           // eslint-disable-next-line no-param-reassign
           data.accounts = JSON.parse(data.accounts)
           data.accounts.map(val => {
-            if (!val) val = 0
+            if (val.charges === null) val.charges = 0
+            console.log(val.charges)
           })
         })
         this.items = data.data.data
