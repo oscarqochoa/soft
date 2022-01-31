@@ -157,7 +157,7 @@ import ModalTrackingEquipment from "../modal/ModalTrackingEquipment.vue";
 import ModalViewEquipment from "../modal/ModalViewEquipment.vue";
 import ModalRepairEquipment from "../modal/ModalRepairEquipment.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-
+import InventoryService from "../service/inventory.service"
 export default {
   props: {
     global: {
@@ -377,32 +377,32 @@ export default {
         return items || [];
       });
     },
-    getSelectCategory() {
+    async getSelectCategory() {
       if (this.listCategoryAll != null) {
         this.optionsCategory = this.listCategoryAll;
         this.filter[0].options = this.listCategoryAll;
       } else {
-        amgApi
-          .get("/logistics/inventory/get-all-equipment-category", {})
-          .then(response => {
-            if (response.status == 200) {
+
+        try{
+          const response = await InventoryService.getSelectCategory({})
+          if (response.status == 200) {
               this.optionsCategory = response.data;
               this.filter[0].options = response.data;
               if (this.listCategoryAll == null) {
                 this.LIST_CATEGORIES(this.optionsCategory);
               }
-            }
-          })
-          .catch(error => {
-            console.error(error);
-            this.showToast(
+          }
+
+        }catch(error){
+          console.error(error)
+          this.showToast(
               "danger",
               "top-right",
               "Error",
               "XIcon",
               "Something went wrong!"
             );
-          });
+        }
       }
     },
     resetSearch() {

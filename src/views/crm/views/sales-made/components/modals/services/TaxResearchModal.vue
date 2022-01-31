@@ -4,6 +4,7 @@
       <b-modal
         v-model="ownControl"
         modal
+        modal-class="modal-primary"
         size="xl"
         scrollable
         header-class="p-0"

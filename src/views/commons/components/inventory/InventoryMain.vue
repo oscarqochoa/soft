@@ -1,7 +1,8 @@
 <template>
   <div>
-    <b-card no-body class="mb-1">
-      <div class="m-2">
+      <header-slot>
+    </header-slot>
+      <div class="ml-2 mr-2 mb-2 mt-0 ">
         <b-row>
           <b-col
             cols="12"
@@ -10,7 +11,7 @@
             sm="6"
             class="d-flex align-items-start justify-content-start mb-1 mb-md-0"
           >
-            <h2>Inventory</h2>
+            <!-- <h2>Inventory</h2> -->
           </b-col>
           <b-col
             cols="12"
@@ -29,7 +30,7 @@
           </b-col>
         </b-row>
       </div>
-    </b-card>
+
     <b-card no-body class="mb-1">
       <div>
         <b-row style="height: 20px"></b-row>
@@ -82,7 +83,7 @@
 <script>
 import RequestEquipment from "./modal/RequestEquipment.vue";
 import { mapGetters } from "vuex";
-import { amgApi } from "@/service/axios";
+import InventoryService from "./service/inventory.service"
 export default {
   components: {
     RequestEquipment,
@@ -112,18 +113,19 @@ export default {
       this.modalRequest = false;
       // this.$refs.inventoryRequest?.resetSearch();
     },
-    countRequestEquipment() {
-      const params = {
+    async countRequestEquipment() {
+      try{
+        const params = {
         id_module: this.$route.meta.module,
         status: 1,
       };
-      amgApi
-        .post("/logistics/inventory/get-counter-equipment-request", params)
-        .then((response) => {
-          if (response.status == 200) {
-            this.countRequest = response.data[0].counter;
-          }
-        });
+        const response = await InventoryService.countRequestEquipment(params)
+        this.countRequest = response.data[0].counter;
+          
+      }catch(error){
+        console.error(error)
+        this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+      }
     },
   },
   created() {

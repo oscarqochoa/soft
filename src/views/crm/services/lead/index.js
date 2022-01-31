@@ -284,7 +284,7 @@ class CrmLead {
     }
   }
 
-  async postTrackingStatusLeads(body) {
+  async getTrakingStatusLeads(body) {
     try {
       const data = await amgApi.post(
         "/lead/ncr/get-lead-tracking-status-by-id",

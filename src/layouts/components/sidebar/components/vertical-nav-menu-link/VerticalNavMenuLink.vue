@@ -7,13 +7,20 @@
       'disabled': item.disabled
     }"
   >
-    <b-link v-bind="linkProps" class="d-flex align-items-center">
-      <amg-icon :icon="item.icon || 'CircleIcon'" :badge="(!isMouseHovered && isVerticalMenuCollapsed && (currentBreakPoint == 'xl' || currentBreakPoint == 'xxl')) ? item.tag : 0" badge-classes="bg-danger" />
+    <b-link
+      v-bind="linkProps"
+      class="d-flex align-items-center"
+    >
+      <amg-icon
+        :icon="item.icon || 'CircleIcon'"
+        :badge="(!isMouseHovered && isVerticalMenuCollapsed && (currentBreakPoint == 'xl' || currentBreakPoint == 'xxl')) ? item.tag : 0"
+        badge-classes="bg-danger"
+      />
       <span class="menu-title text-truncate">{{ t(item.title) }}</span>
       <b-badge
         v-if="item.tag"
         pill
-        :variant="item.tagVariant || 'primary'"
+        :variant="item.tagVariant || 'danger'"
         class="mr-1 ml-auto"
       >{{ item.tag }}</b-badge>
     </b-link>
@@ -21,22 +28,23 @@
 </template>
 
 <script>
-import { useUtils as useAclUtils } from "@core/libs/acl";
-import { BLink, BBadge } from "bootstrap-vue";
-import { useUtils as useI18nUtils } from "@core/libs/i18n";
-import useVerticalNavMenuLink from "./useVerticalNavMenuLink";
-import mixinVerticalNavMenuLink from "./mixinVerticalNavMenuLink";
-import {mapGetters} from 'vuex'
+import { useUtils as useAclUtils } from '@core/libs/acl'
+import { BLink, BBadge } from 'bootstrap-vue'
+import { useUtils as useI18nUtils } from '@core/libs/i18n'
+import { mapGetters } from 'vuex'
+import useVerticalNavMenuLink from './useVerticalNavMenuLink'
+import mixinVerticalNavMenuLink from './mixinVerticalNavMenuLink'
+
 export default {
   components: {
     BLink,
-    BBadge
+    BBadge,
   },
   mixins: [mixinVerticalNavMenuLink],
   props: {
     item: {
       type: Object,
-      required: true
+      required: true,
     },
     isMouseHovered: {
       type: Boolean,
@@ -45,19 +53,19 @@ export default {
     isVerticalMenuCollapsed: {
       type: Boolean,
       required: true,
-    }
+    },
   },
-  computed:{
+  computed: {
     ...mapGetters({
-      currentBreakPoint: 'app/currentBreakPoint'
-    })
+      currentBreakPoint: 'app/currentBreakPoint',
+    }),
   },
   setup(props) {
     const { isActive, linkProps, updateIsActive } = useVerticalNavMenuLink(
-      props.item
-    );
-    const { t } = useI18nUtils();
-    const { canViewVerticalNavMenuLink } = useAclUtils();
+      props.item,
+    )
+    const { t } = useI18nUtils()
+    const { canViewVerticalNavMenuLink } = useAclUtils()
 
     return {
       isActive,
@@ -68,8 +76,8 @@ export default {
       canViewVerticalNavMenuLink,
 
       // i18n
-      t
-    };
-  }
-};
+      t,
+    }
+  },
+}
 </script>

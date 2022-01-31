@@ -34,11 +34,7 @@
         <b-card
           no-body
           class="m-2"
-          
-          style="
-            box-shadow: 0px 4px 4 px 0 rgb(200 200 200 /10%);
-            
-          "
+          style="box-shadow: 0px 4px 4 px 0 rgb(200 200 200 /10%)"
           :style="`${classAdd}`"
         >
           <div class="m-2">
@@ -187,7 +183,7 @@
               v-if="!getRoles"
             >
               <b-button
-                v-if="data.item.cant > 0"
+                v-if="data.item.cant > 0 && data.item.created_at != 'Today'"
                 variant="warning"
                 class="ml-1 reset-radius btn-sm"
                 @click="
@@ -202,7 +198,7 @@
               </b-button>
 
               <b-button
-                v-if="data.item.created_at == 'Today'"
+                v-if="data.item.created_at == 'Today' && count_alltask>0"
                 variant="warning"
                 class="ml-1 reset-radius btn-sm"
                 @click="openModalTaskToday()"
@@ -250,7 +246,7 @@ import ModalByUser from "./subcomponents/ModalByUser.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 import Button from "@/views/components/button/Button.vue";
 import ModalTaskToday from "./subcomponents/ModalTaskToday.vue";
-
+import ListService from "../service/lists.service";
 export default {
   components: {
     vSelect,
@@ -401,10 +397,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      skin: "appConfig/skin"
+      skin: "appConfig/skin",
     }),
-    classAdd() { 
-      return this.skin == "dark" ? "background-color:#333B51" : "background-color: floralwhite;";
+    classAdd() {
+      return this.skin == "dark"
+        ? "background-color:#333B51"
+        : "background-color: floralwhite;";
     },
     getRoles() {
       return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
@@ -505,127 +503,83 @@ export default {
         return items || [];
       });
     },
-    listsgroups(valor) {
-      this.lists = null;
-      amgApi
-        .post("/commons/list-users/search-list-Of-user", {
-          id:
-            this.currentUser.role_id == 1 || this.currentUser.role_id == 2
-              ? null
-              : this.currentUser.user_id,
-          from: this.from,
-          to: this.to,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.lists = response.data.data;
-            this.start_page = response.data.current_page;
-            this.perpage = response.data.per_page;
-            this.next_page = this.start_page + 1;
-            this.ultima_pagina = response.data.last_page;
-            this.totallists = response.data.total;
-            if (response.data.data[0] != null) {
-              this.count_alltask = response.data.data[0].count_alltask;
-              this.count_donetask = response.data.data[0].count_donetask;
-            } else {
-              this.count_alltask = 0;
-              this.count_donetask = 0;
-            }
-            if (valor != 1) {
-              var boton = document.getElementById("app");
-              boton.classList.remove("preloader");
-            }
-          }
-        });
-    },
-    deleteuser(id) {
-      this.showConfirmSwal().then((result) => {
-        // Send request to the server
-        if (result.value) {
-          this.$store.commit("app/SET_LOADING", true);
-          amgApi
-            .post("/commons/list-users/delete-list-of-user", {
-              id: id,
-            })
-            .then((response) => {
-              this.$store.commit("app/SET_LOADING", false);
-              this.$swal
-                .fire("Deleted!", "Your file has been deleted.", "success")
-                .then((res) => {
-                  if (res) {
-                    this.resetSearch();
-                  }
-                });
-            })
-            .catch(() => {
-              this.$store.commit("app/SET_LOADING", false);
-              swal("Failed!", "There was something wronge.", "warning");
+
+    async deleteuser(id) {
+      const confirm = await this.showConfirmSwal(
+        "Are you sure?",
+        "You won't be able to revert this!"
+      );
+      if (confirm.isConfirmed) {
+        try {
+          this.addPreloader();
+          const data = await ListService.deleteUser({ id: id });
+          this.removePreloader();
+          this.$swal
+            .fire("Deleted!", "Your file has been deleted.", "success")
+            .then((res) => {
+              if (res) {
+                this.resetSearch();
+              }
             });
+        } catch (error) {
+          console.log();
+          this.removePreloader();
+          this.showErrorSwal(error);
         }
-      });
+      }
     },
-    groupusers() {
-      amgApi
-        .post("/commons/sellerall/2", {
-          roles: "[]",
-          type: "1",
-        })
-        .then((response) => {
-          this.options = response.data;
-        })
-        .catch((resp) => {
-          this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong with users"
-          );
-        });
+    async groupusers() {
+      try {
+        const data = await ListService.groupUser({ roles: "[]", type: "1" });
+        this.options = data;
+      } catch (error) {
+        console.error(error);
+        this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+      }
     },
     savegroup() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
         } else {
+          const confirm = await this.showConfirmSwal(
+            "Are you sure?",
+            "Do you want to create a List?"
+          );
+          if (confirm.isConfirmed) {
+            try {
+              const params = {
+                users: this.value.map((user) => {
+                  return user.id;
+                }),
+                number: this.number,
+                create_id: this.currentUser.user_id,
+              };
+              this.addPreloader();
+              const data = await ListService.saveGroup(params);
+              this.value = [];
+              this.number = "";
+              this.$refs.refClientsList.refresh();
+              this.removePreloader();
+              this.$swal
+                .fire({
+                  icon: "success",
+                  title: "List Created in successfully",
+                })
+                .then((res) => {
+                  if (res) {
+                    // (this.value = []), (this.number = "");
+                    // (this.cancelList = false), (this.add = true);
+                    // this.newList = false;
+                  }
+                });
+            } catch (error) {
+              console.error(error);
+              this.removePreloader();
+              this.showErrorSwal(error);
+            }
+          }
           
-          this.showConfirmSwal("Are you sure?", "Do you want to create a List?")
-            .then((result) => {
-              if (result.value) {
-                const params = {
-                  users: this.value.map((user) => {
-                    return user.id;
-                  }),
-                  number: this.number,
-                  create_id: this.currentUser.user_id,
-                };
-                this.$store.commit("app/SET_LOADING", true);
-                amgApi
-                  .post("/commons/list-users/save-group", params)
-                  .then((response) => {
-                    this.value = [];
-                    this.number = "";
-                    this.$refs.refClientsList.refresh();
-                    this.$store.commit("app/SET_LOADING", false);
-                    this.$swal
-                      .fire({
-                        icon: "success",
-                        title: "List Created in successfully",
-                      })
-                      .then((res) => {
-                        if (res) {
-                          // (this.value = []), (this.number = "");
-                          // (this.cancelList = false), (this.add = true);
-                          // this.newList = false;
-                        }
-                      });
-                  });
-              }
-            })
-            .catch((err) => {
-              console.error(err);
-              this.$store.commit("app/SET_LOADING", false);
-            });
         }
       });
     },
@@ -646,7 +600,6 @@ export default {
   created() {
     this.groupusers();
     this.statusRol();
-    this.listsgroups();
   },
 };
 </script>

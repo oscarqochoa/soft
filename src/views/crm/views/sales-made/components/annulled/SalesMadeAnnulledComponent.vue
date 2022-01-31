@@ -34,7 +34,16 @@
             <strong>Loading ...</strong>
           </div>
         </template>
-        <template v-slot:cell(program)="data">{{ data.item.program }}</template>
+        <template #cell(client)="data">
+          <router-link
+            class="text-important"
+            :to="`/crm/leads/${data.item.lead_id}`"
+            target="_blank"
+          >{{ data.item.client }}</router-link>
+        </template>
+        <template v-slot:cell(program)="data">
+          {{ data.item.program }}
+        </template>
         <template v-slot:cell(captured)="data">
           <b-row>
             <b-col>{{ data.item.captured }}</b-col>
@@ -59,7 +68,9 @@
             </b-col>
           </b-row>
         </template>
-        <template v-slot:cell(fee)="data">$ {{ data.item.fee }}</template>
+        <template v-slot:cell(fee)="data">
+          $ {{ data.item.fee }}
+        </template>
         <template v-slot:cell(initial_amount)="data">
           <div>
             <b-icon
@@ -70,13 +81,25 @@
           </div>
         </template>
         <template v-slot:cell(contract_fee_status)="data">
-          <b-icon v-if="data.item.contract_fee_status === 0" icon="file-text" variant="muted" />
+          <b-icon
+            v-if="data.item.contract_fee_status === 0"
+            icon="file-text"
+            variant="muted"
+          />
         </template>
         <template v-slot:cell(notes_status)="data">
-          <b-icon v-if="data.item.notes_status == 0" icon="chat-square-text-fill" variant="muted" />
+          <b-icon
+            v-if="data.item.notes_status == 0"
+            icon="chat-square-text-fill"
+            variant="muted"
+          />
         </template>
         <template v-slot:cell(trackings)="data">
-          <b-icon class="cursor-pointer" icon="list-check" variant="muted" />
+          <b-icon
+            class="cursor-pointer"
+            icon="list-check"
+            variant="muted"
+          />
         </template>
         <template v-slot:cell(files)="data">
           <b-icon
@@ -120,27 +143,27 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
-import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-import dataFields from "./fields.data";
-import dataFilters from "./filters.data";
-import CrmService from "@/views/crm/services/crm.service";
-import FilesModal from "@/views/crm/views/sales-made/components/modals/FilesModal.vue";
+import { mapGetters, mapState } from 'vuex'
+import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
+import CrmService from '@/views/crm/services/crm.service'
+import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
+import dataFields from './fields.data'
+import dataFilters from './filters.data'
 /* Modals Import can be deleted */
 
 export default {
-  name: "SalesMadeAnnulledComponent", // Change name component
+  name: 'SalesMadeAnnulledComponent', // Change name component
   components: {
     FilesModal,
-    FilterSlot
+    FilterSlot,
   },
   data() {
     return {
       filterPrincipal: {
-        type: "input",
-        inputType: "text",
-        placeholder: "Client...",
-        model: ""
+        type: 'input',
+        inputType: 'text',
+        placeholder: 'Client...',
+        model: '',
       },
       items: {},
       isBusy: false,
@@ -148,60 +171,60 @@ export default {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       basicSearch: true,
       filter: dataFilters,
       startPage: null,
       toPage: null,
       modal: {
-        files: false
+        files: false,
       },
       modalData: {
         files: {
           id: null,
-          program: "",
-          client: "",
-          sale_id: null
-        }
+          program: '',
+          client: '',
+          sale_id: null,
+        },
       },
       modalControllers: {
-        files: 0
-      }
-    };
+        files: 0,
+      },
+    }
   },
   computed: {
     ...mapState({
-      sellers: state => state["crm-store"].sellersCrm,
-      captured: state => state["crm-store"].capturedCrm,
+      sellers: state => state['crm-store'].sellersCrm,
+      captured: state => state['crm-store'].capturedCrm,
       // TODO HACERLO GLOBAL
-      programs: state => state["crm-store"].programs,
-      stip: state => state["crm-store"].statusip,
-      status: state => state["crm-store"].statusAnnuled,
-      statusFilter: state => state["crm-store"].statusFilter
+      programs: state => state['crm-store'].programs,
+      stip: state => state['crm-store'].statusip,
+      status: state => state['crm-store'].statusAnnuled,
+      statusFilter: state => state['crm-store'].statusFilter,
     }),
     ...mapGetters({
-      currentUser: "auth/currentUser"
+      currentUser: 'auth/currentUser',
     }),
     filteredFields() {
-      return this.fields;
-    }
+      return this.fields
+    },
   },
   async created() {
     try {
       await Promise.all([
-        this.$store.dispatch("crm-store/getSellers"),
-        this.$store.dispatch("crm-store/getCaptured"),
-        this.$store.dispatch("crm-store/getPrograms"),
-        this.$store.dispatch("crm-store/getStates")
-      ]);
-      this.filter[2].options = this.captured;
-      this.filter[3].options = this.sellers;
-      this.filter[4].options = this.statusFilter;
-      this.filter[5].options = this.programs;
-      this.filter[6].options = this.stip;
+        this.$store.dispatch('crm-store/getSellers'),
+        this.$store.dispatch('crm-store/getCaptured'),
+        this.$store.dispatch('crm-store/getPrograms'),
+        this.$store.dispatch('crm-store/getStates'),
+      ])
+      this.filter[2].options = this.captured
+      this.filter[3].options = this.sellers
+      this.filter[4].options = this.statusFilter
+      this.filter[5].options = this.programs
+      this.filter[6].options = this.stip
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   },
   methods: {
@@ -213,29 +236,28 @@ export default {
       status,
       sellerId,
       programId,
-      eventDate
+      eventDate,
     ) {
-      this.modalData.files.id = id;
-      this.modalData.files.program = program;
-      this.modalData.files.client = client;
-      this.modalData.files.sale_id = saleId;
-      this.modalData.files.programId = programId;
-      this.modalData.files.event_date = eventDate;
-      const isCeoOrSupervisor =
-        this.currentUser.role_id == "1" || this.currentUser.role_id == "2";
-      const saleStatus = status == "4" || status == "2";
+      this.modalData.files.id = id
+      this.modalData.files.program = program
+      this.modalData.files.client = client
+      this.modalData.files.sale_id = saleId
+      this.modalData.files.programId = programId
+      this.modalData.files.event_date = eventDate
+      const isCeoOrSupervisor = this.currentUser.role_id == '1' || this.currentUser.role_id == '2'
+      const saleStatus = status == '4' || status == '2'
       if (
-        (this.currentUser.user_id == sellerId || isCeoOrSupervisor) &&
-        saleStatus == false
+        (this.currentUser.user_id == sellerId || isCeoOrSupervisor)
+        && saleStatus == false
       ) {
-        this.modalData.files.valorEdit = true;
+        this.modalData.files.valorEdit = true
       }
-      this.modal.files = true;
+      this.modal.files = true
     },
     async myProvider(ctx) {
       try {
-        const sortBy = 30;
-        const sortDirection = "desc";
+        const sortBy = 30
+        const sortDirection = 'desc'
         const data = await CrmService.getSaleAnnul(
           {
             captured: this.filter[2].model,
@@ -250,22 +272,22 @@ export default {
             statusip: this.filter[6].model,
             text: this.filterPrincipal.model,
             to: this.filter[1].model,
-            per_page: this.paginate.perPage
+            per_page: this.paginate.perPage,
           },
-          ctx.currentPage
-        );
-        this.startPage = data.from;
-        this.toPage = data.to;
-        if (this.totalRows !== data.total) this.totalRows = data.total;
-        this.items = data.data;
-        return this.items;
+          ctx.currentPage,
+        )
+        this.startPage = data.from
+        this.toPage = data.to
+        if (this.totalRows !== data.total) this.totalRows = data.total
+        this.items = data.data
+        return this.items
       } catch (e) {
-        this.showToast("danger", "top-right", "Error", "XIcon", e);
-        return [];
+        this.showToast('danger', 'top-right', 'Error', 'XIcon', e)
+        return []
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style scoped>

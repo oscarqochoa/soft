@@ -329,6 +329,7 @@
 </template>
 
 <script>
+import InventoryService from "../service/inventory.service";
 import vSelect from "vue-select";
 export default {
   components: {
@@ -434,14 +435,10 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-    searchEquipmentById() {
-      console.log(this.idEquipment);
-      amgApi
-        .post("/logistics/inventory/get-equipment-data-by-id", {
-          equipmentId: this.idEquipment
-        })
-        .then(response => {
-          if (response.status == 200) {
+    async searchEquipmentById() {
+      try{
+        const response = await InventoryService.searchEquipmentById({equipmentId: this.idEquipment})
+        if (response.status == 200) {
             this.dataEquipment = response.data[0];
             this.category = this.dataEquipment.category;
             this.brand = this.dataEquipment.brand;
@@ -461,36 +458,33 @@ export default {
                 : this.dataEquipment.url_image;
             this.charge = true;
           }
-        })
-        .catch(err => {
-          console.error(err);
-          this.showToast(
+      }catch(error){
+        console.log(error)
+        this.showToast(
             "danger",
             "top-right",
             "Error",
             "XIcon",
             "Something went wrong!"
           );
-        });
+      }
     },
-    getSelectBrand() {
-      amgApi
-        .get("/logistics/inventory/get-all-equipment-brand", {})
-        .then(response => {
-          if (response.status == 200) {
+    async getSelectBrand() {
+      try{
+        const response = await InventoryService.getSelectBrand({})
+        if (response.status == 200) {
             this.optionsBrand = response.data;
           }
-        })
-        .catch(error => {
-          console.error(error);
-          this.showToast(
+      }catch(error){
+        console.log(error)
+        this.showToast(
             "danger",
             "top-right",
             "Error",
             "XIcon",
             "Something went wrong!"
           );
-        });
+      }        
     }
   },
   created() {

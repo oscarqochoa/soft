@@ -55,7 +55,6 @@ const actions = {
       const response = await eventService.getEvents(params);
       /* console.log('A_GET_EVENTS response', response) */
       if (mixins.methods.isResponseSuccess(response)) {
-        console.log("A_GET_EVENTS response", response);
         commit("SET_DATA", {
           destination: "S_EVENTS",
           data: response.data.data,
@@ -85,7 +84,6 @@ const actions = {
       const response = await eventService.postEvent(body);
       if (mixins.methods.isResponseSuccess(response)) {
         response.data.name_user = body.seller;
-        console.log(response.data, "response.data");
         commit("UNSHIFT_DATA", {
           destination: "S_EVENTS",
           data: response.data,

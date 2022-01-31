@@ -2,7 +2,10 @@
   <ValidationObserver ref="form">
     <b-container fluid>
       <b-row class="d-flex align-items-center justify-content-end">
-        <button-export-pdf :disabled="exportPdfDisabled" @click="nextfirst(idleyend, 4)" />
+        <button-export-pdf
+          :disabled="exportPdfDisabled"
+          @click="nextfirst(idleyend, 4)"
+        />
       </b-row>
       <b-row class="mt-1">
         <b-col class="mr-1">
@@ -65,28 +68,36 @@
           </b-row>
           <b-row class="mt-1">
             <b-col md="3">
-              <p class="text-center font-weight-bolder">Monthly payment</p>
+              <p class="text-center font-weight-bolder">
+                Monthly payment
+              </p>
               <div
                 :class="'bg-'+skin"
                 class="py-1 px-1 font-weight-bolder text-center rounded"
               >{{ "$ " + this.total_monthly }}</div>
             </b-col>
             <b-col md="3">
-              <p class="text-center font-weight-bolder">Months</p>
+              <p class="text-center font-weight-bolder">
+                Months
+              </p>
               <div
                 :class="'bg-'+skin"
                 class="py-1 px-1 font-weight-bolder text-center rounded"
               >{{ this.mont9 }}</div>
             </b-col>
             <b-col md="3">
-              <p class="text-center font-weight-bolder">Years</p>
+              <p class="text-center font-weight-bolder">
+                Years
+              </p>
               <div
                 :class="'bg-'+skin"
                 class="py-1 px-1 font-weight-bolder text-center rounded"
               >{{ this.mont10 }}</div>
             </b-col>
             <b-col md="3">
-              <p class="text-center font-weight-bolder">Total to paid</p>
+              <p class="text-center font-weight-bolder">
+                Total to paid
+              </p>
               <div
                 :class="'bg-'+skin"
                 class="py-1 px-1 font-weight-bolder text-center rounded"
@@ -110,7 +121,10 @@
             >
               <span>Monthly payment</span>
               <span>
-                <ValidationProvider v-slot="{errors}" rules="money-required">
+                <ValidationProvider
+                  v-slot="{errors}"
+                  rules="money-required"
+                >
                   <money
                     v-model="mont14"
                     v-bind="vMoney"
@@ -180,29 +194,37 @@
           </b-row>
           <b-row class="mt-1">
             <b-col md="3">
-              <p class="text-center font-weight-bolder">Monthly payment</p>
+              <p class="text-center font-weight-bolder">
+                Monthly payment
+              </p>
               <div
                 class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded"
               >{{ "$ " + this.mont14 }}</div>
             </b-col>
             <b-col md="3">
-              <p class="text-center font-weight-bolder">Months</p>
+              <p class="text-center font-weight-bolder">
+                Months
+              </p>
               <div class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded">
                 {{
-                this.mont16 == "Infinity" ? "-" : this.mont16
+                  this.mont16 == "Infinity" ? "-" : this.mont16
                 }}
               </div>
             </b-col>
             <b-col md="3">
-              <p class="text-center font-weight-bolder">Years</p>
+              <p class="text-center font-weight-bolder">
+                Years
+              </p>
               <div class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded">
                 {{
-                this.mont17 == "Infinity" ? "-" : this.mont17
+                  this.mont17 == "Infinity" ? "-" : this.mont17
                 }}
               </div>
             </b-col>
             <b-col md="3">
-              <p class="text-center font-weight-bolder font-small-3">Estimated Savings</p>
+              <p class="text-center font-weight-bolder font-small-3">
+                Estimated Savings
+              </p>
               <div
                 class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded"
               >{{ "$ " + this.mont18 }}</div>
@@ -224,8 +246,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import ButtonExportPdf from "@/views/commons/utilities/ButtonExportPdf";
+import { mapGetters } from 'vuex'
+import ButtonExportPdf from '@/views/commons/utilities/ButtonExportPdf'
 
 export default {
   components: { ButtonExportPdf },
@@ -234,32 +256,32 @@ export default {
     idleyend: String,
     typeModal: {
       type: Number,
-      default: 1
+      default: 1,
       // 1: create, 2: show
     },
     isModalShow: Boolean,
-    isModalAdd: Boolean
+    isModalAdd: Boolean,
   },
   data() {
     return {
       blocking: false,
-      total_balance: "",
-      total_monthly: "",
-      total_interest: "",
-      mont3: "",
-      mont4: "",
-      mont5: "",
-      mont7: "",
-      mont9: "",
-      mont10: "",
-      mont11: "",
+      total_balance: '',
+      total_monthly: '',
+      total_interest: '',
+      mont3: '',
+      mont4: '',
+      mont5: '',
+      mont7: '',
+      mont9: '',
+      mont10: '',
+      mont11: '',
       mont12: 0,
-      mont13: "",
+      mont13: '',
       mont14: 0,
-      mont15: "",
-      mont16: "",
-      mont17: "",
-      mont18: "",
+      mont15: '',
+      mont16: '',
+      mont17: '',
+      mont18: '',
       inputDisable: false,
       arraySettlementCost: [
         5,
@@ -282,121 +304,121 @@ export default {
         22,
         23,
         24,
-        25
+        25,
       ],
       percentajes: [
-        { value: "0.0", label: "0%" },
-        { value: "0.01", label: "1%" },
-        { value: "0.02", label: "2%" },
-        { value: "0.03", label: "3%" },
-        { value: "0.04", label: "4%" },
-        { value: "0.05", label: "5%" },
-        { value: "0.06", label: "6%" },
-        { value: "0.07", label: "7%" },
-        { value: "0.08", label: "8%" },
-        { value: "0.09", label: "9%" },
-        { value: "0.1", label: "10%" }
+        { value: '0.0', label: '0%' },
+        { value: '0.01', label: '1%' },
+        { value: '0.02', label: '2%' },
+        { value: '0.03', label: '3%' },
+        { value: '0.04', label: '4%' },
+        { value: '0.05', label: '5%' },
+        { value: '0.06', label: '6%' },
+        { value: '0.07', label: '7%' },
+        { value: '0.08', label: '8%' },
+        { value: '0.09', label: '9%' },
+        { value: '0.1', label: '10%' },
       ],
       vMoney: {
-        decimal: ".",
-        thousands: ",",
-        prefix: "$ ",
+        decimal: '.',
+        thousands: ',',
+        prefix: '$ ',
         precision: 2,
-        masked: false
+        masked: false,
       },
       vMoney2: {
-        decimal: ".",
-        thousands: ",",
-        prefix: "",
+        decimal: '.',
+        thousands: ',',
+        prefix: '',
         precision: 2,
-        masked: false
+        masked: false,
       },
-      porctrf: "0.1",
-      fee: "",
+      porctrf: '0.1',
+      fee: '',
       validatenext1: false,
       validateMoney: false,
-      exportPdfDisabled: false
-    };
+      exportPdfDisabled: false,
+    }
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-      skin: "appConfig/skin"
-    })
+      currentUser: 'auth/currentUser',
+      skin: 'appConfig/skin',
+    }),
   },
   watch: {
     porctrf() {
-      this.mont15 = parseFloat(this.total_balance * this.porctrf).toFixed(2);
-      this.fee = this.mont15;
+      this.mont15 = parseFloat(this.total_balance * this.porctrf).toFixed(2)
+      this.fee = this.mont15
     },
     mont14() {
-      this.functionGeneral();
-    }
+      this.functionGeneral()
+    },
   },
   async mounted() {
-    await this.allDebtSolution();
+    await this.allDebtSolution()
   },
   methods: {
     functionGeneral() {
       this.mont3 = parseFloat(
-        (this.total_balance * this.total_interest) / 100
-      ).toFixed(2);
-      this.mont4 = parseFloat(this.mont3 / 12).toFixed(2);
-      this.mont5 = parseFloat(this.total_monthly - this.mont4).toFixed(2);
-      this.mont7 = parseFloat(this.mont4 / 30).toFixed(2);
+        (this.total_balance * this.total_interest) / 100,
+      ).toFixed(2)
+      this.mont4 = parseFloat(this.mont3 / 12).toFixed(2)
+      this.mont5 = parseFloat(this.total_monthly - this.mont4).toFixed(2)
+      this.mont7 = parseFloat(this.mont4 / 30).toFixed(2)
       this.mont9 = Math.ceil(
-        parseFloat(this.total_balance / this.mont5).toFixed(1)
-      );
-      this.mont10 = Math.ceil(parseFloat(this.mont9 / 12).toFixed(1));
-      this.mont11 = parseFloat(this.mont9 * this.total_monthly).toFixed(2);
+        parseFloat(this.total_balance / this.mont5).toFixed(1),
+      )
+      this.mont10 = Math.ceil(parseFloat(this.mont9 / 12).toFixed(1))
+      this.mont11 = parseFloat(this.mont9 * this.total_monthly).toFixed(2)
 
-      this.mont12 = parseFloat(this.total_balance * 0.8).toFixed(2);
-      this.mont15 = parseFloat(this.total_balance * 0.1).toFixed(2);
-      this.mont16 = Math.ceil(parseFloat(this.mont12 / this.mont14).toFixed(1));
-      this.mont17 = Math.ceil(parseFloat(this.mont16 / 12).toFixed(1));
-      this.mont18 = parseFloat(this.mont11 - this.mont12).toFixed(2);
+      this.mont12 = parseFloat(this.total_balance * 0.8).toFixed(2)
+      this.mont15 = parseFloat(this.total_balance * 0.1).toFixed(2)
+      this.mont16 = Math.ceil(parseFloat(this.mont12 / this.mont14).toFixed(1))
+      this.mont17 = Math.ceil(parseFloat(this.mont16 / 12).toFixed(1))
+      this.mont18 = parseFloat(this.mont11 - this.mont12).toFixed(2)
 
-      this.fee = this.mont15;
-      this.mont13 = this.mont13 == null || this.mont13 == "" ? 25 : this.mont13;
+      this.fee = this.mont15
+      this.mont13 = this.mont13 == null || this.mont13 == '' ? 25 : this.mont13
     },
     async nextfirst(id, type) {
       try {
         if (this.isModalShow) {
           if (type === 4) {
             if (this.salesClient.account_id) {
-              this.downloadPdfAnalysis();
+              this.downloadPdfAnalysis()
             } else {
-              this.downloadPdfAnalysisEvent();
+              this.downloadPdfAnalysisEvent()
             }
           }
-          return true;
+          return true
         }
         if (type == 1 || type == 2) {
-          return await this.axiosNext(id, type);
+          return await this.axiosNext(id, type)
         }
         if (type == 4) {
-          await this.saveant(id, type);
-        } else if (this.dato12 == null || this.dato12 == "") {
-          this.errorGoal = true;
-          return false;
+          await this.saveant(id, type)
+        } else if (this.dato12 == null || this.dato12 == '') {
+          this.errorGoal = true
+          return false
         } else {
-          this.errorGoal = false;
-          if (this.date3 == null || this.date3 == "") {
-            this.errorDate = true;
-            return false;
+          this.errorGoal = false
+          if (this.date3 == null || this.date3 == '') {
+            this.errorDate = true
+            return false
           }
-          this.errorDate = false;
-          return await this.axiosNext(id, type);
+          this.errorDate = false
+          return await this.axiosNext(id, type)
         }
       } catch (error) {
-        console.error(error);
-        return false;
+        console.error(error)
+        return false
       }
     },
     async prevfirst(id, type) {
       try {
-        this.addPreloader();
-        const response = await amgApi.post("/sale/delete-leyend-states-ds", {
+        this.addPreloader()
+        const response = await amgApi.post('/sale/delete-leyend-states-ds', {
           type,
           id,
           event:
@@ -406,40 +428,40 @@ export default {
           account:
             this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5
               ? this.salesClient.account_id
-              : null
-        });
+              : null,
+        })
         if (response.status === 200) {
           // this.leyendDebsolution();
-          this.functionGeneral();
-          this.$emit("previousStep");
-          this.password = "";
-          this.okPassword = false;
-          this.errorPassword = false;
+          this.functionGeneral()
+          this.$emit('previousStep')
+          this.password = ''
+          this.okPassword = false
+          this.errorPassword = false
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
     async saveant(id, type) {
       try {
-        this.validateMoney = true;
-        const success = await this.$refs.form.validate();
+        this.validateMoney = true
+        const success = await this.$refs.form.validate()
         if (success) {
           const response = await amgApi.post(
-            "/sales-made/debt-solution/save-first-debt-solution",
+            '/sales-made/debt-solution/save-first-debt-solution',
             {
               type,
               id,
               event:
-                this.typeModal === 3 ||
-                this.typeModal === 4 ||
-                this.typeModal === 5
+                this.typeModal === 3
+                || this.typeModal === 4
+                || this.typeModal === 5
                   ? null
                   : this.salesClient.event_id,
               account:
-                this.typeModal === 3 ||
-                this.typeModal === 4 ||
-                this.typeModal === 5
+                this.typeModal === 3
+                || this.typeModal === 4
+                || this.typeModal === 5
                   ? this.salesClient.account_id
                   : null,
               total_due: this.mont12,
@@ -451,49 +473,49 @@ export default {
               years: this.mont17,
               estimated: this.mont18,
               id_history: this.id_history,
-              id_analisis: this.id_analisis
-            }
-          );
+              id_analisis: this.id_analisis,
+            },
+          )
           if (response.status === 200) {
             if (type == 4) {
               if (this.salesClient.account_id) {
-                this.downloadPdfAnalysis();
+                this.downloadPdfAnalysis()
               } else {
-                this.downloadPdfAnalysisEvent();
+                this.downloadPdfAnalysisEvent()
               }
             }
           }
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
     async axiosNext(id, type) {
       try {
-        this.validateMoney = true;
-        const success = await this.$refs.form.validate();
+        this.validateMoney = true
+        const success = await this.$refs.form.validate()
         if (success) {
           const result = await this.showConfirmSwal(
-            "Are you sure of continue ?",
-            "Before finalizing you must save."
-          );
+            'Are you sure of continue ?',
+            'Before finalizing you must save.',
+          )
           if (result.value) {
-            this.addPreloader();
+            this.addPreloader()
             const response = await amgApi.post(
-              "/sales-made/debt-solution/save-first-debt-solution",
+              '/sales-made/debt-solution/save-first-debt-solution',
               {
                 type,
                 id,
                 event:
-                  this.typeModal === 3 ||
-                  this.typeModal === 4 ||
-                  this.typeModal === 5
+                  this.typeModal === 3
+                  || this.typeModal === 4
+                  || this.typeModal === 5
                     ? null
                     : this.salesClient.event_id,
                 account:
-                  this.typeModal === 3 ||
-                  this.typeModal === 4 ||
-                  this.typeModal === 5
+                  this.typeModal === 3
+                  || this.typeModal === 4
+                  || this.typeModal === 5
                     ? this.salesClient.account_id
                     : null,
                 total_due: this.mont12,
@@ -505,105 +527,103 @@ export default {
                 years: this.mont17,
                 estimated: this.mont18,
                 id_history: this.id_history,
-                id_analisis: this.id_analisis
-              }
-            );
+                id_analisis: this.id_analisis,
+              },
+            )
             if (response.status === 200) {
-              this.functionGeneral();
-              this.$emit("nextStep");
-              return true;
+              this.functionGeneral()
+              this.$emit('nextStep')
+              return true
             }
-            return false;
+            return false
           }
-          return false;
+          return false
         }
-        return false;
+        return false
       } catch (error) {
-        console.error(error);
-        return false;
+        console.error(error)
+        return false
       }
     },
     async allDebtSolution() {
       try {
         const response = await amgApi.post(
-          "/sales-made/debt-solution/get-credits-debt-solution",
+          '/sales-made/debt-solution/get-credits-debt-solution',
           {
             event:
-              this.typeModal === 3 ||
-              this.typeModal === 4 ||
-              this.typeModal === 5
+              this.typeModal === 3
+              || this.typeModal === 4
+              || this.typeModal === 5
                 ? null
                 : this.salesClient.event_id,
             account:
-              this.typeModal === 3 ||
-              this.typeModal === 4 ||
-              this.typeModal === 5
+              this.typeModal === 3
+              || this.typeModal === 4
+              || this.typeModal === 5
                 ? this.salesClient.account_id
-                : null
-          }
-        );
+                : null,
+          },
+        )
         if (response.status === 200) {
-          const creditors = response.data;
+          const creditors = response.data
           if (creditors.length > 0) {
-            const lvar = creditors.filter(element => element.state1 < 1);
+            const lvar = creditors.filter(element => element.state1 < 1)
             if (lvar.length > 0) {
-              this.validatenext1 = false;
+              this.validatenext1 = false
             } else {
-              this.validatenext1 = true;
+              this.validatenext1 = true
             }
-            this.total_balance = creditors[0].total_balance;
-            this.total_monthly = creditors[0].total_monthly;
-            this.total_interest = creditors[0].total_interest;
-            this.id_history = creditors[0].id_history;
-            this.id_analisis = creditors[0].id_analisis;
-            this.mont14 =
-              creditors[0].monthly_payment == null
-                ? 0
-                : creditors[0].monthly_payment;
-            this.mont13 = creditors[0].cost;
+            this.total_balance = creditors[0].total_balance
+            this.total_monthly = creditors[0].total_monthly
+            this.total_interest = creditors[0].total_interest
+            this.id_history = creditors[0].id_history
+            this.id_analisis = creditors[0].id_analisis
+            this.mont14 = creditors[0].monthly_payment == null
+              ? 0
+              : creditors[0].monthly_payment
+            this.mont13 = creditors[0].cost
             // eslint-disable-next-line no-nested-ternary
-            this.porctrf =
-              creditors[0].pcrf == null
+            this.porctrf = creditors[0].pcrf == null
+              ? 0.1
+              : creditors[0].pcrf == '0.10'
                 ? 0.1
-                : creditors[0].pcrf == "0.10"
-                ? 0.1
-                : creditors[0].pcrf;
+                : creditors[0].pcrf
           } else {
-            this.validatenext1 = false;
-            this.total_balance = "";
-            this.total_monthly = "";
-            this.total_interest = "";
-            this.id_history = "";
-            this.id_analisis = "";
-            this.mont14 = "";
-            this.mont13 = "25";
-            this.porctrf = "0.1";
+            this.validatenext1 = false
+            this.total_balance = ''
+            this.total_monthly = ''
+            this.total_interest = ''
+            this.id_history = ''
+            this.id_analisis = ''
+            this.mont14 = ''
+            this.mont13 = '25'
+            this.porctrf = '0.1'
           }
-          this.functionGeneral();
-          this.removePreloader();
+          this.functionGeneral()
+          this.removePreloader()
         }
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
     downloadPdfAnalysis() {
-      this.exportPdfDisabled = true;
+      this.exportPdfDisabled = true
       // eslint-disable-next-line no-restricted-globals
-      location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/imprimirfileappotanalysisc/?id=${this.salesClient.account_id}`;
+      location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/imprimirfileappotanalysisc/?id=${this.salesClient.account_id}`
       setTimeout(() => {
-        this.exportPdfDisabled = false;
-      }, 10000);
+        this.exportPdfDisabled = false
+      }, 10000)
     },
     downloadPdfAnalysisEvent() {
-      this.exportPdfDisabled = true;
+      this.exportPdfDisabled = true
       // eslint-disable-next-line no-restricted-globals
-      location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/imprimirfileappotanalysis/?id=${this.salesClient.event_id}`;
+      location.href = `${process.env.VUE_APP_BASE_URL_ASSETS}/imprimirfileappotanalysis/?id=${this.salesClient.event_id}`
       setTimeout(() => {
-        this.exportPdfDisabled = false;
-      }, 10000);
-    }
-  }
-};
+        this.exportPdfDisabled = false
+      }, 10000)
+    },
+  },
+}
 </script>
 
 <style>

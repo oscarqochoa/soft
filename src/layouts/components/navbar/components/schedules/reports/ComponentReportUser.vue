@@ -5,24 +5,11 @@
         sm="12"
         md="12"
         xl="6"
-        class="
-          d-flex
-          align-items-center
-          justify-content-center justify-content-sm-start
-        "
+        class="d-flex align-items-center justify-content-center justify-content-sm-start"
       >
-        <b-button
-          variant="primary"
-          class="mr-1"
-          v-b-toggle.sidebar-backdrop
-          @click="getMoreInfo()"
-        >
-          <feather-icon
-            icon="InfoIcon"
-            class="mr-50 text-center cursor-pointer"
-          />
-          MORE INFO</b-button
-        >
+        <b-button variant="primary" class="mr-1" v-b-toggle.sidebar-backdrop @click="getMoreInfo()">
+          <feather-icon icon="InfoIcon" class="mr-50 text-center cursor-pointer" />MORE INFO
+        </b-button>
       </b-col>
       <b-col
         sm="12"
@@ -39,8 +26,9 @@
               month: 'numeric',
               day: 'numeric',
             }"
-          /> </b-form-group
-      ></b-col>
+          />
+        </b-form-group>
+      </b-col>
       <b-col
         sm="12"
         md="12"
@@ -56,8 +44,9 @@
               month: 'numeric',
               day: 'numeric',
             }"
-          /> </b-form-group
-      ></b-col>
+          />
+        </b-form-group>
+      </b-col>
       <b-col
         sm="12"
         md="12"
@@ -65,30 +54,15 @@
         class="d-flex align-items-center justify-content-end align-items-center"
       >
         <b-form-group label="Module" label-for="modul" style="width: 100%">
-          <b-form-select
-            id="modul"
-            v-model="filter.modulId"
-            :options="moduls"
-          ></b-form-select
-        ></b-form-group>
+          <b-form-select id="modul" v-model="filter.modulId" :options="moduls"></b-form-select>
+        </b-form-group>
       </b-col>
     </b-row>
     <b-row>
-      <b-table-simple
-        hover
-        small
-        caption-top
-        responsive
-        ref="table_report_modul"
-      >
+      <b-table-simple hover small caption-top responsive ref="table_report_modul">
         <b-thead>
           <b-tr>
-            <b-th
-              v-for="(item, index) in fields"
-              :key="index"
-              class="text-center"
-              >{{ item.label }}</b-th
-            >
+            <b-th v-for="(item, index) in fields" :key="index" class="text-center">{{ item.label }}</b-th>
           </b-tr>
         </b-thead>
         <b-tbody>
@@ -99,9 +73,7 @@
                 @click="openDetails(item, schedule, schedule.checking_m, 1)"
                 v-b-tooltip.hover
                 :title="titleSchedule(schedule, 1)"
-              >
-                {{ schedule.checking_m }}
-              </div>
+              >{{ schedule.checking_m }}</div>
               <div
                 class="bg-default p-s"
                 @click="
@@ -109,25 +81,19 @@
                 "
                 v-b-tooltip.hover
                 :title="titleSchedule(schedule, 2)"
-              >
-                {{ schedule.m_begining_break }}
-              </div>
+              >{{ schedule.m_begining_break }}</div>
               <div
                 class="bg-default p-s"
                 @click="openDetails(item, schedule, schedule.m_finish_break, 3)"
                 v-b-tooltip.hover
                 :title="titleSchedule(schedule, 3)"
-              >
-                {{ schedule.m_finish_break }}
-              </div>
+              >{{ schedule.m_finish_break }}</div>
               <div
                 class="bg-default p-s"
                 @click="openDetails(item, schedule, schedule.m_checkout, 4)"
                 v-b-tooltip.hover
                 :title="titleSchedule(schedule, 4)"
-              >
-                {{ schedule.m_checkout }}
-              </div>
+              >{{ schedule.m_checkout }}</div>
               <div class="bg-hours p-s">HOURS: {{ schedule.total_hours }}</div>
             </b-td>
           </b-tr>
@@ -145,26 +111,21 @@
     >
       <b-container fluid class="p-4">
         <div class="text-center">
-          <b-img
-            :src="detailsSchedule.image"
-            fluid
-            class="image-captured"
-            alt="Responsive image"
-          ></b-img>
+          <b-img :src="detailsSchedule.image" fluid class="image-captured" alt="Responsive image"></b-img>
         </div>
         <b-row class="py-2">
           <b-col cols="auto">
             <feather-icon icon="CheckCircleIcon" class="mr-50 text-center" />
-            ASSIGNED: {{ detailsSchedule.assigned }}</b-col
-          >
+            ASSIGNED: {{ detailsSchedule.assigned }}
+          </b-col>
           <b-col cols="auto">
             <feather-icon icon="CheckCircleIcon" class="mr-50 text-center" />
-            ASSISTANCE: {{ detailsSchedule.assistance }}</b-col
-          >
+            ASSISTANCE: {{ detailsSchedule.assistance }}
+          </b-col>
           <b-col cols="auto">
             <feather-icon icon="CheckCircleIcon" class="mr-50 text-center" />
-            IP ADDRESS: {{ detailsSchedule.ip }}</b-col
-          >
+            IP ADDRESS: {{ detailsSchedule.ip }}
+          </b-col>
         </b-row>
       </b-container>
     </b-modal>
@@ -200,21 +161,26 @@ export default {
       dataSchedule: [],
       modalDetails: false,
       filter: {
-        from: moment().startOf("week").add(1, "days").format("YYYY-MM-DD"),
-        to: moment().endOf("week").add(1, "days").format("YYYY-MM-DD"),
+        from: moment()
+          .startOf("week")
+          .add(1, "days")
+          .format("YYYY-MM-DD"),
+        to: moment()
+          .endOf("week")
+          .add(1, "days")
+          .format("YYYY-MM-DD"),
         searchUser: "",
-        modulId: null,
+        modulId: null
       },
       keyMoreInfo: 0,
       bgBtnAdres: "background-color: rgba(51, 59, 81, 0.2) !important",
       detailsSchedule: {},
-      moduls: [],
+      moduls: []
     };
   },
   components: { contentMoreInfoReport },
   mounted() {
     this.filter.modulId = this.currentUser.modul_id;
-    console.log(this.currentUser.arrModuls);
     this.getReport();
   },
   methods: {
@@ -225,15 +191,15 @@ export default {
         modul_id: this.filter.modulId,
         user_id: this.currentUser.user_id,
         start_date: this.filter.from,
-        end_date: this.filter.to,
+        end_date: this.filter.to
       };
       const data = await SchedulesServices.getHourReport(params);
       let array = data.data;
-      array.forEach((element) => {
+      array.forEach(element => {
         this.items.push({
           id: element.id,
           user_name: element.name_user,
-          json_data: element.json_data,
+          json_data: element.json_data
         });
       });
       this.dataByDay(data);
@@ -243,21 +209,21 @@ export default {
     dataByDay(data) {
       this.fields = [];
       let array = data.days;
-      array.forEach((element) => {
+      array.forEach(element => {
         let letter = element.dayheader.toUpperCase();
         this.fields.push({
           key: "field",
-          label: letter.toUpperCase(),
+          label: letter.toUpperCase()
         });
       });
     },
     modulsUser() {
       let array = this.currentUser.arrModuls;
       this.moduls = [];
-      array.forEach((element) => {
+      array.forEach(element => {
         this.moduls.push({
           value: element.id_module,
-          text: element.module_name,
+          text: element.module_name
         });
       });
     },
@@ -305,28 +271,28 @@ export default {
           ip: data[0].ip,
           assigned: schedule.checking,
           assistance: schedule.checking_m,
-          image: data[0].images,
+          image: data[0].images
         };
       } else if (type == 2) {
         this.detailsSchedule = {
           ip: data[0].ip2,
           assigned: schedule.begining_break,
           assistance: schedule.m_begining_break,
-          image: data[0].images2,
+          image: data[0].images2
         };
       } else if (type == 3) {
         this.detailsSchedule = {
           ip: data[0].ip3,
           assigned: schedule.finish_break,
           assistance: schedule.m_finish_break,
-          image: data[0].images3,
+          image: data[0].images3
         };
       } else if (type == 4) {
         this.detailsSchedule = {
           ip: data[0].ip4,
           assigned: schedule.checkout,
           assistance: schedule.m_checkout,
-          image: data[0].images4,
+          image: data[0].images4
         };
       }
       this.modalDetails = true;
@@ -335,12 +301,12 @@ export default {
     getMoreInfo() {
       this.dataSchedule = this.items;
       this.keyMoreInfo = ++this.keyMoreInfo;
-    },
+    }
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   watch: {
     "filter.from"(newVal, oldVal) {
@@ -348,8 +314,8 @@ export default {
     },
     "filter.to"(newVal, oldVal) {
       this.getReport();
-    },
-  },
+    }
+  }
 };
 </script>
 

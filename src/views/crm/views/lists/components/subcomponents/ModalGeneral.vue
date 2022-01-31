@@ -24,20 +24,24 @@
                   <span>
                     COMMENT
                     {{
-                    objectLead.status == "pending"
-                    ? ""
-                    : objectLead.cmm_datetime | myGlobalDay
+                      objectLead.status == "pending"
+                        ? ""
+                        : objectLead.cmm_datetime | myGlobalDay
                     }}
                   </span>
                 </b-col>
               </b-row>
             </b-col>
             <b-col md="12">
-              <ValidationProvider name="comment" rules="required" v-slot="{ errors }">
+              <ValidationProvider
+                name="comment"
+                rules="required"
+                v-slot="{ errors }"
+              >
                 <div class="form-group mt-0">
                   <b-form-textarea
                     class="textarea-style wysiwyg-notes w-100"
-                    style="border-radius: 0px 10px 10px 10px; height:120px"
+                    style="border-radius: 0px 10px 10px 10px; height: 120px"
                     :class="{ 'border border-danger': errors[0] }"
                     v-model="comment"
                     :disabled="!statusPending"
@@ -52,7 +56,8 @@
                 variant="success"
                 style="border-radius: 5px !important"
                 @click="changeStatus()"
-              >Save</b-button>
+                >Save</b-button
+              >
             </b-col>
           </b-row>
         </ValidationObserver>
@@ -62,55 +67,59 @@
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
+import ListService from "../../service/lists.service";
 export default {
   props: ["objectLead", "ifModalCard"],
   data() {
     return {
       comment: null,
-      mutableIfModalCard: this.ifModalCard
+      mutableIfModalCard: this.ifModalCard,
     };
   },
   computed: {
     statusPending() {
       return this.objectLead.status == "pending" ? true : false;
-    }
+    },
   },
   methods: {
     closeModal() {
       this.$emit("close", false);
     },
     changeStatus() {
-      this.$refs.form.validate().then(success => {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
         }
-        const params = {
-          id: this.objectLead.l_id,
-          cmm: this.comment
-        };
-        amgApi
-          .post("/commons/list-users/update-list-Of-user", params)
-          .then(res => {
-            this.$emit("update", false);
-            this.showToast(
-              "success",
-              "top-right",
-              "Success",
-              "CheckIcon",
-              "Saved Successfully"
-            );
-          });
+        const confirm = await this.showConfirmSwal(
+          "Are you sure?",
+          "You won't be able to revert this!"
+        );
+        if (confirm.isConfirmed) {
+          try {
+            const params = {
+              id: this.objectLead.l_id,
+              cmm: this.comment,
+            };
+            this.addPreloader();
+            const data = await ListService.changeStatus(params);
+            this.removePreloader();
+             this.$emit("update", false);
+             this.showToast("success","top-right","Success","CheckIcon","Saved Successfully");
+          } catch (error) {
+            console.log(error);
+            this.showErrorSwal(error);
+          }
+        }
       });
     },
     fillComment() {
       if (this.objectLead.status == "done" && this.objectLead.cmm != null) {
         this.comment = this.objectLead.cmm;
       }
-    }
+    },
   },
   created() {
     this.fillComment();
-  }
+  },
 };
 </script>

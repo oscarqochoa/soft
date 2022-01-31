@@ -4,30 +4,14 @@
       <b-col
         cols="12"
         sm="6"
-        class="
-          d-flex
-          align-items-center
-          justify-content-center justify-content-sm-start
-        "
-        ><b-button variant="success" class="mr-1" @click="exportExcel()">
-          <feather-icon
-            icon="DownloadCloudIcon"
-            class="mr-50 text-center cursor-pointer"
-          />
-          EXCEL</b-button
-        >
-        <b-button
-          variant="primary"
-          class="mr-1"
-          v-b-toggle.sidebar-backdrop
-          @click="getMoreInfo()"
-        >
-          <feather-icon
-            icon="InfoIcon"
-            class="mr-50 text-center cursor-pointer"
-          />
-          MORE INFO</b-button
-        >
+        class="d-flex align-items-center justify-content-center justify-content-sm-start"
+      >
+        <b-button variant="success" class="mr-1" @click="exportExcel()">
+          <feather-icon icon="DownloadCloudIcon" class="mr-50 text-center cursor-pointer" />EXCEL
+        </b-button>
+        <b-button variant="primary" class="mr-1" v-b-toggle.sidebar-backdrop @click="getMoreInfo()">
+          <feather-icon icon="InfoIcon" class="mr-50 text-center cursor-pointer" />MORE INFO
+        </b-button>
       </b-col>
       <b-col
         cols="12"
@@ -35,11 +19,7 @@
         class="d-flex align-items-center justify-content-end align-items-center"
       >
         <b-input-group class="mr-1">
-          <b-form-input
-            type="search"
-            v-model="filter.searchUser"
-            placeholder="User..."
-          />
+          <b-form-input type="search" v-model="filter.searchUser" placeholder="User..." />
           <b-input-group-append>
             <b-button variant="primary">
               <feather-icon icon="SearchIcon" />
@@ -60,12 +40,7 @@
     <b-table-simple hover small caption-top responsive ref="table_report_modul">
       <b-thead>
         <b-tr>
-          <b-th
-            v-for="(item, index) in fields"
-            :key="index"
-            class="text-center"
-            >{{ item.label }}</b-th
-          >
+          <b-th v-for="(item, index) in fields" :key="index" class="text-center">{{ item.label }}</b-th>
         </b-tr>
       </b-thead>
       <b-tbody>
@@ -77,33 +52,25 @@
               @click="openDetails(item, schedule, schedule.checking_m, 1)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 1)"
-            >
-              {{ schedule.checking_m }}
-            </div>
+            >{{ schedule.checking_m }}</div>
             <div
               class="bg-default p-s"
               @click="openDetails(item, schedule, schedule.m_begining_break, 2)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 2)"
-            >
-              {{ schedule.m_begining_break }}
-            </div>
+            >{{ schedule.m_begining_break }}</div>
             <div
               class="bg-default p-s"
               @click="openDetails(item, schedule, schedule.m_finish_break, 3)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 3)"
-            >
-              {{ schedule.m_finish_break }}
-            </div>
+            >{{ schedule.m_finish_break }}</div>
             <div
               class="bg-default p-s"
               @click="openDetails(item, schedule, schedule.m_checkout, 4)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 4)"
-            >
-              {{ schedule.m_checkout }}
-            </div>
+            >{{ schedule.m_checkout }}</div>
             <div class="bg-hours p-s">HOURS: {{ schedule.total_hours }}</div>
           </b-td>
         </b-tr>
@@ -120,26 +87,21 @@
     >
       <b-container fluid class="p-4">
         <div class="text-center">
-          <b-img
-            :src="detailsSchedule.image"
-            fluid
-            class="image-captured"
-            alt="Responsive image"
-          ></b-img>
+          <b-img :src="detailsSchedule.image" fluid class="image-captured" alt="Responsive image"></b-img>
         </div>
         <b-row class="py-2">
           <b-col cols="auto">
             <feather-icon icon="CheckCircleIcon" class="mr-50 text-center" />
-            ASSIGNED: {{ detailsSchedule.assigned }}</b-col
-          >
+            ASSIGNED: {{ detailsSchedule.assigned }}
+          </b-col>
           <b-col cols="auto">
             <feather-icon icon="CheckCircleIcon" class="mr-50 text-center" />
-            ASSISTANCE: {{ detailsSchedule.assistance }}</b-col
-          >
+            ASSISTANCE: {{ detailsSchedule.assistance }}
+          </b-col>
           <b-col cols="auto">
             <feather-icon icon="CheckCircleIcon" class="mr-50 text-center" />
-            IP ADDRESS: {{ detailsSchedule.ip }}</b-col
-          >
+            IP ADDRESS: {{ detailsSchedule.ip }}
+          </b-col>
         </b-row>
       </b-container>
     </b-modal>
@@ -210,20 +172,8 @@
       <template #footer>
         <b-container>
           <b-row class="d-flex align-items-center justify-content-between p-1">
-            <b-button
-              v-b-toggle.sidebar-advance
-              variant="info"
-              @click="resetSearch"
-            >
-              Reset
-            </b-button>
-            <b-button
-              v-b-toggle.sidebar-advance
-              variant="primary"
-              @click="getReport()"
-            >
-              Search
-            </b-button>
+            <b-button v-b-toggle.sidebar-advance variant="info" @click="resetSearch">Reset</b-button>
+            <b-button v-b-toggle.sidebar-advance variant="primary" @click="getReport()">Search</b-button>
           </b-row>
         </b-container>
       </template>
@@ -237,7 +187,7 @@ import { mapGetters } from "vuex";
 import moment from "moment";
 export default {
   components: {
-    contentMoreInfoReport,
+    contentMoreInfoReport
   },
   data() {
     return {
@@ -248,13 +198,19 @@ export default {
       schedule: {},
       dataSchedule: [],
       filter: {
-        from: moment().startOf("week").add(1, "days").format("YYYY-MM-DD"),
-        to: moment().endOf("week").add(1, "days").format("YYYY-MM-DD"),
-        searchUser: "",
+        from: moment()
+          .startOf("week")
+          .add(1, "days")
+          .format("YYYY-MM-DD"),
+        to: moment()
+          .endOf("week")
+          .add(1, "days")
+          .format("YYYY-MM-DD"),
+        searchUser: ""
       },
       keyMoreInfo: 0,
       bgBtnAdres: "background-color: rgba(51, 59, 81, 0.2) !important",
-      detailsSchedule: {},
+      detailsSchedule: {}
     };
   },
   mounted() {
@@ -267,15 +223,15 @@ export default {
       const params = {
         modul_id: this.currentUser.modul_id,
         start_date: this.filter.from,
-        end_date: this.filter.to,
+        end_date: this.filter.to
       };
       const data = await SchedulesServices.getHourReport(params);
       let array = data.data;
-      array.forEach((element) => {
+      array.forEach(element => {
         this.items.push({
           id: element.id,
           user_name: element.name_user,
-          json_data: element.json_data,
+          json_data: element.json_data
         });
       });
       this.dataByDay(data);
@@ -287,13 +243,13 @@ export default {
       this.fields.push({
         key: "field",
         label: "USER",
-        sortable: false,
+        sortable: false
       });
-      array.forEach((element) => {
+      array.forEach(element => {
         let letter = element.dayheader.toUpperCase();
         this.fields.push({
           key: "field",
-          label: letter.toUpperCase(),
+          label: letter.toUpperCase()
         });
       });
     },
@@ -341,28 +297,28 @@ export default {
           ip: data[0].ip,
           assigned: schedule.checking,
           assistance: schedule.checking_m,
-          image: data[0].images,
+          image: data[0].images
         };
       } else if (type == 2) {
         this.detailsSchedule = {
           ip: data[0].ip2,
           assigned: schedule.begining_break,
           assistance: schedule.m_begining_break,
-          image: data[0].images2,
+          image: data[0].images2
         };
       } else if (type == 3) {
         this.detailsSchedule = {
           ip: data[0].ip3,
           assigned: schedule.finish_break,
           assistance: schedule.m_finish_break,
-          image: data[0].images3,
+          image: data[0].images3
         };
       } else if (type == 4) {
         this.detailsSchedule = {
           ip: data[0].ip4,
           assigned: schedule.checkout,
           assistance: schedule.m_checkout,
-          image: data[0].images4,
+          image: data[0].images4
         };
       }
       this.modal = true;
@@ -374,7 +330,7 @@ export default {
         items: this.filterUser,
         fields: this.fields,
         start_date: this.filter.from,
-        end_date: this.filter.to,
+        end_date: this.filter.to
       };
       const data = await SchedulesServices.getExportExcel(params);
       let namefile =
@@ -382,7 +338,7 @@ export default {
         moment(this.filter.from).format("MM-DD-YYYY") +
         "_" +
         moment(this.filter.to).format("MM-DD-YYYY");
-        this.forceFileDownload(data, namefile + ".xlsx");
+      this.forceFileDownload(data, namefile + ".xlsx");
       this.removePreloader();
     },
     getMoreInfo() {
@@ -401,22 +357,21 @@ export default {
         this.getReport();
     },
     moveSideways(number) {
-      console.log(number);
       this.$refs.table_report_modul.scrollLeft = "5000px";
-    },
+    }
   },
   computed: {
-    filterUser: function () {
-      return this.items.filter((item) => {
+    filterUser: function() {
+      return this.items.filter(item => {
         return item.user_name
           .toLowerCase()
           .match(this.filter.searchUser.toLowerCase());
       });
     },
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
-  },
+      currentUser: "auth/currentUser"
+    })
+  }
 };
 </script>
   

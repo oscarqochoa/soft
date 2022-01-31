@@ -246,10 +246,10 @@
           <b-col md="12" style="text-align: center;" class="mt-4">
             <b-button
               class="btn-update-sn rounded font-bureau-style text-white"
-              variant="success"
+              variant="primary"
               @click="createCard"
             >
-              <i class="fas fa-save"></i> Save
+             Save
             </b-button>
           </b-col>
         </b-row>
@@ -260,7 +260,7 @@
 
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
-import { extend } from "vee-validate";
+import PaymentService from "../service/payments.service";
 import { amgApi } from "@/service/axios";
 export default {
   components: { VueGoogleAutocomplete },
@@ -293,11 +293,14 @@ export default {
       cardnumber4: ""
     };
   },
-
-  mounted() {
-    amgApi.get("/commons/get-eeuu-states").then(response => {
-      this.states = response.data;
-    });
+  async mounted() {
+       try{
+         const data = await PaymentService.getStates()
+         this.states = data;
+       }catch(error){
+         console.error(error)
+         this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+       }
   },
   methods: {
     activeFocus(index, max) {
@@ -349,21 +352,12 @@ export default {
                 this.$emit("new", this.cards);
                 this.$emit("click", false);
                 this.$store.commit("app/SET_LOADING", false);
-                this.$swal.fire({
-                  icon: "success",
-                  title: "Card Created Successfully"
-                });
+                this.showSuccessSwal()
               })
               .catch(error => {
                 console.error(error);
                 this.$store.commit("app/SET_LOADING", false);
-                this.showToast(
-                  "danger",
-                  "top-right",
-                  "Error",
-                  "XIcon",
-                  "Something went wrong!"
-                );
+                this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
               });
           }
         });

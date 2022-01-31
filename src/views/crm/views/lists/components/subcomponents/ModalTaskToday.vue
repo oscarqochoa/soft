@@ -52,7 +52,7 @@
             <span>{{ data.item.due_date | myGlobalDay }}</span>
           </div>
         </template>
-        <template #cell(done)="">
+        <template #cell(done)="data">
           <div
             class="d-flex flex-column justify-content-center align-items-center"
           >
@@ -127,25 +127,28 @@ export default {
     closeModal() {
       this.$emit("close", false);
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}`, {
+    async myProvider(ctx) {
+      try {
+        const response = await amgApi.post(`${ctx.apiUrl}`, {
         id: this.currentUser.user_id,
       });
-
-      return promise.then((data) => {
-        let items = data.data;
-        return items || [];
-      });
+      const items = response.data
+      return items || []
+      } catch(error) {
+        console.error(error)
+        return []
+      }
     },
     doneTask(id, done) {
+      console.log(done)
         this.showConfirmSwal()
         .then((result) => {
           if (result.value) {
             amgApi
-              .post("/donetasktoday", {
+              .post("/lead/done-task-today", {
                 id: id,
                 user_id: this.currentUser.user_id,
-                done: done == 1 ? 0 : 1,
+                done: done == "1" ? 1 : 0,
               })
               .then((response) => {
                 if (response.status == 200) {
