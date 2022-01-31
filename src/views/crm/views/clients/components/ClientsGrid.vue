@@ -506,9 +506,10 @@ export default {
       return this.items || [];
     },
     updateLead(lead) {
-      this.items[
-        this.editSelectedIndex
-      ].lead_name = `${lead.first_name} ${lead.middle_name} ${lead.last_name}`;
+      console.log(lead);
+      this.items[this.editSelectedIndex].lead_name = `${
+        lead.first_name
+      } ${lead.middle_name || ""} ${lead.last_name}`;
       this.items[this.editSelectedIndex].mobile = lead.mobile;
     },
     async getAllPrograms() {
