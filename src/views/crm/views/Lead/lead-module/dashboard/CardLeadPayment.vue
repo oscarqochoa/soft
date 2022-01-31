@@ -53,6 +53,7 @@
         />
       </b-col>
     </b-row>
+    <!-- <p>{{payment}}</p> -->
   </b-card>
 </template>
 
@@ -70,12 +71,16 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token"
+      token: "auth/token",
+      updatedCards:"CrmCreditCardStore/LISTCARDS" 
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
-    })
+    }),
+    updateCards(){
+      this.lead.cards = this.updatedCards
+    }
   },
   created() {
     this.authUser = this.currentUser;
@@ -100,7 +105,8 @@ export default {
   directives: { Ripple },
   methods: {
     ...mapActions({
-      A_LEAD_PAYMENT: "CrmLeadStore/A_LEAD_PAYMENT"
+      A_LEAD_PAYMENT: "CrmLeadStore/A_LEAD_PAYMENT",
+      
     }),
     async onSubmit(item, ref) {
       this.showConfirmSwal()
