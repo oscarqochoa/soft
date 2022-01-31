@@ -121,7 +121,7 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
-      updatedCards:"CrmCreditCardStore/LISTCARDS"
+      updatedCards:"CrmCreditCardStore/LISTCARDS" 
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
