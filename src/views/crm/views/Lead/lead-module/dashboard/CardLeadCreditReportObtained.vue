@@ -39,9 +39,9 @@
           >
             Process
           </span>
-          <router-link
+          <!-- <router-link
             v-if="data.item.state == 1"
-            :to="{ name: 'report-lead', params: { modul: currentUser.modul_id, global: { idfile: data.item.id, idlead: lead.id } } }"
+            :to="{ name: 'report-lead', params: { modul: currentUser.modul_id, global: { idfile: data.item.id, idlead: data.item.lead_id } } }"
             variant="flat-success"
             class="button-little-size rounded-circle"
             target="_blanck"
@@ -50,7 +50,27 @@
               icon="FileChartIcon"
               size="18"
             />
-          </router-link>
+            
+          </router-link> -->
+          <router-link
+              v-if="data.item.state == 1"
+              :to="{ 
+                name: 'report-lead',
+                params: {idfile:data.item.id,idlead:data.item.lead_id,
+                  modul: 2,
+                  global: {
+                    idfile: data.item.score_id,
+                    idlead: data.item.lead_id,
+                  },
+                },
+              }"
+              target="_blank"
+            >
+             <amg-icon
+              icon="FileChartIcon"
+              size="18"
+            />
+            </router-link>
         </template>
         <template #cell(pdf)="data">
           <a
