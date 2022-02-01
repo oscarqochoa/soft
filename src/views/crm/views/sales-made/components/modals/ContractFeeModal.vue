@@ -84,9 +84,10 @@
                 <money
                   v-model="monthlyAmount"
                   class="form-control text-right"
-                  :class="{'border-danger rounded': errors[0]}"
+                  :class="{'border-danger rounded': errors[0] && monthlyPaymentController}"
                   v-bind="{precision: 2}"
                   :disabled="contractSale.program_id == 2 || contractSale.program_id == 4 || valorEdit"
+                  @change.native="monthlyPaymentController = true"
                 />
               </validation-provider>
             </b-col>
@@ -121,12 +122,13 @@
                 v-slot="{errors}"
                 name="methodPayment"
                 rules="required"
+                @change="methodPaymentController = true"
               >
                 <b-form-radio-group
                   v-model="methodPayment"
                   :options="[{text: 'Credit Card', value: 0}, {text: 'Others', value: 1}]"
                   :disabled="valorEdit"
-                  :class="{'border-danger rounded' : errors[0]}"
+                  :class="{'border-danger rounded' : errors[0] && methodPaymentController}"
                 />
               </validation-provider>
             </b-col>
@@ -388,6 +390,8 @@ export default {
       yearCFee: null,
       dayCFee: null,
       monthCFee: null,
+      methodPaymentController: false,
+      monthlyPaymentController: false,
     }
   },
   computed: {
@@ -448,6 +452,8 @@ export default {
   },
   methods: {
     async saveContract() {
+      this.monthlyPaymentController = true
+      this.methodPaymentController = true
       const result = await this.$refs.form.validate()
       if (result) {
         const params = {
