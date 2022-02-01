@@ -6,7 +6,8 @@
     header-bg-variant="primary"
     title-class="h3 text-white font-weight-bolder"
     size="lg"
-    title="TRACKING"
+    title="Tracking"
+    modal-class="modal-primary"
     hide-footer
     scrollable
   >

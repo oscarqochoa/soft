@@ -3,6 +3,7 @@
     v-model="ownShowModal"
     :title="'Share ' + selectedFile.file_name"
     hide-footer
+    modal-class="modal-primary"
     no-close-on-backdrop
     @hidden="hideModal"
   >

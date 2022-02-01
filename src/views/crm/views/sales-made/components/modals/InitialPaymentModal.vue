@@ -5,6 +5,7 @@
     size="lg"
     title="Initial Payment"
     scrollable
+    modal-class="modal-primary"
     @hide="hideModal"
   >
     <b-container fluid>
@@ -131,7 +132,10 @@
           size="sm"
           @click="createCard"
         >
-          <feather-icon icon="PlusIcon" />ADD
+          <feather-icon
+            icon="PlusIcon"
+            class="mr-50"
+          />Add
         </b-button>
       </b-row>
       <b-row
@@ -161,14 +165,15 @@
       </b-row>
     </b-container>
     <template #modal-footer>
-      <b-row class="d-flex align-items-center justify-content-center w-100">
+      <b-row class="d-flex align-items-center justify-content-end w-100">
         <b-button
           v-if="(valorEdit != true && amount_camp == false) || (valorEdit != true && initial_payment.programid == 2) "
           variant="primary"
+          :disabled="initial_payment.allcards.length === 0"
           size="sm"
           @click="savePayment"
         >
-          <feather-icon icon="SendIcon" />SUBMIT
+          Submit
         </b-button>
       </b-row>
     </template>

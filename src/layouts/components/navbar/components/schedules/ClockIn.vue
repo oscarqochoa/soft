@@ -46,7 +46,10 @@
       title-class="title-assitence-schedule"
       no-close-on-backdrop
     >
-      <content-justify ref="contentJustify" @closeModalJustify="closeModalJustify"/>
+      <content-justify
+        ref="contentJustify"
+        @closeModalJustify="closeModalJustify"
+      />
       <template #modal-footer>
         <div class="footer-capture">
           <b-button variant="primary" @click="sendJustifyLate()">
@@ -74,7 +77,7 @@ export default {
     return {
       payStubModalController: false,
       dialAttendance: false,
-      assistanceText: "NO ASSIGNED",
+      assistanceText: "ENTER YOUR MODULE",
       image: "",
       currentTimem: "",
       setInterval: null,
@@ -91,7 +94,11 @@ export default {
     }),
   },
   mounted() {
-    this.geTimeToDial();
+    console.log(this.currentUser);
+    let modul =
+      "dashboard-" +
+      this.currentUser.module_name.replaceAll(".", "").toLowerCase();
+    console.log("rutas ", modul);
   },
   methods: {
     async sendAssistance(image) {
@@ -104,6 +111,7 @@ export default {
         modul_id: this.currentUser.modul_id,
       };
       const data = await ScheduleService.sendAssistance(params);
+      this.geTimeToDial(false);
       this.sweetAlertAssistance(data);
       this.closeModal();
       this.removePreloader();
@@ -129,7 +137,7 @@ export default {
         this.modalJustify = true;
       }
     },
-    closeModalJustify(){
+    closeModalJustify() {
       this.modalJustify = false;
     },
     sendJustifyLate() {
@@ -139,8 +147,6 @@ export default {
       this.payStubModalController = true;
     },
     openModal() {
-      this.addPreloader();
-      this.getCurrentTime();
       this.geTimeToDial(true);
     },
     attendance() {
@@ -150,7 +156,6 @@ export default {
     closeModal() {
       this.dialAttendance = false;
       this.getCurrentTime();
-      this.geTimeToDial(false);
     },
     async getCurrentTime() {
       const data = await ScheduleService.currentTime();
@@ -165,19 +170,26 @@ export default {
       }, 1000);
     },
     async geTimeToDial(modal) {
-      const data = await ScheduleService.geTimeToDial(this.currentUser);
-      if (data.length > 0) {
-        this.schedule = data[0];
-        this.validateAttendance(data[0], modal);
-      } else {
-        this.removePreloader();
-        this.showToast(
-          "info",
-          "top-right",
-          "Oops!",
-          "XIcon",
-          "NO SCHEDULE FOUND"
-        );
+      if (this.$route.name != "amg-menu") {
+        this.addPreloader();
+        this.getCurrentTime();
+        const data = await ScheduleService.geTimeToDial(this.currentUser);
+        if (data.length > 0) {
+          this.schedule = data[0];
+          this.validateAttendance(data[0], modal);
+        } else {
+          this.assistanceText = "NOT ASSIGNED";
+          this.removePreloader();
+          if (modal == true) {
+            this.showToast(
+              "info",
+              "top-right",
+              "Oops!",
+              "XIcon",
+              "NO SCHEDULE FOUND"
+            );
+          }
+        }
       }
     },
     validateAttendance(data, modal) {
@@ -199,6 +211,17 @@ export default {
       }
       this.dialAttendance = modal;
       this.removePreloader();
+    },
+  },
+  watch: {
+    $route() {
+      if (
+        this.$route.name ==
+        "dashboard-" +
+          this.currentUser.module_name.replaceAll(".", "").toLowerCase()
+      ) {
+        this.geTimeToDial(false);
+      }
     },
   },
 };
