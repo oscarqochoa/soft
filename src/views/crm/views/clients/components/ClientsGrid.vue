@@ -506,9 +506,11 @@ export default {
       return this.items || [];
     },
     updateLead(lead) {
-      this.items[
-        this.editSelectedIndex
-      ].lead_name = `${lead.first_name} ${lead.middle_name} ${lead.last_name}`;
+      //Full name
+      this.items[this.editSelectedIndex].lead_name = `${
+        lead.first_name
+      } ${lead.middle_name || ""} ${lead.last_name}`;
+      //Mobile
       this.items[this.editSelectedIndex].mobile = lead.mobile;
     },
     async getAllPrograms() {
