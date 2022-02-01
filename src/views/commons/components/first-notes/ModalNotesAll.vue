@@ -23,7 +23,11 @@
               md="12"
               class="mb-1"
             >
-              <validation-provider v-slot="{ errors }" rules="required" name="contactSchedule">
+              <validation-provider
+                v-slot="{ errors }"
+                rules="required"
+                name="contactSchedule"
+              >
                 <b-input-group>
                   <b-input-group-prepend
                     class="border-info rounded-left px-1 d-flex align-items-center justify-content-center bg-info text-white font-weight-bolder"
@@ -37,8 +41,15 @@
               </validation-provider>
             </b-col>
             <b-col md="6">
-              <b-form-group label="Origin Country" label-class="font-weight-bolder">
-                <validation-provider v-slot="{ errors }" rules="required" name="originCountry">
+              <b-form-group
+                label="Origin Country"
+                label-class="font-weight-bolder"
+              >
+                <validation-provider
+                  v-slot="{ errors }"
+                  rules="required"
+                  name="originCountry"
+                >
                   <v-select
                     v-model="origin_country"
                     label="name"
@@ -50,8 +61,15 @@
                 </validation-provider>
               </b-form-group>
             </b-col>
-            <b-col v-for="(question, index) in notesSales" :key="index" :cols="question.column">
-              <validation-provider v-slot="{errors}" rules="required">
+            <b-col
+              v-for="(question, index) in notesSales"
+              :key="index"
+              :cols="question.column"
+            >
+              <validation-provider
+                v-slot="{errors}"
+                rules="required"
+              >
                 <b-form-group
                   v-if="findFather(question.father)"
                   :label="question.question"
@@ -78,10 +96,21 @@
                 </b-form-group>
               </validation-provider>
             </b-col>
-            <b-col v-if="notesSales[0].type_view == 2" md="12">
+            <b-col
+              v-if="notesSales[0].type_view == 2"
+              md="12"
+            >
               <b-row>
-                <b-col md="12" class="text-primary font-medium-2 mb-1">More Information</b-col>
-                <b-col class="mb-1 d-flex align-items-center" md="6">
+                <b-col
+                  md="12"
+                  class="text-primary font-medium-2 mb-1"
+                >
+                  More Information
+                </b-col>
+                <b-col
+                  class="mb-1 d-flex align-items-center"
+                  md="6"
+                >
                   <span
                     class="rounded-left border-info bg-info text-white w-25 text-center px-0"
                     style="padding: 3px 10px"
@@ -91,7 +120,10 @@
                     style="padding: 3px 10px"
                   >{{ showContactSchedule.status_lead ? showContactSchedule.status_lead : '-' }}</span>
                 </b-col>
-                <b-col class="mb-1 d-flex align-items-center" md="6">
+                <b-col
+                  class="mb-1 d-flex align-items-center"
+                  md="6"
+                >
                   <span
                     class="rounded-left border-info bg-info text-white text-center"
                     style="padding: 3px 10px; width: 35%"
@@ -101,7 +133,10 @@
                     style="padding: 3px 10px; width: 65%"
                   >$ {{ showContactSchedule.monthly_payment }}</span>
                 </b-col>
-                <b-col class="mb-1 d-flex align-items-center" md="6">
+                <b-col
+                  class="mb-1 d-flex align-items-center"
+                  md="6"
+                >
                   <span
                     class="rounded-left border-info bg-info text-white w-25 text-center px-0"
                     style="padding: 3px 10px"
@@ -111,7 +146,10 @@
                     style="padding: 3px 10px"
                   >$ {{ showContactSchedule.retainer_fee }}</span>
                 </b-col>
-                <b-col class="mb-1 d-flex align-items-center" md="6">
+                <b-col
+                  class="mb-1 d-flex align-items-center"
+                  md="6"
+                >
                   <span
                     class="rounded-left border-info bg-info text-white text-center"
                     style="padding: 3px 10px; width: 35%"
@@ -121,7 +159,10 @@
                     style="padding: 3px 10px; width: 65%"
                   >$ {{ showContactSchedule.total_income }}</span>
                 </b-col>
-                <b-col class="mb-1 d-flex align-items-center" md="6">
+                <b-col
+                  class="mb-1 d-flex align-items-center"
+                  md="6"
+                >
                   <span
                     class="rounded-left border-info bg-info text-white w-25 text-center"
                     style="padding: 3px 10px"
@@ -133,7 +174,12 @@
                 </b-col>
               </b-row>
               <b-row>
-                <b-col md="12" class="text-primary font-medium-2 mb-1">Creditor´s List</b-col>
+                <b-col
+                  md="12"
+                  class="text-primary font-medium-2 mb-1"
+                >
+                  Creditor´s List
+                </b-col>
                 <b-col md="12">
                   <b-table
                     small
@@ -142,9 +188,15 @@
                     :fields="creditorsFields"
                   />
                 </b-col>
-                <b-col class="mb-1" md="12">
+                <b-col
+                  class="mb-1"
+                  md="12"
+                >
                   <b-row class="d-flex align-items-center justify-content-end font-small-3">
-                    <b-col md="6" class="d-flex align-items-center justify-content-center">
+                    <b-col
+                      md="6"
+                      class="d-flex align-items-center justify-content-center"
+                    >
                       <span
                         class="rounded-left border-info bg-info text-white text-center px-1"
                         style="padding: 3px 10px"
@@ -163,13 +215,19 @@
         <template #modal-footer>
           <b-container fluid>
             <b-row v-if="notesCompleted">
-              <b-col v-if="!valorEdit" class="d-flex align-items-center justify-content-end">
+              <b-col
+                v-if="!valorEdit"
+                class="d-flex align-items-center justify-content-end"
+              >
                 <button-update @click="saveNotesCompleted" />
               </b-col>
             </b-row>
             <b-row v-else>
               <b-col class="d-flex align-items-center justify-content-end">
-                <button-save class="mr-1" @click="saveNotesIncomplete" />
+                <button-save
+                  class="mr-1"
+                  @click="saveNotesIncomplete"
+                />
                 <button-save-and-complete @click="saveNotesCompleted" />
               </b-col>
             </b-row>
@@ -181,36 +239,36 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { quillEditor } from "vue-quill-editor";
-import vSelect from "vue-select";
-import NotesServices from "@/views/commons/components/first-notes/services/notes.service";
-import HeaderModalNotes from "./HeaderModalNotes.vue";
-import GlobalService from "@/views/services/global.service";
+import { mapGetters } from 'vuex'
+import { quillEditor } from 'vue-quill-editor'
+import vSelect from 'vue-select'
+import NotesServices from '@/views/commons/components/first-notes/services/notes.service'
+import GlobalService from '@/views/services/global.service'
 
-import "quill/dist/quill.core.css";
-import "quill/dist/quill.snow.css";
-import "quill/dist/quill.bubble.css";
-import ButtonSave from "@/views/commons/utilities/ButtonSave.vue";
-import ButtonSaveAndComplete from "@/views/commons/utilities/ButtonSaveAndComplete.vue";
-import ButtonUpdate from "@/views/commons/utilities/ButtonUpdate.vue";
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import ButtonSave from '@/views/commons/utilities/ButtonSave.vue'
+import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete.vue'
+import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate.vue'
+import HeaderModalNotes from './HeaderModalNotes.vue'
 
 export default {
-  name: "ModalNotesAll",
+  name: 'ModalNotesAll',
   components: {
     ButtonUpdate,
     ButtonSaveAndComplete,
     ButtonSave,
     vSelect,
     HeaderModalNotes,
-    quillEditor
+    quillEditor,
   },
   props: {
     noteInfo: {
       type: Object,
       required: true,
       default: () => ({
-        programSelected: "",
+        programSelected: '',
         roleId: null,
         notesProgram: null,
         nameProgram: null,
@@ -230,26 +288,26 @@ export default {
         sellerName: null,
         trackings: null,
         notes_status: null,
-        notes_status_new: null
-      })
-    }
+        notes_status_new: null,
+      }),
+    },
   },
   data() {
     return {
       creditorsFields: [
         {
-          key: "credit",
-          label: "Creditors Name"
+          key: 'credit',
+          label: 'Creditors Name',
         },
         {
-          key: "account",
-          label: "# Account"
+          key: 'account',
+          label: '# Account',
         },
         {
-          key: "balance",
-          label: "Total Balance",
-          formatter: value => `$ ${value.toFixed(2)}`
-        }
+          key: 'balance',
+          label: 'Total Balance',
+          formatter: value => `$ ${value.toFixed(2)}`,
+        },
       ],
       program: this.noteInfo.nameProgram,
       client_name: this.noteInfo.nameClient,
@@ -265,153 +323,153 @@ export default {
       modalUp: false,
       notesSales: [{ type_view: null }],
       countryOptions: [],
-      contact_schedule: ""
-    };
+      contact_schedule: '',
+    }
   },
   computed: {
     showContactSchedule() {
-      return this.notesSales[0];
+      return this.notesSales[0]
     },
     valorEdit() {
       return (
-        this.noteInfo.type == 1 ||
-        this.noteInfo.editModal == false ||
-        this.noteInfo.statusSale == 2 ||
-        this.noteInfo.statusSale == 4 ||
-        this.noteInfo.notSeller
-      );
-    }
+        this.noteInfo.type == 1
+        || this.noteInfo.editModal == false
+        || this.noteInfo.statusSale == 2
+        || this.noteInfo.statusSale == 4
+        || this.noteInfo.notSeller
+      )
+    },
   },
   async created() {
-    await this.getNotesSales();
-    await this.getCountrys();
-    this.filterQuestions();
-    this.getOriginCountry();
-    this.notesSales = this.notesSales.filter(val => val.question_id != 1062);
-    if (this.noteInfo.created < "2021-08-05") {
+    await this.getNotesSales()
+    await this.getCountrys()
+    this.filterQuestions()
+    this.getOriginCountry()
+    this.notesSales = this.notesSales.filter(val => val.question_id != 1062)
+    if (this.noteInfo.created < '2021-08-05') {
       this.notesSales = this.notesSales.filter(
-        val => val.question != "Type of Agreement" && val.question_id != 1062
-      );
+        val => val.question != 'Type of Agreement' && val.question_id != 1062,
+      )
     }
-    this.cleanNotes();
+    this.cleanNotes()
   },
   methods: {
     async getNotesSales() {
       try {
-        const params = { id: this.noteInfo.saleId };
-        const response = await NotesServices.notesSales(params);
-        this.notesSales = response;
+        const params = { id: this.noteInfo.saleId }
+        const response = await NotesServices.notesSales(params)
+        this.notesSales = response
         this.contact_schedule = this.notesSales[5].answer
           ? this.notesSales[5].answer
-          : "";
-        this.modalUp = true;
-        this.removePreloader();
+          : ''
+        this.modalUp = true
+        this.removePreloader()
       } catch (e) {
-        this.showErrorSwal(e);
-        this.removePreloader();
+        this.showErrorSwal(e)
+        this.removePreloader()
       }
     },
     async getCountrys() {
       try {
-        const response = await GlobalService.getCountrys();
-        this.countryOptions = response;
+        const response = await GlobalService.getCountrys()
+        this.countryOptions = response
       } catch (error) {
-        this.showErrorSwal();
+        this.showErrorSwal()
       }
     },
     getOriginCountry() {
-      this.origin_country = this.noteInfo.originCountry;
+      this.origin_country = this.noteInfo.originCountry
     },
     // Hide Modal
     hideModal(status) {
-      this.modalUp = false;
-      this.$emit("hide", status);
+      this.modalUp = false
+      this.$emit('hide', status)
     },
     closeModal() {
-      this.$emit("close", false);
+      this.$emit('close', false)
     },
     deleteRequired(nota) {
       if (nota.answer != null || nota.answer != null) {
         this.$refs[`required${nota.question_id}`].$el.classList.remove(
-          "required-text"
-        );
+          'required-text',
+        )
       }
     },
     findFather(id) {
       if (id != null) {
         const father = this.notesSales.find(
-          element => element.question_id == id
-        );
-        return father.answer === "YES";
+          element => element.question_id == id,
+        )
+        return father.answer === 'YES'
       }
-      return true;
+      return true
     },
     async saveNotesCompleted() {
-      const result = await this.$refs.form.validate();
+      const result = await this.$refs.form.validate()
       if (result) {
-        const { value } = await this.showConfirmSwal();
+        const { value } = await this.showConfirmSwal()
         if (value) {
-          const response = await amgApi.post("/sales-made/insert-sales-notes", {
+          const response = await amgApi.post('/sales-made/insert-sales-notes', {
             notes: this.notesSales,
             sale_id: this.notesSales[0].sale_id,
             contact_schedule: this.contact_schedule,
             originCountry: this.originCountry,
-            idLead: this.noteInfo.idLead
-          });
+            idLead: this.noteInfo.idLead,
+          })
           if (response.status === 200) {
-            this.removePreloader();
-            this.showSuccessSwal("Notes Successfull");
-            this.hideModal(true);
+            this.removePreloader()
+            this.showSuccessSwal('Notes Successfull')
+            this.hideModal(true)
           }
         }
       }
     },
 
     async saveNotesIncomplete() {
-      const result = await this.showConfirmSwal();
+      const result = await this.showConfirmSwal()
       if (result.value) {
-        this.addPreloader();
-        const response = await amgApi.post("/sales-made/insert-sales-notes", {
+        this.addPreloader()
+        const response = await amgApi.post('/sales-made/insert-sales-notes', {
           notes: this.notesSales,
           sale_id: this.notesSales[0].sale_id,
           contact_schedule: this.contact_schedule,
           originCountry: this.originCountry,
-          idLead: this.noteInfo.idLead
-        });
+          idLead: this.noteInfo.idLead,
+        })
         if (response.status === 200) {
-          this.removePreloader();
-          this.showSuccessSwal("Notes Successfull");
-          this.hideModal(true);
+          this.removePreloader()
+          this.showSuccessSwal('Notes Successfull')
+          this.hideModal(true)
         }
       }
     },
     cleanNotes() {
       this.notesSales.map(note => {
-        if (note.answer == "null" || note.answer == null) {
+        if (note.answer == 'null' || note.answer == null) {
           // eslint-disable-next-line no-param-reassign
-          note.answer = "";
-          this.notesCompleted = false;
+          note.answer = ''
+          this.notesCompleted = false
         }
-      });
+      })
       /* if (this.contact_schedule == '') {
         this.notesCompleted = false
       } */
     },
     filterQuestions() {
       // filter repeat clients
-      let noRepeatQuestions = [];
-      const uniqueQuestion = {};
-      noRepeatQuestions = this.notesSales;
+      let noRepeatQuestions = []
+      const uniqueQuestion = {}
+      noRepeatQuestions = this.notesSales
 
       noRepeatQuestions = noRepeatQuestions.filter(current => {
-        const exists = !uniqueQuestion[current.question_id];
-        uniqueQuestion[current.question_id] = true;
-        return exists;
-      });
-      this.notesSales = noRepeatQuestions;
-    }
-  }
-};
+        const exists = !uniqueQuestion[current.question_id]
+        uniqueQuestion[current.question_id] = true
+        return exists
+      })
+      this.notesSales = noRepeatQuestions
+    },
+  },
+}
 </script>
 
 <style scoped>

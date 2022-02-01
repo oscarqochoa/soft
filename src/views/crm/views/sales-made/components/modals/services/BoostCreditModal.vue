@@ -48,10 +48,25 @@
                     >$</b-col>
                     <b-col>
                       <b-form-select
+                        v-if="[0,null, undefined, 19.99,24.99,29.99,34.99,39.99,44.99, 49.99, 54.99, 59.99].includes(fee)"
                         v-model="fee"
                         :disabled="isModalShow"
                         :options="[19.99,24.99,29.99,34.99,39.99,44.99, 49.99, 54.99, 59.99]"
                         :class="{'border-danger': errors[0]}"
+                      />
+                      <money
+                        v-else
+                        v-model="fee"
+                        v-bind="{
+                          decimal: '.',
+                          thousands: ',',
+                          prefix: '',
+                          precision: 2,
+                          masked: false,
+                        }"
+                        class="form-control text-center"
+                        :class="{'border-danger':errors[0] && validateMoney}"
+                        :disabled="isModalShow"
                       />
                     </b-col>
                   </b-row>

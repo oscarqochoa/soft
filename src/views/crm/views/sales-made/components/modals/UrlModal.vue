@@ -1,7 +1,7 @@
 <template>
   <b-modal
     v-model="modal.url"
-    :title="`Generate Url Lead ${url.client.toUpperCase()}`"
+    :title="`Generate Url Lead ${url.client}`"
     title-class="h3 text-white font-weight-bolder"
     hide-footer
     modal-class="modal-primary"
@@ -52,7 +52,7 @@
           variant="success"
           @click="sendGeneratedLinkViaSms"
         >
-          <feather-icon icon="MessageCircleIcon" />SEND SMS
+          Send Sms
         </b-button>
       </b-row>
     </b-container>
@@ -164,10 +164,7 @@ export default {
           last_name: this.url.selectedLead.last_name,
         })
         if (res.status === 200) {
-          this.$swal.fire({
-            icon: 'success',
-            title: 'SMS SENT',
-          })
+          this.showSuccessSwal('SMS Send', '', '')
         }
       } catch (error) {
         this.showErrorSwal()
