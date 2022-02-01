@@ -37,10 +37,8 @@
           />
           <b-input-group-append>
             <b-button
-              v-clipboard:copy="generatedUrl"
-              v-clipboard:success="onCopy"
-              v-clipboard:error="onError"
               variant="primary"
+              @click="doCopy"
             >
               <feather-icon icon="CopyIcon" />
             </b-button>
@@ -140,6 +138,14 @@ export default {
     },
   },
   methods: {
+    async doCopy() {
+      try {
+        await navigator.clipboard.writeText(this.generatedUrl)
+        this.onCopy()
+      } catch (e) {
+        this.onError(e)
+      }
+    },
     async changeCharge(checked) {
       const message = checked
         ? 'Are you sure to activate the charge?'
@@ -173,8 +179,8 @@ export default {
     onCopy() {
       this.showToast('success', 'top-right', 'Text copied', 'CheckIcon', '')
     },
-    onError() {
-      this.showToast('success', 'top-right', 'Failed to copy', 'XIcon', '')
+    onError(e = '') {
+      this.showToast('success', 'top-right', 'Failed to copy', 'XIcon', e)
     },
   },
 }
