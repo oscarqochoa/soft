@@ -27,7 +27,7 @@
                   >
                   <b-form-radio
                   class="vs-checkbox-con"
-                  :class="{ 'border border-danger': errors[0] }"
+                  :class="{'border-danger': errors[0]}"
                   :value="data.item.id"
                   @change="$emit('CardId',data.item.id)"
                   v-model="selected"

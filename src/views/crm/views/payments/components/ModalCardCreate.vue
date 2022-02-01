@@ -25,7 +25,7 @@
                   v-model="form.cardholdername"
                   type="text"
                   placeholder="Card Holder Name"
-                  :class="{'border border-danger':errors[0]}"
+                  :class="{'border-danger':errors[0]}"
                 />
               </ValidationProvider>
             </div>
@@ -42,7 +42,7 @@
                       @input="activeFocus(1, 4)"
                       v-model="cardnumber1"
                       type="text"
-                      :class="{'border border-danger':errors[0]}"
+                      :class="{'border-danger':errors[0]}"
                     />
                   </ValidationProvider>
                 </b-col>
@@ -54,7 +54,7 @@
                       @input="activeFocus(2, 4)"
                       v-model="cardnumber2"
                       type="text"
-                      :class="{'border border-danger':errors[0]}"
+                      :class="{'border-danger':errors[0]}"
                     />
                   </ValidationProvider>
                 </b-col>
@@ -66,7 +66,7 @@
                       @input="activeFocus(3, 4)"
                       v-model="cardnumber3"
                       type="text"
-                      :class="{'border border-danger':errors[0]}"
+                      :class="{'border-danger':errors[0]}"
                     />
                   </ValidationProvider>
                 </b-col>
@@ -78,7 +78,7 @@
                       @input="activeFocus(4, 4)"
                       v-model="cardnumber4"
                       type="text"
-                      :class="{'border border-danger':errors[0]}"
+                      :class="{'border-danger':errors[0]}"
                     />
                   </ValidationProvider>
                 </b-col>
@@ -96,7 +96,7 @@
                   ref="input-5"
                   @input="activeFocus(5, 2)"
                   v-model="form.card_expi_month"
-                  :class="{'border border-danger':errors[0]}"
+                  :class="{'border-danger':errors[0]}"
                 />
               </ValidationProvider>
             </div>
@@ -112,7 +112,7 @@
                   ref="input-6"
                   @input="activeFocus(6, 2)"
                   v-model="form.card_expi_year"
-                  :class="{'border border-danger':errors[0]}"
+                  :class="{'border-danger':errors[0]}"
                 />
               </ValidationProvider>
             </div>
@@ -129,7 +129,7 @@
                   max="4"
                   type="text"
                   maxlength="16"
-                  :class="{'border border-danger':errors[0]}"
+                  :class="{'border-danger':errors[0]}"
                 />
               </ValidationProvider>
             </div>
@@ -170,7 +170,7 @@
                   v-on:placechanged="getAddressData"
                   country="us"
                   v-model="form.address"
-                  :class="{'border border-danger':errors[0]}"
+                  :class="{'border-danger':errors[0]}"
                 ></vue-google-autocomplete>
               </ValidationProvider>
             </div>
@@ -185,7 +185,7 @@
                   id="city"
                   type="text"
                   placeholder="City"
-                  :class="{'border border-danger':errors[0]}"
+                  :class="{'border-danger':errors[0]}"
                 />
               </ValidationProvider>
             </div>
@@ -199,7 +199,7 @@
                   id="state"
                   v-model="form.state"
                   class="form-control"
-                  :class="{'border border-danger':errors[0]}"
+                  :class="{'border-danger':errors[0]}"
                 >
                   <option
                     :value="state.slug"
@@ -220,7 +220,7 @@
                   id="zipcode"
                   type="text"
                   placeholder="Zip Code"
-                  :class="{'border border-danger':errors[0]}"
+                  :class="{'border-danger':errors[0]}"
                 />
               </ValidationProvider>
             </div>
@@ -236,7 +236,7 @@
                   id="country"
                   type="text"
                   placeholder="Country"
-                  :class="{'border border-danger':errors[0]}"
+                  :class="{'border-danger':errors[0]}"
                 />
               </ValidationProvider>
             </div>

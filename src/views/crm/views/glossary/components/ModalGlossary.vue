@@ -28,7 +28,7 @@
                   :reduce="(val) => val.id"
                   label="name"
                   class="w-100"
-                  :class="{ 'border border-danger': errors[0] }"
+                  :class="{ 'border-danger': errors[0] }"
                 ></v-select>
               </b-form-group>
             </ValidationProvider>
@@ -43,7 +43,7 @@
                 <b-input-group prepend="TITLE" size="md" class="mt-2" style>
                   <b-form-input
                     v-model="title"
-                    :class="{ 'border border-danger': errors[0] }"
+                    :class="{ 'border-danger': errors[0] }"
                   />
                 </b-input-group>
               </b-form-group>
@@ -71,7 +71,7 @@
               >
                 <b-form-textarea
                   :disabled="statusDescription"
-                  :class="{ 'border border-danger': errors[0] }"
+                  :class="{ 'border-danger': errors[0] }"
                   style="border-radius: 0px 10px 10px 10px; height: 120px"
                   v-model="description"
                 ></b-form-textarea>

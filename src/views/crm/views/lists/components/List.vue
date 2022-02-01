@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card no-body class="mb-1">
-      <div class="m-2">
+      <div class="m-2" v-if="statusCreateList">
         <b-row>
           <b-col
             cols="12"
@@ -197,6 +197,13 @@
                 <feather-icon icon="EyeIcon"></feather-icon>
               </b-button>
 
+              <b-button
+                v-if="data.item.created_at == 'Today' && count_alltask==0"
+                variant="warning" disabled
+                class="ml-1 reset-radius btn-sm"
+              >
+                <feather-icon icon="EyeIcon"></feather-icon>
+              </b-button>
               <b-button
                 v-if="data.item.created_at == 'Today' && count_alltask>0"
                 variant="warning"
@@ -421,6 +428,9 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    statusCreateList(){
+      return this.currentUser.role_id == 2 ? true : false;
+    },
   },
   methods: {
     updatingTasks() {
@@ -438,6 +448,7 @@ export default {
     statusRol() {
       this.add = this.currentUser.role_id == 2 ? true : false;
     },
+    
     addlist() {
       this.newList = true;
       this.add = false;

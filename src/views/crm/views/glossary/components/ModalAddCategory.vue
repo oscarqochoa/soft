@@ -29,7 +29,7 @@
                 >
                   <b-form-input
                     v-model="category"
-                    :class="{ 'border border-danger': errors[0] }"
+                    :class="{ 'border-danger': errors[0] }"
                   />
                 </b-input-group>
               </b-form-group>

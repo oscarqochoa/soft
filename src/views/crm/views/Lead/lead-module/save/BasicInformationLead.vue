@@ -62,7 +62,7 @@
         <validation-provider
           v-slot="{errors}"
           name="Email"
-          :rules="`${!disabledemail ? 'required|' : ''}email`"
+          :rules="`${!disabledemail ? 'required|email' : ''}`"
         >
           <b-form-group
             label="Email"
@@ -73,6 +73,7 @@
               v-model="userData.email"
               trim
               :state="errors[0] ? false : null"
+              :disabled="disabledemail"
             />
           </b-form-group>
         </validation-provider>
@@ -81,7 +82,7 @@
             id="without-email"
             name="without-email"
             value="without-email"
-            @input="disabledemail = !disabledemail"
+            @change="disabledemail = !disabledemail"
           >Client has not email</b-form-checkbox>
         </b-form-group>
       </b-col>
@@ -152,6 +153,7 @@
               input-id="state-lead"
               :reduce="el => el.id"
             />
+            
           </b-form-group>
         </validation-provider>
       </b-col>
@@ -230,7 +232,8 @@ export default {
         locale: 'en',
       },
       programsList: [],
-    }
+      listStatus:[]
+    };
   },
   computed: {
     ...mapGetters({
@@ -250,7 +253,8 @@ export default {
     }
   },
   created() {
-    this.formatInitialData()
+    this.formatInitialData();
+    this.listStatus = this.G_STATE_LEADS
   },
   methods: {
     capitalize(el) {
