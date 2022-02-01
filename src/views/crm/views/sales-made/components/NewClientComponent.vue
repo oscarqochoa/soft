@@ -1,13 +1,13 @@
 <template>
   <div>
     <b-tabs
-      pills
+      v-model="tabIndex"
+      tabs
       lazy
-      active-nav-item-class="bg-important border-0 shadow-none"
+      fill
     >
       <b-tab
         title="Done"
-        title-link-class="border-secondary hover-important"
       >
         <sales-made-new-client-component
           :done="1"
@@ -15,7 +15,6 @@
       </b-tab>
       <b-tab
         title="Pending"
-        title-link-class="border-secondary hover-important"
       >
         <sales-made-new-client-component
           :done="0"
@@ -32,6 +31,18 @@ export default {
   name: 'NewClientComponent',
   components: {
     SalesMadeNewClientComponent,
+  },
+  data() {
+    return {
+      tabIndex: null,
+    }
+  },
+  created() {
+    if (this.$route.query.done) {
+      this.tabIndex = this.$route.query.done - 1
+    } else {
+      this.tabIndex = 0
+    }
   },
 }
 </script>
