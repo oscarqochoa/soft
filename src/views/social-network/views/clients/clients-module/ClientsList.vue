@@ -43,9 +43,9 @@
 
           <template v-slot:cell(name)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
-              <p class="mb-0 font-weight-bold">
+              <b-link class="mb-0 font-weight-bold text-important">
                 {{ data.item.lead_name }}
-              </p>
+              </b-link>
             </div>
 
           </template>
@@ -331,7 +331,7 @@ export default {
   watch: {
 
     paymentType(newVal) {
-      if (newVal == 1) {
+      if (newVal === 1) {
         this.paymentDay = true
       } else {
         this.paymentDay = false
@@ -406,7 +406,6 @@ export default {
           data.accounts = JSON.parse(data.accounts)
           data.accounts.map(val => {
             if (val.charges === null) val.charges = 0
-            console.log(val.charges)
           })
         })
         this.items = data.data.data
@@ -432,5 +431,10 @@ export default {
 </script>
 
 <style scoped>
-
+@media (max-width: 960px) {
+  .column-table {
+    display: flex;
+    flex-direction: column;
+  }
+}
 </style>

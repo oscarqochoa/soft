@@ -10,6 +10,7 @@ import ListsRoute from '../views/lists/lists.router'
 import GlossaryRoute from '../views/glossary/glossary.router'
 import LoansRoute from '../views/loans/loans.router'
 import SchedulesRoute from '../views/schedules/schedules.router'
+// eslint-disable-next-line import/extensions
 import FileManangerRoute from '@/views/crm/views/file-mananger/file-mananger.router.js'
 import InventoryRouter from '../views/inventory/inventory.router'
 import NcrRouter from '../views/ncr/ncr.router'

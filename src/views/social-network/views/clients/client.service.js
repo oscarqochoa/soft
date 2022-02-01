@@ -6,7 +6,7 @@ class ClientService {
       const data = await amgApi.post(`/clients?page=${page}`, body)
       return data
     } catch (error) {
-      console.log('Something went wrong on getBankOfFlyers:', error)
+      console.log('Something went wrong on getClients:', error)
       throw error
     }
   }

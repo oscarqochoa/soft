@@ -1,7 +1,7 @@
 export default [
   {
     title: 'Clients',
-    icon: 'PieChartIcon',
+    icon: 'UsersAmgIcon',
     route: 'list-clients',
   },
 ]

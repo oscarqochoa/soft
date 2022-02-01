@@ -15,7 +15,7 @@ const getters = {
   },
   G_STATES() {
     const states = state.S_STATES.map(el => ({ label: el.state, value: el.id }))
-    console.log(states, 'de aqui soy')
+
     return states
   },
 

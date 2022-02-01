@@ -1,7 +1,7 @@
 export default [
   {
     title: 'Bank of flyers',
-    icon: 'PieChartIcon',
+    icon: 'FileTextIcon',
     route: 'list-social-network-active',
   },
 ]
