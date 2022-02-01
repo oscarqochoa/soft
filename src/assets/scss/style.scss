@@ -287,3 +287,11 @@ $borderamg: #efb911;
   background: transparent !important;
   border-color: rgba(146, 151, 165, 0.2) !important;
 }
+
+.nav-pills .nav-link {
+  border-radius: 5px 5px 0px 0px;
+}
+
+.border-bottom-tab {
+  border-bottom: 1px solid #3764ff !important;
+}

@@ -1,5 +1,5 @@
 <template>
-  <b-container class="app-calendar overflow-hidden border" fluid>
+  <b-container class="app-calendar overflow-hidden border mt-1" fluid>
     <b-row v-if="!isModal" class="mt-1">
       <b-col class="d-flex align-items-center justify-content-start">
         <div class="mr-1">

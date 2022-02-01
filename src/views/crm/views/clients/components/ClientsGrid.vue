@@ -40,7 +40,7 @@
           </template>
           <template #cell(lead_name)="data">
             <a
-              class="text-important"
+              :class="textLink"
               @click="openEditLeads(data.item.lead_id, data.index)"
             >{{data.value}}</a>
           </template>

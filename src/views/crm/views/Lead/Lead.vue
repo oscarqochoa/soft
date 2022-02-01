@@ -42,29 +42,31 @@
         </div>
       </template>
     </header-slot>
-    <b-card>
-      <b-nav pills>
-        <b-nav-item
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-          exact
-          :to="`/${routeModule}/leads/`"
-        >Leads</b-nav-item>
-        <b-nav-item
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-          exact
-          :to="`/${routeModule}/leads/sn`"
-        >Leads Sn</b-nav-item>
-        <b-nav-item
-          v-if="[1, 2].includes(currentUser.role_id) || isOnlyLead"
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-          exact
-          :to="`/${routeModule}/leads/w-potential`"
-        >Leads W Potential</b-nav-item>
-      </b-nav>
-      <router-view v-if="preloading" />
+    <b-card no-body>
+      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
+        <b-nav card-header pills class="m-0">
+          <b-nav-item
+            exact-active-class="active border-radius-tabs"
+            exact
+            :to="`/${routeModule}/leads/`"
+          >Leads</b-nav-item>
+          <b-nav-item
+            exact-active-class="active border-radius-tabs"
+            exact
+            :to="`/${routeModule}/leads/sn`"
+          >Leads Sn</b-nav-item>
+          <b-nav-item
+            v-if="[1, 2].includes(currentUser.role_id) || isOnlyLead"
+            exact-active-class="active border-radius-tabs"
+            exact
+            :to="`/${routeModule}/leads/w-potential`"
+          >Leads W Potential</b-nav-item>
+        </b-nav>
+      </b-card-header>
+
+      <b-card-body class="border-primary rounded">
+        <router-view />
+      </b-card-body>
     </b-card>
   </div>
 </template>
@@ -82,6 +84,7 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
+      skin: "appConfig/skin",
       G_STATE_LEADS: "CrmLeadStore/G_STATE_LEADS"
     }),
     ...mapState({
@@ -107,18 +110,19 @@ export default {
     };
   },
   async created() {
-    this.preloading = false;
-    await this.getStateLeads();
-    await this.getStatusLeads();
-    await this.getSourceLeads();
-    await this.getOwners();
-    await this.getPrograms();
-    await this.getSourceNames();
-    await this.getStates();
-    await this.getEeuuStates();
-    await this.getCountries();
-    await this.getSellers();
-    this.preloading = true;
+    //all Promises
+    await Promise.all([
+      this.getStateLeads(),
+      this.getStatusLeads(),
+      this.getSourceLeads(),
+      this.getOwners(),
+      this.getPrograms(),
+      this.getSourceNames(),
+      this.getStates(),
+      this.getEeuuStates(),
+      this.getCountries(),
+      this.getSellers()
+    ]);
   },
   methods: {
     ...mapActions({
