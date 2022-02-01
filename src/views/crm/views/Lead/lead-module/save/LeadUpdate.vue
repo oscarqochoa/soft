@@ -332,8 +332,9 @@ export default {
           this.$emit("update-lead", this.lead);
         }
       } catch (error) {
-        console.log("spmething went wrong onSubmit: ", error);
         this.isLoading = false;
+        console.log("spmething went wrong onSubmit: ", error);
+        this.removePreloader();
         this.showToast(
           "danger",
           "top-right",

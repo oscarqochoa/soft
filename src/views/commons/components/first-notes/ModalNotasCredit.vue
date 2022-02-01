@@ -36,7 +36,7 @@
         </b-col>
         <b-col>
           <validation-provider
-            v-slot="{ errors }"
+            v-slot="{ errors }" 
             name="typeOfAgreement"
             rules="required"
           >

@@ -54,7 +54,7 @@
             <div class="col-lg-12 mt-1">
               <ValidationProvider
                 name="comment"
-                rules="required"
+                rules="required" 
                 v-slot="{ errors }"
               >
                 <div class="form-group row">
@@ -63,7 +63,7 @@
                     class="input-form"
                     v-model="comment"
                     style="height: 140px"
-                    :class="{ 'border border-danger': errors[0] }"
+                    :class="{'border-danger': errors[0]}"
                   ></b-textarea>
                 </div>
               </ValidationProvider>
