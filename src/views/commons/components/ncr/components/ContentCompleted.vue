@@ -1,17 +1,22 @@
 <template>
   <div>
-    <b-tabs
-      pills
-      lazy
-      active-nav-item-class="bg-important border-0 shadow-none"
-    >
-      <b-tab title="Successfull" title-link-class="border-secondary ml-1 hover-important">
-        <content-sub-completed :status="1"></content-sub-completed>
-      </b-tab>
-      <b-tab title="Invalid" title-link-class="border-secondary ml-1 hover-important">
-        <content-sub-completed :status="2"></content-sub-completed>
-      </b-tab>
-    </b-tabs>
+    <b-card body-class="px-0">
+      <b-tabs
+        active-tab-class="p-0 "
+        pills
+        card
+        :nav-wrapper-class="[bgLightDark, 'pb-0']"
+        nav-class="mb-0"
+        active-nav-item-class="bg-info box-shadow-info border-info"
+      >
+        <b-tab title="Successfull">
+          <content-sub-completed :status="1"></content-sub-completed>
+        </b-tab>
+        <b-tab title="Invalid">
+          <content-sub-completed :status="2"></content-sub-completed>
+        </b-tab>
+      </b-tabs>
+    </b-card>
   </div>
 </template>
 
@@ -20,12 +25,12 @@ import ContentSubCompleted from "./subcomponents/ContentSubCompleted.vue";
 export default {
   props: {},
   components: {
-    ContentSubCompleted,
+    ContentSubCompleted
   },
   data() {
     return {};
   },
-  methods: {},
+  methods: {}
 };
 </script>
 

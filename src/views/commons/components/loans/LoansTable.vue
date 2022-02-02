@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="isTabsBorder">
     <filter-slot
       :filter="filters"
       :filter-principal="filterPrincipal"
@@ -99,9 +99,7 @@
           </template>
 
           <template #cell(process)="data">
-            <div class="font-weight-bolder">
-              {{ data.value }}
-            </div>
+            <div class="font-weight-bolder">{{ data.value }}</div>
           </template>
 
           <template #cell(status)="data">
@@ -181,47 +179,31 @@
       </template>
     </filter-slot>
 
-    <ModalTrackingLoan
-      v-if="modalsInfo.tracking"
-      :info="modalsInfo"
-      @hide="closeModals"
-    />
-    <ModalNewPay
-      v-if="modalsInfo.newPay"
-      :info="modalsInfo"
-      @hide="closeModals"
-    />
-    <ModalRevisionPayment
-      v-if="modalsInfo.revisionPay"
-      :info="modalsInfo"
-      @hide="closeModals"
-    />
-    <ModalInvoice
-      v-if="modalsInfo.invoice"
-      :info="modalsInfo"
-      @hide="closeModals"
-    />
+    <ModalTrackingLoan v-if="modalsInfo.tracking" :info="modalsInfo" @hide="closeModals" />
+    <ModalNewPay v-if="modalsInfo.newPay" :info="modalsInfo" @hide="closeModals" />
+    <ModalRevisionPayment v-if="modalsInfo.revisionPay" :info="modalsInfo" @hide="closeModals" />
+    <ModalInvoice v-if="modalsInfo.invoice" :info="modalsInfo" @hide="closeModals" />
   </div>
 </template>
 
 <script>
-import vSelect from 'vue-select'
-import Ripple from 'vue-ripple-directive'
-import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
-import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
-import { mapGetters, mapMutations } from 'vuex'
-import moment from 'moment'
-import ModalTrackingLoan from './modals/ModalTrackingLoan.vue'
-import ModalNewPay from './modals/ModalNewPay.vue'
-import ModalRevisionPayment from './modals/ModalRevisionPayment.vue'
-import ModalInvoice from './modals/ModalInvoice.vue'
-import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
-import loansService from '@/views/commons/components/loans/services/loans.service'
+import vSelect from "vue-select";
+import Ripple from "vue-ripple-directive";
+import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
+import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
+import { mapGetters, mapMutations } from "vuex";
+import moment from "moment";
+import ModalTrackingLoan from "./modals/ModalTrackingLoan.vue";
+import ModalNewPay from "./modals/ModalNewPay.vue";
+import ModalRevisionPayment from "./modals/ModalRevisionPayment.vue";
+import ModalInvoice from "./modals/ModalInvoice.vue";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import loansService from "@/views/commons/components/loans/services/loans.service";
 
 export default {
-  name: 'LoansTable',
+  name: "LoansTable",
   directives: {
-    Ripple,
+    Ripple
   },
   components: {
     vSelect,
@@ -231,17 +213,17 @@ export default {
     ModalNewPay,
     ModalRevisionPayment,
     ModalInvoice,
-    FilterSlot,
+    FilterSlot
   },
   props: {
     tab: {
       type: Number,
-      default: null,
+      default: null
     },
     status: {
       type: Number,
-      default: 1,
-    },
+      default: 1
+    }
   },
   data() {
     return {
@@ -251,114 +233,114 @@ export default {
         revisionPay: false,
         invoice: false,
         idLoan: null,
-        dueId: null,
+        dueId: null
       },
       module: this.$route.meta.module,
       loans: [],
       advance: false,
       user_session: null,
-      startdate: '',
-      enddate: '',
-      start_page: '',
-      next_page: '',
-      last_page: '',
-      total_data: '',
-      nameUser: '',
+      startdate: "",
+      enddate: "",
+      start_page: "",
+      next_page: "",
+      last_page: "",
+      total_data: "",
+      nameUser: "",
       showModalDate: false,
       modalTracking: false,
       modalTrackingPayDay: false,
       idLoan: null,
       idDue: null,
-      status_search: '',
+      status_search: "",
       isNoRefresh: false,
       formatDate: {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
+        year: "numeric",
+        month: "numeric",
+        day: "numeric"
       },
       loanSelected: [],
-      dateNow: moment().format('YYYY-MM-DD'),
-      sortBy: 'created_at',
+      dateNow: moment().format("YYYY-MM-DD"),
+      sortBy: "created_at",
       sortDesc: true,
       paginate: {
         currentPage: 1,
-        perPage: 10,
+        perPage: 10
       },
       arrayColumns: [
         {
-          key: 'username',
-          label: 'User',
-          tdClass: 'font-weight-bolder py-1',
-          thClass: 'font-weight-bolder py-1',
+          key: "username",
+          label: "User",
+          tdClass: "font-weight-bolder py-1",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'amount_loan',
-          label: 'Amount Loan',
-          tdClass: 'font-weight-bolder',
-          thClass: 'font-weight-bolder py-1',
+          key: "amount_loan",
+          label: "Amount Loan",
+          tdClass: "font-weight-bolder",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'balance',
-          label: 'Balance Loan',
-          tdClass: 'font-weight-bolder',
-          thClass: 'font-weight-bolder py-1',
+          key: "balance",
+          label: "Balance Loan",
+          tdClass: "font-weight-bolder",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'due_payment',
-          label: 'Monthly Payment',
-          tdClass: 'font-weight-bolder',
-          thClass: 'font-weight-bolder py-1',
+          key: "due_payment",
+          label: "Monthly Payment",
+          tdClass: "font-weight-bolder",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'due_date',
-          label: 'Pay day',
-          thClass: 'font-weight-bolder py-1',
+          key: "due_date",
+          label: "Pay day",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'payment_time',
-          label: 'Dues',
-          thClass: 'font-weight-bolder py-1',
+          key: "payment_time",
+          label: "Dues",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'due_id',
-          label: 'Current Due',
-          tdClass: 'text-center',
-          thClass: 'font-weight-bolder py-1',
+          key: "due_id",
+          label: "Current Due",
+          tdClass: "text-center",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'created_at',
-          label: 'Creation Date',
-          thClass: 'font-weight-bolder py-1',
+          key: "created_at",
+          label: "Creation Date",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'process',
-          label: 'Status Location',
-          thClass: 'font-weight-bolder py-1',
+          key: "process",
+          label: "Status Location",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'status',
-          label: 'Status',
-          thClass: 'font-weight-bolder py-1',
+          key: "status",
+          label: "Status",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'id_loan',
-          label: 'Tracking',
-          thClass: 'font-weight-bolder py-1',
+          key: "id_loan",
+          label: "Tracking",
+          thClass: "font-weight-bolder py-1"
         },
         {
-          key: 'status_loan',
-          label: 'Actions',
-          thClass: 'font-weight-bolder py-1',
-        },
+          key: "status_loan",
+          label: "Actions",
+          thClass: "font-weight-bolder py-1"
+        }
       ],
-      searchInput: '',
-      orderby: '',
-      order: '',
+      searchInput: "",
+      orderby: "",
+      order: "",
       startPage: null,
       endPage: null,
       totalData: null,
       perPage: 10,
-      nextPage: '',
+      nextPage: "",
       currentPage: 1,
       toPage: null,
       isBusy: false,
@@ -366,93 +348,96 @@ export default {
       isClientsTab: false,
       fromToObject: {
         from: null,
-        to: null,
+        to: null
       },
       filterPrincipal: {
-        type: 'input',
-        inputType: 'text',
-        placeholder: 'Search User...',
-        model: '',
+        type: "input",
+        inputType: "text",
+        placeholder: "Search User...",
+        model: ""
       },
       filters: [
         {
-          type: 'datepicker',
+          type: "datepicker",
           cols: 6,
           margin: true,
           showLabel: true,
-          label: 'From',
-          placeholder: 'Date',
-          class: 'font-small-3',
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
           model: null,
-          locale: 'en',
+          locale: "en",
           dateFormatOptions: {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-          },
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          }
         },
         {
-          type: 'datepicker',
+          type: "datepicker",
           cols: 6,
           margin: true,
           showLabel: true,
-          label: 'To',
-          placeholder: 'Date',
-          class: 'font-small-3',
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
           model: null,
-          locale: 'en',
+          locale: "en",
           dateFormatOptions: {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-          },
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          }
         },
         {
-          type: 'select',
+          type: "select",
           cols: 12,
           margin: true,
           showLabel: true,
-          label: 'Status',
-          placeholder: '',
-          class: 'font-small-3',
+          label: "Status",
+          placeholder: "",
+          class: "font-small-3",
           model: null,
           options: [
-            { value: 0, label: 'All' },
-            { value: 1, label: 'Pending' },
-            { value: 4, label: 'Disapproved' },
-            { value: 6, label: 'Approved' },
-            { value: 2, label: 'Finished' },
+            { value: 0, label: "All" },
+            { value: 1, label: "Pending" },
+            { value: 4, label: "Disapproved" },
+            { value: 6, label: "Approved" },
+            { value: 2, label: "Finished" }
           ],
-          reduce: 'value',
-          selectText: 'label',
-        },
+          reduce: "value",
+          selectText: "label"
+        }
       ],
-      programs: [],
-    }
+      programs: []
+    };
   },
   created() {},
   mounted() {},
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      skin: 'appConfig/skin',
-      loading: 'commissions-store/loading',
-      researchLoans: 'loans-store/researchLoans',
-      modalRequest: 'loans-store/modalRequest',
+      currentUser: "auth/currentUser",
+      skin: "appConfig/skin",
+      loading: "commissions-store/loading",
+      researchLoans: "loans-store/researchLoans",
+      modalRequest: "loans-store/modalRequest"
     }),
     isManagement() {
-      return this.module === 16
+      return this.module === 16;
     },
+    isTabsBorder() {
+      return this.tab === 2 || this.tab === 3 ? "border-info rounded" : "";
+    }
   },
   methods: {
     ...mapMutations({
-      setLoading: 'app/SET_LOADING',
+      setLoading: "app/SET_LOADING"
     }),
 
     // Searching Table
     async search(ctx) {
       try {
-        this.isBusy = true
+        this.isBusy = true;
         const params = {
           page: ctx.currentPage,
           type: this.tab,
@@ -464,28 +449,28 @@ export default {
           enddate: this.filters[1].model,
           status: this.status,
           status_search: this.filters[2].model,
-          perPage: this.paginate.perPage,
-        }
-        const response = await loansService.getLoans(params)
-        this.loans = response.data
-        this.startPage = response.from
-        this.paginate.currentPage = response.current_page
-        this.paginate.perPage = response.per_page
-        this.nextPage = this.startPage + 1
-        this.endPage = response.last_page
-        this.totalData = response.total
-        this.toPage = response.to
-        this.isBusy = false
-        return this.loans
+          perPage: this.paginate.perPage
+        };
+        const response = await loansService.getLoans(params);
+        this.loans = response.data;
+        this.startPage = response.from;
+        this.paginate.currentPage = response.current_page;
+        this.paginate.perPage = response.per_page;
+        this.nextPage = this.startPage + 1;
+        this.endPage = response.last_page;
+        this.totalData = response.total;
+        this.toPage = response.to;
+        this.isBusy = false;
+        return this.loans;
       } catch (error) {
-        this.showErrorSwal()
-        this.isBusy = false
-        return []
+        this.showErrorSwal();
+        this.isBusy = false;
+        return [];
       }
     },
     resetSearch() {
-      this.searchInput = ''
-      this.$refs.refLoansList.refresh()
+      this.searchInput = "";
+      this.$refs.refLoansList.refresh();
     },
 
     // Methods to Edit
@@ -493,104 +478,104 @@ export default {
     updateDate() {
       swal
         .fire({
-          title: 'Are you sure?',
-          text: 'You want to update this date?',
-          type: 'warning',
+          title: "Are you sure?",
+          text: "You want to update this date?",
+          type: "warning",
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, update it!',
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, update it!"
         })
         .then(result => {
           if (result.value) {
-            this.addPreloader()
+            this.addPreloader();
             axios
-              .post('/api/loans/update-date-first-due', {
+              .post("/api/loans/update-date-first-due", {
                 id_loan: this.loanSelected.id_loan,
                 due_date: this.loanSelected.due_date,
-                user_id: this.global.layout.id,
+                user_id: this.global.layout.id
               })
               .then(response => {
-                this.removePreloader()
-                this.showModalDate = false
-                this.reloadSearch()
-                swal.fire('Success!', response.data.message, 'success')
+                this.removePreloader();
+                this.showModalDate = false;
+                this.reloadSearch();
+                swal.fire("Success!", response.data.message, "success");
               })
               .catch(error => {
-                this.removePreloader()
-                swal.fire('Error!', 'Something went wrong!', 'error')
-              })
+                this.removePreloader();
+                swal.fire("Error!", "Something went wrong!", "error");
+              });
           }
-        })
+        });
     },
     editDatePay(loan) {
-      this.loanSelected = JSON.parse(JSON.stringify(loan))
-      this.showModalDate = true
+      this.loanSelected = JSON.parse(JSON.stringify(loan));
+      this.showModalDate = true;
     },
     changeOrdinal(number) {
-      const s = ['th', 'st', 'nd', 'rd']
-      const v = number % 100
-      return number + (s[(v - 20) % 10] || s[v] || s[0])
+      const s = ["th", "st", "nd", "rd"];
+      const v = number % 100;
+      return number + (s[(v - 20) % 10] || s[v] || s[0]);
     },
 
     openModalPays(id) {
-      this.idLoan = id
-      this.showModalLoanPays = true
+      this.idLoan = id;
+      this.showModalLoanPays = true;
     },
 
     // OPEN MODALS
     openModalLoanId(id) {
-      this.modalRequest.idLoan = id
-      this.modalRequest.show = true
+      this.modalRequest.idLoan = id;
+      this.modalRequest.show = true;
     },
     openModalPay(id, due) {
-      this.modalsInfo.idLoan = id
-      this.modalsInfo.idDue = due
-      this.modalsInfo.newPay = true
-      this.addPreloader()
+      this.modalsInfo.idLoan = id;
+      this.modalsInfo.idDue = due;
+      this.modalsInfo.newPay = true;
+      this.addPreloader();
     },
     openModalInvoice(id) {
-      this.addPreloader()
-      this.modalsInfo.idLoan = id
-      this.modalsInfo.invoice = true
+      this.addPreloader();
+      this.modalsInfo.idLoan = id;
+      this.modalsInfo.invoice = true;
     },
     openTrackingLoan(id) {
-      this.addPreloader()
-      this.modalsInfo.idLoan = id
-      this.modalsInfo.tracking = true
+      this.addPreloader();
+      this.modalsInfo.idLoan = id;
+      this.modalsInfo.tracking = true;
     },
     openModalRevision(id) {
-      this.addPreloader()
-      this.modalsInfo.idLoan = id
-      this.modalsInfo.revisionPay = true
+      this.addPreloader();
+      this.modalsInfo.idLoan = id;
+      this.modalsInfo.revisionPay = true;
     },
     // CLOSE MODALS
     closeModals(status) {
       // Close Modals
-      this.modalsInfo.newPay = false
-      this.modalsInfo.tracking = false
-      this.modalsInfo.revisionPay = false
-      this.modalsInfo.invoice = false
+      this.modalsInfo.newPay = false;
+      this.modalsInfo.tracking = false;
+      this.modalsInfo.revisionPay = false;
+      this.modalsInfo.invoice = false;
 
       // Clean Info
-      this.modalsInfo.idLoan = null
-      this.modalsInfo.idDue = null
+      this.modalsInfo.idLoan = null;
+      this.modalsInfo.idDue = null;
 
       // Research
       if (status) {
-        this.$store.commit('loans-store/ADD_ONE_RESEARCH')
-        this.$store.dispatch('loans-store/loadCounterTab')
+        this.$store.commit("loans-store/ADD_ONE_RESEARCH");
+        this.$store.dispatch("loans-store/loadCounterTab");
       }
-    },
+    }
   },
   watch: {
     researchLoans(newValue) {
       if (newValue) {
-        this.resetSearch()
+        this.resetSearch();
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

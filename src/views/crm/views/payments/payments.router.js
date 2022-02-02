@@ -2,6 +2,7 @@ export default [
   {
     path: "/crm/payments",
     name: "payments-crm",
+    redirect: { name: "payments-crm-list" },
     component: () => import("@/views/crm/views/payments/PaymentClient.vue"),
     meta: {
       isClientsTab: true,

@@ -2,6 +2,7 @@ export default [
   {
     path: "/crm/ncr",
     name: "ncr-crm",
+    redirect: { name: "ncr-pending" },
     component: () => import("@/views/commons/components/ncr/NcrMain.vue"),
     meta: {
       isClientsTab: true,
