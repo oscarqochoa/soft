@@ -88,7 +88,7 @@
                       :title="schedule.title_task"
                       class="text-white cursor-pointer schedule"
                       :style="'background:'+schedule.color+'!important' "
-                      @click="OpenSchedulesModal"
+                      @click="OpenSchedulesModal(item)"
                     >{{ schedule.clock_in }} to {{ schedule.clock_out }}</div>
                     <div
                       v-else
@@ -136,7 +136,7 @@
       />
       <modal-schedule
         v-if="modalSchedulesModal"
-
+        :user-text="userText"
         @close="closeSchedulesModal"
       />
     </b-card>
@@ -200,8 +200,9 @@ export default {
       this.modalInsertTaskModal = false
     },
 
-    OpenSchedulesModal() {
+    OpenSchedulesModal(item) {
       this.modalSchedulesModal = true
+      this.userText = item.name_user
     },
 
     closeSchedulesModal() {

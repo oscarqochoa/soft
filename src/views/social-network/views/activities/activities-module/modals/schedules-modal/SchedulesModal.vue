@@ -3,16 +3,26 @@
     v-model="ownControl"
     scrollable
     title-class="h3 text-white font-weight-bolder"
-    title="CREATE TASK"
+
     size="lg"
     @hidden="closeModal"
-  />
+  >
+    <template #modal-title>
+      <span
+        class="text-white"
+        style="font-size: 20px; font-weight: 900;"
+      >{{ userText }}</span>
+
+    </template>
+  </b-modal>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
 export default {
+
+  props: ['userText'],
   data() {
     return {
 
