@@ -2,11 +2,11 @@ import { amgApi } from "@/service/axios";
 
 class QuickNotesService {
   async getQuickNotes(body) {
-    const data = await amgApi.post("/allquicks", body);
+    const data = await amgApi.post("/messages/all-quicks", body);
     return data.data;
   }
   async deleteQuickNote(body) {
-    const data = await amgApi.post("/deletequick", body);
+    const data = await amgApi.post("/messages/delete-quick", body);
     return data.data;
   }
   async saveQuickNote(body) {
