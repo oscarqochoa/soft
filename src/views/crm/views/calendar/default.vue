@@ -1,22 +1,22 @@
 <template>
   <div>
     <header-slot></header-slot>
-    <b-card>
-      <b-nav pills>
-        <b-nav-item
-          :to="{ name: 'crm-calendar-appointment' }"
-          exact
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-        >Appointments</b-nav-item>
-        <b-nav-item
-          :to="{ name: 'crm-calendar-task' }"
-          exact
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-        >Tasks</b-nav-item>
-      </b-nav>
-      <router-view />
+
+    <b-card no-body>
+      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
+        <b-nav card-header pills class="m-0">
+          <b-nav-item
+            :to="{ name: 'crm-calendar-appointment' }"
+            exact
+            exact-active-class="active"
+          >Appointments</b-nav-item>
+          <b-nav-item :to="{ name: 'crm-calendar-task' }" exact exact-active-class="active">Tasks</b-nav-item>
+        </b-nav>
+      </b-card-header>
+
+      <b-card-body class="border-primary rounded">
+        <router-view />
+      </b-card-body>
     </b-card>
   </div>
 </template>

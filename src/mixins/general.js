@@ -4,6 +4,19 @@ export default {
   data() {
     return { baseUrl: process.env.VUE_APP_BASE_URL_ASSETS };
   },
+  computed: {
+    bgLightDark() {
+      //getters
+      return this.$store.getters["appConfig/skin"] === "light"
+        ? "bg-light"
+        : "bg-dark";
+    },
+    textLink() {
+      return this.$store.getters["appConfig/skin"] === "light"
+        ? "text-primary font-weight-bolder"
+        : "text-warning font-weight-bolder";
+    },
+  },
   methods: {
     convertProgramToModule(program) {
       let module = 0;

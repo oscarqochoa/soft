@@ -167,8 +167,10 @@ export default {
             })
             if (this.isResponseSuccess(response)) {
               /* *INTEGRATE* resources\js\components\modal\ModaEventEdit.vue - method: doneAttend */
+              console.log(response.data)
               this.$router.push({
                 name: 'sales-made-crm-new-client',
+                query: { done: this.data.done === 1 ? 1 : 2 },
               })
             }
           }
