@@ -22,7 +22,7 @@
           slot="table"
           ref="migrationList"
           v-scrollbar
-          sticky-header="50vh"
+          sticky-header="70vh"
           no-provider-filtering
           :busy.sync="isBusy"
           :items="search"
@@ -42,7 +42,7 @@
           </template>
           <template v-slot:cell(name)="data">
 
-            <p class="d-flex  align-items-center justify-content-center w-100 mb-0 font-weight-bold p-1">
+            <p class="d-flex      font-weight-bold p-1">
               {{ data.item.lead_name }}
             </p>
 
@@ -102,11 +102,21 @@
 
           <template v-slot:cell(created_by)="data">
             <div
-              class="d-flex flex-column justify-content-start align-items-start"
+              class="d-flex flex-column justify-content-start align-items-center"
             >
               <p>{{ data.item.owner }}</p>
               <p>{{ data.item.created_at | myGlobalDay }}  </p>
             </div>
+          </template>
+
+          <template v-slot:cell(actions)="data">
+            <feather-icon
+              title="DELETED"
+              icon="Trash2Icon"
+              size="20"
+              class="cursor-pointer m-1 text-danger"
+              @click="deletedMigrationLead(data.item.id)"
+            />
           </template>
         </b-table>
 
@@ -208,7 +218,7 @@ export default {
         this.totalData = data.data.total
         this.totalRows = data.data.total
         this.toPage = data.data.to
-
+        console.log(this.items)
         return this.items
       } catch (e) {
         this.showErrorSwal(e)
@@ -254,6 +264,27 @@ export default {
         this.filter[4].options = newData
 
         return newData
+      } catch (e) {
+        this.showErrorSwal(e)
+        return []
+      }
+    },
+
+    async deletedMigrationLead(id) {
+      const params = {
+        id,
+
+      }
+      try {
+        const response = await this.showConfirmSwal()
+        if (response.isConfirmed) {
+          await MigrationsService.deleteLeadsMigration(params)
+
+          console.log('gaaa')
+          this.$refs.migrationList.refresh()
+
+          this.showSuccessSwal('File has been deleted successfully')
+        }
       } catch (e) {
         this.showErrorSwal(e)
         return []

@@ -30,5 +30,15 @@ class MigrationService {
       throw error
     }
   }
+
+  async deleteLeadsMigration(body) {
+    try {
+      const data = await amgApi.post('/delete-leads-migration-sn', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on deleteLeadsMigration:', error)
+      throw error
+    }
+  }
 }
 export default new MigrationService()

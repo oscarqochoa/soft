@@ -34,5 +34,10 @@ export default [
     sortable: true,
     label: 'Created by',
   },
+  {
+    key: 'actions',
+    sortable: false,
+    label: 'Actions',
+  },
 
 ]
