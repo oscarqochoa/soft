@@ -2,6 +2,7 @@
   <b-modal
     v-model="showModal"
     hide-footer
+    modal-class="modal-primary"
     title="New Folder"
     @hidden="hideModal"
   >

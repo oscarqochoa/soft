@@ -14,23 +14,38 @@ const state = {
 }
 const getters = {
   G_OWNERS() {
-    const owners = state.S_OWNERS.map(el => ({ label: el.user_name, value: el.id }))
+    const owners = state.S_OWNERS.map(el => ({
+      label: el.user_name,
+      value: el.id,
+    }))
     return owners
   },
   G_SOURCE_NAMES() {
-    const sourceNames = state.S_SOURCE_NAMES.map(el => ({ label: el.name, id: el.id }))
+    const sourceNames = state.S_SOURCE_NAMES.map(el => ({
+      label: el.name,
+      id: el.id,
+    }))
     return sourceNames
   },
   G_PROGRAMS() {
-    const programs = state.S_PROGRAMS.map(el => ({ label: el.name, id: el.id }))
+    const programs = state.S_PROGRAMS.map(el => ({
+      label: el.name,
+      id: el.id,
+    }))
     return programs
   },
   G_STATES() {
-    const states = state.S_STATES.map(el => ({ label: el.slug, value: el.id }))
+    const states = state.S_STATES.map(el => ({
+      label: el.slug,
+      value: el.id,
+    }))
     return states
   },
   G_EEUU_STATES() {
-    const eeuuStates = state.S_EEUU_STATES.map(el => ({ state: el.state, value: el.slug }))
+    const eeuuStates = state.S_EEUU_STATES.map(el => ({
+      state: el.state,
+      value: el.slug,
+    }))
     return eeuuStates
   },
   G_CRS() {
@@ -55,24 +70,31 @@ const getters = {
     ]
   },
   G_COUNTRIES() {
-    const countries = state.S_COUNTRIES.map(el => ({ label: el.name, id: el.id }))
+    const countries = state.S_COUNTRIES.map(el => ({
+      label: el.name,
+      id: el.id,
+    }))
     return countries
   },
   G_SELLERS() {
-    const sellers = state.S_SELLERS.map(el => ({ label: el.user_name, id: el.id }))
+    const sellers = state.S_SELLERS.map(el => ({
+      label: el.user_name,
+      id: el.id,
+    }))
     return sellers
   },
 }
 const mutations = {
   SET_DATA(state, params) {
     Vue.set(state, params.destination, params.data)
-    console.log(state)
   },
   PUSH_DATA(state, params) {
     state[params.destination].push(params.data)
   },
   REMOVE_DATA(state, params) {
-    const index = state[params.destination].map(el => el.id).indexOf(params.id)
+    const index = state[params.destination]
+      .map(el => el.id)
+      .indexOf(params.id)
     if (index !== -1) {
       state[params.destination].splice(index, 1)
     }
@@ -96,7 +118,6 @@ const actions = {
   async A_GET_PROGRAMS({ commit }, params) {
     try {
       const response = await crmGlobal.getPrograms(params)
-      console.log('A_GET_PROGRAMS response', response)
       commit('SET_DATA', {
         destination: 'S_PROGRAMS',
         data: response.data,
@@ -201,5 +222,4 @@ export default {
   getters,
   actions,
   mutations,
-
 }

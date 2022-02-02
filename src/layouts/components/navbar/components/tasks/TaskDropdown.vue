@@ -80,6 +80,7 @@
       v-model="taskModal"
       scrollable
       hide-footer
+      modal-class="modal-primary"
       title="TASKS"
       title-class="h2 text-white"
     >

@@ -182,12 +182,14 @@ export default {
           label: "Programs:",
           value: this.lead.name_programs
         },
-        this.modul !== 15
-          ? {
-              label: "Status:",
-              value: this.lead.valuestatuslead
-            }
-          : null,
+
+        {
+          label: "Status:",
+          value:
+            this.modul !== 15
+              ? this.lead.lead_status
+              : this.lead.valuestatuslead
+        },
         this.modul !== 15
           ? {
               label: "Address:",

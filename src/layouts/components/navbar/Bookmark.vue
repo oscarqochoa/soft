@@ -1,10 +1,7 @@
 <template>
   <b-navbar-nav class="nav">
-    <b-nav-item
-      :id="`bookmark-clock-in`"
-      @click="$refs.clockIn.openClockInModal()"
-    >
-      <clock-in ref="clockIn" />
+    <b-nav-item :id="`bookmark-clock-in`">
+      <clock-in></clock-in>
     </b-nav-item>
     <b-nav-item
       :id="`bookmark-messages`"

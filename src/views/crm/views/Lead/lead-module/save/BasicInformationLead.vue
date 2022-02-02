@@ -6,8 +6,15 @@
     <b-row>
       <b-col md="6">
         <!-- First Name -->
-        <validation-provider v-slot="{errors}" name="First Name" rules="required">
-          <b-form-group label="First Name" label-for="first-name">
+        <validation-provider
+          v-slot="{errors}"
+          name="First Name"
+          rules="required"
+        >
+          <b-form-group
+            label="First Name"
+            label-for="first-name"
+          >
             <b-form-input
               id="first-name"
               v-model="userData.first_name"
@@ -21,13 +28,27 @@
         </validation-provider>
         <!-- MiddleName -->
         <validation-provider name="MiddleName">
-          <b-form-group label="MiddleName" label-for="middle-name">
-            <b-form-input id="middle-name" v-model="userData.middle_name" trim />
+          <b-form-group
+            label="MiddleName"
+            label-for="middle-name"
+          >
+            <b-form-input
+              id="middle-name"
+              v-model="userData.middle_name"
+              trim
+            />
           </b-form-group>
         </validation-provider>
         <!-- LastName -->
-        <validation-provider v-slot="{errors}" name="LastName" rules="required">
-          <b-form-group label="LastName" label-for="last-name">
+        <validation-provider
+          v-slot="{errors}"
+          name="LastName"
+          rules="required"
+        >
+          <b-form-group
+            label="LastName"
+            label-for="last-name"
+          >
             <b-form-input
               id="last-name"
               v-model="userData.last_name"
@@ -43,7 +64,10 @@
           name="Email"
           :rules="`${!disabledemail ? 'required|email' : ''}`"
         >
-          <b-form-group label="Email" label-for="email">
+          <b-form-group
+            label="Email"
+            label-for="email"
+          >
             <b-form-input
               id="email"
               v-model="userData.email"
@@ -65,7 +89,10 @@
       <b-col md="6">
         <!-- Programs -->
         <validation-provider name="Programs">
-          <b-form-group label="Programs" label-for="programs">
+          <b-form-group
+            label="Programs"
+            label-for="programs"
+          >
             <v-select
               v-model="programsList"
               multiple
@@ -78,7 +105,10 @@
         </validation-provider>
         <!-- Dob -->
         <validation-provider name="DOB">
-          <b-form-group label="DOB" label-for="dob">
+          <b-form-group
+            label="DOB"
+            label-for="dob"
+          >
             <flat-pickr
               id="dob"
               v-model="userData.dob"
@@ -89,8 +119,16 @@
           </b-form-group>
         </validation-provider>
         <!-- Language -->
-        <validation-provider v-slot="{errors}" name="Language" rules="required">
-          <b-form-group label="Language" label-for="language" :state="errors[0] ? false : null">
+        <validation-provider
+          v-slot="{errors}"
+          name="Language"
+          rules="required"
+        >
+          <b-form-group
+            label="Language"
+            label-for="language"
+            :state="errors[0] ? false : null"
+          >
             <v-select
               v-model="userData.language"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -103,7 +141,10 @@
         </validation-provider>
         <!-- Lead State -->
         <validation-provider name="Lead State">
-          <b-form-group label="Status" label-for="state-lead">
+          <b-form-group
+            label="Status"
+            label-for="state-lead"
+          >
             <v-select
               v-model="userData.state_lead"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -118,7 +159,7 @@
       </b-col>
     </b-row>
     <address-information-lead
-      :typeForm="typeForm"
+      :type-form="typeForm"
       :user-data="userData"
       :blank-user-fields="blankUserFields"
       @onModalTrackingChangeOpen="$emit('onModalTrackingChangeOpen', $event)"
@@ -127,25 +168,25 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 import {
   BSidebar,
   BForm,
   BFormGroup,
   BFormInput,
   BFormInvalidFeedback,
-  BButton
-} from "bootstrap-vue";
-import { ValidationProvider, ValidationObserver } from "vee-validate";
-import { required, alphaNum, email } from "@validations";
+  BButton,
+} from 'bootstrap-vue'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { required, alphaNum, email } from '@validations'
 
-import flatPickr from "vue-flatpickr-component";
-import vSelect from "vue-select";
+import flatPickr from 'vue-flatpickr-component'
+import vSelect from 'vue-select'
 
-import formValidation from "@core/comp-functions/forms/form-validation";
+import formValidation from '@core/comp-functions/forms/form-validation'
 
-import AddressInformationLead from "./AddressInformationLead.vue";
-import moment from "moment";
+import moment from 'moment'
+import AddressInformationLead from './AddressInformationLead.vue'
 
 export default {
   components: {
@@ -161,24 +202,24 @@ export default {
 
     // Form Validation
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
   },
   model: {
-    event: "update:is-add-new-user-sidebar-active"
+    event: 'update:is-add-new-user-sidebar-active',
   },
   props: {
     userData: {
       type: Object,
-      required: true
+      required: true,
     },
     blankUserFields: {
       type: Object,
-      required: false
+      required: false,
     },
     typeForm: {
       type: String,
-      required: false // newLead, editLead
-    }
+      required: false, // newLead, editLead
+    },
   },
   data() {
     return {
@@ -187,51 +228,48 @@ export default {
       email,
       disabledemail: false,
       configFlatPickr: {
-        dateFormat: "m/d/Y",
-        locale: "en"
+        dateFormat: 'd/m/Y',
+        locale: 'en',
       },
       programsList: [],
-      listStatus:[]
-    };
+    }
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-      token: "auth/token",
-      G_PROGRAMS: "CrmGlobalStore/G_PROGRAMS",
-      G_LANGUAGES: "CrmGlobalStore/G_LANGUAGES",
-      G_STATE_LEADS: "CrmLeadStore/G_STATE_LEADS"
-    })
+      currentUser: 'auth/currentUser',
+      token: 'auth/token',
+      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
+      G_LANGUAGES: 'CrmGlobalStore/G_LANGUAGES',
+      G_STATE_LEADS: 'CrmLeadStore/G_STATE_LEADS',
+    }),
   },
   setup() {
-    const { refFormObserver, getValidationState } = formValidation(() => {});
+    const { refFormObserver, getValidationState } = formValidation(() => {})
 
     return {
       refFormObserver,
-      getValidationState
-    };
+      getValidationState,
+    }
   },
   created() {
-    this.formatInitialData();
-    this.listStatus = this.G_STATE_LEADS
+    this.formatInitialData()
   },
   methods: {
     capitalize(el) {
-      const element = this.userData[el];
-      this.userData[el] =
-        element.substr(0, 1).toUpperCase() + element.substr(1);
+      const element = this.userData[el]
+      this.userData[el] = element.substr(0, 1).toUpperCase() + element.substr(1)
     },
     formatInitialData() {
       this.userData.dob = this.userData.dob
-        ? moment(this.userData.dob).format("MM/DD/YYYY")
-        : "";
-      this.programsList = this.userData.programs;
+        ? moment(this.userData.dob).format('MM/DD/YYYY')
+        : ''
+      this.programsList = this.userData.programs
     },
     returnProgramlist() {
-      return this.programsList;
-    }
-  }
-};
+      return this.programsList
+    },
+  },
+}
 </script>
 
 <style lang="scss">

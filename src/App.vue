@@ -63,7 +63,7 @@ export default {
     $route() {
       this.updateCurrentUserModuleRole(this.$route.matched[0].meta.module)
       this.showModalTaskToday()
-      this.A_UPDATE_COUNTERS({ module: this.$route.matched[0].meta.module, role: this.currentUser.role_id })
+      this.A_UPDATE_COUNTERS({ module: this.$route.matched[0].meta.module, role: this.currentUser.role_id, userId: this.currentUser.user_id })
     },
   },
   methods: {

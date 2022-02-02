@@ -23,10 +23,13 @@
           link-classes="border-secondary hover-primary"
         >
           Overtime
-          <span class="ml-1" v-if="counterTab.supervisor>0">
+          <span
+            v-if="S_OVERTIME_COUNTER > 0"
+            class="ml-1"
+          >
             <feather-icon
               icon
-              :badge="counterTab.supervisor > 99 ? '99+' : counterTab.supervisor"
+              :badge="S_OVERTIME_COUNTER > 99 ? '99+' : S_OVERTIME_COUNTER"
               badge-classes="badge-danger badge-glow"
             />
           </span>
@@ -38,10 +41,13 @@
           link-classes=" border-secondary hover-primary"
         >
           Justifications
-          <span class="ml-1" v-if="counterTab.my_loan>0">
+          <span
+            v-if="S_JUSTIFICATIONS_COUNTER > 0"
+            class="ml-1"
+          >
             <feather-icon
               icon
-              :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
+              :badge="S_JUSTIFICATIONS_COUNTER > 99 ? '99+' : S_JUSTIFICATIONS_COUNTER"
               badge-classes="badge-danger badge-glow"
             />
           </span>
@@ -56,35 +62,40 @@
 
 <script>
 /* import ModalRequestLoan from "./modals/ModalRequestLoan.vue"; */
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from 'vuex'
+
 export default {
-  name: "SchedulesComponent",
+  name: 'SchedulesComponent',
   components: {
     /* ModalRequestLoan */
   },
-  created() {
-    this.$store.dispatch("loans-store/loadCounterTab");
-  },
 
   data() {
-    return {};
+    return {}
+  },
+  created() {
+    this.$store.dispatch('loans-store/loadCounterTab')
   },
   computed: {
     ...mapGetters({
-      bigWindow: "app/bigWindow",
-      currentUser: "auth/currentUser",
-      researchLoans: "loans-store/researchLoans",
-      counterTab: "loans-store/counterTab",
-      modalRequest: "loans-store/modalRequest",
-      isSupervisor: "auth/isSupervisor"
+      bigWindow: 'app/bigWindow',
+      currentUser: 'auth/currentUser',
+      researchLoans: 'loans-store/researchLoans',
+      counterTab: 'loans-store/counterTab',
+      modalRequest: 'loans-store/modalRequest',
+      isSupervisor: 'auth/isSupervisor',
+    }),
+    ...mapState({
+      S_OVERTIME_COUNTER: state => state.SchedulesStore.S_COUNTER_OVERTIME,
+      S_JUSTIFICATIONS_COUNTER: state => state.SchedulesStore.S_COUNTER_JUSTIFICATIONS,
     }),
     route() {
-      return this.$route.meta.route;
-    }
+      return this.$route.meta.route
+    },
   },
+  mounted() {},
   methods: {},
-  mounted() {}
-};
+}
 </script>
 
 <style>

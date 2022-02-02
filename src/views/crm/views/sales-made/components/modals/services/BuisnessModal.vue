@@ -3,6 +3,7 @@
     <ValidationObserver ref="form">
       <b-modal
         v-model="ownControl"
+        modal-class="modal-primary"
         modal
         size="lg"
         scrollable

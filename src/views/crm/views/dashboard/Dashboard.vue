@@ -14,12 +14,7 @@
             no-body
           >
             <div class="text-center pt-1">
-              <b-button
-                variant="primary"
-                tag="a"
-                class="btn-cart w-100"
-                @click="change_tab(0)"
-              >
+              <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(0)">
                 <span>Leads</span>
               </b-button>
             </div>
@@ -38,9 +33,7 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>MONTH</label>
-                      <p class="borde-count">
-                        {{ global.leadmonth }}
-                      </p>
+                      <p class="borde-count">{{ global.leadmonth }}</p>
                     </div>
                   </div>
                 </div>
@@ -55,12 +48,7 @@
             no-body
           >
             <div class="text-center pt-1">
-              <b-button
-                variant="primary"
-                tag="a"
-                class="btn-cart w-100"
-                @click="change_tab(1)"
-              >
+              <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(1)">
                 <span>Appointments</span>
               </b-button>
             </div>
@@ -79,9 +67,7 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>MONTH</label>
-                      <p class="borde-count">
-                        {{ global.eventmonth }}
-                      </p>
+                      <p class="borde-count">{{ global.eventmonth }}</p>
                     </div>
                   </div>
                 </div>
@@ -96,12 +82,7 @@
             no-body
           >
             <div class="text-center pt-1">
-              <b-button
-                variant="primary"
-                tag="a"
-                class="btn-cart w-100"
-                @click="change_tab(2)"
-              >
+              <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(2)">
                 <span>Tasks</span>
               </b-button>
             </div>
@@ -120,9 +101,7 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>MONTH</label>
-                      <p class="borde-count">
-                        {{ global.taskmonth }}
-                      </p>
+                      <p class="borde-count">{{ global.taskmonth }}</p>
                     </div>
                   </div>
                 </div>
@@ -137,12 +116,7 @@
             no-body
           >
             <div class="text-center pt-1">
-              <b-button
-                variant="primary"
-                tag="a"
-                class="btn-cart w-100"
-                @click="change_tab(3)"
-              >
+              <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(3)">
                 <span>Sales</span>
               </b-button>
             </div>
@@ -161,9 +135,7 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>MONTH</label>
-                      <p class="borde-count">
-                        {{ global.vendiomonth }}
-                      </p>
+                      <p class="borde-count">{{ global.vendiomonth }}</p>
                     </div>
                   </div>
                 </div>
@@ -178,12 +150,7 @@
             no-body
           >
             <div class="text-center pt-1">
-              <b-button
-                variant="primary"
-                tag="a"
-                class="btn-cart w-100"
-                @click="change_tab(4)"
-              >
+              <b-button variant="primary" tag="a" class="btn-cart w-100" @click="change_tab(4)">
                 <span>Capturated</span>
               </b-button>
             </div>
@@ -202,9 +169,7 @@
                   <div class="col-6">
                     <div class="content-info pad-new text-center">
                       <label for>MONTH</label>
-                      <p class="borde-count">
-                        {{ global.clientmonth }}
-                      </p>
+                      <p class="borde-count">{{ global.clientmonth }}</p>
                     </div>
                   </div>
                 </div>
@@ -412,7 +377,7 @@
             </li>
           </ul>
         </div>
-      </div> -->
+      </div>-->
       <div class="row">
         <b-card :title="`${nameOfTab} Balance`" class="col-12">
           <div class="d-flex justify-content-between flex-wrap row">
@@ -477,7 +442,7 @@ export default {
     AppEchartLine,
     AppEchartLineCrm,
     BBadge,
-    vSelect,
+    vSelect
   },
   data() {
     return {

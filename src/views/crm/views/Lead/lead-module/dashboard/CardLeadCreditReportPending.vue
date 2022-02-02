@@ -68,7 +68,7 @@
 
     <!-- modal TRACKING STATUS -->
     <b-modal
-      id="modal-tracking-status"
+      v-model="modalTrackingStatus"
       title-class="h3 text-white"
       modal-class="modal-primary"
       centered
@@ -110,10 +110,11 @@ export default {
       fieldsEvent: [
         { key: "request_by" },
         { key: "status" },
-        { key: "tracking" },
+        { key: "tracking", thClass: "justify-content-center" },
         { key: "actions" }
       ],
-      scoreId: null
+      scoreId: null,
+      modalTrackingStatus: false
     };
   },
   methods: {
@@ -125,8 +126,7 @@ export default {
     }),
     onOpenTrackingStatus(scoreId) {
       this.scoreId = scoreId;
-      console.log("this.scoreId", this.scoreId);
-      this.$bvModal.show("modal-tracking-status");
+      this.modalTrackingStatus = true;
     },
     async countPendingTab() {
       try {

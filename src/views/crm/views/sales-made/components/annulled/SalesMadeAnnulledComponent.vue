@@ -34,34 +34,37 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <template #cell(client)="data">
+          <router-link
+            class="text-important"
+            :to="`/crm/leads/${data.item.lead_id}`"
+            target="_blank"
+          >{{ data.item.client }}</router-link>
+        </template>
         <template v-slot:cell(program)="data">
           {{ data.item.program }}
         </template>
         <template v-slot:cell(captured)="data">
           <b-row>
-            <b-col>
-              {{ data.item.captured }}
-            </b-col>
+            <b-col>{{ data.item.captured }}</b-col>
           </b-row>
           <b-row v-if="data.item.commission">
             <b-col>
-              <p class=" m-0 text-primary font-weight-bold">
-                $ {{ JSON.parse(data.item.commission)[0].commission }}
-              </p>
+              <p
+                class="m-0 text-primary font-weight-bold"
+              >$ {{ JSON.parse(data.item.commission)[0].commission }}</p>
             </b-col>
           </b-row>
         </template>
         <template v-slot:cell(seller)="data">
           <b-row>
-            <b-col>
-              {{ data.item.seller }}
-            </b-col>
+            <b-col>{{ data.item.seller }}</b-col>
           </b-row>
           <b-row v-if="data.item.commission">
             <b-col>
-              <p class="m-0 text-primary font-weight-bold">
-                $ {{ JSON.parse(data.item.commission)[1].commission }}
-              </p>
+              <p
+                class="m-0 text-primary font-weight-bold"
+              >$ {{ JSON.parse(data.item.commission)[1].commission }}</p>
             </b-col>
           </b-row>
         </template>
@@ -111,9 +114,7 @@
             v-if="data.item.status >= 0 && data.item.status <= 4"
             class="m-0 font-weight-bold font-small-3"
             :class="'color: text-' + status[data.item.status].variant"
-          >
-            {{ status[data.item.status].label }}
-          </p>
+          >{{ status[data.item.status].label }}</p>
         </template>
         <template v-slot:cell(creates)="data">
           <span>{{ data.item.creates | myGlobal }}</span>
@@ -143,12 +144,11 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import FilterSlot
-from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
-import dataFields from './fields.data'
-import dataFilters from './filters.data'
+import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
 import CrmService from '@/views/crm/services/crm.service'
 import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
+import dataFields from './fields.data'
+import dataFilters from './filters.data'
 /* Modals Import can be deleted */
 
 export default {
@@ -228,7 +228,16 @@ export default {
     }
   },
   methods: {
-    openFilesModal(id, program, client, saleId, status, sellerId, programId, eventDate) {
+    openFilesModal(
+      id,
+      program,
+      client,
+      saleId,
+      status,
+      sellerId,
+      programId,
+      eventDate,
+    ) {
       this.modalData.files.id = id
       this.modalData.files.program = program
       this.modalData.files.client = client
@@ -237,10 +246,9 @@ export default {
       this.modalData.files.event_date = eventDate
       const isCeoOrSupervisor = this.currentUser.role_id == '1' || this.currentUser.role_id == '2'
       const saleStatus = status == '4' || status == '2'
-      console.log(this.currentUser.user_id, sellerId)
       if (
         (this.currentUser.user_id == sellerId || isCeoOrSupervisor)
-          && saleStatus == false
+        && saleStatus == false
       ) {
         this.modalData.files.valorEdit = true
       }
@@ -250,22 +258,24 @@ export default {
       try {
         const sortBy = 30
         const sortDirection = 'desc'
-        const data = await CrmService.getSaleAnnul({
-          captured: this.filter[2].model,
-          from: this.filter[0].model,
-          order: sortDirection,
-          orderby: sortBy,
-          program: this.filter[5].model,
-          rolsession: this.currentUser.role_id,
-          salemade: 0,
-          seller: this.filter[3].model,
-          status: this.filter[4].model,
-          statusip: this.filter[6].model,
-          text: this.filterPrincipal.model,
-          to: this.filter[1].model,
-          per_page: this.paginate.perPage,
-        },
-        ctx.currentPage)
+        const data = await CrmService.getSaleAnnul(
+          {
+            captured: this.filter[2].model,
+            from: this.filter[0].model,
+            order: sortDirection,
+            orderby: sortBy,
+            program: this.filter[5].model,
+            rolsession: this.currentUser.role_id,
+            salemade: 0,
+            seller: this.filter[3].model,
+            status: this.filter[4].model,
+            statusip: this.filter[6].model,
+            text: this.filterPrincipal.model,
+            to: this.filter[1].model,
+            per_page: this.paginate.perPage,
+          },
+          ctx.currentPage,
+        )
         this.startPage = data.from
         this.toPage = data.to
         if (this.totalRows !== data.total) this.totalRows = data.total
@@ -281,7 +291,7 @@ export default {
 </script>
 
 <style scoped>
-p{
+p {
   margin: 0;
 }
 </style>

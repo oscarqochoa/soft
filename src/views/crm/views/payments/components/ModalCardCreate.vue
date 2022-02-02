@@ -342,7 +342,6 @@ export default {
           } else {
             this.form.street = "";
           }
-        console.log(this.form);
         this.showConfirmSwal().then(result => {
           if (result.isConfirmed) {
             this.$store.commit("app/SET_LOADING", true);
@@ -353,10 +352,7 @@ export default {
                 this.$emit("new", this.cards);
                 this.$emit("click", false);
                 this.$store.commit("app/SET_LOADING", false);
-                this.$swal.fire({
-                  icon: "success",
-                  title: "Card Created Successfully"
-                });
+                this.showSuccessSwal()
               })
               .catch(error => {
                 console.error(error);

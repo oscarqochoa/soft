@@ -228,7 +228,7 @@ export default {
     },
     async allTypes() {
       try {
-        const response = await amgApi.get("/gettypesds");
+        const response = await amgApi.get("/sales-made/debt-solution/get-debts-types");
         if (response.status === 200) {
           this.types = response.data;
         }
@@ -330,7 +330,7 @@ export default {
         return;
       }
       amgApi
-        .post(`/sales-made/debt-solution/seach-creditors?q=${text}`)
+        .post(`/sales-made/debt-solution/search-creditors?q=${text}`)
         .then(response => {
           if (response.status === 200) {
             this.filteredOptions = [{ data: [...response.data] }];

@@ -41,7 +41,7 @@
           <!-- Column: Nickname -->
           <template #cell(nickname)="data">
             <router-link
-              class="text-important"
+              :class="textLink"
               :to="`/${routeModule}/leads/${data.item.lead_id}`"
               target="_blank"
             >{{ data.item.nickname }}</router-link>
@@ -189,7 +189,6 @@ export default {
     },
     async myProvider(ctx) {
       try {
-        console.log(ctx);
         this.isBusy = true;
         const response = await this.A_GET_W_POTENTIAL_LEADS({
           potential: 1,

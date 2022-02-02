@@ -6,6 +6,7 @@
         size="xl"
         scrollable
         header-class="p-0"
+        modal-class="modal-primary"
         header-bg-variant="transparent border-bottom border-bottom-2"
         @hidden="hideModal(false,0)"
       >

@@ -174,6 +174,14 @@ const actions = {
       throw error;
     }
   },
+  async A_EXPORT_TASKS_TO_EXCEL({ commit }, body) {
+    try {
+      const response = await TaskService.exportTasksToExcel(body);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 export default {
   namespaced: true,

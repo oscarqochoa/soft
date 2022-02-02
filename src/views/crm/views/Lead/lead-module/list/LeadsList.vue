@@ -88,7 +88,7 @@
           <template #cell(lead_name)="data">
             <div style="white-space: pre-wrap;">
               <router-link
-                class="text-important"
+                :class="textLink"
                 :to="`/${routeModule}/leads/${data.item.id}`"
                 target="_blank"
               >{{ data.item.lead_name }}</router-link>
@@ -174,9 +174,10 @@
       id="modal-history-sms"
       ok-only
       modal-class="modal-primary"
+      title-class="text-white h4"
       centered
       size="lg"
-      title="HISTORY OF SMS"
+      title="History of Sms"
       hide-footer
     >
       <modal-history-sms
@@ -371,44 +372,31 @@ export default {
     onRowSelected() {
       this.A_SET_SELECTED_LEADS(this.leadsSelecteds);
     },
-    onRowDelete(id) {
-      this.showSwalGeneric(
-        "Are you sure?",
-        "You won't be able to revert this!",
-        "question"
-      )
-        .then(async result => {
-          if (result.value) {
-            const { user_id, role_id } = this.currentUser;
-            const response = await this.A_DELETE_LEADS({
-              leadid: id,
-              idsession: user_id,
-              iduser: user_id,
-              idrole: role_id
-            });
-            if (this.isResponseSuccess(response)) {
-              this.showToast(
-                "success",
-                "top-right",
-                "Deleted!",
-                "CheckIcon",
-                "Your file has been deleted."
-              );
-            } else {
-              this.showToast(
-                "warning",
-                "top-right",
-                "Warning!",
-                "AlertTriangleIcon",
-                `Something went wrong.${response.message}`
-              );
-            }
+    async onRowDelete(id) {
+      const confirm = await this.showConfirmSwal();
+      if (confirm.isConfirmed) {
+        this.addPreloader();
+        try {
+          const { user_id } = this.currentUser;
+          const response = await this.A_DELETE_LEADS({
+            lead_id: id,
+            user_id: user_id
+          });
+          if (this.isResponseSuccess(response)) {
+            this.removePreloader();
+            this.showToast(
+              "success",
+              "top-right",
+              "Deleted!",
+              "CheckIcon",
+              "The Lead has been deleted."
+            );
           }
-        })
-        .catch(error => {
-          console.log("Something went wrong onRowDelete:", error);
+        } catch (error) {
+          this.removePreloader();
           this.showErrorSwal(error);
-        });
+        }
+      }
     },
     onRowProcess(id) {
       this.showSwalGeneric(

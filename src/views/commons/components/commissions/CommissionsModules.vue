@@ -1,13 +1,20 @@
 <template>
   <div>
     <header-slot></header-slot>
-    <b-card>
-      <!-- Tabs for Supervisor CRM -->
-      <b-tabs v-if="isSupervisorCrm" pills active-nav-item-class="border-primary-i">
-        <b-tab lazy title="CRM" title-link-class="border-secondary hover-primary">
+
+    <b-card no-body>
+      <b-tabs
+        v-if="isSupervisorCrm"
+        pills
+        card
+        :nav-wrapper-class="[bgLightDark, 'pb-0']"
+        nav-class="mb-0"
+        content-class="border-primary rounded"
+      >
+        <b-tab lazy title="CRM">
           <CommissionsComponent :module="$route.meta.module" tab="crm" />
         </b-tab>
-        <b-tab lazy title="Departments" title-link-class="border-secondary  hover-primary">
+        <b-tab lazy title="Departments">
           <CommissionsComponent :module="$route.meta.module" tab="supervisorCrm" />
         </b-tab>
       </b-tabs>
@@ -22,9 +29,7 @@ export default {
   components: {
     CommissionsComponent
   },
-  mounted() {
-    console.log(this.$route.meta);
-  },
+  mounted() {},
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser"

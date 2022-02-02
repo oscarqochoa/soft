@@ -1,43 +1,30 @@
 <template>
   <div>
-    <header-slot></header-slot>
-    <b-card body-class="pb-0">
-      <div>
-        <b-nav pills>
-          <b-nav-item
-            :to="{ name: 'crm-clients-list' }"
-            exact
-            exact-active-class="active"
-            link-classes="border-secondary hover-primary"
-          >Clients</b-nav-item>
+    <header-slot />
+
+    <b-card no-body>
+      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
+        <b-nav card-header pills class="m-0">
+          <b-nav-item :to="{ name: 'crm-clients-list' }" exact exact-active-class="active">Clients</b-nav-item>
           <b-nav-item
             :to="{ name: 'crm-clients-shared-list' }"
             exact
             exact-active-class="active"
-            link-classes="border-secondary hover-primary"
           >Shared</b-nav-item>
         </b-nav>
+      </b-card-header>
+
+      <b-card-body class="border-primary rounded">
         <router-view :key="$route.name" />
-      </div>
+      </b-card-body>
     </b-card>
   </div>
 </template>
 
 <script>
 import { mapMutations } from "vuex";
-export default {
-  methods: {
-    ...mapMutations({
-      UPDATE_SIDEBAR_ITEM_PROPERTY: "SidebarStore/UPDATE_SIDEBAR_ITEM_PROPERTY"
-    })
-  },
-  mounted() {
-    this.UPDATE_SIDEBAR_ITEM_PROPERTY({
-      routeName: "sales-made-crm-new-client",
-      tag: 10
-    });
-  }
-};
+
+export default {};
 </script>
 
 <style>
