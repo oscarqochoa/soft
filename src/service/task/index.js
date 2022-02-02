@@ -25,7 +25,7 @@ class TaskService {
   async getHistoryTasks(body) {
     try {
       const data = await amgApi.post(
-        "/lead/task/search-history-task-lead",
+        "/tasks/search-history-task-lead",
         body
       );
       return data;
