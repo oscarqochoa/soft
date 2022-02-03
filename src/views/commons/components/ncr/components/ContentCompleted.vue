@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card body-class="px-0">
-      <b-tabs
+      <b-tabs lazy
         active-tab-class="p-0 "
         pills
         card

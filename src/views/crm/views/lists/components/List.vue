@@ -470,7 +470,7 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        per_page: ctx.perPage,
+        perPage: ctx.perPage,
         id:
           this.currentUser.role_id == 1 || this.currentUser.role_id == 2
             ? null
@@ -572,18 +572,13 @@ export default {
               this.number = "";
               this.$refs.refClientsList.refresh();
               this.removePreloader();
+              // this.showSuccessSwal()
               this.$swal
                 .fire({
                   icon: "success",
                   title: "List Created in successfully",
                 })
-                .then((res) => {
-                  if (res) {
-                    // (this.value = []), (this.number = "");
-                    // (this.cancelList = false), (this.add = true);
-                    // this.newList = false;
-                  }
-                });
+                
             } catch (error) {
               console.error(error);
               this.removePreloader();

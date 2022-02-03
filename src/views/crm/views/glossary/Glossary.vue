@@ -298,6 +298,7 @@ export default {
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}`, {
         page: ctx.currentPage,
+        perPage:ctx.perPage,
         created_by: this.created_by,
         category: this.filter[0].model,
         startdate: this.filter[1].model,
