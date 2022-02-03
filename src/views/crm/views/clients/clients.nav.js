@@ -1,5 +1,7 @@
-export default {
-  title: "Clients",
-  icon: "UsersIcon",
-  route: "crm-clients-list",
-};
+export default [
+  {
+    title: "Clients",
+    icon: "UsersIcon",
+    route: "crm-clients",
+  },
+];

@@ -1,5 +1,7 @@
-export default {
-  title: 'Sales Made',
-  icon: 'FileTextIcon',
-  route: 'sales-made-crm-new-client',
-}
+export default [
+  {
+    title: "Sales Made",
+    icon: "FileTextIcon",
+    route: "sales-made-crm",
+  },
+];

@@ -1,5 +1,7 @@
-export default {
-  title: "Inventory",
-  icon: "BoxIcon",
-  route: "inventory-crm-equipment",
-};
+export default [
+  {
+    title: "Inventory",
+    icon: "BoxIcon",
+    route: "inventory-crm",
+  },
+];

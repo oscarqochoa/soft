@@ -14,7 +14,7 @@
       body-class="p-0"
       title-class="title-assitence-schedule"
       no-close-on-backdrop
-      @hidden="closeModal()"
+      @hide="closeModal()"
     >
       <b-img v-if="image" :src="image" class="w-100" />
       <content-camera v-else ref="content" @capturedImage="sendAssistance" />
@@ -94,11 +94,7 @@ export default {
     }),
   },
   mounted() {
-    console.log(this.currentUser);
-    let modul =
-      "dashboard-" +
-      this.currentUser.module_name.replaceAll(".", "").toLowerCase();
-    console.log("rutas ", modul);
+
   },
   methods: {
     async sendAssistance(image) {
@@ -111,6 +107,7 @@ export default {
         modul_id: this.currentUser.modul_id,
       };
       const data = await ScheduleService.sendAssistance(params);
+      this.$refs.content.$refs.photo.stopVideoStream();
       this.geTimeToDial(false);
       this.sweetAlertAssistance(data);
       this.closeModal();
@@ -152,8 +149,10 @@ export default {
     attendance() {
       this.$refs.content.$refs.photo.capture();
       this.$refs.content.$refs.photo.done();
+      this.$refs.content.$refs.photo.stopVideoStream();
     },
     closeModal() {
+      this.$refs.content.$refs.photo.stopVideoStream();
       this.dialAttendance = false;
       this.getCurrentTime();
     },
