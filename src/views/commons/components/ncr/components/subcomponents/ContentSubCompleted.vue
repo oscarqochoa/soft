@@ -1,5 +1,5 @@
 <template>
-  <div class="px-1">
+  <div class="border-info rounded">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"

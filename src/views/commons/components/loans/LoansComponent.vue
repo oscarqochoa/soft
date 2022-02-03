@@ -13,58 +13,59 @@
       </template>
     </header-slot>
 
-    <b-card body-class="pb-0">
-      <b-nav pills>
-        <b-nav-item
-          v-if="isManagement"
-          :to="`/${route}/loans/general`"
-          exact
-          exact-active-class="active "
-          link-classes="ml-1 border-secondary hover-primary"
-        >
-          Loans
-          <span v-if="counterTab.management>0" class="ml-1">
-            <feather-icon
-              icon
-              :badge="counterTab.management > 99 ? '99+' : counterTab.management"
-              badge-classes="badge-important"
-            />
-          </span>
-        </b-nav-item>
-        <b-nav-item
-          v-if="isSupervisor"
-          :to="`/${route}/loans/loans-module/`"
-          exact
-          exact-active-class="active border-primary-i"
-          link-classes="ml-1 border-secondary hover-primary"
-        >
-          Loans by Module
-          <span v-if="counterTab.supervisor>0" class="ml-1">
-            <feather-icon
-              icon
-              :badge="counterTab.supervisor > 99 ? '99+' : counterTab.supervisor"
-              badge-classes="badge-important"
-            />
-          </span>
-        </b-nav-item>
-        <b-nav-item
-          :to="`/${route}/loans/my-loans`"
-          exact
-          exact-active-class="active border-primary-i"
-          link-classes="ml-1 border-secondary hover-primary"
-        >
-          My Loans
-          <span v-if="counterTab.my_loan>0" class="ml-1">
-            <feather-icon
-              icon
-              :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
-              badge-classes="badge-important"
-            />
-          </span>
-        </b-nav-item>
-      </b-nav>
+    <b-card no-body>
+      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
+        <b-nav card-header pills class="m-0">
+          <b-nav-item
+            v-if="isManagement"
+            :to="`/${route}/loans/general`"
+            exact
+            exact-active-class="active "
+          >
+            Loans
+            <span v-if="counterTab.management>0" class="ml-1">
+              <feather-icon
+                icon
+                :badge="counterTab.management > 99 ? '99+' : counterTab.management"
+                badge-classes="badge-important"
+              />
+            </span>
+          </b-nav-item>
+          <b-nav-item
+            v-if="isSupervisor"
+            :to="`/${route}/loans/loans-module/`"
+            exact
+            exact-active-class="active border-primary-i"
+          >
+            Loans by Module
+            <span v-if="counterTab.supervisor>0" class="ml-1">
+              <feather-icon
+                icon
+                :badge="counterTab.supervisor > 99 ? '99+' : counterTab.supervisor"
+                badge-classes="badge-important"
+              />
+            </span>
+          </b-nav-item>
+          <b-nav-item
+            :to="`/${route}/loans/my-loans`"
+            exact
+            exact-active-class="active border-primary-i"
+          >
+            My Loans
+            <span v-if="counterTab.my_loan>0" class="ml-1">
+              <feather-icon
+                icon
+                :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
+                badge-classes="badge-important"
+              />
+            </span>
+          </b-nav-item>
+        </b-nav>
+      </b-card-header>
 
-      <router-view :key="this.$route.name" />
+      <b-card-body class="border-primary rounded">
+        <router-view :key="this.$route.name" />
+      </b-card-body>
     </b-card>
     <ModalRequestLoan v-if="modalRequest.show" :info="modalRequest" @hide="closeModalLoan" />
   </div>
@@ -107,7 +108,8 @@ export default {
     },
     route() {
       return this.$route.meta.route;
-    }
+    },
+    
   },
   mounted() {
     this.modalRequest.tab = this.tab;

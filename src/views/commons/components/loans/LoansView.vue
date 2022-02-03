@@ -1,6 +1,34 @@
 <template>
   <div>
-    <b-tabs
+    <b-card body-class="px-0">
+      <b-tabs
+        v-if="isTabs"
+        active-tab-class="p-0 "
+        pills
+        card
+        :nav-wrapper-class="[bgLightDark, 'pb-0']"
+        nav-class="mb-0"
+        active-nav-item-class="bg-info box-shadow-info border-info"
+      >
+        <b-tab lazy title="Pending">
+          <LoansTable :tab="tab" :status="1" />
+        </b-tab>
+        <b-tab lazy>
+          <template #title>
+            Completed
+            <span class="ml-1" v-if="counterTab.counter_comp>0 && isManagement">
+              <feather-icon
+                :badge="counterTab.counter_comp > 99 ? '99+' : counterTab.counter_comp"
+                badge-classes="badge-danger badge-glow"
+              />
+            </span>
+          </template>
+          <LoansTable :tab="tab" :status="2" />
+        </b-tab>
+      </b-tabs>
+      <LoansTable v-if="!isTabs" :tab="tab" :status="2" />
+    </b-card>
+    <!--    <b-tabs
       v-if="isTabs"
       content-class="ml-2"
       nav-class="ml-2"
@@ -23,7 +51,7 @@
         <LoansTable :tab="tab" :status="2" />
       </b-tab>
     </b-tabs>
-    <LoansTable v-if="!isTabs" :tab="tab" :status="2" />
+    <LoansTable v-if="!isTabs" :tab="tab" :status="2" />-->
   </div>
 </template>
 
