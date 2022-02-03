@@ -512,7 +512,7 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        per_page: ctx.perPage,
+        perPage: ctx.perPage,
         text: this.filterPrincipal.model,
         from: this.filter[3].model,
         to: this.filter[4].model,

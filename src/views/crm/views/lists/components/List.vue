@@ -21,8 +21,12 @@
             sm="6"
             class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
           >
-            <b-button variant="info" v-if="add" @click="addlist">CREATE LIST</b-button>
-            <b-button variant="danger" v-if="cancelList" @click="closelist">CANCEL</b-button>
+            <b-button variant="info" v-if="add" @click="addlist"
+              >CREATE LIST</b-button
+            >
+            <b-button variant="danger" v-if="cancelList" @click="closelist"
+              >CANCEL</b-button
+            >
           </b-col>
         </b-row>
       </div>
@@ -34,22 +38,41 @@
           :style="`${classAdd}`"
         >
           <div class="m-2">
-            <h3 style="color: #ff9f43 !important; display: inline-block">CREATE LIST</h3>
+            <h3 style="color: #ff9f43 !important; display: inline-block">
+              CREATE LIST
+            </h3>
             <ValidationObserver ref="form">
               <b-row>
                 <b-col md="7">
                   <b-form-group label="Selec User">
-                    <ValidationProvider name="comment" rules="required" v-slot="{ errors }">
-                      <v-select v-model="value" multiple :options="options" label="user_name"></v-select>
-                      <small v-if="errors[0]" class="text-danger text-center">User {{ errors[0] }}</small>
+                    <ValidationProvider
+                      name="comment"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
+                      <v-select
+                        v-model="value"
+                        multiple
+                        :options="options"
+                        label="user_name"
+                      ></v-select>
+                      <small v-if="errors[0]" class="text-danger text-center"
+                        >User {{ errors[0] }}</small
+                      >
                     </ValidationProvider>
                   </b-form-group>
                 </b-col>
                 <b-col md="5">
                   <b-form-group label="Number of leads by user">
-                    <ValidationProvider name="comment" rules="required" v-slot="{ errors }">
+                    <ValidationProvider
+                      name="comment"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
                       <b-form-input v-model="number" type="number" />
-                      <small v-if="errors[0]" class="text-danger text-center">Number {{ errors[0] }}</small>
+                      <small v-if="errors[0]" class="text-danger text-center"
+                        >Number {{ errors[0] }}</small
+                      >
                     </ValidationProvider>
                   </b-form-group>
                 </b-col>
@@ -102,13 +125,21 @@
             </div>
           </template>
           <template #cell(created_at)="data">
-            <div class="d-flex flex-column justify-content-start align-items-start">
-              <span v-if="data.item.created_at == 'Today'">{{ data.item.created_at }}</span>
-              <span v-else>{{ data.item.created_at | myDateGlobalWithHour }}</span>
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <span v-if="data.item.created_at == 'Today'">
+                {{ data.item.created_at }}
+              </span>
+              <span v-else>
+                {{ data.item.created_at | myDateGlobalWithHour }}
+              </span>
             </div>
           </template>
           <template #cell(users)="data" v-if="getRoles">
-            <div class="d-flex flex-column justify-content-start align-items-start">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
               <b-button
                 variant="flat-primary"
                 style="
@@ -120,12 +151,18 @@
                 v-for="(user, index) in JSON.parse(data.item.users)"
                 :key="index"
                 @click="modalopen(user.user_name, user.id, data.item.id)"
-              >{{ user.user_name }}</b-button>
+                >{{ user.user_name }}</b-button
+              >
             </div>
           </template>
           <template #cell(action)="data">
             <div
-              class="d-flex flex-column justify-content-center align-items-center"
+              class="
+                d-flex
+                flex-column
+                justify-content-center
+                align-items-center
+              "
               v-if="getRoles"
             >
               <b-button
@@ -137,7 +174,12 @@
               </b-button>
             </div>
             <div
-              class="d-flex flex-column justify-content-center align-items-start"
+              class="
+                d-flex
+                flex-column
+                justify-content-center
+                align-items-start
+              "
               v-if="!getRoles"
             >
               <b-button
@@ -199,7 +241,8 @@
       :currentUser="currentUser"
       @close="closeModalTaskToday"
       @updatingTasks="updatingTasks"
-    ></modal-task-today>
+    >
+    </modal-task-today>
   </div>
 </template>
 
@@ -217,7 +260,7 @@ export default {
     ModalByUser,
     FilterSlot,
     Button,
-    ModalTaskToday
+    ModalTaskToday,
   },
   data() {
     return {
@@ -225,13 +268,13 @@ export default {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: ""
+        model: "",
       },
       id: null,
       nameUser: "",
@@ -254,65 +297,65 @@ export default {
           key: "created_at",
           label: "Create Date",
           sortable: true,
-          visible: true
+          visible: true,
         },
         {
           key: "create_name",
           label: "Create By",
-          visible: true
+          visible: true,
         },
         {
           key: "cant",
           label: "Number of Leads by user",
-          visible: true
+          visible: true,
         },
         {
           key: "users",
           label: "Users",
-          visible: true
+          visible: true,
         },
         {
           key: "done",
           label: "Done",
-          visible: true
+          visible: true,
         },
         {
           key: "action",
           label: "Actions",
-          visible: true
-        }
+          visible: true,
+        },
       ],
       arrayColumnsTwo: [
         {
           key: "created_at",
           label: "Create Date",
           sortable: true,
-          visible: true
+          visible: true,
         },
         {
           key: "create_name",
           label: "Create By",
-          visible: true
+          visible: true,
         },
         {
           key: "cant",
           label: "Number of Leads by user",
-          visible: true
+          visible: true,
         },
         {
           key: "done",
           label: "Done",
-          visible: true
+          visible: true,
         },
         {
           key: "action",
           label: "Actions",
-          visible: true
-        }
+          visible: true,
+        },
       ],
       fromToObject: {
         from: null,
-        to: null
+        to: null,
       },
       filters: [],
       count_alltask: 0,
@@ -336,9 +379,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric"
+            day: "numeric",
           },
-          cols: 6
+          cols: 6,
         },
         {
           type: "datepicker",
@@ -352,16 +395,16 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric"
+            day: "numeric",
           },
-          cols: 6
-        }
-      ]
+          cols: 6,
+        },
+      ],
     };
   },
   computed: {
     ...mapGetters({
-      skin: "appConfig/skin"
+      skin: "appConfig/skin",
     }),
     classAdd() {
       return this.skin == "dark"
@@ -379,8 +422,8 @@ export default {
     },
     visibleFields() {
       return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
-        ? this.arrayColumns.filter(column => column.visible)
-        : this.arrayColumnsTwo.filter(column => column.visible);
+        ? this.arrayColumns.filter((column) => column.visible)
+        : this.arrayColumnsTwo.filter((column) => column.visible);
     },
     ...mapGetters({
       currentUser: "auth/currentUser",
@@ -427,16 +470,16 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        per_page: ctx.perPage,
+        perPage: ctx.perPage,
         id:
           this.currentUser.role_id == 1 || this.currentUser.role_id == 2
             ? null
             : this.currentUser.user_id,
         from: this.filter[0].model,
-        to: this.filter[1].model
+        to: this.filter[1].model,
       });
       // Must return a promise that resolves to an array of items
-      return promise.then(data => {
+      return promise.then((data) => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
         this.startPage = data.data.from;
@@ -461,7 +504,7 @@ export default {
             created_at: "Today",
             create_name: "System",
             cant: this.count_alltask,
-            done: this.count_donetask
+            done: this.count_donetask,
           };
           // let newData = data.data;
           items.unshift(firstOption);
@@ -484,7 +527,7 @@ export default {
           this.removePreloader();
           this.$swal
             .fire("Deleted!", "Your file has been deleted.", "success")
-            .then(res => {
+            .then((res) => {
               if (res) {
                 this.resetSearch();
               }
@@ -502,17 +545,11 @@ export default {
         this.options = data;
       } catch (error) {
         console.error(error);
-        this.showToast(
-          "danger",
-          "top-right",
-          "Error",
-          "XIcon",
-          "Something went wrong!"
-        );
+        this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
       }
     },
     savegroup() {
-      this.$refs.form.validate().then(async success => {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
         } else {
@@ -523,11 +560,11 @@ export default {
           if (confirm.isConfirmed) {
             try {
               const params = {
-                users: this.value.map(user => {
+                users: this.value.map((user) => {
                   return user.id;
                 }),
                 number: this.number,
-                create_id: this.currentUser.user_id
+                create_id: this.currentUser.user_id,
               };
               this.addPreloader();
               const data = await ListService.saveGroup(params);
@@ -535,24 +572,20 @@ export default {
               this.number = "";
               this.$refs.refClientsList.refresh();
               this.removePreloader();
+              // this.showSuccessSwal()
               this.$swal
                 .fire({
                   icon: "success",
-                  title: "List Created in successfully"
+                  title: "List Created in successfully",
                 })
-                .then(res => {
-                  if (res) {
-                    // (this.value = []), (this.number = "");
-                    // (this.cancelList = false), (this.add = true);
-                    // this.newList = false;
-                  }
-                });
+                
             } catch (error) {
               console.error(error);
               this.removePreloader();
               this.showErrorSwal(error);
             }
           }
+          
         }
       });
     },
@@ -568,12 +601,12 @@ export default {
     },
     closeModal() {
       this.modalChanging = false;
-    }
+    },
   },
   created() {
     this.groupusers();
     this.statusRol();
-  }
+  },
 };
 </script>
 
