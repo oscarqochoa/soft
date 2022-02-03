@@ -30,5 +30,15 @@ class ActivitiesService {
       throw error
     }
   }
+
+  async getTask(body) {
+    try {
+      const data = await amgApi.post('sn-activities/get-tasks', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getTask:', error)
+      throw error
+    }
+  }
 }
 export default new ActivitiesService()

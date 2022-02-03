@@ -21,6 +21,7 @@
             caption-top
             responsive
           >
+
             <b-thead>
               <b-tr>
                 <b-th />
@@ -77,6 +78,7 @@
                 :key="index"
               >
                 <b-th>{{ item.name_user }}</b-th>
+
                 <td
                   v-for="(schedule,i) in item.json_data"
                   :key="i"
@@ -86,10 +88,11 @@
                       v-if="schedule.id_tasks != null"
                       v-b-tooltip.hover
                       :title="schedule.title_task"
+
                       class="text-white cursor-pointer schedule"
                       :style="'background:'+schedule.color+'!important' "
-                      @click="OpenSchedulesModal(item)"
-                    >{{ schedule.clock_in }} to {{ schedule.clock_out }}</div>
+                      @click="OpenSchedulesModal(schedule,item,i)"
+                    >{{ schedule.clock_in }} to {{ schedule.clock_out }} </div>
                     <div
                       v-else
                       class="cursor-pointer off"
@@ -137,6 +140,9 @@
       <modal-schedule
         v-if="modalSchedulesModal"
         :user-text="userText"
+        :schedule="schedule"
+        :schedules="schedules"
+        :index="index"
         @close="closeSchedulesModal"
       />
     </b-card>
@@ -178,6 +184,7 @@ export default {
       item: {},
       schedule: {},
       userText: null,
+      index: '',
     }
   },
   created() {
@@ -200,9 +207,11 @@ export default {
       this.modalInsertTaskModal = false
     },
 
-    OpenSchedulesModal(item) {
+    OpenSchedulesModal(schedule, item, index) {
       this.modalSchedulesModal = true
       this.userText = item.name_user
+      this.schedule = schedule
+      this.index = index
     },
 
     closeSchedulesModal() {
