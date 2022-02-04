@@ -10,12 +10,12 @@
 
     <validation-observer ref="form">
 
-      <validation-provider
-        v-slot="{ errors }"
-        name="task"
-        rules="required"
-      >
-        <b-form-group class>
+      <b-form-group class>
+        <validation-provider
+          v-slot="{ errors,valid }"
+          name="title"
+          rules="required"
+        >
           <b-input-group>
             <b-input-group-prepend>
               <b-input-group-text
@@ -31,12 +31,25 @@
                 v-model="task.title"
                 type="text"
                 placeholder="Enter title"
-                required
+                :state="errors[0] ? false : valid ? true : null"
               />
             </div>
           </b-input-group>
-        </b-form-group>
-        <b-form-group class>
+          <span
+            v-if="errors[0]"
+            class="text-danger"
+          >
+            Title {{ errors[0] }}
+          </span>
+        </validation-provider>
+      </b-form-group>
+      <b-form-group class>
+
+        <validation-provider
+          v-slot="{ errors,valid }"
+          name="description"
+          rules="required"
+        >
           <b-input-group>
             <b-input-group-prepend>
               <b-input-group-text
@@ -49,18 +62,21 @@
               <b-form-textarea
                 v-model="task.description"
                 placeholder="Enter description"
-                class="input-form "
+                class="input-form"
+                :state="errors[0] ? false : valid ? true : null"
               />
             </div>
+
           </b-input-group>
-        </b-form-group>
-        <label
-          v-if="errors[0]"
-          class="text-danger"
-        >
-          Required
-        </label>
-      </validation-provider>
+          <span
+            v-if="errors[0]"
+            class="text-danger"
+          >
+            Description {{ errors[0] }}
+          </span>
+        </validation-provider>
+      </b-form-group>
+
     </validation-observer>
 
     <template #modal-footer>

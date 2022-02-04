@@ -13,7 +13,7 @@
       <span
         class="text-white"
         style="font-size: 20px; font-weight: 900;"
-      >{{ userText }}</span>
+      >{{ user.name_user }}</span>
 
     </template>
     <div>
@@ -95,7 +95,7 @@ from '@/views/social-network/views/activities/activities-module/modals/tracking-
 import ActivitiesService from '@/views/social-network/views/activities/activities.service'
 
 export default {
-  props: ['item', 'from', 'to', 'userText'],
+  props: ['item', 'from', 'to', 'user'],
   data() {
     return {
 

@@ -91,11 +91,12 @@
 
                       class="text-white cursor-pointer schedule"
                       :style="'background:'+schedule.color+'!important' "
-                      @click="OpenSchedulesModal(schedule,item,i)"
+                      @click="OpenSchedulesModal(schedule,item,true)"
                     >{{ schedule.clock_in }} to {{ schedule.clock_out }} </div>
                     <div
                       v-else
                       class="cursor-pointer off"
+                      @click="OpenSchedulesModal(schedule,item,false)"
                     >OFF</div>
                   </div>
                   <div v-else>
@@ -134,15 +135,16 @@
         :item="item"
         :from="date.from"
         :to="date.to"
-        :user-text="userText"
+        :user="user"
         @close="closeTrackingModal"
       />
       <modal-schedule
         v-if="modalSchedulesModal"
-        :user-text="userText"
+        :user="user"
         :schedule="schedule"
         :schedules="schedules"
-        :index="index"
+        :edit="edit"
+        @getSchedules="getSchedules"
         @close="closeSchedulesModal"
       />
     </b-card>
@@ -183,8 +185,9 @@ export default {
       modalSchedulesModal: false,
       item: {},
       schedule: {},
-      userText: null,
-      index: '',
+      user: { },
+      edit: false,
+
     }
   },
   created() {
@@ -207,11 +210,13 @@ export default {
       this.modalInsertTaskModal = false
     },
 
-    OpenSchedulesModal(schedule, item, index) {
+    OpenSchedulesModal(schedule, item, edit) {
+      console.log(item)
       this.modalSchedulesModal = true
-      this.userText = item.name_user
+      this.user = item
+
       this.schedule = schedule
-      this.index = index
+      this.edit = edit
     },
 
     closeSchedulesModal() {
@@ -220,7 +225,8 @@ export default {
 
     OpenTrackingModal(schedule, item) {
       this.modalTrackingModal = true
-      this.userText = item.name_user
+      this.user.name_user = item.name_user
+      this.user.id = item.id
       this.schedule = schedule
       this.item = item
     },

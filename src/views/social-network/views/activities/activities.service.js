@@ -40,5 +40,25 @@ class ActivitiesService {
       throw error
     }
   }
+
+  async createSchedules(body) {
+    try {
+      const data = await amgApi.post('sn-activities/create-schedules', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on createSchedules:', error)
+      throw error
+    }
+  }
+
+  async updateSchedules(body) {
+    try {
+      const data = await amgApi.post('sn-activities/update-schedules', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on updateSchedules:', error)
+      throw error
+    }
+  }
 }
 export default new ActivitiesService()
