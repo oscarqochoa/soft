@@ -114,6 +114,10 @@ const mutations = {
   M_KEY_UPDATE_DETAILS_LEAD(state) {
     state.S_KEY_UPDATE_DETAILS_LEAD++;
   },
+  SET_DATA_LEAD_EDIT(state, payload) {
+    state.S_LEAD_EDIT = payload;
+    Vue.set(state.S_LEAD_EDIT, "state_lead", payload.state_lead);
+  },
 };
 const actions = {
   async A_GET_LEADS({ commit }, body) {
@@ -167,10 +171,7 @@ const actions = {
     try {
       const response = await crmLead.getLeadEdit(id, params);
       /* console.log('A_GET_LEAD_EDIT response', response) */
-      commit("SET_DATA", {
-        destination: "S_LEAD_EDIT",
-        data: response[0],
-      });
+      commit("SET_DATA_LEAD_EDIT", response[0]);
       return response;
     } catch (error) {
       console.log("ERROR_GET_LEAD_EDIT [ACTION]", error);
