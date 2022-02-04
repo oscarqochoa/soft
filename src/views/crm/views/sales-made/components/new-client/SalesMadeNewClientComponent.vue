@@ -53,18 +53,20 @@
           </b-form-group>
         </template>
         <template v-slot:cell(client)="data">
-          <router-link
-            class="text-important"
-            :to="`/crm/leads/${data.item.lead_id}`"
-            target="_blank"
-          >{{ data.item.client }}</router-link>
-          <p class="mb-0">{{ data.item.mobile }}</p>
-          <p class="mb-0">
-            <small>{{ data.item.state }}</small>
-          </p>
-          <p>
-            <small>{{ data.item.sourcesname }}</small>
-          </p>
+          <div class="text-left">
+            <router-link
+              :class="[textLink]"
+              :to="`/crm/leads/${data.item.lead_id}`"
+              target="_blank"
+            >{{ data.item.client }}</router-link>
+            <p class="mb-0">{{ data.item.mobile }}</p>
+            <p class="mb-0">
+              <small>{{ data.item.state }}</small>
+            </p>
+            <p>
+              <small>{{ data.item.sourcesname }}</small>
+            </p>
+          </div>
         </template>
         <template v-slot:cell(program)="data">
           <b-button
@@ -222,7 +224,7 @@
             <b-col>
               <money
                 v-model="data.item.fee"
-                class="form-control form-control-sm mb-1 p-0 border-0 text-center"
+                class="mb-1 p-0 border-0 text-center"
                 v-bind="{prefix: ' $ ', precision: 2}"
                 style="width: 70px !important; padding-left: 10px; opacity: 1"
                 disabled
@@ -876,6 +878,8 @@ export default {
     } catch (error) {
       console.error(error);
     }
+
+    this.addPaddingTd();
   },
   methods: {
     hideInitialPaymentModal(val) {

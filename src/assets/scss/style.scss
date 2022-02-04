@@ -295,3 +295,8 @@ $borderamg: #efb911;
 .border-bottom-tab {
   border-bottom: 1px solid #3764ff !important;
 }
+
+.table td,
+.table th {
+  vertical-align: top !important;
+}
