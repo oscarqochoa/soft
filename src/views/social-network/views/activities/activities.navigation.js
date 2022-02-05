@@ -1,7 +1,7 @@
 export default [
   {
     title: 'Activities',
-    icon: 'RepeatIcon',
+    icon: 'CalendarIcon',
     route: 'activities-social-network',
   },
 ]

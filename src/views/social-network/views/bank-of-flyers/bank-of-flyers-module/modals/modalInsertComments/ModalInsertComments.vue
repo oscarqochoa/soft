@@ -25,7 +25,7 @@
           v-if="errors[0]"
           class="text-danger"
         >
-          Required
+          Comment {{ errors[0] }}
         </label>
       </validation-provider>
     </validation-observer>
