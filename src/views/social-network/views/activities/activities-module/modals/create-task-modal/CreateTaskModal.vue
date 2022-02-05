@@ -294,6 +294,7 @@ export default {
       }
     },
 
+    // eslint-disable-next-line consistent-return
     async updateTask() {
       try {
         const response = await this.showConfirmSwal()
@@ -329,10 +330,4 @@ export default {
 
 <style>
 
-/*.modal-header{*/
-/*  background-color:#ffffff !important;*/
-/*}*/
-/*.modal-content {*/
-/*  overflow:hidden;*/
-/*}*/
 </style>

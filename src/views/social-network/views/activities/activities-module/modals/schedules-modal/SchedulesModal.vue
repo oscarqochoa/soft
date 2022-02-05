@@ -82,7 +82,7 @@
                       class="cursor-pointer"
                       size="20"
                       icon="PlusCircleIcon"
-                      @click="OpenInsertTaskModal(false)"
+                      @click="openInsertTaskModal(false)"
                     />
                   </div>
                 </b-col>
@@ -499,6 +499,7 @@ export default {
       this.taskSche = this.schedule
       this.taskSche.title = this.schedule.title_task
     },
+    // eslint-disable-next-line consistent-return
     async updateSchedule() {
       try {
         const result = await this.$refs.form.validate()
@@ -540,6 +541,7 @@ export default {
       }
     },
 
+    // eslint-disable-next-line consistent-return
     async createSchedule() {
       try {
         const result = await this.$refs.form.validate()
@@ -569,7 +571,7 @@ export default {
       }
     },
 
-    OpenInsertTaskModal(editTask) {
+    openInsertTaskModal(editTask) {
       this.editTask = editTask
       this.modalInsertTaskModal = true
     },

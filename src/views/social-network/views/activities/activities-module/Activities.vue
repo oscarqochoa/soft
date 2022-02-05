@@ -8,7 +8,7 @@
         <div class="d-inline justify-content-end">
           <b-button
             variant="primary"
-            @click="OpenInsertTaskModal(false)"
+            @click="openInsertTaskModal(false)"
           >
             CREATE TASK
           </b-button>
@@ -162,12 +162,12 @@
 
                       class="text-white cursor-pointer schedule"
                       :style="'background:'+schedule.color+'!important' "
-                      @click="OpenSchedulesModal(schedule,item,true)"
+                      @click="openSchedulesModal(schedule,item,true)"
                     >{{ schedule.clock_in }} to {{ schedule.clock_out }} </div>
                     <div
                       v-else
                       class="cursor-pointer off"
-                      @click="OpenSchedulesModal(schedule,item,false)"
+                      @click="openSchedulesModal(schedule,item,false)"
                     >OFF</div>
                   </div>
                   <div v-else>
@@ -181,7 +181,7 @@
                     size="50px"
                     style="font-size: 10px;"
                     title="SEE TRACKING"
-                    @click="OpenTrackingModal(schedule,item)"
+                    @click="openTrackingModal(schedule,item)"
                   >
                     TRACKING
                   </b-icon>
@@ -233,7 +233,7 @@
           <div
             :style="'background:'+i.color+'!important'"
             class="border-task"
-            @click="OpenInsertTaskModal(true,i)"
+            @click="openInsertTaskModal(true,i)"
           >
             <p
               v-if="i.title.length < 24"
@@ -329,7 +329,7 @@ export default {
 
       return this.schedules
     },
-    OpenInsertTaskModal(editTask, task) {
+    openInsertTaskModal(editTask, task) {
       this.editTask = editTask
       this.modalInsertTaskModal = true
       this.taskOut = task
@@ -340,7 +340,7 @@ export default {
       this.modalInsertTaskModal = false
     },
 
-    OpenSchedulesModal(schedule, item, edit) {
+    openSchedulesModal(schedule, item, edit) {
       console.log(item)
       this.modalSchedulesModal = true
       this.user = item
@@ -353,7 +353,7 @@ export default {
       this.modalSchedulesModal = false
     },
 
-    OpenTrackingModal(schedule, item) {
+    openTrackingModal(schedule, item) {
       this.modalTrackingModal = true
       this.user.name_user = item.name_user
       this.user.id = item.id

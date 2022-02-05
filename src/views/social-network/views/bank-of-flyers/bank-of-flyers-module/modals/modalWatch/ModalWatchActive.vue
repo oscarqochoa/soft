@@ -409,7 +409,7 @@ export default {
       })
       return this.flyer_name
     },
-    OpenInsertModal() {
+    openInsertModal() {
       this.titleInsertCampaign()
       this.ownInsertControl = true
     },

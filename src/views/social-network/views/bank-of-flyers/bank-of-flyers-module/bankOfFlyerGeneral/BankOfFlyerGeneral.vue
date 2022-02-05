@@ -26,7 +26,7 @@
               v-if="status===4"
               variant="primary"
               class="ml-1"
-              @click="OpenWatchModal(1,1)"
+              @click="openWatchModal(1,1)"
             >
               <feather-icon
                 icon="FilePlusIcon"
@@ -95,7 +95,7 @@
                 v-if="data.item.count>0"
                 v-b-tooltip.hover="'Click to view history of replies'"
                 class="mb-0 font-weight-bolder cursor-pointer text-primary fon"
-                @click="OpenRepliesModal(data.index)"
+                @click="openRepliesModal(data.index)"
               >
                 {{ data.item.count }}
               </p>
@@ -130,7 +130,7 @@
                 size="20"
                 class="cursor-pointer m-1"
 
-                @click="OpenWatchModal(data.index,2)"
+                @click="openWatchModal(data.index,2)"
               />
 
             </template>
@@ -150,7 +150,7 @@
                 <b-dropdown-item
                   v-b-tooltip.hover.left="'Add new comment'"
 
-                  @click="OpenInsertCommentsModal(data.item.id)"
+                  @click="openInsertCommentsModal(data.item.id)"
                 >
                   <feather-icon
                     icon="PlusIcon"
@@ -158,7 +158,7 @@
                 </b-dropdown-item>
                 <b-dropdown-item
                   v-b-tooltip.hover.left="'View history of comments'"
-                  @click="OpenListCommentsModal(data.item.id)"
+                  @click="openListCommentsModal(data.item.id)"
                 >
                   <feather-icon icon="RotateCcwIcon" />History
                 </b-dropdown-item>
@@ -353,7 +353,7 @@ export default {
       this.showImage = index
     },
 
-    OpenWatchModal(index, info) {
+    openWatchModal(index, info) {
       this.modalWatch = true
       this.showWatch = index
       this.info = info
@@ -362,17 +362,17 @@ export default {
     closeWatchModal() {
       this.modalWatch = false
     },
-    OpenRepliesModal(index) {
+    openRepliesModal(index) {
       this.modalReplies = true
       this.showReplies = index
     },
-    OpenInsertCommentsModal(index) {
+    openInsertCommentsModal(index) {
       this.modalInsertCommentsModal = true
       this.showComments = index
       console.log(index)
     },
 
-    OpenListCommentsModal(index) {
+    openListCommentsModal(index) {
       this.modalListCommentsModal = true
       this.showListComments = index
     },
