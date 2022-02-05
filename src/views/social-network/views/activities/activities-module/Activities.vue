@@ -7,7 +7,7 @@
         <div class="d-inline justify-content-end">
           <b-button
             variant="primary"
-            @click="OpenInsertTaskModal"
+            @click="OpenInsertTaskModal(false)"
           >
             CREATE TASK
           </b-button>
@@ -126,7 +126,8 @@
       </b-container>
       <modal-create-task
         v-if="modalInsertTaskModal"
-
+        :edit-task="editTask"
+        :task-out="taskOut"
         @close="closeInsertTaskModal"
       />
 
@@ -144,15 +145,44 @@
         :schedule="schedule"
         :schedules="schedules"
         :edit="edit"
-        @getSchedules="getSchedules"
+        @getSchedules="getSchedulesIn"
         @close="closeSchedulesModal"
       />
+
+      <div
+        class="row"
+        style="margin: 1px!important;"
+      >
+        <div
+          v-for="(i,index) in tasks"
+          :key="index"
+          class="col-sm-2"
+          style="margin:0!important;padding:0!important"
+        >
+          <div
+            :style="'background:'+i.color+'!important'"
+            class="border-task"
+            @click="OpenInsertTaskModal(true,i)"
+          >
+            <p
+              v-if="i.title.length < 24"
+              class="card-text text-white text-center cursor-pointer"
+            >{{ i.title }}</p>
+            <p
+              v-else
+
+              class="card-text text-white text-center cursor-pointer"
+            >{{ i.title.substr(0,24) }}...</p>
+          </div>
+        </div>
+      </div>
     </b-card>
   </div>
 
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import ActivitiesService from '@/views/social-network/views/activities/activities.service'
 
 import ModalCreateTask
@@ -173,6 +203,7 @@ export default {
   },
   data() {
     return {
+
       schedules: [],
       date: {
         // from: moment().startOf("week").add(1, "days").format("YYYY-MM-DD"),
@@ -187,26 +218,40 @@ export default {
       schedule: {},
       user: { },
       edit: false,
-
+      editTask: false,
+      taskOut: null,
     }
   },
-  created() {
-    this.getSchedules()
+  computed: {
+    ...mapGetters({
+      currentUser: 'auth/currentUser',
+      token: 'auth/token',
+      tasks: 'SocialNetworkActivities/G_TASKS',
+    }),
+
   },
 
+  created() {
+    this.getSchedulesIn()
+    this.A_GET_TASKS()
+  },
   methods: {
-    async getSchedules() {
+    ...mapActions('SocialNetworkActivities', ['A_GET_TASKS']),
+    async getSchedulesIn() {
       const params = { from: this.date.from, to: this.date.to }
       const data = await ActivitiesService.getSchedules(params)
       this.schedules = data.data
-      console.log(this.schedules)
+
       return this.schedules
     },
-    OpenInsertTaskModal() {
+    OpenInsertTaskModal(editTask, task) {
+      this.editTask = editTask
       this.modalInsertTaskModal = true
+      this.taskOut = task
     },
 
     closeInsertTaskModal() {
+      this.A_GET_TASKS()
       this.modalInsertTaskModal = false
     },
 
@@ -253,5 +298,9 @@ tbody tr td {
   padding-top: 1px;
   padding-bottom: 1px;
   border-radius: 7px;
+}
+
+.border-task {
+  border: 1px solid white !important;
 }
 </style>

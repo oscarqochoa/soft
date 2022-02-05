@@ -21,6 +21,16 @@ class ActivitiesService {
     }
   }
 
+  async updateTask(body) {
+    try {
+      const data = await amgApi.post('sn-activities/update-tasks', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on updateTask:', error)
+      throw error
+    }
+  }
+
   async getTrackingChanges(body) {
     try {
       const data = await amgApi.post('sn-activities/get-tracking', body)

@@ -280,7 +280,6 @@ export default {
         if (response.isConfirmed) {
           await MigrationsService.deleteLeadsMigration(params)
 
-          console.log('gaaa')
           this.$refs.migrationList.refresh()
 
           this.showSuccessSwal('File has been deleted successfully')

@@ -1,13 +1,44 @@
 <template>
   <b-modal
+    id="modalTask"
     v-model="ownControl"
+    modal
     scrollable
     title-class="h3 text-white font-weight-bolder"
-    title="CREATE TASK"
+    header-class="class_modal_js"
     size="lg"
+
     @hidden="closeModal"
   >
 
+    <template
+      #modal-header
+    >
+      <div
+        v-if="editTask===false"
+      >
+
+        <div class="text-center">
+          <span style="font-size: 20px; font-weight: 900; color: #ffffff; ">Create Task</span>
+        </div>
+        <i
+          class="fas fa-times-circle text-white"
+          style="color: #ffffff; font-size: 20px; cursor: pointer"
+          @click="closeModal"
+        />
+      </div>
+      <div v-if="editTask===true">
+        <div class="text-center">
+          <span style="font-size: 20px; font-weight: 900; color: #ffffff;">Update Task</span>
+        </div>
+        <i
+          class="fas fa-times-circle text-white"
+          style="color: #ffffff; font-size: 20px; cursor: pointer"
+          @click="closeModal"
+        />
+      </div>
+
+    </template>
     <validation-observer ref="form">
 
       <b-form-group class>
@@ -27,8 +58,17 @@
             </b-input-group-prepend>
             <div class="d-flex align-items-center justify-content-around w-100">
               <b-form-input
+                v-if="editTask===false"
                 id="input-1"
                 v-model="task.title"
+                type="text"
+                placeholder="Enter title"
+                :state="errors[0] ? false : valid ? true : null"
+              />
+              <b-form-input
+                v-if="editTask===true"
+                id="input-1"
+                v-model="taskOut.title"
                 type="text"
                 placeholder="Enter title"
                 :state="errors[0] ? false : valid ? true : null"
@@ -60,7 +100,15 @@
             </b-input-group-prepend>
             <div class="w-100">
               <b-form-textarea
+                v-if="editTask===false"
                 v-model="task.description"
+                placeholder="Enter description"
+                class="input-form"
+                :state="errors[0] ? false : valid ? true : null"
+              />
+              <b-form-textarea
+                v-if="editTask===true"
+                v-model="taskOut.description"
                 placeholder="Enter description"
                 class="input-form"
                 :state="errors[0] ? false : valid ? true : null"
@@ -77,10 +125,56 @@
         </validation-provider>
       </b-form-group>
 
+      <b-form-group
+        v-if="editTask===true"
+        class
+      >
+
+        <b-input-group>
+
+          <b-col
+
+            md="3"
+            class="p-0"
+          >
+
+            <b-input-group-prepend>
+              <b-input-group-text
+                class="bg-primary text-white w-100"
+              >
+                <span>COLOR</span>
+              </b-input-group-text>
+            </b-input-group-prepend>
+
+          </b-col>
+          <b-col
+
+            md="9"
+            class="p-0 "
+          >
+            <div
+
+              class="w-100"
+            >
+
+              <b-input
+                v-if="editTask===true"
+                v-model="taskOut.color"
+
+                type="color"
+              />
+
+            </div>
+          </b-col>
+
+        </b-input-group>
+
+      </b-form-group>
     </validation-observer>
 
     <template #modal-footer>
       <b-button
+        v-if="editTask===false"
         variant="primary"
         @click="createTask"
       >
@@ -89,6 +183,18 @@
           small
         />
         SAVE
+      </b-button>
+
+      <b-button
+        v-if="editTask===true"
+        variant="primary"
+        @click="updateTask"
+      >
+        <b-spinner
+          v-if="spinnerOn"
+          small
+        />
+        UPDATE
       </b-button>
 
     </template>
@@ -101,6 +207,7 @@ import { mapGetters } from 'vuex'
 import ActivitiesService from '@/views/social-network/views/activities/activities.service'
 
 export default {
+  props: ['editTask', 'taskOut'],
   data() {
     return {
 
@@ -112,25 +219,54 @@ export default {
         id: null,
         title: null,
         description: null,
-        color: null,
+        color: '#ffffff',
 
       },
+      delete: null,
     }
   },
-  created() {
-    this.ownControl = true
-  },
+
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
-
+      tasks: 'SocialNetworkActivities/G_TASKS',
     }),
+
+  },
+
+  created() {
+    this.ownControl = true
+    this.backgroundColor()
   },
   methods: {
 
     closeModal() {
+      if (this.editTask === true) {
+        this.deleteClass()
+      }
+
       this.$emit('close')
+    },
+    createClass(name, rules) {
+      console.log(this.$refs.taskModal)
+      const style = document.createElement('style')
+      style.type = 'text/css'
+      document.getElementsByTagName('head')[0].appendChild(style)
+      if (!(style.sheet || {}).insertRule) (style.styleSheet || style.sheet).addRule(name, rules)
+      else style.sheet.insertRule(`${name}{${rules}}`, 0)
+      console.log(style.sheet.cssRules)
+      this.delete = style
+    },
+
+    deleteClass() {
+      this.delete.sheet.deleteRule(0)
+    },
+
+    backgroundColor() {
+      if (this.editTask === true) {
+        this.createClass('#modalTask___BV_modal_header_', `background-color:${this.taskOut.color}!important`)
+      }
     },
     // eslint-disable-next-line consistent-return
     async createTask() {
@@ -157,10 +293,46 @@ export default {
         return []
       }
     },
+
+    async updateTask() {
+      try {
+        const response = await this.showConfirmSwal()
+        if (response.isConfirmed) {
+          const result = await this.$refs.form.validate()
+          if (result) {
+            this.spinnerOn = true
+
+            const params = {
+              id: this.taskOut.id,
+              title: this.taskOut.title,
+              description: this.taskOut.description,
+
+              color: this.taskOut.color,
+              colorModal: this.taskOut.color,
+            }
+
+            const data = await ActivitiesService.updateTask(params)
+            if (data.status === 200) {
+              this.showSuccessSwal()
+              this.closeModal()
+            }
+          }
+        }
+      } catch (e) {
+        this.showErrorSwal(e)
+        return []
+      }
+    },
   },
 }
 </script>
 
-<style scoped>
+<style>
 
+/*.modal-header{*/
+/*  background-color:#ffffff !important;*/
+/*}*/
+/*.modal-content {*/
+/*  overflow:hidden;*/
+/*}*/
 </style>

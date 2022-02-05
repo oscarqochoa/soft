@@ -1,15 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Test from '../views/test/test.store'
-import BankOfFlyers from '@/views/social-network/views/bank-of-flyers/bank-of-flyers.store.js'
-import Global from '@/views/social-network/store/global/index.js'
-
+import BankOfFlyers from '@/views/social-network/views/bank-of-flyers/bank-of-flyers.store'
+import Global from '@/views/social-network/store/global/index'
+import Activities from '@/views/social-network/views/activities/activities.store'
 
 Vue.use(Vuex)
 
 export default {
   SocialNetworkTest: Test,
-  SocialNetworkBankOfFlyersStore:  BankOfFlyers,
+  SocialNetworkBankOfFlyersStore: BankOfFlyers,
   SocialNetworkGlobalStore: Global,
+  SocialNetworkActivities: Activities,
 
 }

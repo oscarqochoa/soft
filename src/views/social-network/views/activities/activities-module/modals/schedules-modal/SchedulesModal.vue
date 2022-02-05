@@ -1,8 +1,12 @@
 <template>
   <b-modal
-    v-model="ownControl"
+    id="modalTask"
 
+    v-model="ownControl"
+    modal
+    scrollable
     title-class="h3 text-white font-weight-bolder"
+    header-class="class_modal_js"
 
     size="lg"
     @hidden="closeModal"
@@ -57,6 +61,7 @@
                       :options="tasks"
                       :reduce="option=>option"
                       label="title"
+                      @input="onChangeEditTaskSche()"
                     />
 
                     <v-select
@@ -77,7 +82,7 @@
                       class="cursor-pointer"
                       size="20"
                       icon="PlusCircleIcon"
-                      @click="OpenInsertTaskModal"
+                      @click="OpenInsertTaskModal(false)"
                     />
                   </div>
                 </b-col>
@@ -330,7 +335,7 @@
                     </span>
                   </b-form-group>
                 </validation-provider>
-                {{ taskSche }}
+
               </b-col>
             </b-row></b-card-body>
 
@@ -341,7 +346,7 @@
 
     <modal-create-task
       v-if="modalInsertTaskModal"
-
+      :edit-task="editTask"
       @close="closeInsertTaskModal"
     />
 
@@ -349,6 +354,7 @@
       <b-button
         v-if="edit===true"
         variant="primary"
+
         @click="updateSchedule"
       >
         <b-spinner
@@ -376,7 +382,7 @@
 
 <script>
 import moment from 'moment'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import vSelect from 'vue-select'
 import ActivitiesService from '@/views/social-network/views/activities/activities.service'
 import ModalCreateTask
@@ -390,7 +396,6 @@ export default {
   props: ['user', 'schedule', 'schedules', 'edit'],
   data: () => ({
 
-    tasks: [],
     idTask: ' ',
     ownControl: false,
     spinnerOn: false,
@@ -405,28 +410,39 @@ export default {
     maxDate: new Date(2050, 9, 1),
 
     dayText: null,
-
+    editTask: false,
+    delete: null,
   }),
 
-  created() {
-    this.ownControl = true
-    this.getTasks()
+  async created() {
+    try {
+      await Promise.all([
+        this.$store.dispatch('SocialNetworkActivities/A_GET_TASKS'),
+        this.ownControl = true,
 
-    this.convert()
+        this.convert(),
+
+      ])
+    } catch (error) {
+      console.error(error)
+    }
   },
   mounted() {
+    this.backgroundColor()
     this.taskConvert()
   },
   computed: {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
+      tasks: 'SocialNetworkActivities/G_TASKS',
 
     }),
+
   },
 
   methods: {
-
+    ...mapActions('SocialNetworkActivities', ['A_GET_TASKS']),
     convert() {
       this.dayText = moment(this.schedule.date).format('ddd')
 
@@ -434,6 +450,9 @@ export default {
     },
 
     closeModal() {
+      if (this.edit === true) {
+        this.deleteClass()
+      }
       this.$emit('close')
     },
     onChangeTaskSche() {
@@ -441,51 +460,80 @@ export default {
       if (!this.taskSche) {
         this.taskSche = {}
       }
-      console.log(this.schedule, 'doble')
     },
-    // eslint-disable-next-line consistent-return
 
-    async getTasks() {
-      try {
-        const params = { item: this.item, from: this.from, to: this.to }
-        const data = await ActivitiesService.getTask(params)
-        console.log(data)
-        this.tasks = data.data
-        // Must return an array of items or an empty array if an error occurred
+    createClass(name, rules) {
+      console.log(this.$refs.taskModal)
+      const style = document.createElement('style')
+      style.type = 'text/css'
+      document.getElementsByTagName('head')[0].appendChild(style)
+      if (!(style.sheet || {}).insertRule) (style.styleSheet || style.sheet).addRule(name, rules)
+      else style.sheet.insertRule(`${name}{${rules}}`, 0)
+      console.log(style.sheet.cssRules)
+      this.delete = style
+    },
 
-        return this.tasks
-      } catch (e) {
-        this.showErrorSwal(e)
-        return []
+    deleteClass() {
+      this.delete.sheet.deleteRule(0)
+    },
+
+    backgroundColor() {
+      if (this.edit === true) {
+        console.log('entre')
+        console.log(this.schedule.color)
+        this.createClass('#modalTask___BV_modal_header_', `background-color:${this.schedule.color}!important`)
       }
     },
+
+    onChangeEditTaskSche() {
+      this.taskSche.clock_in = this.schedule.clock_in
+      this.taskSche.clock_out = this.schedule.clock_out
+      this.taskSche.start_break = this.schedule.start_break
+
+      this.taskSche.id_tasks = this.taskSche.id
+    },
+
     taskConvert() {
       console.log(this.schedule)
       this.taskSche = this.schedule
       this.taskSche.title = this.schedule.title_task
-
-      console.log('ga')
-      console.log(this.taskSche, 'tasckhe')
     },
     async updateSchedule() {
       try {
-        const result = await this.$refs.form.validate()
-        if (result) {
-          this.spinnerOn = true
-          const params = {
-            id_task: this.taskSche.id_tasks,
-            schedule: this.taskSche,
-            item: this.user,
-            id_user: this.currentUser.user_id,
+        const response = await this.showConfirmSwal()
+        if (response.isConfirmed) {
+          const result = await this.$refs.form.validate()
+          if (result) {
+            this.spinnerOn = true
+            const params = {
 
-          }
+              id_task: this.taskSche.id_tasks,
+              schedule: {
+                id: this.schedule.id,
+                clock_in: this.taskSche.clock_in,
+                clock_out: this.taskSche.clock_out,
+                color: this.schedule.color,
+                date: this.schedule.date,
+                description: this.schedule.description,
 
-          console.log(params, 'checkear')
-          const data = await ActivitiesService.updateSchedules(params)
-          if (data.status === 200) {
-            this.$emit('getSchedules')
-            this.showSuccessSwal()
-            this.closeModal()
+                id_tasks: this.schedule.id_tasks,
+                isBreak: this.taskSche.isBreak,
+                start_break: this.taskSche.start_break,
+                end_break: this.taskSche.end_break,
+                title_task: this.schedule.title,
+
+              },
+              item: this.user,
+              id_user: this.currentUser.user_id,
+
+            }
+
+            const data = await ActivitiesService.updateSchedules(params)
+            if (data.status === 200) {
+              this.$emit('getSchedulesIn')
+              this.showSuccessSwal('Schedule has been updated successfully')
+              this.closeModal()
+            }
           }
         }
       } catch (e) {
@@ -523,13 +571,14 @@ export default {
       }
     },
 
-    OpenInsertTaskModal() {
+    OpenInsertTaskModal(editTask) {
+      this.editTask = editTask
       this.modalInsertTaskModal = true
     },
 
     closeInsertTaskModal() {
+      this.A_GET_TASKS()
       this.modalInsertTaskModal = false
-      this.getTasks()
     },
   },
 
