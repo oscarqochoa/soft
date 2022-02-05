@@ -208,8 +208,8 @@ export default {
       date: {
         // from: moment().startOf("week").add(1, "days").format("YYYY-MM-DD"),
         // to: moment().endOf("week").add(1, "days").format("YYYY-MM-DD"),
-        from: '2021-10-18',
-        to: '2021-10-24',
+        from: '2020-10-18',
+        to: '2020-10-24',
       },
       modalInsertTaskModal: false,
       modalTrackingModal: false,

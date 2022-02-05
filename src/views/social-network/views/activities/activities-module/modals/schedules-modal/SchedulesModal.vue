@@ -119,12 +119,13 @@
                 v-model="taskSche.description"
                 placeholder="Enter description"
                 class="input-form "
-                :state="errors[0] ? false : valid ? true : null"
+                disabled
               />
 
               <b-form-textarea
                 v-if="edit===false"
                 v-model="taskSche.description"
+                :state="errors[0] ? false : valid ? true : null"
                 placeholder="Enter description"
                 class="input-form "
                 required
@@ -500,40 +501,37 @@ export default {
     },
     async updateSchedule() {
       try {
-        const response = await this.showConfirmSwal()
-        if (response.isConfirmed) {
-          const result = await this.$refs.form.validate()
-          if (result) {
-            this.spinnerOn = true
-            const params = {
+        const result = await this.$refs.form.validate()
+        if (result) {
+          this.spinnerOn = true
+          const params = {
 
-              id_task: this.taskSche.id_tasks,
-              schedule: {
-                id: this.schedule.id,
-                clock_in: this.taskSche.clock_in,
-                clock_out: this.taskSche.clock_out,
-                color: this.schedule.color,
-                date: this.schedule.date,
-                description: this.schedule.description,
+            id_task: this.taskSche.id_tasks,
+            schedule: {
+              id: this.schedule.id,
+              clock_in: this.taskSche.clock_in,
+              clock_out: this.taskSche.clock_out,
+              color: this.schedule.color,
+              date: this.schedule.date,
+              description: this.schedule.description,
 
-                id_tasks: this.schedule.id_tasks,
-                isBreak: this.taskSche.isBreak,
-                start_break: this.taskSche.start_break,
-                end_break: this.taskSche.end_break,
-                title_task: this.schedule.title,
+              id_tasks: this.schedule.id_tasks,
+              isBreak: this.taskSche.isBreak,
+              start_break: this.taskSche.start_break,
+              end_break: this.taskSche.end_break,
+              title_task: this.schedule.title,
 
-              },
-              item: this.user,
-              id_user: this.currentUser.user_id,
+            },
+            item: this.user,
+            id_user: this.currentUser.user_id,
 
-            }
+          }
 
-            const data = await ActivitiesService.updateSchedules(params)
-            if (data.status === 200) {
-              this.$emit('getSchedulesIn')
-              this.showSuccessSwal('Schedule has been updated successfully')
-              this.closeModal()
-            }
+          const data = await ActivitiesService.updateSchedules(params)
+          if (data.status === 200) {
+            this.$emit('getSchedules')
+            this.showSuccessSwal('Schedule has been updated successfully')
+            this.closeModal()
           }
         }
       } catch (e) {
