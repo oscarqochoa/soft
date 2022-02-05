@@ -302,5 +302,8 @@ tbody tr td {
 
 .border-task {
   border: 1px solid white !important;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  border-radius: 7px;
 }
 </style>
