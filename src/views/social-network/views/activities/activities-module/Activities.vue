@@ -95,52 +95,11 @@
 
             <b-thead>
               <b-tr>
-                <b-th />
-                <b-th class="bg-light text-center">
-                  MON
-                </b-th>
-                <b-th class="text-center">
-                  BREAK
-                </b-th>
-                <b-th class="bg-light text-center">
-                  TUE
-                </b-th>
-                <b-th class="text-center">
-                  BREAK
-                </b-th>
-                <b-th class="bg-light text-center">
-                  WED
-                </b-th>
-                <b-th class="text-center">
-                  BREAK
-                </b-th>
-                <b-th class="bg-light text-center">
-                  THUE
-                </b-th>
-                <b-th class="text-center">
-                  BREAK
-                </b-th>
-                <b-th class="bg-light text-center">
-                  FRI
-                </b-th>
-                <b-th class="text-center">
-                  BREAK
-                </b-th>
-                <b-th class="bg-light text-center">
-                  SAT
-                </b-th>
-                <b-th class="text-center">
-                  BREAK
-                </b-th>
-                <b-th class="bg-light text-center">
-                  SUN
-                </b-th>
-                <b-th class="text-center">
-                  BREAK
-                </b-th>
-                <b-th class="text-center">
-                  ACTION
-                </b-th>
+                <b-th
+                  v-for="(item, index) in fields"
+                  :key="index"
+                  class="text-center"
+                >{{ item.label }}</b-th>
               </b-tr>
             </b-thead>
             <b-tbody>
@@ -277,7 +236,7 @@ export default {
   },
   data() {
     return {
-
+      fields: [],
       filter: FilterData,
       isBusy: false,
       schedules: [],
@@ -314,6 +273,35 @@ export default {
     this.A_GET_TASKS()
   },
   methods: {
+    dataByDay(data) {
+      this.fields = []
+      let json = []
+      this.fields.push({
+        key: 'field',
+        label: 'USER',
+        sortable: false,
+      })
+
+      data.map(json_data => {
+        // eslint-disable-next-line no-param-reassign
+        json = json_data.json_data
+      })
+      console.log(json)
+
+      for (let i = 0; i < 13; i += 2) {
+        this.fields.push({
+          key: 'field',
+          label: json[i].date,
+        })
+      }
+
+      // {
+      //   this.fields.push({
+      //     key: 'field',
+      //     label: val.date,
+      //   })
+      // })
+    },
     ...mapActions('SocialNetworkActivities', ['A_GET_TASKS']),
     async getSchedulesIn() {
       this.$store.commit('app/SET_LOADING', true)
@@ -325,8 +313,9 @@ export default {
       if (data.status === 200) {
         this.$store.commit('app/SET_LOADING', false)
       }
-      this.schedules = data.data
 
+      this.schedules = data.data
+      this.dataByDay(this.schedules)
       return this.schedules
     },
     openInsertTaskModal(editTask, task) {
