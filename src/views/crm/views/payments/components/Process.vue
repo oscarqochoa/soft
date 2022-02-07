@@ -104,7 +104,7 @@
                         name="price"
                         id="price"
                         class="form-control"
-                        :class="{ 'border border-danger': errors[0] }"
+                        :class="{ 'border-danger': errors[0] }"
                       ></money>
                     </b-form-group>
                   </ValidationProvider>
@@ -122,7 +122,7 @@
                       <b-form-radio-group
                         v-model="payment"
                         :options="options"
-                        :class="{ 'border border-danger': errors[0] }"
+                        :class="{ 'border-danger': errors[0] }"
                         name="radios-stacked"
                         stacked
                       />
@@ -198,7 +198,7 @@
                         v-model="methodpayment"
                         :options="optionsMethodPay"
                         class="demo-inline-spacing"
-                        :class="{ 'border border-danger': errors[0] }"
+                        :class="{ 'border-danger': errors[0] }"
                         name="radio-inline"
                       />
                       <b-form-checkbox

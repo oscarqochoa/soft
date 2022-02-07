@@ -2,6 +2,7 @@ export default [
   {
     path: "/crm/clients",
     name: "crm-clients",
+    redirect: { name: "crm-clients-list" },
     component: () => import("@/views/crm/views/clients/Clients.vue"),
     meta: {
       pageTitle: "Clients",

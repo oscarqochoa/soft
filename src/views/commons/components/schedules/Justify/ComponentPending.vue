@@ -158,6 +158,7 @@ export default {
         return items;
       } catch (e) {
         this.showToast("danger", "top-right", "Error", "XIcon", e);
+        this.removePreloader();
         return [];
       }
     },

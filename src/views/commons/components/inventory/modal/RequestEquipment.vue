@@ -27,7 +27,7 @@
                           :options="optionsCategory"
                           :reduce="(val) => val.id"
                           label="name"
-                          :class="{ 'border border-danger': errors[0] }"
+                          :class="{ 'border-danger': errors[0] }"
                           class="per-page-selector d-inline-block w-100"
                         />
                       </b-form-group>
@@ -42,7 +42,7 @@
                           :options="optionsEmployees"
                           :reduce="(val) => val.id"
                           label="name_user"
-                          :class="{ 'border border-danger': errors[0] }"
+                          :class="{ 'border-danger': errors[0] }"
                           class="per-page-selector d-inline-block w-100"
                         />
                       </b-form-group>
@@ -62,7 +62,7 @@
                           v-model="cant"
                           disabled
                           class="input-background-white"
-                          :class="{ 'border border-danger': errors[0] }"
+                          :class="{ 'border-danger': errors[0] }"
                         ></b-form-input>
                       </b-form-group>
                     </ValidationProvider>
@@ -96,7 +96,7 @@
                           rows="3"
                           max-rows="3"
                           class="input-background-white"
-                          :class="{ 'border border-danger': errors[0] }"
+                          :class="{ 'border-danger': errors[0] }"
                         ></b-form-textarea>
                       </b-form-group>
                     </ValidationProvider>
@@ -224,6 +224,7 @@ export default {
           if (confirm.isConfirmed) {
             try {
               this.addPreloader();
+              
               const response = await InventoryService.saveRequest({
                 userId: this.global.user_id,
                 categoryId: this.category,

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-1">
+  <div>
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -35,7 +35,7 @@
         <template #cell(lead_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <router-link
-              class="select-lead-name text-important"
+              :class="textLink"
               :to="{
                 name: 'lead-show',
                 params: { id: data.item.lead_id },
@@ -357,6 +357,7 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+        perPage:ctx.perPage,
         name_text: this.filterPrincipal.model,
         date_from: this.filter[1].model,
         date_to: this.filter[2].model,

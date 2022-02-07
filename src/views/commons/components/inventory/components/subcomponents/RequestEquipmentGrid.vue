@@ -46,7 +46,7 @@
           </div>
         </template>
         <template #cell(commentary)="data">
-          <div class="tdbreak">
+          <div class="tdbreak" style="width:100px; overflow:hidden;text-overflow:ellipsis">
               {{ data.item.commentary }}
           </div>
         </template>

@@ -88,7 +88,7 @@
           <template #cell(lead_name)="data">
             <div style="white-space: pre-wrap;">
               <router-link
-                class="text-important"
+                :class="textLink"
                 :to="`/${routeModule}/leads/${data.item.id}`"
                 target="_blank"
               >{{ data.item.lead_name }}</router-link>

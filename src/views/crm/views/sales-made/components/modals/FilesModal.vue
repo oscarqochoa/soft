@@ -20,7 +20,7 @@
           :program="files.program"
         />
         <b-row
-          v-if="files.valorEdit"
+          v-if="files.valorEdit || itemTable.length > 0"
           class="mt-2 d-flex align-items-center justify-content-end mr-1"
         >
           <b-btn

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-1">
+  <div>
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -35,11 +35,8 @@
         </template>
         <template #cell(lead_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
-            <!-- <a href="http://www.google.com" target="_blank"
-            class="select-lead-name text-important"> {{data.item.lead_name}} </a>-->
-            <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
             <router-link
-              class="select-lead-name text-important"
+              :class="textLink"
               :to="{
                 name: 'lead-show',
                 params: { id: data.item.lead_id },
@@ -351,7 +348,7 @@ import vSelect from "vue-select";
 import ModalQuestionnaire from "../modal/ModalQuestionnaire.vue";
 import ModalTrackingStatus from "../modal/ModalTrackingStatus.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-import NrcService from "../service/ncr.service"
+import NrcService from "../service/ncr.service";
 import ncrmixin from "../mixin";
 export default {
   mixins: [ncrmixin],
@@ -527,6 +524,7 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+        perPage:ctx.perPage,
         name_text: this.filterPrincipal.model,
         date_from: this.filter[1].model,
         date_to: this.filter[2].model,
@@ -589,32 +587,31 @@ export default {
         })
         .then(async result => {
           if (result.value) {
-            try{
+            try {
               this.addPreloader();
               const response = await NrcService.changeStatus({
                 user_id: this.currentUser.user_id,
                 score_id: score_id,
                 status_id: status_id,
                 text: result.value
-              })
+              });
               if (response.status == 200) {
-                  this.resetSearch();
-                  this.removePreloader();
-                  this.showSuccessSwal("OPERATION SUCCESSFULLY");
-                }
-
-            }catch(error){
+                this.resetSearch();
+                this.removePreloader();
+                this.showSuccessSwal("OPERATION SUCCESSFULLY");
+              }
+            } catch (error) {
               this.removePreloader();
               console.error(error);
-                this.showToast(
-                  "danger",
-                  "top-right",
-                  "Error",
-                  "XIcon",
-                  "Something went wrong!"
-                );
+              this.showToast(
+                "danger",
+                "top-right",
+                "Error",
+                "XIcon",
+                "Something went wrong!"
+              );
             }
-            
+
             // amgApi
             //   .post("/lead/ncr/change-status", {
             //     user_id: this.currentUser.user_id,
@@ -623,11 +620,11 @@ export default {
             //     text: result.value
             //   })
             //   .then(response => {
-                
+
             //   })
             //   .catch(error => {
             //     this.$store.commit("app/SET_LOADING", false);
-                
+
             //   });
           }
         });

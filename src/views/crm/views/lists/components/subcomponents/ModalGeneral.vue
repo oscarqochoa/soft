@@ -42,7 +42,7 @@
                   <b-form-textarea
                     class="textarea-style wysiwyg-notes w-100"
                     style="border-radius: 0px 10px 10px 10px; height: 120px"
-                    :class="{ 'border border-danger': errors[0] }"
+                    :class="{ 'border-danger': errors[0] }"
                     v-model="comment"
                     :disabled="!statusPending"
                   ></b-form-textarea>

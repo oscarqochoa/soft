@@ -1,7 +1,7 @@
 <template>
   <b-modal
     v-model="modal.url"
-    :title="`Generate Url Lead ${url.client.toUpperCase()}`"
+    :title="`Generate Url Lead ${url.client}`"
     title-class="h3 text-white font-weight-bolder"
     hide-footer
     modal-class="modal-primary"
@@ -37,10 +37,8 @@
           />
           <b-input-group-append>
             <b-button
-              v-clipboard:copy="generatedUrl"
-              v-clipboard:success="onCopy"
-              v-clipboard:error="onError"
               variant="primary"
+              @click="doCopy"
             >
               <feather-icon icon="CopyIcon" />
             </b-button>
@@ -52,7 +50,7 @@
           variant="success"
           @click="sendGeneratedLinkViaSms"
         >
-          <feather-icon icon="MessageCircleIcon" />SEND SMS
+          Send Sms
         </b-button>
       </b-row>
     </b-container>
@@ -140,6 +138,14 @@ export default {
     },
   },
   methods: {
+    async doCopy() {
+      try {
+        await navigator.clipboard.writeText(this.generatedUrl)
+        this.onCopy()
+      } catch (e) {
+        this.onError(e)
+      }
+    },
     async changeCharge(checked) {
       const message = checked
         ? 'Are you sure to activate the charge?'
@@ -164,10 +170,7 @@ export default {
           last_name: this.url.selectedLead.last_name,
         })
         if (res.status === 200) {
-          this.$swal.fire({
-            icon: 'success',
-            title: 'SMS SENT',
-          })
+          this.showSuccessSwal('SMS Send', '', '')
         }
       } catch (error) {
         this.showErrorSwal()
@@ -176,8 +179,8 @@ export default {
     onCopy() {
       this.showToast('success', 'top-right', 'Text copied', 'CheckIcon', '')
     },
-    onError() {
-      this.showToast('success', 'top-right', 'Failed to copy', 'XIcon', '')
+    onError(e = '') {
+      this.showToast('success', 'top-right', 'Failed to copy', 'XIcon', e)
     },
   },
 }

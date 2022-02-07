@@ -1,8 +1,8 @@
 <template>
   <div>
-    <PhotoCapture ref="photo" v-model="imageBase64" v-if="!viewPhoto" />
+    <PhotoCapture ref="photo" v-model="imageBase64" v-show="!viewPhoto" />
     <img
-      v-else
+      v-show="viewPhoto"
       :src="imageBase64"
       class="
         img-fluid
@@ -28,13 +28,10 @@ export default {
   watch: {
     imageBase64(newValue) {
       this.$emit("capturedImage", newValue);
-      //this.$refs.photo.stopVideoStream();
-    //  this.$refs.photo.streamUserMediaVideo();
-     this.viewPhoto = true;
+      this.viewPhoto = true;
     },
   },
   mounted() {
-    //this.getCurrentTime(false);
   },
   created() {},
 };

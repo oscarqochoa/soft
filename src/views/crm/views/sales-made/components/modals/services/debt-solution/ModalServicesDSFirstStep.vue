@@ -116,18 +116,18 @@
       <template #modal-footer="{ ok, cancel }">
         <div style="display: flex; justify-content: end; align-items: center">
           <b-button
-            variant="secondary"
-            class="rounded mr-2"
-            @click="cancel()"
-          >
-            CANCEL
-          </b-button>
-          <b-button
             variant="primary"
             class="rounded"
             style="border-width: 1px;"
             @click="ok()"
-          >{{ statemodal==1?'ADD':'UPDATE' }}</b-button>
+          >{{ statemodal==1?'Add':'Update' }}</b-button>
+          <b-button
+            variant="secondary"
+            class="rounded mr-2"
+            @click="cancel()"
+          >
+            Cancel
+          </b-button>
         </div>
       </template>
     </b-modal>
