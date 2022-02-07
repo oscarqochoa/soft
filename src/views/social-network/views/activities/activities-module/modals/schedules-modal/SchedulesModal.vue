@@ -208,7 +208,7 @@
           <b-card-body>
 
             <b-row>
-              <b-col>
+              <b-col class="d-flex justify-content-center align-items-center">
                 <validation-provider
                   v-slot="{ errors }"
                   rules="required"
@@ -252,7 +252,7 @@
                   </b-form-group>
                 </validation-provider>
               </b-col>
-              <b-col>
+              <b-col class="d-flex justify-content-center align-items-center">
                 <validation-provider
                   v-slot="{ errors }"
                   rules="required"
@@ -302,7 +302,7 @@
                   <b-form-group>
                     <label
                       style="font-size: small; font-weight: bold"
-                      class="d-flex justify-content-center align-items-center text"
+                      class="d-flex justify-content-center align-items-center"
                     >CLOCK OUT</label>
 
                     <kendo-timepicker
@@ -403,8 +403,7 @@ export default {
     task: { title: '' },
     modalInsertTaskModal: false,
     taskSche: { },
-    newtaskSche: { },
-    newschedule: { },
+
     min: new Date(1950, 0, 1, 8, 0, 0),
     max: new Date(2049, 11, 31, 24, 0, 0),
     minDate: new Date(1000, 1, 1),
@@ -445,7 +444,12 @@ export default {
   methods: {
     ...mapActions('SocialNetworkActivities', ['A_GET_TASKS']),
     convert() {
-      this.dayText = moment(this.schedule.date).format('ddd')
+      const date = new Date(this.schedule.date)
+      const options = {
+        weekday: 'long', month: 'numeric', day: 'numeric',
+      }
+
+      this.dayText = date.toLocaleDateString('en-US', options)
 
       return this.dayText
     },
