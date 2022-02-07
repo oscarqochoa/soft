@@ -464,13 +464,12 @@ export default {
     },
 
     createClass(name, rules) {
-      console.log(this.$refs.taskModal)
       const style = document.createElement('style')
       style.type = 'text/css'
       document.getElementsByTagName('head')[0].appendChild(style)
       if (!(style.sheet || {}).insertRule) (style.styleSheet || style.sheet).addRule(name, rules)
       else style.sheet.insertRule(`${name}{${rules}}`, 0)
-      console.log(style.sheet.cssRules)
+
       this.delete = style
     },
 
@@ -480,8 +479,6 @@ export default {
 
     backgroundColor() {
       if (this.edit === true) {
-        console.log('entre')
-        console.log(this.schedule.color)
         this.createClass('#modalTask___BV_modal_header_', `background-color:${this.schedule.color}!important`)
       }
     },
@@ -495,7 +492,6 @@ export default {
     },
 
     taskConvert() {
-      console.log(this.schedule)
       this.taskSche = this.schedule
       this.taskSche.title = this.schedule.title_task
     },
@@ -557,7 +553,7 @@ export default {
             created_by: this.currentUser.user_id,
 
           }
-          console.log(params)
+
           const data = await ActivitiesService.createSchedules(params)
           if (data.status === 200) {
             this.$emit('getSchedules')

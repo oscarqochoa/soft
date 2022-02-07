@@ -236,6 +236,7 @@ export default {
   },
   data() {
     return {
+      lenght: null,
       fields: [],
       filter: FilterData,
       isBusy: false,
@@ -267,6 +268,7 @@ export default {
   },
 
   created() {
+    this.$store.commit('app/SET_LOADING', true)
     this.filter[0].model = '2020-10-18'
     this.filter[1].model = '2020-10-24'
     this.getSchedulesIn()
@@ -286,25 +288,31 @@ export default {
         // eslint-disable-next-line no-param-reassign
         json = json_data.json_data
       })
-      console.log(json)
 
-      for (let i = 0; i < 13; i += 2) {
+      for (let i = 0; i < (json.length - 1); i += 2) {
+        const date = new Date(json[i].date)
+        const options = {
+          weekday: 'long', month: 'numeric', day: 'numeric',
+        }
+
         this.fields.push({
           key: 'field',
-          label: json[i].date,
+          label: date.toLocaleDateString('en-US', options),
+        })
+        this.fields.push({
+          key: 'field',
+          label: 'Break',
         })
       }
 
-      // {
-      //   this.fields.push({
-      //     key: 'field',
-      //     label: val.date,
-      //   })
-      // })
+      this.fields.push({
+        key: 'field',
+        label: 'Action',
+        sortable: false,
+      })
     },
     ...mapActions('SocialNetworkActivities', ['A_GET_TASKS']),
     async getSchedulesIn() {
-      this.$store.commit('app/SET_LOADING', true)
       const params = {
         from: this.filter[0].model,
         to: this.filter[1].model,
@@ -315,6 +323,7 @@ export default {
       }
 
       this.schedules = data.data
+
       this.dataByDay(this.schedules)
       return this.schedules
     },
@@ -330,7 +339,6 @@ export default {
     },
 
     openSchedulesModal(schedule, item, edit) {
-      console.log(item)
       this.modalSchedulesModal = true
       this.user = item
 

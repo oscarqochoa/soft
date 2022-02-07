@@ -369,7 +369,6 @@ export default {
     openInsertCommentsModal(index) {
       this.modalInsertCommentsModal = true
       this.showComments = index
-      console.log(index)
     },
 
     openListCommentsModal(index) {
@@ -440,8 +439,6 @@ export default {
           this.items.forEach(item => {
             this.totalReplies += item.count
             this.totalNewReplies += item.new_count
-            console.log(this.items)
-            console.log(this.totalReplies)
           })
         }
         this.startPage = data.data.from

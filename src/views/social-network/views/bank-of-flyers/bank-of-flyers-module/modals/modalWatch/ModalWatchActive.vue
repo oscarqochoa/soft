@@ -354,12 +354,11 @@ export default {
       if (item.active === 0) {
         this.optionsStatus = 'INACTIVE'
       } else if (item.active === 1) {
-        console.log(item.active)
         this.optionsStatus = 'ACTIVE'
       } else if (item.active === 2) {
         this.optionsStatus = 'PREACTIVE'
       }
-      console.log('fasdas', this.optionsStatus)
+
       return this.optionsStatus
     },
     // eslint-disable-next-line consistent-return
@@ -457,7 +456,7 @@ export default {
             }.bind(this),
           }
           const response = await amgApi.post('/upload-bank-flyers', formData, headers)
-          console.log(response)
+
           if (response.status === 200) {
             this.uploadFileModal = false
             this.removePreloader()
@@ -487,7 +486,6 @@ export default {
           this.showSuccessSwal()
           this.closeInsertModal()
           this.new_item.campaign = this.campaigns[this.campaigns.length - 1].id
-          console.log(this.new_item.campaign, 'aaa')
         }
       } catch (e) {
         this.showErrorSwal(e)

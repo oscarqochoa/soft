@@ -218,7 +218,7 @@ export default {
         this.totalData = data.data.total
         this.totalRows = data.data.total
         this.toPage = data.data.to
-        console.log(this.items)
+
         return this.items
       } catch (e) {
         this.showErrorSwal(e)

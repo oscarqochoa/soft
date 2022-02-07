@@ -99,7 +99,7 @@ export default {
           flyer_id: this.index,
         }
         const data = await SocialNetworkService.getFlyerComments(params)
-        console.log(data)
+
         this.items = data.data
         // Must return an array of items or an empty array if an error occurred
 

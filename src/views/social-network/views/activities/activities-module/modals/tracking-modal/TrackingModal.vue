@@ -119,7 +119,7 @@ export default {
       try {
         const params = { item: this.item, from: this.from, to: this.to }
         const data = await ActivitiesService.getTrackingChanges(params)
-        console.log(data)
+
         this.items = data.data
         // Must return an array of items or an empty array if an error occurred
 

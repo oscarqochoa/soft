@@ -93,7 +93,7 @@ export default {
             flyer_id: this.index,
             user_id: this.currentUser.user_id,
           }
-          console.log(params)
+
           const data = await SocialNetworkService.insertFlyerComments(params)
           if (data.status === 200) {
             this.showSuccessSwal()
