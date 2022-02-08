@@ -291,7 +291,7 @@ export default {
                     },
                   });
                 });
-                this.loading = false;
+              this.loading = false;
             })
             .catch((error) => {
               this.$refs.loginForm.setErrors(error.response.data.error);
