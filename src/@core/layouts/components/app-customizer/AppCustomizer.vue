@@ -48,17 +48,17 @@
         </b-form-group>
 
         <!-- Skin -->
-        <b-form-group label="Content Width">
+        <!-- <b-form-group label="Content Width">
           <b-form-radio-group
             id="content-width-radio-group"
             v-model="contentWidth"
             name="content-width"
             :options="contentWidthOptions"
           />
-        </b-form-group>
+        </b-form-group> -->
 
         <!-- RTL -->
-        <b-form-group label="RTL" label-cols="10">
+        <!-- <b-form-group label="RTL" label-cols="10">
           <b-form-checkbox
             v-model="isRTL"
             class="mr-0 mt-50"
@@ -66,7 +66,7 @@
             switch
             inline
           />
-        </b-form-group>
+        </b-form-group> -->
 
         <!-- Router Transition -->
         <b-form-group label="Router Transition" label-cols="6">
@@ -85,13 +85,13 @@
       <!-- SECTION: Menu -->
       <div class="customizer-section">
         <!-- Layout Type -->
-        <b-form-group label="Menu Layout">
+        <!-- <b-form-group label="Menu Layout">
           <b-form-radio-group
             v-model="layoutType"
             name="layout-type"
             :options="layoutTypeOptions"
           />
-        </b-form-group>
+        </b-form-group> -->
 
         <!-- Collapsible -->
         <div
@@ -141,7 +141,7 @@
         </b-form-group>
 
         <!-- Navbar Type -->
-        <b-form-group
+        <!-- <b-form-group
           :label="layoutType === 'vertical' ? 'Navbar Type' : 'Menu Type'"
         >
           <b-form-radio-group
@@ -149,12 +149,11 @@
             name="navbar-type"
             :options="navbarTypes"
           />
-        </b-form-group>
+        </b-form-group> -->
       </div>
 
       <!-- SECTION: Footer -->
-      <div class="customizer-section">
-        <!-- Footer Type -->
+      <!-- <div class="customizer-section">
         <b-form-group label="Footer Type">
           <b-form-radio-group
             v-model="footerType"
@@ -162,7 +161,7 @@
             :options="footerTypes"
           />
         </b-form-group>
-      </div>
+      </div> -->
     </vue-perfect-scrollbar>
   </div>
 </template>
