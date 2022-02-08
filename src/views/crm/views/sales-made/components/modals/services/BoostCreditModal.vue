@@ -52,6 +52,7 @@
                         v-model="fee"
                         :disabled="isModalShow"
                         :options="[19.99,24.99,29.99,34.99,39.99,44.99, 49.99, 54.99, 59.99]"
+                        class="text-center"
                         :class="{'border-danger': errors[0]}"
                       />
                       <money
