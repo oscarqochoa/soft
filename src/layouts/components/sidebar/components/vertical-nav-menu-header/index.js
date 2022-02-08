@@ -13,8 +13,8 @@ export default {
   },
   render(h) {
     const span = h("span", {}, t(this.item.header));
-    const icon = h("amg-icon", {
-      props: { icon: "MoreHorizontalIcon", size: "18" },
+    const icon = h("tabler-icon", {
+      props: { icon: "DotsIcon", size: "18" },
     });
     if (canViewVerticalNavMenuHeader(this.item)) {
       return h("li", { class: "navigation-header text-truncate" }, [

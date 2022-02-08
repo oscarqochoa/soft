@@ -1,7 +1,6 @@
 <template>
   <div>
     <header-slot />
-
     <b-card no-body>
       <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
         <b-nav card-header pills class="m-0">

@@ -9,7 +9,7 @@
     }"
   >
     <b-link class="d-flex align-items-center" @click="() => updateGroupOpen(!isOpen)">
-      <amg-icon :icon="item.icon || 'CircleIcon'" />
+      <tabler-icon :icon="item.icon || 'CircleIcon'" />
       <span class="menu-title text-truncate">{{ t(item.title) }}</span>
       <b-badge
         v-if="item.tag"
