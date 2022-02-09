@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12 col-lg-12 col-sm-12">
       <b-row class="">
-        <b-col class="" cols="12" sm="4" md="4" lg="2">
+        <b-col class="" cols="12" sm="4" md="4" lg="3" xl="2">
           <b-row class="pl-1 pr-1">
               <b-card
               
@@ -362,7 +362,7 @@
             </b-card>
           </b-row>
         </b-col>
-        <b-col class="mb-3" cols="12" sm="8" md="8" lg="10" >
+        <b-col class="mb-3" cols="12" sm="8" md="8" lg="9" xl="10">
           <b-card title="" class="col-12 h-100">
             <br />
             <br />
