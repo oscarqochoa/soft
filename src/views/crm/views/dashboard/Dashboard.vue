@@ -29,7 +29,6 @@
                     style="
                       width: 17px;
                       height: 17px;
-                      
                       border-radius: 4px;
                     "
                     :style="itemCards[0] == true?'background-color: white':''"
@@ -103,11 +102,10 @@
                     style="
                       width: 17px;
                       height: 17px;
-                      
                       border-radius: 4px;
                     "
                     :style="itemCards[1] == true?'background-color: white':''"
-                    class="mr-1 item-wrapper-font div-box1"
+                    class="mr-2 item-wrapper-font div-box1"
                   ></div>
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
@@ -178,7 +176,7 @@
                       border-radius: 4px;
                     "
                     :style="itemCards[2] == true?'background-color: white':''"
-                    class="mr-1 item-wrapper-font div-box1"
+                    class="mr-2 item-wrapper-font div-box1"
                   ></div>
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
@@ -249,7 +247,7 @@
                       border-radius: 4px;
                     "
                     :style="itemCards[3] == true?'background-color: white':''"
-                    class="mr-1 item-wrapper-font div-box1"
+                    class="mr-2 item-wrapper-font div-box1"
                   ></div>
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
@@ -319,7 +317,7 @@
                       border-radius: 4px;
                     "
                     :style="itemCards[4] == true?'background-color: white':''"
-                    class="mr-1 item-wrapper-font div-box1"
+                    class="mr-2 item-wrapper-font div-box1"
                   ></div>
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
