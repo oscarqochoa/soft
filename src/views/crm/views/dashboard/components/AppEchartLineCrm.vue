@@ -58,15 +58,16 @@ export default {
           stepSize: 50,
          
         },
-        series: [{
-          type: 'line',
-          stack: 'Total',
-          name:this.optionData.series.name,
-          showSymbol: false,
-          data: this.optionData.series.data,
-        },
+        // series: [{
+        //   type: 'line',
+        //   stack: 'Total',
+        //   name:this.optionData.series.name,
+        //   showSymbol: false,
+        //   data: this.optionData.series.data,
+        // },
         
-        ]
+        // ]
+        series:this.optionData.series
       },
     }
   },
