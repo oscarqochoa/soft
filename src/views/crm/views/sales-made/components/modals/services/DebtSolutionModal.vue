@@ -7,6 +7,7 @@
     header-bg-variant="transparent border-bottom border-bottom-2"
     size="xl"
     hide-footer
+    @hidden="hideModal(false,0)"
   >
     <template #modal-header="{ }">
       <modal-service-header
@@ -186,7 +187,7 @@ export default {
     validationFirstStep() {
       return new Promise((resolve, reject) => {
         if (this.isModalShow) resolve(true)
-        else if (!this.passwordIsCorrect && this.state1 === 1) {
+        else if (!this.passwordIsCorrect && this.isFirstStep) {
           this.showToast(
             'danger',
             'top-right',
