@@ -7,14 +7,14 @@ export default {
   computed: {
     bgLightDark() {
       //getters
-      return this.$store.getters["appConfig/skin"] === "light"
-        ? "bg-light"
-        : "bg-dark";
+      return this.$store.getters["appConfig/skin"] === "dark"
+        ? "bg-dark"
+        : "bg-light";
     },
     textLink() {
-      return this.$store.getters["appConfig/skin"] === "light"
-        ? "text-primary font-weight-bolder"
-        : "text-warning font-weight-bolder";
+      return this.$store.getters["appConfig/skin"] === "dark"
+        ? "text-warning font-weight-bolder"
+        : "text-primary font-weight-bolder";
     },
   },
   methods: {

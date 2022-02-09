@@ -18,6 +18,11 @@ export default [
     icon: 'EyeIcon',
   },
   {
+    title: 'Tabler',
+    route: 'ui-tabler',
+    icon: 'EyeIcon',
+  },
+  {
     title: 'Cards',
     icon: 'CreditCardIcon',
     tag: 'new',

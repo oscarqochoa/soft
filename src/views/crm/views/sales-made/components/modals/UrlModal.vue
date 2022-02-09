@@ -1,60 +1,70 @@
 <template>
-  <b-modal
-    v-model="modal.url"
-    :title="`Generate Url Lead ${url.client}`"
-    title-class="h3 text-white font-weight-bolder"
-    hide-footer
-    modal-class="modal-primary"
-    centered
+  <validation-observer
+    ref="form"
   >
-    <b-container fluid>
-      <b-row class="d-flex align-items-center justify-content-end">
-        <b-form-checkbox
-          v-model="charge"
-          class="custom-control-success"
-          @change="changeCharge"
-        >Charge</b-form-checkbox>
-      </b-row>
-      <b-row>
-        <b-col>
-          <p>Program</p>
-          <p>{{ url.program }}</p>
-        </b-col>
-        <b-col>
-          <p>Amount</p>
-          <money
-            v-model="amount"
-            v-bind="{decimal: '.', thousands: ',', prefix: '$  ', precision: 2}"
-            class="rounded text-center form-control"
-          />
-        </b-col>
-      </b-row>
-      <b-row class="mt-1">
-        <b-input-group>
-          <b-form-input
-            v-model="generatedUrl"
-            disabled
-          />
-          <b-input-group-append>
-            <b-button
-              variant="primary"
-              @click="doCopy"
+    <b-modal
+      v-model="modal.url"
+      :title="`Generate Url Lead ( ${url.client} )`"
+      title-class="h3 text-white font-weight-bolder"
+      hide-footer
+      modal-class="modal-primary"
+      centered
+    >
+      <b-container fluid>
+        <b-row class="d-flex align-items-center justify-content-end">
+          <b-form-checkbox
+            v-model="charge"
+            class="custom-control-success"
+            @change="changeCharge"
+          >Charge</b-form-checkbox>
+        </b-row>
+        <b-row>
+          <b-col>
+            <p>Program</p>
+            <p>{{ url.program }}</p>
+          </b-col>
+          <b-col>
+            <p>Amount</p>
+            <validation-provider
+              v-slot="{errors}"
+              rules="required|validate-amount"
             >
-              <feather-icon icon="CopyIcon" />
-            </b-button>
-          </b-input-group-append>
-        </b-input-group>
-      </b-row>
-      <b-row class="mt-1 d-flex font-weight-bold align-items-center justify-content-center">
-        <b-button
-          variant="success"
-          @click="sendGeneratedLinkViaSms"
-        >
-          Send Sms
-        </b-button>
-      </b-row>
-    </b-container>
-  </b-modal>
+              <money
+                v-model="amount"
+                v-bind="{decimal: '.', thousands: ',', prefix: '$  ', precision: 2}"
+                class="rounded text-center form-control"
+                :class="{'border-danger': errors[0] && errorControl}"
+              />
+            </validation-provider>
+          </b-col>
+        </b-row>
+        <b-row class="mt-1">
+          <b-input-group>
+            <b-form-input
+              v-model="generatedUrl"
+              disabled
+            />
+            <b-input-group-append>
+              <b-button
+                variant="primary"
+                @click="doCopy"
+              >
+                <feather-icon icon="CopyIcon" />
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </b-row>
+        <b-row class="mt-1 d-flex font-weight-bold align-items-center justify-content-center">
+          <b-button
+            variant="success"
+            @click="sendGeneratedLinkViaSms"
+          >
+            Send Sms
+          </b-button>
+        </b-row>
+      </b-container>
+    </b-modal>
+  </validation-observer>
 </template>
 
 <script>
@@ -89,6 +99,7 @@ export default {
     return {
       charge: true,
       amount: 0,
+      errorControl: false,
     }
   },
   computed: {
@@ -140,8 +151,12 @@ export default {
   methods: {
     async doCopy() {
       try {
-        await navigator.clipboard.writeText(this.generatedUrl)
-        this.onCopy()
+        this.errorControl = true
+        const result = await this.$refs.form.validate()
+        if (result) {
+          await navigator.clipboard.writeText(this.generatedUrl)
+          this.onCopy()
+        }
       } catch (e) {
         this.onError(e)
       }
@@ -160,17 +175,21 @@ export default {
     },
     async sendGeneratedLinkViaSms() {
       try {
-        const res = await amgApi.post('/sales-made/send-generated-link-sms', {
-          leadid: this.url.selectedLead.lead_id,
-          user_id: this.$store.state.auth.currentUser.user_id,
-          generated_url: this.generatedUrl,
-          modul: 2,
-          language: this.url.selectedLead.language,
-          program: this.url.selectedLead.program,
-          last_name: this.url.selectedLead.last_name,
-        })
-        if (res.status === 200) {
-          this.showSuccessSwal('SMS Send', '', '')
+        this.errorControl = true
+        const result = await this.$refs.form.validate()
+        if (result) {
+          const res = await amgApi.post('/sales-made/send-generated-link-sms', {
+            leadid: this.url.selectedLead.lead_id,
+            user_id: this.$store.state.auth.currentUser.user_id,
+            generated_url: this.generatedUrl,
+            modul: 2,
+            language: this.url.selectedLead.language,
+            program: this.url.selectedLead.program,
+            last_name: this.url.selectedLead.last_name,
+          })
+          if (res.status === 200) {
+            this.showSuccessSwal('SMS Send', '', '')
+          }
         }
       } catch (error) {
         this.showErrorSwal()

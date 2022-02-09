@@ -1,13 +1,20 @@
 <template>
   <div>
     <header-slot />
-
     <b-card no-body>
-      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
-        <b-nav card-header pills class="m-0">
+      <b-card-header
+        header-tag="nav"
+        :class="['pb-0', bgLightDark ]"
+      >
+        <b-nav
+          card-header
+          pills
+          class="m-0"
+        >
           <b-nav-item
             :to="{name: 'sales-made-crm-new-client'}"
-            exact-active-class="active"
+            :class="{'active bg-primary rounded-top': isNewClient}"
+            :link-classes="{'text-white': isNewClient}"
           >New Clients</b-nav-item>
           <b-nav-item
             v-if="(currentUser.role_id == 1 || currentUser.role_id == 2)"
@@ -30,16 +37,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "SalesMade",
+  name: 'SalesMade',
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser"
-    })
-  }
-};
+      currentUser: 'auth/currentUser',
+    }),
+    isNewClient() {
+      return this.$route.name === 'sales-made-crm-new-client'
+    },
+  },
+  created() {
+    console.log(this.$route.name === 'sales-made-crm-new-client', 'gaaaaaa')
+  },
+}
 </script>
 
 <style scoped>

@@ -32,6 +32,7 @@
             v-model="method"
             :options="[{text: 'Credit Card', value: 'credit-card'}, {text: 'Others', value: 'others'}]"
             class="d-flex"
+            :disabled="valorEdit"
           >
             <b-checkbox
               v-if="method === 'credit-card'"
@@ -124,8 +125,8 @@
         class="d-flex align-items-center justify-content-between"
       >
         <b-form-checkbox
-          v-if="(method === 'credit-card' && listCards.length === 0 && initial_payment.idtransaction != null) || (method === 'credit-card' && initial_payment.programid == 2)"
           ref="smsgeneral"
+          :class="{'hide-visible': !((method === 'credit-card' && listCards.length === 0 && initial_payment.idtransaction != null) || (method === 'credit-card' && initial_payment.programid == 2)) }"
         >Send SMS</b-form-checkbox>
         <b-button
           variant="success"
@@ -169,8 +170,7 @@
         <b-button
           v-if="(valorEdit != true && amount_camp == false) || (valorEdit != true && initial_payment.programid == 2) "
           variant="primary"
-          :disabled="initial_payment.allcards.length === 0"
-          size="sm"
+          :disabled="(initial_payment.allcards.length === 0 && method === 'credit-card') || (!cardId && method === 'credit-card')"
           @click="savePayment"
         >
           Submit
@@ -248,7 +248,7 @@ export default {
         : 0,
       charge: true,
       listCards: [],
-      cardId: null,
+      cardId: '',
       typesOption: [
         {
           label: 'Cash',
@@ -527,7 +527,7 @@ export default {
             this.sendMessage = true
             this.addPreloader()
             const response = await amgApi.post(
-              '/note/first-note/save-initial',
+              '/note/first-note/save-initial-others',
               {
                 amount: this.amount.toString(),
                 idcard: this.cardId,
@@ -565,4 +565,7 @@ export default {
 </script>
 
 <style scoped>
+.hide-visible {
+  visibility: hidden;
+}
 </style>

@@ -11,7 +11,7 @@
       v-bind="linkProps"
       class="d-flex align-items-center"
     >
-      <amg-icon
+      <tabler-icon
         :icon="item.icon || 'CircleIcon'"
         :badge="(!isMouseHovered && isVerticalMenuCollapsed && (currentBreakPoint == 'xl' || currentBreakPoint == 'xxl')) ? item.tag : 0"
         badge-classes="bg-danger"

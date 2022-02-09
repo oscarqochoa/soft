@@ -18,13 +18,13 @@
           :cols="twoPerRow ? 6 : 3"
         >
           <h5>Program</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py10">
+          <p class="bg-info rounded text-white font-medium-1 text-center py10">
             {{ sales.program }}
           </p>
         </b-col>
         <b-col :cols="twoPerRow ? 6 : 3">
           <h5>Client</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py10">
+          <p class="bg-info rounded text-white font-medium-1 text-center py10">
             {{ sales.client }}
           </p>
         </b-col>
@@ -33,7 +33,7 @@
           :cols="twoPerRow ? 6 : 3"
         >
           <h5>Type</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py10">
+          <p class="bg-info rounded text-white font-medium-1 text-center py10">
             {{ typeAddChange }} SERVICES
           </p>
         </b-col>
@@ -42,7 +42,7 @@
           :cols="twoPerRow ? 6 : 3"
         >
           <h5>Origin</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py10">
+          <p class="bg-info rounded text-white font-medium-1 text-center py10">
             {{ sales.program_first }}
           </p>
         </b-col>
@@ -51,7 +51,7 @@
           :cols="twoPerRow ? 6 : 3"
         >
           <h5>Destination</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py10">
+          <p class="bg-info rounded text-white font-medium-1 text-center py10">
             {{ sales.program }}
           </p>
         </b-col>
