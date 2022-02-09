@@ -7,7 +7,7 @@ export default [
     meta: {
       pageTitle: 'Activities',
       breadcrumb: [{
-        text: 'activities',
+        text: 'Activities',
       }],
     },
   },

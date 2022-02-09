@@ -192,6 +192,7 @@
           :items="items"
           :status="status"
           :info="info"
+
           no-close-on-esc="false"
           no-close-on-backdrop="false"
           @close="closeWatchModal"
@@ -206,7 +207,7 @@
         <modal-insert-comments
           v-if="modalInsertCommentsModal"
           :index="showComments"
-          @close="closeInsertCommentsModal"
+          @asd="closeInsertCommentsModal"
         />
 
         <modal-list-comments
@@ -334,6 +335,9 @@ export default {
     } catch (error) {
       console.error(error)
     }
+
+    this.ejemplo = 'carolina'
+    this.bri = 'bri'
   },
 
   methods: {

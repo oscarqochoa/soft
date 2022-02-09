@@ -13,74 +13,74 @@
             CREATE TASK
           </b-button>
         </div>
-        <template>
-          <div>
+        <!--        <template>-->
+        <!--          <div>-->
 
-            <b-button
-              v-b-toggle.sidebar-right
-              v-b-tooltip.bottom="'Advanced Search'"
-              variant="primary"
-            >
-              <div class="d-flex justify-content-between">
-                <feather-icon
-                  icon="FilterIcon"
-                  size="15"
-                />
-              </div>
-            </b-button>
-            <b-sidebar
-              id="sidebar-right"
-              right
-              backdrop
-              bg-variant="white"
-              sidebar-class="sidebar-lg"
-              header-class="pt-1"
-              lazy
-            >
-              <template #header>
-                <div class="d-flex justify-content-between align-items-center w-100">
-                  <span>
-                    <h3>Advanced Search</h3>
-                  </span>
-                  <span
-                    v-b-toggle.sidebar-right
-                    class="cursor-pointer"
-                  >
-                    <amg-icon
-                      icon="XIcon"
-                      size="20"
-                    />
-                  </span>
-                </div>
-              </template>
-              <b-container>
-                <filters-component
-                  :filters="filter"
-                />
-              </b-container>
-              <template #footer>
-                <b-container>
-                  <b-row class="d-flex align-items-center justify-content-between p-1">
-                    <b-button
-                      v-b-toggle.sidebar-right
-                      variant="info"
-                      @click="$emit('reset-all-filters')"
-                    >
-                      Reset
-                    </b-button>
-                    <b-button
-                      v-b-toggle.sidebar-right
-                      variant="primary"
-                      @click="sideBarSearch"
-                    >
-                      Search
-                    </b-button>
-                  </b-row>
-                </b-container>
-              </template>
-            </b-sidebar>
-          </div>
-        </template>
+        <!--            <b-button-->
+        <!--              v-b-toggle.sidebar-right-->
+        <!--              v-b-tooltip.bottom="'Advanced Search'"-->
+        <!--              variant="primary"-->
+        <!--            >-->
+        <!--              <div class="d-flex justify-content-between">-->
+        <!--                <feather-icon-->
+        <!--                  icon="FilterIcon"-->
+        <!--                  size="15"-->
+        <!--                />-->
+        <!--              </div>-->
+        <!--            </b-button>-->
+        <!--            <b-sidebar-->
+        <!--              id="sidebar-right"-->
+        <!--              right-->
+        <!--              backdrop-->
+        <!--              bg-variant="white"-->
+        <!--              sidebar-class="sidebar-lg"-->
+        <!--              header-class="pt-1"-->
+        <!--              lazy-->
+        <!--            >-->
+        <!--              <template #header>-->
+        <!--                <div class="d-flex justify-content-between align-items-center w-100">-->
+        <!--                  <span>-->
+        <!--                    <h3>Advanced Search</h3>-->
+        <!--                  </span>-->
+        <!--                  <span-->
+        <!--                    v-b-toggle.sidebar-right-->
+        <!--                    class="cursor-pointer"-->
+        <!--                  >-->
+        <!--                    <amg-icon-->
+        <!--                      icon="XIcon"-->
+        <!--                      size="20"-->
+        <!--                    />-->
+        <!--                  </span>-->
+        <!--                </div>-->
+        <!--              </template>-->
+        <!--              <b-container>-->
+        <!--                <filters-component-->
+        <!--                  :filters="filter"-->
+        <!--                />-->
+        <!--              </b-container>-->
+        <!--              <template #footer>-->
+        <!--                <b-container>-->
+        <!--                  <b-row class="d-flex align-items-center justify-content-between p-1">-->
+        <!--                    <b-button-->
+        <!--                      v-b-toggle.sidebar-right-->
+        <!--                      variant="info"-->
+        <!--                      @click="$emit('reset-all-filters')"-->
+        <!--                    >-->
+        <!--                      Reset-->
+        <!--                    </b-button>-->
+        <!--                    <b-button-->
+        <!--                      v-b-toggle.sidebar-right-->
+        <!--                      variant="primary"-->
+        <!--                      @click="sideBarSearch"-->
+        <!--                    >-->
+        <!--                      Search-->
+        <!--                    </b-button>-->
+        <!--                  </b-row>-->
+        <!--                </b-container>-->
+        <!--              </template>-->
+        <!--            </b-sidebar>-->
+        <!--          </div>-->
+        <!--        </template>-->
       </div>
       <b-container fluid>
 
@@ -95,11 +95,54 @@
 
             <b-thead>
               <b-tr>
-                <b-th
-                  v-for="(item, index) in fields"
-                  :key="index"
-                  class="text-center"
-                >{{ item.label }}</b-th>
+                <b-th class="text-center">
+                  USER
+                </b-th>
+                <b-th class="text-center">
+                  MON
+                </b-th>
+                <b-th class="text-center">
+                  BREAK
+                </b-th>
+                <b-th class="text-center">
+                  TUE
+                </b-th>
+                <b-th class="text-center">
+                  BREAK
+                </b-th>
+                <b-th class=" text-center">
+                  WED
+                </b-th>
+                <b-th class="text-center">
+                  BREAK
+                </b-th>
+                <b-th class=" text-center">
+                  THU
+                </b-th>
+                <b-th class="text-center">
+                  BREAK
+                </b-th>
+                <b-th class="text-center">
+                  FRI
+                </b-th>
+                <b-th class="text-center">
+                  BREAK
+                </b-th>
+                <b-th class=" text-center">
+                  SAT
+                </b-th>
+                <b-th class="text-center">
+                  BREAK
+                </b-th>
+                <b-th class=" text-center">
+                  SUN
+                </b-th>
+                <b-th class="text-center">
+                  BREAK
+                </b-th>
+                <b-th class="text-center">
+                  ACTION
+                </b-th>
               </b-tr>
             </b-thead>
             <b-tbody>
@@ -244,8 +287,8 @@ export default {
       date: {
         // from: moment().startOf("week").add(1, "days").format("YYYY-MM-DD"),
         // to: moment().endOf("week").add(1, "days").format("YYYY-MM-DD"),
-        from: '2020-10-18',
-        to: '2020-10-24',
+        from: '2021-10-18',
+        to: '2021-10-24',
       },
       modalInsertTaskModal: false,
       modalTrackingModal: false,
@@ -269,8 +312,8 @@ export default {
 
   created() {
     this.$store.commit('app/SET_LOADING', true)
-    this.filter[0].model = '2020-10-18'
-    this.filter[1].model = '2020-10-24'
+    // this.filter[0].model = '2020-10-18'
+    // this.filter[1].model = '2020-10-24'
     this.getSchedulesIn()
     this.A_GET_TASKS()
   },
@@ -314,8 +357,8 @@ export default {
     ...mapActions('SocialNetworkActivities', ['A_GET_TASKS']),
     async getSchedulesIn() {
       const params = {
-        from: this.filter[0].model,
-        to: this.filter[1].model,
+        from: this.date.from,
+        to: this.date.to,
       }
       const data = await ActivitiesService.getSchedules(params)
       if (data.status === 200) {
@@ -324,7 +367,7 @@ export default {
 
       this.schedules = data.data
 
-      this.dataByDay(this.schedules)
+      // this.dataByDay(this.schedules)
       return this.schedules
     },
     openInsertTaskModal(editTask, task) {

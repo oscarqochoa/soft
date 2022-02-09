@@ -226,6 +226,7 @@
                         class="bg-primary text-white "
                       >
                         <span>PUBLICATION DATE</span>
+
                       </b-input-group-text>
                     </b-input-group-prepend>
                     <div class="w-75">

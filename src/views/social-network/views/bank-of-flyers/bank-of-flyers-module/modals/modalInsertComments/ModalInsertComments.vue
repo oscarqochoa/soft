@@ -80,7 +80,7 @@ export default {
   methods: {
 
     closeModal() {
-      this.$emit('close')
+      this.$emit('asd')
     },
     // eslint-disable-next-line consistent-return
     async insertFlyerComments() {

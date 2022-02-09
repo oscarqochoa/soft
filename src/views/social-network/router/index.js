@@ -3,6 +3,7 @@ import bankOfFlyersRouter from '@/views/social-network/views/bank-of-flyers/bank
 import ClientsRouter from '@/views/social-network/views/clients/client.router'
 import MigrationsRouter from '@/views/social-network/views/migrations/migrations.router'
 import ActivitiesRouter from '@/views/social-network/views/activities/activities.router'
+import DashboardRouter from '@/views/social-network/views/dashboard/dashboard.router'
 
 const routes = [
   { path: '/socialnetwork', redirect: { name: 'test-social-network' } },
@@ -11,6 +12,7 @@ const routes = [
   ...ClientsRouter,
   ...MigrationsRouter,
   ...ActivitiesRouter,
+  ...DashboardRouter,
 
 ]
 

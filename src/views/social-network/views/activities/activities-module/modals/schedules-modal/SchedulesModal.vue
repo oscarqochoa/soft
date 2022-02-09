@@ -444,12 +444,16 @@ export default {
   methods: {
     ...mapActions('SocialNetworkActivities', ['A_GET_TASKS']),
     convert() {
-      const date = new Date(this.schedule.date)
-      const options = {
-        weekday: 'long', month: 'numeric', day: 'numeric',
-      }
+      // const date = new Date(this.schedule.date)
+      // const options = {
+      //   weekday: 'long', month: 'numeric', day: 'numeric',
+      // }
+      //
+      // this.dayText = date.toLocaleDateString('en-US', options)
+      //
+      // return this.dayText
 
-      this.dayText = date.toLocaleDateString('en-US', options)
+      this.dayText = moment(this.schedule.date).format('ddd')
 
       return this.dayText
     },
