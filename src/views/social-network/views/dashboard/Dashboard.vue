@@ -38,7 +38,7 @@
                 />
               </b-button>
               <b-button
-                :disabled="currentDay == today"
+                :disabled="currentDay === today"
                 variant="info"
                 class="btn-icon rounded-circle"
                 @click="changeDateCard(1)"
@@ -81,7 +81,7 @@
                 v-model="programFilter"
                 :options="OptionProgram"
                 label="option"
-                @input="getFilterCard"
+                @input="getFilterCard(),getGraphics()"
               />
 
             </div>
@@ -99,7 +99,7 @@
                 v-model="userFilter"
                 :options="users"
                 label="user_name"
-                @input="getFilterCard"
+                @input="getFilterCard(),getGraphics()"
               />
 
             </div>
@@ -117,8 +117,116 @@
         :user="userFilter"
       />
     </b-card>
-  </div>
-</template>
+    <div class="row">
+      <b-card
+        :title="`${chardOption.option} Balance`"
+        class="col-12"
+      >
+        <div class="d-flex justify-content-between flex-wrap row">
+          <div class="mb-1 mb-sm-0 d-inline col-lg-7">
+            <b-row>
+              <b-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <v-select
+                  v-model="chardOption"
+                  class="per-page-selector"
+                  style="font-size: 15px"
+                  :clearable="false"
+                  label="option"
+                  :options="arrayOptions"
+                  @input="getGraphics"
+                />
+              </b-col>
+              <b-col
+                cols="12"
+                sm="2"
+                md="2"
+              >
+
+                <span
+
+                  style="padding-top: 7px"
+                  class="all-text day d-inline-flex pl-2"
+                >Current {{ showGraphForWeek ? "Week" : "Month" }}</span>
+              </b-col>
+              <b-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <span
+                  style="padding-top: 7px"
+                  class="all-text d-inline-flex "
+                >
+                  {{
+                    (showGraphForWeek ? firstDay : firstDayOfMonth)
+                      | myGlobal
+                  }}
+                  -
+                  {{
+                    (showGraphForWeek ? endDay : endDayOfMonth) | myGlobal
+                  }}
+                </span>
+              </b-col>
+              <b-col
+                cols="12"
+                sm="3"
+                md="3"
+              >
+                <b-button
+
+                  variant="info"
+                  class="btn-icon rounded-circle mr-1 "
+                  @click="showGraphForWeek ? changeWeek(-1) : changeMonth(-1)"
+                >
+                  <feather-icon
+                    icon="ChevronLeftIcon"
+                  />
+                </b-button>
+                <b-button
+
+                  variant="info"
+                  class="btn-icon rounded-circle"
+                  :disabled="validateDate > currentDay"
+                  @click="showGraphForWeek ? changeWeek(1) : changeMonth(1)"
+                >
+                  <feather-icon
+                    icon="ChevronRightIcon"
+                  />
+                </b-button>
+              </b-col>
+            </b-row>
+          </div>
+          <div class="d-flex align-content-center mb-1 mb-sm-0 col-lg-3">
+            <b-button
+              v-b-tooltip.hover
+              style="padding-top: 7px"
+              size="30"
+              class="btn-show "
+              variant="primary"
+              title="CHANGE"
+              @click="(showGraphForWeek = !showGraphForWeek), getGraphics()"
+            >
+              <feather-icon
+                icon="CalendarIcon"
+              />
+              {{ showGraphForWeek ? "SHOW MONTH" : "SHOW WEEK" }}
+            </b-button>
+
+          </div>
+        </div>
+        <br>
+        <br>
+        <!--        <app-echart-line-crm-->
+        <!--          :key="idEchart"-->
+        <!--          :option-data="option"-->
+        <!--        />-->
+      </b-card>
+    </div>
+  </div></template>
 
 <script>
 
@@ -135,6 +243,18 @@ export default {
   },
   data() {
     return {
+      validateDate: null,
+      firstDay: moment()
+        .startOf('week')
+        .add(1, 'days')
+        .format('YYYY-MM-DD 00:00:00'),
+      endDay: moment()
+        .endOf('week')
+        .add(1, 'days')
+        .format('YYYY-MM-DD 00:00:00'),
+      firstDayOfMonth: moment().startOf('month').format('YYYY-MM-DD 00:00:00'),
+      endDayOfMonth: moment().endOf('month').format('YYYY-MM-DD 00:00:00'),
+      showGraphForWeek: false,
       dateRange: {
         startDate: moment(new Date()).format('YYYY-MM-DD 00:00:00'),
         endDate: moment(new Date()).format('YYYY-MM-DD 00:00:00'),
@@ -142,6 +262,8 @@ export default {
       currentDay: moment().format('YYYY-MM-DD 00:00:00'),
       typeCard: null,
       cardUpdate: 0,
+      chardOption: {},
+      graph: [],
       card: [
         {
           title: 'replies',
@@ -202,8 +324,41 @@ export default {
           cursor: false,
         },
       ],
-      today: moment()
-        .format('YYYY-MM-DD'),
+      arrayOptions: [
+        {
+          id: 2,
+          option: 'Replies',
+        },
+        {
+          id: 1,
+          option: 'Leads',
+        },
+        {
+          id: 3,
+          option: 'Answers',
+        },
+        {
+          id: 4,
+          option: 'Mobiles',
+        },
+        {
+          id: 5,
+          option: 'Appointment',
+        },
+        {
+          id: 6,
+          option: 'Productivity',
+        },
+        {
+          id: 7,
+          option: 'Seller appointment',
+        },
+        {
+          id: 8,
+          option: 'Weekly Average',
+        },
+      ],
+      today: moment().format('YYYY-MM-DD 00:00:00'),
       advanceFilter: false,
       programFilter: [{
         id: 0,
@@ -238,13 +393,40 @@ export default {
 
       users: [],
       juniorUser: false,
+      labelGraph: null,
+
     }
   },
-
+  watch: {
+    showGraphForWeek(newVal, oldVal) {
+      this.firstDay = moment()
+        .startOf('week')
+        .add(1, 'days')
+        .format('YYYY-MM-DD 00:00:00')
+      this.endDay = moment(this.firstDay)
+        .add(6, 'days')
+        .format('YYYY-MM-DD 00:00:00')
+      this.firstDayOfMonth = moment()
+        .startOf('month')
+        .format('YYYY-MM-DD 00:00:00')
+      this.endDayOfMonth = moment()
+        .endOf('month')
+        .format('YYYY-MM-DD 00:00:00')
+      this.validateDate = this.showGraphForWeek
+        ? this.endDay
+        : this.endDayOfMonth
+    },
+    selectedOption() {
+      this.getGraphic()
+    },
+  },
   created() {
     this.programFilter.id = 0
-
+    this.chardOption.option = 'Replies'
+    this.chardOption.id = 2
     this.getUsers()
+    this.getGraphics()
+    this.validateDate = this.showGraphForWeek ? this.endDay : this.endDayOfMonth
   },
   mounted() {
     this.getFilterCard()
@@ -311,6 +493,86 @@ export default {
       this.changeOverlay = true
       this.getFilterCard()
     },
+    changeMonth(month) {
+      this.firstDayOfMonth = moment(this.firstDayOfMonth)
+        .add(month, 'month')
+        .startOf('month')
+        .format('YYYY-MM-DD 00:00:00')
+      this.endDayOfMonth = moment(this.endDayOfMonth)
+        .add(month, 'month')
+        .endOf('month')
+        .format('YYYY-MM-DD 00:00:00')
+      this.getGraphics()
+      this.validateDate = this.showGraphForWeek
+        ? this.endDay
+        : this.endDayOfMonth
+    },
+
+    changeWeek(week) {
+      this.firstDay = moment(this.firstDay)
+        .add(week, 'week')
+        .format('YYYY-MM-DD 00:00:00')
+      this.endDay = moment(this.firstDay)
+        .add(6, 'days')
+        .format('YYYY-MM-DD 00:00:00')
+      this.getGraphics()
+      this.validateDate = this.showGraphForWeek
+        ? this.endDay
+        : this.endDayOfMonth
+    },
+    async getGraphics() {
+      try {
+        const params = {
+          from: this.showGraphForWeek ? this.firstDay : this.firstDayOfMonth,
+          to: this.showGraphForWeek ? this.endDay : this.endDayOfMonth,
+          program: this.programFilter.id,
+          user: this.userFilter.id,
+
+        }
+        this.juniorUser = false
+        if (this.chardOption.id === 1) {
+          const data = await DashboardService.getLeadsGraphic(params)
+          this.graph = data.data
+          this.labelGraph = 'Leads'
+        } else if (this.chardOption.id === 2) {
+          const data = await DashboardService.getRepliesGraphic(params)
+          this.graph = data.data
+          this.labelGraph = 'Replies'
+        } else if (this.chardOption.id === 3) {
+          const data = await DashboardService.getAnswersGraphic(params)
+          this.graph = data.data
+          this.labelGraph = 'Answers'
+        } else if (this.chardOption.id === 4) {
+          const data = await DashboardService.getMobilesGraphic(params)
+          this.graph = data.data
+          this.labelGraph = 'Mobiles'
+        } else if (this.chardOption.id === 5) {
+          const data = await DashboardService.getTasksGraphic(params)
+          this.graph = data.data
+          this.labelGraph = 'Appointments'
+        } else if (this.chardOption.id === 6) {
+          const data = await DashboardService.getProductivityGraphic(params)
+          this.graph = data.data
+          this.labelGraph = 'Productivity'
+          this.juniorUser = true
+        } else if (this.chardOption.id === 7) {
+          const data = await DashboardService.getTaskCatcherGraphic(params)
+          this.graph = data.data
+          this.labelGraph = 'Seller Appointments'
+          this.isDate = false
+        } else if (this.chardOption.id === 8) {
+          const data = await DashboardService.getMultiChartGraphic(params)
+          this.graph = data.data
+          this.multiGraphic = true
+        }
+
+        return this.graph
+      } catch (e) {
+        this.showErrorSwal(e)
+        return []
+      }
+    },
+
   },
 }
 </script>
@@ -336,5 +598,17 @@ export default {
   left: 454px;
   top: 215px;
   border-radius: 40px !important;
+}
+
+.btn-show {
+
+  color: white !important;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25) !important;
+  width: 150px;
+  height: 38px;
+  left: 454px;
+  top: 215px;
+  border-radius: 40px !important;
+
 }
 </style>
