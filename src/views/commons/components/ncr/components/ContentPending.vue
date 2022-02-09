@@ -11,7 +11,6 @@
       @reload="$refs['refClientsList'].refresh()"
     >
       <b-table
-        v-scrollbar
         slot="table"
         no-provider-filtering
         :api-url="'/lead/ncr/search-pending-leads-crm'"
@@ -42,6 +41,7 @@
               }"
               target="_blank"
             >{{ data.item.lead_name }}</router-link>
+             <div v-if="data.item.mobile">{{data.item.mobile}}</div>
           </div>
         </template>
         <template #cell(seller_name)="data">

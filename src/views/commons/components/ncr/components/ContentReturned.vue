@@ -11,7 +11,6 @@
       @reload="$refs['refClientsList'].refresh()"
     >
       <b-table
-        v-scrollbar
         small
         slot="table"
         no-provider-filtering
@@ -30,8 +29,7 @@
         <template #table-busy>
           <div class="text-center text-primary my-2">
             <b-spinner class="align-middle mr-1"></b-spinner>
-            <strong>Loading ...</strong>
-          </div>
+            <strong>Loading ...</strong>textLink </div>
         </template>
         <template #cell(lead_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
@@ -43,6 +41,7 @@
               }"
               target="_blank"
             >{{ data.item.lead_name }}</router-link>
+             <div v-if="data.item.mobile">{{data.item.mobile}}</div>
           </div>
         </template>
         <template #cell(seller_name)="data">
