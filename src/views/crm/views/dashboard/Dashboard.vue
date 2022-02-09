@@ -666,6 +666,7 @@ export default {
           this.changeListYear("Total leads",this.global.leads_year)
         }else{
           this.chargeDataToEchartNew(this.leads, "Total leads")
+          this.changeListYearNew("Total leads",this.global.leads_year)
         }
         this.total_year = this.global.leads_year;
         
