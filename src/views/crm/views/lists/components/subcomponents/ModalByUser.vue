@@ -115,7 +115,6 @@ export default {
   },
   data() {
     return {
-      statusCheck: true,
       totalMissing: 0,
       totalDone: 0,
       mutableIfModalCard: this.ifModalCard,
@@ -184,7 +183,6 @@ export default {
     })
   },
   methods: {
-    checkveri(state) {},
     closeModal() {
       this.$emit("close", false);
     },
@@ -232,6 +230,5 @@ export default {
       }
     }
   },
-  created() {}
 };
 </script>

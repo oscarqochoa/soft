@@ -44,7 +44,9 @@
                   ? 'color: rgb(122 0 255);'
                   : 'color: #00CC00'
               "
-            >{{ data.item.status }}</p>
+            >
+              {{ data.item.status }}
+            </p>
           </template>
 
           <template #cell(created_at)="data">
@@ -54,7 +56,10 @@
           </template>
 
           <template #cell(description)="data">
-            <div style="white-space: normal" v-html="data.item.description"></div>
+            <div
+              style="white-space: normal"
+              v-html="data.item.description"
+            ></div>
           </template>
         </b-table>
       </div>
@@ -67,14 +72,14 @@
 export default {
   props: {
     modalTracking: {
-      type: Boolean
+      type: Boolean,
     },
     global: {
-      type: Object
+      type: Object,
     },
     equipmentId: {
-      type: [Number, String]
-    }
+      type: [Number, String],
+    },
   },
   data() {
     return {
@@ -85,37 +90,39 @@ export default {
           key: "status",
           label: "Status",
           class: "text-left",
-          sortable: false
+          sortable: false,
         },
         {
           key: "created_at",
           label: "Created BY",
           class: "text-left",
-          sortable: false
+          sortable: false,
         },
         {
           key: "description",
           label: "Commentary",
           class: "text-left",
-          sortable: false
-        }
-      ]
+          sortable: false,
+        },
+      ],
     };
   },
   methods: {
     closeModal() {
       this.$emit("close", false);
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}`, {
-        equipmentId: this.equipmentId
-      });
-      return promise.then(data => {
+    async myProvider(ctx) {
+      try {
+        const data = await amgApi.post(`${ctx.apiUrl}`, {
+          equipmentId: this.equipmentId,
+        });
         const items = data.data;
         return items || [];
-      });
-    }
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
-  created() {}
+  created() {},
 };
 </script>

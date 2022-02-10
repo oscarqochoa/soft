@@ -24,7 +24,7 @@
         :link-classes="['px-3',bgTabsNavs]"
       >
         Equipment Request
-        <span class="ml-1" v-if="countRequest > 0">
+        <span class="ml-1" v-if="countRequest > 0 && $route.meta.module == 19">
           <feather-icon
             icon
             :badge="countRequest > 99 ? '+99' : countRequest"
@@ -87,7 +87,6 @@ export default {
     },
     closeModalRequest() {
       this.modalRequest = false;
-      // this.$refs.inventoryRequest?.resetSearch();
     },
     async countRequestEquipment() {
       try {

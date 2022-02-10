@@ -51,7 +51,7 @@
         <template #cell(status)="data">
           <p
             :style="
-              data.item.status == 'APPROVED'
+              data.item.status == 'DELIVERED'
                 ? 'color:#00CC00'
                 : data.item.status == 'DISAPPROVED'
                 ? 'color: #FF0000'
@@ -227,8 +227,13 @@ export default {
     ...mapGetters("inventory-store", ["updateRequestEquip"]),
     statusUpdateRequestEquip() {
       if (this.updateRequestEquip) {
-        this.$refs.refClientsList.refresh();
-        this.UpdateRequEquip();
+        if(this.$refs.refClientsList === undefined){
+          this.UpdateRequEquip();
+        }else{
+          this.$refs.refClientsList.refresh();
+          this.UpdateRequEquip();
+        }
+        
       }
     }
   },
@@ -244,8 +249,9 @@ export default {
       this.fromToObject.to = null;
       this.$refs.refClientsList.refresh();
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+    async myProvider(ctx) {
+      try{
+        const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         from: this.filter[0].model == "" ? null : this.filter[0].model,
         to: this.filter[1].model == "" ? null : this.filter[1].model,
         perpage: ctx.perPage,
@@ -255,10 +261,8 @@ export default {
         statusRequest: null
         // statusRequest: this.filters[0].model,
       });
-      // Must return a promise that resolves to an array of items
-      return promise.then(data => {
-        // Pluck the array of items off our axios response
-        const items = data.data.data;
+
+      const items = data.data.data;
         this.startPage = data.data.from;
         this.current_page = data.data.current_page;
         this.perpage = data.data.per_page;
@@ -269,7 +273,17 @@ export default {
         this.toPage = data.data.to;
         // Must return an array of items or an empty array if an error occurred
         return items || [];
-      });
+
+      }catch(error){
+        console.log(error)
+        this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
+      }
     },
     openModalTrackingRequest(requestId) {
       this.requestId = requestId;
