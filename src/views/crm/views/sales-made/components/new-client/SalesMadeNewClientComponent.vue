@@ -1,7 +1,6 @@
 <template>
   <div class="border-info rounded">
     <filter-slot
-      v-scrollbar
       :filter="filter"
       :filter-principal="filterPrincipal"
       :total-rows="totalRows"
@@ -28,7 +27,6 @@
         id="new-client-done-table"
         slot="table"
         ref="new-client-done-table"
-        :has-provider="true"
         sticky-header="70vh"
         small
         no-provider-filtering
@@ -156,7 +154,7 @@
               <p v-if="(data.item.commission) && (G_IS_CEO || G_IS_SUPERVISOR)">
                 <small
                   class="text-primary font-weight-bold"
-                >$ {{ JSON.parse(data.item.commission)[0].commission }}</small>
+                >$ {{ data.item.commission[0].commission }}</small>
               </p>
             </b-col>
           </b-row>
@@ -215,7 +213,7 @@
               <p v-if="data.item.commission && (G_IS_CEO || G_IS_SUPERVISOR)">
                 <small
                   class="text-primary font-weight-bold"
-                >$ {{ JSON.parse(data.item.commission)[1].commission }}</small>
+                >$ {{ data.item.commission[1].commission }}</small>
               </p>
             </b-col>
           </b-row>
@@ -567,6 +565,120 @@
             @click="returnDone(data.item.event_id, null)"
           >Done</b-btn>
         </template>
+        <template #custom-foot>
+          <b-tr>
+            <b-td colspan="2" />
+            <b-td
+              colspan="2"
+              class="text-center"
+            >
+              TCMC
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center"
+            >
+              TCMS
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center"
+            >
+              TFEE
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center"
+            >
+              TIP
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center"
+            >
+              TMA
+            </b-td>
+            <b-td :colspan="done === 0 ? 3 : 2" />
+          </b-tr>
+          <b-tr>
+            <b-td
+              colspan="2"
+              class="text-right"
+            >
+              Subtotal
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center"
+            >
+              {{ '$ ' + subtotal.tcmc }}
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center"
+            >
+              {{ '$ ' + subtotal.tcms }}
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center"
+            >
+              {{ '$ ' + subtotal.tfee }}
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center"
+            >
+              {{ '$ ' + subtotal.tip }}
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center"
+            >
+              {{ '$ ' + subtotal.tma }}
+            </b-td>
+            <b-td :colspan="done === 0 ? 3 : 2" />
+          </b-tr>
+          <b-tr>
+            <b-td
+              colspan="2"
+              class="text-right"
+            >
+              Total
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center"
+            >
+              {{ '$ ' + total.tcmc }}
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center"
+            >
+              {{ '$ ' + total.tcms }}
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center"
+            >
+              {{ '$ ' + total.tfee }}
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center"
+            >
+              {{ '$ ' + total.tip }}
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center"
+            >
+              {{ '$ ' + total.tma }}
+            </b-td>
+            <b-td :colspan="done === 0 ? 3 : 2" />
+          </b-tr>
+        </template>
       </b-table>
     </filter-slot>
     <b-modal
@@ -738,7 +850,7 @@ export default {
   },
   data() {
     return {
-      items: {},
+      items: [],
       selected: [],
       isBusy: false,
       fields: dataFields,
@@ -896,6 +1008,77 @@ export default {
       if (this.done === 0) return this.fields
       return this.fields.filter(field => field.key !== 'done')
     },
+    total() {
+      if (this.items[0]) {
+        return {
+          tcmc: this.items[0].tcmc,
+          tcms: this.items[0].tcms,
+          tfee: this.items[0].tfee,
+          tip: this.items[0].tip,
+          tma: this.items[0].tma,
+        }
+      }
+      return {
+        tcmc: '0.00',
+        tcms: '0.00',
+        tfee: '0.00',
+        tip: '0.00',
+        tma: '0.00',
+      }
+    },
+    subtotal() {
+      if (this.items.length > 0) {
+        return {
+          tcmc: this.items.reduce((previous, current) => {
+            const currentComissionCapturedAmount = current.commission ? parseFloat(current.commission[0].commission) : 0.0
+            if (typeof previous === 'object') {
+              const previousComissionCapturedAmount = previous.commission ? parseFloat(previous.commission[0].commission) : 0.0
+              return currentComissionCapturedAmount + previousComissionCapturedAmount
+            }
+            return currentComissionCapturedAmount + previous
+          }).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          tcms: this.items.reduce((previous, current) => {
+            const currentComissionSellerAmount = current.commission ? parseFloat(current.commission[1].commission) : 0.0
+            if (typeof previous === 'object') {
+              const previousComissionSellerAmount = previous.commission ? parseFloat(previous.commission[1].commission) : 0.0
+              return currentComissionSellerAmount + previousComissionSellerAmount
+            }
+            return currentComissionSellerAmount + previous
+          }).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          tfee: this.items.reduce((previous, current) => {
+            const currentFeeAmount = current.fee ? parseFloat(current.fee) : 0.0
+            if (typeof previous === 'object') {
+              const previousFeeAmount = previous.fee ? parseFloat(previous.fee) : 0.0
+              return currentFeeAmount + previousFeeAmount
+            }
+            return currentFeeAmount + previous
+          }).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          tip: this.items.reduce((previous, current) => {
+            const currentInitialAmount = current.initial_amount !== '0.00' ? parseFloat(current.initial_amount.replaceAll(',', '')) : 0.0
+            if (typeof previous === 'object') {
+              const previousInitialAmount = previous.initial_amount !== '0.00' ? parseFloat(previous.initial_amount.replaceAll(',', '')) : 0.0
+              return currentInitialAmount + previousInitialAmount
+            }
+            return currentInitialAmount + previous
+          }).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          tma: this.items.reduce((previous, current) => {
+            const currentMonthlyAmount = current.monthly_amount ? parseFloat(current.monthly_amount.replaceAll(',', '')) : 0.0
+            if (typeof previous === 'object') {
+              const previousMonthlyAmount = previous.monthly_amount ? parseFloat(previous.monthly_amount.replaceAll(',', '')) : 0.0
+              return currentMonthlyAmount + previousMonthlyAmount
+            }
+            return currentMonthlyAmount + previous
+          }).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+        }
+      }
+      return {
+        tcmc: '0.00',
+        tcms: '0.00',
+        tfee: '0.00',
+        tip: '0.00',
+        tma: '0.00',
+      }
+    },
   },
   async created() {
     try {
@@ -1045,7 +1228,7 @@ export default {
           index += 1
         }
         this.items = data.data
-        return this.items || []
+        return this.items
       } catch (e) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', e)
         return []
@@ -1202,7 +1385,6 @@ export default {
           || this.currentUser.role_id == 1
           || this.currentUser.role_id == 2
         this.modalData.initial_payment.statusSale = data.status
-        this.modalData.initial_payment.comissions = data.commission
         this.modalData.initial_payment.nameProgram = data.program
         this.modalData.initial_payment.nameClient = data.client
         this.modalData.initial_payment.valorInitalPaymetn = data.initial_payment_status
