@@ -3,6 +3,7 @@
     v-model="ownControl"
     title="Supervisor password"
     hide-footer
+    modal-class="modal-primary"
     centered
     @hidden="closeModal"
   >
@@ -16,9 +17,7 @@
           <span
             v-if="errorPassword"
             class="text-danger"
-          >
-            Incorrect Password
-          </span>
+          >Incorrect Password</span>
         </b-col>
         <b-col cols="4">
           <b-button
@@ -52,11 +51,14 @@ export default {
       this.$emit('click', false)
     },
     async approvesuperviser() {
-      const response = await amgApi.post('/approvesuperviserprogram', {
-        password: this.password,
-        id: this.sessionId,
-        modul: this.modul,
-      })
+      const response = await amgApi.post(
+        '/commons/approved-superviser-program',
+        {
+          password: this.password,
+          id: this.sessionId,
+          modul: this.modul,
+        },
+      )
       if (response.status === 200) {
         if (response.data.status == 1) {
           if (this.typeApprove == 1) {
@@ -76,5 +78,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

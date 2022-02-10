@@ -1,47 +1,81 @@
 export default [
-    {
-        path: '/crm/inventory',
-        name: 'inventory-crm',
-        component: () => import("@/views/commons/components/inventory/InventoryMain.vue"),
-        meta:{
-            isClientsTab: true,
-            module: 2,
-            permittedRoles:[1,2]
-            
+  {
+    path: "/crm/inventory",
+    name: "inventory-crm",
+    redirect: { name: "inventory-crm-equipment" },
+    component: () =>
+      import("@/views/commons/components/inventory/InventoryMain.vue"),
+    meta: {
+      isClientsTab: true,
+      module: 2,
+      permittedRoles: [1, 2],
+      pageTitle: "Inventory",
+      breadcrumb: [
+        {
+          text: "Inventory",
+          active: true,
         },
-        children: [
+      ],
+    },
+    children: [
+      {
+        path: "",
+        name: "inventory-crm-equipment",
+        component: () =>
+          import(
+            "@/views/commons/components/inventory/components/Equipment.vue"
+          ),
+        meta: {
+          isClientsTab: true,
+          module: 2,
+          permittedRoles: [1, 2],
+          pageTitle: "Inventory",
+          breadcrumb: [
             {
-                path: '',
-                name: 'inventory-crm-equipment',
-                component: () => import('@/views/commons/components/inventory/components/Equipment.vue'),
-                meta:{
-                    isClientsTab: true,
-                    module: 2,
-                    permittedRoles:[1,2]
-                },
-                
+              text: "Equipment",
+              active: true,
             },
+          ],
+        },
+      },
+      {
+        path: " ",
+        name: "inventory-crm-equipment-request",
+        component: () =>
+          import(
+            "@/views/commons/components/inventory/components/EquipmentRequest.vue"
+          ),
+        meta: {
+          isClientsTab: false,
+          module: 2,
+          permittedRoles: [1, 2],
+          pageTitle: "Inventory",
+          breadcrumb: [
             {
-                path: ' ',
-                name: 'inventory-crm-equipment-request',
-                component: () => import('@/views/commons/components/inventory/components/EquipmentRequest.vue'),
-                meta:{
-                    isClientsTab: false,
-                    module: 2,
-                    permittedRoles:[1,2]
-                }
+              text: "Equipment Request",
+              active: true,
             },
+          ],
+        },
+      },
+      {
+        path: "  ",
+        name: "inventory-crm-assign",
+        component: () =>
+          import("@/views/commons/components/inventory/components/Assign.vue"),
+        meta: {
+          isClientsTab: false,
+          module: 2,
+          permittedRoles: [1, 2],
+          pageTitle: "Inventory",
+          breadcrumb: [
             {
-                path: '  ',
-                name: 'inventory-crm-assign',
-                component: () => import('@/views/commons/components/inventory/components/Assign.vue'),
-                meta:{
-                    isClientsTab: false,
-                    module: 2,
-                    permittedRoles:[1,2]
-                }
+              text: "Assign",
+              active: true,
             },
-        ],
-        
-    }
-]
+          ],
+        },
+      },
+    ],
+  },
+];

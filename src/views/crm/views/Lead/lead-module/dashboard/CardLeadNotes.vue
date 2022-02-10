@@ -199,7 +199,7 @@ export default {
         const result = await this.showConfirmSwal()
         if (result.value) {
           if (this.dontHaveNote) {
-            const response = await amgApi.post('/updatenotes', {
+            const response = await amgApi.post('/note/note/update-notes', {
               created_at: '',
               created_by: '',
               created_by_name: '',
@@ -214,7 +214,7 @@ export default {
               this.disableTextArea()
             }
           } else {
-            const response = await amgApi.post('/updatenotes', {
+            const response = await amgApi.post('/note/note/update-notes', {
               created_at: this.note.created_at,
               created_by: this.note.user_id,
               created_by_name: this.note.created_by_name,

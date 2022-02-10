@@ -14,9 +14,7 @@
         @close="hideModal(false)"
       />
     </template>
-    <validation-observer
-      ref="form"
-    >
+    <validation-observer ref="form">
       <b-row>
         <b-col>
           <validation-provider
@@ -51,19 +49,23 @@
                 :options="note.businessIdentification.options"
                 :class="{'border-danger rounded': errors[0]}"
               />
-              <b-form-input
+              <validation-provider
                 v-if="note.businessIdentification.value === 'N/A'"
-                v-model="note.businessIdentification.otherValue"
-                class="mt-50"
-                size="sm"
-                :class="{'border-danger rounded': errors[0]}"
-              />
+                v-slot="{ errors }"
+                name="businessIdentificationOtherValue"
+                rules="required"
+              >
+                <b-form-input
+                  v-model="note.businessIdentification.otherValue"
+                  class="mt-50"
+                  size="sm"
+                  :class="{'border-danger rounded': errors[0]}"
+                />
+              </validation-provider>
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col
-          v-if="dateTypeAgreement"
-        >
+        <b-col v-if="dateTypeAgreement">
           <validation-provider
             v-slot="{ errors }"
             name="typeOfAgreement"
@@ -146,9 +148,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col
-          md="6"
-        >
+        <b-col md="6">
           <validation-provider
             v-slot="{ errors }"
             name="newBusiness"
@@ -246,9 +246,7 @@
             </validation-provider>
           </b-col>
         </transition>
-        <b-col
-          md="6"
-        >
+        <b-col md="6">
           <validation-provider
             v-slot="{ errors }"
             name="originCountry"
@@ -624,7 +622,6 @@ export default {
       return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller
     },
     newNote() {
-      console.log(this.noteInfo.created > '2021-05-16 00:00:00')
       return this.noteInfo.created > '2021-05-16 00:00:00'
     },
     emptyNote() {
@@ -644,16 +641,24 @@ export default {
     'note.businessIdentification.value': {
       handler(newValue) {
         if (newValue !== 'N/A') {
-          this.note.businessIdentification.otherValue = this.note.businessIdentification.otherValue ? this.note.businessIdentification.otherValue : this.note.businessIdentification.otherValue
-        }
+          this.note.businessIdentification.otherValue = this.note.businessIdentification.otherValue
+            ? this.note.businessIdentification.otherValue
+            : this.note.businessIdentification.otherValue
+        } else if (this.note.businessIdentification.otherValue === '0' && newValue === 'N/A') this.note.businessIdentification.otherValue = ''
       },
       deep: true,
     },
     'note.newBusiness.value': {
       handler(newValue) {
         if (newValue !== 'No') {
-          this.note.newBusiness.startBusiness = this.note.newBusiness.startBusiness ? this.note.newBusiness.startBusiness : 0
-          this.note.newBusiness.registration.value = this.note.newBusiness.registration.value ? this.note.newBusiness.registration.value : 0
+          this.note.newBusiness.startBusiness = this.note.newBusiness
+            .startBusiness
+            ? this.note.newBusiness.startBusiness
+            : 0
+          this.note.newBusiness.registration.value = this.note.newBusiness
+            .registration.value
+            ? this.note.newBusiness.registration.value
+            : 0
         }
       },
       deep: true,
@@ -661,16 +666,20 @@ export default {
     'note.newBusiness.registration.value': {
       handler(newValue) {
         if (newValue !== 'Yes') {
-          this.note.newBusiness.registerBusiness.value = this.note.newBusiness.registerBusiness.value ? this.note.newBusiness.registerBusiness.value : 0
-          this.note.newBusiness.registerBusiness.text = this.note.newBusiness.registerBusiness.text ? this.note.newBusiness.registerBusiness.text : 0
+          this.note.newBusiness.registerBusiness.value = this.note.newBusiness
+            .registerBusiness.value
+            ? this.note.newBusiness.registerBusiness.value
+            : 0
+          this.note.newBusiness.registerBusiness.text = this.note.newBusiness
+            .registerBusiness.text
+            ? this.note.newBusiness.registerBusiness.text
+            : 0
         }
       },
       deep: true,
     },
-
   },
   async created() {
-    console.log(this.noteInfo)
     await this.getFirstNote()
     await this.listTypeBusiness()
     await this.getCountries()
@@ -732,7 +741,10 @@ export default {
         { number: 1013, value: this.note.indications.value },
         { number: 1014, value: this.note.suggestion.value },
         { number: 1015, value: this.note.pending.value },
-        { number: 1063, value: this.dateTypeAgreement ? this.note.typeOfAgreement.value : 1 },
+        {
+          number: 1063,
+          value: this.dateTypeAgreement ? this.note.typeOfAgreement.value : 1,
+        },
         { number: 1004, value: this.note.typeOfBuisiness.value },
         { number: 1005, value: this.note.numberOfEmployees.value },
         { number: 1006, value: this.note.annualIncome.value },
@@ -743,7 +755,7 @@ export default {
         { number: 1009, value: this.note.newBusiness.registration.value },
         { number: 1010, value: this.note.newBusiness.registerBusiness.value },
         { number: 1011, value: this.note.newBusiness.registerBusiness.text },
-        { number: 1003, value: this.note.businessIdentification.otherValue },
+        { number: 1003, value: this.note.businessIdentification.otherValue ? this.note.businessIdentification.otherValue : 0 },
       ]
     },
     hideModal(status) {
@@ -752,7 +764,7 @@ export default {
     },
     async getCountries() {
       try {
-        const response = await amgApi.post('/view-countrys', {})
+        const response = await amgApi.post('/commons/get-world-countrys', {})
         this.note.country.options = response.data
       } catch (error) {
         this.showErrorSwal(error)
@@ -760,7 +772,7 @@ export default {
     },
     async listTypeBusiness() {
       try {
-        const response = await amgApi.get('/listtypebusiness')
+        const response = await amgApi.post('/commons/get-all-type-business')
         this.note.typeOfBuisiness.options = response.data
       } catch (error) {
         this.showErrorSwal(error)
@@ -768,7 +780,6 @@ export default {
     },
     getDetailsAnswers(note) {
       note.forEach(answer => {
-        console.log(answer)
         if (answer.answer != 'null') {
           if (answer.question_id === 1002) this.note.businessIdentification.value = answer.answer
           if (answer.question_id === 1003) this.note.businessIdentification.otherValue = answer.answer
@@ -791,11 +802,7 @@ export default {
       })
     },
     initialValidationNote(note) {
-      if (
-        note.length != 0
-          && this.noteInfo.statusSale != 4
-          && !this.noteNull
-      ) {
+      if (note.length != 0 && this.noteInfo.statusSale != 4 && !this.noteNull) {
         this.showUpdate = true
       } else if (this.noteInfo.editmodal == false) {
         this.showSave = false
@@ -826,10 +833,11 @@ export default {
 .quill-editor {
   height: 100px;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0
+  opacity: 0;
 }
 </style>

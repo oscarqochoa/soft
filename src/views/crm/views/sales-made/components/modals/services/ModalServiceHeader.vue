@@ -6,7 +6,9 @@
     />
     <b-container fluid>
       <b-row class="text-left bg-primary px-3 py-1">
-        <h3 class="font-weight-bolder text-white">
+        <h3
+          class="font-weight-bolder text-white"
+        >
           {{ titleModal }}
         </h3>
       </b-row>
@@ -16,13 +18,13 @@
           :cols="twoPerRow ? 6 : 3"
         >
           <h5>Program</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py10">
+          <p class="bg-info rounded text-white font-medium-1 text-center py10">
             {{ sales.program }}
           </p>
         </b-col>
         <b-col :cols="twoPerRow ? 6 : 3">
           <h5>Client</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py10">
+          <p class="bg-info rounded text-white font-medium-1 text-center py10">
             {{ sales.client }}
           </p>
         </b-col>
@@ -31,7 +33,7 @@
           :cols="twoPerRow ? 6 : 3"
         >
           <h5>Type</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py10">
+          <p class="bg-info rounded text-white font-medium-1 text-center py10">
             {{ typeAddChange }} SERVICES
           </p>
         </b-col>
@@ -40,7 +42,7 @@
           :cols="twoPerRow ? 6 : 3"
         >
           <h5>Origin</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py10">
+          <p class="bg-info rounded text-white font-medium-1 text-center py10">
             {{ sales.program_first }}
           </p>
         </b-col>
@@ -49,7 +51,7 @@
           :cols="twoPerRow ? 6 : 3"
         >
           <h5>Destination</h5>
-          <p class="border-2 border-primary rounded text-primary text-center py10">
+          <p class="bg-info rounded text-white font-medium-1 text-center py10">
             {{ sales.program }}
           </p>
         </b-col>
@@ -184,15 +186,15 @@ export default {
     }),
     titleModal() {
       if (this.typeModal === 1) {
-        return 'COMPLETE RATES'
+        return 'Complete Rates'
       } if (this.typeModal === 2 || this.typeModal === 5) {
-        return 'DETAIL OF SALE'
+        return 'Detail Of Sale'
       } if (this.typeModal === 3) {
-        return 'ADD SERVICE'
+        return 'Add Service'
       } if (this.typeModal === 4) {
-        return 'CHANGE SERVICES'
+        return 'Change Services'
       } if (this.typeModal === 6) {
-        return 'ADD SALE'
+        return 'Add Sale'
       }
       return ''
     },

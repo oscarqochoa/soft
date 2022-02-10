@@ -235,9 +235,6 @@ export default {
       this.setInitialFrom()
     ]);
 
-    console.log(this.event);
-    console.log(this.lead);
-
     this.removePreloader();
   },
   computed: {
@@ -403,7 +400,6 @@ export default {
   watch: {
     "event.from"(newVal, oldVal) {
       if (newVal) {
-        console.log("bew", newVal, oldVal);
         this.setInitialTo(newVal);
       }
     }

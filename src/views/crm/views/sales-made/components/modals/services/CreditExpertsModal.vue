@@ -3,6 +3,7 @@
     <ValidationObserver ref="form">
       <b-modal
         v-model="ownControl"
+        modal-class="modal-primary"
         modal
         size="xlg"
         scrollable
@@ -53,7 +54,7 @@
               <template v-slot:cell(quantity)="data">
                 <b-form-spinbutton
                   v-model.number="data.item.quantity"
-                  :disabled="!select_option[data.item.index]"
+                  :disabled="!select_option[data.item.index] || isModalShow"
                   class="square"
                   min="1"
                   max="99"
@@ -100,7 +101,7 @@
               <template v-slot:cell(quantity)="data">
                 <b-form-spinbutton
                   v-model.number="data.item.quantity"
-                  :disabled="!select_option[data.item.index]"
+                  :disabled="!select_option[data.item.index] || isModalShow"
                   class="square"
                   min="1"
                   max="99"
@@ -127,13 +128,9 @@
           <!-- total -->
           <b-container fluid>
             <b-row class="mb-1">
-              <b-col
-                lg="6"
-              >
+              <b-col lg="6">
                 <b-row class="text-center d-flex align-items-center justify-content-end">
-                  <b-col
-                    cols="2"
-                  >
+                  <b-col cols="2">
                     TOTAL $
                   </b-col>
                   <b-col cols="3">
@@ -233,7 +230,10 @@ export default {
     salesClient: {
       type: Object,
       default: () => ({
-        event_id: '', account_id: '', id: '', lead_id: '',
+        event_id: '',
+        account_id: '',
+        id: '',
+        lead_id: '',
       }),
     },
     typeModal: {
@@ -379,23 +379,24 @@ export default {
           switch (this.typeModal) {
             case 1:
               message = 'complete Rates'
-              route = '/attendend'
+              route = '/sales-made/attendend-sale'
               break
             case 3:
               message = 'add new service'
-              route = '/attendendprogram'
+              route = '/sales-made/attendend-saleprogram'
               typeADD = 1
               break
             case 4:
               message = 'change service'
-              route = '/attendendprogram'
+              route = '/sales-made/attendend-saleprogram'
               typeADD = 2
               break
             case 6:
               message = 'add new service'
-              route = '/leadattendend'
+              route = '/sale/insert-lead-attendance'
               break
-            default: break
+            default:
+              break
           }
           // Get the prices
           this.rates.forEach((rate, index) => {
@@ -435,7 +436,9 @@ export default {
             json_ce: this.json_ce,
           }
 
-          const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
+          const result = await this.showConfirmSwal(
+            `Are you sure you want to ${message}`,
+          )
           if (result.value) {
             this.addPreloader()
             const response = await amgApi.post(`${route}`, param)
@@ -463,17 +466,23 @@ export default {
         this.rates[index].subtotal = 0
         this.rates[index].disabled = true
       }
-      this.totalAmount = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
+      this.totalAmount = this.rates.reduce(
+        (sum, rate) => sum + rate.subtotal,
+        0,
+      )
     },
     calculateSubtotal(index) {
       this.rates[index].subtotal = this.rates[index].price * this.rates[index].quantity
-      this.totalAmount = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
+      this.totalAmount = this.rates.reduce(
+        (sum, rate) => sum + rate.subtotal,
+        0,
+      )
     },
 
     /* Rates */
     async getSelects() {
       try {
-        const response = await amgApi.get('selectratesce')
+        const response = await amgApi.get('/rates/get-rates-options')
         if (response.status === 200) {
           this.forSelectCe(response.data)
           this.select_option[0] = 1
@@ -496,7 +505,9 @@ export default {
     async getSelected() {
       if (this.isModalShow) {
         try {
-          const response = await amgApi.post('getjsonattendce', { sale_id: this.salesClient.id })
+          const response = await amgApi.post('/attend/get-attend', {
+            sale_id: this.salesClient.id,
+          })
           if (response.status === 200) {
             this.json_ce_new = response.data.json_ce
             this.date_sale = response.data.date_sale
@@ -519,7 +530,9 @@ export default {
     },
     async searchRate() {
       try {
-        const response = await amgApi.post('searchprogram', { id: this.program })
+        const response = await amgApi.post('/rates/get-rates-by-programs', {
+          id: this.program,
+        })
         if (response.status === 200) {
           this.rates = response.data
 
@@ -543,10 +556,12 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post('searchprogramsalemade', { id: this.salesClient.id })
+        const response = await amgApi.post('/sales-made/get-details-sales-made', {
+          id: this.salesClient.id,
+        })
         if (response.status === 200) {
           this.fee = response.data[0].fee
-          this.rate_selected = JSON.parse(response.data[0].rate_selected)
+          this.rate_selected = response.data[0].rate_selected
           this.totalSuggeste = response.data[0].suggeste
           /* TODO: REFACTORIZAR */
           for (let i = 0; i < this.rates.length; i++) {
@@ -574,7 +589,9 @@ export default {
     },
     async getScore() {
       try {
-        const response = await amgApi.post('/getscoreattend', { lead_id: this.salesClient.lead_id })
+        const response = await amgApi.post('/attend/get-score-attend', {
+          lead_id: this.salesClient.lead_id,
+        })
         if (response.status === 200) {
           this.score_id = response.data.score_id
         }
@@ -587,7 +604,8 @@ export default {
 </script>
 
 <style>
-select:disabled, input:disabled {
+select:disabled,
+input:disabled {
   background-color: transparent !important;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
+    <p>{{ statusUpdateRequestEquip }}</p>
     <filter-slot
-      
       :filter="filter"
       :filter-principal="filterPrincipal"
       :no-visible-principal-filter="true"
@@ -17,7 +17,7 @@
         small
         slot="table"
         no-provider-filtering
-        :api-url="'/inventory/search-request-equipments'"
+        :api-url="'/logistics/inventory/search-request-equipment'"
         ref="refClientsList"
         :items="myProvider"
         :fields="arrayColumns"
@@ -46,9 +46,9 @@
           </div>
         </template>
         <template #cell(commentary)="data">
-          <span style="display: block; width: 150px; word-wrap: break-word">{{
-            data.item.commentary
-          }}</span>
+          <div class="tdbreak" style="width:100px; overflow:hidden;text-overflow:ellipsis">
+              {{ data.item.commentary }}
+          </div>
         </template>
         <template #cell(status)="data">
           <p
@@ -96,7 +96,8 @@
 import vSelect from "vue-select";
 import ModalViewTrackingRequest from "../../modal/ModalViewTrackingRequest.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-
+import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   props: {
     global: {
@@ -226,7 +227,22 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapGetters("inventory-store", ["updateRequestEquip"]),
+    statusUpdateRequestEquip() {
+      if (this.updateRequestEquip) {
+        this.$refs.refClientsList.refresh();
+        this.UpdateRequEquip();
+      }
+    },
+  },
   methods: {
+    ...mapActions("inventory-store", ["UPDATE_REQUEST_EQUIPMENT"]),
+    UpdateRequEquip() {
+      if (this.updateRequestEquip) {
+        this.UPDATE_REQUEST_EQUIPMENT(false);
+      }
+    },
     resetSearch() {
       this.fromToObject.from = null;
       this.fromToObject.to = null;
@@ -272,6 +288,10 @@ export default {
 
 
 <style lang="scss" scoped>
+.tdbreak {
+  word-break: break-all;
+  // width: 10em;
+}
 .per-page-selector {
   width: 90px;
 }

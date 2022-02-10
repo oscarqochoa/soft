@@ -1,8 +1,6 @@
 <template>
   <div>
-    <validation-observer
-      ref="form"
-    >
+    <validation-observer ref="form">
       <b-modal
         v-model="modalUp"
         size="xmd"
@@ -33,9 +31,7 @@
                 <b-input-group>
                   <b-input-group-prepend
                     class="border-info rounded-left px-1 d-flex align-items-center justify-content-center bg-info text-white font-weight-bolder"
-                  >
-                    Contact Schedule
-                  </b-input-group-prepend>
+                  >Contact Schedule</b-input-group-prepend>
                   <b-form-input
                     v-model="contact_schedule"
                     :disabled="valorEdit"
@@ -118,13 +114,11 @@
                   <span
                     class="rounded-left border-info bg-info text-white w-25 text-center px-0"
                     style="padding: 3px 10px"
-                  >
-                    Legal Status
-                  </span>
+                  >Legal Status</span>
                   <span
                     class="w-75 border-top-info border-right-info border-bottom-info rounded-right"
                     style="padding: 3px 10px"
-                  > {{ showContactSchedule.status_lead ? showContactSchedule.status_lead : '-' }}</span>
+                  >{{ showContactSchedule.status_lead ? showContactSchedule.status_lead : '-' }}</span>
                 </b-col>
                 <b-col
                   class="mb-1 d-flex align-items-center"
@@ -133,13 +127,11 @@
                   <span
                     class="rounded-left border-info bg-info text-white text-center"
                     style="padding: 3px 10px; width: 35%"
-                  >
-                    Monthly Payment
-                  </span>
+                  >Monthly Payment</span>
                   <span
                     class="border-top-info border-right-info border-bottom-info rounded-right"
                     style="padding: 3px 10px; width: 65%"
-                  > $ {{ showContactSchedule.monthly_payment }}</span>
+                  >$ {{ showContactSchedule.monthly_payment }}</span>
                 </b-col>
                 <b-col
                   class="mb-1 d-flex align-items-center"
@@ -148,13 +140,11 @@
                   <span
                     class="rounded-left border-info bg-info text-white w-25 text-center px-0"
                     style="padding: 3px 10px"
-                  >
-                    Retainer Fee
-                  </span>
+                  >Retainer Fee</span>
                   <span
                     class="w-75 border-top-info border-right-info border-bottom-info rounded-right"
                     style="padding: 3px 10px"
-                  > $ {{ showContactSchedule.retainer_fee }}</span>
+                  >$ {{ showContactSchedule.retainer_fee }}</span>
                 </b-col>
                 <b-col
                   class="mb-1 d-flex align-items-center"
@@ -163,13 +153,11 @@
                   <span
                     class="rounded-left border-info bg-info text-white text-center"
                     style="padding: 3px 10px; width: 35%"
-                  >
-                    Incomes
-                  </span>
+                  >Incomes</span>
                   <span
                     class="border-top-info border-right-info border-bottom-info rounded-right"
                     style="padding: 3px 10px; width: 65%"
-                  > $ {{ showContactSchedule.total_income }}</span>
+                  >$ {{ showContactSchedule.total_income }}</span>
                 </b-col>
                 <b-col
                   class="mb-1 d-flex align-items-center"
@@ -178,13 +166,11 @@
                   <span
                     class="rounded-left border-info bg-info text-white w-25 text-center"
                     style="padding: 3px 10px"
-                  >
-                    Saving
-                  </span>
+                  >Saving</span>
                   <span
                     class="w-75 border-top-info border-right-info border-bottom-info rounded-right"
                     style="padding: 3px 10px"
-                  > $ {{ showContactSchedule.saving }}</span>
+                  >$ {{ showContactSchedule.saving }}</span>
                 </b-col>
               </b-row>
               <b-row>
@@ -214,13 +200,11 @@
                       <span
                         class="rounded-left border-info bg-info text-white text-center px-1"
                         style="padding: 3px 10px"
-                      >
-                        Total
-                      </span>
+                      >Total</span>
                       <span
                         class="border-top-info border-right-info border-bottom-info rounded-right px-2"
                         style="padding: 3px 10px"
-                      > $ {{ showContactSchedule.total_balance ? showContactSchedule.total_balance : '0.00' }}</span>
+                      >$ {{ showContactSchedule.total_balance ? showContactSchedule.total_balance : '0.00' }}</span>
                     </b-col>
                   </b-row>
                 </b-col>
@@ -259,7 +243,6 @@ import { mapGetters } from 'vuex'
 import { quillEditor } from 'vue-quill-editor'
 import vSelect from 'vue-select'
 import NotesServices from '@/views/commons/components/first-notes/services/notes.service'
-import HeaderModalNotes from './HeaderModalNotes.vue'
 import GlobalService from '@/views/services/global.service'
 
 import 'quill/dist/quill.core.css'
@@ -268,6 +251,7 @@ import 'quill/dist/quill.bubble.css'
 import ButtonSave from '@/views/commons/utilities/ButtonSave.vue'
 import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete.vue'
 import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate.vue'
+import HeaderModalNotes from './HeaderModalNotes.vue'
 
 export default {
   name: 'ModalNotesAll',
@@ -347,11 +331,13 @@ export default {
       return this.notesSales[0]
     },
     valorEdit() {
-      return this.noteInfo.type == 1
-          || this.noteInfo.editModal == false
-          || this.noteInfo.statusSale == 2
-          || this.noteInfo.statusSale == 4
-          || this.noteInfo.notSeller
+      return (
+        this.noteInfo.type == 1
+        || this.noteInfo.editModal == false
+        || this.noteInfo.statusSale == 2
+        || this.noteInfo.statusSale == 4
+        || this.noteInfo.notSeller
+      )
     },
   },
   async created() {
@@ -373,7 +359,9 @@ export default {
         const params = { id: this.noteInfo.saleId }
         const response = await NotesServices.notesSales(params)
         this.notesSales = response
-        this.contact_schedule = this.notesSales[5].answer ? this.notesSales[5].answer : ''
+        this.contact_schedule = this.notesSales[5].answer
+          ? this.notesSales[5].answer
+          : ''
         this.modalUp = true
         this.removePreloader()
       } catch (e) {
@@ -409,7 +397,9 @@ export default {
     },
     findFather(id) {
       if (id != null) {
-        const father = this.notesSales.find(element => element.question_id == id)
+        const father = this.notesSales.find(
+          element => element.question_id == id,
+        )
         return father.answer === 'YES'
       }
       return true
@@ -419,7 +409,7 @@ export default {
       if (result) {
         const { value } = await this.showConfirmSwal()
         if (value) {
-          const response = await amgApi.post('/insertSaleNotes', {
+          const response = await amgApi.post('/sales-made/insert-sales-notes', {
             notes: this.notesSales,
             sale_id: this.notesSales[0].sale_id,
             contact_schedule: this.contact_schedule,
@@ -439,7 +429,7 @@ export default {
       const result = await this.showConfirmSwal()
       if (result.value) {
         this.addPreloader()
-        const response = await amgApi.post('/insertSaleNotes', {
+        const response = await amgApi.post('/sales-made/insert-sales-notes', {
           notes: this.notesSales,
           sale_id: this.notesSales[0].sale_id,
           contact_schedule: this.contact_schedule,
@@ -483,7 +473,7 @@ export default {
 </script>
 
 <style scoped>
-.quill-editor{
+.quill-editor {
   height: 100px;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <b-modal
     v-model="ownControl"
+    modal-class="modal-primary"
     title="Send SMS"
     hide-footer
     @hide="$emit('closeModal')"
@@ -8,7 +9,7 @@
     <b-container fluid>
       <b-row>
         <b-col class="d-flex align-items-center">
-          <span>Leads: </span>
+          <span>Leads:</span>
           <div class="ml-1">
             {{ nameleads }}
           </div>
@@ -29,7 +30,7 @@
           <span
             v-if="maxLenght"
             class="text-danger"
-          > Max: 1000 characters</span>
+          >Max: 1000 characters</span>
         </b-col>
         <b-col class="d-flex justify-content-end">
           <b-button
@@ -118,10 +119,13 @@ export default {
           this.errorContent = true
         } else {
           this.errorContent = false
-          const result = await this.showConfirmSwal('Are you Sure Send SMS', 'You won\'t be able to revert this!')
+          const result = await this.showConfirmSwal(
+            'Are you Sure Send SMS',
+            "You won't be able to revert this!",
+          )
           if (result.value) {
             this.addPreloader()
-            const response = await amgApi.post('/sendmessagelead', {
+            const response = await amgApi.post('/messages/send-message-lead', {
               contmessage: this.contmessage,
               user: this.user_id,
               sms: this.smss,
@@ -147,5 +151,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

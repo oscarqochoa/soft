@@ -11,7 +11,7 @@ const DEFAULT_BODY_GET_CAPTURED_CRM = {
 export default {
   namespaced: true,
   state: {
-    sellersCrm: {},
+    sellersCrm: [{ id: 0, label: 'All' }],
     capturedCrm: [],
     // TODO Hacerlo global
     programs: {},
@@ -92,7 +92,10 @@ export default {
         id: seller.id,
         label: seller.user_name,
       }))
-      commit('SET_SELLERS_CRM', formatedSellers)
+      commit('SET_SELLERS_CRM', [{
+        id: 0,
+        label: 'All',
+      }, ...formatedSellers])
     },
     async getCaptured({ commit }, payload = { module: 2, body: DEFAULT_BODY_GET_CAPTURED_CRM }) {
       const captured = await CrmServices.getCapturedCrm(payload.module, payload.body)

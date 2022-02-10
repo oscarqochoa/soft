@@ -34,8 +34,8 @@
             v-if="[5].includes(currentUser.role_id)"
             variant="success"
             class="ml-1"
-            :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.user_id).includes(currentUser.user_id))"
-            @click="showToast('warning', 'top-right', 'In maintenance', 'AlertIcon', 'This action is under maintenance')"
+            :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.assign_id).includes(currentUser.user_id))"
+            @click="addListSeller()"
           >
             <feather-icon
               icon="ListIcon"
@@ -47,7 +47,7 @@
         <b-table
           slot="table"
           ref="refUserListTable"
-          class="position-relative"
+          class="position-relative font-small-3"
           primary-key="id"
           empty-text="No matching records found"
           select-mode="multi"
@@ -108,11 +108,13 @@
 
           <!-- Column: Name -->
           <template #cell(lead_name)="data">
-            <router-link
-              class="text-important"
-              :to="`/${routeModule}/leads/${data.item.id}`"
-              target="_blank"
-            >{{ data.item.lead_name }}</router-link>
+            <div style="white-space: pre-wrap;">
+              <router-link
+                :class="textLink"
+                :to="`/${routeModule}/leads/${data.item.id}`"
+                target="_blank"
+              >{{ data.item.lead_name }}</router-link>
+            </div>
           </template>
 
           <!-- Column: Status -->
@@ -133,17 +135,25 @@
 
           <!-- Column: Programs -->
           <template #cell(programs)="data">
+<<<<<<< HEAD
             <div
               v-if="data.item.programs"
               class="d-flex"
               style="gap: .5rem"
             >
+=======
+            <div v-if="data.item.programs" class="d-flex flex-column" style="gap: .5rem">
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
               <template v-for="(program, key) in JSON.parse(data.item.programs)">
-                <div
+                <b-img
+                  v-if="program.logo"
                   :key="key"
-                  style="width: 50px;height: 50px;background-position: center;background-repeat: no-repeat;background-size: contain;"
-                  :style="{ backgroundImage: `url(${baseUrl + program.logo})` }"
+                  thumbnail
+                  fluid
+                  :src="baseUrl + program.logo"
+                  style="width: 50px"
                 />
+                <span :key="key" v-else>{{ program.value }}</span>
               </template>
             </div>
           </template>
@@ -178,23 +188,8 @@
     </b-card>
 
     <!-- modal SEND SMS -->
-    <b-modal
-      id="modal-send-sms"
-      ok-only
-      modal-class="modal-primary"
-      centered
-      size="lg"
-      title="SEND SMS"
-      no-close-on-backdrop
-    >
-      <modal-send-sms
-        :smss="leads_sms"
-        :modul="currentUser.modul_id"
-        :typesms="typesms"
-        :sms="leads_sms_o"
-        :name-leads="name_leads_arr"
-      />
 
+<<<<<<< HEAD
       <template #modal-footer>
         <b-form-group
           label="VARS"
@@ -241,15 +236,27 @@
         </b-form-group>
       </template>
     </b-modal>
+=======
+    <modal-send-sms
+      v-if="modalSms"
+      :smss="leads_sms"
+      :modul="currentUser.modul_id"
+      :typesms="typesms"
+      :sms="leads_sms_o"
+      :name-leads="name_leads_arr"
+      @hide="modalSmsClose"
+    />
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
 
     <!-- modal HISTORY SMS -->
     <b-modal
       id="modal-history-sms"
       ok-only
       modal-class="modal-primary"
+      title-class="text-white h4"
       centered
       size="lg"
-      title="HISTORY OF SMS"
+      title="History of Sms"
       hide-footer
     >
       <modal-history-sms
@@ -262,6 +269,7 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { BTable, BPagination, BModal } from 'bootstrap-vue'
 
@@ -275,13 +283,23 @@ import FiltersTable from '../../lead-table/FiltersTable.vue'
 import ModalHistorySms from '../../lead-sms/ModalHistorySms.vue'
 import ModalSendSms from '../../lead-sms/ModalSendSms.vue'
 import PaginateTable from '@/views/crm/views/Lead/lead-table/PaginateTable.vue'
+=======
+import { mapActions, mapGetters, mapState } from "vuex";
+
+import ActionsTable from "../../lead-table/ActionsTable.vue";
+import dataFields from "@/views/crm/views/Lead/lead-table/fields.data";
+import dataFilters from "@/views/crm/views/Lead/lead-table/filtersLead.data";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import ModalHistorySms from "../../lead-sms/ModalHistorySms.vue";
+import ModalSendSms from "../../lead-sms/ModalSendSms.vue";
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
 
 export default {
   components: {
     FilterSlot,
-    FiltersTable,
     ActionsTable,
     ModalSendSms,
+<<<<<<< HEAD
     ModalHistorySms,
 
     BTable,
@@ -309,6 +327,9 @@ export default {
     routeModule() {
       return this.$route.meta.route
     },
+=======
+    ModalHistorySms
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
   },
   data() {
     return {
@@ -344,9 +365,37 @@ export default {
       leads_sms_o: [],
 
       leadsSelecteds: [],
+<<<<<<< HEAD
+    }
+=======
+      modalSms: false
+    };
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      G_STATUS_LEADS: "CrmLeadStore/G_STATUS_LEADS",
+      G_OWNERS: "CrmGlobalStore/G_OWNERS",
+      G_PROGRAMS: "CrmGlobalStore/G_PROGRAMS",
+      G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
+      G_STATES: "CrmGlobalStore/G_STATES",
+      G_CRS: "CrmGlobalStore/G_CRS",
+      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS"
+    }),
+    ...mapState({
+      S_LEADS: state => state.CrmLeadStore.S_LEADS
+    }),
+    routeModule() {
+      return this.$route.meta.route;
+    },
+    moduleId() {
+      return this.$route.meta.module;
     }
   },
   created() {
+<<<<<<< HEAD
     this.myProvider()
     this.setOptionsOnFilters()
   },
@@ -357,6 +406,20 @@ export default {
       A_SET_SELECTED_LEADS: 'CrmLeadStore/A_SET_SELECTED_LEADS',
       A_DELETE_LEADS: 'CrmLeadStore/A_DELETE_LEADS',
       A_PROCESS_LEADS: 'CrmLeadStore/A_PROCESS_LEADS',
+=======
+    this.addPaddingTd();
+    this.myProvider();
+    this.setOptionsOnFilters();
+  },
+  methods: {
+    ...mapActions({
+      A_GET_LEADS: "CrmLeadStore/A_GET_LEADS",
+      A_SET_FILTERS_LEADS: "CrmLeadStore/A_SET_FILTERS_LEADS",
+      A_SET_SELECTED_LEADS: "CrmLeadStore/A_SET_SELECTED_LEADS",
+      A_DELETE_LEADS: "CrmLeadStore/A_DELETE_LEADS",
+      A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS",
+      A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST"
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
     }),
     resolveUserStatusVariant(status) {
       if (status === 'Pending') return 'warning'
@@ -398,9 +461,15 @@ export default {
           state_h: this.filter[7].model,
           typedoc: this.filter[9].model,
           user_owner: this.filter[3].model,
+<<<<<<< HEAD
           perpage: this.paginate.perPage,
           page: this.paginate.currentPage,
         })
+=======
+          perPage: this.paginate.perPage,
+          page: this.paginate.currentPage
+        });
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
         setTimeout(() => {
           this.isBusy = false
         }, 500)
@@ -448,6 +517,7 @@ export default {
     onRowSelected() {
       this.A_SET_SELECTED_LEADS(this.leadsSelecteds)
     },
+<<<<<<< HEAD
     onRowDelete(id) {
       this.showSwalGeneric(
         'Are you sure?',
@@ -486,6 +556,33 @@ export default {
           console.log('Something went wrong onRowDelete:', error)
           this.showErrorSwal(error)
         })
+=======
+    async onRowDelete(id) {
+      const confirm = await this.showConfirmSwal();
+      if (confirm.isConfirmed) {
+        this.addPreloader();
+        try {
+          const { user_id } = this.currentUser;
+          const response = await this.A_DELETE_LEADS({
+            lead_id: id,
+            user_id: user_id
+          });
+          if (this.isResponseSuccess(response)) {
+            this.removePreloader();
+            this.showToast(
+              "success",
+              "top-right",
+              "Deleted!",
+              "CheckIcon",
+              "The Lead has been deleted."
+            );
+          }
+        } catch (error) {
+          this.removePreloader();
+          this.showErrorSwal(error);
+        }
+      }
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
     },
     onRowProcess(id) {
       this.showSwalGeneric(
@@ -535,6 +632,7 @@ export default {
         })
     },
     modalSmsOpen(item) {
+<<<<<<< HEAD
       this.rowData = item
       this.leads_sms = []
       this.typesms = 1
@@ -542,6 +640,15 @@ export default {
       this.leads_sms_o.push(item.id)
       this.name_leads_arr = [{ name: item.lead_name, id: item.id }]
       this.$bvModal.show('modal-send-sms')
+=======
+      this.rowData = item;
+      this.leads_sms = [];
+      this.typesms = 1;
+      this.leads_sms_o = [];
+      this.leads_sms_o.push(item.id);
+      this.name_leads_arr = [{ name: item.lead_name, id: item.id }];
+      this.modalSms = true;
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
     },
     modalHistorySmsOpen(item) {
       this.historySms.id = item.id
@@ -552,10 +659,52 @@ export default {
       this.typesms = 0
       this.name_leads_arr = this.leadsSelecteds.map(el => ({
         name: el.lead_name,
+<<<<<<< HEAD
         id: el.id,
       }))
       this.leads_sms = this.leadsSelecteds.map(el => el.id)
       this.$bvModal.show('modal-send-sms')
+=======
+        id: el.id
+      }));
+      this.leads_sms = this.leadsSelecteds.map(el => el.id);
+      this.modalSms = true;
+    },
+    modalSmsClose() {
+      this.modalSms = false;
+    },
+    async addListSeller() {
+      const confirm = await this.showConfirmSwal(
+        "Are you sure?",
+        "You are going to add this leads to your List"
+      );
+      if (confirm.isConfirmed) {
+        this.addPreloader();
+        //filter just the owner of the lead
+        const leadList = this.leadsSelecteds
+          .filter(el => el.assign_id === this.currentUser.user_id)
+          .map(el => el.id);
+        try {
+          const params = {
+            user_id: this.currentUser.user_id,
+            list_lead: leadList,
+            module_id: this.moduleId
+          };
+          const response = await this.A_ADD_SELLER_LIST(params);
+          this.removePreloader();
+          this.showToast(
+            "success",
+            "top-right",
+            "Success!",
+            "CheckIcon",
+            "Leads were added to your list"
+          );
+        } catch (error) {
+          this.removePreloader();
+          this.showErrorSwal(error);
+        }
+      }
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
     },
     resetQuickData(item) {
       this.quickData = item
@@ -564,6 +713,7 @@ export default {
   mounted() {
     if (![4].includes(this.currentUser.role_id) && !this.isOnlyLead) {
       this.fields.unshift({
+<<<<<<< HEAD
         key: 'selected',
         label: '',
         sortable: false,
@@ -572,6 +722,17 @@ export default {
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0) this.actionsOptions.push('delete')
   },
 }
+=======
+        key: "selected",
+        label: "",
+        sortable: false
+      });
+    }
+    if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
+      this.actionsOptions.push("delete");
+  }
+};
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
 </script>
 
 <style lang="scss" scoped>

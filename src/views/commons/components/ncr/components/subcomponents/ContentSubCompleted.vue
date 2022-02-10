@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="border-info rounded">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -11,7 +11,7 @@
       @reload="$refs['refClientsList'].refresh()"
     >
       <b-table
-      v-scrollbar
+        v-scrollbar
         slot="table"
         no-provider-filtering
         :api-url="clientRoute"
@@ -33,12 +33,10 @@
           </div>
         </template>
         <template #cell(lead_name)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
+          <div class="d-flex flex-column justify-content-start align-items-start">
             <!-- <a href="www.google.com" target="_blank" class="select-lead-name text-important">
               {{ data.item.lead_name }}
-            </a> -->
+            </a>-->
             <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
             <router-link
               class="select-lead-name text-important"
@@ -47,27 +45,19 @@
                 params: { id: data.item.lead_id },
               }"
               target="_blank"
-            >
-              {{ data.item.lead_name }}
-            </router-link>
+            >{{ data.item.lead_name }}</router-link>
           </div>
         </template>
         <template #cell(seller_name)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <span>
-              {{ data.item.seller_name }}
-            </span>
+          <div class="d-flex flex-column justify-content-start align-items-start">
+            <span>{{ data.item.seller_name }}</span>
             <div>{{ data.item.date | myGlobalDay }}</div>
           </div>
         </template>
         <template #cell(status)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
+          <div class="d-flex flex-column justify-content-start align-items-start">
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-if="data.item.status_id == 1"
               style="
                 background-color: #38c172;
@@ -76,10 +66,9 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 2"
               style="
                 background-color: #3490dc;
@@ -88,10 +77,9 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 3"
               style="
                 background-color: #e13232;
@@ -100,10 +88,9 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 4"
               style="
                 background-color: #ffd46a;
@@ -112,10 +99,9 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 5"
               style="
                 background-color: #ffd46a;
@@ -124,10 +110,9 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 6"
               style="
                 background-color: #e13232;
@@ -136,10 +121,9 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 7"
               style="
                 background-color: #eabc73;
@@ -148,10 +132,9 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 8"
               style="
                 background-color: #eabc73;
@@ -160,10 +143,9 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 9"
               style="
                 background-color: #e13232;
@@ -172,10 +154,9 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 10"
               style="
                 background-color: #e13232;
@@ -184,8 +165,7 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
           </div>
         </template>
         <template #cell(question_id)="data">
@@ -219,9 +199,7 @@
           ></feather-icon>
         </template>
         <template #cell(tracking)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center">
             <feather-icon
               icon="ListIcon"
               class="font-medium-4"
@@ -237,7 +215,7 @@
             <!-- <b-button variant="transparent" target="_blanck"
                   :to="{name:'report-lead',params:{modul:2,global:{idfile:data.item.score_id,idlead:data.item.lead_id}}}">
                   <img :src="assetsImg + '/images/icons/report2.ico'" />
-            </b-button> -->
+            </b-button>-->
             <router-link
               :to="{
                 name: 'report-lead',
@@ -255,25 +233,14 @@
             </router-link>
           </div>
           <div v-if="status == 2">
-            <a
-              :href="data.item.route_html"
-              v-if="!data.item.route_html"
-              target="_blanck"
-            >
-              <amg-icon size="23" icon="CRInvalidIcon" ></amg-icon>
+            <a :href="data.item.route_html" v-if="data.item.route_html" target="_blanck">
+              <amg-icon size="23" icon="CRInvalidIcon"></amg-icon>
             </a>
-           
           </div>
         </template>
         <template #cell(route_pdf)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
-            <a
-              :href="data.item.route_pdf"
-              v-if="data.item.route_pdf"
-              target="_blanck"
-            >
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <a :href="data.item.route_pdf" v-if="data.item.route_pdf" target="_blanck">
               <img
                 v-if="data.item.route_pdf"
                 width="20"
@@ -284,9 +251,7 @@
           </div>
         </template>
         <template #cell(attemps)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center">
             <ul style="padding-left: 0px; margin-bottom: 0px">
               <li
                 v-for="(attemp, index) in JSON.parse(data.item.attemps)
@@ -295,27 +260,19 @@
                 :key="index"
                 style="list-style: none"
               >
-                <img
-                  :src="assetsImg + attemp.plataform_ico"
-                  :title="attemp.plataform_name"
-                />
+                <img :src="assetsImg + attemp.plataform_ico" :title="attemp.plataform_name" />
               </li>
             </ul>
           </div>
         </template>
         <template #cell(marked_pdf)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center">
             <a
               :href="JSON.parse(data.item.attemps).slice()[0].file_cancel"
               v-if="JSON.parse(data.item.attemps).slice()[0].file_cancel"
               target="_blanck"
             >
-              <img
-                :src="assetsImg + '/images/icons/pdf.png'"
-                style="width: 20px"
-              />
+              <img :src="assetsImg + '/images/icons/pdf.png'" style="width: 20px" />
               <!-- <p>{{ JSON.parse(data.item.attemps).slice()[0].file_cancel}}</p> -->
             </a>
             <div v-else style="height: 20px"></div>
@@ -358,19 +315,19 @@ export default {
     vSelect,
     ModalQuestionnaire,
     ModalTrackingStatus,
-    FilterSlot,
+    FilterSlot
   },
   props: {
     status: {
-      type: [Number, String],
-    },
+      type: [Number, String]
+    }
   },
   data() {
     return {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10,
+        perPage: 10
       },
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       startPage: null,
@@ -381,78 +338,78 @@ export default {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: "",
+        model: ""
       },
       arrayColumns: [
         {
           key: "lead_name",
           label: "Lead Name",
           class: "text-left",
-          sortable: false,
+          sortable: false
         },
         {
           key: "seller_name",
           label: "Request By",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "admin_name",
           label: "Administrador",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "status",
           label: "Status",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "question_id",
           label: "QU",
           class: "text-left ",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "tracking",
           label: "Tracking",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "cr",
           label: "CR",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "route_pdf", //////
           label: "PDF",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "attemps",
           label: "Provider",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "marked_pdf",
           label: "File",
           class: "text-center",
           sortable: false,
-          visible: true,
-        },
+          visible: true
+        }
       ],
       dato2: 4,
       dato1: "desc",
@@ -474,7 +431,7 @@ export default {
           options: [],
           reduce: "id",
           selectText: "user_name",
-          cols: 12,
+          cols: 12
         },
         {
           type: "datepicker",
@@ -488,9 +445,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
+          cols: 6
         },
         {
           type: "datepicker",
@@ -504,23 +461,22 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
-        },
-      ],
+          cols: 6
+        }
+      ]
     };
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
+      currentUser: "auth/currentUser"
     }),
     clientRoute() {
       return this.status == 1
-        ? "/ncr-leads-search-completed-successfull-crm"
-        : "/ncr-leads-search-completed-invalid-crm";
-    },
-    
+        ? "/lead/ncr/search-completed-successfull"
+        : "/lead/ncr/search-completed-invalid";
+    }
   },
   methods: {
     resetSearch() {
@@ -528,6 +484,7 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+        perPage:ctx.perPage,
         name_text: this.filterPrincipal.model,
         date_from: this.filter[1].model,
         date_to: this.filter[2].model,
@@ -536,9 +493,9 @@ export default {
         user_id: this.currentUser.user_id,
         role_id: this.currentUser.role_id,
         seller: this.filter[0].model,
-        modul: this.$route.meta.module,
+        modul: this.$route.meta.module
       });
-      return promise.then((data) => {
+      return promise.then(data => {
         const items = data.data.data;
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
@@ -549,7 +506,7 @@ export default {
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
         if (items != null) {
-          items.map((item) => {
+          items.map(item => {
             item.attemps_count =
               item.attemps == null ? "" : JSON.parse(item.attemps).length;
           });
@@ -571,8 +528,8 @@ export default {
     },
     closeTrackingStatus() {
       this.modalTrackingStatus = false;
-    },
-  },
+    }
+  }
 };
 </script>
 

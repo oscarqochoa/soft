@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 // Modules
 import ecommerceStoreModule from '@/views/apps/e-commerce/eCommerceStoreModule'
 import app from '@/store/app'
@@ -22,6 +21,7 @@ import MessageStore from '@/store/message'
 import SidebarStore from '@/store/sidebar'
 
 import SocialNetworkStore from '@/views/social-network/store'
+import SchedulesStore from '@/views/commons/components/schedules/store'
 
 Vue.use(Vuex)
 
@@ -41,6 +41,7 @@ const initialState = {
   UserStore: { ...UserStore.state },
   MessageStore: { ...MessageStore.state },
   SidebarStore: { ...SidebarStore.state },
+  SchedulesStore: { ...SchedulesStore.state },
 }
 
 export default new Vuex.Store({
@@ -64,6 +65,7 @@ export default new Vuex.Store({
     UserStore,
     MessageStore,
     SidebarStore,
+    SchedulesStore,
   },
   mutations: {
     resetState(state) {
@@ -71,6 +73,9 @@ export default new Vuex.Store({
         Object.assign(state[key], initialState[key])
       })
     },
+  },
+  actions: {
+
   },
   strict: process.env.DEV,
 })

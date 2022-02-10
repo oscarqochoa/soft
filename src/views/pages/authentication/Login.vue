@@ -225,8 +225,14 @@
 
 <script>
 /* eslint-disable global-require */
+<<<<<<< HEAD
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
+=======
+import { ValidationProvider, ValidationObserver } from "vee-validate";
+import VuexyLogo from "@core/layouts/components/Logo.vue";
+import subscribePusher from '@/pusher'
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
 import {
   BRow,
   BCol,
@@ -278,10 +284,17 @@ export default {
   mixins: [togglePasswordVisibility],
   data() {
     return {
+<<<<<<< HEAD
       status: '',
       password: '123456',
       userEmail: 'rogerdtfs@gmail.com',
       sideImg: require('@/assets/images/pages/login-v2.svg'),
+=======
+      status: "",
+      password: "Soft@@2022",
+      userEmail: "rogerdtfs@gmail.com",
+      sideImg: require("@/assets/images/pages/login-v2.svg"),
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
 
       // validation rules
       required,
@@ -332,6 +345,7 @@ export default {
               this.$router
                 .replace(getHomeRouteForLoggedInUser(userData.roleName))
                 .then(() => {
+                  subscribePusher()
                   this.$toast({
                     component: ToastificationContent,
                     position: 'top-right',

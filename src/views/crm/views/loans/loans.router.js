@@ -4,6 +4,7 @@ export default [
   {
     path: "/crm/loans",
     name: "loans-crm",
+
     redirect: "/crm/loans/my-loans",
     component: LoansComponent,
     children: [
@@ -14,6 +15,13 @@ export default [
         meta: {
           tab: 1,
           module: 2,
+          pageTitle: "Loans",
+          breadcrumb: [
+            {
+              text: "My Loans",
+              active: true,
+            },
+          ],
           route: "crm",
         },
       },
@@ -25,6 +33,13 @@ export default [
           tab: 2,
           module: 2,
           route: "crm",
+          pageTitle: "Loans",
+          breadcrumb: [
+            {
+              text: "Loans By Module",
+              active: true,
+            },
+          ],
         },
       },
     ],

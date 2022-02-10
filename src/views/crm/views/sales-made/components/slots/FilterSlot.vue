@@ -18,8 +18,14 @@
             <span>
               <h3>Advanced Search</h3>
             </span>
-            <span class="cursor-pointer" v-b-toggle.sidebar-right>
-              <amg-icon icon="XIcon" size="20" />
+            <span
+              v-b-toggle.sidebar-right
+              class="cursor-pointer"
+            >
+              <amg-icon
+                icon="XIcon"
+                size="20"
+              />
             </span>
           </div>
         </template>
@@ -34,7 +40,7 @@
               <b-button
                 v-b-toggle.sidebar-right
                 variant="info"
-                @click="$emit('reset-all-filters')"
+                @click="resetFiltersButtons"
               >
                 Reset
               </b-button>
@@ -267,6 +273,9 @@ export default {
     this.filterPrincipal.model = ''
   },
   methods: {
+    resetFiltersButtons() {
+      this.$emit('reset-all-filters')
+    },
     resetFilter() {
       this.filter.map(fil => {
         fil.model = null

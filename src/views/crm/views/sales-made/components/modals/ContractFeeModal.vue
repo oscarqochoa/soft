@@ -1,12 +1,14 @@
 <template>
   <validation-observer ref="form">
     <b-modal
-      v-model="modal.contract_fee"
+      v-model="ownControl"
       title-class="h3 text-white font-weight-bolder"
       size="lg"
-      title="CONTRACT FEE"
+      modal-class="modal-primary"
+      title="Contract Fee"
       scrollable
       :hide-footer="valorEdit"
+      @hide="closeModal(false)"
     >
       <program-client-header
         :client="contractFee.clientName"
@@ -33,11 +35,14 @@
             <b-col class="d-flex align-items-center">
               <span>Initial Payment:</span>
             </b-col>
-            <b-col class="d-flex align-items-center">
+            <b-col class="d-flex align-items-center justify-content-between">
               <span>$</span>
-              <p v-if="contractFee.initialPaymentStatus != 2">
+              <span
+                v-if="contractFee.initialPaymentStatus != 2"
+                class="text-danger"
+              >
                 Pending
-              </p>
+              </span>
               <money
                 v-else
                 v-model="initialPayment"
@@ -62,25 +67,35 @@
             </b-col>
           </b-row>
           <b-row class="mt-1">
-            <b-col class="d-flex align-items-center">
+            <b-col
+              cols="6"
+              class="d-flex align-items-center"
+            >
               <span>Monthly Payment:</span>
             </b-col>
-            <validation-provider
-              v-slot="{ errors }"
-              name="monthlyAmount"
-              rules="required|validate-amount"
+            <b-col
+              cols="1"
+              class="d-flex align-items-center justify-content-center"
             >
-              <b-col class="d-flex align-items-center justify-content-between">
-                <span>$</span>
+              <span>$</span>
+            </b-col>
+            <b-col class="d-flex align-items-center justify-content-between">
+              <validation-provider
+                v-slot="{ errors }"
+                name="monthlyAmount"
+                rules="required|validate-amount"
+              >
                 <money
                   v-model="monthlyAmount"
-                  class="form-control w-75 text-right"
-                  :class="{'border-danger rounded': errors[0]}"
+                  class="form-control text-right"
+                  :class="{'border-danger rounded': errors[0] && monthlyPaymentController}"
                   v-bind="{precision: 2}"
                   :disabled="contractSale.program_id == 2 || contractSale.program_id == 4 || valorEdit"
+                  @change.native="monthlyPaymentController = true"
                 />
-              </b-col>
-            </validation-provider>
+              </validation-provider>
+            </b-col>
+
           </b-row>
           <b-row class="mt-1">
             <b-col>
@@ -111,12 +126,13 @@
                 v-slot="{errors}"
                 name="methodPayment"
                 rules="required"
+                @change="methodPaymentController = true"
               >
                 <b-form-radio-group
                   v-model="methodPayment"
                   :options="[{text: 'Credit Card', value: 0}, {text: 'Others', value: 1}]"
                   :disabled="valorEdit"
-                  :class="{'border-danger rounded' : errors[0]}"
+                  :class="{'border-danger rounded' : errors[0] && methodPaymentController}"
                 />
               </validation-provider>
             </b-col>
@@ -230,7 +246,6 @@
                   :class="{'border-danger rounded' : errors[0]}"
                 />
               </validation-provider>
-
             </b-col>
           </b-row>
         </b-col>
@@ -262,12 +277,11 @@
             <b-col class="d-flex align-items-center justify-content-end">
               <b-button
                 v-if="!valorEdit"
-                variant="important"
+                variant="success"
                 size="sm"
                 @click="addCardModal = true"
               >
-                <feather-icon icon="PlusIcon" />
-                Add
+                <feather-icon icon="PlusIcon" />Add
               </b-button>
             </b-col>
           </b-row>
@@ -275,13 +289,13 @@
       </b-row>
       <template #modal-footer>
         <b-row class="w-100">
-          <b-col class="d-flex align-items-center justify-content-center">
+          <b-col class="d-flex align-items-center justify-content-end">
             <b-button
               variant="primary"
-              size="sm"
+              :disabled="(!cardId && methodPayment === 0 && cardType === 0)"
               @click="saveContract"
             >
-              Save
+              Submit
             </b-button>
           </b-col>
         </b-row>
@@ -331,6 +345,7 @@ export default {
   },
   data() {
     return {
+      ownControl: false,
       cards: [],
       methodPayment: '',
       cardType: '',
@@ -340,7 +355,7 @@ export default {
       fee: 0,
       initialPayment: 0,
       perPay: 0,
-      monthlyAmount: 0,
+      monthlyAmount: '',
       months: 0,
       fieldsT1: [
         {
@@ -380,6 +395,8 @@ export default {
       yearCFee: null,
       dayCFee: null,
       monthCFee: null,
+      methodPaymentController: false,
+      monthlyPaymentController: false,
     }
   },
   computed: {
@@ -387,10 +404,12 @@ export default {
       currentUser: 'auth/currentUser',
     }),
     valorEdit() {
-      return this.contractFee.editModal == false
-          || this.contractFee.statusSale == 2
-          || this.contractFee.statusSale == 4
-          || this.contractSale.st == 1
+      return (
+        this.contractFee.editModal == false
+        || this.contractFee.statusSale == 2
+        || this.contractFee.statusSale == 4
+        || this.contractSale.st == 1
+      )
     },
   },
   watch: {
@@ -400,13 +419,16 @@ export default {
       }
     },
     cardType(val) {
-      if (val === '0') {
+      if (val === 0) {
         this.yearCFee = this.$moment()._d.getFullYear()
         this.monthCFee = this.$moment()._d.getMonth() + 2
         if (this.monthCFee === 13) {
           this.monthCFee = 1
           this.yearCFee += 1
         }
+      } else {
+        this.yearCFee = ''
+        this.monthCFee = ''
       }
     },
   },
@@ -418,60 +440,86 @@ export default {
       await this.getContractSales()
       this.perPay = this.fee - this.initialPayment
       if (this.contractSale.program_id == 2) {
-        this.monthlyAmount = 0
+        this.monthlyAmount = this.fee
         this.months = 0
       } else if (this.monthlyAmount > 0) {
         this.months = Math.ceil(this.perPay / this.monthlyAmount)
         if (this.months < 1) this.months = 0
       }
       this.cardId = this.contractSale.card_id
-      this.years = this.range(2020, new Date().getFullYear() + 1)
+      const add = parseInt(this.$moment().format('MM'), 10) === 12 ? 1 : 0
+      this.years = this.range(2020, new Date().getFullYear() + add)
       this.removePreloader()
+      this.ownControl = true
     } catch (error) {
       this.showErrorSwal(error)
       this.removePreloader()
     }
   },
   methods: {
+    closeModal(reload = false) {
+      this.ownControl = false
+      this.$emit('close')
+      if (reload) {
+        this.$emit('reload')
+      }
+    },
+
     async saveContract() {
+      this.monthlyPaymentController = true
+      this.methodPaymentController = true
       const result = await this.$refs.form.validate()
       if (result) {
         const params = {
           card_id: this.cardId,
           charge: this.charge,
           day_payment: this.dayCFee,
-          initial_amount: (this.contractSale.initial_amount) ? this.contractSale.initial_amount.toString() : '',
-          method_payment: (this.methodPayment === 0 || this.methodPayment === 1) ? this.methodPayment.toString() : '',
+          initial_amount: this.contractSale.initial_amount
+            ? this.contractSale.initial_amount.toString()
+            : '',
+          method_payment:
+            this.methodPayment === 0 || this.methodPayment === 1
+              ? this.methodPayment.toString()
+              : '',
           month_cfee: this.monthCFee,
-          monthly_amount: (this.monthlyAmount) ? this.monthlyAmount.toString() : '',
+          monthly_amount: this.monthlyAmount
+            ? this.monthlyAmount.toString()
+            : '',
           months: this.months,
           sale_id: this.contractFee.saleId,
-          type_payment: (this.cardType === 0 || this.cardType === 1) ? this.cardType.toString() : '',
-          year_cfee: (this.yearCFee) ? this.yearCFee.toString() : '',
+          type_payment:
+            this.cardType === 0 || this.cardType === 1
+              ? this.cardType.toString()
+              : '',
+          year_cfee: this.yearCFee ? this.yearCFee.toString() : '',
         }
         this.addPreloader()
         try {
-          const response = await amgApi.post('/insertContract', params)
+          const response = await amgApi.post(
+            '/sales-made/insert-contract',
+            params,
+          )
           if (response.status === 200) {
+            this.removePreloader()
             await this.showSuccessSwal('Contract save succesfully')
-            this.$emit('close')
-            this.$emit('reload')
-            this.removePreloader()
+            this.closeModal(true)
           } else {
-            await this.showErrorSwal()
-            this.$emit('close')
             this.removePreloader()
+            await this.showErrorSwal()
+            this.closeModal(false)
           }
         } catch (error) {
-          await this.showErrorSwal()
-          this.$emit('close')
           this.removePreloader()
+          await this.showErrorSwal()
+          this.closeModal(false)
         }
       }
     },
     async getCards() {
       try {
-        this.cards = await amgApi.post('/searchcards', { id: this.contractFee.id })
+        this.cards = await window.amgApi.post('/clients/search-cards-clients', {
+          id: this.contractFee.id,
+        })
         if (this.cards.status === 200) {
           this.cards = this.cards.data
         } else {
@@ -483,7 +531,7 @@ export default {
     },
     async getPaymentsDays() {
       try {
-        this.paymentDays = await amgApi.get('/paymentdays')
+        this.paymentDays = await amgApi.get('/commons/get-payment-days')
         if (this.paymentDays.status === 200) {
           this.paymentDays = this.paymentDays.data
         } else {
@@ -495,13 +543,15 @@ export default {
     },
     async getContractSales() {
       try {
-        const data = await amgApi.post('/contractsales', { id: this.contractFee.saleId })
+        const data = await amgApi.post('/sales-made/get-contract-sales', {
+          id: this.contractFee.saleId,
+        })
         if (data.status === 200) {
           [this.contractSale] = data.data
           this.fee = parseFloat(this.contractSale.fee)
           this.initialPayment = parseFloat(this.contractSale.initial_amount)
           if (this.contractSale.program_id == 2) this.monthlyAmount = this.fee
-          else this.monthlyAmount = parseFloat(this.contractSale.monthly_amount)
+          else { this.monthlyAmount = parseFloat(this.contractSale.monthly_amount) }
           this.methodPayment = this.contractSale.method_payment
           this.cardType = this.contractSale.type_payment
           this.dayCFee = this.contractSale.day_payment
@@ -522,7 +572,10 @@ export default {
     },
     async changeCharge(checked) {
       if (checked === false) {
-        const response = await this.showConfirmSwal('Desactivate Charge', 'Are you sure to desactivate the charge?')
+        const response = await this.showConfirmSwal(
+          'Desactivate Charge',
+          'Are you sure to desactivate the charge?',
+        )
         if (!response.isConfirmed) this.charge = !this.charge
       }
     },
@@ -531,7 +584,7 @@ export default {
 </script>
 
 <style scoped>
-input:disabled{
+input:disabled {
   background-color: transparent;
 }
 </style>

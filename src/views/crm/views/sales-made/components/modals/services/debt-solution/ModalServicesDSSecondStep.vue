@@ -12,45 +12,59 @@
           <b-row
             :class="'bg-'+skin"
             class="px-1 py-50 text-uppercase"
-          >
-            Current Situation with current payments
-          </b-row>
+          >Current Situation with current payments</b-row>
           <b-row>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0"
+            >
               <span>Current balance owing</span>
               <span class="font-weight-bolder">{{ "$ " + this.total_balance }}</span>
             </b-col>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0"
+            >
               <span>Mothly credit to principal</span>
-              <span class="font-weight-bolder"> {{ "$ " + this.mont5 }} </span>
+              <span class="font-weight-bolder">{{ "$ " + this.mont5 }}</span>
             </b-col>
           </b-row>
           <b-row>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0"
+            >
               <span>Annual interest rate</span>
               <span class="font-weight-bolder">{{ this.total_interest + " %" }}</span>
             </b-col>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0"
+            >
               <span>Current Payment</span>
-              <span class="font-weight-bolder">{{ "$ " + this.total_monthly }} </span>
+              <span class="font-weight-bolder">{{ "$ " + this.total_monthly }}</span>
             </b-col>
           </b-row>
           <b-row>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0"
+            >
               <span>Annual interest charged</span>
               <span class="font-weight-bolder">{{ "$ " + this.mont3 }}</span>
             </b-col>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0"
+            >
               <span>Daily interest charge</span>
-              <span class="font-weight-bolder"> {{ "$ " + this.mont7 }} </span>
+              <span class="font-weight-bolder">{{ "$ " + this.mont7 }}</span>
             </b-col>
           </b-row>
           <b-row>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0"
+            >
               <span>Monthly Interest Charged</span>
               <span class="font-weight-bolder">{{ "$ " + this.mont4 }}</span>
             </b-col>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0" />
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0"
+            />
           </b-row>
           <b-row class="mt-1">
             <b-col md="3">
@@ -60,9 +74,7 @@
               <div
                 :class="'bg-'+skin"
                 class="py-1 px-1 font-weight-bolder text-center rounded"
-              >
-                {{ "$ " + this.total_monthly }}
-              </div>
+              >{{ "$ " + this.total_monthly }}</div>
             </b-col>
             <b-col md="3">
               <p class="text-center font-weight-bolder">
@@ -71,9 +83,7 @@
               <div
                 :class="'bg-'+skin"
                 class="py-1 px-1 font-weight-bolder text-center rounded"
-              >
-                {{ this.mont9 }}
-              </div>
+              >{{ this.mont9 }}</div>
             </b-col>
             <b-col md="3">
               <p class="text-center font-weight-bolder">
@@ -82,9 +92,7 @@
               <div
                 :class="'bg-'+skin"
                 class="py-1 px-1 font-weight-bolder text-center rounded"
-              >
-                {{ this.mont10 }}
-              </div>
+              >{{ this.mont10 }}</div>
             </b-col>
             <b-col md="3">
               <p class="text-center font-weight-bolder">
@@ -93,24 +101,24 @@
               <div
                 :class="'bg-'+skin"
                 class="py-1 px-1 font-weight-bolder text-center rounded"
-              >
-                {{ "$ " + this.mont11 }}
-              </div>
+              >{{ "$ " + this.mont11 }}</div>
             </b-col>
           </b-row>
         </b-col>
         <b-col class="ml-1">
           <b-row
             class="px-1 bg-info text-white py-50 text-uppercase"
-          >
-            Situation with AMG DEBT SOLUTION
-          </b-row>
+          >Situation with AMG DEBT SOLUTION</b-row>
           <b-row>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0"
+            >
               <span>Total due</span>
               <span class="font-weight-bolder">{{ "$ " + this.mont12 }}</span>
             </b-col>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0"
+            >
               <span>Monthly payment</span>
               <span>
                 <ValidationProvider
@@ -130,13 +138,17 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0"
+            >
               <span>Estimated annual interes rate</span>
               <span class="font-weight-bolder">0.00 %</span>
             </b-col>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0"
+            >
               <span>Retainer Fee</span>
-              <span class="font-weight-bolder">{{ "$ " + this.mont15 }} </span>
+              <span class="font-weight-bolder">{{ "$ " + this.mont15 }}</span>
               <b-form-select
                 v-model="porctrf"
                 class="w-25 font-weight-bolder"
@@ -154,11 +166,15 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0"
+            >
               <span>Annual interest charged</span>
               <span class="font-weight-bolder">$ 0.00</span>
             </b-col>
-            <b-col class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0">
+            <b-col
+              class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0"
+            >
               <span>Settlement cost</span>
               <b-form-select
                 id="mont13"
@@ -181,9 +197,9 @@
               <p class="text-center font-weight-bolder">
                 Monthly payment
               </p>
-              <div class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded">
-                {{ "$ " + this.mont14 }}
-              </div>
+              <div
+                class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded"
+              >{{ "$ " + this.mont14 }}</div>
             </b-col>
             <b-col md="3">
               <p class="text-center font-weight-bolder">
@@ -209,9 +225,9 @@
               <p class="text-center font-weight-bolder font-small-3">
                 Estimated Savings
               </p>
-              <div class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded">
-                {{ "$ " + this.mont18 }}
-              </div>
+              <div
+                class="py-1 px-1 bg-info text-white font-weight-bolder text-center rounded"
+              >{{ "$ " + this.mont18 }}</div>
             </b-col>
           </b-row>
           <b-row class="mt-1 d-flex align-items-center">
@@ -268,8 +284,27 @@ export default {
       mont18: '',
       inputDisable: false,
       arraySettlementCost: [
-        5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-        24, 25,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
       ],
       percentajes: [
         { value: '0.0', label: '0%' },
@@ -360,7 +395,8 @@ export default {
         }
         if (type == 1 || type == 2) {
           return await this.axiosNext(id, type)
-        } if (type == 4) {
+        }
+        if (type == 4) {
           await this.saveant(id, type)
         } else if (this.dato12 == null || this.dato12 == '') {
           this.errorGoal = true
@@ -382,11 +418,17 @@ export default {
     async prevfirst(id, type) {
       try {
         this.addPreloader()
-        const response = await amgApi.post('/deletesave', {
+        const response = await amgApi.post('/sale/delete-leyend-states-ds', {
           type,
           id,
-          event: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? null : this.salesClient.event_id,
-          account: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? this.salesClient.account_id : null,
+          event:
+            this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5
+              ? null
+              : this.salesClient.event_id,
+          account:
+            this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5
+              ? this.salesClient.account_id
+              : null,
         })
         if (response.status === 200) {
           // this.leyendDebsolution();
@@ -405,22 +447,35 @@ export default {
         this.validateMoney = true
         const success = await this.$refs.form.validate()
         if (success) {
-          const response = await amgApi.post('/savefirst', {
-            type,
-            id,
-            event: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? null : this.salesClient.event_id,
-            account: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? this.salesClient.account_id : null,
-            total_due: this.mont12,
-            cost: this.mont13,
-            monthly: this.mont14,
-            porctrf: this.porctrf,
-            retainer: this.mont15,
-            months: this.mont16,
-            years: this.mont17,
-            estimated: this.mont18,
-            id_history: this.id_history,
-            id_analisis: this.id_analisis,
-          })
+          const response = await amgApi.post(
+            '/sales-made/debt-solution/save-first-debt-solution',
+            {
+              type,
+              id,
+              event:
+                this.typeModal === 3
+                || this.typeModal === 4
+                || this.typeModal === 5
+                  ? null
+                  : this.salesClient.event_id,
+              account:
+                this.typeModal === 3
+                || this.typeModal === 4
+                || this.typeModal === 5
+                  ? this.salesClient.account_id
+                  : null,
+              total_due: this.mont12,
+              cost: this.mont13,
+              monthly: this.mont14,
+              porctrf: this.porctrf,
+              retainer: this.mont15,
+              months: this.mont16,
+              years: this.mont17,
+              estimated: this.mont18,
+              id_history: this.id_history,
+              id_analisis: this.id_analisis,
+            },
+          )
           if (response.status === 200) {
             if (type == 4) {
               if (this.salesClient.account_id) {
@@ -440,25 +495,41 @@ export default {
         this.validateMoney = true
         const success = await this.$refs.form.validate()
         if (success) {
-          const result = await this.showConfirmSwal('Are you sure of continue ?', 'Before finalizing you must save.')
+          const result = await this.showConfirmSwal(
+            'Are you sure of continue ?',
+            'Before finalizing you must save.',
+          )
           if (result.value) {
             this.addPreloader()
-            const response = await amgApi.post('/savefirst', {
-              type,
-              id,
-              event: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? null : this.salesClient.event_id,
-              account: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? this.salesClient.account_id : null,
-              total_due: this.mont12,
-              cost: this.mont13,
-              monthly: this.mont14,
-              porctrf: this.porctrf,
-              retainer: this.mont15,
-              months: this.mont16,
-              years: this.mont17,
-              estimated: this.mont18,
-              id_history: this.id_history,
-              id_analisis: this.id_analisis,
-            })
+            const response = await amgApi.post(
+              '/sales-made/debt-solution/save-first-debt-solution',
+              {
+                type,
+                id,
+                event:
+                  this.typeModal === 3
+                  || this.typeModal === 4
+                  || this.typeModal === 5
+                    ? null
+                    : this.salesClient.event_id,
+                account:
+                  this.typeModal === 3
+                  || this.typeModal === 4
+                  || this.typeModal === 5
+                    ? this.salesClient.account_id
+                    : null,
+                total_due: this.mont12,
+                cost: this.mont13,
+                monthly: this.mont14,
+                porctrf: this.porctrf,
+                retainer: this.mont15,
+                months: this.mont16,
+                years: this.mont17,
+                estimated: this.mont18,
+                id_history: this.id_history,
+                id_analisis: this.id_analisis,
+              },
+            )
             if (response.status === 200) {
               this.functionGeneral()
               this.$emit('nextStep')
@@ -476,10 +547,23 @@ export default {
     },
     async allDebtSolution() {
       try {
-        const response = await amgApi.post('/salesmadeds', {
-          event: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? null : this.salesClient.event_id,
-          account: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? this.salesClient.account_id : null,
-        })
+        const response = await amgApi.post(
+          '/sales-made/debt-solution/get-credits-debt-solution',
+          {
+            event:
+              this.typeModal === 3
+              || this.typeModal === 4
+              || this.typeModal === 5
+                ? null
+                : this.salesClient.event_id,
+            account:
+              this.typeModal === 3
+              || this.typeModal === 4
+              || this.typeModal === 5
+                ? this.salesClient.account_id
+                : null,
+          },
+        )
         if (response.status === 200) {
           const creditors = response.data
           if (creditors.length > 0) {
@@ -494,10 +578,16 @@ export default {
             this.total_interest = creditors[0].total_interest
             this.id_history = creditors[0].id_history
             this.id_analisis = creditors[0].id_analisis
-            this.mont14 = creditors[0].monthly_payment == null ? 0 : creditors[0].monthly_payment
+            this.mont14 = creditors[0].monthly_payment == null
+              ? 0
+              : creditors[0].monthly_payment
             this.mont13 = creditors[0].cost
             // eslint-disable-next-line no-nested-ternary
-            this.porctrf = creditors[0].pcrf == null ? 0.1 : creditors[0].pcrf == '0.10' ? 0.1 : creditors[0].pcrf
+            this.porctrf = creditors[0].pcrf == null
+              ? 0.1
+              : creditors[0].pcrf == '0.10'
+                ? 0.1
+                : creditors[0].pcrf
           } else {
             this.validatenext1 = false
             this.total_balance = ''
@@ -537,7 +627,7 @@ export default {
 </script>
 
 <style>
-select:disabled{
+select:disabled {
   background-color: transparent !important;
 }
 </style>

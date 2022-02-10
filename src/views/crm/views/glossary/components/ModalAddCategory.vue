@@ -2,7 +2,7 @@
   <div>
     <b-modal
       modal
-       title="CREATE CATEGORY"
+      title="CREATE CATEGORY"
       v-model="ifModalCardCategory"
       size="sm"
       modal-class="modal-primary"
@@ -20,16 +20,16 @@
               rules="required"
               v-slot="{ errors }"
             >
-              <b-form-group label="">
+              <b-form-group label>
                 <b-input-group
                   prepend="NAME"
                   size="md"
                   class="badge-name-group"
-                  style=""
+                  style
                 >
                   <b-form-input
                     v-model="category"
-                    :class="{ 'border border-danger': errors[0] }"
+                    :class="{ 'border-danger': errors[0] }"
                   />
                 </b-input-group>
               </b-form-group>
@@ -44,9 +44,8 @@
             style="border-radius: 5px !important"
             @click="createCategory()"
             v-if="!spinnerBtnCg"
+            >Create</b-button
           >
-             Create
-          </b-button>
           <b-button
             variant="success"
             style="border-radius: 5px !important"
@@ -62,7 +61,7 @@
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
+import GlossarydService from "../service/glossary.service"
 export default {
   props: {
     ifModalCard: {
@@ -81,43 +80,39 @@ export default {
       this.$emit("close", false);
     },
     createCategory() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
         } else {
-            this.showConfirmSwal("CREATE GLOSSSARY","Are you sure?").then((result) => {
-              if (result.value) {
-                this.spinnerBtnCg = true;
-                // this.selectCategory = null;
-                const params = { name: this.category };
-                amgApi
-                  .post("/glossary/create-category", params)
-                  .then((res) => {
-                    //   this.selectCategory = null;
-                    //   this.category = null;
-                    //   this.getCategories();
-                    this.showToast(
+          const confirm = await this.showConfirmSwal(
+            "CREATE GLOSSSARY",
+            "Are you sure?"
+          );
+          if (confirm.isConfirmed) {
+            try {
+              this.spinnerBtnCg = true;
+              const params = { name: this.category };
+              const data =  await GlossarydService.createCategory(params)
+              this.showToast(
                       "success",
                       "top-right",
                       "Success",
                       "CheckIcon",
                       "Category Created"
                     );
-                    this.spinnerBtnCg = false;
-                    this.$emit("close", false);
-                  })
-                  .catch((error) => {
-                    this.showToast(
+              this.spinnerBtnCg = false;
+              this.$emit("close", false);
+            } catch (error) {
+              this.showToast(
                       "danger",
                       "top-right",
                       "Error",
                       "XIcon",
                       "Something went wrong!"
                     );
-                    console.log(error);
-                  });
-              }
-            });
+              console.log(error);
+            }
+          }
         }
       });
     },

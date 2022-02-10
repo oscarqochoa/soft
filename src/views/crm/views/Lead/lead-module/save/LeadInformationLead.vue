@@ -22,7 +22,9 @@
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="label"
               :options="G_SELLERS"
+              :clearable="false"
               :reduce="el => el.id"
+              :disabled="isClient"
             />
           </b-form-group>
         </validation-provider>
@@ -44,11 +46,15 @@
                 label="label"
                 :options="G_STATUS_LEADS"
                 style="width: 1%; flex: 1 1 auto;"
+                :clearable="false"
                 :reduce="el => el.id"
                 :disabled="userData.id && disabled.leadstatus_id"
               />
               <template v-if="userData.id">
-                <b-input-group-append v-if="!disabled.leadstatus_id" class="border-right">
+                <b-input-group-append
+                  v-if="!disabled.leadstatus_id"
+                  class="border-right"
+                >
                   <b-button
                     variant="outline-primary"
                     class="btn-sm"
@@ -77,9 +83,7 @@
                   @click="onModalTrackingChangeOpen(9, 'STATUS(LEAD)')"
                 >
                   <b-input-group-text>
-                    <amg-icon
-                      icon="ListIcon"
-                    />
+                    <amg-icon icon="ListIcon" />
                   </b-input-group-text>
                 </b-input-group-append>
               </template>
@@ -105,6 +109,8 @@
               label="label"
               :options="G_SOURCE_LEADS"
               :reduce="el => el.id"
+              :clearable="false"
+              :disabled="isClient"
             />
           </b-form-group>
         </validation-provider>
@@ -125,6 +131,8 @@
               label="label"
               :options="G_SOURCE_NAMES"
               :reduce="el => el.id"
+              :clearable="false"
+              :disabled="isClient"
             />
           </b-form-group>
         </validation-provider>
@@ -134,9 +142,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
-  BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
+  BSidebar,
+  BForm,
+  BFormGroup,
+  BFormInput,
+  BFormInvalidFeedback,
+  BButton,
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 
@@ -144,7 +157,6 @@ import { required, alphaNum, email } from '@validations'
 import vSelect from 'vue-select'
 
 import formValidation from '@core/comp-functions/forms/form-validation'
-
 
 export default {
   components: {
@@ -165,13 +177,17 @@ export default {
   },
   props: {
     userData: {
-      required: true
+      required: true,
+    },
+    typeEdit: {
+      type: String,
+      default: 'lead',
     },
   },
   data() {
     return {
       alphaNum,
-      blankUserData: new Object,
+      blankUserData: new Object(),
       disabled: {
         leadstatus_id: true,
       },
@@ -188,89 +204,111 @@ export default {
       G_SOURCE_LEADS: 'CrmLeadStore/G_SOURCE_LEADS',
       G_SOURCE_NAMES: 'CrmGlobalStore/G_SOURCE_NAMES',
     }),
+    isClient() {
+      return this.typeEdit === 'client'
+    },
   },
-  created () {
+  created() {
     this.setDataBlank('userData')
   },
   setup(props, { emit }) {
-    const {
-      refFormObserver,
-      getValidationState,
-    } = formValidation(() => {})
+    const { refFormObserver, getValidationState } = formValidation(() => {})
 
     return {
       refFormObserver,
-      getValidationState
+      getValidationState,
     }
   },
   methods: {
     ...mapActions({
       A_UPDATE_FIELDS_LEAD: 'CrmLeadStore/A_UPDATE_FIELDS_LEAD',
+      A_GET_SELLERS: 'CrmGlobalStore/A_GET_SELLERS',
     }),
-    setDataBlank (key) {
-      this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`] = Object.assign({}, this[key])
+    ...mapMutations({
+      M_STATUS_LEADS_CLIENT: 'CrmLeadStore/M_STATUS_LEADS_CLIENT',
+    }),
+    setDataBlank(key) {
+      this[
+        `blank${key.charAt(0).toUpperCase()}${key.slice(1)}`
+      ] = { ...this[key] }
     },
-    resetElement (key, subkey) {
-      const object = this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`]
+    resetElement(key, subkey) {
+      const object = this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`]
       this[key][subkey] = object[subkey]
     },
-    capitalize (el) {
+    capitalize(el) {
       const element = this.userData[el]
       this.userData[el] = element.substr(0, 1).toUpperCase() + element.substr(1)
     },
-    toggleElement (key) {
+    toggleElement(key) {
       this.disabled[key] = !this.disabled[key]
-      if (this.disabled[key])
-        this.resetElement('userData', key)
+      if (this.disabled[key]) this.resetElement('userData', key)
     },
-    async onSubmitFields () {
+    async onSubmitFields() {
       this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          this.isPreloading(true)
-          const response = await this.A_UPDATE_FIELDS_LEAD({
-            id: this.currentUser.user_id,
-            id_lead: this.userData.id,
-            id_user: this.currentUser.user_id,
-            typee: 9,
-            street: null,
-            city: null,
-            state: null,
-            zipcode: null,
-            country: null,
-            other_street: null,
-            other_city: null,
-            other_state: null,
-            other_zipcode: null,
-            other_country: null,
-            phoneh: null,
-            phonem: null,
-            ssn: null,
-            itin: null,
-            other: null,
-            statusLead: this.userData.leadstatus_id,
-          })
+        .then(async result => {
+          if (result.value) {
+            this.isPreloading(true)
+            const response = await this.A_UPDATE_FIELDS_LEAD({
+              id: this.currentUser.user_id,
+              id_lead: this.userData.id,
+              id_user: this.currentUser.user_id,
+              typee: 9,
+              street: null,
+              city: null,
+              state: null,
+              zipcode: null,
+              country: null,
+              other_street: null,
+              other_city: null,
+              other_state: null,
+              other_zipcode: null,
+              other_country: null,
+              phoneh: null,
+              phonem: null,
+              ssn: null,
+              itin: null,
+              other: null,
+              statusLead: this.userData.leadstatus_id,
+            })
+            this.isPreloading(false)
+            if (this.isResponseSuccess(response)) {
+              this.blankUserData.leadstatus_id = this.userData.leadstatus_id
+              this.toggleElement('leadstatus_id')
+              this.showToast(
+                'success',
+                'top-right',
+                'Success!',
+                'CheckIcon',
+                'Successful operation',
+              )
+            } else {
+              this.showToast(
+                'warning',
+                'top-right',
+                'Warning!',
+                'AlertTriangleIcon',
+                `Something went wrong.${response.message}`,
+              )
+            }
+          }
+        })
+        .catch(error => {
+          console.log('spmething went wrong onSubmitFields: ', error)
           this.isPreloading(false)
-          if (this.isResponseSuccess(response)) {
-            this.blankUserData.leadstatus_id = this.userData.leadstatus_id
-            this.toggleElement('leadstatus_id')
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          } else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', 'Something went wrong.' + response.message)
-        }
-      }).catch(error => {
-        console.log('spmething went wrong onSubmitFields: ', error)
-        this.isPreloading(false)
-        this.showErrorSwal()
-      })
+          this.showErrorSwal()
+        })
     },
-    onModalTrackingChangeOpen (type, name) {
-      this.$emit('onModalTrackingChangeOpen', { type, name, mapFunction: (el) => ({
+    onModalTrackingChangeOpen(type, name) {
+      this.$emit('onModalTrackingChangeOpen', {
+        type,
+        name,
+        mapFunction: el => ({
           ...el,
           main_row: el.fields,
           main_row_hide: el.fields_secret,
           seeHideCell: false,
-        })
+        }),
       })
     },
   },
@@ -278,7 +316,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
+@import "@core/scss/vue/libs/vue-select.scss";
 
 #add-new-user-sidebar {
   .vs__dropdown-menu {

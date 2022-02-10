@@ -22,18 +22,14 @@
                     cols="4"
                     md="4"
                   >
-                    <p><strong>Lead</strong></p>
+                    <p>
+                      <strong>Lead</strong>
+                    </p>
                   </b-col>
                   <b-col cols="8" md="8" class="px-1">
-                    <div class="">
+                    <div class>
                       <p
-                        class="
-                          bg-important
-                          rounded
-                          text-white
-                          font-medium-1
-                          px-1
-                        "
+                        class="bg-important rounded text-white font-medium-1 px-1"
                         style="padding-top: 10px; padding-bottom: 10px"
                       >
                         <strong>{{ lead_name }}</strong>
@@ -47,7 +43,6 @@
         </b-row>
         <div>
           <b-table
-           
             ref="refClientsList"
             :items="data"
             :fields="arrayColumns"
@@ -57,15 +52,14 @@
             show-empty
             sticky-header="50vh"
           >
+            <template #table-busy>
+              <div class="text-center text-primary my-2">
+                <b-spinner class="align-middle mr-1"></b-spinner>
+                <strong>Loading ...</strong>
+              </div>
+            </template>
             <template #cell(plataform_ico)="data">
-              <div
-                class="
-                  d-flex
-                  flex-column
-                  justify-content-start
-                  align-items-start
-                "
-              >
+              <div class="d-flex flex-column justify-content-start align-items-start">
                 <img
                   v-if="data.item.plataform_ico != null"
                   :src="assetsImg + data.item.plataform_ico"
@@ -74,17 +68,8 @@
               </div>
             </template>
             <template #cell(created_name)="data">
-              <div
-                class="
-                  d-flex
-                  flex-column
-                  justify-content-start
-                  align-items-start
-                "
-              >
-                <span>
-                  {{ data.item.created_name }}
-                </span>
+              <div class="d-flex flex-column justify-content-start align-items-start">
+                <span>{{ data.item.created_name }}</span>
                 <div>{{ data.item.created_at | myGlobalDay }}</div>
                 <!-- <span>{{ data.item.date | myGlobalDay }}</span> -->
               </div>
@@ -101,14 +86,14 @@ import { amgApi } from "@/service/axios";
 export default {
   props: {
     modalTrackingStatus: {
-      type: Boolean,
+      type: Boolean
     },
     score_id: {
-      type: [String, Number],
+      type: [String, Number]
     },
     lead_name: {
-      type: [String, Number],
-    },
+      type: [String, Number]
+    }
   },
   data() {
     return {
@@ -121,34 +106,34 @@ export default {
           key: "status",
           label: "STATUS",
           class: "text-left",
-          sortable: false,
+          sortable: false
         },
         {
           key: "plataform_ico",
           label: "PROVIDER",
           class: "text-left",
-          sortable: false,
+          sortable: false
         },
         {
           key: "created_name",
           label: "CREATED BY",
           class: "text-left",
-          sortable: false,
+          sortable: false
         },
         {
           key: "note",
           label: "NOTE",
           class: "text-left",
-          sortable: false,
-        },
+          sortable: false
+        }
       ],
-      currentPage: "",
+      currentPage: ""
     };
   },
   computed: {
     statusSpinner() {
       return this.status;
-    },
+    }
   },
   methods: {
     closeModal() {
@@ -157,20 +142,20 @@ export default {
     getTrackingStatus() {
       this.status = true;
       amgApi
-        .post("/ncr-leads-get-tracking-status", {
-          score_id: this.score_id,
+        .post("/lead/ncr/get-lead-tracking-status-by-id", {
+          score_id: this.score_id
         })
-        .then((response) => {
+        .then(response => {
           if (response.status == 200) {
             this.data = response.data;
             this.status = false;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
           this.status = false;
         });
-    },
+    }
     // myProvider(ctx) {
     //   const promise = amgApi.post(`${ctx.apiUrl}`, {
     //     name_text: this.score_id,
@@ -184,7 +169,7 @@ export default {
   },
   created() {
     this.getTrackingStatus();
-  },
+  }
 };
 </script>
 

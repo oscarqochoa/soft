@@ -2,6 +2,7 @@
   <b-modal
     v-model="showModal"
     hide-footer
+    modal-class="modal-primary"
     title="New Folder"
     @hidden="hideModal"
   >
@@ -66,7 +67,7 @@ export default {
               name_folder: this.newFolderName,
               user_id: this.currentUser.user_id,
             }
-            await amgApi.post('/savefoldermodule', params)
+            await amgApi.post('/file-manager/save-module-folder', params)
             this.hideModalAndRefresh()
             this.showSuccessSwal()
           }

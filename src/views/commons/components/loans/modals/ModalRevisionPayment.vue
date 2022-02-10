@@ -43,6 +43,14 @@
             </div>
           </template>
 
+          <template #cell(file)="data">
+            <div v-if="data.value">
+              <b-link :href="data.value" download>
+                <b-icon icon="folder-fill" variant="warning" font-scale="1.5" />
+              </b-link>
+            </div>
+          </template>
+
           <template #cell(pay_status)="data">
             <div>
               <b-badge

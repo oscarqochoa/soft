@@ -6,9 +6,15 @@ import mixins from '@/mixins/general'
 
 const state = {
   S_CREDIT_CARDS: [],
+  CARDS_UPDATE:null
 }
-const getters = {}
+const getters = {
+  LISTCARDS: (state) => state.CARDS_UPDATE,
+}
 const mutations = {
+  SET_DATA_UPDATED(state,params){
+    state.CARDS_UPDATE = params
+  },
   SET_DATA (state, params) {
     Vue.set(state, params.destination, params.data)
   },
@@ -16,7 +22,7 @@ const mutations = {
     state[params.destination].push(params.data)
   },
   UNSHIFT_DATA (state, params) {
-    state[params.destination].unshift(params.data)
+    state[params.destination].unshift(params.data) 
   },
   REMOVE_DATA (state, params) {
     const index = state[params.destination].map(el => el.id).indexOf(params.id)
@@ -26,6 +32,9 @@ const mutations = {
   }
 }
 const actions = {
+  SET_DATA_CARDS_UPDATE({commit},params){
+    commit('SET_DATA_UPDATED',params)
+  },
   async A_GET_CREDIT_CARD ({ commit }, body) {
     try {
       const response = await CreditCardService.getCreditCard(body)

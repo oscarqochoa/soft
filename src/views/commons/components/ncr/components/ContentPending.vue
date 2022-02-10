@@ -14,7 +14,7 @@
         v-scrollbar
         slot="table"
         no-provider-filtering
-        :api-url="'/ncr-leads-search-pending-crm'"
+        :api-url="'/lead/ncr/search-pending-leads-crm'"
         ref="refClientsList"
         :items="myProvider"
         :fields="arrayColumns"
@@ -33,28 +33,20 @@
           </div>
         </template>
         <template #cell(lead_name)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
+          <div class="d-flex flex-column justify-content-start align-items-start">
             <router-link
-              class="select-lead-name text-important"
+              :class="textLink"
               :to="{
                 name: 'lead-show',
                 params: { id: data.item.lead_id },
               }"
               target="_blank"
-            >
-              {{ data.item.lead_name }}
-            </router-link>
+            >{{ data.item.lead_name }}</router-link>
           </div>
         </template>
         <template #cell(seller_name)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <span>
-              {{ data.item.seller_name }}
-            </span>
+          <div class="d-flex flex-column justify-content-start align-items-start">
+            <span>{{ data.item.seller_name }}</span>
             <div>{{ data.item.date | myGlobalDay }}</div>
             <!-- <span>{{ data.item.date | myGlobalDay }}</span> -->
           </div>
@@ -90,59 +82,81 @@
           ></feather-icon>
         </template>
         <template #cell(status)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center">
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-if="data.item.status_id == 1"
-              style="background-color: #38c172"
-              >{{ data.item.status }}</span
-            >
+              style="background-color: #38c172;
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;"
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 2"
-              style="background-color: #3490dc"
-              >{{ data.item.status }}</span
-            >
+              style="background-color: #3490dc;
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;"
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 3"
-              style="background-color: #e13232"
-              >{{ data.item.status }}</span
-            >
+              style="background-color: #e13232;
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;"
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 4"
-              style="background-color: #ffd46a"
-              >{{ data.item.status }}</span
-            >
+              style="background-color: #ffd46a;
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;"
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 5"
-              style="background-color: #ffd46a"
-              >{{ data.item.status }}</span
-            >
+              style="background-color: #ffd46a;
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;"
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 6"
-              style="background-color: #e13232"
-              >{{ data.item.status }}</span
-            >
+              style="background-color: #e13232;
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;"
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 7"
-              style="background-color: #eabc73"
-              >{{ data.item.status }}</span
-            >
+              style="background-color: #eabc73;
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;"
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 8"
-              style="background-color: #eabc73"
-              >{{ data.item.status }}</span
-            >
+              style="background-color: #eabc73;
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;"
+            >{{ data.item.status }}</span>
             <span
-              class="ncr-leads-status-successful"
+              class="ncr-leads-status-successful w-100"
               v-else-if="data.item.status_id == 9"
               style="
                 background-color: #e13232;
@@ -151,21 +165,21 @@
                 padding-left: 15px;
                 padding-right: 15px;
               "
-              >{{ data.item.status }}</span
-            >
+            >{{ data.item.status }}</span>
 
             <span
               class="ncr-leads-status-successful"
               v-else-if="data.item.status_id == 10"
-              style="background-color: #e13232"
-              >{{ data.item.status }}</span
-            >
+              style="background-color: #e13232;
+                color: white;
+                border-radius: 30px;
+                padding-left: 15px;
+                padding-right: 15px;"
+            >{{ data.item.status }}</span>
           </div>
         </template>
         <template #cell(tracking)="data">
-          <div
-            class="d-flex flex-column justify-content-center align-items-center"
-          >
+          <div class="d-flex flex-column justify-content-center align-items-center">
             <feather-icon
               icon="ListIcon"
               class="font-medium-4"
@@ -217,7 +231,7 @@ export default {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10,
+        perPage: 10
       },
       startPage: null,
       toPage: null,
@@ -227,50 +241,50 @@ export default {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: "",
+        model: ""
       },
       arrayColumns: [
         {
           key: "lead_name",
           label: "Lead Name",
           class: "text-left",
-          sortable: false,
+          sortable: false
         },
         {
           key: "seller_name",
           label: "Request By",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "admin_name",
           label: "Administrador",
           class: "text-left",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "status",
           label: "Status",
           class: "text-center",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "question_id",
           label: "QU",
           class: "text-left ",
           sortable: false,
-          visible: true,
+          visible: true
         },
         {
           key: "tracking",
           label: "Tracking",
           class: "text-center",
           sortable: false,
-          visible: true,
-        },
+          visible: true
+        }
       ],
       dato2: 4,
       dato1: "desc",
@@ -292,7 +306,7 @@ export default {
           options: [],
           reduce: "id",
           selectText: "user_name",
-          cols: 12,
+          cols: 12
         },
         {
           type: "datepicker",
@@ -306,9 +320,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
+          cols: 6
         },
         {
           type: "datepicker",
@@ -322,17 +336,17 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
-        },
-      ],
+          cols: 6
+        }
+      ]
     };
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   methods: {
     updateGrid() {
@@ -343,6 +357,7 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+        perPage:ctx.perPage,
         name_text: this.filterPrincipal.model,
         date_from: this.filter[1].model,
         date_to: this.filter[2].model,
@@ -351,9 +366,9 @@ export default {
         user_id: this.currentUser.user_id,
         role_id: this.currentUser.role_id,
         seller: this.filter[0].model,
-        modul: this.$route.meta.module,
+        modul: this.$route.meta.module
       });
-      return promise.then((data) => {
+      return promise.then(data => {
         const items = data.data.data;
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
@@ -378,9 +393,9 @@ export default {
 
     closeModalQuestionnaire() {
       this.modalQuestionnaire = false;
-    },
+    }
   },
-  created() {},
+  created() {}
 };
 </script>
 

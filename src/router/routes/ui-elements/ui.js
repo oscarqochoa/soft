@@ -50,4 +50,21 @@ export default [
       ],
     },
   },
+  {
+    path: '/ui/tabler',
+    name: 'ui-tabler',
+    component: () => import('@/views/ui/tabler/Tabler.vue'),
+    meta: {
+      pageTitle: 'Tabler',
+      breadcrumb: [
+        {
+          text: 'UI',
+        },
+        {
+          text: 'Tabler',
+          active: true,
+        },
+      ],
+    },
+  },
 ]

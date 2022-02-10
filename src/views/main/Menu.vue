@@ -11,7 +11,7 @@
           class="text-center mb-5 center-fix"
         >
           <router-link
-            v-if="item.module_route == 'crm' || item.module_route == 'socialnetwork'"
+            v-if="enviroment === 'deploy' ? item.module_route == 'crm' : (item.module_route == 'crm' || item.module_route == 'socialnetwork')"
             :to="{ path: item.module_route }"
             class="card-logo"
           >
@@ -65,6 +65,7 @@ export default {
     return {
       menuHidden: this.$store.state.appConfig.layout.menu.hidden,
       navbarConfig: this.$store.state.appConfig.layout.navbar.type,
+      enviroment: process.env.VUE_APP_ENVIROMENT,
     }
   },
   computed: {

@@ -1,6 +1,8 @@
-export default  {
-    title: 'NCR',
-    icon: 'ArchiveIcon',
-    route: 'ncr-pending',
-    
-}
+export default [
+  {
+    title: "NCR",
+    icon: "FileMinusIcon",
+    route: "ncr-crm",
+    tag: 0,
+  },
+];

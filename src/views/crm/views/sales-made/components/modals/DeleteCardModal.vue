@@ -4,6 +4,7 @@
       v-model="ifModalCard"
       title="Delete Credit Card"
       title-class="h3 text-white font-weight-bolder"
+      modal-class="modal-primary"
       hide-footer
       @hidden="closeModal"
     >
@@ -30,7 +31,7 @@
                   variant="danger"
                   @click="deletecard"
                 >
-                  <feather-icon icon="Trash2Icon" /> Delete
+                  <feather-icon icon="Trash2Icon" />Delete
                 </b-button>
               </b-col>
             </b-row>
@@ -56,12 +57,7 @@ export default {
       try {
         const success = await this.$refs.form.validate()
         if (success) {
-          const result = await this.$swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-          })
+          const result = await this.showConfirmSwal()
           if (result.value) {
             const params = {
               cardid: this.card_id,
@@ -70,7 +66,10 @@ export default {
               comment: this.commentary,
             }
             this.addPreloader()
-            const response = await amgApi.post('/deletecard', params)
+            const response = await amgApi.post(
+              '/note/first-note/delete-card-lead',
+              params,
+            )
             if (response.status === 200) {
               this.removePreloader()
               this.cards = response.data
@@ -86,7 +85,13 @@ export default {
             }
           }
         } else {
-          this.showToast('danger', 'top-right', 'Validation Error', 'XIcon', 'Comentary required')
+          this.showToast(
+            'danger',
+            'top-right',
+            'Validation Error',
+            'XIcon',
+            'Comentary required',
+          )
         }
       } catch (error) {
         this.showErrorSwal()

@@ -1,38 +1,52 @@
 <template>
   <b-navbar-nav class="nav">
-    <b-nav-item @click="$refs.clockIn.openClockInModal()" :id="`bookmark-clock-in`">
-      <clock-in ref="clockIn"></clock-in>
+    <b-nav-item :id="`bookmark-clock-in`">
+      <clock-in></clock-in>
     </b-nav-item>
     <b-nav-item
       :id="`bookmark-messages`"
-      :to="{name: 'amg-messages'}"
       v-b-tooltip.hover.top="'Messages'"
+      :to="{name: 'amg-messages'}"
     >
-      <messages></messages>
-    </b-nav-item>
-    <b-nav-item @click="$refs.stickyNotes.openStickyNotes()" :id="`bookmark-sticky-notes`">
-      <sticky-notes ref="stickyNotes"></sticky-notes>
-    </b-nav-item>
-    <b-nav-item @click="$refs.payStub.openPayStubModal()" :id="`bookmark-pay-stub`">
-      <pay-stub ref="payStub"></pay-stub>
+      <messages />
     </b-nav-item>
     <b-nav-item
-      @click="$refs.messenger.redirectToMessenger()"
+      :id="`bookmark-sticky-notes`"
+      @click="$refs.stickyNotes.openStickyNotes()"
+    >
+      <sticky-notes ref="stickyNotes" />
+    </b-nav-item>
+    <b-nav-item
+      :id="`bookmark-pay-stub`"
+      @click="$refs.payStub.openPayStubModal()"
+    >
+      <pay-stub ref="payStub" />
+    </b-nav-item>
+    <b-nav-item
+      v-b-tooltip.hover.top="'Appointments'"
+      @click="$refs.calendar.openAppointmentsModal()"
+    >
+      <calendar ref="calendar" />
+    </b-nav-item>
+    <b-nav-item
       :id="`bookmark-messenger`"
       v-b-tooltip.hover.top="'AMG Messenger'"
+      @click="$refs.messenger.redirectToMessenger()"
     >
-      <messenger ref="messenger"></messenger>
+      <messenger ref="messenger" />
     </b-nav-item>
   </b-navbar-nav>
 </template>
 
 <script>
-import StickyNotes from "./components/sticky-notes/StickyNotes.vue";
-import Appointments from "./components/appointments/Appointments.vue";
-import Messages from "./components/messages/Messages.vue";
-import Messenger from "./components/messenger/Messenger.vue";
-import PayStub from "./components/pay-stub/PayStub.vue";
-import ClockIn from "./components/schedules/ClockIn.vue";
+import StickyNotes from './components/sticky-notes/StickyNotes.vue'
+import Appointments from './components/appointments/Appointments.vue'
+import Messages from './components/messages/Messages.vue'
+import Messenger from './components/messenger/Messenger.vue'
+import PayStub from './components/pay-stub/PayStub.vue'
+import ClockIn from './components/schedules/ClockIn.vue'
+import Calendar from './components/calendar/Calendar.vue'
+
 export default {
   components: {
     StickyNotes,
@@ -40,9 +54,10 @@ export default {
     Messages,
     Messenger,
     PayStub,
-    ClockIn
-  }
-};
+    ClockIn,
+    Calendar,
+  },
+}
 </script>
 
 <style lang="scss" scoped>

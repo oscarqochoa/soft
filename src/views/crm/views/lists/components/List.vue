@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card no-body class="mb-1">
-      <div class="m-2">
+      <div class="m-2" v-if="statusCreateList">
         <b-row>
           <b-col
             cols="12"
@@ -12,7 +12,7 @@
           >
             <!-- <span
                         style="display: inline-block;margin-left: 10px;color: black;"
-                      >Total Leads Pending : 146789</span> -->
+            >Total Leads Pending : 146789</span>-->
           </b-col>
           <b-col
             cols="12"
@@ -21,12 +21,12 @@
             sm="6"
             class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
           >
-            <b-button variant="info" v-if="add" @click="addlist">
-              CREATE LIST
-            </b-button>
-            <b-button variant="danger" v-if="cancelList" @click="closelist">
-              CANCEL
-            </b-button>
+            <b-button variant="info" v-if="add" @click="addlist"
+              >CREATE LIST</b-button
+            >
+            <b-button variant="danger" v-if="cancelList" @click="closelist"
+              >CANCEL</b-button
+            >
           </b-col>
         </b-row>
       </div>
@@ -34,10 +34,8 @@
         <b-card
           no-body
           class="m-2"
-          style="
-            box-shadow: 0px 4px 4 px 0 rgb(200 200 200 /10%);
-            background-color: floralwhite;
-          "
+          style="box-shadow: 0px 4px 4 px 0 rgb(200 200 200 /10%)"
+          :style="`${classAdd}`"
         >
           <div class="m-2">
             <h3 style="color: #ff9f43 !important; display: inline-block">
@@ -57,8 +55,7 @@
                         multiple
                         :options="options"
                         label="user_name"
-                      >
-                      </v-select>
+                      ></v-select>
                       <small v-if="errors[0]" class="text-danger text-center"
                         >User {{ errors[0] }}</small
                       >
@@ -73,16 +70,15 @@
                       v-slot="{ errors }"
                     >
                       <b-form-input v-model="number" type="number" />
-                      <small v-if="errors[0]" class="text-danger text-center">
-                        Number {{ errors[0] }}</small
+                      <small v-if="errors[0]" class="text-danger text-center"
+                        >Number {{ errors[0] }}</small
                       >
                     </ValidationProvider>
                   </b-form-group>
                 </b-col>
                 <b-col cols="12">
                   <b-button variant="success" type="submit" @click="savegroup">
-                    <feather-icon icon="FileIcon" size="15"></feather-icon>
-                    SAVE
+                    <feather-icon icon="FileIcon" size="15"></feather-icon>SAVE
                   </b-button>
                 </b-col>
               </b-row>
@@ -92,7 +88,6 @@
       </div>
 
       <filter-slot
-        
         :filter="filter"
         :filter-principal="filterPrincipal"
         :total-rows="totalRows"
@@ -115,7 +110,7 @@
           table-class="text-nowrap"
           responsive="sm"
           show-empty
-          sticky-header="70vh"
+          sticky-header="50vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
@@ -137,7 +132,7 @@
                 {{ data.item.created_at }}
               </span>
               <span v-else>
-                {{ data.item.created_at | myGlobalDay }}
+                {{ data.item.created_at | myDateGlobalWithHour }}
               </span>
             </div>
           </template>
@@ -188,7 +183,7 @@
               v-if="!getRoles"
             >
               <b-button
-                v-if="data.item.cant > 0"
+                v-if="data.item.cant > 0 && data.item.created_at != 'Today'"
                 variant="warning"
                 class="ml-1 reset-radius btn-sm"
                 @click="
@@ -201,8 +196,24 @@
               >
                 <feather-icon icon="EyeIcon"></feather-icon>
               </b-button>
+
               <b-button
-                v-else
+                v-if="data.item.created_at == 'Today' && count_alltask==0"
+                variant="warning" disabled
+                class="ml-1 reset-radius btn-sm"
+              >
+                <feather-icon icon="EyeIcon"></feather-icon>
+              </b-button>
+              <b-button
+                v-if="data.item.created_at == 'Today' && count_alltask>0"
+                variant="warning"
+                class="ml-1 reset-radius btn-sm"
+                @click="openModalTaskToday()"
+              >
+                <feather-icon icon="EyeIcon"></feather-icon>
+              </b-button>
+              <b-button
+                v-if="data.item.cant <= 0 && data.item.created_at != 'Today'"
                 disabled
                 variant="warning"
                 class="ml-1 reset-radius btn-sm"
@@ -224,24 +235,36 @@
       :nameUser="nameUser"
       :id="id"
     ></modal-by-user>
+    <modal-task-today
+      v-if="modalTaskToday"
+      :modalTaskToday="modalTaskToday"
+      :currentUser="currentUser"
+      @close="closeModalTaskToday"
+      @updatingTasks="updatingTasks"
+    >
+    </modal-task-today>
   </div>
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-import ModalByUser from "../components/subcomponents/ModalByUser.vue";
+import ModalByUser from "./subcomponents/ModalByUser.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-
+import Button from "@/views/components/button/Button.vue";
+import ModalTaskToday from "./subcomponents/ModalTaskToday.vue";
+import ListService from "../service/lists.service";
 export default {
   components: {
     vSelect,
     ModalByUser,
     FilterSlot,
+    Button,
+    ModalTaskToday,
   },
   data() {
     return {
+      modalTaskToday: false,
       totalRows: 0,
       paginate: {
         currentPage: 1,
@@ -380,33 +403,52 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      skin: "appConfig/skin",
+    }),
+    classAdd() {
+      return this.skin == "dark"
+        ? "background-color:#333B51"
+        : "background-color: floralwhite;";
+    },
     getRoles() {
-      return this.currentUser.role_id == 1 ||
-        this.currentUser.role_id == 2
+      return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
         ? true
         : false;
     },
 
     clientRoute() {
-      return "/listusers";
+      return "/commons/list-users/search-list-Of-user";
     },
     visibleFields() {
-      return this.currentUser.role_id == 1 ||
-        this.currentUser.role_id == 2
+      return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
         ? this.arrayColumns.filter((column) => column.visible)
         : this.arrayColumnsTwo.filter((column) => column.visible);
     },
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    statusCreateList(){
+      return this.currentUser.role_id == 2 ? true : false;
+    },
   },
   methods: {
+    updatingTasks() {
+      this.$refs.refClientsList.refresh();
+    },
+    openModalTaskToday() {
+      this.modalTaskToday = true;
+    },
+    closeModalTaskToday() {
+      this.modalTaskToday = false;
+    },
     refresh() {
       this.$refs.refClientsList.refresh();
     },
     statusRol() {
       this.add = this.currentUser.role_id == 2 ? true : false;
     },
+    
     addlist() {
       this.newList = true;
       this.add = false;
@@ -428,10 +470,9 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        per_page: ctx.perPage,
+        perPage: ctx.perPage,
         id:
-          this.currentUser.role_id == 1 ||
-          this.currentUser.role_id == 2
+          this.currentUser.role_id == 1 || this.currentUser.role_id == 2
             ? null
             : this.currentUser.user_id,
         from: this.filter[0].model,
@@ -456,10 +497,7 @@ export default {
           this.count_alltask = 0;
           this.count_donetask = 0;
         }
-        if (
-          this.currentUser.role_id == 1 ||
-          this.currentUser.role_id == 2
-        ) {
+        if (this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
           return items || [];
         } else {
           let firstOption = {
@@ -476,142 +514,78 @@ export default {
         return items || [];
       });
     },
-    listsgroups(valor) {
-      this.lists = null;
-      amgApi
-        .post("/listusers", {
-          id:
-            this.currentUser.role_id == 1 ||
-            this.currentUser.role_id == 2
-              ? null
-              : this.currentUser.user_id,
-          from: this.from,
-          to: this.to,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.lists = response.data.data;
-            this.start_page = response.data.current_page;
-            this.perpage = response.data.per_page;
-            this.next_page = this.start_page + 1;
-            this.ultima_pagina = response.data.last_page;
-            this.totallists = response.data.total;
-            if (response.data.data[0] != null) {
-              this.count_alltask = response.data.data[0].count_alltask;
-              this.count_donetask = response.data.data[0].count_donetask;
-            } else {
-              this.count_alltask = 0;
-              this.count_donetask = 0;
-            }
-            if (valor != 1) {
-              var boton = document.getElementById("app");
-              boton.classList.remove("preloader");
-            }
-          }
-        });
+
+    async deleteuser(id) {
+      const confirm = await this.showConfirmSwal(
+        "Are you sure?",
+        "You won't be able to revert this!"
+      );
+      if (confirm.isConfirmed) {
+        try {
+          this.addPreloader();
+          const data = await ListService.deleteUser({ id: id });
+          this.removePreloader();
+          this.$swal
+            .fire("Deleted!", "Your file has been deleted.", "success")
+            .then((res) => {
+              if (res) {
+                this.resetSearch();
+              }
+            });
+        } catch (error) {
+          console.log();
+          this.removePreloader();
+          this.showErrorSwal(error);
+        }
+      }
     },
-    deleteuser(id) {
-      this.$swal
-        .fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonAriaLabel: "Thumbs up, great!",
-          cancelButtonAriaLabel: "Thumbs down",
-          customClass: {
-            confirmButton: "btn btn-primary",
-            cancelButton: "btn btn-danger ",
-          },
-          confirmButtonText: "Yes, delete it!",
-        })
-        .then((result) => {
-          // Send request to the server
-          if (result.value) {
-            this.$store.commit("app/SET_LOADING", true);
-            amgApi
-              .post("/deletelist", {
-                id: id,
-              })
-              .then((response) => {
-                this.$store.commit("app/SET_LOADING", false);
-                this.$swal
-                  .fire("Deleted!", "Your file has been deleted.", "success")
-                  .then((res) => {
-                    if (res) {
-                      this.resetSearch();
-                    }
-                  });
-              })
-              .catch(() => {
-                this.$store.commit("app/SET_LOADING", false);
-                swal("Failed!", "There was something wronge.", "warning");
-              });
-          }
-        });
-    },
-    groupusers() {
-      amgApi
-        .post("/sellerall/2", {
-          roles: "[]",
-          type: "1",
-        })
-        .then((response) => {
-          this.options = response.data;
-        })
-        .catch((resp) => {
-          this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong with users"
-          );
-        });
+    async groupusers() {
+      try {
+        const data = await ListService.groupUser({ roles: "[]", type: "1" });
+        this.options = data;
+      } catch (error) {
+        console.error(error);
+        this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+      }
     },
     savegroup() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
         } else {
-          this.$swal
-            .fire({
-              title: "Are you Sure ?",
-              text: "Do you want to create a List?",
-              icon: "warning",
-              showCancelButton: true,
-              customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-danger ",
-              },
-              confirmButtonText: "Yes",
-            })
-            .then((result) => {
-              if (result.value) {
-                const params = {
-                  users: this.value.map((user) => {
-                    return user.id;
-                  }),
-                  number: this.number,
-                  create_id: this.currentUser.user_id,
-                };
-                amgApi.post("/savegroup", params).then((response) => {
-                  this.$refs.refClientsList.refresh();
-                  this.$swal
-                    .fire({
-                      icon: "success",
-                      title: "List Created in successfully",
-                    })
-                    .then((res) => {
-                      if (res) {
-                        // (this.value = []), (this.number = "");
-                        // (this.cancelList = false), (this.add = true);
-                        // this.newList = false;
-                      }
-                    });
-                });
-              }
-            });
+          const confirm = await this.showConfirmSwal(
+            "Are you sure?",
+            "Do you want to create a List?"
+          );
+          if (confirm.isConfirmed) {
+            try {
+              const params = {
+                users: this.value.map((user) => {
+                  return user.id;
+                }),
+                number: this.number,
+                create_id: this.currentUser.user_id,
+              };
+              this.addPreloader();
+              const data = await ListService.saveGroup(params);
+              this.value = [];
+              this.number = "";
+              this.$refs.refClientsList.refresh();
+              this.removePreloader();
+              // this.showSuccessSwal()
+              this.$swal
+                .fire({
+                  icon: "success",
+                  title: "List Created in successfully",
+                })
+                
+            } catch (error) {
+              console.error(error);
+              this.removePreloader();
+              this.showErrorSwal(error);
+            }
+          }
+          
         }
       });
     },
@@ -632,7 +606,6 @@ export default {
   created() {
     this.groupusers();
     this.statusRol();
-    this.listsgroups();
   },
 };
 </script>

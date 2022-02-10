@@ -8,6 +8,7 @@
       lazy
       title-class="h3 text-white font-weight-bolder"
       size="xmd"
+      modal-class="modal-primary"
       title="Files"
       hide-footer
       scrollable
@@ -19,7 +20,7 @@
           :program="files.program"
         />
         <b-row
-          v-if="files.valorEdit"
+          v-if="files.valorEdit || itemTable.length > 0"
           class="mt-2 d-flex align-items-center justify-content-end mr-1"
         >
           <b-btn
@@ -27,13 +28,10 @@
             size="sm"
             @click="loadFile = !loadFile"
           >
-            <feather-icon icon="PlusIcon" />
-            Upload File
+            <feather-icon icon="PlusIcon" />Upload File
           </b-btn>
         </b-row>
-        <b-row
-          v-if="loadFile"
-        >
+        <b-row v-if="loadFile">
           <b-container fluid>
             <b-row class="my-2">
               <div style="width: 150px">
@@ -64,9 +62,7 @@
                   name="doe"
                   class="w-100"
                 >
-                  <b-form-group
-                    label="DOE"
-                  >
+                  <b-form-group label="DOE">
                     <b-form-datepicker
                       id="from-date-picker"
                       v-model="doe"
@@ -99,7 +95,7 @@
                 variant="success"
                 @click="uploadFile"
               >
-                <feather-icon icon="UploadIcon" /> Upload
+                <feather-icon icon="UploadIcon" />Upload
               </b-button>
             </b-row>
           </b-container>
@@ -130,9 +126,7 @@
                 </div>
               </template>
               <template v-slot:cell(size)="data">
-                <div>
-                  {{ data.item.size }} KB
-                </div>
+                <div>{{ data.item.size }} KB</div>
               </template>
               <template v-slot:cell(expiration)="data">
                 <div v-if="data.item.expiration">
@@ -157,9 +151,7 @@
                         <b-col
                           cols="1"
                           class="text-info text-center d-flex align-items-center justify-content-center"
-                        >
-                          EN
-                        </b-col>
+                        >EN</b-col>
                         <b-col class="d-flex">
                           <b-btn
                             class="btn-icon rounded-circle"
@@ -189,9 +181,7 @@
                         <b-col
                           cols="1"
                           class="text-info text-center d-flex align-items-center justify-content-center"
-                        >
-                          ES
-                        </b-col>
+                        >ES</b-col>
                         <b-col class="d-flex">
                           <b-btn
                             variant="info"
@@ -237,7 +227,7 @@
                         variant="info"
                         size="sm"
                         target="_blank"
-                        :href="base_url + '/dowloadfile?route='+data.item.route +'/'+data.item.file_name+'&file='+data.item.file_name"
+                        :href="data.item.url"
                         class="btn-icon rounded-circle"
                       >
                         <feather-icon icon="DownloadIcon" />
@@ -350,12 +340,17 @@ export default {
     itemTable() {
       const programid = this.files.programId
       if (this.mode === 1) {
-        return this.item.filter(item => (
-          item.is_ag == 0
+        return this.item.filter(
+          item => item.is_ag == 0
             || (item.is_ag == 1
-                && (programid == 1 || programid == 2 || programid == 3 || programid == 4 || programid == 7))
+              && (programid == 1
+                || programid == 2
+                || programid == 3
+                || programid == 4
+                || programid == 7))
             || (item.is_ag == 2 && (programid == 3 || programid == 4))
-            || (item.is_ag == 3 && (programid == 3 || programid == 4))))
+            || (item.is_ag == 3 && (programid == 3 || programid == 4)),
+        )
       }
       return this.item
     },
@@ -370,7 +365,7 @@ export default {
     async checkFile(id, status) {
       try {
         this.addPreloader()
-        const response = await amgApi.post('/checkfile', {
+        const response = await amgApi.post('/sales-made/payment/check-file', {
           id,
           saleid: this.files.sale_id,
         })
@@ -406,7 +401,10 @@ export default {
         reader.readAsDataURL(this.file)
         reader.onload = async file => {
           body.image = file.target.result
-          const response = await amgApi.post('savefiledocu', body)
+          const response = await amgApi.post(
+            '/sales-made/save-document-file',
+            body,
+          )
           if (response.status === 200) {
             this.showSuccessSwal()
             this.doe = ''
@@ -420,7 +418,6 @@ export default {
     },
     openSmsUrlPdfModal(urlPdf) {
       this.urlpdf = urlPdf
-      console.log(this.urlpdf)
       this.openModalSmsPdf = true
     },
     async loadTable() {
@@ -487,7 +484,15 @@ export default {
             typee,
           })
           this.removePreloader()
-          if (response === 'ok') this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Tu archivo se genero correctamente')
+          if (response === 'ok') {
+            this.showToast(
+              'success',
+              'top-right',
+              'Success',
+              'CheckIcon',
+              'Tu archivo se genero correctamente',
+            )
+          }
           await this.loadTable()
         }
       } catch (error) {
@@ -506,7 +511,15 @@ export default {
             url,
           })
           this.removePreloader()
-          if (response === 'ok') this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Tu archivo se elimino correctamente')
+          if (response === 'ok') {
+            this.showToast(
+              'success',
+              'top-right',
+              'Success',
+              'CheckIcon',
+              'Tu archivo se elimino correctamente',
+            )
+          }
           await this.loadTable()
         }
       } catch (error) {

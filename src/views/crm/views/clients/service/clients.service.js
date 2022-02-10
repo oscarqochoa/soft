@@ -8,12 +8,12 @@ class ClientService {
   }
 
   async getAllPrograms() {
-    const data = await amgApi.get('/programs')
+    const data = await amgApi.get('/program/get-programs')
     return data.data
   }
 
   async getAllAdvisors(payload) {
-    const data = await amgApi.post('/usersprograms', payload)
+    const data = await amgApi.post('/programs/get-program-users', payload)
     return data.data
   }
 }

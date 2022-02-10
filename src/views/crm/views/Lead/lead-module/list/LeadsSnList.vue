@@ -17,7 +17,7 @@
         <b-table
           slot="table"
           ref="refUserListTable"
-          class="position-relative"
+          class="position-relative font-small-3"
           empty-text="No matching records found"
           primary-key="id"
           responsive="sm"
@@ -29,6 +29,7 @@
           :sort-by.sync="sortBy"
           :sort-desc.sync="isSortDirDesc"
           :busy.sync="isBusy"
+          small
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -39,7 +40,11 @@
 
           <!-- Column: Nickname -->
           <template #cell(nickname)="data">
-            <a href="#" target="_blank">{{ data.item.nickname }}</a>
+            <router-link
+              :class="textLink"
+              :to="`/${routeModule}/leads/${data.item.id}`"
+              target="_blank"
+            >{{ data.item.nickname }}</router-link>
             <br />
             <span>{{ data.item.lead_name }}</span>
           </template>
@@ -55,10 +60,7 @@
 
           <!-- Column: Fanpage -->
           <template #cell(fanpage)="data">
-            <div
-              style="width: 50px;height: 50px;background-position: center;background-repeat: no-repeat;background-size: contain;"
-              v-bind:style="{ backgroundImage: `url(${baseUrl + data.item.logo})` }"
-            />
+            <b-img thumbnail fluid :src="baseUrl + data.item.logo" style="width: 50px" />
           </template>
 
           <!-- Column: Recomendations -->
@@ -120,7 +122,10 @@ export default {
       token: "auth/token",
       G_OWNERS: "CrmGlobalStore/G_OWNERS",
       G_STATES: "CrmGlobalStore/G_STATES"
-    })
+    }),
+    routeModule() {
+      return this.$route.meta.route;
+    }
   },
   data() {
     return {
@@ -150,6 +155,7 @@ export default {
     };
   },
   created() {
+    this.addPaddingTd();
     this.myProvider();
     this.setOptionsOnFilters();
   },

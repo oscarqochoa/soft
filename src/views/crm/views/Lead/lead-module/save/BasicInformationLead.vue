@@ -6,19 +6,12 @@
     <b-row>
       <b-col md="6">
         <!-- First Name -->
-        <validation-provider
-          v-slot="{errors}"
-          name="First Name"
-          rules="required"
-        >
-          <b-form-group
-            label="First Name"
-            label-for="first-name"
-          >
+        <validation-provider v-slot="{errors}" name="First Name" rules="required">
+          <b-form-group label="First Name" label-for="first-name">
             <b-form-input
               id="first-name"
-              name="first-name"
               v-model="userData.first_name"
+              name="first-name"
               autofocus
               :state="errors[0] ? false : null"
               trim
@@ -27,30 +20,14 @@
           </b-form-group>
         </validation-provider>
         <!-- MiddleName -->
-        <validation-provider
-          name="MiddleName"
-        >
-          <b-form-group
-            label="MiddleName"
-            label-for="middle-name"
-          >
-            <b-form-input
-              id="middle-name"
-              v-model="userData.middle_name"
-              trim
-            />
+        <validation-provider name="MiddleName">
+          <b-form-group label="MiddleName" label-for="middle-name">
+            <b-form-input id="middle-name" v-model="userData.middle_name" trim />
           </b-form-group>
         </validation-provider>
         <!-- LastName -->
-        <validation-provider
-          v-slot="{errors}"
-          name="LastName"
-          rules="required"
-        >
-          <b-form-group
-            label="LastName"
-            label-for="last-name"
-          >
+        <validation-provider v-slot="{errors}" name="LastName" rules="required">
+          <b-form-group label="LastName" label-for="last-name">
             <b-form-input
               id="last-name"
               v-model="userData.last_name"
@@ -64,17 +41,15 @@
         <validation-provider
           v-slot="{errors}"
           name="Email"
-          :rules="`${!disabledemail ? 'required|' : ''}email`"
+          :rules="`${!disabledemail ? 'required|email' : ''}`"
         >
-          <b-form-group
-            label="Email"
-            label-for="email"
-          >
+          <b-form-group label="Email" label-for="email">
             <b-form-input
               id="email"
               v-model="userData.email"
               trim
               :state="errors[0] ? false : null"
+              :disabled="disabledemail"
             />
           </b-form-group>
         </validation-provider>
@@ -83,24 +58,16 @@
             id="without-email"
             name="without-email"
             value="without-email"
-            @input="disabledemail = !disabledemail"
-          >
-            Client has not email
-          </b-form-checkbox>
-
+            @change="disabledemail = disabledemail"
+          >Client has not email</b-form-checkbox>
         </b-form-group>
       </b-col>
       <b-col md="6">
         <!-- Programs -->
-        <validation-provider
-          name="Programs"
-        >
-          <b-form-group
-            label="Programs"
-            label-for="programs"
-          >
+        <validation-provider name="Programs">
+          <b-form-group label="Programs" label-for="programs">
             <v-select
-              v-model="userData.programs"
+              v-model="programsList"
               multiple
               label="label"
               input-id="programs"
@@ -110,34 +77,20 @@
           </b-form-group>
         </validation-provider>
         <!-- Dob -->
-        <validation-provider
-          name="DOB"
-        >
-          <b-form-group
-            label="DOB"
-            label-for="dob"
-          >
+        <validation-provider name="DOB">
+          <b-form-group label="DOB" label-for="dob">
             <flat-pickr
               id="dob"
               v-model="userData.dob"
               class="form-control"
-              :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'm/d/Y', locale: 'en' }"
+              :config="configFlatPickr"
               placeholder="From"
             />
-
           </b-form-group>
         </validation-provider>
         <!-- Language -->
-        <validation-provider
-          v-slot="{errors}"
-          name="Language"
-          rules="required"
-        >
-          <b-form-group
-            label="Language"
-            label-for="language"
-            :state="errors[0] ? false : null"
-          >
+        <validation-provider v-slot="{errors}" name="Language" rules="required">
+          <b-form-group label="Language" label-for="language" :state="errors[0] ? false : null">
             <v-select
               v-model="userData.language"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -149,43 +102,47 @@
           </b-form-group>
         </validation-provider>
         <!-- Lead State -->
-        <validation-provider
-          name="Lead State"
-        >
-          <b-form-group
-            label="Status"
-            label-for="state-lead"
-          >
-            <v-select
-              v-model="userData.state_lead"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="G_STATE_LEADS"
-              :clearable="false"
-              input-id="state-lead"
-              :reduce="el => el.id"
-            />
-          </b-form-group>
-        </validation-provider>
+        <b-form-group label="Status" label-for="state-lead">
+          <v-select
+            id="state-lead"
+            v-model="userData.state_lead"
+            :options="G_STATE_LEADS"
+            :clearable="false"
+            :reduce="el => el.id"
+            label="label"
+          />
+        </b-form-group>
       </b-col>
     </b-row>
-    <address-information-lead :user-data="userData" :blank-user-fields="blankUserFields" @onModalTrackingChangeOpen="$emit('onModalTrackingChangeOpen', $event)" />
+    <address-information-lead
+      :type-form="typeForm"
+      :user-data="userData"
+      :blank-user-fields="blankUserFields"
+      @onModalTrackingChangeOpen="$emit('onModalTrackingChangeOpen', $event)"
+    />
   </b-card>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 import {
-  BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
-} from 'bootstrap-vue'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import { required, alphaNum, email } from '@validations'
+  BSidebar,
+  BForm,
+  BFormGroup,
+  BFormInput,
+  BFormInvalidFeedback,
+  BButton
+} from "bootstrap-vue";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
+import { required, alphaNum, email } from "@validations";
 
-import flatPickr from 'vue-flatpickr-component'
-import vSelect from 'vue-select'
+import flatPickr from "vue-flatpickr-component";
+import vSelect from "vue-select";
 
-import formValidation from '@core/comp-functions/forms/form-validation'
+import formValidation from "@core/comp-functions/forms/form-validation";
 
-import AddressInformationLead from './AddressInformationLead.vue'
+import moment from "moment";
+import AddressInformationLead from "./AddressInformationLead.vue";
 
 export default {
   components: {
@@ -201,10 +158,10 @@ export default {
 
     // Form Validation
     ValidationProvider,
-    ValidationObserver,
+    ValidationObserver
   },
   model: {
-    event: 'update:is-add-new-user-sidebar-active',
+    event: "update:is-add-new-user-sidebar-active"
   },
   props: {
     userData: {
@@ -213,7 +170,11 @@ export default {
     },
     blankUserFields: {
       type: Object,
-      required: false,
+      required: false
+    },
+    typeForm: {
+      type: String,
+      required: false // newLead, editLead
     }
   },
   data() {
@@ -222,40 +183,55 @@ export default {
       alphaNum,
       email,
       disabledemail: false,
-    }
+      configFlatPickr: {
+        dateFormat: "d/m/Y",
+        locale: "en"
+      },
+      programsList: []
+    };
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token',
-      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
-      G_LANGUAGES: 'CrmGlobalStore/G_LANGUAGES',
-      G_STATE_LEADS: 'CrmLeadStore/G_STATE_LEADS',
-    }),
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      G_PROGRAMS: "CrmGlobalStore/G_PROGRAMS",
+      G_LANGUAGES: "CrmGlobalStore/G_LANGUAGES",
+      G_STATE_LEADS: "CrmLeadStore/G_STATE_LEADS"
+    })
   },
-  setup () {
-    const {
-      refFormObserver,
-      getValidationState,
-    } = formValidation(() => {})
+  setup() {
+    const { refFormObserver, getValidationState } = formValidation(() => {});
 
     return {
       refFormObserver,
       getValidationState
-    }
+    };
+  },
+  created() {
+    this.formatInitialData();
   },
   methods: {
-    capitalize (el) {
-      const element = this.userData[el]
-      this.userData[el] = element.substr(0, 1).toUpperCase() + element.substr(1)
+    capitalize(el) {
+      const element = this.userData[el];
+      this.userData[el] =
+        element.substr(0, 1).toUpperCase() + element.substr(1);
+    },
+    formatInitialData() {
+      this.userData.dob = this.userData.dob
+        ? moment(this.userData.dob).format("MM/DD/YYYY")
+        : "";
+      this.programsList = this.userData.programs;
+    },
+    returnProgramlist() {
+      return this.programsList;
     }
-  },
-}
+  }
+};
 </script>
 
 <style lang="scss">
-@import '@core/scss/vue/libs/vue-flatpicker.scss';
-@import '@core/scss/vue/libs/vue-select.scss';
+@import "@core/scss/vue/libs/vue-flatpicker.scss";
+@import "@core/scss/vue/libs/vue-select.scss";
 
 #add-new-user-sidebar {
   .vs__dropdown-menu {

@@ -67,7 +67,7 @@ export default {
       if (oldValue.id) {
         const resolve = await this.showConfirmSwal()
         if (resolve.value) {
-          const response = await amgApi.post('/importantnote', {
+          const response = await amgApi.post('/note/note/important-note', {
             id: newValue.id,
             lead_id: this.lead.id,
             user_id: parseInt(newValue.created_by, 10),
@@ -92,7 +92,7 @@ export default {
     },
     async getHistoryLeadNotes() {
       try {
-        const response = await amgApi.post('/getleadnotes', { lead_id: this.lead.id })
+        const response = await amgApi.post('/note/note/get-lead-notes', { lead_id: this.lead.id })
         if (response.status === 200) {
           this.historyNotes = response.data
         }

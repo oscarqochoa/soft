@@ -1,11 +1,12 @@
 <template>
   <div>
-    <lead-list-add-new :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive" />
-    <b-card>
-      <div class="card-header">
-        <div>
-          <b-card-title>Leads</b-card-title>
-        </div>
+    <lead-list-add-new
+      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
+      :key="keyCreateList"
+      @saveLead="keyCreateList = Math.random()"
+    />
+    <header-slot>
+      <template #actions>
         <div>
           <b-button
             v-if="!isOnlyLead"
@@ -15,39 +16,57 @@
           >
             <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
           </b-button>
-          <b-dropdown v-if="[1, 2].includes(currentUser.role_id)" id="dropdown-6" variant="info">
+          <b-dropdown
+            v-if="[1, 2].includes(currentUser.role_id) && isLeadsRoute"
+            id="dropdown-6"
+            variant="info"
+            :disabled="isLoading"
+          >
             <template #button-content>
-              <feather-icon icon="DownloadIcon" size="16" class="align-middle" />
+              <template v-if="isLoading">
+                <b-spinner small />
+              </template>
+              <template v-else>
+                <feather-icon icon="DownloadIcon" size="16" class="align-middle" />
+              </template>
               <span class="ml-1">Export To Excel</span>
             </template>
+
             <b-dropdown-item @click="exportExcel(1, 1)">Export Current Page</b-dropdown-item>
             <b-dropdown-item @click="exportExcel(1, 2)">Export All Page</b-dropdown-item>
-            <b-dropdown-item @click="exportExcel(1, 3)">Export Selection</b-dropdown-item>
+            <b-dropdown-item
+              :disabled="!S_SELECTED_LEADS.length"
+              @click="exportExcel(1, 3)"
+            >Export Selection</b-dropdown-item>
           </b-dropdown>
         </div>
-      </div>
-      <b-nav pills>
-        <b-nav-item
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-          exact
-          :to="`/${routeModule}/leads/`"
-        >Leads</b-nav-item>
-        <b-nav-item
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-          exact
-          :to="`/${routeModule}/leads/sn`"
-        >Leads Sn</b-nav-item>
-        <b-nav-item
-          v-if="[1, 2].includes(currentUser.role_id) || isOnlyLead"
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-          exact
-          :to="`/${routeModule}/leads/w-potential`"
-        >Leads W Potential</b-nav-item>
-      </b-nav>
-      <router-view v-if="preloading" />
+      </template>
+    </header-slot>
+    <b-card no-body>
+      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
+        <b-nav card-header pills class="m-0">
+          <b-nav-item
+            exact-active-class="active border-radius-tabs"
+            exact
+            :to="`/${routeModule}/leads/`"
+          >Leads</b-nav-item>
+          <b-nav-item
+            exact-active-class="active border-radius-tabs"
+            exact
+            :to="`/${routeModule}/leads/sn`"
+          >Leads Sn</b-nav-item>
+          <b-nav-item
+            v-if="[1, 2].includes(currentUser.role_id) || isOnlyLead"
+            exact-active-class="active border-radius-tabs"
+            exact
+            :to="`/${routeModule}/leads/w-potential`"
+          >Leads W Potential</b-nav-item>
+        </b-nav>
+      </b-card-header>
+
+      <b-card-body class="border-primary rounded">
+        <router-view />
+      </b-card-body>
     </b-card>
   </div>
 </template>
@@ -65,6 +84,7 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
+      skin: "appConfig/skin",
       G_STATE_LEADS: "CrmLeadStore/G_STATE_LEADS"
     }),
     ...mapState({
@@ -73,6 +93,9 @@ export default {
     }),
     routeModule() {
       return this.$route.meta.route;
+    },
+    isLeadsRoute() {
+      return this.$route.path === `/${this.routeModule}/leads/`;
     }
   },
   data() {
@@ -81,28 +104,32 @@ export default {
       isAddNewUserSidebarActive: false,
       preloading: true,
       dato1: "desc",
-      dato2: 10
+      dato2: 10,
+      isLoading: false,
+      keyCreateList: 0
     };
   },
   async created() {
-    this.preloading = false;
-    await this.getStateLeads();
-    await this.getStatusLeads();
-    await this.getSourceLeads();
-    await this.getOwners();
-    await this.getPrograms();
-    await this.getSourceNames();
-    await this.getStates();
-    await this.getEeuuStates();
-    await this.getCountries();
-    await this.getSellers();
-    this.preloading = true;
+    //all Promises
+    await Promise.all([
+      this.getStateLeads(),
+      this.getStatusLeads(),
+      this.getSourceLeads(),
+      this.getOwners(),
+      this.getPrograms(),
+      this.getSourceNames(),
+      this.getStates(),
+      this.getEeuuStates(),
+      this.getCountries(),
+      this.getSellers()
+    ]);
   },
   methods: {
     ...mapActions({
       A_GET_STATE_LEADS: "CrmLeadStore/A_GET_STATE_LEADS",
       A_GET_STATUS_LEADS: "CrmLeadStore/A_GET_STATUS_LEADS",
       A_GET_SOURCE_LEADS: "CrmLeadStore/A_GET_SOURCE_LEADS",
+      A_EXPORT_LEADS_TO_EXCEL: "CrmLeadStore/A_EXPORT_LEADS_TO_EXCEL",
       A_GET_OWNERS: "CrmGlobalStore/A_GET_OWNERS",
       A_GET_PROGRAMS: "CrmGlobalStore/A_GET_PROGRAMS",
       A_GET_SOURCE_NAMES: "CrmGlobalStore/A_GET_SOURCE_NAMES",
@@ -257,35 +284,12 @@ export default {
         );
       }
     },
-    exportExcel(Export, TypeExport) {
-      const jsonString = JSON.stringify(this.S_SELECTED_LEADS.map(el => el.id));
+    async exportExcel(Export, TypeExport) {
+      const id_leads = this.S_SELECTED_LEADS.map(el => el.id);
       const name_text = this.S_FILTERS_LEADS.searchQuery
         ? this.S_FILTERS_LEADS.searchQuery
         : null;
-
       this.dato2 = this.S_FILTERS_LEADS.perPage;
-
-      if (this.dato2 == 10) {
-        if (this.dato1 == "desc") {
-          this.oneDateLead = false;
-          this.orderDateDesc = true;
-          this.orderDateAsc = false;
-        } else {
-          this.orderDateAsc = true;
-          this.orderDateDesc = false;
-          this.oneDateLead = false;
-        }
-      } else if (this.dato2 == 2) {
-        if (this.dato1 == "desc") {
-          this.oneEventLead = false;
-          this.orderLeadDesc = true;
-          this.orderLeadAsc = false;
-        } else {
-          this.orderLeadAsc = true;
-          this.orderLeadDesc = false;
-          this.oneEventLead = false;
-        }
-      }
 
       const date_from =
         this.S_FILTERS_LEADS.from == "" ? null : this.S_FILTERS_LEADS.from;
@@ -293,10 +297,32 @@ export default {
         this.S_FILTERS_LEADS.to == "" ? null : this.S_FILTERS_LEADS.to;
       const orderby = this.dato2 == null ? 10 : this.dato2;
       const order = this.dato1 == null ? "desc" : this.dato1;
-      const dataExport = `name_text=${name_text}&lead_status=${this.S_FILTERS_LEADS.statusLead}&cr=${this.S_FILTERS_LEADS.cr}&program=${this.S_FILTERS_LEADS.program}&date_from=${date_from}&date_to=${date_to}&orderby=${orderby}&order=${order}&user_owner=${this.S_FILTERS_LEADS.owner}&assign_to=${this.S_FILTERS_LEADS.assignTo}&sourcename=${this.S_FILTERS_LEADS.sourceName}&Export=${Export}&TypeExport=${TypeExport}&current_pageE=${this.S_FILTERS_LEADS.currentPage}&id_leads=${jsonString}`;
-      window.open(
-        `${process.env.VUE_APP_BASE_URL}/exportleadsexcel?${dataExport}`
-      );
+      const params = {
+        type_export: TypeExport,
+        current_page: this.S_FILTERS_LEADS.currentPage,
+        id_leads,
+        name_text,
+        lead_status: this.S_FILTERS_LEADS.statusLead,
+        cr: this.S_FILTERS_LEADS.cr,
+        program: this.S_FILTERS_LEADS.program,
+        date_from,
+        date_to,
+        orderby,
+        order,
+        per_page: this.dato2,
+        user_owner: this.S_FILTERS_LEADS.owner,
+        assign_to: this.S_FILTERS_LEADS.assignTo,
+        sourcename: this.S_FILTERS_LEADS.sourceName
+      };
+      try {
+        this.isLoading = true;
+        const response = await this.A_EXPORT_LEADS_TO_EXCEL(params);
+        await this.forceFileDownload(response, "leads.xlsx");
+        this.isLoading = false;
+      } catch (error) {
+        this.showErrorSwal(error);
+        this.isLoading = false;
+      }
     }
   },
   watch: {

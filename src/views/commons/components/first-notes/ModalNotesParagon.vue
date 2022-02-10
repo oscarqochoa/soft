@@ -21,13 +21,20 @@
             label="Type of Business"
             label-class="font-weight-bolder"
           >
-            <v-select
-              v-model="note.typeOfBuisiness.value"
-              :disabled="disabled"
-              :options="note.typeOfBuisiness.options"
-              label="name"
-              multiple
-            />
+            <validation-provider
+              v-slot="{ errors }"
+              name="typeOfBusiness"
+              rules="required"
+            >
+              <v-select
+                v-model="note.typeOfBuisiness.value"
+                :class="{'border-danger': errors[0]}"
+                :disabled="disabled"
+                :options="note.typeOfBuisiness.options"
+                label="name"
+                multiple
+              />
+            </validation-provider>
           </b-form-group>
         </b-col>
       </b-row>
@@ -73,9 +80,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col
-          cols="4"
-        >
+        <b-col cols="4">
           <validation-provider
             v-slot="{ errors }"
             name="facebook"
@@ -95,9 +100,7 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col
-          cols="4"
-        >
+        <b-col cols="4">
           <validation-provider
             v-slot="{ errors }"
             name="logo"
@@ -117,9 +120,7 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col
-          cols="4"
-        >
+        <b-col cols="4">
           <validation-provider
             v-slot="{ errors }"
             name="instagram"
@@ -144,9 +145,7 @@
             v-if="note.facebook.value === 'Yes' || note.instagram.value === 'Yes'"
             cols="12"
           >
-            <b-row
-              class="d-flex align-items-center justify-content-between"
-            >
+            <b-row class="d-flex align-items-center justify-content-between">
               <b-col
                 class="d-flex"
                 :class="{'aaa' : note.facebook.value !== 'Yes'}"
@@ -171,7 +170,6 @@
                     :disabled="disabled"
                   />
                 </b-form-group>
-
               </b-col>
               <b-col
                 v-if="note.instagram.value === 'Yes'"
@@ -201,9 +199,7 @@
             </b-row>
           </b-col>
         </transition>
-        <b-col
-          cols="4"
-        >
+        <b-col cols="4">
           <validation-provider
             v-slot="{ errors }"
             name="website"
@@ -223,9 +219,7 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col
-          cols="4"
-        >
+        <b-col cols="4">
           <validation-provider
             v-slot="{ errors }"
             name="socialMediaServices"
@@ -245,9 +239,7 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col
-          cols="4"
-        >
+        <b-col cols="4">
           <validation-provider
             v-slot="{ errors }"
             name="newBusiness"
@@ -272,9 +264,7 @@
             v-if="note.website.value === 'Yes' || note.newBusiness.value === 'No'"
             cols="12"
           >
-            <b-row
-              class="d-flex align-items-center justify-content-between"
-            >
+            <b-row class="d-flex align-items-center justify-content-between">
               <b-col
                 cols="6"
                 class="d-flex"
@@ -300,7 +290,6 @@
                     :options="['STANDAR', 'PROFESSIONAL', 'ECOMMERCE']"
                   />
                 </b-form-group>
-
               </b-col>
               <b-col
                 v-if="note.newBusiness.value === 'No'"
@@ -310,9 +299,7 @@
                   label="Years?"
                   label-class="font-weight-bolder"
                 >
-                  <b-form-input
-                    v-model="note.newBusiness.years"
-                  />
+                  <b-form-input v-model="note.newBusiness.years" />
                 </b-form-group>
               </b-col>
             </b-row>
@@ -631,7 +618,6 @@ export default {
       editorOption: {
         modules: { toolbar: false },
       },
-
     }
   },
   computed: {
@@ -639,7 +625,6 @@ export default {
       return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller
     },
     newNote() {
-      console.log(this.noteInfo.created > '2021-05-16 00:00:00')
       return this.noteInfo.created > '2021-05-16 00:00:00'
     },
     emptyNote() {
@@ -659,11 +644,19 @@ export default {
     'note.facebook.value': {
       handler(newValue) {
         if (newValue !== 'Yes') {
-          this.note.facebook.likes = this.note.facebook.likes ? this.note.facebook.likes : 0
-          this.note.facebook.link = this.note.facebook.link ? this.note.facebook.link : 0
+          this.note.facebook.likes = this.note.facebook.likes
+            ? this.note.facebook.likes
+            : 0
+          this.note.facebook.link = this.note.facebook.link
+            ? this.note.facebook.link
+            : 0
         } else {
-          this.note.facebook.likes = this.note.facebook.likes === 0 || this.note.facebook.likes === '0' ? '' : this.note.facebook.likes
-          this.note.facebook.link = this.note.facebook.link === 0 || this.note.facebook.link === '0' ? '' : this.note.facebook.link
+          this.note.facebook.likes = this.note.facebook.likes === 0 || this.note.facebook.likes === '0'
+            ? ''
+            : this.note.facebook.likes
+          this.note.facebook.link = this.note.facebook.link === 0 || this.note.facebook.link === '0'
+            ? ''
+            : this.note.facebook.link
         }
       },
       deep: true,
@@ -671,11 +664,19 @@ export default {
     'note.instagram.value': {
       handler(newValue) {
         if (newValue !== 'Yes') {
-          this.note.instagram.likes = this.note.instagram.likes ? this.note.instagram.likes : 0
-          this.note.instagram.link = this.note.instagram.link ? this.note.instagram.link : 0
+          this.note.instagram.likes = this.note.instagram.likes
+            ? this.note.instagram.likes
+            : 0
+          this.note.instagram.link = this.note.instagram.link
+            ? this.note.instagram.link
+            : 0
         } else {
-          this.note.instagram.likes = this.note.instagram.likes === 0 || this.note.instagram.likes === '0' ? '' : this.note.instagram.likes
-          this.note.instagram.link = this.note.instagram.link === 0 || this.note.instagram.link === '0' ? '' : this.note.instagram.link
+          this.note.instagram.likes = this.note.instagram.likes === 0 || this.note.instagram.likes === '0'
+            ? ''
+            : this.note.instagram.likes
+          this.note.instagram.link = this.note.instagram.link === 0 || this.note.instagram.link === '0'
+            ? ''
+            : this.note.instagram.link
         }
       },
       deep: true,
@@ -683,11 +684,19 @@ export default {
     'note.website.value': {
       handler(newValue) {
         if (newValue !== 'Yes') {
-          this.note.website.link = this.note.website.link ? this.note.website.link : 0
-          this.note.website.type = this.note.website.type ? this.note.website.type : 0
+          this.note.website.link = this.note.website.link
+            ? this.note.website.link
+            : 0
+          this.note.website.type = this.note.website.type
+            ? this.note.website.type
+            : 0
         } else {
-          this.note.website.link = this.note.website.link === 0 || this.note.website.link === '0' ? '' : this.note.website.link
-          this.note.website.type = this.note.website.type === 0 || this.note.website.type === '0' ? '' : this.note.website.type
+          this.note.website.link = this.note.website.link === 0 || this.note.website.link === '0'
+            ? ''
+            : this.note.website.link
+          this.note.website.type = this.note.website.type === 0 || this.note.website.type === '0'
+            ? ''
+            : this.note.website.type
         }
       },
       deep: true,
@@ -695,9 +704,13 @@ export default {
     'note.experience.value': {
       handler(newValue) {
         if (newValue !== 'Yes') {
-          this.note.details.value = this.note.details.value ? this.note.details.value : 0
+          this.note.details.value = this.note.details.value
+            ? this.note.details.value
+            : 0
         } else {
-          this.note.details.value = this.note.details.value === 0 || this.note.details.value === '0' ? '' : this.note.details.value
+          this.note.details.value = this.note.details.value === 0 || this.note.details.value === '0'
+            ? ''
+            : this.note.details.value
         }
       },
       deep: true,
@@ -705,9 +718,14 @@ export default {
     'note.newBusiness.value': {
       handler(newValue) {
         if (newValue !== 'No') {
-          this.note.newBusiness.years = this.note.newBusiness.years ? this.note.newBusiness.years : 0
+          this.note.newBusiness.years = this.note.newBusiness.years
+            ? this.note.newBusiness.years
+            : 0
         } else {
-          this.note.newBusiness.years = this.note.newBusiness.years === 0 || this.note.newBusiness.years === '0' ? '' : this.note.newBusiness.years
+          this.note.newBusiness.years = this.note.newBusiness.years === 0
+            || this.note.newBusiness.years === '0'
+            ? ''
+            : this.note.newBusiness.years
         }
       },
       deep: true,
@@ -798,18 +816,14 @@ export default {
     },
     async getCountries() {
       try {
-        const response = await amgApi.post('/view-countrys', {})
+        const response = await amgApi.post('/commons/get-world-countrys', {})
         this.note.country.options = response.data
       } catch (error) {
         this.showErrorSwal(error)
       }
     },
     initialValidationNote(note) {
-      if (
-        note.length != 0
-          && this.noteInfo.statusSale != 4
-          && !this.noteNull
-      ) {
+      if (note.length != 0 && this.noteInfo.statusSale != 4 && !this.noteNull) {
         this.showUpdate = true
       } else if (this.noteInfo.editmodal == false) {
         this.showSave = false
@@ -821,36 +835,34 @@ export default {
     getDetailsAnswers(note) {
       note.forEach(answer => {
         if (answer.answer != 'null') {
-          if (answer.question_id === 1075) this.note.facebook.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1072) this.note.website.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1078) this.note.instagram.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1083) this.note.logo.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1081) this.note.experience.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1066) this.note.newBusiness.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1075) this.note.facebook.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1072) this.note.website.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1078) this.note.instagram.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1083) this.note.logo.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1081) this.note.experience.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1066) this.note.newBusiness.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
           if (answer.question_id === 1064) this.note.typeOfBuisiness.value = JSON.parse(answer.answer)
-          if (answer.question_id === 1071) this.note.contactTime.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1067) this.note.information.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1068) this.note.indications.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1069) this.note.suggestion.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1070) this.note.pending.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1082) this.note.details.value = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1071) this.note.contactTime.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1067) this.note.information.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1068) this.note.indications.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1069) this.note.suggestion.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1070) this.note.pending.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1082) this.note.details.value = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
           if (answer.question_id === 1076) {
-            console.log((answer.answer === 0 || answer.answer === '0') ? '' : answer.answer)
-            this.note.facebook.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-            console.log(this.note.facebook.link)
+            this.note.facebook.link = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
           }
-          if (answer.question_id === 1077) this.note.facebook.likes = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1079) this.note.instagram.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1080) this.note.instagram.likes = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1073) this.note.website.link = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1074) this.note.website.type = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
-          if (answer.question_id === 1065) this.note.newBusiness.years = (answer.answer === 0 || answer.answer === '0') ? '' : answer.answer
+          if (answer.question_id === 1077) this.note.facebook.likes = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1079) this.note.instagram.link = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1080) this.note.instagram.likes = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1073) this.note.website.link = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1074) this.note.website.type = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
+          if (answer.question_id === 1065) this.note.newBusiness.years = answer.answer === 0 || answer.answer === '0' ? '' : answer.answer
         } else this.noteNull = true
       })
     },
     async listTypeBusiness() {
       try {
-        const response = await amgApi.get('/listtypebusiness')
+        const response = await amgApi.post('/commons/get-all-type-business')
         this.note.typeOfBuisiness.options = response.data
       } catch (error) {
         this.showErrorSwal(error)
@@ -862,7 +874,6 @@ export default {
         const response = await NotesServices.getFirstNote(params)
         await this.getDetailsAnswers(response)
         await this.initialValidationNote(response)
-        console.log(response)
         this.modalUp = true
         this.removePreloader()
       } catch (error) {
@@ -876,16 +887,17 @@ export default {
 </script>
 
 <style scoped>
-.quill-editor{
+.quill-editor {
   height: 100px;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0
+  opacity: 0;
 }
-.aaa{
+.aaa {
   visibility: hidden !important;
 }
 </style>

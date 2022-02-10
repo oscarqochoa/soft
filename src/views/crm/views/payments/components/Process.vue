@@ -103,10 +103,9 @@
                         v-bind="moneyConfig"
                         name="price"
                         id="price"
-                        class="form-control "
-                        :class="{ 'border border-danger': errors[0] }"
-                      >
-                      </money>
+                        class="form-control"
+                        :class="{ 'border-danger': errors[0] }"
+                      ></money>
                     </b-form-group>
                   </ValidationProvider>
                 </div>
@@ -123,7 +122,7 @@
                       <b-form-radio-group
                         v-model="payment"
                         :options="options"
-                        :class="{ 'border border-danger': errors[0] }"
+                        :class="{ 'border-danger': errors[0] }"
                         name="radios-stacked"
                         stacked
                       />
@@ -199,7 +198,7 @@
                         v-model="methodpayment"
                         :options="optionsMethodPay"
                         class="demo-inline-spacing"
-                        :class="{ 'border border-danger': errors[0] }"
+                        :class="{ 'border-danger': errors[0] }"
                         name="radio-inline"
                       />
                       <b-form-checkbox
@@ -209,9 +208,8 @@
                         value="true"
                         @input="chargeStatus()"
                         name="radio-inline"
+                        >Charge</b-form-checkbox
                       >
-                        Charge
-                      </b-form-checkbox>
                     </div>
                   </ValidationProvider>
                 </b-form-group>
@@ -231,7 +229,7 @@
               </div>
             </div>
 
-            <div class="row w-100">
+            <!-- <div class="row w-100">
               <div class="col-lg-3 col-xl-3 col-md-4 col-9 ml-2 col-sm-6 ">
                   <b-row>
                     <b-col cols="4" cols-sm="3" cols-xl="1" cols-md="1" cols-lg="3">
@@ -257,6 +255,27 @@
                     </b-col>
                   </b-row>
               </div>
+            </div>-->
+            <div class="row w-100">
+              <div class="ml-1 pl-1 d-flex">
+                <div class="d-inline-block mr-1">
+                  <b-button
+                    type="submit"
+                    variant="primary"
+                    class="pr-1"
+                    @click="submitAutorize"
+                    :disabled="changeDisable"
+                    >Submit</b-button
+                  >
+                </div>
+                <b-form-checkbox
+                  v-if="methodpayment == 1"
+                  v-model="sendsms"
+                  value="true"
+                  class="custom-control-primary"
+                  >Send SMS</b-form-checkbox
+                >
+              </div>
             </div>
           </div>
         </ValidationObserver>
@@ -269,7 +288,7 @@
 import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-
+import PaymentService from "../service/payments.service";
 import ModalCreditCard from "@/views/crm/views/payments/components/ModalCreditCard.vue";
 
 export default {
@@ -351,30 +370,18 @@ export default {
       this.cardsLead = {
         lead_id: this.user_id, //user_id
         user_id: this.currentUser.user_id,
-        rol: this.currentUser.arrRoles[0].role_id,
+        rol: this.currentUser.role_id,
       };
     },
     chargeStatus() {
       if (this.charge == false) {
-        this.$swal
-          .fire({
-            title: "Desactivate Charge",
-            text: "Are you sure to desactivate the charge?",
-            icon: "warning",
-            showCancelButton: true,
-            customClass: {
-              confirmButton: "btn btn-primary",
-              cancelButton: "btn btn-danger",
-            },
-            confirmButtonText: "Yes",
-          })
-          .then((result) => {
-            if (result.value) {
-              this.charge = false;
-            } else {
-              this.charge = true;
-            }
-          });
+        this.showConfirmSwal("DELETE", "Are you sure?").then((result) => {
+          if (result.value) {
+            this.charge = false;
+          } else {
+            this.charge = true;
+          }
+        });
       }
     },
     validMounthly(id) {
@@ -402,32 +409,21 @@ export default {
         event.preventDefault();
       }
     },
-    searchlead() {
+    async searchlead() {
       if (this.userfilter != "") {
         this.spinner = true;
         this.statusSelected = true;
-        amgApi
-          .post("/searchlead", {
-            q: this.userfilter,
-          })
-          .then((response) => {
-            this.users = response.data;
+        try{
+          const data = await PaymentService.searchlead({q: this.userfilter });
+          this.users = data;
             if (this.users.length == 0) {
               this.users = null;
             }
             this.spinner = false;
-          })
-          .catch((err) => {
-            this.spinner = false;
-            this.showToast(
-              "danger",
-              "top-right",
-              "Error",
-              "XIcon",
-              "Something went wrong with users, try again!"
-            );
-            console.error(err);
-          });
+        }catch(error){
+          console.error(error)
+          this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+        }
       } else {
         this.users = null;
       }
@@ -441,182 +437,137 @@ export default {
     getCardId(Card) {
       this.card_id = Card;
     },
-    getcard() {
-      this.$store.commit("app/SET_LOADING", true);
-      amgApi
-        .post("/searchleadpayment", {
-          id: this.user_id,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.cards = response.data;
-            this.modalCreditController++;
-            this.getCardsLead();
-            this.dataLead = true;
-            if (this.cards.length > 0) {
-              this.lead = this.cards[0].lead_name;
-              this.mobile = this.cards[0].mobile;
-            } else {
-              this.lead = "";
-              this.mobile = "";
-            }
-            this.$store.commit("app/SET_LOADING", false);
-          }
-        })
-        .catch((error) => {
-          this.$store.commit("app/SET_LOADING", false);
-          console.log(error);
-          this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong!"
-          );
-        });
+    async getcard() {
+      this.addPreloader();
+      try {
+        const data = await PaymentService.getCard({ id: this.user_id });
+        this.cards = data;
+        this.modalCreditController++;
+        this.getCardsLead();
+        this.dataLead = true;
+        if (this.cards.length > 0) {
+          this.lead = this.cards[0].lead_name;
+          this.mobile = this.cards[0].mobile;
+        } else {
+          this.lead = "";
+          this.mobile = "";
+        }
+        this.removePreloader();
+      } catch (e) {
+        console.error(e);
+        this.removePreloader();
+        this.showErrorSwal(error);
+      }
     },
     submitAutorize() {
       this.subtAutorize();
     },
     subtAutorize() {
-      this.$refs.form.validate().then((success) => {
+       this.$refs.form.validate().then(async (success) => { 
         if (!success) {
           return;
         } else {
-          this.$swal
-            .fire({
-              title: "Process Payment",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-danger ",
-              },
-              confirmButtonText: "Yes",
-            })
-            .then((result) => {
-              if (result.value) {
-                this.$store.commit("app/SET_LOADING", true);
-                amgApi
-                  .post("/checkoutpayment", {
-                    idcard: this.card_id,
-                    amount: this.amount,
-                    merchant: this.merchant,
-                    idsession: this.currentUser.user_id,
-                    payment: this.payment,
-                    lead_id: this.user_id,
-                    methodpayment: this.methodpayment,
-                    observationOther: this.observationOther,
-                    charge: this.charge == false ? 1 : 0,
-                    sendsms: this.sendsms == true ? 1 : 0,
-                  })
-                  .then((response) => {
-                    if (response.status == 200 && response.data.status == 200) {
-                      if (this.methodpayment == 1) {
-                        if (response.data.transaction.messages) {
-                          this.$store.commit("app/SET_LOADING", false);
-                          this.$swal.fire({
-                            icon: "success",
-                            title:
-                              response.data.transaction.responseCode == 1
-                                ? "Approved"
-                                : response.data.transaction.responseCode == 2
-                                ? "Declined"
-                                : response.data.transaction.responseCode == 3
-                                ? "Error"
-                                : response.data.transaction.responseCode == 4
-                                ? "Held For Review"
-                                : "",
-                          });
+          const confirm = await this.showConfirmSwal(
+            "Process Payment",
+            "You won't be able to revert this!"
+          );
+          if (confirm.isConfirmed) {
+            try {
+              this.addPreloader();
+              const data = await PaymentService.subtAutorize({
+                idcard: this.card_id,
+                amount: this.amount,
+                merchant: this.merchant,
+                idsession: this.currentUser.user_id,
+                payment: this.payment,
+                lead_id: this.user_id,
+                methodpayment: this.methodpayment,
+                observationOther: this.observationOther,
+                charge: this.charge == false ? 1 : 0,
+                sendsms: this.sendsms == true ? 1 : 0,
+              });
+              if (data.status == 200 && data.data.status == 200) {
+                    if (this.methodpayment == 1) {
+                      if (data.data.transaction.messages) {
+                        this.removePreloader();
+                        this.$swal.fire({
+                          icon: "success",
+                          title:
+                            data.data.transaction.responseCode == 1
+                              ? "Approved"
+                              : data.data.transaction.responseCode == 2
+                              ? "Declined"
+                              : data.data.transaction.responseCode == 3
+                              ? "Error"
+                              : data.data.transaction.responseCode == 4
+                              ? "Held For Review"
+                              : "",
+                        });
 
-                          this.$router.push({ name: "payments-crm-list" });
-                        } else {
-                          this.$store.commit("app/SET_LOADING", false);
-                          this.$swal
-                            .fire({
-                              icon: "error",
-                              title:
-                                response.data.transaction.responseCode == 1
-                                  ? "Approved"
-                                  : response.data.transaction.responseCode == 2
-                                  ? "Declined"
-                                  : response.data.transaction.responseCode == 3
-                                  ? "Error"
-                                  : response.data.transaction.responseCode == 4
-                                  ? "Held For Review"
-                                  : "",
-                            })
-                            .then((res) => {
-                              this.$store.commit("app/SET_LOADING", false);
-                              if (res) {
-                                this.getcard();
-                                this.card_id = "";
-                              }
-                            });
-                        }
-                      } else {
-                        this.$store.commit("app/SET_LOADING", false);
-                        this.$swal
-                          .fire({
-                            icon: "success",
-                            title: "Transaction Unverified",
-                          })
-                          .then((res) => {
-                            if (res) {
-                              this.$store.commit("app/SET_LOADING", false);
-                              this.$emit("clickList", true);
-                            }
-                          });
                         this.$router.push({ name: "payments-crm-list" });
-                      }
-                    } else if (
-                      response.status == 200 &&
-                      response.data.status == 500
-                    ) {
-                      this.$store.commit("app/SET_LOADING", false);
-                      if (response.data.transaction.errors) {
-                        this.errosAutorize =
-                          response.data.transaction.errors.error;
-                        this.responseCode =
-                          response.data.transaction.responseCode;
-                        this.messageList = false;
-                        this.errosList = true;
-                        if (this.methodpayment == 1) {
-                          this.$swal
-                            .fire({
-                              icon: "error",
-                              title:
-                                response.data.transaction.responseCode == 1
-                                  ? "Approved"
-                                  : response.data.transaction.responseCode == 2
-                                  ? "Declined"
-                                  : response.data.transaction.responseCode == 3
-                                  ? "Error"
-                                  : response.data.transaction.responseCode == 4
-                                  ? "Held For Review"
-                                  : "",
-                            })
-                            .then((res) => {
-                              if (res) {
-                                this.getcard();
-                                this.card_id = "";
-                              }
-                            });
-                        }
                       } else {
-                        this.$store.commit("app/SET_LOADING", false);
+                        this.removePreloader();
                         this.$swal
                           .fire({
                             icon: "error",
                             title:
-                              response.data.transaction.responseCode == 1
+                              data.data.transaction.responseCode == 1
                                 ? "Approved"
-                                : response.data.transaction.responseCode == 2
+                                : data.data.transaction.responseCode == 2
                                 ? "Declined"
-                                : response.data.transaction.responseCode == 3
+                                : data.data.transaction.responseCode == 3
                                 ? "Error"
-                                : response.data.transaction.responseCode == 4
+                                : data.data.transaction.responseCode == 4
+                                ? "Held For Review"
+                                : "",
+                          })
+                          .then((res) => {
+                            this.removePreloader();
+                            if (res) {
+                              this.getcard();
+                              this.card_id = "";
+                            }
+                          });
+                      }
+                    } else {
+                      this.removePreloader();
+                      this.$swal
+                        .fire({
+                          icon: "success",
+                          title: "Transaction Unverified",
+                        })
+                        .then((res) => {
+                          if (res) {
+                            this.removePreloader();
+                            this.$emit("clickList", true);
+                          }
+                        });
+                      this.$router.push({ name: "payments-crm-list" });
+                    }
+                  } else if (
+                    data.status == 200 &&
+                    data.data.status == 500
+                  ) {
+                    this.removePreloader();
+                    if (data.data.transaction.errors) {
+                      this.errosAutorize =
+                        data.data.transaction.errors.error;
+                      this.responseCode =
+                        data.data.transaction.responseCode;
+                      this.messageList = false;
+                      this.errosList = true;
+                      if (this.methodpayment == 1) {
+                        this.$swal
+                          .fire({
+                            icon: "error",
+                            title:
+                              data.data.transaction.responseCode == 1
+                                ? "Approved"
+                                : data.data.transaction.responseCode == 2
+                                ? "Declined"
+                                : data.data.transaction.responseCode == 3
+                                ? "Error"
+                                : data.data.transaction.responseCode == 4
                                 ? "Held For Review"
                                 : "",
                           })
@@ -624,25 +575,191 @@ export default {
                             if (res) {
                               this.getcard();
                               this.card_id = "";
-                              this.$store.commit("app/SET_LOADING", false);
                             }
                           });
                       }
+                    } else {
+                      this.removePreloader();
+                      this.$swal
+                        .fire({
+                          icon: "error",
+                          title:
+                            data.data.transaction.responseCode == 1
+                              ? "Approved"
+                              : data.data.transaction.responseCode == 2
+                              ? "Declined"
+                              : data.data.transaction.responseCode == 3
+                              ? "Error"
+                              : data.data.transaction.responseCode == 4
+                              ? "Held For Review"
+                              : "",
+                        })
+                        .then((res) => {
+                          if (res) {
+                            this.getcard();
+                            this.card_id = "";
+                            this.removePreloader();
+                          }
+                        });
                     }
-                  })
-                  .catch((error) => {
-                    this.$store.commit("app/SET_LOADING", false);
-                    this.showToast(
-                      "danger",
-                      "top-right",
-                      "Error",
-                      "XIcon",
-                      "Something went wrong!"
-                    );
-                    console.log(error);
-                  });
-              }
-            });
+                  }
+            } catch (error) {
+              this.showErrorSwal(error);
+              this.removePreloader();
+            }
+          }
+
+          // this.showConfirmSwal(
+          //   "Process Payment",
+          //   "You won't be able to revert this!"
+          // ).then((result) => {
+          //   if (result.value) {
+          //     this.$store.commit("app/SET_LOADING", true);
+          //     amgApi
+          //       .post("/authorize/checkout-payment", {
+          //         idcard: this.card_id,
+          //         amount: this.amount,
+          //         merchant: this.merchant,
+          //         idsession: this.currentUser.user_id,
+          //         payment: this.payment,
+          //         lead_id: this.user_id,
+          //         methodpayment: this.methodpayment,
+          //         observationOther: this.observationOther,
+          //         charge: this.charge == false ? 1 : 0,
+          //         sendsms: this.sendsms == true ? 1 : 0,
+          //       })
+          //       .then((response) => {
+          //         if (response.status == 200 && response.data.status == 200) {
+          //           if (this.methodpayment == 1) {
+          //             if (response.data.transaction.messages) {
+          //               this.$store.commit("app/SET_LOADING", false);
+          //               this.$swal.fire({
+          //                 icon: "success",
+          //                 title:
+          //                   response.data.transaction.responseCode == 1
+          //                     ? "Approved"
+          //                     : response.data.transaction.responseCode == 2
+          //                     ? "Declined"
+          //                     : response.data.transaction.responseCode == 3
+          //                     ? "Error"
+          //                     : response.data.transaction.responseCode == 4
+          //                     ? "Held For Review"
+          //                     : "",
+          //               });
+
+          //               this.$router.push({ name: "payments-crm-list" });
+          //             } else {
+          //               this.$store.commit("app/SET_LOADING", false);
+          //               this.$swal
+          //                 .fire({
+          //                   icon: "error",
+          //                   title:
+          //                     response.data.transaction.responseCode == 1
+          //                       ? "Approved"
+          //                       : response.data.transaction.responseCode == 2
+          //                       ? "Declined"
+          //                       : response.data.transaction.responseCode == 3
+          //                       ? "Error"
+          //                       : response.data.transaction.responseCode == 4
+          //                       ? "Held For Review"
+          //                       : "",
+          //                 })
+          //                 .then((res) => {
+          //                   this.$store.commit("app/SET_LOADING", false);
+          //                   if (res) {
+          //                     this.getcard();
+          //                     this.card_id = "";
+          //                   }
+          //                 });
+          //             }
+          //           } else {
+          //             this.$store.commit("app/SET_LOADING", false);
+          //             this.$swal
+          //               .fire({
+          //                 icon: "success",
+          //                 title: "Transaction Unverified",
+          //               })
+          //               .then((res) => {
+          //                 if (res) {
+          //                   this.$store.commit("app/SET_LOADING", false);
+          //                   this.$emit("clickList", true);
+          //                 }
+          //               });
+          //             this.$router.push({ name: "payments-crm-list" });
+          //           }
+          //         } else if (
+          //           response.status == 200 &&
+          //           response.data.status == 500
+          //         ) {
+          //           this.$store.commit("app/SET_LOADING", false);
+          //           if (response.data.transaction.errors) {
+          //             this.errosAutorize =
+          //               response.data.transaction.errors.error;
+          //             this.responseCode =
+          //               response.data.transaction.responseCode;
+          //             this.messageList = false;
+          //             this.errosList = true;
+          //             if (this.methodpayment == 1) {
+          //               this.$swal
+          //                 .fire({
+          //                   icon: "error",
+          //                   title:
+          //                     response.data.transaction.responseCode == 1
+          //                       ? "Approved"
+          //                       : response.data.transaction.responseCode == 2
+          //                       ? "Declined"
+          //                       : response.data.transaction.responseCode == 3
+          //                       ? "Error"
+          //                       : response.data.transaction.responseCode == 4
+          //                       ? "Held For Review"
+          //                       : "",
+          //                 })
+          //                 .then((res) => {
+          //                   if (res) {
+          //                     this.getcard();
+          //                     this.card_id = "";
+          //                   }
+          //                 });
+          //             }
+          //           } else {
+          //             this.$store.commit("app/SET_LOADING", false);
+          //             this.$swal
+          //               .fire({
+          //                 icon: "error",
+          //                 title:
+          //                   response.data.transaction.responseCode == 1
+          //                     ? "Approved"
+          //                     : response.data.transaction.responseCode == 2
+          //                     ? "Declined"
+          //                     : response.data.transaction.responseCode == 3
+          //                     ? "Error"
+          //                     : response.data.transaction.responseCode == 4
+          //                     ? "Held For Review"
+          //                     : "",
+          //               })
+          //               .then((res) => {
+          //                 if (res) {
+          //                   this.getcard();
+          //                   this.card_id = "";
+          //                   this.$store.commit("app/SET_LOADING", false);
+          //                 }
+          //               });
+          //           }
+          //         }
+          //       })
+          //       .catch((error) => {
+          //         this.$store.commit("app/SET_LOADING", false);
+          //         this.showToast(
+          //           "danger",
+          //           "top-right",
+          //           "Error",
+          //           "XIcon",
+          //           "Something went wrong!"
+          //         );
+          //         console.log(error);
+          //       });
+          //   }
+          // });
         }
       });
     },

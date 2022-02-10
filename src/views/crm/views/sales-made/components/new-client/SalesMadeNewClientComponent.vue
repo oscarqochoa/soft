@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="border-info rounded">
     <filter-slot
       v-scrollbar
       :filter="filter"
@@ -62,25 +62,29 @@
           </b-form-group>
         </template>
         <template v-slot:cell(client)="data">
-          <p class="mb-0 font-weight-bold">
-            {{ data.item.client }}
-          </p>
-          <p class="mb-0">
-            {{ data.item.mobile }}
-          </p>
-          <p class="mb-0">
-            <small>{{ data.item.state }}</small>
-          </p>
-          <p>
-            <small>{{ data.item.sourcesname }}</small>
-          </p>
+          <div class="text-left">
+            <router-link
+              :class="[textLink]"
+              :to="`/crm/leads/${data.item.lead_id}`"
+              target="_blank"
+            >{{ data.item.client }}</router-link>
+            <p class="mb-0">
+              {{ data.item.mobile }}
+            </p>
+            <p class="mb-0">
+              <small>{{ data.item.state }}</small>
+            </p>
+            <p>
+              <small>{{ data.item.sourcesname }}</small>
+            </p>
+          </div>
         </template>
         <template v-slot:cell(program)="data">
           <b-button
             :style="`color: white !important; border-color: ${data.item.program_color} !important; background-color: ${data.item.program_color} !important;`"
             size="sm"
             class="font-weight-bolder"
-            @click="openModalProgram(data.item)"
+            @click="openModalProgram(data.item, data.index)"
           >
             <span
               v-if="data.item.program === 'Business'"
@@ -253,7 +257,7 @@
             <b-col>
               <money
                 v-model="data.item.fee"
-                class="form-control form-control-sm mb-1 p-0 border-0 text-center"
+                class="mb-1 p-0 border-0 text-center"
                 v-bind="{prefix: ' $ ', precision: 2}"
                 style="width: 70px !important; padding-left: 10px; opacity: 1"
                 disabled
@@ -278,7 +282,7 @@
                 v-if="!data.item.editFee"
                 icon="pencil-fill"
                 class="cursor-pointer"
-                @click="data.item.editFee = true"
+                @click="!(data.item.haveRates !== 1) && (data.item.editFee = true)"
               />
               <feather-icon
                 v-else
@@ -309,7 +313,7 @@
               G_IS_CEO || G_IS_SUPERVISOR)) ? 'cursor-pointer' : ''"
             @click="( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
               G_IS_CEO || G_IS_SUPERVISOR) &&
-              openInitialPaymentModal(data.item)"
+              openInitialPaymentModal(data.item, data.index)"
           >
             <b-icon
               v-if="data.item.initial_payment_status === 1"
@@ -340,7 +344,7 @@
               icon="file-text"
               variant="muted"
               :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
-              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item)"
+              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item, data.index)"
             />
             <b-icon
               v-if="data.item.contract_fee_status == 1 && data.item.initial_payment_status == 2"
@@ -348,7 +352,7 @@
               icon="file-text"
               class="cursor-pointer font-medium-2"
               :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
-              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item)"
+              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item, data.index)"
             />
             <b-icon
               v-if="data.item.contract_fee_status == 2"
@@ -356,7 +360,7 @@
               icon="file-text"
               class="cursor-pointer font-medium-2"
               :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
-              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item)"
+              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item, data.index)"
             />
           </b-row>
         </template>
@@ -369,7 +373,7 @@
               (data.item.notes_status_new == null) ? 'muted':
               (data.item.notes_status_new == 0) ? 'success' :
               'warning' "
-            @click="notesModal(data.item)"
+            @click="notesModal(data.item, data.index)"
           />
           <b-icon
             v-else
@@ -377,7 +381,7 @@
             class="cursor-pointer font-medium-2"
             :variant="
               (data.item.notes_status === 0) ? 'muted': 'success' "
-            @click="notesModal(data.item)"
+            @click="notesModal(data.item, data.index)"
           />
         </template>
         <template v-slot:cell(trackings)="data">
@@ -390,7 +394,7 @@
           />
         </template>
         <template v-slot:cell(files)="data">
-          <amg-icon
+          <feather-icon
             :class="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||G_IS_CEO || G_IS_SUPERVISOR)) ? 'cursor-pointer text-warning' : ''"
             :style="( (( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||G_IS_CEO || G_IS_SUPERVISOR)) ? 'fill: #ff9f43' : 'fill: #D8D8D6'"
             icon="FolderIcon"
@@ -417,7 +421,7 @@
               variant="outline-success"
               class="m-10px"
               size="sm"
-              @click="revisionSale(5,data.item)"
+              @click="revisionSale(5,data.item, data.index)"
             >Revission</b-button>
 
             <!-- Revission to Administration for Supervisor or Ceo -->
@@ -428,7 +432,7 @@
               :disabled="data.item.type == 1 && G_IS_CEO ? false: data.item.type == 0 ? false : true"
               class="m-10px"
               size="sm"
-              @click="revisionSale(2, data.item)"
+              @click="revisionSale(2, data.item, data.index)"
             >Revission</b-button>
 
             <!-- IN SUPERVISOR REVISSION  -->
@@ -438,7 +442,7 @@
               variant="outline-success"
               class="m-10px"
               size="sm"
-              @click="revisionSale(2, data.item)"
+              @click="revisionSale(2, data.item, data.index)"
             >Revission</b-button>
             <b-button
               v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
@@ -446,7 +450,7 @@
               variant="outline-warning"
               class="m-10px"
               size="sm"
-              @click="revisionSale(7, data.item)"
+              @click="revisionSale(7, data.item, data.index)"
             >Return</b-button>
             <b-button
               v-if="data.item.status == 3 && (currentUser.user_id == data.item.user_id ||
@@ -455,7 +459,7 @@
               variant="outline-danger"
               class="m-10px"
               size="sm"
-              @click="revisionSale(2,data.item)"
+              @click="revisionSale(2,data.item, data.index)"
             >Revission</b-button>
             <b-button
               v-if="data.item.initial_payment_status == 1 && (G_IS_CEO || G_IS_SUPERVISOR)"
@@ -477,7 +481,7 @@
               variant="outline-success"
               class="m-10px"
               size="sm"
-              @click="revisionSale(5, data.item)"
+              @click="revisionSale(5, data.item, data.index)"
             >Revission</b-button>
             <b-button
               v-if="(data.item.status == 1 || data.item.status == 6) && (G_IS_CEO || G_IS_SUPERVISOR) &&
@@ -486,7 +490,7 @@
               variant="outline-success"
               :disabled="data.item.type == 1 && G_IS_CEO ? false : data.item.type == 0 ? false : true"
               size="sm"
-              @click="revisionSale(2, data.item)"
+              @click="revisionSale(2, data.item, data.index)"
             >Revission</b-button>
             <b-button
               v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) &&
@@ -494,7 +498,7 @@
               class="m-10px"
               variant="outline-success"
               size="sm"
-              @click="revisionSale(2, data.item)"
+              @click="revisionSale(2, data.item, data.index)"
             >Revission</b-button>
             <b-button
               v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) &&
@@ -502,7 +506,7 @@
               class="m-10px"
               variant="outline-danger"
               size="sm"
-              @click="revisionSale(7, data.item)"
+              @click="revisionSale(7, data.item, data.index)"
             >Return</b-button>
             <b-button
               v-if="data.item.status == 3 && (currentUser.user_id == data.item.user_id ||
@@ -511,7 +515,7 @@
               class="m-10px"
               variant="outline-danger"
               size="sm"
-              @click="revisionSale(2, data.item)"
+              @click="revisionSale(2, data.item, data.index)"
             >Revission</b-button>
             <b-button
               v-if="data.item.initial_payment_status == 1 && (G_IS_CEO || G_IS_SUPERVISOR)"
@@ -561,7 +565,7 @@
             variant="outline-info"
             size="sm"
             @click="returnDone(data.item.event_id, null)"
-          >Return</b-btn>
+          >Done</b-btn>
         </template>
       </b-table>
     </filter-slot>
@@ -580,69 +584,15 @@
         :lead-name="modalData.historySms.leadName"
       />
     </b-modal>
-    <b-modal
-      id="modal-send-sms"
-      ok-only
-      modal-class="modal-primary"
-      centered
-      size="lg"
-      title="SEND SMS"
-      no-close-on-backdrop
-    >
-      <modal-send-sms
-        :smss="modalData.sendSms.leads_sms"
-        :modul="currentUser.modul_id"
-        :typesms="modalData.sendSms.typesms"
-        :sms="modalData.sendSms.leads_sms_o"
-        :name-leads="modalData.sendSms.name_leads_arr"
-      />
-
-      <template #modal-footer>
-        <b-form-group
-          label="VARS"
-          class="w-100"
-        >
-          <b-row>
-            <b-col sm="3">
-              <b-input-group size="sm">
-                <b-input-group-prepend is-text>
-                  @1
-                </b-input-group-prepend>
-                <b-form-input
-                  placeholder="FIRST NAME"
-                  readonly
-                />
-              </b-input-group>
-            </b-col>
-            <b-col sm="3">
-              <b-input-group size="sm">
-                <b-input-group-prepend is-text>
-                  @2
-                </b-input-group-prepend>
-                <b-form-input
-                  placeholder="LAST NAME"
-                  readonly
-                />
-              </b-input-group>
-            </b-col>
-            <b-col
-              v-if="currentUser.modul_id == 15"
-              sm="3"
-            >
-              <b-input-group size="sm">
-                <b-input-group-prepend is-text>
-                  @3
-                </b-input-group-prepend>
-                <b-form-input
-                  placeholder="LAST NAME"
-                  readonly
-                />
-              </b-input-group>
-            </b-col>
-          </b-row>
-        </b-form-group>
-      </template>
-    </b-modal>
+    <modal-send-sms
+      v-if="modal.modalSms"
+      :smss="modalData.sendSms.leads_sms"
+      :modul="currentUser.modul_id"
+      :typesms="modalData.sendSms.typesms"
+      :sms="modalData.sendSms.leads_sms_o"
+      :name-leads="modalData.sendSms.name_leads_arr"
+      @hide="modalSmsClose"
+    />
     <tracking-modal
       :modal="modal"
       :tracking="modalData.tracking"
@@ -676,8 +626,8 @@
       v-if="modal.revission"
       :modal="modal"
       :revission="modalData.revission"
-      @click="$refs['new-client-done-table'].refresh(); modal.revission = false"
-      @response="$refs['new-client-done-table'].refresh(); modal.revission = false"
+      @click="updateRow(); modal.revission = false"
+      @response="updateRow(); modal.revission = false"
     />
 
     <!-- NOTES -->
@@ -698,7 +648,7 @@
       :modal="modal"
       :contract-fee="modalData.contractFee"
       @close="modal.contract_fee = false"
-      @reload="$refs['new-client-done-table'].refresh()"
+      @reload="updateRow"
     />
     <approve-supervisor-modal
       v-if="modal.approveSupervisorModal"
@@ -818,6 +768,7 @@ export default {
         contract_fee: false,
         notes: false,
         approveSupervisorModal: false,
+        modalSms: false,
       },
       modalData: {
         historySms: {
@@ -915,6 +866,8 @@ export default {
         },
       },
       selectAll: false,
+      selectedIndex: null,
+      newRowFromSelectedIndex: null,
     }
   },
   computed: {
@@ -975,12 +928,14 @@ export default {
     } catch (error) {
       console.error(error)
     }
+
+    this.addPaddingTd()
   },
   methods: {
-    hideInitialPaymentModal(val) {
+    async hideInitialPaymentModal(val) {
       this.modal.initial_payment = false
       if (val) {
-        this.$refs['new-client-done-table'].refresh()
+        await this.updateRow()
       }
     },
     closeModalApprove() {
@@ -999,7 +954,7 @@ export default {
         )
         if (result.value) {
           try {
-            const response = await amgApi.post('/set-done', {
+            const response = await amgApi.post('/sale/update-sales-set-done', {
               eventId: this.modalData.approveSupervisorModal.eventId,
             })
             if (response.status === 200) {
@@ -1019,7 +974,7 @@ export default {
       this.modalData.sendSms.name_leads_arr = [
         { name: item.client, id: item.lead_id },
       ]
-      this.$bvModal.show('modal-send-sms')
+      this.modal.modalSms = true
     },
     modalSmssOpen() {
       this.modalData.sendSms.typesms = 0
@@ -1028,8 +983,10 @@ export default {
         id: el.lead_id,
       }))
       this.modalData.sendSms.leads_sms = this.selected.map(el => el.lead_id)
-      console.log(this.modalData.sendSms.name_leads_arr)
-      this.$bvModal.show('modal-send-sms')
+      this.modal.modalSms = true
+    },
+    modalSmsClose() {
+      this.modal.modalSms = false
     },
     modalHistorySmsOpen(item) {
       this.modalData.historySms.leadName = item.client
@@ -1088,13 +1045,14 @@ export default {
           index += 1
         }
         this.items = data.data
-        return this.items
+        return this.items || []
       } catch (e) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', e)
         return []
       }
     },
-    openContractFeeModal(data) {
+    openContractFeeModal(data, index) {
+      this.selectedIndex = index
       if (
         data.user_id == this.currentUser.user_id
         || this.G_IS_CEO
@@ -1114,7 +1072,7 @@ export default {
     },
 
     // Notes
-    async notesModal(data) {
+    async notesModal(data, index) {
       this.addPreloader()
       this.modalData.notes.capturedName = data.captured
       this.modalData.notes.sellerName = data.seller
@@ -1137,13 +1095,14 @@ export default {
         || this.G_USER_SESSION == data.user_id
       this.modalData.notes.notSeller = data.user_id != this.G_USER_SESSION && this.G_IS_SELLER
 
-      this.openModalNotes(data.creates, data.program_id)
+      this.openModalNotes(data.creates, data.program_id, index)
 
       /*  this.modalData.notes.notesProgram =
           this.modalData.notes.salesMades =
           this.modalData.notes.type = */
     },
-    openModalNotes(created, program) {
+    openModalNotes(created, program, index) {
+      this.selectedIndex = index
       switch (true) {
         case created >= '2020-05-28' && program == 1:
           this.modalData.notes.programSelected = 'ModalNotesFirst' // ready
@@ -1170,11 +1129,10 @@ export default {
 
       this.modal.notes = true
     },
-    closeModalNotes(status) {
-      console.log(status)
+    async closeModalNotes(status) {
       this.modal.notes = false
       if (status) {
-        this.$refs['new-client-done-table'].refresh()
+        await this.updateRow()
         this.removePreloader()
         this.showSuccessSwal('OPERATION SUCCESSFULLY')
       }
@@ -1185,7 +1143,8 @@ export default {
       this.modalData.url.selectedLead = data
       this.modal.url = true
     },
-    revisionSale(state, data) {
+    revisionSale(state, data, index) {
+      this.selectedIndex = index
       this.modalData.revission.nameProgram = data.program
       this.modalData.revission.idProgram = data.program_id
       this.modalData.revission.nameClient = data.client
@@ -1201,8 +1160,14 @@ export default {
       this.modalData.revission.last_name = data.last_name
       this.modal.revission = true
     },
-    hideModalProgram(refresh) {
-      if (refresh) this.$refs['new-client-done-table'].refresh()
+    async updateRow() {
+      this.newRowFromSelectedIndex = await window.amgApi.post('/sales-made/get-sale-made-by-sale-id', { saleId: this.items[this.selectedIndex].id })
+      Object.assign(this.items[this.selectedIndex], this.newRowFromSelectedIndex.data[0])
+    },
+    async hideModalProgram(refresh) {
+      if (refresh) {
+        await this.updateRow()
+      }
       this.modalData.programs.programSelected = ''
       this.modal.programs = false
       this.$store.commit('app/SET_LOADING', false)
@@ -1225,8 +1190,9 @@ export default {
       else if (type === 3) this.modalData.capturedByTracking.tittle = 'FEE'
       this.modal.captuerd_by_tracking = true
     },
-    async openInitialPaymentModal(data) {
+    async openInitialPaymentModal(data, index) {
       try {
+        this.selectedIndex = index
         this.addPreloader()
         this.modalData.initial_payment.programid = data.program_id
         this.modalData.initial_payment.sessionId = this.currentUser.user_id
@@ -1241,11 +1207,16 @@ export default {
         this.modalData.initial_payment.nameClient = data.client
         this.modalData.initial_payment.valorInitalPaymetn = data.initial_payment_status
         this.modalData.initial_payment.feeprops = data.fee
-        const cards = await amgApi.post('/searchcards', { id: data.lead_id })
+        const cards = await amgApi.post('/clients/search-cards-clients', {
+          id: data.lead_id,
+        })
         if (cards.status === 200) {
           this.modalData.initial_payment.allcards = cards.data
         }
-        const response = await amgApi.post('/paymentsales', { id: data.id })
+        const response = await amgApi.post(
+          '/sales-made/get-payments-sales-made',
+          { id: data.id },
+        )
         if (response.status === 200) {
           [this.modalData.initial_payment.payments] = response.data
         }
@@ -1256,7 +1227,8 @@ export default {
         this.showErrorSwal()
       }
     },
-    openModalProgram(data) {
+    openModalProgram(data, index) {
+      this.selectedIndex = index
       switch (data.program_id) {
         case 1:
           this.modalData.programs.programSelected = 'business-modal'
@@ -1294,7 +1266,16 @@ export default {
         this.modal.programs = true
       }
     },
-    openFilesModal(id, program, client, saleId, status, sellerId, programId, eventDate) {
+    openFilesModal(
+      id,
+      program,
+      client,
+      saleId,
+      status,
+      sellerId,
+      programId,
+      eventDate,
+    ) {
       this.modalData.files.id = id
       this.modalData.files.program = program
       this.modalData.files.client = client
@@ -1425,13 +1406,7 @@ export default {
             user: this.currentUser.user_id,
           })
           if (response.status === 200) {
-            this.showToast(
-              'success',
-              'top-right',
-              'Success',
-              'CheckIcon',
-              'Se actualizo satisfactoriamente',
-            )
+            this.showSuccessSwal()
           } else return
           // eslint-disable-next-line no-param-reassign
           user.fee = user.feeNew
@@ -1453,7 +1428,7 @@ export default {
           'Are you sure annuled this sale',
         )
         if (swal.isConfirmed) {
-          const response = await amgApi.post('/annulsale', {
+          const response = await amgApi.post('/sales-made/annul-sale', {
             id: sale.id,
             id_event: sale.event_id,
             user: this.currentUser.user_id,

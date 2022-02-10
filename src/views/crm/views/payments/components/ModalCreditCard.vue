@@ -4,22 +4,37 @@
     <div class="col-lg-12 px-0">
       <div>
         <div
-          :style="cards.length >= 3 ? 'height: 166px;overflow: auto;' : ''"
-          id="cont-list"
+          
         >
-          <div class="table-responsive" style="margin-bottom: 0" >
-            <b-table responsive="sm"  style="margin-bottom:0px"
-              show-empty table-class="text-nowrap"
-              sticky-header :items="cards" :fields="fields">
+          <div style="margin-bottom: 0" >
+            <b-table 
+         
+          slot="table"
+          no-provider-filtering
+          ref="refClientsList"
+          primary-key="id"
+          table-class="text-nowrap"
+          responsive="sm"
+          show-empty
+          sticky-header="30vh"
+              
+              :items="cards" :fields="fields">
               <template #cell(Select)="data">
+                <ValidationProvider
+                    name="comment"
+                    rules="required"
+                    v-slot="{ errors }"
+                  >
                   <b-form-radio
                   class="vs-checkbox-con"
+                  :class="{'border-danger': errors[0]}"
                   :value="data.item.id"
                   @change="$emit('CardId',data.item.id)"
                   v-model="selected"
                   plain
                 >
                 </b-form-radio>
+                </ValidationProvider>
               </template>
               <template #cell(cardnumber)="data">
                 <div
@@ -81,7 +96,7 @@
 <script>
 import { amgApi } from "@/service/axios.js";
 import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
-
+import PaymentService from "../service/payments.service";
 export default {
   components: {
     ModalCardCreate,
@@ -149,27 +164,6 @@ export default {
     },
   },
   methods: {
-    //Edit and Cancel information
-    editInformation() {
-      this.$swal
-        .fire({
-          title: "Are you Sure ? ",
-          text: "Do you want to edit the information?",
-          icon: "warning",
-          showCancelButton: true,
-          customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-danger ",
-          },
-          confirmButtonText: "Yes",
-        })
-        .then((r) => {
-          if (r.value) {
-            this.returnInformation = JSON.parse(JSON.stringify(this.form));
-            this.edit = true;
-          }
-        });
-    },
 
     //Cards
     openModalCreateCard() {
@@ -186,21 +180,6 @@ export default {
       this.modalCard = false;
     },
 
-    openModalCard(id) {
-      amgApi
-        .post("/carddata", {
-          id: id,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.card = {
-              valor: response.data[0],
-              role: this.cardsLead.rol,
-            };
-            this.modalCard = true;
-          }
-        });
-    },
 
     openmodaldeletecard(id) {
       this.card_id = id;
@@ -209,26 +188,15 @@ export default {
     closedModalDeleteCar() {
       this.deletecardmodal = false;
     },
-    searchcards() {
-      amgApi
-        .post("/searchcards", {
-          id: this.cardsLead.lead_id,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.cards = response.data;
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          this.showToast(
-                  "danger",
-                  "top-right",
-                  "Error",
-                  "XIcon",
-                  "Something went wrong!"
-                );
-        });
+    async searchcards() {
+      try{
+        const data = await PaymentService.searchcards({id: this.cardsLead.lead_id,})
+        this.cards = data;
+
+      }catch(error){
+        console.log(error)
+        this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+      }
     },
   },
 };

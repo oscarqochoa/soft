@@ -1,39 +1,56 @@
 <template>
   <div>
-    <b-tabs
-      pills
-      lazy
-      active-nav-item-class="bg-important border-0 shadow-none"
-    >
-      <b-tab
-        title="Done"
-        title-link-class="border-secondary hover-important"
+    <b-card body-class="px-0">
+      <b-tabs
+        lazy
+        v-model="tabIndex"
+        active-tab-class="p-0 "
+        pills
+        card
+        :nav-wrapper-class="[bgLightDark, 'pb-0']"
+        nav-class="mb-0"
+        active-nav-item-class="bg-info box-shadow-info border-info"
       >
-        <sales-made-new-client-component
-          :done="1"
-        />
+        <b-tab title="Done">
+          <sales-made-new-client-component :done="1" />
+        </b-tab>
+        <b-tab title="Pending">
+          <sales-made-new-client-component :done="0" />
+        </b-tab>
+      </b-tabs>
+    </b-card>
+    <!-- <b-tabs v-model="tabIndex" tabs lazy fill>
+      <b-tab title="Done">
+        <sales-made-new-client-component :done="1" />
       </b-tab>
-      <b-tab
-        title="Pending"
-        title-link-class="border-secondary hover-important"
-      >
-        <sales-made-new-client-component
-          :done="0"
-        />
+      <b-tab title="Pending">
+        <sales-made-new-client-component :done="0" />
       </b-tab>
-    </b-tabs>
+    </b-tabs>-->
   </div>
 </template>
 
 <script>
-import SalesMadeNewClientComponent from '@/views/crm/views/sales-made/components/new-client/SalesMadeNewClientComponent.vue'
+import SalesMadeNewClientComponent from "@/views/crm/views/sales-made/components/new-client/SalesMadeNewClientComponent.vue";
 
 export default {
-  name: 'NewClientComponent',
+  name: "NewClientComponent",
   components: {
-    SalesMadeNewClientComponent,
+    SalesMadeNewClientComponent
   },
-}
+  data() {
+    return {
+      tabIndex: null
+    };
+  },
+  created() {
+    if (this.$route.query.done) {
+      this.tabIndex = this.$route.query.done - 1;
+    } else {
+      this.tabIndex = 0;
+    }
+  }
+};
 </script>
 
 <style scoped>

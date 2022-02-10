@@ -3,6 +3,7 @@
     <ValidationObserver ref="form">
       <b-modal
         v-model="ownControl"
+        modal-class="modal-primary"
         modal
         size="lg"
         scrollable
@@ -153,7 +154,7 @@
                             <div class="text-center">
                               {{ rate.description }}
                             </div>
-                            <div> ${{ rate.price }}.00 </div>
+                            <div>${{ rate.price }}.00</div>
                           </b-col>
                         </b-row>
                       </b-col>
@@ -288,7 +289,7 @@
                             <div class="text-center">
                               {{ rate.description }}
                             </div>
-                            <div> ${{ rate.price }}.00 </div>
+                            <div>${{ rate.price }}.00</div>
                           </b-col>
                         </b-row>
                       </b-col>
@@ -320,9 +321,7 @@
                             cols="4"
                             class="text-right font-weight-bold font-medium-2"
                           >
-                            <div>
-                              FEE $
-                            </div>
+                            <div>FEE $</div>
                           </b-col>
                           <b-col cols="8">
                             <money
@@ -339,9 +338,7 @@
                       <b-col
                         v-if="errors[0] && validateMoney"
                         class="invalid-feedback ml-4"
-                      >
-                        Fee is {{ errors[0] }}
-                      </b-col>
+                      >Fee is {{ errors[0] }}</b-col>
                     </ValidationProvider>
                   </b-row>
                 </b-col>
@@ -407,7 +404,10 @@ export default {
     salesClient: {
       type: Object,
       default: () => ({
-        event_id: '', account_id: '', id: '', lead_id: '',
+        event_id: '',
+        account_id: '',
+        id: '',
+        lead_id: '',
       }),
       // 1: complete rates crm, 2: detail of sale crm, 3: add Services
       // 4: change Services, 5 show add change Services, 6  add  services to lead from programs
@@ -469,7 +469,9 @@ export default {
       return this.typeModal === 2 || this.typeModal === 5
     },
     isModalAdd() {
-      return this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+      return (
+        this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+      )
     },
 
     otherTotalS() {
@@ -523,35 +525,49 @@ export default {
         prices.push({ item: this.option.toString(), cant: 1 })
 
         // For others or business credit
-        this.othersPayments = this.option == 34 ? this.s_payments : this.option == 35 ? this.m_payments : []
+        this.othersPayments = this.option == 34
+          ? this.s_payments
+          : this.option == 35
+            ? this.m_payments
+            : []
         switch (this.option) {
-          case 34: this.suggested = this.otherTotalS; break
-          case 35: this.suggested = this.otherTotalM; break
-          case 63: this.suggested = this.businessCreditS; break
-          case 64: this.suggested = this.businessCreditM; break
-          default: break
+          case 34:
+            this.suggested = this.otherTotalS
+            break
+          case 35:
+            this.suggested = this.otherTotalM
+            break
+          case 63:
+            this.suggested = this.businessCreditS
+            break
+          case 64:
+            this.suggested = this.businessCreditM
+            break
+          default:
+            break
         }
         // Depends of the Modal type
         switch (this.typeModal) {
           case 1:
             message = 'complete Rates'
-            route = '/attendend'
+            route = '/sales-made/attendend-sale'
             break
           case 3:
             message = 'add new service'
-            route = '/attendendprogram'
+            route = '/sales-made/attendend-saleprogram'
             this.typeADD = 1
             break
           case 4:
             message = 'change service'
-            route = '/attendendprogram'
+            route = '/sales-made/attendend-saleprogram'
             this.typeADD = 2
             break
           case 6:
             message = 'add new service'
-            route = '/leadattendend'
+            route = '/sale/insert-lead-attendance'
             break
-          default: break
+          default:
+            break
         }
         const param = {
           prices,
@@ -570,7 +586,9 @@ export default {
           json_ce: this.json_ce,
         }
 
-        const result = await this.showConfirmSwal(`Are you sure you want to ${message}`)
+        const result = await this.showConfirmSwal(
+          `Are you sure you want to ${message}`,
+        )
         if (result.value) {
           this.addPreloader()
           const response = await amgApi.post(`${route}`, param)
@@ -605,7 +623,7 @@ export default {
 
     async searchRate() {
       try {
-        const response = await amgApi.post('/searchprogram', { id: this.program })
+        const response = await amgApi.post('/rates/get-rates-by-programs', { id: this.program })
         if (response.status === 200) {
           const rates = response.data
           // Order by order
@@ -636,17 +654,28 @@ export default {
 
     async showRates() {
       try {
-        const response = await amgApi.post('/searchprogramsalemade', { id: this.salesClient.id })
+        const response = await amgApi.post('/sales-made/get-details-sales-made', { id: this.salesClient.id })
         if (response.status === 200) {
           this.fee = response.data[0].fee
-          this.rate_selected = response.data[0].rate_selected ? JSON.parse(response.data[0].rate_selected) : ''
+          this.rate_selected = response.data[0].rate_selected
+            ? response.data[0].rate_selected
+            : ''
           this.option = this.rate_selected ? this.rate_selected[0].rate_id : 0
           switch (this.option) {
-            case 34: this.s_payments = JSON.parse(response.data[0].others_prices); break
-            case 35: this.m_payments = JSON.parse(response.data[0].others_prices); break
-            case 63: this.businessCreditS = response.data[0].suggeste; break
-            case 64: this.businessCreditM = response.data[0].suggeste; break
-            default: break
+            case 34:
+              this.s_payments = JSON.parse(response.data[0].others_prices)
+              break
+            case 35:
+              this.m_payments = JSON.parse(response.data[0].others_prices)
+              break
+            case 63:
+              this.businessCreditS = response.data[0].suggeste
+              break
+            case 64:
+              this.businessCreditM = response.data[0].suggeste
+              break
+            default:
+              break
           }
           this.removePreloader()
         }
@@ -662,7 +691,9 @@ export default {
     },
     async getScore() {
       try {
-        const response = await amgApi.post('/getscoreattend', { lead_id: this.salesClient.lead_id })
+        const response = await amgApi.post('/attend/get-score-attend', {
+          lead_id: this.salesClient.lead_id,
+        })
         if (response.status === 200) {
           this.score_id = response.data.score_id
         }
@@ -671,30 +702,31 @@ export default {
       }
     },
   },
-
 }
 </script>
 
 <style scoped>
 .bg-click {
-  background-color: #6100FF !important;
+  background-color: #6100ff !important;
 }
-.hover-card, .cancel{
+.hover-card,
+.cancel {
   transition: 300ms;
 }
-.hover-card:hover{
-  background-color: #6100FF !important;
+.hover-card:hover {
+  background-color: #6100ff !important;
   color: white;
   border: none !important;
 }
-.cancel:hover{
-  background-color: #FF3B19 !important;
+.cancel:hover {
+  background-color: #ff3b19 !important;
   color: white !important;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0
+  opacity: 0;
 }
 </style>

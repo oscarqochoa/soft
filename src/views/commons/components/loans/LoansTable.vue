@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="isTabsBorder">
     <filter-slot
       :filter="filters"
       :filter-principal="filterPrincipal"
@@ -31,6 +31,7 @@
           :current-page="paginate.currentPage"
           :per-page="paginate.perPage"
           :filter="searchInput"
+          striped
           no-provider-filtering
           thead-class="text-center"
           tbody-class="text-center"
@@ -44,13 +45,13 @@
 
           <template #cell(amount_loan)="data">
             <div>
-              <span style="color:#4141af">$ {{data.value}}</span>
+              <span style="color:#4141af">$ {{ data.value }}</span>
             </div>
           </template>
 
           <template #cell(balance)="data">
             <div>
-              <span style="color:#4141af">$ {{data.value}}</span>
+              <span style="color:#4141af">$ {{ data.value }}</span>
             </div>
           </template>
 
@@ -64,21 +65,21 @@
 
           <template #cell(due_date)="data">
             <div v-if="data.item.due_id">
-              <span>{{data.item.due_date | myGlobal}}</span>
+              <span>{{ data.item.due_date | myGlobal }}</span>
               <b-icon
                 v-if="isManagement && data.item.due == 1"
                 icon="pencil-square"
                 variant="success cursor-pointer ml2"
                 font-scale="1"
                 @click="editDatePay(data.item)"
-              ></b-icon>
+              />
               <b-icon
                 v-if="isManagement && data.item.due == 1 && data.item.is_tracking"
                 icon="pencil-square"
                 variant="secondary cursor-pointer ml2"
                 font-scale="1"
                 @click="openTrackingPayDay(data.item.id_loan)"
-              ></b-icon>
+              />
             </div>
             <div v-else>
               <span>-</span>
@@ -98,57 +99,57 @@
           </template>
 
           <template #cell(process)="data">
-            <div class="font-weight-bolder">{{ data.value}}</div>
+            <div class="font-weight-bolder">{{ data.value }}</div>
           </template>
 
           <template #cell(status)="data">
             <b-badge
               class="fs100 w-100"
-              :variant="data.item.status_loan ==4? 'dark' : data.item.status_tracking == 2?'danger': data.item.rol_tracking == 4 &&  data.item.status_tracking ==1? 'success': 'warning'"
+              :variant="data.item.status_loan ==4? 'dark' : data.item.status_tracking == 2?'danger': data.item.rol_tracking == 4 && data.item.status_tracking ==1? 'success': 'warning'"
             >{{ data.value }}</b-badge>
           </template>
 
           <template #cell(id_loan)="data">
             <b-button
-              size="sm"
               v-b-tooltip.hover
+              size="sm"
               title="tracking"
               variant="dark button-little-size"
               @click="openTrackingLoan(data.item.id_loan)"
             >
-              <b-icon icon="stoplights"></b-icon>
+              <b-icon icon="stoplights" />
             </b-button>
           </template>
 
           <template #cell(status_loan)="data">
             <b-button
-              size="sm"
               v-b-tooltip.hover
+              size="sm"
               title="INFO OF LOAN"
               class="button-little-size ml6"
               variant="gradient-info"
               @click="openModalLoanId(data.item.id_loan)"
             >
-              <b-icon icon="info-circle-fill"></b-icon>
+              <b-icon icon="info-circle-fill" />
             </b-button>
             <b-button
               v-if="tab==1 && data.item.status_loan == 3"
-              size="sm"
               v-b-tooltip.hover
+              size="sm"
               title="ADD NEW PAY"
               class="button-little-size ml6"
               variant="gradient-success"
               @click="openModalPay(data.item.id_loan, data.item.due_id)"
             >
-              <b-icon icon="wallet-fill"></b-icon>
+              <b-icon icon="wallet-fill" />
             </b-button>
             <span
-              style="position:relative"
               v-if="(tab==1 || isManagement)&& [3,4].includes(data.item.status_loan)"
+              style="position:relative"
             >
               <b-button
-                size="sm"
                 v-b-tooltip.hover
+                size="sm"
                 title="REVISION PAYMENT"
                 class="button-little-size ml6"
                 variant="gradient-warning"
@@ -164,14 +165,14 @@
             </span>
             <b-button
               v-if="(tab==1 || isManagement)&& [3,4].includes(data.item.status_loan)"
-              size="sm"
               v-b-tooltip.hover
+              size="sm"
               title="INVOICE"
               class="button-little-size ml6"
               variant="gradient-secondary"
               @click="openModalInvoice(data.item.id_loan)"
             >
-              <b-icon icon="file-earmark-spreadsheet"></b-icon>
+              <b-icon icon="file-earmark-spreadsheet" />
             </b-button>
           </template>
         </b-table>
@@ -190,14 +191,15 @@ import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
+import { mapGetters, mapMutations } from "vuex";
+import moment from "moment";
 import ModalTrackingLoan from "./modals/ModalTrackingLoan.vue";
 import ModalNewPay from "./modals/ModalNewPay.vue";
 import ModalRevisionPayment from "./modals/ModalRevisionPayment.vue";
 import ModalInvoice from "./modals/ModalInvoice.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-import { mapGetters, mapMutations } from "vuex";
-import moment from "moment";
 import loansService from "@/views/commons/components/loans/services/loans.service";
+
 export default {
   name: "LoansTable",
   directives: {
@@ -422,6 +424,9 @@ export default {
     }),
     isManagement() {
       return this.module === 16;
+    },
+    isTabsBorder() {
+      return this.tab === 2 || this.tab === 3 ? "border-info rounded" : "";
     }
   },
   methods: {
@@ -429,7 +434,7 @@ export default {
       setLoading: "app/SET_LOADING"
     }),
 
-    //Searching Table
+    // Searching Table
     async search(ctx) {
       try {
         this.isBusy = true;
@@ -444,10 +449,8 @@ export default {
           enddate: this.filters[1].model,
           status: this.status,
           status_search: this.filters[2].model,
-          perPage: ctx.perPage
+          perPage: this.paginate.perPage
         };
-
-        console.log(this.paginate);
         const response = await loansService.getLoans(params);
         this.loans = response.data;
         this.startPage = response.from;
@@ -467,10 +470,10 @@ export default {
     },
     resetSearch() {
       this.searchInput = "";
-      this.$refs.refClientsList.refresh();
+      this.$refs.refLoansList.refresh();
     },
 
-    //Methods to Edit
+    // Methods to Edit
     openTrackingPayDay(id) {},
     updateDate() {
       swal
@@ -487,7 +490,7 @@ export default {
           if (result.value) {
             this.addPreloader();
             axios
-              .post("/api/loans/update-date", {
+              .post("/api/loans/update-date-first-due", {
                 id_loan: this.loanSelected.id_loan,
                 due_date: this.loanSelected.due_date,
                 user_id: this.global.layout.id
@@ -510,8 +513,8 @@ export default {
       this.showModalDate = true;
     },
     changeOrdinal(number) {
-      var s = ["th", "st", "nd", "rd"];
-      var v = number % 100;
+      const s = ["th", "st", "nd", "rd"];
+      const v = number % 100;
       return number + (s[(v - 20) % 10] || s[v] || s[0]);
     },
 
@@ -520,7 +523,7 @@ export default {
       this.showModalLoanPays = true;
     },
 
-    //OPEN MODALS
+    // OPEN MODALS
     openModalLoanId(id) {
       this.modalRequest.idLoan = id;
       this.modalRequest.show = true;
@@ -546,19 +549,19 @@ export default {
       this.modalsInfo.idLoan = id;
       this.modalsInfo.revisionPay = true;
     },
-    //CLOSE MODALS
+    // CLOSE MODALS
     closeModals(status) {
-      //Close Modals
+      // Close Modals
       this.modalsInfo.newPay = false;
       this.modalsInfo.tracking = false;
       this.modalsInfo.revisionPay = false;
       this.modalsInfo.invoice = false;
 
-      //Clean Info
+      // Clean Info
       this.modalsInfo.idLoan = null;
       this.modalsInfo.idDue = null;
 
-      //Research
+      // Research
       if (status) {
         this.$store.commit("loans-store/ADD_ONE_RESEARCH");
         this.$store.dispatch("loans-store/loadCounterTab");
@@ -566,9 +569,9 @@ export default {
     }
   },
   watch: {
-    researchLoans(newValue, oldValue) {
+    researchLoans(newValue) {
       if (newValue) {
-        this.search();
+        this.resetSearch();
       }
     }
   }

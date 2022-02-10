@@ -6,7 +6,7 @@
       @contextmenu.prevent="contentRightClicked"
     >
       <amg-icon
-        :icon="content.type === 'Folder' ? 'FolderIcon' : 'FileIcon'"
+        :icon="content.type === 'Folder' ? 'CustomFolderIcon' : 'CustomFileIcon'"
         class="font-large-4 cursor-pointer"
         :style="content.type === 'Folder' ? 'fill: #ff9f43' : ''"
         :class="{'text-warning' : content.type === 'Folder'}"
@@ -20,10 +20,14 @@
       </h5>
       <b-form-input
         v-else
+        ref="editInput"
         v-model="newName"
         size="sm"
         @blur="renameFile"
       />
+      <h6>
+        {{ content.created_at | myGlobal }}
+      </h6>
     </div>
     <b-dropdown
       ref="dropdown"
@@ -38,35 +42,32 @@
         v-b-toggle.sidebar-right
         @click="$emit('details', content)"
       >
-        <amg-icon
+        <feather-icon
           icon="InfoIcon"
           class="mr-50"
-        />  Details
+        />Details
       </b-dropdown-item>
       <div v-if="currentUser.modul_id === content.module_id">
         <b-dropdown-item @click="enableRenameFile">
-          <amg-icon
+          <feather-icon
             icon="EditIcon"
             class="mr-50"
-          />
-          Rename
+          />Rename
         </b-dropdown-item>
         <b-dropdown-item @click="deleteFile">
-          <amg-icon
+          <feather-icon
             icon="TrashIcon"
             class="mr-50"
-          />
-          Delete
+          />Delete
         </b-dropdown-item>
         <b-dropdown-item
           v-if="content.parent == null"
           @click="shareFile"
         >
-          <amg-icon
+          <feather-icon
             icon="Share2Icon"
             class="mr-50"
-          />
-          Share
+          />Share
         </b-dropdown-item>
       </div>
     </b-dropdown>
@@ -95,6 +96,7 @@ export default {
     enableRenameFile() {
       this.newName = this.content.file_name
       this.edit = true
+      this.$emit('edit', true)
     },
     async renameFile() {
       if (this.newName === this.content.file_name) {
@@ -106,13 +108,23 @@ export default {
         name_file: this.newName,
       }
       try {
-        await amgApi.post('/savefilename', params)
+        await amgApi.post(
+          '/file-manager/update-file-name',
+          params,
+        )
         this.content.file_name = this.newName
-        this.showToast('success', 'top-right', '', 'CheckIcon', 'Rename success')
+        this.showToast(
+          'success',
+          'top-right',
+          '',
+          'CheckIcon',
+          'Rename success',
+        )
       } catch (error) {
         this.showErrorSwal(error)
       }
       this.edit = false
+      this.$emit('edit', false)
     },
     async deleteFile() {
       const params = {
@@ -122,7 +134,7 @@ export default {
       try {
         const response = await this.showConfirmSwal()
         if (response.isConfirmed) {
-          await amgApi.post('/deletefilemodule', params)
+          await amgApi.post('/file-manager/remove-file-from-module', params)
           this.showSuccessSwal('File has been deleted successfully')
           this.$emit('deleteFile', this.content)
         }

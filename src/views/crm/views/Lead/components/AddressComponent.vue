@@ -14,35 +14,24 @@
         >
           <b-input-group>
             <vue-google-autocomplete
-              :ref="`${addressData.prename}-street`"
               :id="`${addressData.prename}-street`"
+              :ref="`${addressData.prename}-street`"
+              v-model="addressData.street"
               class="form-control input-form fond-white border-hover"
               placeholder="Please type your address"
-              v-on:placechanged="getAddressData"
               country="us"
-              v-model="addressData.street"
               :class="{ 'border border-danger' : errors[0] }"
               :readonly="addressData.id && disabled.street || isDisabled"
+              @placechanged="getAddressData"
             />
-            <template v-if="addressData.id">
+            <template v-if="addressData.id && isEditable">
               <b-input-group-append v-if="!disabled.street" class="border-right">
-                <b-button
-                  variant="outline-primary"
-                  class="btn-sm"
-                  @click="onSubmitAddress"
-                >
-                  <amg-icon
-                    icon="SaveIcon"
-                    class="cursor-pointer"
-                  />
+                <b-button variant="outline-primary" class="btn-sm" @click="onSubmitAddress">
+                  <amg-icon icon="SaveIcon" class="cursor-pointer" />
                 </b-button>
               </b-input-group-append>
               <b-input-group-append class="border-right">
-                <b-button
-                  variant="outline-warning"
-                  class="btn-sm"
-                  @click="toggleData('street')"
-                >
+                <b-button variant="outline-warning" class="btn-sm" @click="toggleData('street')">
                   <amg-icon
                     :icon="disabled.street ? 'Edit2Icon' : 'Edit2SlashIcon'"
                     class="cursor-pointer"
@@ -54,9 +43,7 @@
                 @click="$emit('onModalTrackingChangeOpen')"
               >
                 <b-input-group-text>
-                  <amg-icon
-                    icon="ListIcon"
-                  />
+                  <amg-icon icon="ListIcon" />
                 </b-input-group-text>
               </b-input-group-append>
             </template>
@@ -71,10 +58,7 @@
         :name="`City (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
-        <b-form-group
-          label="City"
-          label-for="city"
-        >
+        <b-form-group label="City" label-for="city">
           <b-form-input
             id="city"
             v-model="addressData.city"
@@ -90,10 +74,7 @@
         :name="`Zip Code (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
-        <b-form-group
-          label="Zip Code"
-          label-for="zipcode"
-        >
+        <b-form-group label="Zip Code" label-for="zipcode">
           <b-form-input
             id="zipcode"
             v-model="addressData.zipcode"
@@ -111,11 +92,7 @@
         :name="`State (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
-        <b-form-group
-          label="State"
-          label-for="country"
-          :state="errors[0] ? false : null"
-        >
+        <b-form-group label="State" label-for="country" :state="errors[0] ? false : null">
           <v-select
             id="country"
             v-model="addressData.state"
@@ -133,10 +110,7 @@
         :name="`Country (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
-        <b-form-group
-          label="Country"
-          label-for="country"
-        >
+        <b-form-group label="Country" label-for="country">
           <b-form-input
             id="country"
             v-model="addressData.country"
@@ -151,16 +125,20 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 import {
-  BSidebar, BForm, BFormGroup, BFormInvalidFeedback, BButton,
-} from 'bootstrap-vue'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+  BSidebar,
+  BForm,
+  BFormGroup,
+  BFormInvalidFeedback,
+  BButton
+} from "bootstrap-vue";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
 
-import vSelect from 'vue-select'
-import VueGoogleAutocomplete from 'vue-google-autocomplete'
+import vSelect from "vue-select";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 
-import formValidation from '@core/comp-functions/forms/form-validation'
+import formValidation from "@core/comp-functions/forms/form-validation";
 
 export default {
   components: {
@@ -174,7 +152,7 @@ export default {
 
     // Form Validation
     ValidationProvider,
-    ValidationObserver,
+    ValidationObserver
   },
   props: {
     addressData: {
@@ -191,13 +169,18 @@ export default {
       required: false,
       default: false
     },
+    isEditable: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
   },
   data() {
     return {
       addSocial: false,
-      blankAddressData: new Object,
+      blankAddressData: new Object(),
       disabled: {
-        street: true,
+        street: true
       },
       hideSSN: false,
       hideITIN: false,
@@ -205,74 +188,77 @@ export default {
       hideCPN: false,
       labssn: false,
       labitin: false,
-      location: null,
-    }
+      location: null
+    };
   },
   computed: {
     ...mapGetters({
-      G_EEUU_STATES: 'CrmGlobalStore/G_EEUU_STATES',
-    }),
+      G_EEUU_STATES: "CrmGlobalStore/G_EEUU_STATES"
+    })
   },
-  created () {
-    this.setDataBlank('addressData')
+  created() {
+    this.setDataBlank("addressData");
+    this.fieldsNotDisabled();
   },
   setup(props, { emit }) {
-    const {
-      refFormObserver,
-      getValidationState,
-    } = formValidation(() => {})
+    const { refFormObserver, getValidationState } = formValidation(() => {});
 
     return {
       refFormObserver,
       getValidationState
-    }
-  },
-  methods: {
-    setDataBlank (key) {
-      this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`] = Object.assign({}, this[key])
-    },
-    resetData (key) {
-      const object = this[`blank${ key.charAt(0).toUpperCase() }${ key.slice(1) }`]
-      for (let subkey in object) {
-        this[key][subkey] = object[subkey]
-      }
-    },
-    getObjectToKey (array, keyId) {
-      const index = array.map(el => el.id).indexOf(keyId)
-      if (index !== -1) return array[index]
-      return null
-    },
-    getAddressData (mainAddress) {
-      const location = mainAddress
-      const address = `${location.street_number} ${location.route}`
-      this.addressData.street = address
-      this.addressData.city = location.locality
-      this.addressData.zipcode = location.postal_code
-    },
-    toggleData (key) {
-      this.disabled[key] = !this.disabled[key]
-      if (this.disabled[key])
-        this.resetData('addressData')
-    },
-    onSubmitAddress () {
-      if (!this.addressData.street) {
-        this.addressData.street =  this.addressData.streetReal
-      }
-      this.$emit('onSubmitAddress', false)
-      this.blankAddressData.street = this.addressData.street
-      this.blankAddressData.city = this.addressData.city
-      this.blankAddressData.state = this.addressData.state
-      this.blankAddressData.zipcode = this.addressData.zipcode
-      this.blankAddressData.country = this.addressData.country
-      this.disabled.street = !this.disabled.street
-    },
+    };
   },
   mounted() {},
-}
+  methods: {
+    fieldsNotDisabled() {
+      if (!(this.addressData.id && this.isEditable))
+        this.disabled.street = false;
+    },
+    setDataBlank(key) {
+      this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = {
+        ...this[key]
+      };
+    },
+    resetData(key) {
+      const object = this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`];
+      for (const subkey in object) {
+        this[key][subkey] = object[subkey];
+      }
+    },
+    getObjectToKey(array, keyId) {
+      const index = array.map(el => el.id).indexOf(keyId);
+      if (index !== -1) return array[index];
+      return null;
+    },
+    getAddressData(mainAddress) {
+      const location = mainAddress;
+      const address = `${location.street_number} ${location.route}`;
+      this.addressData.street = address;
+      this.addressData.city = location.locality;
+      this.addressData.zipcode = location.postal_code;
+    },
+    toggleData(key) {
+      this.disabled[key] = !this.disabled[key];
+      if (this.disabled[key]) this.resetData("addressData");
+    },
+    onSubmitAddress() {
+      if (!this.addressData.street) {
+        this.addressData.street = this.addressData.streetReal;
+      }
+      this.$emit("onSubmitAddress", false);
+      this.blankAddressData.street = this.addressData.street;
+      this.blankAddressData.city = this.addressData.city;
+      this.blankAddressData.state = this.addressData.state;
+      this.blankAddressData.zipcode = this.addressData.zipcode;
+      this.blankAddressData.country = this.addressData.country;
+      this.disabled.street = !this.disabled.street;
+    }
+  }
+};
 </script>
 
 <style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
+@import "@core/scss/vue/libs/vue-select.scss";
 
 #add-new-user-sidebar {
   .vs__dropdown-menu {

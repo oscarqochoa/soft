@@ -7,9 +7,7 @@
           variant="outline-secondary"
           class="mr-1"
           @click="addNewCreditor"
-        >
-          Add Creditor
-        </b-button>
+        >Add Creditor</b-button>
         <button-export-pdf
           :disabled="creditors.length === 0"
           @click="salesClient.account_id?downloadPdf():downloadPdfEvent()"
@@ -49,29 +47,21 @@
         <template #bottom-row>
           <td colspan="1" />
           <td>
-            <div>
-              Total
-            </div>
+            <div>Total</div>
           </td>
           <td>
-            <div
-              style="padding-left: 10px"
-            >
+            <div style="padding-left: 10px">
               {{ "$ " + total_balance }}
             </div>
           </td>
           <td>
-            <div
-              style="padding-left: 12px"
-            >
+            <div style="padding-left: 12px">
               {{ "$ " + total_monthly }}
             </div>
           </td>
           <td colspan="1" />
           <td>
-            <div>
-              {{ total_interest + " %" }}
-            </div>
+            <div>{{ total_interest + " %" }}</div>
           </td>
         </template>
       </b-table>
@@ -91,7 +81,7 @@
               size="sm"
               @click="verifyPassword"
             >
-              <feather-icon icon="CheckIcon" /> Approve Supervisor
+              <feather-icon icon="CheckIcon" />Approve Supervisor
             </b-button>
             <b-button
               v-else
@@ -99,7 +89,7 @@
               variant="info"
               disabled
             >
-              <b-spinner small /> Loading...
+              <b-spinner small />Loading...
             </b-button>
           </b-input-group-append>
         </b-input-group>
@@ -126,18 +116,18 @@
       <template #modal-footer="{ ok, cancel }">
         <div style="display: flex; justify-content: end; align-items: center">
           <b-button
-            variant="secondary"
-            class="rounded mr-2"
-            @click="cancel()"
-          >
-            CANCEL
-          </b-button>
-          <b-button
             variant="primary"
             class="rounded"
             style="border-width: 1px;"
             @click="ok()"
-          >{{ statemodal==1?'ADD':'UPDATE' }}</b-button>
+          >{{ statemodal==1?'Add':'Update' }}</b-button>
+          <b-button
+            variant="secondary"
+            class="rounded mr-2"
+            @click="cancel()"
+          >
+            Cancel
+          </b-button>
         </div>
       </template>
     </b-modal>
@@ -227,10 +217,18 @@ export default {
   },
   computed: {
     passwordIsCorrectAndCreditorLength() {
-      return (this.okPassword && this.creditors.length > 0) || (this.creditors.filter(element => element.state1 == 1).length > 0)
+      return (
+        (this.okPassword && this.creditors.length > 0)
+        || this.creditors.filter(element => element.state1 == 1).length > 0
+      )
     },
     isModalAddThis() {
-      return this.typeModal === 1 || this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+      return (
+        this.typeModal === 1
+        || this.typeModal === 3
+        || this.typeModal === 4
+        || this.typeModal === 6
+      )
     },
   },
   watch: {
@@ -248,10 +246,23 @@ export default {
     },
     async allDebtSolution() {
       try {
-        const response = await amgApi.post('/salesmadeds', {
-          event: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? null : this.salesClient.event_id,
-          account: this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5 ? this.salesClient.account_id : null,
-        })
+        const response = await amgApi.post(
+          '/sales-made/debt-solution/get-credits-debt-solution',
+          {
+            event:
+              this.typeModal === 3
+              || this.typeModal === 4
+              || this.typeModal === 5
+                ? null
+                : this.salesClient.event_id,
+            account:
+              this.typeModal === 3
+              || this.typeModal === 4
+              || this.typeModal === 5
+                ? this.salesClient.account_id
+                : null,
+          },
+        )
         if (response.status === 200) {
           this.creditors = response.data
           if (this.creditors.length > 0) {
@@ -269,7 +280,10 @@ export default {
     },
     async editCreditor(id) {
       try {
-        const result = await this.showConfirmSwal('Are you Sure?', 'Before finalizing you must save.')
+        const result = await this.showConfirmSwal(
+          'Are you Sure?',
+          'Before finalizing you must save.',
+        )
         if (result.value) {
           this.openmodal = true
           this.statemodal = 0
@@ -285,9 +299,15 @@ export default {
     },
     async deleteCreditor(id) {
       try {
-        const result = await this.showConfirmSwal('Are you Sure?', 'Before finalizing you must save.')
+        const result = await this.showConfirmSwal(
+          'Are you Sure?',
+          'Before finalizing you must save.',
+        )
         if (result.value) {
-          const response = await amgApi.post('/deletecredit', { id })
+          const response = await amgApi.post(
+            '/sales-made/debt-solution/delete-credit',
+            { id },
+          )
           if (response.status === 200) {
             await this.allDebtSolution()
           }
@@ -299,7 +319,7 @@ export default {
     async verifyPassword() {
       try {
         this.show = true
-        const response = await amgApi.post('/claims/get-password-supervisor', {
+        const response = await amgApi.post('/commons/get-password-supervisor', {
           module_id: 2,
           field_pass: this.password,
           type: 0,
@@ -313,12 +333,24 @@ export default {
               this.password = ''
               this.validatenext1 = true
               this.show = false
-              this.showToast('success', 'top-right', 'Success', 'CheckIcon', 'Password correct')
+              this.showToast(
+                'success',
+                'top-right',
+                'Success',
+                'CheckIcon',
+                'Password correct',
+              )
             } else {
               this.validatenext1 = false
               this.show = false
               this.errorPassword = true
-              this.showToast('danger', 'top-right', 'Danger', 'XIcon', 'Incorrect password')
+              this.showToast(
+                'danger',
+                'top-right',
+                'Danger',
+                'XIcon',
+                'Incorrect password',
+              )
             }
           }
         }
@@ -332,9 +364,11 @@ export default {
         if (this.isModalShow) return true
         if (type == 1 || type == 2) {
           return await this.axiosNext(id, type)
-        } if (type == 4) {
+        }
+        if (type == 4) {
           return await this.saveant(id, type)
-        } if (this.dato12 == null || this.dato12 == '') {
+        }
+        if (this.dato12 == null || this.dato12 == '') {
           this.errorGoal = true
           return false
         }
@@ -351,79 +385,82 @@ export default {
     },
     async saveant(id, type) {
       try {
-        const response = await amgApi.post('/savefirst', {
-          type,
-          id,
-          event: this.salesClient.event_id,
-          account: null,
-          total_due: this.mont12,
-          cost: this.mont13,
-          monthly: this.mont14,
-          porctrf: this.porctrf,
-          retainer: this.mont15,
-          months: this.mont16,
-          years: this.mont17,
-          estimated: this.mont18,
-          id_history: this.id_history,
-          id_analisis: this.id_analisis,
-          name1: this.name1,
-          last1: this.last1,
-          date1: this.date1,
-          ssn1: this.ssn1,
-          applicant: this.applicant,
-          name2: this.name2,
-          last2: this.last2,
-          date2: this.date2,
-          ssn2: this.ssn2,
-          address: this.address,
-          city: this.city,
-          state: this.state,
-          zipcode: this.zipcode,
-          civil: this.civil,
-          civil2: this.civil2,
-          dependents: this.dependents,
-          dependents2: this.dependents2,
-          phone1: this.phone1,
-          employer1: this.employer1,
-          workphone1: this.workphone1,
-          employer2: this.employer2,
-          workphone2: this.workphone2,
-          dato1: this.dato1,
-          dato2: this.dato2,
-          dato3: this.dato3,
-          dato4: this.dato4,
-          dato5: this.dato5,
-          dato6: this.dato6,
-          dato7: this.dato7,
-          dato8: this.dato8,
-          dato91: this.dato91,
-          dato92: this.dato92,
-          dato93: this.dato93,
-          dato94: this.dato94,
-          dato95: this.dato95,
-          dato10: this.dato10,
-          dato11: this.dato11,
-          dato12: this.dato12,
-          dato13: this.dato13,
-          dato14: this.dato14,
-          dato15: this.dato15,
-          date3: this.date3,
-          date4: this.date4,
-          date5: this.date5,
-          date6: this.date6,
-          others: this.others,
-          middle1: this.middle1,
-          state_lead1: this.state_lead1,
-          middle2: this.middle2,
-          state_lead2: this.state_lead2,
-          phone2: this.phone2,
-          email: this.email,
-          valorutility: this.valorutility,
-          montoutlity: this.montoutlity,
-          valorothers: this.valorothers,
-          montoothers: this.montoothers,
-          housing: this.housing == false ? 0 : 1,
-        })
+        const response = await amgApi.post(
+          '/sales-made/debt-solution/save-first-debt-solution',
+          {
+            type,
+            id,
+            event: this.salesClient.event_id,
+            account: null,
+            total_due: this.mont12,
+            cost: this.mont13,
+            monthly: this.mont14,
+            porctrf: this.porctrf,
+            retainer: this.mont15,
+            months: this.mont16,
+            years: this.mont17,
+            estimated: this.mont18,
+            id_history: this.id_history,
+            id_analisis: this.id_analisis,
+            name1: this.name1,
+            last1: this.last1,
+            date1: this.date1,
+            ssn1: this.ssn1,
+            applicant: this.applicant,
+            name2: this.name2,
+            last2: this.last2,
+            date2: this.date2,
+            ssn2: this.ssn2,
+            address: this.address,
+            city: this.city,
+            state: this.state,
+            zipcode: this.zipcode,
+            civil: this.civil,
+            civil2: this.civil2,
+            dependents: this.dependents,
+            dependents2: this.dependents2,
+            phone1: this.phone1,
+            employer1: this.employer1,
+            workphone1: this.workphone1,
+            employer2: this.employer2,
+            workphone2: this.workphone2,
+            dato1: this.dato1,
+            dato2: this.dato2,
+            dato3: this.dato3,
+            dato4: this.dato4,
+            dato5: this.dato5,
+            dato6: this.dato6,
+            dato7: this.dato7,
+            dato8: this.dato8,
+            dato91: this.dato91,
+            dato92: this.dato92,
+            dato93: this.dato93,
+            dato94: this.dato94,
+            dato95: this.dato95,
+            dato10: this.dato10,
+            dato11: this.dato11,
+            dato12: this.dato12,
+            dato13: this.dato13,
+            dato14: this.dato14,
+            dato15: this.dato15,
+            date3: this.date3,
+            date4: this.date4,
+            date5: this.date5,
+            date6: this.date6,
+            others: this.others,
+            middle1: this.middle1,
+            state_lead1: this.state_lead1,
+            middle2: this.middle2,
+            state_lead2: this.state_lead2,
+            phone2: this.phone2,
+            email: this.email,
+            valorutility: this.valorutility,
+            montoutlity: this.montoutlity,
+            valorothers: this.valorothers,
+            montoothers: this.montoothers,
+            housing: this.housing == false ? 0 : 1,
+          },
+        )
         if (response.status === 200) {
           await this.allDebtSolution()
           return true
@@ -436,15 +473,27 @@ export default {
     },
     async axiosNext(id, type) {
       try {
-        const result = await this.showConfirmSwal('Are you sure of continue ?', 'Before finalizing you must save.')
+        const result = await this.showConfirmSwal(
+          'Are you sure of continue ?',
+          'Before finalizing you must save.',
+        )
         if (result.value) {
           this.addPreloader()
-          const response = await amgApi.post('/savefirst', {
-            type,
-            id,
-            event: this.typeModal == 3 || this.typeModal == 4 ? null : this.salesClient.event_id,
-            account: this.typeModal == 3 || this.typeModal == 4 ? this.salesClient.account_id : null,
-          })
+          const response = await amgApi.post(
+            '/sales-made/debt-solution/save-first-debt-solution',
+            {
+              type,
+              id,
+              event:
+                this.typeModal == 3 || this.typeModal == 4
+                  ? null
+                  : this.salesClient.event_id,
+              account:
+                this.typeModal == 3 || this.typeModal == 4
+                  ? this.salesClient.account_id
+                  : null,
+            },
+          )
           if (response.status === 200) this.$emit('nextStep')
           return true
         }

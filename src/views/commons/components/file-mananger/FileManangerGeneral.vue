@@ -1,53 +1,58 @@
 <template>
-  <b-container>
-    <b-row>
-      <b-col class="pl-0 d-flex align-items-center justify-content-start">
-        <feather-icon
-          v-b-tooltip.hover
-          :title="selectedView ? 'Change to list' : 'Change to explorer'"
-          class="cursor-pointer text-important"
-          size="25"
-          :icon="selectedView ? 'ListIcon' : 'FolderIcon'"
-          @click="selectedView = !selectedView"
-        />
-      </b-col>
-      <b-col
-        cols="10"
-        class="d-flex align-items-center justify-content-end pr-0"
-      >
-        <b-button
-          class="mr-1"
-          variant="important"
-          @click="openModalNewFolder"
-        >
-          New Folder
-        </b-button>
-        <b-button
-          variant="info"
-          @click="openUploadFileMoadl"
-        >
-          Add Files
-        </b-button>
-      </b-col>
-    </b-row>
-    <b-row class="my-1">
+  <div>
+    <header-slot>
+      <template #actions>
+        <b-row>
+          <b-col class="d-flex align-items-center justify-content-start">
+            <feather-icon
+              v-b-tooltip.hover
+              :title="selectedView ? 'Change to list' : 'Change to explorer'"
+              class="cursor-pointer text-important"
+              size="25"
+              :icon="selectedView ? 'ListIcon' : 'FolderIcon'"
+              @click="selectedView = !selectedView"
+            />
+          </b-col>
+          <b-col
+            cols="10"
+            class="d-flex align-items-center justify-content-end"
+          >
+            <b-button
+              class="mr-1"
+              variant="important"
+              @click="openModalNewFolder"
+            >
+              New Folder
+            </b-button>
+            <b-button
+              variant="info"
+              @click="openUploadFileMoadl"
+            >
+              Add Files
+            </b-button>
+          </b-col>
+        </b-row>
+      </template>
+    </header-slot>
 
+    <b-row class="mb-1 pl-1">
       <template v-for="(route, index) in history">
         <div
           :key="index"
           class="d-flex align-items-center justify-content-between cursor-pointer"
           @click="historyClicked(index)"
         >
-          <amg-icon
+          <feather-icon
             class="font-medium-5"
             :icon="route.icon"
             :class="{'text-warning' : route.icon === '', 'text-primary' : route.icon === 'HomeIcon'}"
           />
-          <span class="ml-50 d-flex align-items-center justify-content-center font-medium-1">{{ route.label }}</span>
+          <span
+            class="ml-50 d-flex align-items-center justify-content-center font-medium-1"
+          >{{ route.label }}</span>
           <span class="font-large-1 ml-50">/</span>
         </div>
       </template>
-
     </b-row>
     <b-row v-if="selectedView">
       <b-col
@@ -57,7 +62,8 @@
         sm="4"
         md="3"
         lg="2"
-        xl="1"
+        xl="2"
+        :class="skin === 'dark' ? 'hover-shadow-dark' : 'hover-shadow-light'"
       >
         <file-component
           :current-user="currentUser"
@@ -66,11 +72,11 @@
           @details="openFileDetail"
           @deleteFile="deleteFile"
           @shareFile="openShareFileModal"
+          @edit="updateEditState"
         />
-
       </b-col>
     </b-row>
-    <b-row v-else>
+    <b-card v-else>
       <b-table
         :fields="fields"
         :items="currentFiles"
@@ -79,20 +85,21 @@
       >
         <template #cell(file_name)="data">
           <span
-            v-if="selectedFile !== data.item"
+            v-if="selectedFile !== data.item || !editState"
             class="cursor-pointer d-flex align-items-center justify-content-start"
             @click="contentClicked(data.item)"
           >
-            <feather-icon
-              :icon="data.item.extension ? 'FileIcon' : 'FolderIcon'"
+
+            <amg-icon
+              :icon="data.item.extension ? 'CustomFileIcon' : 'CustomFolderIcon'"
               :style="data.item.type === 'Folder' ? 'fill: #ff9f43' : ''"
               class="mr-50"
               :class="{'text-warning' : data.item.type === 'Folder'}"
               size="15"
             />
-            <span class="font-small-4">
-              {{ data.item.file_name + (data.item.extension? '.' + data.item.extension : '') }}
-            </span>
+            <span
+              class="font-small-4"
+            >{{ data.item.file_name + (data.item.extension? '.' + data.item.extension : '') }}</span>
           </span>
           <b-form-input
             v-else
@@ -103,14 +110,8 @@
           />
         </template>
         <template #cell(countfiel)="data">
-          <span
-            v-if="!data.item.extension"
-          >
-            {{ data.item.countfiel }}
-          </span>
-          <span v-else>
-            {{ data.item.size }}
-          </span>
+          <span v-if="!data.item.extension">{{ data.item.countfiel }}</span>
+          <span v-else>{{ data.item.size }}</span>
         </template>
         <template #cell(user_upload)="data">
           <p>{{ data.item.user_upload }}</p>
@@ -128,19 +129,19 @@
               v-if="currentUser.modul_id === data.item.module_id"
               class="d-flex align-items-center justify-content-around"
             >
-              <amg-icon
+              <feather-icon
                 class="text-primary cursor-pointer"
                 icon="EditIcon"
                 size="15"
                 @click="selectedFile = data.item"
               />
-              <amg-icon
+              <feather-icon
                 class="text-danger cursor-pointer"
                 icon="TrashIcon"
                 size="15"
                 @click="asyncDeleteFile(data.item)"
               />
-              <amg-icon
+              <feather-icon
                 v-if="data.item.parent == null"
                 class="text-success cursor-pointer"
                 icon="Share2Icon"
@@ -151,7 +152,7 @@
           </b-row>
         </template>
       </b-table>
-    </b-row>
+    </b-card>
     <b-sidebar
       id="sidebar-right"
       right
@@ -165,9 +166,10 @@
             v-if="selectedFile !== {}"
             class="d-flex align-items-center justify-content-center"
           >
+
             <amg-icon
               size="50"
-              :icon="selectedFile.type === 'Folder' ? 'FolderIcon' : 'FileIcon'"
+              :icon="selectedFile.type === 'Folder' ? 'CustomFolderIcon' : 'CustomFileIcon'"
               :class="{'text-warning' : selectedFile.type === 'Folder'}"
             />
           </b-col>
@@ -181,9 +183,9 @@
         </b-row>
         <b-row class="mt-1">
           <b-col>
-            <p class="font-medium-1">
-              Created: {{ selectedFile.created_at | myGlobal }} by {{ selectedFile.user_upload }}
-            </p>
+            <p
+              class="font-medium-1"
+            >Created: {{ selectedFile.created_at | myGlobal }} by {{ selectedFile.user_upload }}</p>
           </b-col>
         </b-row>
         <b-row
@@ -216,9 +218,7 @@
             </p>
           </b-col>
         </b-row>
-        <b-row
-          class="mt-10"
-        >
+        <b-row class="mt-10">
           <b-col>
             <p class="font-medium-1">
               Route: {{ currentRoute }}
@@ -230,11 +230,10 @@
             <p class="font-medium-1">
               Permissions:
               <span v-if="currentUser.modul_id == selectedFile.module_id">
-                Rename, Delete, <span v-if="selectedFile.parent == null"> Share </span>
+                Rename, Delete,
+                <span v-if="selectedFile.parent == null">Share</span>
               </span>
-              <span v-else>
-                None
-              </span>
+              <span v-else>None</span>
             </p>
           </b-col>
         </b-row>
@@ -245,9 +244,7 @@
               variant="primary"
               class="w-100"
               @click="contentClicked(selectedFile)"
-            >
-              Open
-            </b-button>
+            >Open</b-button>
           </b-col>
         </b-row>
       </b-container>
@@ -290,7 +287,7 @@
         </b-button>
       </template>
     </b-modal>
-  </b-container>
+  </div>
 </template>
 
 <script>
@@ -299,11 +296,15 @@ import FileComponent from '@/views/commons/components/file-mananger/components/F
 import ShareFileModal from '@/views/commons/components/file-mananger/modals/ShareFileModal'
 import NewFolderModal from '@/views/commons/components/file-mananger/modals/NewFolderModal'
 import DragAndDrop from '@/views/commons/utilities/DragAndDrop'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'FileManangerGeneral',
   components: {
-    DragAndDrop, NewFolderModal, ShareFileModal, FileComponent,
+    DragAndDrop,
+    NewFolderModal,
+    ShareFileModal,
+    FileComponent,
   },
   directives: {
     'b-tooltip': VBTooltip,
@@ -316,6 +317,7 @@ export default {
   },
   data() {
     return {
+      editState: false,
       fileModel: {
         model: false,
       },
@@ -364,6 +366,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      skin: 'appConfig/skin',
+    }),
     currentRoute() {
       let route = ''
       this.history.forEach(r => {
@@ -376,6 +381,9 @@ export default {
     await this.getFilesFromFolder(null)
   },
   methods: {
+    updateEditState(state) {
+      this.editState = state
+    },
     actionOnHideUploadFileModal() {
       this.files = []
     },
@@ -391,21 +399,33 @@ export default {
           formData.append('module_id', this.currentFolderModule)
           formData.append('folder_name', '')
           formData.append('user_id', this.currentUser.user_id)
-          formData.append('idfolder', this.currentFolder ? this.currentFolder : '')
+          formData.append(
+            'idfolder',
+            this.currentFolder ? this.currentFolder : '',
+          )
           const headers = {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
             // eslint-disable-next-line func-names
             onUploadProgress: function (progressEvent) {
-              this.uploadPercentage = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+              this.uploadPercentage = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total,
+              )
             }.bind(this),
           }
-          const response = await amgApi.post('/filemoduledragdrop', formData, headers)
+          const response = await amgApi.post(
+            '/file-manager/save-file-by-module',
+            formData,
+            headers,
+          )
           if (response.status === 200) {
             this.uploadFileModal = false
             this.showSuccessSwal()
-            await this.getFilesFromFolder(this.currentFolder, this.currentFolderModule)
+            await this.getFilesFromFolder(
+              this.currentFolder,
+              this.currentFolderModule,
+            )
           }
         }
       } catch (error) {
@@ -415,16 +435,22 @@ export default {
     openUploadFileMoadl() {
       this.uploadFileModal = true
     },
-    async getFilesFromFolder(folderId, folderModule = this.currentUser.modul_id) {
+    async getFilesFromFolder(
+      folderId,
+      folderModule = this.currentUser.modul_id,
+    ) {
       try {
         this.addPreloader()
-        const response = await amgApi.post('/searchfilesmodule', {
-          module_id: folderModule,
-          order: 'asc',
-          orderby: 2,
-          parent: folderId,
-          typee: null,
-        })
+        const response = await amgApi.post(
+          '/file-manager/search-files-manager',
+          {
+            module_id: folderModule,
+            order: 'asc',
+            orderby: 2,
+            parent: folderId,
+            typee: null,
+          },
+        )
         this.currentFiles = []
         this.currentFiles = response.data.data
         this.currentFolder = folderId
@@ -484,7 +510,7 @@ export default {
       try {
         const response = await this.showConfirmSwal()
         if (response.isConfirmed) {
-          await amgApi.post('/deletefilemodule', params)
+          await amgApi.post('/file-manager/remove-file-from-module', params)
           this.showSuccessSwal('File has been deleted successfully')
           this.deleteFile(content)
         }
@@ -502,7 +528,10 @@ export default {
         name_file: this.selectedFile.file_name,
       }
       try {
-        await amgApi.post('/savefilename', params)
+        await amgApi.post(
+          '/file-manager/update-file-name',
+          params,
+        )
       } catch (error) {
         this.showErrorSwal(error)
       }
@@ -513,5 +542,14 @@ export default {
 </script>
 
 <style scoped>
-
+.hover-shadow-light,
+.hover-shadow-dark{
+  transition: box-shadow .3s;
+}
+.hover-shadow-dark:hover {
+  box-shadow: 0 0 11px #191C24;
+}
+.hover-shadow-light:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
 </style>

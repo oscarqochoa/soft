@@ -6,6 +6,7 @@ PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
 $borderamg: #efb911;
 @import "components/card";
+@import "components/kendo";
 @import "variables/new-colors";
 .client-status {
   // height: 10px;
@@ -190,17 +191,17 @@ $borderamg: #efb911;
   }
 }
 .modal-backdrop {
-  opacity: 85% !important;
+  opacity: 0.85 !important;
 }
 
 //Modal XMD
 
 .modal .modal-xmd {
-  max-width: 65vw;
+  min-width: 65vw;
   width: 100%;
 }
 .modal .modal-xlg {
-  max-width: 80vw;
+  min-width: 80vw;
   width: 100%;
 }
 
@@ -215,7 +216,8 @@ $borderamg: #efb911;
 .x-close-position {
   transform: translate(-12px, 4px) !important;
 }
-.hover-primary, .hover-important {
+.hover-primary,
+.hover-important {
   transition: 0.3s;
 }
 .hover-primary:hover {
@@ -285,4 +287,17 @@ $borderamg: #efb911;
   outline: 0;
   background: transparent !important;
   border-color: rgba(146, 151, 165, 0.2) !important;
+}
+
+.nav-pills .nav-link {
+  border-radius: 5px 5px 0px 0px;
+}
+
+.border-bottom-tab {
+  border-bottom: 1px solid #3764ff !important;
+}
+
+.table td,
+.table th {
+  vertical-align: top !important;
 }

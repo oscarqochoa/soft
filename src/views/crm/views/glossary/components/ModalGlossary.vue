@@ -28,9 +28,8 @@
                   :reduce="(val) => val.id"
                   label="name"
                   class="w-100"
-                  :class="{ 'border border-danger': errors[0] }"
-                >
-                </v-select>
+                  :class="{ 'border-danger': errors[0] }"
+                ></v-select>
               </b-form-group>
             </ValidationProvider>
           </div>
@@ -41,10 +40,10 @@
               v-slot="{ errors }"
             >
               <b-form-group label=" ">
-                <b-input-group prepend="TITLE" size="md" class="mt-2" style="">
+                <b-input-group prepend="TITLE" size="md" class="mt-2" style>
                   <b-form-input
                     v-model="title"
-                    :class="{ 'border border-danger': errors[0] }"
+                    :class="{ 'border-danger': errors[0] }"
                   />
                 </b-input-group>
               </b-form-group>
@@ -59,7 +58,7 @@
                 class="class-campo-icon add-class-campo-icon"
                 style="border-radius: 10px 10px 0px 0px"
               >
-                <span>DESCRIPTION </span>
+                <span>DESCRIPTION</span>
               </b-col>
             </b-row>
           </b-col>
@@ -72,8 +71,7 @@
               >
                 <b-form-textarea
                   :disabled="statusDescription"
-                  
-                  :class="{ 'border border-danger': errors[0] }"
+                  :class="{ 'border-danger': errors[0] }"
                   style="border-radius: 0px 10px 10px 10px; height: 120px"
                   v-model="description"
                 ></b-form-textarea>
@@ -82,24 +80,22 @@
           </b-col>
         </b-row>
       </ValidationObserver>
-      <b-row>
+      <b-row v-if="statusModal != '3'">
         <b-col md="12" style="text-align: center" class="mt-3">
           <b-button
             variant="success"
             style="border-radius: 5px !important"
             @click="createGlossary()"
             v-if="!spinnerBtn && statusModal == '1'"
+            >Save</b-button
           >
-             Save
-          </b-button>
           <b-button
             variant="success"
             style="border-radius: 5px !important"
             @click="editGlossary()"
             v-if="!spinnerBtn && statusModal == '2'"
+            >Update</b-button
           >
-             Update
-          </b-button>
           <b-button
             variant="success"
             style="border-radius: 5px !important"
@@ -123,7 +119,7 @@
 import ModalAddCategory from "./ModalAddCategory.vue";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-import { amgApi } from "@/service/axios";
+import GlossarydService from "../service/glossary.service";
 export default {
   components: {
     vSelect,
@@ -141,19 +137,18 @@ export default {
     },
     objectGlossary: {
       type: Object,
-      
     },
   },
   data() {
     return {
-      id:null,
+      id: null,
       spinnerBtn: false,
       title: "",
       modalChangingCategory: false,
       description: null,
       selectCategory: null,
       mutableIfModalCard: this.ifModalCard,
-      objectGlossaryChange:null,
+      objectGlossaryChange: null,
     };
   },
   computed: {
@@ -167,94 +162,97 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
-    statusDescription(){
-      return this.statusModal == "3"? true:false
+    statusDescription() {
+      return this.statusModal == "3" ? true : false;
     },
-    titleView(){
-      return this.statusModal == "3"? this.objectGlossary.title :'CREATE GLOSSARY'
+    titleView() {
+      return this.statusModal == "3"
+        ? this.objectGlossary.title
+        : "CREATE GLOSSARY";
     },
-    
   },
   methods: {
     createGlossary() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
         }
-          this.showConfirmSwal("CREATE","Are you sure?").then((result) => {
-            if (result.value) {
-              this.spinnerBtn = true;
-              const params = {
-                user_id: this.currentUser.user_id,
-                module_id: this.$route.meta.module,
-                category_id: this.selectCategory,
-                title: this.title,
-                description: this.description,
-              };
-              amgApi.post("/glossary/create-glossaries", params).then((res) => {
-                this.showToast(
+        const confirm = await this.showConfirmSwal(
+          "CREATE",
+          "Are you sure?"
+        );
+        if (confirm.isConfirmed) {
+          try {
+            this.spinnerBtn = true;
+            const params = {
+              user_id: this.currentUser.user_id,
+              module_id: this.$route.meta.module,
+              category_id: this.selectCategory,
+              title: this.title,
+              description: this.description,
+            };
+            const data = await GlossarydService.createGlossary(params)
+            this.showToast(
                   "success",
                   "top-right",
                   "Success",
                   "CheckIcon",
                   "Glossary Created"
                 );
-                this.spinnerBtn = false;
-                this.$emit("updateGlossary", false);
-              }).catch(error=>{
-                console.log(error)
+            this.spinnerBtn = false;
+            this.$emit("updateGlossary", false);
+          } catch (error) {
+            console.log(error);
                 this.showToast(
-                    "danger",
-                    "top-right",
-                    "Error",
-                    "XIcon",
-                    "Something went wrong!"
-                  );
-              });
-            }
-          });
+                  "danger",
+                  "top-right",
+                  "Error",
+                  "XIcon",
+                  "Something went wrong!"
+                );
+          }
+        }
       });
     },
     editGlossary() {
-      this.$refs.form.validate().then((success) => {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
         }
-          this.showConfirmSwal("UPDATE","Are you sure?").then((result) => {
-            if (result.value) {
-              this.spinnerBtn = true;
-              const params = {
-                id: this.id,
-                category: this.selectCategory,
-                title: this.title,
-                description: this.description,
-              };
-              
-              amgApi
-                .post("/glossary/edit-glossary", params)
-                .then((res) => {
-                  this.spinnerBtn = false;
-                  this.showToast(
-                    "success",
-                    "top-right",
-                    "Success",
-                    "CheckIcon",
-                    "Glossary Updated"
-                  );
-                  this.$emit("updateGlossary", false);
-                })
-                .catch((error) => {
-                  console.log(error);
-                  this.showToast(
-                    "danger",
-                    "top-right",
-                    "Error",
-                    "XIcon",
-                    "Something went wrong!"
-                  );
-                });
-            }
-          });
+        const confirm = await this.showConfirmSwal(
+          "UPDATE",
+          "Are you sure?"
+        );
+        if (confirm.isConfirmed){
+          try{
+            this.spinnerBtn = true;
+            const params = {
+              id: this.id,
+              category: this.selectCategory,
+              title: this.title,
+              description: this.description,
+            };
+            const data = await GlossarydService.editGlossary(params)
+            this.spinnerBtn = false;
+            this.showToast(
+                  "success",
+                  "top-right",
+                  "Success",
+                  "CheckIcon",
+                  "Glossary Updated"
+                );
+            this.$emit("updateGlossary", false);
+          }catch(error){
+            console.log(error)
+            this.showToast(
+                  "danger",
+                  "top-right",
+                  "Error",
+                  "XIcon",
+                  "Something went wrong!"
+                );
+          }
+        }
       });
     },
     openModalCategory() {
@@ -274,7 +272,7 @@ export default {
     },
     closeModal() {
       this.$emit("close", false);
-      this.objectGlossaryChange = null
+      this.objectGlossaryChange = null;
     },
     openModalEdit(item) {
       this.id = item.id;
@@ -282,15 +280,15 @@ export default {
       this.description = item.description;
       this.selectCategory = item.category_id;
     },
-    initEdit(){
-      this.objectGlossaryChange =this.objectGlossary
-      if(this.statusModal == "2" || this.statusModal == "3"){
-        this.openModalEdit(this.objectGlossary)
+    initEdit() {
+      this.objectGlossaryChange = this.objectGlossary;
+      if (this.statusModal == "2" || this.statusModal == "3") {
+        this.openModalEdit(this.objectGlossary);
       }
-    }
+    },
   },
   created() {
-    this.initEdit()
+    this.initEdit();
   },
 };
 </script>

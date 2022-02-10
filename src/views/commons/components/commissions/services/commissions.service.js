@@ -3,7 +3,10 @@ import { amgApi } from "@/service/axios";
 class CommissionsService {
   async searchCommissions(params) {
     try {
-      const { data } = await amgApi.post("/getreportcommissionsad", params);
+      const { data } = await amgApi.post(
+        "/commissions/get-report-commissions",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
@@ -12,7 +15,7 @@ class CommissionsService {
   async searchCommissionsDepartments(params) {
     try {
       const { data } = await amgApi.post(
-        "/get-report-commission-department",
+        "/commissions/get-report-commissions-department",
         params
       );
       return data;
@@ -23,7 +26,7 @@ class CommissionsService {
   async updatePercentage(params) {
     try {
       const { data } = await amgApi.post(
-        "/change-percentage-to-pay-crm",
+        "/commissions/edit-percentage-to-pay-crm",
         params
       );
       return data;
@@ -33,7 +36,10 @@ class CommissionsService {
   }
   async getDepartmentPercentage(params) {
     try {
-      const { data } = await amgApi.post("/percentage-department", params);
+      const { data } = await amgApi.post(
+        "/commissions/get-percentage-by-department",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
@@ -41,7 +47,10 @@ class CommissionsService {
   }
   async searchCommissionsUserCrm(params) {
     try {
-      const { data } = await amgApi.post("/getcommissions", params);
+      const { data } = await amgApi.post(
+        "/commissions/get-details-of-commissions-crm",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
@@ -49,7 +58,10 @@ class CommissionsService {
   }
   async searchCommissionsUserAdm(params) {
     try {
-      const { data } = await amgApi.post("/getcommissionsad", params);
+      const { data } = await amgApi.post(
+        "/commissions/get-details-of-commissions-administration",
+        params
+      );
       return data;
     } catch (error) {
       console.log("Something went wrong on Commissions:", error);
@@ -58,7 +70,10 @@ class CommissionsService {
   }
   async searchCommissionsUserDepartment(params) {
     try {
-      const { data } = await amgApi.post("/getcommissionsprogram", params);
+      const { data } = await amgApi.post(
+        "/commissions/get-details-of-commissions-departments",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
@@ -66,7 +81,10 @@ class CommissionsService {
   }
   async searchCommissionsApprove(params) {
     try {
-      const { data } = await amgApi.post("/searchapprovecommissions", params);
+      const { data } = await amgApi.post(
+        "/commissions/get-approve-commissions",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
@@ -74,7 +92,10 @@ class CommissionsService {
   }
   async anullComissions(params) {
     try {
-      const { data } = await amgApi.post("/anullcommissions", params);
+      const { data } = await amgApi.post(
+        "/commissions/anull-commissions",
+        params
+      );
       return data;
     } catch (error) {
       throw error;
@@ -82,7 +103,10 @@ class CommissionsService {
   }
   async approveCommissions(params) {
     try {
-      const { data } = await amgApi.post("/approvecommissions", params);
+      const { data } = await amgApi.post(
+        "/commissions/approve-commissions",
+        params
+      );
       return data;
     } catch (error) {
       throw error;

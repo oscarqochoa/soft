@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-modal
+<<<<<<< HEAD
         v-model="modalUp"
         title-class="h2 text-white "
         size="lg"
@@ -8,6 +9,16 @@
         :hide-footer="hideFooter"
         modal-class="modal-primary "
         @hidden="hideModal(false)"
+=======
+      v-model="modalUp"
+      title-class="h2 text-white "
+      size="lg"
+      :title="requestTitle"
+      :hide-footer="hideFooter"
+      modal-class="modal-primary "
+      scrollable
+      @hidden="hideModal(false)"
+>>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
     >
       <div>
         <div style="margin: 0px 8px;" v-if="isLoadData">

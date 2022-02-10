@@ -12,7 +12,7 @@
       :fields="fieldsEvent"
       :items="S_EVENTS"
       :busy.sync="isBusy"
-      class="mb-0"
+      class="mb-0 font-small-3"
     >
       <template #table-busy>
         <div class="text-center text-primary my-2">
@@ -25,10 +25,11 @@
         <b-button
           variant="flat-primary"
           @click="openModalEditEventShow(data.item.id)"
+          size="small"
         >{{ data.item.title }}</b-button>
       </template>
 
-      <template #cell(seller)="data">{{ data.item.user.first_name }} {{ data.item.user.last_name }}</template>
+      <template #cell(seller)="data">{{ data.item.name_user }}</template>
 
       <template #cell(date)="data">
         <div style="white-space: nowrap;">{{ data.item.date | myDate }}</div>
@@ -49,6 +50,7 @@
             v-ripple.400="'rgba(113, 102, 240, 0.15)'"
             variant="flat-danger"
             class="button-little-size rounded-circle"
+            size="sm"
             @click="deleteEvent(data.item.id)"
           >
             <feather-icon icon="Trash2Icon" />

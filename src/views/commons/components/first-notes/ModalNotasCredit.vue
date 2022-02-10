@@ -215,6 +215,58 @@
               </b-col>
             </b-row>
             <b-row>
+              <b-col lg="6">
+                <b-form-group
+                  label-class="font-weight-bolder"
+                  label="Attach Call"
+                >
+                  <b-input-group>
+                    <b-input-group-prepend>
+                      <b-button
+                        variant="info"
+                        class="btn-icon"
+                        :disabled="disabledFile"
+                        title="Delete File"
+                        @click="deleteAudio"
+                      >
+                        <feather-icon
+                          icon="Trash2Icon"
+                          class="text-white"
+                        />
+                      </b-button>
+                    </b-input-group-prepend>
+                    <b-form-input
+                      v-if="note.fileName"
+                      v-model="note.fileName"
+                      type="text"
+                      class="bg-transparent text-info"
+                      disabled
+                    />
+                    <b-form-file
+                      v-else
+                      v-model="audioCall"
+                      placeholder="Choose a file or drop it here..."
+                      browse-text="Audio"
+                      accept="audio/*"
+                      :disabled="disabledFile"
+                    />
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+
+              <b-col
+                v-if="note.fileAudio"
+                lg="6"
+              >
+                <audio
+                  :src="note.fileAudio"
+                  controls
+                  class="mt-1 w-100"
+                  type="audio/mp3"
+                />
+              </b-col>
+            </b-row>
+            <b-row>
               <b-col>
                 <validation-provider
                   v-slot="{errors}"
@@ -381,6 +433,7 @@ export default {
   },
   data() {
     return {
+      audioCall: null,
       noteNull: false,
       modalUp: false,
       note: {
@@ -394,7 +447,7 @@ export default {
               },
             },
             {
-              text: 'ADVISOR\'S RECOMMENDATIONS',
+              text: "ADVISOR'S RECOMMENDATIONS",
               value: {
                 id: 'reco-2',
               },
@@ -582,6 +635,9 @@ export default {
           mid1: [],
           mid2: [],
         },
+        fileAudio: null,
+        fileName: null,
+        file: null,
       },
       noCredit: [],
       showSave: false,
@@ -589,15 +645,16 @@ export default {
       editorOption: {
         modules: { toolbar: false },
       },
-
     }
   },
   computed: {
+    disabledFile() {
+      return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller
+    },
     disabled() {
       return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller
     },
     newNote() {
-      console.log(this.noteInfo.created > '2021-05-16 00:00:00')
       return this.noteInfo.created > '2021-05-16 00:00:00'
     },
     emptyNote() {
@@ -613,20 +670,29 @@ export default {
       return this.showUpdate && !this.noteInfo.notSeller
     },
     isSelectedOthersOnRecomendations() {
-      return this.note.recomendations.selectedsOptions.map(val => val.id).includes('reco-4')
+      return this.note.recomendations.selectedsOptions
+        .map(val => val.id)
+        .includes('reco-4')
     },
   },
   watch: {
+    audioCall(newValue) {
+      if (newValue) {
+        this.onAudioChange()
+      }
+    },
     'note.recomendations.value': {
       handler(newValue) {
-        const include = this.note.recomendations.selectedsOptions.map(val => val.id).includes('reco-4')
+        const include = this.note.recomendations.selectedsOptions
+          .map(val => val.id)
+          .includes('reco-4')
         if (newValue && !include) {
-          console.log('add')
           this.note.recomendations.selectedsOptions.push({ id: 'reco-4' })
         }
         if (!newValue && include) {
-          console.log('remove')
-          const index = this.note.recomendations.selectedsOptions.indexOf({ id: 'reco-4' })
+          const index = this.note.recomendations.selectedsOptions.indexOf({
+            id: 'reco-4',
+          })
           this.note.recomendations.selectedsOptions.splice(index, 1)
         }
       },
@@ -636,9 +702,12 @@ export default {
       handler(newValue, oldValue) {
         const isRemoved = newValue.length < oldValue.length
         if (isRemoved) {
-          const includedReco4InNewValue = newValue.map(val => val.id).includes('reco-4')
-          const includedReco4InOldValue = oldValue.map(val => val.id).includes('reco-4')
-          console.log(includedReco4InNewValue, includedReco4InOldValue)
+          const includedReco4InNewValue = newValue
+            .map(val => val.id)
+            .includes('reco-4')
+          const includedReco4InOldValue = oldValue
+            .map(val => val.id)
+            .includes('reco-4')
           if (!includedReco4InNewValue && includedReco4InOldValue) {
             this.note.recomendations.value = ''
           }
@@ -655,9 +724,23 @@ export default {
     this.note.country.value = this.noteInfo.originCountry
   },
   methods: {
+    onAudioChange() {
+      const file = this.audioCall
+      const reader = new FileReader()
+      reader.onload = e => {
+        this.note.fileAudio = e.target.result
+      }
+      this.note.fileName = file.name
+      reader.readAsDataURL(file)
+    },
     async getNoCredit() {
       try {
-        const response = await amgApi.post('/getjsonnocredit', { sale_id: this.noteInfo.saleId })
+        const response = await amgApi.post(
+          '/sales-made/get-program-task-welcome',
+          {
+            sale_id: this.noteInfo.saleId,
+          },
+        )
         this.noCredit = response.data
         const middle = this.noCredit.length / 2
         this.note.incoveniences.mid1 = this.noCredit.slice(0, middle + 1)
@@ -691,6 +774,8 @@ export default {
     },
     paramsNote() {
       const params = {
+        file_audio: this.note.fileAudio,
+        file_name: this.note.fileName,
         sale_id: this.noteInfo.saleId,
         note: this.answersNote(),
         originCountry: this.note.country.value,
@@ -725,6 +810,7 @@ export default {
         if (val.id === 'reco-4') val.text = this.note.recomendations.value
       })
       answer23.value = JSON.stringify(answer23.value)
+      // eslint-disable-next-line no-return-assign
       return [
         answer23,
         { number: 24, value: JSON.stringify(this.note.pending.value) },
@@ -732,12 +818,16 @@ export default {
         { number: 1058, value: this.note.emergencyContact.value },
         { number: 1057, value: this.note.contactSchedule.value },
         { number: 1056, value: this.note.maritalStatus.value },
-        { number: 20, value: this.note.workStatus.value },
+        { number: 20, value: this.note.workStatus.value ? this.note.workStatus.value : '' },
         { number: 1063, value: this.note.typeOfAgreement.value },
         { number: 19, value: this.note.identificationNumber.value },
         { number: 1060, value: this.note.incoveniences.value },
         { number: 1061, value: this.note.information.value },
         { number: 26, value: this.note.suggestion.value },
+        {
+          number: 1055,
+          value: (this.note.file = this.note.fileName ? `SM/${this.noteInfo.idLead}/${this.note.fileName}` : null),
+        },
       ]
     },
     hideModal(status) {
@@ -746,18 +836,14 @@ export default {
     },
     async getCountries() {
       try {
-        const response = await amgApi.post('/view-countrys', {})
+        const response = await amgApi.post('/commons/get-world-countrys', {})
         this.note.country.options = response.data
       } catch (error) {
         this.showErrorSwal(error)
       }
     },
     initialValidationNote(note) {
-      if (
-        note.length != 0
-          && this.noteInfo.statusSale != 4
-          && !this.noteNull
-      ) {
+      if (note.length != 0 && this.noteInfo.statusSale != 4 && !this.noteNull) {
         this.showUpdate = true
       } else if (this.noteInfo.editmodal == false) {
         this.showSave = false
@@ -768,19 +854,32 @@ export default {
     },
     getDetailsAnswers(note) {
       note.forEach(answer => {
-        if (answer.answer != 'null') {
+        if (answer.answer != 'null' && answer.answer != '[]') {
           if (answer.question_id === 23) {
-            console.log(answer.answer.replaceAll('\\', '"'))
-            const response = JSON.parse(answer.answer.replaceAll('\\', '"'))
+            const response = JSON.parse(
+              JSON.parse(
+                answer.answer.replace(/\\\\n/g, '<br>').replace(/\\\\/g, '"').replaceAll('""', ''),
+              ),
+            )
             response.forEach(ans => {
               if (ans.id === 'reco-4') {
-                this.note.recomendations.selectedsOptions.push({ id: 'reco-4' })
+                this.note.recomendations.selectedsOptions.push({
+                  id: 'reco-4',
+                })
                 this.note.recomendations.value = ans.text
               } else this.note.recomendations.selectedsOptions.push(ans)
             })
           }
-          if (answer.question_id === 24) this.note.pending.value = JSON.parse(answer.answer.replaceAll('\\', '"'))
-          if (answer.question_id === 25) this.note.goals.value = JSON.parse(answer.answer.replaceAll('\\', '"'))
+          if (answer.question_id === 24) {
+            this.note.pending.value = JSON.parse(
+              answer.answer.replace(/\\\\n/g, '<br>').replace(/\\/g, '"'),
+            )
+          }
+          if (answer.question_id === 25) {
+            this.note.goals.value = JSON.parse(
+              answer.answer.replace(/\\\\n/g, '<br>').replace(/\\/g, '"'),
+            )
+          }
           if (answer.question_id === 1058) this.note.emergencyContact.value = answer.answer
           if (answer.question_id === 1057) this.note.contactSchedule.value = answer.answer
           if (answer.question_id === 1056) this.note.maritalStatus.value = answer.answer
@@ -790,12 +889,18 @@ export default {
           if (answer.question_id === 1060) this.note.incoveniences.value = answer.answer
           if (answer.question_id === 1061) this.note.information.value = answer.answer
           if (answer.question_id === 26) this.note.suggestion.value = answer.answer
+          if (answer.question_id === 1055) {
+            if (answer.answer != 0) {
+              this.note.fileAudio = answer.answer
+              this.note.fileName = answer.url.split('/')[2]
+            }
+          }
         } else this.noteNull = true
       })
     },
     async listTypeBusiness() {
       try {
-        const response = await amgApi.get('/listtypebusiness')
+        const response = await amgApi.post('/commons/get-all-type-business')
         this.note.typeOfBuisiness.options = response.data
       } catch (error) {
         this.showErrorSwal(error)
@@ -820,7 +925,7 @@ export default {
 </script>
 
 <style scoped>
-.quill-editor{
+.quill-editor {
   height: 100px;
 }
 </style>
