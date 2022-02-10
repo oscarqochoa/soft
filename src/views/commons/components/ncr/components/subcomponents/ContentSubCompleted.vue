@@ -1,5 +1,5 @@
 <template>
-  <div class="border-info border-table-radius">
+  <div class="border-top-info border-3 box-shadow-3 rounded-bottom">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -38,7 +38,7 @@
             </a>-->
             <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
             <router-link
-              class=""
+              class
               :to="{
                 name: 'lead-show',
                 params: { id: data.item.lead_id },
@@ -48,7 +48,7 @@
             <div v-if="data.item.mobile">{{data.item.mobile}}</div>
           </div>
         </template>
-        
+
         <template #cell(seller_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span>{{ data.item.seller_name }}</span>
