@@ -111,8 +111,8 @@
         :key="cardUpdate"
         :data="card"
         :type="typeCard"
-        :date_init="this.dateRange.startDate"
-        :date_end="this.dateRange.endDate"
+        :date_init="dateRange.startDate"
+        :date_end="dateRange.endDate"
         :program="programFilter"
         :user="userFilter"
       />
@@ -220,10 +220,10 @@
         </div>
         <br>
         <br>
-        <!--        <app-echart-line-crm-->
-        <!--          :key="idEchart"-->
-        <!--          :option-data="option"-->
-        <!--        />-->
+        <app-echart-line-social-network
+          :key="idEchart"
+          :option-data="option"
+        />
       </b-card>
     </div>
   </div></template>
@@ -234,15 +234,31 @@ import moment from 'moment'
 import vSelect from 'vue-select'
 import DashboardService from '@/views/social-network/views/dashboard/dashboard.service'
 import Card from '@/views/social-network/views/dashboard/components/Card.vue'
+import AppEchartLineSocialNetwork
+from '@/views/social-network/views/dashboard/components/chard/AppEchartLineSocialNetwork.vue'
 
 export default {
   components: {
     vSelect,
     Card,
+    AppEchartLineSocialNetwork,
 
   },
   data() {
     return {
+      idEchart: 0,
+      option: {
+        xAxisData: [
+
+        ],
+        yAxisData: [
+
+        ],
+        series: {
+          name: '',
+          data: [],
+        },
+      },
       validateDate: null,
       firstDay: moment()
         .startOf('week')
@@ -417,7 +433,7 @@ export default {
         : this.endDayOfMonth
     },
     selectedOption() {
-      this.getGraphic()
+      this.getGraphics()
     },
   },
   created() {
@@ -432,7 +448,24 @@ export default {
     this.getFilterCard()
   },
   methods: {
+    prueba() {
+      const val = this.graph[0].count
+      const x = []
+      this.graph.map(data => {
+        x.push(data.due_date)
+      })
 
+      const info = []
+      this.graph.map(data => {
+        info.push((data.count).toString())
+      })
+
+      this.option.series.name = 'ga'
+      this.option.series.data = info
+      this.option.xAxisData = x
+      this.idEchart++
+      console.log(this.option.series.data, 'soy data series')
+    },
     async getUsers() {
       try {
         const params = {
@@ -532,11 +565,14 @@ export default {
         this.juniorUser = false
         if (this.chardOption.id === 1) {
           const data = await DashboardService.getLeadsGraphic(params)
+
           this.graph = data.data
           this.labelGraph = 'Leads'
         } else if (this.chardOption.id === 2) {
           const data = await DashboardService.getRepliesGraphic(params)
+          console.log(data.data)
           this.graph = data.data
+          console.log(this.graph, 'oa')
           this.labelGraph = 'Replies'
         } else if (this.chardOption.id === 3) {
           const data = await DashboardService.getAnswersGraphic(params)
@@ -565,7 +601,7 @@ export default {
           this.graph = data.data
           this.multiGraphic = true
         }
-
+        this.prueba()
         return this.graph
       } catch (e) {
         this.showErrorSwal(e)
