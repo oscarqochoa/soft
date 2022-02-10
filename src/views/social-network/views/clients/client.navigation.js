@@ -1,7 +1,7 @@
 export default [
   {
     title: 'Clients',
-    icon: 'UsersAmgIcon',
+    icon: 'UsersIcon',
     route: 'list-clients',
   },
 ]

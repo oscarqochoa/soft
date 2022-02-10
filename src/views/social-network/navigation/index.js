@@ -10,11 +10,11 @@ const navigation = [
     header: 'SOCIAL NETWORK',
   },
   ...TestNavigation,
-  ...BankOfFlyersNavigation,
+  ...DashboardNavigation,
   ...ClientNavigation,
   ...MigrationsNavigation,
+  ...BankOfFlyersNavigation,
   ...ActivitiesNavigation,
-  ...DashboardNavigation,
 
 ]
 export default navigation
