@@ -479,7 +479,7 @@ export default {
       this.$emit("closeModalQuestionnaire", false);
     },
     getQuestionnaire() {
-      this.$store.commit("app/SET_LOADING", true);
+      this.addPreloader();
       amgApi
         .post("/lead/ncr/get-all-leads-questions", {
           question_id: this.question_id
@@ -533,11 +533,11 @@ export default {
             this.data.oa_question.monthly_payment = oa_question.monthly_payment;
             this.data.oa_question.year_opened = oa_question.year_opened;
             this.data.oa_question.original_amount = oa_question.original_amount;
-            this.$store.commit("app/SET_LOADING", false);
+            this.removePreloader();
           }
         })
         .catch(errors => {
-          this.$store.commit("app/SET_LOADING", false);
+          this.removePreloader();
           if (errors.response.status == 500 || errors.response.status == 422) {
             this.showToast(
               "danger",
@@ -574,7 +574,7 @@ export default {
     save() {
       this.showConfirmSwal().then(result => {
         if (result.value) {
-          this.$store.commit("app/SET_LOADING", true);
+          this.addPreloader();
           this.data["score_id"] = this.score_id;
           this.data["open_account"] = this.data["open_accounts"];
           amgApi
@@ -582,13 +582,13 @@ export default {
             .then(response => {
               if (response.status == 200) {
                 this.$emit("closeModalQuestionnaire", false);
-                this.$store.commit("app/SET_LOADING", false);
+                this.removePreloader();
                 this.showSuccessSwal("OPERATION SUCCESSFULLY");
                 this.$emit("updateGrid", false);
               }
             })
             .catch(errors => {
-              this.$store.commit("app/SET_LOADING", false);
+              this.removePreloader();
               if (
                 errors.response.status == 500 ||
                 errors.response.status == 422

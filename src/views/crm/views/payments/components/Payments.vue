@@ -612,9 +612,6 @@ td.div {
     flex-direction: column;
   }
 }
-// b-table{
-//    width: 100%;;
-// }
 </style>
 
 <style lang="scss">

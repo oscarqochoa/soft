@@ -40,6 +40,32 @@ export default {
           });
       }
     },
+    statusColor(status){
+      switch(status){
+        case 1:
+          return '#38c172'
+        case 2:
+          return '#3490dc'
+        case 3:
+          return '#e13232'
+        case 4:
+          return '#ffd46a'
+        case 5:
+          return '#ffd46a'
+        case 6:
+          return '#e13232'
+        case 7:
+          return '#eabc73'
+        case 8:
+          return '#eabc73'
+        case 9:
+          return '#e13232'
+        case 10:
+          return '#e13232'
+        default:
+          return ''
+      }
+    },
   },
   created: function () {
     this.getSellers();

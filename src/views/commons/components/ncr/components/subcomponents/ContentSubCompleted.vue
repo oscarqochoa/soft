@@ -33,10 +33,6 @@
         </template>
         <template #cell(lead_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
-            <!-- <a href="www.google.com" target="_blank" class="select-lead-name text-important">
-              {{ data.item.lead_name }}
-            </a>-->
-            <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
             <router-link
               class=""
               :to="{
@@ -48,7 +44,6 @@
             <div v-if="data.item.mobile">{{data.item.mobile}}</div>
           </div>
         </template>
-        
         <template #cell(seller_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span>{{ data.item.seller_name }}</span>
@@ -59,114 +54,15 @@
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span
               class="ncr-leads-status-successful w-100"
-              v-if="data.item.status_id == 1"
               style="
-                background-color: #38c172;
                 color: white;
                 border-radius: 30px;
                 padding-left: 15px;
                 padding-right: 15px;
               "
+              :style="`background-color:${statusColor(data.item.status_id)}`"
             >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 2"
-              style="
-                background-color: #3490dc;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 3"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 4"
-              style="
-                background-color: #ffd46a;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 5"
-              style="
-                background-color: #ffd46a;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 6"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 7"
-              style="
-                background-color: #eabc73;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 8"
-              style="
-                background-color: #eabc73;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 9"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 10"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
+           
           </div>
         </template>
         <template #cell(question_id)="data">
@@ -213,10 +109,6 @@
         </template>
         <template #cell(cr)="data">
           <div v-if="status == 1">
-            <!-- <b-button variant="transparent" target="_blanck"
-                  :to="{name:'report-lead',params:{modul:2,global:{idfile:data.item.score_id,idlead:data.item.lead_id}}}">
-                  <img :src="assetsImg + '/images/icons/report2.ico'" />
-            </b-button>-->
             <router-link
               :to="{
                 name: 'report-lead',
@@ -274,7 +166,6 @@
               target="_blanck"
             >
               <img :src="assetsImg + '/images/icons/pdf.png'" style="width: 20px" />
-              <!-- <p>{{ JSON.parse(data.item.attemps).slice()[0].file_cancel}}</p> -->
             </a>
             <div v-else style="height: 20px"></div>
           </div>
@@ -515,7 +406,6 @@ export default {
         return items || [];
       });
     },
-
     closeModalQuestionnaire() {
       this.modalQuestionnaire = false;
     },

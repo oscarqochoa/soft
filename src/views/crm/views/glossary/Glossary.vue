@@ -80,11 +80,9 @@
                 />
               </template>
               <b-dropdown-item @click="modalopenEdit(2, data.item)">
-                <!-- <feather-icon icon="EditIcon" /> -->
                 <span class="align-middle ml-50">Edit</span>
               </b-dropdown-item>
               <b-dropdown-item @click="deleteGlossary(data.item)">
-                <!-- <feather-icon icon="TrashIcon" /> -->
                 <span class="align-middle ml-50">Delete</span>
               </b-dropdown-item>
             </b-dropdown>

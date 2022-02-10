@@ -127,7 +127,6 @@ export default {
           sortable: false
         }
       ],
-      currentPage: ""
     };
   },
   computed: {
@@ -156,16 +155,6 @@ export default {
           this.status = false;
         });
     }
-    // myProvider(ctx) {
-    //   const promise = amgApi.post(`${ctx.apiUrl}`, {
-    //     name_text: this.score_id,
-    //   });
-    //   return promise.then((data) => {
-    //     const items = data.data.data;
-    //     console.log(items);
-    //     return items || [];
-    //   });
-    // },
   },
   created() {
     this.getTrackingStatus();

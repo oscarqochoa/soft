@@ -140,7 +140,6 @@ export default {
       }
     },
     doneTask(id, done) {
-      console.log(done)
         this.showConfirmSwal()
         .then((result) => {
           if (result.value) {

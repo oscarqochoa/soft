@@ -235,9 +235,6 @@ export default {
         this.modalChanging = false;
       }
     },
-    onEnter() {
-      this.$refs.refClientsList.refresh();
-    },
     resetSearch() {
       this.searchInput = "";
       this.$refs.refClientsList.refresh();

@@ -10,7 +10,6 @@
           sm="6"
           class="d-flex align-items-start justify-content-start mb-1 mb-md-0"
         >
-          <!-- <h2>Inventory</h2> -->
         </b-col>
         <b-col
           cols="12"
@@ -106,7 +105,6 @@ export default {
     },
     closeModalRequest() {
       this.modalRequest = false;
-      // this.$refs.inventoryRequest?.resetSearch();
     },
     async countRequestEquipment() {
       try {

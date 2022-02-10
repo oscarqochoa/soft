@@ -45,7 +45,6 @@
         <template #cell(url_image)="data">
           <div class="image-upload">
             <input type="file" id="file_input" hidden />
-            <!-- INPUT_FILE FIN -->
             <div class="form-group">
               <figure>
                 <img v-if="data.item.url_image" width="80" height="80" :src="data.item.url_image" />
@@ -523,7 +522,6 @@ export default {
     },
     closeModalRepairEquipment() {
       this.modalRepairEquipment = false;
-      // this.resetSearch();
     },
     updateRepairEquipment() {
       this.$refs.refClientsList.refresh();

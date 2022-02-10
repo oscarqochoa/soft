@@ -69,7 +69,15 @@
 <script>
 import ListService from "../../service/lists.service";
 export default {
-  props: ["objectLead", "ifModalCard"],
+  props:{
+    ifModalCard:{
+      type:Boolean
+    },
+    objectLead:{
+      type:Object,
+      default:()=>{}
+    }
+  },
   data() {
     return {
       comment: null,
