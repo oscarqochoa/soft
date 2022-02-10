@@ -5,16 +5,21 @@ export default {
     return { baseUrl: process.env.VUE_APP_BASE_URL_ASSETS };
   },
   computed: {
-    bgLightDark() {
+    bgTabsNavs() {
       //getters
       return this.$store.getters["appConfig/skin"] === "dark"
-        ? "bg-dark"
-        : "bg-light";
+        ? "nav-dark-tabs"
+        : "nav-light-tabs";
     },
     textLink() {
       return this.$store.getters["appConfig/skin"] === "dark"
         ? "text-warning font-weight-bolder"
         : "text-primary font-weight-bolder";
+    },
+    bgLightDark() {
+      return this.$store.getters["appConfig/skin"] === "dark"
+        ? "bg-dark"
+        : "bg-white";
     },
   },
   methods: {
@@ -236,9 +241,12 @@ export default {
         buttonsStyling: false,
       });
     },
-    showErrorSwal(error) {
+    showErrorSwal(
+      error,
+      title = "Sorry, there was an error... try again or contact support !!!"
+    ) {
       this.$swal({
-        html: `<h4><b>Sorry, there was an error... try again or contact support !!!</b></h4> <br/> <span class="font-small-3 text-danger">${error}</span>`,
+        html: `<h4><b>${title}</b></h4> <br/> <span class="font-small-3 text-danger">${error}</span>`,
         imageUrl: "/assets/images/icons/swal/error.svg",
         imageWidth: 70,
         confirmButtonText: "Ok",

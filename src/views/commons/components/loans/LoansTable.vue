@@ -426,7 +426,9 @@ export default {
       return this.module === 16;
     },
     isTabsBorder() {
-      return this.tab === 2 || this.tab === 3 ? "border-info rounded" : "";
+      return this.tab === 2 || this.tab === 3
+        ? "border-info border-table-radius"
+        : "";
     }
   },
   methods: {

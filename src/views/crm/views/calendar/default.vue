@@ -2,21 +2,23 @@
   <div>
     <header-slot></header-slot>
 
-    <b-card no-body>
-      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
-        <b-nav card-header pills class="m-0">
-          <b-nav-item
-            :to="{ name: 'crm-calendar-appointment' }"
-            exact
-            exact-active-class="active"
-          >Appointments</b-nav-item>
-          <b-nav-item :to="{ name: 'crm-calendar-task' }" exact exact-active-class="active">Tasks</b-nav-item>
-        </b-nav>
-      </b-card-header>
+    <b-nav card-header pills class="m-0">
+      <b-nav-item
+        :to="{ name: 'crm-calendar-appointment' }"
+        exact
+        exact-active-class="active"
+        :link-classes="['px-3',bgTabsNavs]"
+      >Appointments</b-nav-item>
+      <b-nav-item
+        :to="{ name: 'crm-calendar-task' }"
+        exact
+        exact-active-class="active"
+        :link-classes="['px-3',bgTabsNavs]"
+      >Tasks</b-nav-item>
+    </b-nav>
 
-      <b-card-body class="border-primary rounded">
-        <router-view />
-      </b-card-body>
+    <b-card class="border-primary border-table-radius px-0">
+      <router-view />
     </b-card>
   </div>
 </template>
