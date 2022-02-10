@@ -1,9 +1,6 @@
 <template>
   <div>
-    <b-card
-      no-body
-      class="mb-1"
-    >
+    <b-card no-body class="mb-1 border-0 p-0">
       <b-sidebar
         id="sidebar-right"
         right
@@ -18,39 +15,19 @@
             <span>
               <h3>Advanced Search</h3>
             </span>
-            <span
-              v-b-toggle.sidebar-right
-              class="cursor-pointer"
-            >
-              <amg-icon
-                icon="XIcon"
-                size="20"
-              />
+            <span v-b-toggle.sidebar-right class="cursor-pointer">
+              <amg-icon icon="XIcon" size="20" />
             </span>
           </div>
         </template>
         <b-container>
-          <filters-component
-            :filters="filter"
-          />
+          <filters-component :filters="filter" />
         </b-container>
         <template #footer>
           <b-container>
             <b-row class="d-flex align-items-center justify-content-between p-1">
-              <b-button
-                v-b-toggle.sidebar-right
-                variant="info"
-                @click="resetFiltersButtons"
-              >
-                Reset
-              </b-button>
-              <b-button
-                v-b-toggle.sidebar-right
-                variant="primary"
-                @click="sideBarSearch"
-              >
-                Search
-              </b-button>
+              <b-button v-b-toggle.sidebar-right variant="info" @click="resetFiltersButtons">Reset</b-button>
+              <b-button v-b-toggle.sidebar-right variant="primary" @click="sideBarSearch">Search</b-button>
             </b-row>
           </b-container>
         </template>
@@ -60,26 +37,18 @@
           <b-col
             cols="12"
             sm="6"
-            class="
-                d-flex
-                align-items-center
-                justify-content-center justify-content-sm-start
-              "
+            class="d-flex align-items-center justify-content-center justify-content-sm-start"
           >
-            <span
-              class="text-muted"
-            >Showing {{ startPage }} to {{ toPage }} of
-              {{ totalRows }} entries</span>
+            <span class="text-muted">
+              Showing {{ startPage }} to {{ toPage }} of
+              {{ totalRows }} entries
+            </span>
           </b-col>
           <!-- Pagination -->
           <b-col
             cols="12"
             sm="6"
-            class="
-                d-flex
-                align-items-center
-                justify-content-center justify-content-sm-end
-              "
+            class="d-flex align-items-center justify-content-center justify-content-sm-end"
           >
             <b-pagination
               v-model="paginate.currentPage"
@@ -93,16 +62,10 @@
               @input="$emit('onChangeCurrentPage', $event)"
             >
               <template #prev-text>
-                <feather-icon
-                  icon="ChevronLeftIcon"
-                  size="18"
-                />
+                <feather-icon icon="ChevronLeftIcon" size="18" />
               </template>
               <template #next-text>
-                <feather-icon
-                  icon="ChevronRightIcon"
-                  size="18"
-                />
+                <feather-icon icon="ChevronRightIcon" size="18" />
               </template>
             </b-pagination>
           </b-col>
@@ -136,22 +99,9 @@
             <slot name="buttons" />
           </b-col>
           <!-- Search -->
-          <b-col
-            cols="12"
-            md="6"
-          >
-            <div
-              class="
-                d-flex
-                align-items-center
-                justify-content-end
-                align-items-center
-              "
-            >
-              <b-input-group
-                v-if="!noVisiblePrincipalFilter"
-                class="mr-1"
-              >
+          <b-col cols="12" md="6">
+            <div class="d-flex align-items-center justify-content-end align-items-center">
+              <b-input-group v-if="!noVisiblePrincipalFilter" class="mr-1">
                 <b-form-input
                   v-if="filterPrincipal.type === 'input'"
                   v-model="filterPrincipal.model"
@@ -161,10 +111,7 @@
                   @keyup.enter="$emit('reload')"
                 />
                 <b-input-group-append>
-                  <b-button
-                    variant="primary"
-                    @click="$emit('reload')"
-                  >
+                  <b-button variant="primary" @click="$emit('reload')">
                     <feather-icon icon="SearchIcon" />
                   </b-button>
                 </b-input-group-append>
@@ -175,10 +122,7 @@
                 variant="primary"
               >
                 <div class="d-flex justify-content-between">
-                  <feather-icon
-                    icon="FilterIcon"
-                    size="15"
-                  />
+                  <feather-icon icon="FilterIcon" size="15" />
                 </div>
               </b-button>
             </div>
@@ -190,28 +134,15 @@
       </div>
       <div class="mx-2 mb-2 mt-2">
         <b-row>
-          <b-col
-            class="
-                d-flex
-                align-items-center
-                justify-content-center justify-content-sm-start
-              "
-          >
-            <span
-              class="text-muted"
-            >Showing {{ startPage }} to {{ toPage }} of
-              {{ totalRows }} entries</span>
+          <b-col class="d-flex align-items-center justify-content-center justify-content-sm-start">
+            <span class="text-muted">
+              Showing {{ startPage }} to {{ toPage }} of
+              {{ totalRows }} entries
+            </span>
           </b-col>
           <!-- Pagination -->
           <slot name="footer" />
-          <b-col
-
-            class="
-                d-flex
-                align-items-center
-                justify-content-center justify-content-sm-end
-              "
-          >
+          <b-col class="d-flex align-items-center justify-content-center justify-content-sm-end">
             <b-pagination
               v-model="paginate.currentPage"
               :total-rows="totalRows"
@@ -224,16 +155,10 @@
               @input="$emit('onChangeCurrentPage', $event)"
             >
               <template #prev-text>
-                <feather-icon
-                  icon="ChevronLeftIcon"
-                  size="18"
-                />
+                <feather-icon icon="ChevronLeftIcon" size="18" />
               </template>
               <template #next-text>
-                <feather-icon
-                  icon="ChevronRightIcon"
-                  size="18"
-                />
+                <feather-icon icon="ChevronRightIcon" size="18" />
               </template>
             </b-pagination>
           </b-col>
@@ -244,13 +169,13 @@
 </template>
 
 <script>
-import vSelect from 'vue-select'
-import { mapGetters } from 'vuex'
+import vSelect from "vue-select";
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'SalesMadeNewClientComponent',
+  name: "SalesMadeNewClientComponent",
   components: {
-    vSelect,
+    vSelect
   },
   props: {
     filter: { required: true, type: Array },
@@ -259,40 +184,40 @@ export default {
     startPage: { required: false, type: Number },
     toPage: { required: false, type: Number },
     filterPrincipal: { required: true, type: Object },
-    noVisiblePrincipalFilter: { required: false, default: false },
+    noVisiblePrincipalFilter: { required: false, default: false }
   },
   computed: {
     ...mapGetters({
-      skin: 'appConfig/skin',
-    }),
+      skin: "appConfig/skin"
+    })
   },
   created() {
     this.filter.map(fil => {
-      fil.model = null
-    })
-    this.filterPrincipal.model = ''
+      fil.model = null;
+    });
+    this.filterPrincipal.model = "";
   },
   methods: {
     resetFiltersButtons() {
-      this.$emit('reset-all-filters')
+      this.$emit("reset-all-filters");
     },
     resetFilter() {
       this.filter.map(fil => {
-        fil.model = null
-      })
-      this.filterPrincipal.model = ''
-      this.$emit('reload')
+        fil.model = null;
+      });
+      this.filterPrincipal.model = "";
+      this.$emit("reload");
     },
     sideBarSearch() {
-      this.filterPrincipal.model = ''
-      this.$emit('reload')
-    },
-  },
-}
+      this.filterPrincipal.model = "";
+      this.$emit("reload");
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-.flexible{
+.flexible {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -304,11 +229,11 @@ export default {
 td.div {
   width: 100% !important;
 }
-.hover-close{
+.hover-close {
   transition: 300ms;
 }
-.hover-close:hover{
-  background-color: #FF3B19 !important;
+.hover-close:hover {
+  background-color: #ff3b19 !important;
   color: white !important;
 }
 @media (max-width: 960px) {

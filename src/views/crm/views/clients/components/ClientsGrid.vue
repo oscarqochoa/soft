@@ -1,7 +1,6 @@
 <template>
   <div>
     <filter-slot
-      v-scrollbar
       :filter="filters"
       :filter-principal="filterPrincipal"
       :total-rows="totalRows"
@@ -23,14 +22,13 @@
           responsive="sm"
           show-empty
           no-provider-filtering
-          sticky-header="50vh"
+          sticky-header="65vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
           :current-page="paginate.currentPage"
           :per-page="paginate.perPage"
           :filter="searchInput"
-          v-scrollbar
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">

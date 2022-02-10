@@ -1,5 +1,5 @@
 <template>
-  <div class="px-1 border-info rounded">
+  <div class="border-info border-table-radius">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -11,7 +11,6 @@
       @reload="$refs['refClientsList'].refresh()"
     >
       <b-table
-        v-scrollbar
         slot="table"
         no-provider-filtering
         :api-url="clientRoute"
@@ -245,7 +244,7 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        perPage:ctx.perPage,
+        perPage: ctx.perPage,
         page: ctx.currentPage,
         leadname: this.filterPrincipal.model,
         startdate: this.filter[0].model,

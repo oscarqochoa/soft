@@ -1,7 +1,6 @@
 <template>
-  <div class="border-info rounded">
+  <div class="border-info border-table-radius">
     <filter-slot
-      v-scrollbar
       :filter="filter"
       :filter-principal="filterPrincipal"
       :total-rows="totalRows"

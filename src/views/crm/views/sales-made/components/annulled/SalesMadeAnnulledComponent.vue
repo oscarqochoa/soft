@@ -15,7 +15,6 @@
         id="annull-table"
         slot="table"
         ref="annull-table"
-        v-scrollbar
         :has-provider="true"
         sticky-header="70vh"
         small
