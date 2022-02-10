@@ -9,7 +9,10 @@
     @mouseleave="updateMouseHovered(false)"
   >
     <!-- main menu header-->
-    <div class="navbar-header expanded">
+    <div
+      class="navbar-header expanded"
+      style="height: 5.45rem;"
+    >
       <slot
         name="header"
         :toggleVerticalMenuActive="toggleVerticalMenuActive"
@@ -17,28 +20,34 @@
         :collapseTogglerIcon="collapseTogglerIcon"
       >
         <ul class="nav navbar-nav flex-row">
-
           <!-- Logo & Text -->
           <li class="nav-item mr-auto">
             <b-link
               class="navbar-brand"
               to="/"
             >
-              <span class="brand-logo">
-                <b-img
-                  :src="appLogoImage"
-                  alt="logo"
+              <span >
+                <amg-icon
+                  icon="AmgIcon"
+                  size="44"
+                  :class="(skin=='dark' || skin == 'semi-dark')?'text-light':'text-dark'"
                 />
               </span>
-              <h2 class="brand-text">
+              <h2
+                class="brand-text"
+                :class="(skin=='dark' || skin == 'semi-dark')?'text-light':'text-dark'"
+              >
                 {{ appName }}
               </h2>
             </b-link>
           </li>
-
           <!-- Toggler Button -->
           <li class="nav-item nav-toggle">
-            <b-link class="nav-link modern-nav-toggle">
+            <b-link
+              class="nav-link modern-nav-toggle"
+              style="margin-top: 28px;"
+              :class="(skin=='dark' || skin == 'semi-dark')?'text-light':'text-dark'"
+            >
               <feather-icon
                 icon="XIcon"
                 size="20"
@@ -63,30 +72,34 @@
       :class="{'d-block': shallShadowBottom}"
       class="shadow-bottom"
     />
-
-    <!-- main menu content-->
-    <vue-perfect-scrollbar
-      :settings="perfectScrollbarSettings"
-      class="main-menu-content scroll-area"
-      tagname="ul"
-      @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
-    >
-      <vertical-nav-menu-items
-        :items="navMenuItems"
-        class="navigation navigation-main"
-      />
-    </vue-perfect-scrollbar>
-    <!-- /main menu content-->
+    
+      <!-- main menu content-->
+      <vue-perfect-scrollbar
+        :settings="perfectScrollbarSettings"
+        class="main-menu-content scroll-area"
+        tagname="ul"
+        @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
+      >
+      <slot name="items" :isMouseHovered="isMouseHovered" :isVerticalMenuCollapsed="isVerticalMenuCollapsed">
+        <vertical-nav-menu-items
+          :items="navMenuItems"
+          class="navigation navigation-main"
+          style="font-size: 14px;"
+        />
+        </slot>
+      </vue-perfect-scrollbar>
+      <!-- /main menu content-->
+    
   </div>
 </template>
 
 <script>
-import navMenuItems from '@/navigation/vertical'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import { BLink, BImg } from 'bootstrap-vue'
 import { provide, computed, ref } from '@vue/composition-api'
 import useAppConfig from '@core/app-config/useAppConfig'
 import { $themeConfig } from '@themeConfig'
+import navMenuItems from '@/navigation/vertical'
 import VerticalNavMenuItems from './components/vertical-nav-menu-items/VerticalNavMenuItems.vue'
 import useVerticalNavMenu from './useVerticalNavMenu'
 

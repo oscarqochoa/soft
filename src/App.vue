@@ -1,12 +1,15 @@
 <template>
   <div
     id="app"
+    v-loading.full="loading"
     class="h-100"
-    :class="[skinClasses]"
+    :class="[skinClasses] "
   >
     <component :is="layout">
       <router-view />
     </component>
+
+    <ModalsContainer :modul="currentModul" />
 
     <scroll-to-top v-if="enableScrollToTop" />
   </div>
@@ -23,6 +26,8 @@ import useAppConfig from '@core/app-config/useAppConfig'
 
 import { useWindowSize, useCssVar } from '@vueuse/core'
 
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import ModalsContainer from '@/views/commons/components/modals-container/ModalsContainer.vue'
 import store from '@/store'
 
 const LayoutVertical = () => import('@/layouts/vertical/LayoutVertical.vue')
@@ -31,13 +36,13 @@ const LayoutFull = () => import('@/layouts/full/LayoutFull.vue')
 
 export default {
   components: {
-
     // Layouts
     LayoutHorizontal,
     LayoutVertical,
     LayoutFull,
 
     ScrollToTop,
+    ModalsContainer,
   },
   // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
   // Currently, router.currentRoute is not reactive and doesn't trigger any change
@@ -49,14 +54,51 @@ export default {
     contentLayoutType() {
       return this.$store.state.appConfig.layout.type
     },
+    ...mapGetters({
+      loading: 'app/loading',
+      currentUser: 'auth/currentUser',
+    }),
+  },
+  watch: {
+    $route() {
+      this.updateCurrentUserModuleRole(this.$route.matched[0].meta.module)
+      this.showModalTaskToday()
+      this.A_UPDATE_COUNTERS({ module: this.$route.matched[0].meta.module, role: this.currentUser.role_id, userId: this.currentUser.user_id })
+    },
+  },
+  methods: {
+    ...mapActions({
+      updateCurrentUserModuleRole: 'auth/updateCurrentUserModuleRole',
+      A_UPDATE_COUNTERS: 'SidebarStore/A_UPDATE_COUNTERS',
+    }),
+    ...mapMutations({
+      showModalTaskToday: 'TaskStore/M_SHOW_TASK_TODAY_MODAL',
+    }),
+  },
+  data() {
+    return {
+      currentModul: null,
+    }
   },
   beforeCreate() {
     // Set colors in theme
-    const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
+    const colors = [
+      'primary',
+      'secondary',
+      'success',
+      'info',
+      'warning',
+      'danger',
+      'light',
+      'dark',
+    ]
 
     // eslint-disable-next-line no-plusplus
     for (let i = 0, len = colors.length; i < len; i++) {
-      $themeColors[colors[i]] = useCssVar(`--${colors[i]}`, document.documentElement).value.trim()
+      $themeColors[colors[i]] = useCssVar(
+        `--${colors[i]}`,
+        document.documentElement,
+      ).value.trim()
     }
 
     // Set Theme Breakpoints
@@ -64,7 +106,12 @@ export default {
 
     // eslint-disable-next-line no-plusplus
     for (let i = 0, len = breakpoints.length; i < len; i++) {
-      $themeBreakpoints[breakpoints[i]] = Number(useCssVar(`--breakpoint-${breakpoints[i]}`, document.documentElement).value.slice(0, -2))
+      $themeBreakpoints[breakpoints[i]] = Number(
+        useCssVar(
+          `--breakpoint-${breakpoints[i]}`,
+          document.documentElement,
+        ).value.slice(0, -2),
+      )
     }
 
     // Set RTL
@@ -104,3 +151,8 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+@import "@core/scss/vue/libs/vue-select.scss";
+@import "@core/scss/vue/libs/vue-sweetalert.scss";
+</style>

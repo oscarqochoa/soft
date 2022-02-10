@@ -1,24 +1,30 @@
 <template>
   <div>
-    <b-nav tabs>
+    <header-slot />
+    <b-nav card-header pills class="m-0">
       <b-nav-item
         :to="{ name: 'crm-clients-list' }"
         exact
         exact-active-class="active"
-        >Clients</b-nav-item
-      >
+        :link-classes="['px-3',bgTabsNavs]"
+      >Clients</b-nav-item>
       <b-nav-item
         :to="{ name: 'crm-clients-shared-list' }"
         exact
         exact-active-class="active"
-        >Shared</b-nav-item
-      >
+        :link-classes="['px-3',bgTabsNavs]"
+      >Shared</b-nav-item>
     </b-nav>
-    <router-view :key="$route.name"></router-view>
+
+    <b-card no-body class="border-primary border-table-radius px-0">
+      <router-view :key="$route.name" />
+    </b-card>
   </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {};
 </script>
 

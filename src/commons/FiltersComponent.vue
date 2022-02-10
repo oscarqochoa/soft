@@ -1,6 +1,7 @@
 <template>
   <b-row class="d-flex justify-content-end">
-    <b-col cols="12" md="2" class="mb-md-0 mb-2">
+    <b-col cols="12" md="2" class="mb-md-0 mb-2"
+    v-if="fromToFilter">
       <b-form-group label="From" label-for="from">
         <b-form-datepicker
           id="from"
@@ -15,7 +16,8 @@
       </b-form-group>
       <!-- <label>{{filter.label}}</label> -->
     </b-col>
-    <b-col cols="12" md="2" class="mb-md-0 mb-2">
+    <b-col cols="12" md="2" class="mb-md-0 mb-2"
+    v-if="fromToFilter">
       <b-form-group label="To" label-for="to">
         <b-form-datepicker
           id="to"
@@ -71,7 +73,7 @@ export default {
       this.$emit("onChangeFilter", null);
     },
   },
-};
+}
 </script>
 <style >
 .b-calendar-grid-caption {

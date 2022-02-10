@@ -1,186 +1,71 @@
 <template>
   <div>
-    <b-card no-body class="mb-1">
-      <div class="mx-2 mb-2 mt-2">
-          <b-row>
-            <b-col
-              cols="12"
-              sm="6"
-              class="
-                d-flex
-                align-items-center
-                justify-content-center justify-content-sm-start
-              "
-            >
-              <span class="text-muted"
-                >Showing {{ startPage }} to {{ toPage }} of
-                {{ totalData }} entries</span
-              >
-            </b-col>
-            <!-- Pagination -->
-            <b-col
-              cols="12"
-              sm="6"
-              class="
-                d-flex
-                align-items-center
-                justify-content-center justify-content-sm-end
-              "
-            >
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="totalData"
-                :per-page="perPage"
-                first-number
-                last-number
-                class="mb-0 mt-1 mt-sm-0"
-                prev-class="prev-item"
-                next-class="next-item"
-              >
-                <template #prev-text>
-                  <feather-icon icon="ChevronLeftIcon" size="18" />
-                </template>
-                <template #next-text>
-                  <feather-icon icon="ChevronRightIcon" size="18" />
-                </template>
-              </b-pagination>
-            </b-col>
-          </b-row>
-        </div>
-      <div class="m-2">
-        <!-- Table Top -->
-        <b-row>
-          <!-- Per Page -->
-          <b-col
-            cols="12"
-            md="6"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Show</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label class="mr-2">entries</label>
-            <feather-icon
-              class="cursor-pointer"
-              icon="RefreshCcwIcon"
-              size="20"
-              @click="resetSearch"
-            />
-          </b-col>
-          <!-- Search -->
-          <b-col cols="12" md="6">
-            <div
-              class="
-                d-flex
-                align-items-center
-                justify-content-end
-                align-items-center
-              "
-            >
-              <b-form-input
-                v-model="searchInput"
-                class="d-inline-block mr-1"
-                placeholder="Client..."
-                debounce="200"
-              />
-              <b-button
-                variant="primary"
-                @click="filterController = !filterController"
-              >
-                <div class="d-flex justify-content-between">
-                  <span class="mr-50"
-                    ><feather-icon icon="FilterIcon" size="15"
-                  /></span>
-
-                  <span class="text-nowrap">{{
-                    filterController ? "Basic Search" : "Advanced Search"
-                  }}</span>
-                </div>
-              </b-button>
-            </div>
-          </b-col>
-        </b-row>
-      </div>
-      <transition name="fade">
-        <filters-component
-          class="mr-2 ml-2 mb-2"
-          :filters="filters"
-          v-if="filterController"
-          fromToFilter
-          :fromToObject="fromToObject"
-          @onChangeFilter="$refs.refClientsList.refresh()"
-        ></filters-component>
-      </transition>
-      <div class="table-responsive">
+    <filter-slot
+      :filter="filters"
+      :filter-principal="filterPrincipal"
+      :total-rows="totalRows"
+      :paginate="paginate"
+      :start-page="startPage"
+      :to-page="toPage"
+      @reset-all-filters="resetAllFilters"
+      @reload="$refs['refClientsList'].refresh()"
+    >
+      <template #table>
         <b-table
-          :api-url="clientRoute"
           ref="refClientsList"
+          :api-url="clientRoute"
           class="position-relative"
           :items="myProvider"
-          stacked="lg"
           :fields="visibleFields"
           primary-key="id"
           table-class="text-nowrap"
-          responsive
+          responsive="sm"
           show-empty
-          sticky-header
-          :busy.sync="isBusy"
+          no-provider-filtering
+          sticky-header="65vh"
+          :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
-          :current-page="currentPage"
-          :per-page="perPage"
+          :current-page="paginate.currentPage"
+          :per-page="paginate.perPage"
           :filter="searchInput"
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
-              <b-spinner class="align-middle mr-1"></b-spinner>
+              <b-spinner class="align-middle mr-1" />
               <strong>Loading ...</strong>
             </div>
           </template>
+          <template #cell(lead_name)="data">
+            <a
+              :class="textLink"
+              @click="openEditLeads(data.item.lead_id, data.index)"
+            >{{data.value}}</a>
+          </template>
           <template #cell(accounts2)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+            <div class="d-flex flex-column justify-content-start align-items-start">
               <span
                 v-for="(account, index) in JSON.parse(data.item.accounts)"
                 :key="index"
-              >
-                {{ account.account }}
-              </span>
+              >{{ account.account }}</span>
             </div>
           </template>
           <template #cell(programs)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+            <div class="d-flex flex-column justify-content-start align-items-start">
               <span
                 v-for="(account, index) in JSON.parse(data.item.accounts)"
                 :key="index"
-              >
-                {{ account.program }}
-              </span>
+              >{{ account.program }}</span>
             </div>
           </template>
           <template #cell(statuses)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
-              <template
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
-              >
-                <span
-                  :key="index"
-                  class="d-flex justify-content-between align-items-center"
-                >
+            <div class="d-flex flex-column justify-content-start align-items-start">
+              <template v-for="(account, index) in JSON.parse(data.item.accounts)">
+                <span :key="index" class="d-flex justify-content-between align-items-center">
                   <feather-icon
+                    v-if="account.status == 1"
                     icon="CircleIcon"
                     size="13"
-                    v-if="account.status == 1"
                     :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                   />
                   <div
@@ -189,36 +74,36 @@
                     :style="`top: 50%;margin-right: 5px; background: ${
                       account.validate_sp == 2 ? 'red' : ''
                     }`"
-                  ></div>
+                  />
                   <feather-icon
+                    v-if="account.status == 3"
                     icon="CircleIcon"
                     size="13"
-                    v-if="account.status == 3"
                     :style="`color: #0066FF; border-color: #0066FF; background: #0066FF; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                   />
                   <feather-icon
-                    icon="CircleIcon"
-                    size="13"
                     v-if="
                       account.status == 4 ||
                       account.status == 5 ||
                       account.status == 6
                     "
+                    icon="CircleIcon"
+                    size="13"
                     :style="`color: red; border-color: red; background: red; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                   />
                   <span>
                     {{
-                      account.status == 1
-                        ? "Active"
-                        : account.status == 2
-                        ? "Hold"
-                        : account.status == 3
-                        ? "Transition"
-                        : account.status == 4
-                        ? "Canceled"
-                        : account.status == 5
-                        ? "Loyal"
-                        : "Closed"
+                    account.status == 1
+                    ? "Active"
+                    : account.status == 2
+                    ? "Hold"
+                    : account.status == 3
+                    ? "Transition"
+                    : account.status == 4
+                    ? "Canceled"
+                    : account.status == 5
+                    ? "Loyal"
+                    : "Closed"
                     }}
                   </span>
                 </span>
@@ -226,81 +111,37 @@
             </div>
           </template>
           <template #cell(advisors)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+            <div class="d-flex flex-column justify-content-start align-items-start">
               <span
                 v-for="(account, index) in JSON.parse(data.item.accounts)"
                 :key="index"
-              >
-                {{ account.advisor_name }}
-              </span>
+              >{{ account.advisor_name }}</span>
             </div>
           </template>
           <template #cell(ext)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+            <div class="d-flex flex-column justify-content-start align-items-start">
               <span
                 v-for="(account, index) in JSON.parse(data.item.accounts)"
                 :key="index"
-              >
-                {{ account.advisor_extension }}
-              </span>
+              >{{ account.advisor_extension }}</span>
             </div>
           </template>
           <template #cell(created_at)="data">
-            {{ data.item.created_at | myGlobal }}
+            {{
+            data.item.created_at | myGlobal
+            }}
           </template>
         </b-table>
-      </div>
-      <div class="mx-2 mb-2">
-        <b-row>
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-start
-            "
-          >
-            <span class="text-muted"
-              >Showing {{ startPage }} to {{ toPage }} of
-              {{ totalData }} entries</span
-            >
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="
-              d-flex
-              align-items-center
-              justify-content-center justify-content-sm-end
-            "
-          >
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalData"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon icon="ChevronLeftIcon" size="18" />
-              </template>
-              <template #next-text>
-                <feather-icon icon="ChevronRightIcon" size="18" />
-              </template>
-            </b-pagination>
-          </b-col>
-        </b-row>
-      </div>
-    </b-card>
+      </template>
+    </filter-slot>
+    <lead-update
+      v-if="isAddUpdateUserSidebarActive"
+      :modul="modul"
+      :typeEdit="typeEdit"
+      :lead="S_LEAD_EDIT"
+      :is-add-new-user-sidebar-active.sync="isAddUpdateUserSidebarActive"
+      @update-lead="updateLead"
+    />
   </div>
 </template>
 <script>
@@ -308,209 +149,336 @@ import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
-import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
-import { mapGetters } from "vuex";
+import ClientService from "../service/clients.service";
+import LeadUpdate from "@/views/crm/views/Lead/lead-module/save/LeadUpdate.vue";
+import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 export default {
   directives: {
-    Ripple,
-  },
-  mounted() {
-    this.getAllPrograms();
-  },
-  data() {
-    return {
-      sortBy: "created_at",
-      sortDesc: true,
-      arrayColumns: [
-        {
-          key: "lead_name",
-          label: "Name",
-          sortable: true,
-          visible: true,
-        },
-        {
-          key: "mobile",
-          label: "Mobile",
-          sortable: true,
-          visible: true,
-        },
-        {
-          key: "accounts2",
-          label: "Account",
-          visible: true,
-        },
-        {
-          key: "programs",
-          label: "Program",
-          visible: true,
-        },
-        {
-          key: "statuses",
-          label: "Status",
-          visible: true,
-        },
-        {
-          key: "advisors",
-          label: "Advisor",
-          visible: true,
-        },
-        {
-          key: "ext",
-          label: "Ext",
-          visible: this.$route.meta.isClientsTab,
-        },
-        {
-          key: "created_at",
-          label: "Creation Date",
-          sortable: true,
-          visible: true,
-        },
-        // { key: "actions", label: "Acciones", class: "text-center " },
-      ],
-      searchInput: "",
-      orderby: "",
-      order: "",
-      startPage: "",
-      endPage: "",
-      totalData: "",
-      perPage: 10,
-      nextPage: "",
-      currentPage: 1,
-      toPage: "",
-      isBusy: false,
-      perPageOptions: [10, 25, 50, 100],
-      isClientsTab: false,
-      fromToObject: {
-        from: null,
-        to: null,
-      },
-      filters: [
-        {
-          label: "Programs",
-          options: [],
-          model: null,
-          primaryKey: "id",
-          labelSelect: "value",
-          cols: 12,
-          md: 2,
-          visible: true
-        },
-        {
-          label: "Advisor",
-          options: [],
-          model: null,
-          primaryKey: "id",
-          labelSelect: "user_name",
-          cols: 12,
-          md: 2,
-          visible: this.$route.meta.isClientsTab
-        },
-        {
-          label: "Status",
-          options: [
-            {value: 0, label: "All"},
-            {value: 1, label: "Active"},
-            {value: 4, label: "Canceled"},
-            {value: 6, label: "Closed"},
-            {value: 2, label: "Hold"},
-            {value: 5, label: "Loyal"},
-            {value: 3, label: "Transition"},
-          ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
-          cols: 12,
-          md: 2,
-          visible: true
-        },
-        {
-          label: "Payment Type",
-          options: [
-            {value: 0, label: "All"},
-            {value: 1, label: "Automatic"},
-            {value: 2, label: "Manual"},
-            {value: 3, label: "Others"}          ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
-          cols: 12,
-          md: 2,
-          visible: true
-        },
-        {
-          label: "Day Payment",
-          options: [
-            {value: 0, label: "All"},
-            {value: 5, label: "5"},
-            {value: 10, label: "10"},
-            {value: 15, label: "15"},
-            {value: 20, label: "20"},
-            {value: 25, label: "25"},
-            {value: 30, label: "30"},
-          ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
-          cols: 12,
-          md: 2,
-          visible: false
-        },
-      ],
-      filterController: false,
-      programs: [],
-    };
+    Ripple
   },
   components: {
     vSelect,
     AppCollapse,
     AppCollapseItem,
+    LeadUpdate
+  },
+  data() {
+    return {
+      isAddUpdateUserSidebarActive: false,
+      otherClient: 0,
+      sortBy: "created_at",
+      sortDesc: true,
+      typeEdit: "client",
+      arrayColumns: [
+        {
+          key: "lead_name",
+          label: "Name",
+          sortable: true,
+          visible: true
+        },
+        {
+          key: "mobile",
+          label: "Mobile",
+          sortable: true,
+          visible: true
+        },
+        {
+          key: "accounts2",
+          label: "Account",
+          visible: true
+        },
+        {
+          key: "programs",
+          label: "Program",
+          visible: true
+        },
+        {
+          key: "statuses",
+          label: "Status",
+          visible: true
+        },
+        {
+          key: "advisors",
+          label: "Advisor",
+          visible: true
+        },
+        {
+          key: "ext",
+          label: "Ext",
+          visible: this.$route.meta.isClientsTab
+        },
+        {
+          key: "created_at",
+          label: "Creation Date",
+          sortable: true,
+          visible: true
+        }
+        // { key: "actions", label: "Acciones", class: "text-center " },
+      ],
+      searchInput: "",
+      orderby: "",
+      order: "",
+      startPage: 0,
+      endPage: "",
+      totalRows: 0,
+      perPage: 10,
+      nextPage: "",
+      currentPage: 1,
+      paginate: {
+        perPage: 10,
+        currentPage: 1
+      },
+      toPage: 0,
+      isBusy: false,
+      perPageOptions: [10, 25, 50, 100],
+      isClientsTab: false,
+      fromToObject: {
+        from: null,
+        to: null
+      },
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Client...",
+        model: ""
+      },
+      filters: [
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          },
+          cols: 6
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          },
+          cols: 6
+        },
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Programs",
+          options: [],
+          model: null,
+          reduce: "id",
+          selectText: "value",
+          cols: 12,
+          md: 2,
+          visible: true
+        },
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Advisor",
+          options: [],
+          model: null,
+          reduce: "id",
+          selectText: "user_name",
+          cols: 12,
+          md: 2,
+          visible: this.$route.meta.isClientsTab
+        },
+        {
+          type: "select",
+          label: "Status",
+          margin: true,
+          showLabel: true,
+          options: [
+            { value: 0, label: "All" },
+            { value: 1, label: "Active" },
+            { value: 4, label: "Canceled" },
+            { value: 6, label: "Closed" },
+            { value: 2, label: "Hold" },
+            { value: 5, label: "Loyal" },
+            { value: 3, label: "Transition" }
+          ],
+          model: "",
+          reduce: "value",
+          selectText: "label",
+          cols: 12,
+          md: 2,
+          visible: true
+        },
+        {
+          type: "select",
+          label: "Payment Type",
+          margin: true,
+          showLabel: true,
+          options: [
+            { value: 0, label: "All" },
+            { value: 1, label: "Automatic" },
+            { value: 2, label: "Manual" },
+            { value: 3, label: "Others" }
+          ],
+          model: "",
+          reduce: "value",
+          selectText: "label",
+          cols: 12,
+          md: 2,
+          visible: true
+        },
+        {
+          type: "select",
+          label: "Day Payment",
+          margin: true,
+          showLabel: true,
+          options: [
+            { value: 0, label: "All" },
+            { value: 5, label: "5" },
+            { value: 10, label: "10" },
+            { value: 15, label: "15" },
+            { value: 20, label: "20" },
+            { value: 25, label: "25" },
+            { value: 30, label: "30" }
+          ],
+          model: "",
+          reduce: "value",
+          selectText: "label",
+          cols: 12,
+          md: 2,
+          visible: false
+        }
+      ],
+      filterController: false,
+      programs: [],
+      items: [],
+      editSelectedIndex: null
+    };
+  },
+  mounted() {
+    this.getAllPrograms();
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
+      currentUser: "auth/currentUser"
     }),
+    ...mapState({
+      S_LEAD_EDIT: state => state.CrmLeadStore.S_LEAD_EDIT
+    }),
+    modul() {
+      return this.$route.meta.module;
+    },
     clientRoute() {
-      return this.$route.meta.isClientsTab ? "/clients" : "/clientsshareother";
+      return this.$route.meta.isClientsTab
+        ? "/clients/search-clients"
+        : "/clients/search-share-clients";
     },
     visibleFields() {
-      return this.arrayColumns.filter((column) => column.visible);
+      return this.arrayColumns.filter(column => column.visible);
     },
-    program(){
-      return this.filters[0].model;
-    },
-    advisor(){
-      return this.filters[1].model;
-    },
-    status(){
+    program() {
       return this.filters[2].model;
     },
-    paymentType:{
-      get(){
-        return this.filters[3].model;
+    advisor() {
+      return this.filters[3].model;
+    },
+    status() {
+      return this.filters[4].model;
+    },
+    paymentType: {
+      get() {
+        return this.filters[5].model;
       },
-      set(value){
-        this.filters[3].model = value;
+      set(value) {
+        this.filters[5].model = value;
       }
     },
-    paymentDay:{
-      get(){
-        return this.filters[4].model;
+    paymentDay: {
+      get() {
+        return this.filters[6].model;
       },
-      set(value){
-        this.filters[4].visible = value;
+      set(value) {
+        this.filters[6].visible = value;
       }
-    },
+    }
   },
   methods: {
+    ...mapActions({
+      A_GET_LEAD: "CrmLeadStore/A_GET_LEAD",
+      A_GET_LEAD_EDIT: "CrmLeadStore/A_GET_LEAD_EDIT",
+      A_GET_OWNERS: "CrmGlobalStore/A_GET_OWNERS",
+      A_GET_EVENTS: "CrmEventStore/A_GET_EVENTS",
+      A_GET_PROGRAMS: "CrmGlobalStore/A_GET_PROGRAMS",
+      A_GET_CREDIT_REPORTS: "CrmCreditReportStore/A_GET_CREDIT_REPORTS",
+      A_GET_CREDIT_REPORT_PENDINGS:
+        "CrmCreditReportStore/A_GET_CREDIT_REPORT_PENDINGS",
+      A_GET_CALLS: "CrmCallStore/A_GET_CALLS",
+      A_GET_STATE_LEADS: "CrmLeadStore/A_GET_STATE_LEADS",
+      A_GET_STATUS_LEADS: "CrmLeadStore/A_GET_STATUS_LEADS",
+      A_GET_SOURCE_LEADS: "CrmLeadStore/A_GET_SOURCE_LEADS",
+      A_GET_SOURCE_NAMES: "CrmGlobalStore/A_GET_SOURCE_NAMES",
+      A_GET_STATES: "CrmGlobalStore/A_GET_STATES",
+      A_GET_EEUU_STATES: "CrmGlobalStore/A_GET_EEUU_STATES",
+      A_GET_COUNTRIES: "CrmGlobalStore/A_GET_COUNTRIES",
+      A_GET_SELLERS: "CrmGlobalStore/A_GET_SELLERS"
+    }),
+    ...mapMutations({
+      M_STATUS_LEADS_CLIENT: "CrmLeadStore/M_STATUS_LEADS_CLIENT"
+    }),
+    async openEditLeads(leadId, index) {
+      this.editSelectedIndex = index;
+      this.addPreloader();
+      try {
+        //All promises
+        const roles = [2, 4].includes(this.modul) ? "[1,2,5]" : "[1,2,3,5]";
+        if (!this.otherClient) {
+          await Promise.all([
+            this.A_GET_PROGRAMS(),
+            await this.A_GET_SELLERS({
+              modul: this.modul,
+              body: { roles: "[]", type: "1" }
+            }),
+            this.A_GET_STATE_LEADS(),
+            await this.A_GET_STATUS_LEADS(),
+            this.M_STATUS_LEADS_CLIENT(),
+            this.A_GET_SOURCE_LEADS(),
+            this.A_GET_SOURCE_NAMES(),
+            this.A_GET_COUNTRIES()
+          ]);
+        }
+        await this.A_GET_LEAD_EDIT({ id: leadId });
+        this.otherClient++; // Just reload data the first time
+        this.isAddUpdateUserSidebarActive = true;
+        this.removePreloader();
+      } catch (error) {
+        this.removePreloader();
+        this.showErrorSwal(error);
+      }
+    },
     onChangeFilter() {
       this.$refs.refClientsList.refresh();
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+    async myProvider(ctx) {
+      let params = {
+        api_url: ctx.apiUrl,
+        current_page: ctx.currentPage,
         per_page: ctx.perPage,
-        text: ctx.filter,
-        from: this.fromToObject.from,
-        to: this.fromToObject.to,
+        text: this.filterPrincipal.model,
+        from: this.filters[0].model,
+        to: this.filters[1].model,
         program: this.program,
         order: ctx.sortDesc == 1 ? "desc" : "asc",
         orderby: 5,
@@ -518,84 +486,80 @@ export default {
         advisor: this.advisor,
         type: this.paymentType,
         day: this.paymentDay,
-        rol_id: this.currentUser.arrRoles.find((rol) => rol.module_id == 2)
+        rol_id: this.currentUser.arrRoles.find(rol => rol.module_id == 2)
           .role_id,
         session: this.currentUser.user_id,
-        modul: 2,
-      });
-
-      // Must return a promise that resolves to an array of items
-      return promise.then((data) => {
-        // Pluck the array of items off our axios response
-        const items = data.data.data;
-        this.startPage = data.data.from;
-        this.currentPage = data.data.current_page;
-        this.perPage = data.data.per_page;
-        this.nextPage = this.startPage + 1;
-        this.endPage = data.data.last_page;
-        this.totalData = data.data.total;
-        this.toPage = data.data.to;
-        // Must return an array of items or an empty array if an error occurred
-        return items || [];
-      });
+        modul: this.modul
+      };
+      const data = await ClientService.getCrmUsers(params);
+      this.items = data.data;
+      this.startPage = data.from;
+      this.paginate.currentPage = data.current_page;
+      this.paginate.perPage = data.per_page;
+      this.nextPage = this.startPage + 1;
+      this.endPage = data.last_page;
+      this.totalRows = data.total;
+      this.toPage = data.to;
+      // Must return an arthis.items or an empty array if an error occurred
+      return this.items || [];
+    },
+    updateLead(lead) {
+      //Full name
+      this.items[this.editSelectedIndex].lead_name = `${
+        lead.first_name
+      } ${lead.middle_name || ""} ${lead.last_name}`;
+      //Mobile
+      this.items[this.editSelectedIndex].mobile = lead.mobile;
     },
     async getAllPrograms() {
-      const data = await amgApi.get(`/programs`);
+      const data = await ClientService.getAllPrograms();
       let firstOption = {
         value: "All",
-        id: 0,
+        id: 0
       };
-      let newData = data.data;
+      let newData = data;
       newData.unshift(firstOption);
-      this.filters[0].options = newData;
+      this.filters[2].options = newData;
     },
     async getAllAdvisors(program) {
-      const data = await amgApi.post(`/usersprograms`, {
+      let params = {
         idmodule: this.convertProgramToModule(program),
         iduser: this.currentUser.user_id,
-        idrole: this.currentUser.role_id ? this.currentUser.role_id : 1,
-      });
+        idrole: this.currentUser.role_id ? this.currentUser.role_id : 1
+      };
+      const data = await ClientService.getAllAdvisors(params);
       let firstOption = {
         user_name: "All",
-        id: 0,
+        id: 0
       };
-      let newData = data.data;
+      let newData = data;
       newData.unshift(firstOption);
-      this.filters[1].options = newData;
+      this.filters[3].options = newData;
+    },
+    resetAllFilters() {
+      this.filters.forEach(filter => {
+        filter.model = null;
+      });
+      this.filterPrincipal.model = null;
+      this.$refs.refClientsList.refresh();
     },
     resetSearch() {
       this.searchInput = "";
       this.$refs.refClientsList.refresh();
-    },
-    showToast(variant, position, title, icon, text) {
-      this.$toast(
-        {
-          component: ToastificationContent,
-          props: {
-            title,
-            icon,
-            text,
-            variant,
-          },
-        },
-        {
-          position,
-        }
-      );
-    },
-  },
-  watch: {
-    program(newVal){
-      this.getAllAdvisors(newVal);
-    },
-    paymentType(newVal){
-      if(newVal == 1){
-        this.paymentDay = true
-      }else{
-        this.paymentDay = false
-      }
     }
   },
+  watch: {
+    program(newVal) {
+      this.getAllAdvisors(newVal);
+    },
+    paymentType(newVal) {
+      if (newVal == 1) {
+        this.paymentDay = true;
+      } else {
+        this.paymentDay = false;
+      }
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

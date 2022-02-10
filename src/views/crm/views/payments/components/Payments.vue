@@ -1,0 +1,623 @@
+<template>
+  <div>
+    <filter-slot
+      :filter="filterStatus"
+      :filter-principal="filterPrincipal"
+      :total-rows="totalRows"
+      :paginate="paginate"
+      :start-page="startPage"
+      :to-page="toPage"
+      :send-multiple-sms="false"
+      @reload="$refs['refClientsList'].refresh()"
+    >
+      <b-table
+        small
+        slot="table"
+        no-provider-filtering
+        :api-url="clientRoute"
+        ref="refClientsList"
+        :items="myProvider"
+        :fields="fields"
+        primary-key="id"
+        table-class="text-nowrap"
+        responsive="sm"
+        show-empty
+        sticky-header="70vh"
+        :busy="isBusy"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
+        :current-page="paginate.currentPage"
+        :per-page="paginate.perPage"
+      >
+        <template #table-busy>
+          <div class="text-center text-primary my-2">
+            <b-spinner class="align-middle mr-1"></b-spinner>
+            <strong>Loading ...</strong>
+          </div>
+        </template>
+        <template #cell(lead_name)="data">
+          <div class="d-flex flex-column justify-content-start align-items-start">
+            <router-link
+              :class="textLink"
+              :to="{
+                name: 'lead-show',
+                params: { id: data.item.lead_id },
+              }"
+              target="_blank"
+            >{{ data.item.lead_name }}</router-link>
+          </div>
+        </template>
+        <template #cell(amount)="data">
+          <div class="inline" style="position: relative">
+            <span
+              v-if="data.item.type_t != 39 && data.item.type_t != 40"
+              class="mr-1"
+            >$ {{ data.item.amount }}</span>
+            <span
+              v-if="data.item.type_t == 39 || data.item.type_t == 40"
+              class="mr-1"
+            >$ ({{ data.item.amount }})</span>
+            <feather-icon
+              icon="EyeIcon"
+              style="cursor: pointer; position: absolute; left: 70px"
+              v-if="data.item.type_t == 39 || data.item.type_t == 40"
+              class="text-primary"
+              @click="getVoidRefund(data.item.transaction_id)"
+            ></feather-icon>
+            <img
+              :src="assetsImg + '/images/icons/void.ico'"
+              style="
+                cursor: pointer;
+                color: red;
+                position: absolute;
+                left: 70px;
+              "
+              title="Void"
+              @click="
+                voidAuthorize(
+                  data.item.transaction_id,
+                  data.item.merchant,
+                  data.item.amount,
+                  data.item.lead_name,
+                  data.item.settlement_date,
+                  1
+                )
+              "
+              v-if="
+                data.item.type_t != 39 &&
+                data.item.type_t != 40 &&
+                data.item.void == 1 &&
+                data.item.w_card == 1 &&
+                currentUser.role_id == 1 &&
+                data.item.result == 'Approved'
+              "
+            />
+            <img
+              :src="assetsImg + '/images/icons/refund.ico'"
+              style="
+                cursor: pointer;
+                color: green;
+                position: absolute;
+                left: 70px;
+              "
+              title="Refund"
+              v-if="
+                data.item.type_t != 39 &&
+                data.item.type_t != 40 &&
+                data.item.void == 0 &&
+                data.item.refund == 1 &&
+                data.item.w_card == 1 &&
+                currentUser.role_id == 1 &&
+                data.item.result == 'Approved'
+              "
+              @click="
+                voidAuthorize(
+                  data.item.transaction_id,
+                  data.item.merchant,
+                  data.item.amount,
+                  data.item.lead_name,
+                  data.item.settlement_date,
+                  2
+                )
+              "
+            />
+          </div>
+        </template>
+        <template #cell(charge)="data">
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <b-icon v-if="data.item.charge == 0" icon="check-circle-fill" variant="success"></b-icon>
+            <feather-icon
+              v-if="data.item.charge == 1 || data.item.charge == null"
+              icon="XCircleIcon"
+              class="text-danger"
+            />
+          </div>
+        </template>
+        <template #cell(result)="data">
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <b-icon
+              v-if="data.item.result == 'Approved'"
+              icon="check-circle-fill"
+              variant="success"
+            ></b-icon>
+            <feather-icon
+              v-if="data.item.result == 'Unverified'"
+              icon="ClockIcon"
+              class="text-warning"
+            />
+            <feather-icon
+              v-if="
+                data.item.result != 'Approved' &&
+                data.item.result != 'Unverified'
+              "
+              icon="XCircleIcon"
+              class="text-danger"
+            />
+          </div>
+        </template>
+        <template #cell(user_name)="data">
+          <div class="d-flex flex-column justify-content-start align-items-start">
+            <span>
+              {{ data.item.user_name }} -
+              {{ data.item.created_at | myGlobalDay }}
+            </span>
+          </div>
+        </template>
+      </b-table>
+      <template #footer>
+        <b-col class="d-flex align-items-center justify-content-center justify-content-sm-start">
+          <div
+            style="
+              background-color: #3764ff !important;
+              padding: 5px;
+              border-radius: 30px;
+              padding-left: 15px;
+              padding-right: 15px;
+            "
+          >
+            <span class="text-nowrap" style="color: #fff">
+              Total Amount
+              {{ totalAmount == 0 ? "$" + totalAmount : totalAmount }}
+            </span>
+          </div>
+        </b-col>
+      </template>
+    </filter-slot>
+
+    <modal-refund
+      v-if="modalRefund"
+      :modalRefund="modalRefund"
+      :modul="$route.meta.module"
+      :dataVoid="this.dataVoid"
+      :global="this.currentUser"
+      @close="closeModalRefund"
+      @updateGrid="updateGrid"
+    ></modal-refund>
+    <modal-void-refund-info
+      v-if="modalVoidRefund"
+      :modalVoidRefund="modalVoidRefund"
+      :idtransaction="idtransaction"
+      @closeInfo="closeModalVoidRefundInfo"
+    ></modal-void-refund-info>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+import { amgApi } from "@/service/axios";
+import vSelect from "vue-select";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import PaymentService from "../service/payments.service";
+import ModalRefund from "@/views/crm/views/payments/components/ModalRefund.vue";
+import ModalVoidRefundInfo from "@/views/crm/views/payments/components/ModalVoidRefundInfo.vue";
+export default {
+  components: {
+    vSelect,
+    FilterSlot,
+    ModalRefund,
+    ModalVoidRefundInfo
+  },
+  data() {
+    return {
+      modalRefund: false,
+      assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
+      totalRows: 0,
+      paginate: {
+        currentPage: 1,
+        perPage: 10
+      },
+      totalAmount: 0,
+      sortBy: "created_at",
+      sortDesc: true,
+      arrayColumns: [
+        {
+          key: "lead_name",
+          label: "Name",
+
+          visible: true
+        },
+        {
+          key: "type_transaction",
+          label: "Type",
+          visible: true
+        },
+        {
+          key: "transaction_id",
+          label: "Transaction ID",
+          visible: true
+        },
+        {
+          key: "amount",
+          label: "Amount",
+          visible: true
+        },
+        {
+          key: "charge",
+          label: "Charge",
+          visible: true
+        },
+        {
+          key: "result",
+          label: "Result",
+          visible: true
+        },
+        {
+          key: "card_number",
+          label: "Credit Card",
+          visible: true
+        },
+        {
+          key: "account",
+          label: "Account",
+          visible: true
+        },
+        {
+          key: "program",
+          label: "Program",
+          visible: true
+        },
+        {
+          key: "user_name",
+          label: "Created By",
+          visible: true
+        }
+        // {
+        //   key: "created_at",
+        //   label: "Creation Date",
+        //   sortable: true,
+        //   visible: true,
+        // },
+        // { key: "actions", label: "Acciones", class: "text-center " },
+      ],
+      searchInput: "",
+      orderby: "",
+      order: "",
+      startPage: null,
+      endPage: "",
+      totalData: "",
+      // perPage: 10,
+      nextPage: "",
+      // currentPage: 1,
+      toPage: null,
+      isBusy: false,
+      perPageOptions: [10, 25, 50, 100],
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Client...",
+        model: ""
+      },
+      filter: [
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Type",
+          model: null,
+          options: [
+            { value: 0, label: "All" },
+            { value: 1, label: "Realtor" },
+            { value: 2, label: "Appointment" },
+            { value: 3, label: "Inital Payment" },
+            { value: 4, label: "Others" }
+          ],
+          reduce: "value",
+          selectText: "label",
+          cols: 12
+        },
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Result",
+          model: null,
+          options: [
+            { value: 0, label: "All" },
+            { value: 1, label: "Approved" },
+            { value: 2, label: "Declined" },
+            { value: 3, label: "Underview" }
+          ],
+          reduce: "value",
+          selectText: "label",
+          cols: 12
+        },
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "User",
+          model: null,
+          options: [],
+          reduce: "id",
+          selectText: "user_name",
+          cols: 12
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          },
+          cols: 6
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          },
+          cols: 6
+        }
+      ],
+      filter2: [
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Type",
+          model: null,
+          options: [
+            { value: 0, label: "All" },
+            { value: 1, label: "Realtor" },
+            { value: 2, label: "Appointment" },
+            { value: 3, label: "Inital Payment" },
+            { value: 4, label: "Others" }
+          ],
+          reduce: "value",
+          selectText: "label",
+          cols: 12
+        },
+        {
+          type: "select",
+          margin: true,
+          showLabel: true,
+          label: "Result",
+          model: null,
+          options: [
+            { value: 0, label: "All" },
+            { value: 1, label: "Approved" },
+            { value: 2, label: "Declined" },
+            { value: 3, label: "Underview" }
+          ],
+          reduce: "value",
+          selectText: "label",
+          cols: 12
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "From",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          },
+          cols: 6
+        },
+        {
+          type: "datepicker",
+          margin: true,
+          showLabel: true,
+          label: "To",
+          placeholder: "Date",
+          class: "font-small-3",
+          model: null,
+          locale: "en",
+          dateFormatOptions: {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          },
+          cols: 6
+        }
+      ],
+      filterController: false,
+      modalRefund: false,
+      dataVoid: [],
+      modalVoidRefund: false,
+      idtransaction: null
+    };
+  },
+  mounted() {
+    this.getAllUsers();
+    this.addPaddingTd();
+  },
+  computed: {
+    clientRoute() {
+      return "/crm/payment/get-all-lead-payments";
+    },
+    fields() {
+      return this.arrayColumns.filter(column => column.visible);
+    },
+    ...mapGetters({
+      currentUser: "auth/currentUser"
+    }),
+    filterStatus() {
+      return this.currentUser.user_id == 1 || this.currentUser.user_id == 2
+        ? this.filter
+        : this.filter2;
+    }
+  },
+  methods: {
+    voidAuthorize(
+      idtransaction,
+      idmerchant,
+      amount,
+      client_name,
+      settlement_date,
+      type
+    ) {
+      this.dataVoid = {
+        idtransaction,
+        idmerchant,
+        amount,
+        client_name,
+        settlement_date,
+        type
+      };
+      this.modalRefund = true;
+    },
+    closeModalRefund() {
+      this.modalRefund = false;
+    },
+    getVoidRefund(idtransaction) {
+      this.idtransaction = idtransaction;
+      this.modalVoidRefund = true;
+    },
+    closeModalVoidRefundInfo() {
+      this.modalVoidRefund = false;
+    },
+    myProvider(ctx) {
+      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+        perPage: ctx.perPage,
+        text: this.filterPrincipal.model,
+        from: this.filter[3].model,
+        to: this.filter[4].model,
+        result: this.filter[1].model,
+        type: this.filter[0].model,
+        user:
+          this.currentUser.user_id == 1 || this.currentUser.user_id == 2
+            ? this.filter[2].model
+            : this.currentUser.user_id
+      });
+
+      // Must return a promise that resolves to an array of items
+      return promise.then(data => {
+        // Pluck the array of items off our axios response
+        const items = data.data.data;
+        let value = 0;
+        if (items) {
+          items.forEach(element => {
+            value += parseFloat(element.amount);
+          });
+          const formatter = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD"
+          });
+
+          this.totalAmount = formatter.format(value);
+        } else {
+          this.totalAmount = 0.0;
+        }
+
+        this.startPage = data.data.from;
+        this.paginate.currentPage = data.data.current_page;
+        this.paginate.perPage = data.data.per_page;
+        this.nextPage = this.startPage + 1;
+        this.endPage = data.data.last_page;
+        this.totalData = data.data.total;
+        this.totalRows = data.data.total;
+        this.toPage = data.data.to;
+        // Must return an array of items or an empty array if an error occurred
+        return items || [];
+      });
+    },
+    onChangeFilter() {
+      this.$refs.refClientsList.refresh();
+    },
+
+    async getAllUsers() {
+      try {
+        const data = await PaymentService.getAllUsers({
+          roles: "[1,2,5]",
+          type: "0"
+        });
+        let firstOption = {
+          value: "All",
+          id: 0
+        };
+        let newData = data;
+        newData.unshift(firstOption);
+        this.filter[2].options = newData;
+      } catch (error) {
+        console.error(error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong!"
+        );
+      }
+    },
+    resetSearch() {
+      this.searchInput = "";
+      this.fromToObject.from = null;
+      this.fromToObject.to = null;
+      this.$refs.refClientsList.refresh();
+    },
+    updateGrid() {
+      this.$refs.refClientsList.refresh();
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.select-lead-name:hover {
+  text-decoration-line: underline;
+}
+.per-page-selector {
+  width: 90px;
+}
+td.div {
+  width: 100% !important;
+}
+@media (max-width: 960px) {
+  .column-table {
+    display: flex;
+    flex-direction: column;
+  }
+}
+// b-table{
+//    width: 100%;;
+// }
+</style>
+
+<style lang="scss">
+@import "@core/scss/vue/libs/vue-select.scss";
+@import "@core/scss/vue/libs/vue-sweetalert.scss";
+</style>
+
+

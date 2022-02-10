@@ -36,7 +36,7 @@ import others from './others'
 import chartsAndMaps from './charts-and-maps'
 import uiElements from './ui-elements'
 import formAndTable from './forms-and-table'
-import crm from '../../views/crm/navigation/index'
-
+import crm from '@/views/crm/navigation/index'
+import socialNetwork from '@/views/social-network/navigation'
 // Array of sections
-export default [...crm, ...dashboard, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+export default [...dashboard, ...socialNetwork, ...crm, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]

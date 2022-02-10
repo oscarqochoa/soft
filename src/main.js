@@ -1,15 +1,31 @@
 import Vue from 'vue'
-import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
+import {
+  ToastPlugin,
+  ModalPlugin,
+  BootstrapVue,
+  BootstrapVueIcons,
+} from 'bootstrap-vue'
+import '@progress/kendo-ui'
+import '@progress/kendo-theme-default/dist/all.css'
+import { DateinputsInstaller } from '@progress/kendo-dateinputs-vue-wrapper'
 import VueCompositionAPI from '@vue/composition-api'
-
-import i18n from '@/libs/i18n'
+// import i18n from "@/libs/i18n";
+import ScrollBar from '@morioh/v-perfect-scrollbar'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import money from 'v-money'
+import VueTheMask from 'vue-the-mask'
+import VueMoment from 'vue-moment'
+import Pusher from 'pusher-js' // import Pusher
 import router from './router'
 import store from './store'
 import App from './App.vue'
-import {amgApi} from './service/axios';
+import { amgApi } from './service/axios'
 import { initialize } from './service/general'
-import { BootstrapVue } from "bootstrap-vue";
+
 import generalMixins from './mixins/general'
+import vueLoader from './directives/preloader/index'
+// import 'vue-loading-rx/dist/vue-loading.css';
+// global register
 // Global Components
 import './global-components'
 
@@ -27,17 +43,44 @@ import '@/libs/tour'
 import '@/@fake-db/db'
 
 // Filters
+import './filters/dates'
+import './filters/times'
+import './filters/number'
 
-import './filters/dates.js'
+// Validation rules (Vee validate)
+
+import './validation/rules'
+
+import './pusher/index'
+
+Vue.prototype.$log = console.log
 
 window.amgApi = amgApi
+
+// KENDO PLUGIN
+Vue.use(DateinputsInstaller)
 // require('./service/axios');
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
-Vue.use(BootstrapVue);
+Vue.use(BootstrapVue, {
+  BModal: { headerBgVariant: 'primary', titleClass: 'text-light' },
+  breakpoints: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'],
+})
+Vue.use(BootstrapVueIcons)
 // Composition API
 Vue.use(VueCompositionAPI)
+
+Vue.use(VueMoment)
+
+Vue.use(ScrollBar)
+Vue.component('ValidationProvider', ValidationProvider)
+Vue.component('ValidationObserver', ValidationObserver)
+Vue.use(vueLoader, 'loading')
+// register directive v-money and component <money>
+Vue.use(money, { precision: 4 })
+// register directive v-mask and component <the-mask>
+Vue.use(VueTheMask)
 
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard
@@ -49,16 +92,15 @@ require('@core/scss/core.scss')
 // import assets styles
 require('@/assets/scss/style.scss')
 
-
 // Global Mixins general.js
 
-Vue.mixin(generalMixins);
+Vue.mixin(generalMixins)
 
 Vue.config.productionTip = false
 initialize(router)
 new Vue({
   router,
   store,
-  i18n,
+  // i18n,
   render: h => h(App),
 }).$mount('#app')

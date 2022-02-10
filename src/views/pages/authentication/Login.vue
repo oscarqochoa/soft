@@ -127,8 +127,13 @@
                 variant="primary"
                 block
                 :disabled="invalid"
+                v-if="!loading"
               >
                 Sign in
+              </b-button>
+              <b-button variant="primary" disabled v-else block>
+                <b-spinner small />
+                Loading...
               </b-button>
             </b-form>
           </validation-observer>
@@ -171,6 +176,7 @@
 /* eslint-disable global-require */
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import VuexyLogo from "@core/layouts/components/Logo.vue";
+import subscribePusher from '@/pusher'
 import {
   BRow,
   BCol,
@@ -223,13 +229,14 @@ export default {
   data() {
     return {
       status: "",
-      password: "Soft@@2021",
+      password: "Soft@@2022",
       userEmail: "rogerdtfs@gmail.com",
       sideImg: require("@/assets/images/pages/login-v2.svg"),
 
       // validation rules
       required,
       email,
+      loading: false,
     };
   },
   computed: {
@@ -249,6 +256,7 @@ export default {
     login() {
       this.$refs.loginForm.validate().then((success) => {
         if (success) {
+          this.loading = true;
           useJwt
             .login({
               email: this.userEmail,
@@ -273,6 +281,7 @@ export default {
               this.$router
                 .replace(getHomeRouteForLoggedInUser(userData.roleName))
                 .then(() => {
+                  subscribePusher()
                   this.$toast({
                     component: ToastificationContent,
                     position: "top-right",
@@ -284,9 +293,11 @@ export default {
                     },
                   });
                 });
+                this.loading = false;
             })
             .catch((error) => {
               this.$refs.loginForm.setErrors(error.response.data.error);
+              this.loading = false;
             });
         }
       });

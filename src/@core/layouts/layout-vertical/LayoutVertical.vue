@@ -8,7 +8,7 @@
     <b-navbar
       :toggleable="false"
       :variant="navbarBackgroundColor"
-      class="header-navbar navbar navbar-shadow align-items-center"
+      class="header-navbar navbar navbar-shadow align-items-center navbar-mobile"
       :class="[navbarTypeClass]"
     >
       <slot
@@ -21,7 +21,6 @@
       </slot>
     </b-navbar>
     <!--/ Navbar -->
-
     <!-- Vertical Nav Menu -->
     <vertical-nav-menu
       v-if="!isNavMenuHidden"
@@ -33,6 +32,9 @@
           name="vertical-menu-header"
           v-bind="slotProps"
         />
+      </template>
+      <template #items="{isMouseHovered, isVerticalMenuCollapsed}">
+        <slot name="vertical-menu-items" :isMouseHovered="isMouseHovered" :isVerticalMenuCollapsed="isVerticalMenuCollapsed" />
       </template>
     </vertical-nav-menu>
     <!-- /Vertical Nav Menu -->
@@ -115,11 +117,15 @@ export default {
       if (rendererType === 'sidebar-left') return 'layout-content-renderer-left'
       if (rendererType === 'sidebar-left-detached') return 'layout-content-renderer-left-detached'
       return 'layout-content-renderer-default'
-    },
+    }
   },
   setup() {
     const {
-      routerTransition, navbarBackgroundColor, navbarType, footerType, isNavMenuHidden,
+      routerTransition,
+      navbarBackgroundColor,
+      navbarType,
+      footerType,
+      isNavMenuHidden,
     } = useAppConfig()
 
     const {

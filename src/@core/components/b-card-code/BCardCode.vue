@@ -12,7 +12,6 @@
           {{ $attrs['sub-title'] }}
         </b-card-sub-title>
       </div>
-
       <i
         class="code-toggler feather icon-code cursor-pointer"
         :aria-expanded="!code_visible ? 'true' : 'false'"
@@ -81,6 +80,10 @@ export default {
     codeLanguage: {
       default: 'markup',
       type: String,
+    },
+    actions: {
+      default: false,
+      type: Boolean,
     },
   },
   data() {

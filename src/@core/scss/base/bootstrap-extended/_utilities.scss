@@ -11,7 +11,7 @@
 // Sizes Variable for height and width mixins
 $sizes-px: (
   // in px
-    50: 50px,
+  50: 50px,
   100: 100px,
   150: 150px,
   200: 200px,
@@ -31,7 +31,7 @@ $sizes-px: (
 
 $sizes-per: (
   // in %
-    5: 5%,
+  5: 5%,
   10: 10%,
   15: 15%,
   20: 20%,
@@ -378,6 +378,12 @@ $sizes-per: (
 }
 .box-shadow-6 {
   box-shadow: 0 4px 8px 0 rgba($black, 0.12), 0 2px 4px 0 rgba($black, 0.08);
+}
+
+.box-shadow-info {
+  box-shadow: 1px 2px 8px 3px rgba(142, 73, 255, 0.38);
+  -webkit-box-shadow: 1px 2px 8px 3px rgba(142, 73, 255, 0.38);
+  -moz-box-shadow: 1px 2px 8px 3px rgba(142, 73, 255, 0.38);
 }
 
 //-------------- Outline --------------

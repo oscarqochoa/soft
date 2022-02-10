@@ -56,6 +56,7 @@ export default {
         },
         series: {
           type: 'line',
+          
           showSymbol: false,
           data: this.optionData.series,
         },
