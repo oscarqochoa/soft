@@ -99,7 +99,6 @@
         @reload="$refs['refClientsList'].refresh()"
       >
         <b-table
-          v-scrollbar
           slot="table"
           no-provider-filtering
           :api-url="clientRoute"
