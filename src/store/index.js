@@ -19,6 +19,7 @@ import NCRStore from '@/views/commons/components/ncr/store'
 import UserStore from '@/store/user'
 import MessageStore from '@/store/message'
 import SidebarStore from '@/store/sidebar'
+import StandarStore from '@/store/global'
 
 import SocialNetworkStore from '@/views/social-network/store'
 import SchedulesStore from '@/views/commons/components/schedules/store'
@@ -56,6 +57,7 @@ export default new Vuex.Store({
     'commissions-store': CommissionsStore,
     'loans-store': LoansStore,
     'global-store': GlobalStore,
+    StandarStore,
     TaskStore,
     'sticky-notes': stickyNotesStoreModule,
     'inventory-store': InventoryStore,

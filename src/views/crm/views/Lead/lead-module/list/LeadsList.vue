@@ -26,8 +26,23 @@
             v-if="[5].includes(currentUser.role_id)"
             variant="success"
             class="ml-1"
-            :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.assign_id).includes(currentUser.user_id))"
-            @click="addListSeller()"
+            :disabled="
+              !(
+                leadsSelecteds.length &&
+                leadsSelecteds
+                  .map((el) => el.user_id)
+                  .includes(currentUser.user_id)
+              )
+            "
+            @click="
+              showToast(
+                'warning',
+                'top-right',
+                'In maintenance',
+                'AlertIcon',
+                'This action is under maintenance'
+              )
+            "
           >
             <feather-icon icon="ListIcon" class="mr-50" />ADD LIST
           </b-button>
@@ -80,18 +95,21 @@
                 size="18"
                 class="mr-50 text-danger"
               />
-              <span class="align-text-top text-capitalize">{{ data.item.date_even }}</span>
+              <span class="align-text-top text-capitalize">{{
+                data.item.date_even
+              }}</span>
             </b-badge>
           </template>
 
           <!-- Column: Name -->
           <template #cell(lead_name)="data">
-            <div style="white-space: pre-wrap;">
+            <div>
               <router-link
-                :class="textLink"
-                :to="`/${routeModule}/leads/${data.item.id}`"
+                :to="{ name: 'lead-show', params: { id: data.item.id } }"
                 target="_blank"
-              >{{ data.item.lead_name }}</router-link>
+                >{{ data.item.nickname }} sss</router-link
+              >
+              <p>{{ data.item.nickname }}</p>
             </div>
           </template>
 
@@ -101,27 +119,36 @@
               pill
               :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
               class="text-capitalize"
-            >{{ data.item.status }}</b-badge>
+              >{{ data.item.status }}</b-badge
+            >
           </template>
 
           <!-- Column: Credit Report -->
           <template #cell(credit_report)="data">
             <strong
-              :class="`text-${ (data.item.credit_report == 1) ? 'danger' : 'success' }`"
-            >{{ (data.item.credit_report == 1) ? 'NO' : 'YES' }}</strong>
+              :class="`text-${
+                data.item.credit_report == 1 ? 'danger' : 'success'
+              }`"
+              >{{ data.item.credit_report == 1 ? "NO" : "YES" }}</strong
+            >
           </template>
 
           <!-- Column: Programs -->
           <template #cell(programs)="data">
-            <div v-if="data.item.programs" class="d-flex flex-column" style="gap: .5rem">
-              <template v-for="(program, key) in JSON.parse(data.item.programs)">
-                <b-img
-                  v-if="program.logo"
+            <div v-if="data.item.programs" class="d-flex" style="gap: 0.5rem">
+              <template
+                v-for="(program, key) in JSON.parse(data.item.programs)"
+              >
+                <div
                   :key="key"
-                  thumbnail
-                  fluid
-                  :src="baseUrl + program.logo"
-                  style="width: 50px"
+                  style="
+                    width: 50px;
+                    height: 50px;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                  "
+                  :style="{ backgroundImage: `url(${baseUrl + program.logo})` }"
                 />
                 <span :key="key" v-else>{{ program.value }}</span>
               </template>
@@ -139,7 +166,9 @@
           <template #cell(assign_to)="data">
             <small>{{ data.item.assign_to }}</small>
             <br />
-            <small v-if="data.item.assign_date">{{ data.item.assign_date | myDateGlobal }}</small>
+            <small v-if="data.item.assign_date">{{
+              data.item.assign_date | myDateGlobal
+            }}</small>
           </template>
 
           <!-- Column: Actions -->
@@ -159,15 +188,31 @@
 
     <!-- modal SEND SMS -->
 
-    <modal-send-sms
-      v-if="modalSms"
-      :smss="leads_sms"
-      :modul="currentUser.modul_id"
-      :typesms="typesms"
-      :sms="leads_sms_o"
-      :name-leads="name_leads_arr"
-      @hide="modalSmsClose"
-    />
+      <template #modal-footer>
+        <b-form-group label="VARS" class="w-100">
+          <b-row>
+            <b-col sm="3">
+              <b-input-group size="sm">
+                <b-input-group-prepend is-text> @1 </b-input-group-prepend>
+                <b-form-input placeholder="FIRST NAME" readonly />
+              </b-input-group>
+            </b-col>
+            <b-col sm="3">
+              <b-input-group size="sm">
+                <b-input-group-prepend is-text> @2 </b-input-group-prepend>
+                <b-form-input placeholder="LAST NAME" readonly />
+              </b-input-group>
+            </b-col>
+            <b-col v-if="currentUser.modul_id == 15" sm="3">
+              <b-input-group size="sm">
+                <b-input-group-prepend is-text> @3 </b-input-group-prepend>
+                <b-form-input placeholder="LAST NAME" readonly />
+              </b-input-group>
+            </b-col>
+          </b-row>
+        </b-form-group>
+      </template>
+    </b-modal>
 
     <!-- modal HISTORY SMS -->
     <b-modal
@@ -191,11 +236,15 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
+import { BTable, BPagination, BModal } from "bootstrap-vue";
+
+import vSelect from "vue-select";
 
 import ActionsTable from "../../lead-table/ActionsTable.vue";
 import dataFields from "@/views/crm/views/Lead/lead-table/fields.data";
 import dataFilters from "@/views/crm/views/Lead/lead-table/filtersLead.data";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import FiltersTable from "../../lead-table/FiltersTable.vue";
 import ModalHistorySms from "../../lead-sms/ModalHistorySms.vue";
 import ModalSendSms from "../../lead-sms/ModalSendSms.vue";
 
@@ -204,7 +253,30 @@ export default {
     FilterSlot,
     ActionsTable,
     ModalSendSms,
-    ModalHistorySms
+    ModalHistorySms,
+
+    BTable,
+    BPagination,
+    BModal,
+
+    vSelect,
+    PaginateTable,
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      G_STATUS_LEADS: "CrmLeadStore/G_STATUS_LEADS",
+      G_OWNERS: "CrmGlobalStore/G_OWNERS",
+      G_PROGRAMS: "CrmGlobalStore/G_PROGRAMS",
+      G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
+      G_STATES: "CrmGlobalStore/G_STATES",
+      G_CRS: "CrmGlobalStore/G_CRS",
+      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS",
+    }),
+    ...mapState({
+      S_LEADS: (state) => state.CrmLeadStore.S_LEADS,
+    }),
   },
   data() {
     return {
@@ -219,7 +291,7 @@ export default {
         type: "input",
         inputType: "text",
         placeholder: "Search...",
-        model: ""
+        model: "",
       },
       paginate: {
         currentPage: 1,
@@ -231,7 +303,7 @@ export default {
       rowData: {},
       historySms: {
         leadName: "",
-        id: null
+        id: null,
       },
       name_leads_arr: [],
       leads_sms: [],
@@ -240,33 +312,9 @@ export default {
       leads_sms_o: [],
 
       leadsSelecteds: [],
-      modalSms: false
     };
   },
-  computed: {
-    ...mapGetters({
-      currentUser: "auth/currentUser",
-      token: "auth/token",
-      G_STATUS_LEADS: "CrmLeadStore/G_STATUS_LEADS",
-      G_OWNERS: "CrmGlobalStore/G_OWNERS",
-      G_PROGRAMS: "CrmGlobalStore/G_PROGRAMS",
-      G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
-      G_STATES: "CrmGlobalStore/G_STATES",
-      G_CRS: "CrmGlobalStore/G_CRS",
-      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS"
-    }),
-    ...mapState({
-      S_LEADS: state => state.CrmLeadStore.S_LEADS
-    }),
-    routeModule() {
-      return this.$route.meta.route;
-    },
-    moduleId() {
-      return this.$route.meta.module;
-    }
-  },
   created() {
-    this.addPaddingTd();
     this.myProvider();
     this.setOptionsOnFilters();
   },
@@ -277,7 +325,6 @@ export default {
       A_SET_SELECTED_LEADS: "CrmLeadStore/A_SET_SELECTED_LEADS",
       A_DELETE_LEADS: "CrmLeadStore/A_DELETE_LEADS",
       A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS",
-      A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST"
     }),
     resolveUserStatusVariant(status) {
       if (status === "Pending") return "warning";
@@ -288,13 +335,13 @@ export default {
     },
     selectedAll() {
       if (this.selectAll)
-        this.S_LEADS.items.forEach(item => (item.selected = true));
-      else this.S_LEADS.items.forEach(item => (item.selected = false));
+        this.S_LEADS.items.forEach((item) => (item.selected = true));
+      else this.S_LEADS.items.forEach((item) => (item.selected = false));
       this.onRowSelected();
     },
     onSelectedRow(data) {
       const index = this.leadsSelecteds.findIndex(
-        select => select.id === data.id
+        (select) => select.id === data.id
       );
       if (data.selected === true && index === -1)
         this.leadsSelecteds.push(data);
@@ -322,8 +369,8 @@ export default {
           state_h: this.filter[7].model,
           typedoc: this.filter[9].model,
           user_owner: this.filter[3].model,
-          perPage: this.paginate.perPage,
-          page: this.paginate.currentPage
+          perpage: this.paginate.perPage,
+          page: this.paginate.currentPage,
         });
         setTimeout(() => {
           this.isBusy = false;
@@ -366,37 +413,51 @@ export default {
         sourceName: this.filter[8].model,
         typeDoc: this.filter[9].model,
         perPage: this.paginate.perPage,
-        currentPage: this.paginate.currentPage
+        currentPage: this.paginate.currentPage,
       });
     },
     onRowSelected() {
       this.A_SET_SELECTED_LEADS(this.leadsSelecteds);
     },
-    async onRowDelete(id) {
-      const confirm = await this.showConfirmSwal();
-      if (confirm.isConfirmed) {
-        this.addPreloader();
-        try {
-          const { user_id } = this.currentUser;
-          const response = await this.A_DELETE_LEADS({
-            lead_id: id,
-            user_id: user_id
-          });
-          if (this.isResponseSuccess(response)) {
-            this.removePreloader();
-            this.showToast(
-              "success",
-              "top-right",
-              "Deleted!",
-              "CheckIcon",
-              "The Lead has been deleted."
-            );
+    onRowDelete(id) {
+      this.showSwalGeneric(
+        "Are you sure?",
+        "You won't be able to revert this!",
+        "question"
+      )
+        .then(async (result) => {
+          if (result.value) {
+            const { user_id, role_id } = this.currentUser;
+            const response = await this.A_DELETE_LEADS({
+              leadid: id,
+              idsession: user_id,
+              iduser: user_id,
+              idrole: role_id,
+            });
+
+            if (this.isResponseSuccess(response)) {
+              this.showToast(
+                "success",
+                "top-right",
+                "Deleted!",
+                "CheckIcon",
+                "Your file has been deleted."
+              );
+            } else {
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                `Something went wrong.${response.message}`
+              );
+            }
           }
-        } catch (error) {
-          this.removePreloader();
+        })
+        .catch((error) => {
+          console.log("Something went wrong onRowDelete:", error);
           this.showErrorSwal(error);
-        }
-      }
+        });
     },
     onRowProcess(id) {
       this.showSwalGeneric(
@@ -405,21 +466,21 @@ export default {
         "warning",
         {
           input: "textarea",
-          inputValidator: value => {
+          inputValidator: (value) => {
             if (!value) {
               return "You need to write something!";
             }
-          }
+          },
         }
       )
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             const { user_id, role_id } = this.currentUser;
             const response = await this.A_PROCESS_LEADS({
               lead_id: id,
               status: 3,
               user_id,
-              description: result.value
+              description: result.value,
             });
             if (this.isResponseSuccess(response)) {
               this.showToast(
@@ -440,7 +501,7 @@ export default {
             }
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Something went wrong onRowProcess:", error);
           this.showErrorSwal(error);
         });
@@ -452,7 +513,7 @@ export default {
       this.leads_sms_o = [];
       this.leads_sms_o.push(item.id);
       this.name_leads_arr = [{ name: item.lead_name, id: item.id }];
-      this.modalSms = true;
+      this.$bvModal.show("modal-send-sms");
     },
     modalHistorySmsOpen(item) {
       this.historySms.id = item.id;
@@ -461,47 +522,15 @@ export default {
     },
     modalSmssOpen() {
       this.typesms = 0;
-      this.name_leads_arr = this.leadsSelecteds.map(el => ({
+      this.name_leads_arr = this.leadsSelecteds.map((el) => ({
         name: el.lead_name,
-        id: el.id
+        id: el.id,
       }));
-      this.leads_sms = this.leadsSelecteds.map(el => el.id);
-      this.modalSms = true;
+      this.leads_sms = this.leadsSelecteds.map((el) => el.id);
+      this.$bvModal.show("modal-send-sms");
     },
-    modalSmsClose() {
-      this.modalSms = false;
-    },
-    async addListSeller() {
-      const confirm = await this.showConfirmSwal(
-        "Are you sure?",
-        "You are going to add this leads to your List"
-      );
-      if (confirm.isConfirmed) {
-        this.addPreloader();
-        //filter just the owner of the lead
-        const leadList = this.leadsSelecteds
-          .filter(el => el.assign_id === this.currentUser.user_id)
-          .map(el => el.id);
-        try {
-          const params = {
-            user_id: this.currentUser.user_id,
-            list_lead: leadList,
-            module_id: this.moduleId
-          };
-          const response = await this.A_ADD_SELLER_LIST(params);
-          this.removePreloader();
-          this.showToast(
-            "success",
-            "top-right",
-            "Success!",
-            "CheckIcon",
-            "Leads were added to your list"
-          );
-        } catch (error) {
-          this.removePreloader();
-          this.showErrorSwal(error);
-        }
-      }
+    resetQuickData(item) {
+      this.quickData = item;
     },
     resetQuickData(item) {
       this.quickData = item;
@@ -512,12 +541,11 @@ export default {
       this.fields.unshift({
         key: "selected",
         label: "",
-        sortable: false
+        sortable: false,
       });
-    }
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
       this.actionsOptions.push("delete");
-  }
+  },
 };
 </script>
 

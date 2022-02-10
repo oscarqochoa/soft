@@ -1,8 +1,10 @@
 import testRoute from '../views/test/test.router'
+import LeadsRouter from '../views/leads/leads.router';
 
 const routes = [
   { path: '/socialnetwork', redirect: { name: 'test-social-network' } },
   ...testRoute,
+  ...LeadsRouter,
 ]
 
 // eslint-disable-next-line array-callback-return
