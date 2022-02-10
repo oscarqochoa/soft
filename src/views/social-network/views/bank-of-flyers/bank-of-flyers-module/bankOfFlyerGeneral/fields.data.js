@@ -44,17 +44,17 @@ export default [
     sortable: true,
     label: 'Created by',
   },
-  {
-    key: 'actions',
-    sortable: false,
-    label: 'Action',
 
-  },
   {
     key: 'comments',
     sortable: false,
     label: 'Comments',
 
   },
+  {
+    key: 'actions',
+    sortable: false,
+    label: 'Action',
 
+  },
 ]

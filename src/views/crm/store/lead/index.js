@@ -30,6 +30,7 @@ const state = {
     to: null,
     statusLead: null,
     owner: null,
+    assignTo: null,
     cr: null,
     program: null,
     sourceName: null,
@@ -387,11 +388,7 @@ const actions = {
 
   /* DELETES */
 
-<<<<<<< HEAD
-  async A_DELETE_LEADS ({ commit }, body) {
-=======
   async A_DELETE_LEADS({ commit }, body) {
->>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
     try {
       const response = await crmLead.postDeleteLead(body);
 
@@ -406,11 +403,7 @@ const actions = {
     }
   },
 
-<<<<<<< HEAD
-  async A_DELETE_FILES_LEADS ({ commit }, body) {
-=======
   async A_DELETE_FILES_LEADS({ commit }, body) {
->>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61
     try {
       const response = await crmLead.deleteFileLead(body);
       /* console.log('A_DELETE_FILES_LEADS response', response) */
@@ -454,8 +447,8 @@ const actions = {
           (el.label = body.taskForSn
             ? el.user_name
             : `${el.user_name} (${el.count_task}) ${
-                el.disabled > 0 ? "(Not Available)" : ""
-              }`),
+              el.disabled > 0 ? "(Not Available)" : ""
+            }`),
             (el.value = el.id),
             (el.itemDisabled = el.disabled > 0);
         });

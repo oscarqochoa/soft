@@ -124,7 +124,7 @@
 
             <template v-slot:cell(actions)="data">
 
-              <amg-icon
+              <feather-icon
                 icon="InfoIcon"
                 title="WATCH"
                 size="20"
@@ -141,7 +141,7 @@
                 no-caret
               >
                 <template #button-content>
-                  <amg-icon
+                  <feather-icon
                     icon="MoreVerticalIcon"
                     size="16"
                     class="align-middle text-body"

@@ -3,7 +3,7 @@ import { amgApi } from '@/service/axios'
 class ClientService {
   async getClients(body, page) {
     try {
-      const data = await amgApi.post(`/clients?page=${page}`, body)
+      const data = await amgApi.post(`clients/search-clients?page=${page}`, body)
       return data
     } catch (error) {
       console.log('Something went wrong on getClients:', error)

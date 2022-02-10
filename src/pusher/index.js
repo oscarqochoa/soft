@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import PusherService from './service.js'
-
-PusherService.instanceNewPusher()
-=======
 import Pusher from 'pusher-js'
 import refreshMessageQuantites from '@/commons/messages/messages.pusher'
 import reloadCounterLoanCrm from '@/views/crm/views/loans/reload-counter-loan-crm.pusher'
@@ -41,4 +36,3 @@ const subscribePusher = () => {
 subscribePusher()
 
 export default subscribePusher
->>>>>>> 76ad9cdfe17d7e9d60fe837d2e8d75b5a5903f61

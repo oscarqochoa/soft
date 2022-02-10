@@ -3,7 +3,7 @@ import { amgApi } from '@/service/axios'
 class ActivitiesService {
   async getSchedules(body) {
     try {
-      const data = await amgApi.post('/sn-activities/get-schedules', body)
+      const data = await amgApi.post('/social-network/activities/get-schedules', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getLeadsMigration:', error)
@@ -13,7 +13,7 @@ class ActivitiesService {
 
   async insertTask(body) {
     try {
-      const data = await amgApi.post('sn-activities/create-tasks', body)
+      const data = await amgApi.post('/social-network/activities/create-tasks', body)
       return data
     } catch (error) {
       console.log('Something went wrong on insertTask:', error)
@@ -23,7 +23,7 @@ class ActivitiesService {
 
   async updateTask(body) {
     try {
-      const data = await amgApi.post('sn-activities/update-tasks', body)
+      const data = await amgApi.post('/social-network/activities/update-tasks', body)
       return data
     } catch (error) {
       console.log('Something went wrong on updateTask:', error)
@@ -33,7 +33,7 @@ class ActivitiesService {
 
   async getTrackingChanges(body) {
     try {
-      const data = await amgApi.post('sn-activities/get-tracking', body)
+      const data = await amgApi.post('/social-network/activities/get-tracking', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getTrackingChanges:', error)
@@ -43,7 +43,7 @@ class ActivitiesService {
 
   async getTask(body) {
     try {
-      const data = await amgApi.post('sn-activities/get-tasks', body)
+      const data = await amgApi.post('/social-network/activities/get-tasks', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getTask:', error)
@@ -53,7 +53,7 @@ class ActivitiesService {
 
   async createSchedules(body) {
     try {
-      const data = await amgApi.post('sn-activities/create-schedules', body)
+      const data = await amgApi.post('/social-network/activities/create-schedules', body)
       return data
     } catch (error) {
       console.log('Something went wrong on createSchedules:', error)
@@ -63,7 +63,7 @@ class ActivitiesService {
 
   async updateSchedules(body) {
     try {
-      const data = await amgApi.post('sn-activities/update-schedules', body)
+      const data = await amgApi.post('/social-network/activities/update-schedules', body)
       return data
     } catch (error) {
       console.log('Something went wrong on updateSchedules:', error)

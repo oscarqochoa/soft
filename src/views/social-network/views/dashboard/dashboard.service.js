@@ -3,7 +3,7 @@ import { amgApi } from '@/service/axios'
 class DashboardService {
   async getUsers(body) {
     try {
-      const data = await amgApi.post('/sellerall/15', body)
+      const data = await amgApi.post('commons/sellerall/15', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getUsers:', error)
@@ -13,7 +13,7 @@ class DashboardService {
 
   async getFilterCardSocial(body) {
     try {
-      const data = await amgApi.post('/filterCardSocial', body)
+      const data = await amgApi.post('social-network/get-social-cards', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getFilterCardSocial:', error)
@@ -23,7 +23,7 @@ class DashboardService {
 
   async getDataLead(body) {
     try {
-      const data = await amgApi.post('/getDataLead', body)
+      const data = await amgApi.post('social-network/get-lead-data', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getDataLead:', error)
@@ -33,7 +33,7 @@ class DashboardService {
 
   async getLeadsGraphic(body) {
     try {
-      const data = await amgApi.post('/sn-dashboard/leads-graphic', body)
+      const data = await amgApi.post('social-network/get-leads-graphic', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getLeadsGraphic:', error)
@@ -43,7 +43,7 @@ class DashboardService {
 
   async getRepliesGraphic(body) {
     try {
-      const data = await amgApi.post('/sn-dashboard/replies-graphic', body)
+      const data = await amgApi.post('social-network/get-replies-graphic', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getRepliesGraphic:', error)
@@ -53,7 +53,7 @@ class DashboardService {
 
   async getAnswersGraphic(body) {
     try {
-      const data = await amgApi.post('/sn-dashboard/answers-graphic', body)
+      const data = await amgApi.post('social-network/get-answers-graphic', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getRepliesGraphic:', error)
@@ -63,7 +63,7 @@ class DashboardService {
 
   async getMobilesGraphic(body) {
     try {
-      const data = await amgApi.post('/sn-dashboard/mobiles-graphic', body)
+      const data = await amgApi.post('social-network/get-mobiles-graphic', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getMobilesGraphic:', error)
@@ -73,7 +73,7 @@ class DashboardService {
 
   async getTasksGraphic(body) {
     try {
-      const data = await amgApi.post('/sn-dashboard/graphic-tasks', body)
+      const data = await amgApi.post('social-network/get-tasks-graphic', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getTasksGraphic:', error)
@@ -83,7 +83,7 @@ class DashboardService {
 
   async getProductivityGraphic(body) {
     try {
-      const data = await amgApi.post('/sn-dashboard/graphic-productivity', body)
+      const data = await amgApi.post('social-network/get-productivity-graphic', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getProductivityGraphic:', error)
@@ -93,7 +93,7 @@ class DashboardService {
 
   async getTaskCatcherGraphic(body) {
     try {
-      const data = await amgApi.post('/sn-dashboard/graphic-tasks-catcher', body)
+      const data = await amgApi.post('social-network/get-tasks-catcher-graphic', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getTaskCatcherGraphic:', error)
@@ -103,7 +103,7 @@ class DashboardService {
 
   async getMultiChartGraphic(body) {
     try {
-      const data = await amgApi.post('/sn-dashboard/multi-chart-sn', body)
+      const data = await amgApi.post('social-network/get-multi-chart-per-week', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getMultiChartGraphic:', error)
