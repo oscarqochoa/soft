@@ -1,13 +1,14 @@
 <template>
   <validation-observer ref="form">
     <b-modal
-      v-model="modal.contract_fee"
+      v-model="ownControl"
       title-class="h3 text-white font-weight-bolder"
       size="lg"
       modal-class="modal-primary"
       title="Contract Fee"
       scrollable
       :hide-footer="valorEdit"
+      @hide="closeModal(false)"
     >
       <program-client-header
         :client="contractFee.clientName"
@@ -34,11 +35,14 @@
             <b-col class="d-flex align-items-center">
               <span>Initial Payment:</span>
             </b-col>
-            <b-col class="d-flex align-items-center">
+            <b-col class="d-flex align-items-center justify-content-between">
               <span>$</span>
-              <p v-if="contractFee.initialPaymentStatus != 2">
+              <span
+                v-if="contractFee.initialPaymentStatus != 2"
+                class="text-danger"
+              >
                 Pending
-              </p>
+              </span>
               <money
                 v-else
                 v-model="initialPayment"
@@ -273,7 +277,7 @@
             <b-col class="d-flex align-items-center justify-content-end">
               <b-button
                 v-if="!valorEdit"
-                variant="important"
+                variant="success"
                 size="sm"
                 @click="addCardModal = true"
               >
@@ -288,10 +292,10 @@
           <b-col class="d-flex align-items-center justify-content-end">
             <b-button
               variant="primary"
-              size="sm"
+              :disabled="(!cardId && methodPayment === 0 && cardType === 0)"
               @click="saveContract"
             >
-              Save
+              Submit
             </b-button>
           </b-col>
         </b-row>
@@ -341,6 +345,7 @@ export default {
   },
   data() {
     return {
+      ownControl: false,
       cards: [],
       methodPayment: '',
       cardType: '',
@@ -445,12 +450,21 @@ export default {
       const add = parseInt(this.$moment().format('MM'), 10) === 12 ? 1 : 0
       this.years = this.range(2020, new Date().getFullYear() + add)
       this.removePreloader()
+      this.ownControl = true
     } catch (error) {
       this.showErrorSwal(error)
       this.removePreloader()
     }
   },
   methods: {
+    closeModal(reload = false) {
+      this.ownControl = false
+      this.$emit('close')
+      if (reload) {
+        this.$emit('reload')
+      }
+    },
+
     async saveContract() {
       this.monthlyPaymentController = true
       this.methodPaymentController = true
@@ -488,17 +502,16 @@ export default {
           if (response.status === 200) {
             this.removePreloader()
             await this.showSuccessSwal('Contract save succesfully')
-            this.$emit('close')
-            this.$emit('reload')
+            this.closeModal(true)
           } else {
             this.removePreloader()
             await this.showErrorSwal()
-            this.$emit('close')
+            this.closeModal(false)
           }
         } catch (error) {
           this.removePreloader()
           await this.showErrorSwal()
-          this.$emit('close')
+          this.closeModal(false)
         }
       }
     },

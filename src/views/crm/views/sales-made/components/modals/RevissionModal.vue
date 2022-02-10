@@ -1,49 +1,61 @@
 <template>
-  <b-modal
-    v-model="modal.revission"
-    :title="title"
-    title-class="h3 text-white font-weight-bolder"
-    size="lg"
-    modal-class="modal-primary"
+  <validation-observer
+    ref="form"
   >
-    <b-container fluid>
-      <program-client-header
-        :client="revission.nameClient"
-        :program="revission.nameProgram"
-        class="sticky-top"
-      />
-      <b-row>
-        <h3 class="mt-2">
-          Observation
-        </h3>
-        <b-form-textarea
-          id="textarea-1"
-          v-model="observation"
-          placeholder="Enter observation..."
-          rows="5"
-          max-rows="6"
+    <b-modal
+      v-model="modal.revission"
+      :title="title"
+      title-class="h3 text-white font-weight-bolder"
+      size="lg"
+      modal-class="modal-primary"
+    >
+      <b-container fluid>
+        <program-client-header
+          :client="revission.nameClient"
+          :program="revission.nameProgram"
+          class="sticky-top"
         />
-      </b-row>
-      <b-row
-        v-if="revission.type === 2"
-        class="mt-1"
-      >
-        <b-form-checkbox
-          v-model="sendSms"
-          switch
+        <b-row>
+          <validation-provider
+            v-slot="{ errors }"
+            name="typeOfAgreement"
+            rules="required"
+            class="w-100"
+          >
+            <h3 class="mt-2">
+              Observation
+            </h3>
+            <b-form-textarea
+              id="textarea-1"
+              v-model="observation"
+              placeholder="Enter observation..."
+              rows="5"
+              max-rows="6"
+              :class="{'border-danger': errors[0]}"
+            />
+          </validation-provider>
+        </b-row>
+        <b-row
+          v-if="revission.type === 2"
+          class="mt-1"
         >
-          Send sms
-        </b-form-checkbox>
-      </b-row>
-    </b-container>
-    <template #modal-footer>
-      <b-button
-        :disabled="disabledButton"
-        :variant="revission.type === 3 ? 'danger' : 'success'"
-        @click="revision"
-      >{{ buttonText }}</b-button>
-    </template>
-  </b-modal>
+          <b-form-checkbox
+            v-model="sendSms"
+            switch
+          >
+            Send sms
+          </b-form-checkbox>
+        </b-row>
+      </b-container>
+      <template #modal-footer>
+        <b-button
+          :disabled="disabledButton"
+          :variant="revission.type === 3 ? 'danger' : 'success'"
+          @click="revision"
+        >{{ buttonText }}</b-button>
+      </template>
+    </b-modal>
+  </validation-observer>
 </template>
 
 <script>
@@ -115,17 +127,12 @@ export default {
     }
   },
   methods: {
-    revision() {
+    async revision() {
+      const response = await this.$refs.form.validate()
       if (this.revission.type !== 4) {
-        if (this.observation.trim() === '') {
-          this.showToast(
-            'danger',
-            'top-right',
-            'Error',
-            'XIcon',
-            'Observation is required',
-          )
-        } else this.send()
+        if (response) {
+          await this.send()
+        }
       } else if (this.advisorId === null) {
         this.showToast(
           'danger',
@@ -134,15 +141,9 @@ export default {
           'XIcon',
           'Please select an advisor',
         )
-      } else if (this.observation.trim() === '') {
-        this.showToast(
-          'danger',
-          'top-right',
-          'Error',
-          'XIcon',
-          'Observation is required',
-        )
-      } else this.sendAutorize()
+      } else if (response) {
+        this.sendAutorize()
+      }
     },
     async send() {
       try {

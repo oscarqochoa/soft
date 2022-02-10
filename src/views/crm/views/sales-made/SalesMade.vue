@@ -29,16 +29,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "SalesMade",
+  name: 'SalesMade',
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser"
-    })
-  }
-};
+      currentUser: 'auth/currentUser',
+    }),
+    isNewClient() {
+      return this.$route.name === 'sales-made-crm-new-client'
+    },
+  },
+  created() {
+    console.log(this.$route.name === 'sales-made-crm-new-client', 'gaaaaaa')
+  },
+}
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 export default [
   {
-    path: "/lists",
+    path: "/crm/lists",
     name: "lists-crm",
     redirect: { name: "lists-crm-mylist" },
     component: () => import("@/views/crm/views/lists/ListsCrm.vue"),

@@ -41,6 +41,7 @@
               }"
               target="_blank"
             >{{ data.item.lead_name }}</router-link>
+             <div v-if="data.item.mobile">{{data.item.mobile}}</div>
           </div>
         </template>
         <template #cell(seller_name)="data">
