@@ -1,5 +1,5 @@
 <template>
-  <div class="border-info rounded">
+  <div class="border-info border-table-radius">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -376,7 +376,7 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        perPage:ctx.perPage,
+        perPage: ctx.perPage,
         name_text: this.filterPrincipal.model,
         date_from: this.filter[1].model,
         date_to: this.filter[2].model,

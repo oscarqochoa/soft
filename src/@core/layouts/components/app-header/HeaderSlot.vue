@@ -4,8 +4,8 @@
     <b-col class="content-header-left mb-2" cols="12" md="9">
       <b-row class="breadcrumbs-top">
         <b-col cols="12">
-          <h2 class="content-header-title float-left pr-1 mb-0">{{ $route.meta.pageTitle }}</h2>
-          <div class="breadcrumb-wrapper">
+          <h2 class="content-header-title float-left pr-1 mb-0 border-0">{{ $route.meta.pageTitle }}</h2>
+          <!-- <div class="breadcrumb-wrapper">
             <b-breadcrumb>
               <b-breadcrumb-item to="/">
                 <feather-icon icon="HomeIcon" size="16" class="align-text-top" />
@@ -17,7 +17,7 @@
                 :to="item.to"
               >{{ item.text }}</b-breadcrumb-item>
             </b-breadcrumb>
-          </div>
+          </div>-->
         </b-col>
       </b-row>
     </b-col>

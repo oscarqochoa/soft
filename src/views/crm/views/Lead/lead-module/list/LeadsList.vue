@@ -1,9 +1,8 @@
 <template>
   <div>
     <!-- Table Container Card -->
-    <b-card no-body class="mb-0">
+    <b-card no-body class="mb-0 border-0 p-0">
       <filter-slot
-        v-scrollbar
         :filter="filter"
         :filter-principal="filterPrincipal"
         :total-rows="S_LEADS.total"
@@ -42,7 +41,7 @@
           select-mode="multi"
           responsive="sm"
           table-class="text-nowrap"
-          sticky-header="73vh"
+          sticky-header="68vh"
           small
           show-empty
           :sort-by.sync="sortBy"

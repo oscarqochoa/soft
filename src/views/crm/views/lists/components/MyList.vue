@@ -1,22 +1,19 @@
 <template>
   <div>
-    <b-card body-class="px-0">
-      <b-tabs lazy
-        active-tab-class="p-0 "
-        pills
-        card
-        :nav-wrapper-class="[bgLightDark, 'pb-0']"
-        nav-class="mb-0"
-        active-nav-item-class="bg-info box-shadow-info border-info"
-      >
-        <b-tab title="Pending">
-          <pending-done active :status="1" />
-        </b-tab>
-        <b-tab title="Done">
-          <pending-done :status="2" />
-        </b-tab>
-      </b-tabs>
-    </b-card>
+    <b-tabs
+      lazy
+      active-tab-class="p-0 "
+      pills
+      nav-class="mb-0"
+      active-nav-item-class="bg-info box-shadow-info border-info info"
+    >
+      <b-tab title="Pending" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
+        <pending-done active :status="1" />
+      </b-tab>
+      <b-tab title="Done" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
+        <pending-done :status="2" />
+      </b-tab>
+    </b-tabs>
   </div>
 </template>
 

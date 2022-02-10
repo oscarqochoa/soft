@@ -2,9 +2,7 @@
   <div>
     <header-slot>
       <template #actions>
-        <b-button variant="success" @click="modalopen(1)"
-          >Create Glossary</b-button
-        >
+        <b-button variant="success" @click="modalopen(1)">Create Glossary</b-button>
       </template>
     </header-slot>
     <b-card class="px-1">
@@ -20,7 +18,6 @@
         @reload="$refs['refClientsList'].refresh()"
       >
         <b-table
-          v-scrollbar
           slot="table"
           no-provider-filtering
           :api-url="clientRoute"
@@ -43,9 +40,7 @@
             </div>
           </template>
           <template #cell(title)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+            <div class="d-flex flex-column justify-content-start align-items-start">
               <b-button
                 variant="flat-primary"
                 @click="modalopenEdit(3, data.item)"
@@ -55,29 +50,18 @@
                   padding-top: 5px;
                   padding-bottom: 5px;
                 "
-                >{{ data.item.title }}</b-button
-              >
+              >{{ data.item.title }}</b-button>
             </div>
           </template>
           <template #cell(created_at)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+            <div class="d-flex flex-column justify-content-start align-items-start">
               <span>{{ data.item.created_at | myGlobalDay }}</span>
             </div>
           </template>
           <template #cell(action)="data">
-            <b-dropdown
-              variant="link"
-              no-caret
-              :right="$store.state.appConfig.isRTL"
-            >
+            <b-dropdown variant="link" no-caret :right="$store.state.appConfig.isRTL">
               <template #button-content>
-                <feather-icon
-                  icon="MoreVerticalIcon"
-                  size="16"
-                  class="align-middle text-body"
-                />
+                <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
               </template>
               <b-dropdown-item @click="modalopenEdit(2, data.item)">
                 <span class="align-middle ml-50">Edit</span>
@@ -114,20 +98,20 @@ export default {
   components: {
     vSelect,
     ModalGlossary,
-    FilterSlot,
+    FilterSlot
   },
   data() {
     return {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10,
+        perPage: 10
       },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: "",
+        model: ""
       },
       searchInput: "",
       created_by: null,
@@ -145,32 +129,32 @@ export default {
         {
           key: "category",
           label: "Category",
-          visible: true,
+          visible: true
         },
         {
           key: "title",
           label: "Title",
-          visible: true,
+          visible: true
         },
         {
           key: "nameuser",
           label: "Created By",
-          visible: true,
+          visible: true
         },
         {
           key: "created_at",
           label: "Created",
-          visible: true,
+          visible: true
         },
         {
           key: "action",
           label: "Actions",
-          visible: true,
-        },
+          visible: true
+        }
       ],
       fromToObject: {
         from: null,
-        to: null,
+        to: null
       },
       categories: [],
       modalChanging: false,
@@ -186,7 +170,7 @@ export default {
           options: [],
           reduce: "id",
           selectText: "name",
-          cols: 12,
+          cols: 12
         },
         {
           type: "datepicker",
@@ -200,9 +184,9 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
+          cols: 6
         },
         {
           type: "datepicker",
@@ -216,11 +200,11 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric",
+            day: "numeric"
           },
-          cols: 6,
-        },
-      ],
+          cols: 6
+        }
+      ]
     };
   },
   computed: {
@@ -228,11 +212,11 @@ export default {
       return "/glossary/get-all-glossaries";
     },
     visibleFields() {
-      return this.arrayColumns.filter((column) => column.visible);
+      return this.arrayColumns.filter(column => column.visible);
     },
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   methods: {
     async deleteGlossary(item) {
@@ -242,7 +226,7 @@ export default {
           this.addPreloader();
           const data = await GlossarydService.deleteGlossary({
             user_id: this.currentUser.id,
-            id: item.id,
+            id: item.id
           });
           this.removePreloader();
           this.showToast(
@@ -296,15 +280,15 @@ export default {
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}`, {
         page: ctx.currentPage,
-        perPage:ctx.perPage,
+        perPage: ctx.perPage,
         created_by: this.created_by,
         category: this.filter[0].model,
         startdate: this.filter[1].model,
-        enddate: this.filter[2].model,
+        enddate: this.filter[2].model
       });
 
       // Must return a promise that resolves to an array of items
-      return promise.then((data) => {
+      return promise.then(data => {
         // Pluck the array of items off our axios response
         const items = data.data.data;
         this.startPage = data.data.from;
@@ -327,26 +311,25 @@ export default {
       this.$refs.refClientsList.refresh();
     },
     async getCategories() {
-      try{
-        const res = await GlossarydService.getCategories()
+      try {
+        const res = await GlossarydService.getCategories();
         this.categories = res.data;
         this.filter[0].options = res.data;
-
-      }catch(error){
-        console.error(error)
+      } catch (error) {
+        console.error(error);
         this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong!"
-          );
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong!"
+        );
       }
-    },
+    }
   },
   created() {
     this.getCategories();
-  },
+  }
 };
 </script>
 

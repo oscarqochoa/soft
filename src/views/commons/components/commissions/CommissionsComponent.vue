@@ -12,15 +12,7 @@
         <b-spinner class="align-middle mr-1" />
         <strong>Loading ...</strong>
       </div>
-      <b-table-simple
-        v-else
-        responsive
-        sticky-header="74vh"
-        no-border-collapse
-        striped
-        v-scrollbar
-        bordered
-      >
+      <b-table-simple v-else responsive sticky-header="74vh" no-border-collapse striped bordered>
         <b-thead>
           <b-tr class="width-th">
             <b-th style="width: 100px !important">User</b-th>

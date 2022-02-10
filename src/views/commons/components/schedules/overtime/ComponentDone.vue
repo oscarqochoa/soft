@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="border-info border-table-radius">
     <filter-slot
       annulled
       :fields="fields"
@@ -15,7 +15,6 @@
         id="annull-table"
         slot="table"
         ref="annull-table"
-        v-scrollbar
         :has-provider="true"
         sticky-header="70vh"
         small
@@ -69,45 +68,45 @@ import { mapGetters } from "vuex";
 export default {
   components: {
     ContentModal,
-    ContentTracking,
+    ContentTracking
   },
   data() {
     return {
       fields: [
         {
           key: "user_name",
-          label: "user",
+          label: "user"
         },
         {
           key: "date",
-          label: "date",
+          label: "date"
         },
         {
           key: "hours_assigned",
-          label: "HOURS ASSIGNED",
+          label: "HOURS ASSIGNED"
         },
         {
           key: "hours_worked",
-          label: "HOURS WORKED",
+          label: "HOURS WORKED"
         },
         {
           key: "overtime",
-          label: "overtime",
+          label: "overtime"
         },
         {
           key: "tracking",
-          label: "tracking",
+          label: "tracking"
         },
         {
           key: "status",
-          label: "status",
-        },
+          label: "status"
+        }
       ],
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "User...",
-        model: null,
+        model: null
       },
       items: [],
       filter: dataFilters,
@@ -116,20 +115,20 @@ export default {
         currentPage: 1,
         startPage: null,
         toPage: null,
-        totalRows: 0,
+        totalRows: 0
       },
       isBusy: false,
       titleModal: null,
       item: {},
       modalTracking: false,
-      tracking: [],
+      tracking: []
     };
   },
   mounted() {},
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   methods: {
     async myProvider(ctx) {
@@ -143,7 +142,7 @@ export default {
           per_page: this.paginate.perPage,
           current_modal: this.currentUser.modul_id,
           done: 1,
-          page: ctx.currentPage,
+          page: ctx.currentPage
         };
         const data = await SchedulesServices.getOvertime(params);
         this.paginate.startPage = data.from;
@@ -152,7 +151,7 @@ export default {
           this.paginate.totalRows = data.total;
         let array = data.data;
         let items = [];
-        array.forEach((element) => {
+        array.forEach(element => {
           items.push({
             id: element.id,
             user_id: element.iduser,
@@ -166,7 +165,7 @@ export default {
             overtime:
               parseInt(element.total_hours) - parseInt(element.total_assigned),
             status: element.appv_overtime,
-            seen_status: element.seen_status_over,
+            seen_status: element.seen_status_over
           });
         });
         this.removePreloader();
@@ -218,8 +217,8 @@ export default {
     async updateSeenStatus(item) {
       const params = { id: item.id, type: 2 };
       await SchedulesServices.updateSeendStatus(params);
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>

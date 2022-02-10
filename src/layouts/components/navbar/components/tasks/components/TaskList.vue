@@ -41,7 +41,6 @@
           :current-page="currentPage"
           :per-page="perPage"
           :filter="searchInput"
-          v-scrollbar
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
