@@ -69,6 +69,7 @@
 
 
 <script>
+import fields from '../data/viewequipment.data'
 export default {
   props: {
     modalTracking: {
@@ -84,27 +85,7 @@ export default {
   data() {
     return {
       mutableIfModalEquipment: this.modalTracking,
-
-      arrayColumns: [
-        {
-          key: "status",
-          label: "Status",
-          class: "text-left",
-          sortable: false,
-        },
-        {
-          key: "created_at",
-          label: "Created BY",
-          class: "text-left",
-          sortable: false,
-        },
-        {
-          key: "description",
-          label: "Commentary",
-          class: "text-left",
-          sortable: false,
-        },
-      ],
+      arrayColumns: fields,
     };
   },
   methods: {

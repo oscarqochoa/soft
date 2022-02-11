@@ -34,7 +34,7 @@
             class="d-flex flex-column justify-content-start align-items-start"
           >
             <router-link
-              class="select-lead-name text-important"
+              class="select-lead-name "
               :to="{
                 name: 'lead-show',
                 params: { id: data.item.lead_id },
@@ -77,6 +77,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import fields from '../../data/fields.task.data'
 export default {
   props: {
     modalTaskToday: {
@@ -86,33 +87,7 @@ export default {
   data() {
     return {
       modaltask: this.modalTaskToday,
-      arrayColumns: [
-        {
-          key: "client_name",
-          label: "Client Name",
-          visible: true,
-        },
-        {
-          key: "mobile",
-          label: "Phone",
-          visible: true,
-        },
-        {
-          key: "subject",
-          label: "Subject",
-          visible: true,
-        },
-        {
-          key: "due_date",
-          label: "Due Date",
-          visible: true,
-        },
-        {
-          key: "done",
-          label: "Done",
-          visible: true,
-        },
-      ],
+      arrayColumns: fields,
     };
   },
   computed:{

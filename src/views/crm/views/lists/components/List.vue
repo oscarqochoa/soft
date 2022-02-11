@@ -54,7 +54,7 @@
                   </b-form-group>
                 </b-col>
                 <b-col cols="12">
-                  <b-button variant="success" type="submit" @click="savegroup">
+                  <b-button variant="success" type="submit" @click="saveGroup">
                     <feather-icon icon="FileIcon" size="15"></feather-icon>SAVE
                   </b-button>
                 </b-col>
@@ -118,7 +118,7 @@
                 "
                 v-for="(user, index) in JSON.parse(data.item.users)"
                 :key="index"
-                @click="modalopen(user.user_name, user.id, data.item.id)"
+                @click="modalOpen(user.user_name, user.id, data.item.id)"
               >{{ user.user_name }}</b-button>
             </div>
           </template>
@@ -130,7 +130,7 @@
               <b-button
                 variant="danger"
                 class="mr-1 reset-radius btn-sm"
-                @click="deleteuser(data.item.id)"
+                @click="deleteUser(data.item.id)"
               >
                 <feather-icon icon="Trash2Icon"></feather-icon>
               </b-button>
@@ -144,7 +144,7 @@
                 variant="warning"
                 class="ml-1 reset-radius btn-sm"
                 @click="
-                  modalopen(
+                  modalOpen(
                     currentUser.fullName,
                     currentUser.user_id,
                     data.item.id
@@ -425,8 +425,9 @@ export default {
       this.fromToObject.to = null;
       this.$refs.refClientsList.refresh();
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+    async myProvider(ctx) {
+      try{
+        const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perPage: ctx.perPage,
         id:
           this.currentUser.role_id == 1 || this.currentUser.role_id == 2
@@ -435,10 +436,7 @@ export default {
         from: this.filter[0].model,
         to: this.filter[1].model
       });
-      // Must return a promise that resolves to an array of items
-      return promise.then(data => {
-        // Pluck the array of items off our axios response
-        const items = data.data.data;
+      const items = data.data.data;
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
         this.perPage = data.data.per_page;
@@ -466,13 +464,14 @@ export default {
           // let newData = data.data;
           items.unshift(firstOption);
         }
-
-        // Must return an array of items or an empty array if an error occurred
         return items || [];
-      });
+
+      }catch(error){
+        console.error(error)
+      }
     },
 
-    async deleteuser(id) {
+    async deleteUser(id) {
       const confirm = await this.showConfirmSwal(
         "Are you sure?",
         "You won't be able to revert this!"
@@ -496,7 +495,7 @@ export default {
         }
       }
     },
-    async groupusers() {
+    async groupUsers() {
       try {
         const data = await ListService.groupUser({ roles: "[]", type: "1" });
         this.options = data;
@@ -511,7 +510,7 @@ export default {
         );
       }
     },
-    savegroup() {
+    saveGroup() {
       this.$refs.form.validate().then(async success => {
         if (!success) {
           return;
@@ -549,7 +548,7 @@ export default {
         }
       });
     },
-    modalopen(name, id, idByUser) {
+    modalOpen(name, id, idByUser) {
       this.nameUser = name;
       this.id = id;
       this.idByUser = idByUser;
@@ -564,7 +563,7 @@ export default {
     }
   },
   created() {
-    this.groupusers();
+    this.groupUsers();
     this.statusRol();
   }
 };

@@ -91,6 +91,8 @@ import vSelect from "vue-select";
 import { mapGetters } from "vuex";
 import ModalPending from "./ModalGeneral.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import ColumnFields from '../../data/fields.pendingdone.data'
+import filters from '../../data/filter.pendingdone.data'
 export default {
   components: {
     vSelect,
@@ -122,39 +124,8 @@ export default {
       toPage: null,
       isBusy: false,
       perPageOptions: [10, 25, 50, 100],
-      arrayColumns: [
-        {
-          key: "leadname",
-          label: "Lead",
-          visible: true
-        },
-        {
-          key: "status_lead",
-          label: "Status",
-          visible: true
-        },
-        {
-          key: "credit_report",
-          label: "CR",
-          visible: true
-        },
-        {
-          key: "mobile",
-          label: "Mobile",
-          visible: true
-        },
-        {
-          key: "created_at",
-          label: "Created",
-          sortable: true,
-          visible: true
-        },
-        {
-          key: "action",
-          label: "Actions",
-          visible: true
-        }
-      ],
+      //data fields
+      arrayColumns: ColumnFields,
       fromToObject: {
         from: null,
         to: null
@@ -166,41 +137,8 @@ export default {
         model: ""
       },
       filters: [],
-      filter: [
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ],
-      filterController: false,
+      //data filter
+      filter: filters,
       modalChanging: false
     };
   },
@@ -239,8 +177,9 @@ export default {
       this.searchInput = "";
       this.$refs.refClientsList.refresh();
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+    async myProvider(ctx) {
+      try{
+        const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perPage: ctx.perPage,
         page: ctx.currentPage,
         leadname: this.filterPrincipal.model,
@@ -249,10 +188,6 @@ export default {
         status: this.status == 1 ? 1 : 2,
         user_id: this.currentUser.user_id
       });
-
-      // Must return a promise that resolves to an array of items
-      return promise.then(data => {
-        // Pluck the array of items off our axios response
         const items = data.data.data;
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
@@ -262,9 +197,13 @@ export default {
         this.totalData = data.data.total;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
-        // Must return an array of items or an empty array if an error occurred
         return items || [];
-      });
+
+      }catch(error){
+        console.error(error)
+
+      }
+      
     }
   }
 };

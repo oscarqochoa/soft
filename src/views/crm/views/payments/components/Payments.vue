@@ -234,7 +234,6 @@ export default {
       arrayColumns: fields,
       startPage: null,
       endPage: "",
-      totalData: "",
       nextPage: "",
       toPage: null,
       isBusy: false,
@@ -341,7 +340,6 @@ export default {
         this.paginate.perPage = data.data.per_page;
         this.nextPage = this.startPage + 1;
         this.endPage = data.data.last_page;
-        this.totalData = data.data.total;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
         return items || [];

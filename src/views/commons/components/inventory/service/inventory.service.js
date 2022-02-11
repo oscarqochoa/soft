@@ -11,6 +11,10 @@ class InventoryService {
         const data = await amgApi.get("/logistics/inventory/get-all-equipment-category", params)
         return data
     }
+    async validatePassword(params){
+        const data = await amgApi.post("/logistics/inventory/equipment-validate-return", params)
+        return data
+    }
     //Request Equipment
     async getSelectUsers(params){
         const data = await amgApi.post("/logistics/inventory/get-list-users-by-module-id",params)

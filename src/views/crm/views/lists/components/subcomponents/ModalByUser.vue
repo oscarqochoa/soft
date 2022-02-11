@@ -91,7 +91,8 @@
 import ListService from "../../service/lists.service";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-
+import filters from '../../data/filter.user.data'
+import fields from '../../data/fields.user.data'
 export default {
   components: {
     vSelect
@@ -118,48 +119,10 @@ export default {
       totalMissing: 0,
       totalDone: 0,
       mutableIfModalCard: this.ifModalCard,
-      filters: [
-        {
-          options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Missing" },
-            { value: 2, label: "Done" }
-          ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
-          cols: 12,
-          md: 2,
-          visible: true
-        }
-      ],
-      arrayColumns: [
-        {
-          key: "lead_name",
-          label: "Names",
-          visible: true
-        },
-        {
-          key: "status_lead",
-          label: "Status",
-          visible: true
-        },
-        {
-          key: "credit_report",
-          label: "CR",
-          visible: true
-        },
-        {
-          key: "mobile",
-          label: "Mobile",
-          visible: true
-        },
-        {
-          key: "done",
-          label: "Done",
-          visible: true
-        }
-      ]
+      //data filter
+      filters: filters,
+      //data fields 
+      arrayColumns: fields,
     };
   },
   computed: {
@@ -172,6 +135,7 @@ export default {
     clientRoute() {
       return "/commons/list-users/get-list-of-leads";
     },
+    //status disabled checkbox by type of user
     rolByUser() {
       return this.currentUser.role_id == 1 ||
         this.currentUser.role_id == 2
@@ -186,15 +150,14 @@ export default {
     closeModal() {
       this.$emit("close", false);
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}`, {
+    async myProvider(ctx) {
+      try{
+        const data = await  amgApi.post(`${ctx.apiUrl}`, {
         id: this.id,
         listid: this.idByUser,
         filter: this.filterId
       });
-
-      return promise.then(data => {
-        let items = data.data;
+      let items = data.data;
         if (items.length != 0) {
           this.totalMissing = items[0].quantity_pending;
           this.totalDone = items[0].quantity_done;
@@ -206,7 +169,10 @@ export default {
           this.totalDone = 0;
         }
         return items || [];
-      });
+
+      }catch(error){
+        console.error(error)
+      }
     },
     async callead(state, idlead, idlist, iduser) {
       if (state == "1") {

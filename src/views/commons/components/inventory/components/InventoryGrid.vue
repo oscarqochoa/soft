@@ -156,6 +156,8 @@ import ModalViewEquipment from "../modal/ModalViewEquipment.vue";
 import ModalRepairEquipment from "../modal/ModalRepairEquipment.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 import InventoryService from "../service/inventory.service";
+import fields from '../data/fields.inventorygrid.data'
+import filters from '../data/filter.inventorygrid.data'
 export default {
   props: {
     global: {
@@ -191,100 +193,11 @@ export default {
         model: ""
       },
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
-      categoryFilter: null,
       startPage: null,
       toPage: null,
-      totalData: "",
-      // currentPage: 1,
-      // perPage: 10,
-      perPageOptions: [10, 25, 50, 100],
       optionsCategory: [],
-      arrayColumns: [
-        {
-          key: "selected",
-          label: "#",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "url_image",
-          label: "Image",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "name_category",
-          label: "Category",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "price",
-          label: "Price",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "condition",
-          label: "Condition",
-          class: "text-left ",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "name_brand",
-          label: "Brand",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "model",
-          label: "Model",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "process",
-          label: "Current location",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "assigned_to",
-          label: "Assigned To",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "tracking",
-          label: "Tracking",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "created_at",
-          label: "Created By",
-          class: "text-left",
-          sortable: true,
-          visible: true
-        },
-        {
-          key: "actions",
-          label: "Actions",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        }
-      ],
+      //data fields
+      arrayColumns: fields,
       modalTracking: false,
       edit: "",
       modalViewEquipment: false,
@@ -294,51 +207,8 @@ export default {
       assignedTo: "",
       num: "",
       sortBy: "created_at",
-      filter: [
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Category",
-          model: null,
-          options: [],
-          reduce: "id",
-          selectText: "name",
-          cols: 12
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ]
+      //data filters
+      filter: filters,
     };
   },
   computed: {
@@ -367,7 +237,6 @@ export default {
         this.perPage = data.data.per_page;
         this.nextPage = this.startPage + 1;
         this.endPage = data.data.last_page;
-        this.totalData = data.data.total;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
         return items || [];
@@ -409,12 +278,6 @@ export default {
           );
         }
       }
-    },
-    resetSearch() {
-      this.categoryFilter = null;
-      this.fromToObject.from = null;
-      this.fromToObject.to = null;
-      this.$refs.refClientsList.refresh();
     },
     openModalTrackingEquipment(equipmentId) {
       this.equipmentId = equipmentId;
@@ -472,7 +335,7 @@ export default {
           });
       }
     },
-    validatePassword(value, param1, param2, param3, moduleId, num) {
+    async validatePassword(value, param1, param2, param3, moduleId, num) {
       let module = 0;
       if (num == 1) {
         module = 19;
@@ -489,11 +352,10 @@ export default {
           }
         }
       }
-      const params = { module: module, pass: value };
-      amgApi
-        .post("/logistics/inventory/equipment-validate-return", params)
-        .then(res => {
-          if (res.data == 0) {
+      try{
+        const params = { module: module, pass: value };
+        const res = await InventoryService.validatePassword(params)
+        if (res.data == 0) {
             this.$swal.fire({
               icon: "error",
               title: "Oops...",
@@ -509,9 +371,8 @@ export default {
             );
             this.openModalRepairEquipment(param1, param2, param3, num);
           }
-        })
-        .catch(error => {
-          console.error(error);
+      }catch(error){
+        console.error(error);
           this.showToast(
             "danger",
             "top-right",
@@ -519,7 +380,8 @@ export default {
             "XIcon",
             "Something went wrong!"
           );
-        });
+      }
+       
     },
     openModalRepairEquipment(idEquipment, status, assignTo, num) {
       this.idEquipment = idEquipment;

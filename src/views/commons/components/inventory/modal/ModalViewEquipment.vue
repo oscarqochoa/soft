@@ -110,15 +110,6 @@
                       </b-col>
                       <b-col sm="6">
                         <ValidationProvider rules="required" v-slot="{ errors }">
-                          <!-- <b-form-group label="PURCHASE DATE:">
-                            <b-form-datepicker
-                              v-model="dateRegister"
-                              size="sm"
-                              class="per-page-datepicker d-inline-block"
-                              disabled
-                              :class="{ 'border border-danger': errors[0] }"
-                            ></b-form-datepicker>
-                          </b-form-group>-->
                           <b-form-group label="PURCHASE DATE:">
                             <b-form-datepicker
                               v-model="dateRegister"
@@ -203,13 +194,6 @@
                   </b-col>
                 </b-row>
               </div>
-
-              <!-- <div
-                
-                style="background: #f7f6f2; color: #706d7d; padding: 10px"
-              >
-                SECONDARY INFORMATION
-              </div>-->
               <b-alert variant="primary" v-if="category == 1" show>
                 <div class="alert-body">
                   <span>
@@ -331,6 +315,7 @@
 <script>
 import InventoryService from "../service/inventory.service";
 import vSelect from "vue-select";
+import {optionsCondition,optionsDisc,optionsRam,optionsSo} from '../data/viewequipment.data'
 export default {
   components: {
     vSelect
@@ -357,35 +342,13 @@ export default {
       condition: null,
       optionsCategory: this.optionsCat,
       optionsBrand: [],
-      optionsCondition: [
-        { value: 1, text: "NEW" },
-        { value: 2, text: "REPAIRED" },
-        { value: 3, text: "USED" },
-        { value: 4, text: "NOT FUNCTIONAL" }
-      ],
+      optionsCondition: optionsCondition,
       disc: null,
-      optionsDisc: [
-        { value: "128 GB", text: "128 GB" },
-        { value: "256 GB", text: "256 GB" },
-        { value: "512 GB", text: "512 GB" },
-        { value: "1 TB", text: "1 TB" },
-        { value: "2 TB", text: "2 TB" }
-      ],
+      optionsDisc:optionsDisc,
       ram: null,
-      optionsRam: [
-        { value: "4 GB", text: "4 GB" },
-        { value: "6 GB", text: "6 GB" },
-        { value: "8 GB", text: "8 GB" },
-        { value: "12 GB", text: "12 GB" },
-        { value: "16 GB", text: "16 GB" },
-        { value: "32 GB", text: "32 GB" },
-        { value: "64 GB", text: "64 GB" }
-      ],
+      optionsRam: optionsRam,
       so: null,
-      optionsSo: [
-        { value: "WINDOWS 10", text: "WINDOWS 10" },
-        { value: "WINDOWS 11", text: "WINDOWS 11" }
-      ],
+      optionsSo: optionsSo,
       serie: "",
       processor: "",
       price: "",

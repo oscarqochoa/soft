@@ -94,6 +94,8 @@ import ModalViewTrackingRequest from "../../modal/ModalViewTrackingRequest.vue";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
+import fields from '../../data/fields.requestequipment.data'
+import filters from '../../data/filter.requestequipment.data'
 export default {
   props: {
     global: {
@@ -126,101 +128,11 @@ export default {
       },
       startPage: null,
       toPage: null,
-      totalData: "",
-      // currentPage: 1,
-      // perPage: 10,
-      perPageOptions: [10, 25, 50, 100],
-      arrayColumns: [
-        {
-          key: "equipment",
-          label: "Equipment",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "cant",
-          label: "Quantity",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "name_operator",
-          label: "Assign To ",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "programs_to_install",
-          label: "Programs to Install",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "commentary",
-          label: "Comment",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "status",
-          label: "Status",
-          class: "text-left",
-          sortable: true
-        },
-        {
-          key: "created_at",
-          label: "Created By",
-          class: "text-left",
-          sortable: true
-        },
-        {
-          key: "tracking",
-          label: "Tracking",
-          class: "text-left"
-        },
-        {
-          key: "actions",
-          label: "Actions",
-          class: "text-left"
-        }
-      ],
+      arrayColumns: fields,
       modalTrackingRequest: false,
       requestId: "",
       sortDesc: true,
-      filter: [
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ]
+      filter: filters,
     };
   },
   computed: {
@@ -244,11 +156,6 @@ export default {
         this.UPDATE_REQUEST_EQUIPMENT(false);
       }
     },
-    resetSearch() {
-      this.fromToObject.from = null;
-      this.fromToObject.to = null;
-      this.$refs.refClientsList.refresh();
-    },
     async myProvider(ctx) {
       try{
         const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
@@ -268,7 +175,6 @@ export default {
         this.perpage = data.data.per_page;
         this.next_page = this.startPage + 1;
         this.end_page = data.data.last_page;
-        this.totalData = data.data.total;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
         // Must return an array of items or an empty array if an error occurred

@@ -56,7 +56,6 @@
               <b-form-input disabled v-model="statusDone"></b-form-input>
             </div>
           </div>
-
           <div class="col-lg-12 mt-1">
             <div class="form-group row">
               <span>Comment</span>

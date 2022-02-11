@@ -7,4 +7,6 @@ export const optionsMethodPay = [
     { text: "Credit Card", value: "1" },
     { text: "Others", value: "2" },
 ]
+
+
 export default  {options, optionsMethodPay}
