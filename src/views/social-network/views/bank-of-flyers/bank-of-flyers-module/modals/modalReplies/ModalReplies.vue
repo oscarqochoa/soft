@@ -111,7 +111,7 @@ import SocialNetworkService from '@/views/social-network/services/social-network
 export default {
   props: {
     item: {},
-    leadsFlyer: {},
+    leadsFlyer: null,
 
   },
   data() {
@@ -120,6 +120,7 @@ export default {
       ownControl: false,
       fields: dataFields,
       title: 'carolina',
+      flyer: this.flyer,
 
     }
   },
@@ -147,10 +148,11 @@ export default {
           flyer_id: this.item.id,
         }
         const data = await SocialNetworkService.getLeadsFlyer(params)
-        this.leadsFlyer = data.data
+
+        this.flyer = data.data
         // Must return an array of items or an empty array if an error occurred
 
-        return this.leadsFlyer
+        return this.flyer
       } catch (e) {
         this.showErrorSwal(e)
         return []

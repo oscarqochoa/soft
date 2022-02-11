@@ -33,7 +33,7 @@ class SocialNetworkService {
 
   async getLeadsFlyer(body) {
     try {
-      const data = await amgApi.post('social-network/bank-of-flyers/get-flyer-comments', body)
+      const data = await amgApi.post('social-network/bank-of-flyers/get-leads-flyers', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getLeadsFlyer:', error)
