@@ -1,5 +1,5 @@
 <template>
-  <div class="border-info border-table-radius">
+  <div class="border-top-info border-3 box-shadow-3 rounded-bottom">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -34,7 +34,7 @@
         <template #cell(lead_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <router-link
-              class=""
+              class
               :to="{
                 name: 'lead-show',
                 params: { id: data.item.lead_id },
