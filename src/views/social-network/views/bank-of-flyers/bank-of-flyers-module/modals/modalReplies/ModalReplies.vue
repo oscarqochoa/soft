@@ -119,7 +119,7 @@ export default {
       baseImg: process.env.VUE_APP_BASE_URL_FRONT,
       ownControl: false,
       fields: dataFields,
-      title: 'carolina',
+
       flyer: this.flyer,
 
     }

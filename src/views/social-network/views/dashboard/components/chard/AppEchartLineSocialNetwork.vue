@@ -56,13 +56,15 @@ export default {
           type: 'value',
           splitLine: { show: false },
         },
-        series: {
-          type: 'line',
-          name: this.optionData.series.name,
-          showSymbol: false,
-          data: this.optionData.series.data,
-        },
+        // series: {
+        //   type: 'line',
+        //   name: this.optionData.series.name,
+        //   showSymbol: false,
+        //   data: this.optionData.series.data,
+        //
+        // },
 
+        series: this.optionData.series,
       },
     }
   },

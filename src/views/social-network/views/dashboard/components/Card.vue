@@ -14,6 +14,7 @@
           :class="i.cursor ? 'pointer' : ''"
           @click=" i.cursor ? clickCard(i,index) : ''"
         >
+
           <span class="m-b-20 font title">
             {{ i.title }}
           </span>
@@ -59,7 +60,6 @@ export default {
     }
   },
 
-  created() {},
   methods: {
 
     closeInfoModal() {

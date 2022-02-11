@@ -410,7 +410,7 @@ export default {
       users: [],
       juniorUser: false,
       labelGraph: null,
-
+      type: null,
     }
   },
   watch: {
@@ -448,22 +448,32 @@ export default {
     this.getFilterCard()
   },
   methods: {
-    prueba() {
-      const val = this.graph[0].count
+    prueba(type) {
       const x = []
-      this.graph.map(data => {
-        x.push(data.due_date)
-      })
+
+      if (type === 'sellers') {
+        this.graph.map(data => {
+          x.push(data.string)
+        })
+        this.option.xAxisData = x
+      } else {
+        this.graph.map(data => {
+          x.push(data.due_date)
+        })
+        this.option.xAxisData = x
+      }
 
       const info = []
       this.graph.map(data => {
         info.push((data.count).toString())
       })
 
-      this.option.series.name = 'ga'
+      this.option.series.name = this.labelGraph
       this.option.series.data = info
-      this.option.xAxisData = x
+
+      // eslint-disable-next-line no-plusplus
       this.idEchart++
+      console.log(x, 'asdasd')
       console.log(this.option.series.data, 'soy data series')
     },
     async getUsers() {
@@ -508,9 +518,9 @@ export default {
         this.card[0].data = data.data.replies
         this.card[2].data = data.data.answer
         this.card[3].data = data.data.mobiles
-        this.card[4].data = data.data.appoinments
+        this.card[4].data = data.data.appointments
         this.card[5].data = `${data.data.productivity}%`
-        console.log(data)
+
         return data
       } catch (e) {
         this.showErrorSwal(e)
@@ -568,40 +578,49 @@ export default {
 
           this.graph = data.data
           this.labelGraph = 'Leads'
+          this.type = ''
         } else if (this.chardOption.id === 2) {
           const data = await DashboardService.getRepliesGraphic(params)
           console.log(data.data)
           this.graph = data.data
           console.log(this.graph, 'oa')
           this.labelGraph = 'Replies'
+          this.type = ''
         } else if (this.chardOption.id === 3) {
           const data = await DashboardService.getAnswersGraphic(params)
           this.graph = data.data
           this.labelGraph = 'Answers'
+          this.type = ''
         } else if (this.chardOption.id === 4) {
           const data = await DashboardService.getMobilesGraphic(params)
           this.graph = data.data
           this.labelGraph = 'Mobiles'
+          this.type = ''
         } else if (this.chardOption.id === 5) {
           const data = await DashboardService.getTasksGraphic(params)
           this.graph = data.data
           this.labelGraph = 'Appointments'
+          this.type = ''
         } else if (this.chardOption.id === 6) {
           const data = await DashboardService.getProductivityGraphic(params)
           this.graph = data.data
           this.labelGraph = 'Productivity'
           this.juniorUser = true
+          this.type = ''
         } else if (this.chardOption.id === 7) {
           const data = await DashboardService.getTaskCatcherGraphic(params)
           this.graph = data.data
           this.labelGraph = 'Seller Appointments'
           this.isDate = false
+          this.type = 'sellers'
         } else if (this.chardOption.id === 8) {
           const data = await DashboardService.getMultiChartGraphic(params)
           this.graph = data.data
+          this.type = 'multi'
           this.multiGraphic = true
         }
-        this.prueba()
+        this.prueba(this.type)
+        console.log(this.graph, 'aca ando hoy')
         return this.graph
       } catch (e) {
         this.showErrorSwal(e)

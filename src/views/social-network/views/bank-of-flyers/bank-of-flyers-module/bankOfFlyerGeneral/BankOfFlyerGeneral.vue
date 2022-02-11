@@ -207,7 +207,7 @@
         <modal-insert-comments
           v-if="modalInsertCommentsModal"
           :index="showComments"
-          @asd="closeInsertCommentsModal"
+          @close="closeInsertCommentsModal"
         />
 
         <modal-list-comments
