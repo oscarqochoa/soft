@@ -204,12 +204,13 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 import PaymentService from "../service/payments.service";
 import ModalRefund from "@/views/crm/views/payments/components/ModalRefund.vue";
 import ModalVoidRefundInfo from "@/views/crm/views/payments/components/ModalVoidRefundInfo.vue";
+import filters from '../data/filters.payments.data'
+import fields from '../data/fields.payments.data'
 export default {
   components: {
     vSelect,
@@ -229,75 +230,12 @@ export default {
       totalAmount: 0,
       sortBy: "created_at",
       sortDesc: true,
-      arrayColumns: [
-        {
-          key: "lead_name",
-          label: "Name",
-
-          visible: true
-        },
-        {
-          key: "type_transaction",
-          label: "Type",
-          visible: true
-        },
-        {
-          key: "transaction_id",
-          label: "Transaction ID",
-          visible: true
-        },
-        {
-          key: "amount",
-          label: "Amount",
-          visible: true
-        },
-        {
-          key: "charge",
-          label: "Charge",
-          visible: true
-        },
-        {
-          key: "result",
-          label: "Result",
-          visible: true
-        },
-        {
-          key: "card_number",
-          label: "Credit Card",
-          visible: true
-        },
-        {
-          key: "account",
-          label: "Account",
-          visible: true
-        },
-        {
-          key: "program",
-          label: "Program",
-          visible: true
-        },
-        {
-          key: "user_name",
-          label: "Created By",
-          visible: true
-        }
-        // {
-        //   key: "created_at",
-        //   label: "Creation Date",
-        //   sortable: true,
-        //   visible: true,
-        // },
-        // { key: "actions", label: "Acciones", class: "text-center " },
-      ],
-      searchInput: "",
-      orderby: "",
-      order: "",
+      //fields data
+      arrayColumns: fields,
       startPage: null,
       endPage: "",
       totalData: "",
-      // perPage: 10,
       nextPage: "",
-      // currentPage: 1,
       toPage: null,
       isBusy: false,
       perPageOptions: [10, 25, 50, 100],
@@ -307,86 +245,8 @@ export default {
         placeholder: "Client...",
         model: ""
       },
-      filter: [
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Type",
-          model: null,
-          options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Realtor" },
-            { value: 2, label: "Appointment" },
-            { value: 3, label: "Inital Payment" },
-            { value: 4, label: "Others" }
-          ],
-          reduce: "value",
-          selectText: "label",
-          cols: 12
-        },
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Result",
-          model: null,
-          options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Approved" },
-            { value: 2, label: "Declined" },
-            { value: 3, label: "Underview" }
-          ],
-          reduce: "value",
-          selectText: "label",
-          cols: 12
-        },
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "User",
-          model: null,
-          options: [],
-          reduce: "id",
-          selectText: "user_name",
-          cols: 12
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ],
-      filterController: false,
-      modalRefund: false,
+      //data filters
+      filter: filters,
       dataVoid: [],
       modalVoidRefund: false,
       idtransaction: null
@@ -406,6 +266,7 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser"
     }),
+    //filter status by Type of User
     filterStatus() {
       if(this.currentUser.user_id == 1 || this.currentUser.user_id == 2){
         return this.filter
@@ -414,19 +275,10 @@ export default {
         newFilter.splice(2,1);
         return newFilter
       }
-      
-
-      // let array = [{name:'franco',value:1},{name:'dalia',value:2},{name:'david',value:3}]
-      // console.log((array.splice(1,1)))
-      // console.log("user id",this.currentUser.user_id )
-      // console.log(this.filter)
-      // console.log(this.filter.splice(1,0))
-      // return this.currentUser.user_id == 1 || this.currentUser.user_id == 2
-      //   ? this.filter
-      //   : this.filter.splice(1,1);
     }
   },
   methods: {
+    //open modal refund
     voidAuthorize(
       idtransaction,
       idmerchant,
@@ -518,7 +370,7 @@ export default {
           "top-right",
           "Error",
           "XIcon",
-          "Something went wrong!"
+          "Something went wrong with users!"
         );
       }
     },

@@ -93,6 +93,7 @@
 <script>
 import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
 import PaymentService from "../service/payments.service";
+import fields from '../data/fields.credit.card'
 export default {
   components: {
     ModalCardCreate,
@@ -109,36 +110,8 @@ export default {
       //More information
       cards: [],
       modalCreateCard: false,
-      fields: [
-        {
-          key: "Select",
-          label: "",
-        },
-        {
-          key: "cardholdername",
-          label: "Card Holder Name",
-        },
-        {
-          key: "cardnumber",
-          label: "Card Number",
-        },
-        {
-          key: "type_card",
-          label: "Type",
-        },
-        {
-          key: "card_expi_month",
-          label: "MM",
-        },
-        {
-          key: "card_expi_year",
-          label: "YY",
-        },
-        {
-          key: "cardsecuritycode",
-          label: "CVC",
-        },
-      ],
+      //data field
+      fields: fields
     };
   },
 

@@ -1,10 +1,11 @@
 <template>
   <e-charts
     ref="line"
+    auto-resize
+
     autoresize
     :options="line"
     theme="theme-color"
-    auto-resize
   />
 </template>
 
@@ -33,12 +34,14 @@ export default {
           show: true,
           type: 'continuous',
           min: 0,
-          max: 400,
+          max: 900,
+          height:500,
         }],
         grid: {
           width: '95%',
           left: '40px',
           right: '4%',
+          height:'320px',
           containLabel: false,
         },
         tooltip: {
@@ -52,7 +55,7 @@ export default {
           type: 'value',
           splitLine: { show: false },
           stepSize: 50,
-         
+          height:600,
         },
         series:this.optionData.series
       },

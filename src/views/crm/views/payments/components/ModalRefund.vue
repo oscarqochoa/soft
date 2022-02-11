@@ -82,7 +82,7 @@
                   v-if="isCeo == 1 || (isSupervisor == 2 && modul == 4)"
                   @click="sendVoid"
                 >
-                  SUBMIT
+                  Submit
                 </b-button>
               </div>
             </div>
@@ -147,6 +147,7 @@ export default {
     updateGrid() {
       this.$emit("updateGrid", false);
     },
+    //Send two types of refund
     sendVoid() {
       this.$refs.form.validate().then(async (success) => {
         if (!success) {

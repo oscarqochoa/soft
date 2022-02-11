@@ -119,6 +119,7 @@ export default {
     closeModal() {
       this.$emit("closeInfo", false);
     },
+    //Getting Information of Refund
     async getVoidRefund(idtransaction) {
       try{
         this.addPreloader();

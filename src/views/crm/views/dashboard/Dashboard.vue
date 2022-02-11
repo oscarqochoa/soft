@@ -417,8 +417,8 @@
                 </b-row>
               </div>
             </div>
-            <b-card-body class="mb-2">
-              <app-echart-line-crm :key="idEchart" :option-data="repaint" />
+            <b-card-body >
+              <app-echart-line-crm  :key="idEchart" :option-data="repaint" />
             </b-card-body>
           </b-card>
         </b-col>

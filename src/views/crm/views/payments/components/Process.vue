@@ -255,7 +255,7 @@ import vSelect from "vue-select";
 import { mapGetters } from "vuex";
 import PaymentService from "../service/payments.service";
 import ModalCreditCard from "@/views/crm/views/payments/components/ModalCreditCard.vue";
-
+import {options,optionsMethodPay} from '../data/options.process.data'
 export default {
   name: "process-crm",
   components: {
@@ -268,15 +268,9 @@ export default {
       price: 0,
       modalCreditController: 0,
       cardsLead: {},
-      options: [
-        { text: "Realtor", value: "1" },
-        { text: "Appointment", value: "2" },
-        { text: "Others", value: "3" },
-      ],
-      optionsMethodPay: [
-        { text: "Credit Card", value: "1" },
-        { text: "Others", value: "2" },
-      ],
+      // data of options
+      options: options,
+      optionsMethodPay:optionsMethodPay,
       userfilter: "",
       users: null,
       user_id: null,
