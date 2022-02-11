@@ -251,13 +251,10 @@ export default {
         xAxisData: [
 
         ],
-        yAxisData: [
+
+        series: [
 
         ],
-        series: {
-          name: '',
-          data: [],
-        },
       },
       validateDate: null,
       firstDay: moment()
@@ -411,6 +408,15 @@ export default {
       juniorUser: false,
       labelGraph: null,
       type: null,
+      labelsDays: [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+      ],
     }
   },
   watch: {
@@ -448,6 +454,37 @@ export default {
     this.getFilterCard()
   },
   methods: {
+    statusColor(name) {
+      let color = ''
+      switch (name) {
+        case 'Leads':
+          color = '#E84E4D'
+          break
+        case 'Replies':
+
+          color = '#744FEF'
+          break
+        case 'Answers':
+          color = '#E67B4F'
+          break
+        case 'Mobiles':
+          color = '#4EC4F0'
+          break
+        case 'Appointments':
+          color = '#515CEE'
+          break
+        case 'Productivity':
+          color = '#40A094'
+          break
+        case 'Seller Appointments':
+          color = '#e83e8c'
+          break
+        default:
+          color = '#e83e8c'
+          break
+      }
+      return color
+    },
     prueba(type) {
       const x = []
 
@@ -456,6 +493,8 @@ export default {
           x.push(data.string)
         })
         this.option.xAxisData = x
+      } else if (type === 'multi') {
+        this.option.xAxisData = this.labelsDays
       } else {
         this.graph.map(data => {
           x.push(data.due_date)
@@ -464,17 +503,31 @@ export default {
       }
 
       const info = []
-      this.graph.map(data => {
-        info.push((data.count).toString())
-      })
+      if (type === 'multi') {
+        this.option.series = []
+        for (let i = 0; i < this.graph.length; i++) {
+          this.option.series.push(
+            {
+              type: 'line', name: this.graph[i].name, data: this.graph[i].count, color: this.graph[i].color,
+            },
+          )
+        }
+      } else {
+        this.graph.map(data => {
+          info.push((data.count).toString())
+        })
 
-      this.option.series.name = this.labelGraph
-      this.option.series.data = info
-
+        const normal = {
+          type: 'line', name: this.labelGraph, data: info, color: this.statusColor(this.labelGraph),
+        }
+        console.log(info, 'indo')
+        this.option.series = []
+        this.option.series.push(
+          normal,
+        )
+      }
       // eslint-disable-next-line no-plusplus
       this.idEchart++
-      console.log(x, 'asdasd')
-      console.log(this.option.series.data, 'soy data series')
     },
     async getUsers() {
       try {
@@ -583,7 +636,7 @@ export default {
           const data = await DashboardService.getRepliesGraphic(params)
           console.log(data.data)
           this.graph = data.data
-          console.log(this.graph, 'oa')
+
           this.labelGraph = 'Replies'
           this.type = ''
         } else if (this.chardOption.id === 3) {
@@ -617,10 +670,9 @@ export default {
           const data = await DashboardService.getMultiChartGraphic(params)
           this.graph = data.data
           this.type = 'multi'
-          this.multiGraphic = true
         }
         this.prueba(this.type)
-        console.log(this.graph, 'aca ando hoy')
+
         return this.graph
       } catch (e) {
         this.showErrorSwal(e)
