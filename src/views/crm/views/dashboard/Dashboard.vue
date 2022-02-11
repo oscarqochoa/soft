@@ -6,7 +6,7 @@
           <b-row class="pl-1 pr-1">
               <b-card
               
-              @click="change_tab(0)"
+              @click="changeTab(0)"
               class="ecommerce-card-leads ecommerce-card col-lg-12 h-100 cursor-pointer"
               :class="classAdd"
               :style="
@@ -75,13 +75,12 @@
             </b-card>
             
           </b-row>
-
           <b-row class="pl-1 pr-1">
             <b-card
               
               class="ecommerce-card-appointments ecommerce-card col-lg-12 h-150 cursor-pointer"
               :class="classAdd"
-              @click="change_tab(1)"
+              @click="changeTab(1)"
               :style="
                 itemCards[1] == true
                   ? 'background: linear-gradient(to right, #299aff, rgb(230, 174, 230));color: white'
@@ -151,7 +150,7 @@
             <b-card
               class="ecommerce-card-tasks ecommerce-card col-lg-12 h-150 cursor-pointer"
               :class="classAdd"
-              @click="change_tab(2)"
+              @click="changeTab(2)"
               :style="
                 itemCards[2] == true
                   ? 'background: linear-gradient(to right, #82868b, rgb(230, 174, 230));color: white'
@@ -222,7 +221,7 @@
             <b-card
               class="ecommerce-card-sales ecommerce-card col-lg-12 h-150 cursor-pointer"
               :class="classAdd"
-              @click="change_tab(3)"
+              @click="changeTab(3)"
               :style="
                 itemCards[3] == true
                   ? 'background: linear-gradient(to right, #28c76f, rgb(240, 214, 240));color: white'
@@ -293,7 +292,7 @@
             <b-card
               class="ecommerce-card-capturated ecommerce-card col-lg-12 h-150 cursor-pointer"
               :class="classAdd"
-              @click="change_tab(4)"
+              @click="changeTab(4)"
               :style="
                 itemCards[4] == true
                   ? 'background: linear-gradient(to right, #e83e8c, rgb(211, 192, 211));color: white'
@@ -377,7 +376,7 @@
                       style="font-size: 15px"
                       :clearable="false"
                       :options="years"
-                      @input="filtrocont()"
+                      @input="filtroCont()"
                     />
                   </b-col>
                   <b-col cols="12" sm="12" md="4">
@@ -391,32 +390,20 @@
                       label="user_name"
                       :options="users"
                       :reduce="(val) => val.id"
-                      @input="filtrocont()"
+                      @input="filtroCont()"
                     />
                   </b-col>
                 </b-row>
               </div>
-              <div class=" mb-1 mb-sm-0 col-lg-5 col-md-5 inline">
-                <!-- <b-row class="w-100">
-                  <div>
-                    <h1 class="font-weight-bolder">TOTAL:</h1>
-                  </div>
-                  <div class="important text-center ml-1 mr-1">
-                    <div
-                      style="background-color: blue; border-radius: 4px"
-                      class="ml-2 mr-2 w-100"
-                    >
-                      <h1 class="font-weight-bolder" style="color: white">
-                        {{ total_year }}
-                      </h1>
-                    </div>
-                  </div>
-                </b-row> -->
-                <b-row v-for="data in totalYearByCard" :key="data.id"  class="w-100" style="padding-bottom:6px">
-                  <div>
+              <div class=" mb-1 mb-sm-0 col-lg-6 col-md-9 col-xl-5 inline ">
+                <b-row v-for="data in totalYearByCard" :key="data.id"  class="w-100 " style="padding-bottom:6px">
+                  <b-col cols="7" xl="8">
+                    <div>
                     <h3 class="font-weight-bolder">{{data.name}}:</h3>
                   </div>
-                  <div class="important text-center ml-1 mr-1" style="position: absolute; left: 170px;width:90px">
+                  </b-col>
+                  <b-col cols="5" xl="4">
+                    <div class="important text-center ml-1 mr-1" >
                     <div
                       style="background: #0090E7; border-radius: 5px;"
                       class="ml-2 mr-2 w-100"
@@ -426,8 +413,8 @@
                       </h1>
                     </div>
                   </div>
+                  </b-col>
                 </b-row>
-               
               </div>
             </div>
             <b-card-body class="mb-2">
@@ -493,7 +480,6 @@ export default {
       users: [],
       year: moment().format("YYYY"),
       years: [],
-      nameOfTab: "Leads",
       itemCards: [true, false, false, false, false],
       item: null,
     };
@@ -515,7 +501,7 @@ export default {
   created() {
     this.userCreator();
     this.allData();
-    this.year_select();
+    this.yearSelect();
   },
   methods: {
     statusColor(name){
@@ -604,40 +590,33 @@ export default {
         this.totalYearByCard.push({name:name,total:total})
       } 
     },
-    change_tab(index) {
+    changeTab(index) {
       this.changeItemCards(index);
       switch (index) {
         case 0:
           this.total_year = this.global.leads_year;
           this.chargeDataToEchart(this.leads, "Total leads");
           this.changeListYear("Total leads",this.global.leads_year)
-          this.nameOfTab = "Leads";
-
           break;
         case 1:
           this.total_year = this.global.quotes_year;
           this.chargeDataToEchart(this.quotes, "Total Appointments");
           this.changeListYear("Total Appointments",this.global.quotes_year)
-          this.nameOfTab = "Appointments";
           break;
         case 2:
           this.total_year = this.global.calls_year;
           this.chargeDataToEchart(this.calls, "Total Calls");
           this.changeListYear("Total Calls",this.global.calls_year)
-          this.nameOfTab = "Tasks";
           break;
         case 3:
           this.total_year = this.global.sales_year;
           this.chargeDataToEchart(this.sales, "Total Sales");
           this.changeListYear("Total Sales",this.global.sales_year)
-          this.nameOfTab = "Sales";
           break;
         case 4:
           this.total_year = this.global.clients_year;
           this.chargeDataToEchart(this.captur, "Total Captured");
           this.changeListYear("Total Captured",this.global.clients_year)
-          this.nameOfTab = "Captured";
-
           break;
       }
       this.index = index;
@@ -658,9 +637,8 @@ export default {
         this.quotes = response.data.quotes.map((list) => list);
         this.calls = response.data.calls.map((list) => list);
         this.sales = response.data.sales.map((list) => list);
-        this.captur = response.data.vendio.map((list) => list); // error
+        this.captur = response.data.vendio.map((list) => list); 
         this.removePreloader();
-        
         if(status ==null){
           this.chargeDataToEchart(this.leads, "Total leads");
           this.changeListYear("Total leads",this.global.leads_year)
@@ -669,8 +647,6 @@ export default {
           this.changeListYearNew("Total leads",this.global.leads_year)
         }
         this.total_year = this.global.leads_year;
-        
-        this.nameOfTab = "Leads";
       } catch (error) {
         console.log(error);
         this.removePreloader();
@@ -683,7 +659,7 @@ export default {
         );
       }
     },
-    async filtrocont() {
+    async filtroCont() {
       this.itemCards =  [true, false, false, false, false]
       if (this.userfilter != null) {
         try {
@@ -737,7 +713,7 @@ export default {
         );
       }
     },
-    year_select() {
+    yearSelect() {
       for (let x = 2014; x <= moment().format("YYYY"); x++) {
         this.years.push(x);
       }

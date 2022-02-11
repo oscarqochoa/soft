@@ -14,7 +14,6 @@ import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/chart/line'
 import theme from './theme.json'
-
 ECharts.registerTheme('theme-color', theme)
 
 export default {
@@ -29,14 +28,11 @@ export default {
   },
   data() {
     return {
-        values:[2,4,5,6],
       line: {
-        // Make gradient line here
         visualMap: [{
           show: true,
           type: 'continuous',
           min: 0,
-          
           max: 400,
         }],
         grid: {
@@ -58,15 +54,6 @@ export default {
           stepSize: 50,
          
         },
-        // series: [{
-        //   type: 'line',
-        //   stack: 'Total',
-        //   name:this.optionData.series.name,
-        //   showSymbol: false,
-        //   data: this.optionData.series.data,
-        // },
-        
-        // ]
         series:this.optionData.series
       },
     }

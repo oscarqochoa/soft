@@ -385,73 +385,6 @@ export default {
           cols: 6
         }
       ],
-      filter2: [
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Type",
-          model: null,
-          options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Realtor" },
-            { value: 2, label: "Appointment" },
-            { value: 3, label: "Inital Payment" },
-            { value: 4, label: "Others" }
-          ],
-          reduce: "value",
-          selectText: "label",
-          cols: 12
-        },
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Result",
-          model: null,
-          options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Approved" },
-            { value: 2, label: "Declined" },
-            { value: 3, label: "Underview" }
-          ],
-          reduce: "value",
-          selectText: "label",
-          cols: 12
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ],
       filterController: false,
       modalRefund: false,
       dataVoid: [],
@@ -474,9 +407,23 @@ export default {
       currentUser: "auth/currentUser"
     }),
     filterStatus() {
-      return this.currentUser.user_id == 1 || this.currentUser.user_id == 2
-        ? this.filter
-        : this.filter2;
+      if(this.currentUser.user_id == 1 || this.currentUser.user_id == 2){
+        return this.filter
+      }else{
+        let newFilter = [...this.filter]
+        newFilter.splice(2,1);
+        return newFilter
+      }
+      
+
+      // let array = [{name:'franco',value:1},{name:'dalia',value:2},{name:'david',value:3}]
+      // console.log((array.splice(1,1)))
+      // console.log("user id",this.currentUser.user_id )
+      // console.log(this.filter)
+      // console.log(this.filter.splice(1,0))
+      // return this.currentUser.user_id == 1 || this.currentUser.user_id == 2
+      //   ? this.filter
+      //   : this.filter.splice(1,1);
     }
   },
   methods: {
@@ -508,8 +455,9 @@ export default {
     closeModalVoidRefundInfo() {
       this.modalVoidRefund = false;
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+    async myProvider(ctx) {
+      try{
+        const data = await  amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perPage: ctx.perPage,
         text: this.filterPrincipal.model,
         from: this.filter[3].model,
@@ -521,10 +469,6 @@ export default {
             ? this.filter[2].model
             : this.currentUser.user_id
       });
-
-      // Must return a promise that resolves to an array of items
-      return promise.then(data => {
-        // Pluck the array of items off our axios response
         const items = data.data.data;
         let value = 0;
         if (items) {
@@ -540,7 +484,6 @@ export default {
         } else {
           this.totalAmount = 0.0;
         }
-
         this.startPage = data.data.from;
         this.paginate.currentPage = data.data.current_page;
         this.paginate.perPage = data.data.per_page;
@@ -549,14 +492,12 @@ export default {
         this.totalData = data.data.total;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
-        // Must return an array of items or an empty array if an error occurred
         return items || [];
-      });
-    },
-    onChangeFilter() {
-      this.$refs.refClientsList.refresh();
-    },
 
+      }catch(error){
+        console.error(error)
+      }
+    },
     async getAllUsers() {
       try {
         const data = await PaymentService.getAllUsers({
@@ -580,12 +521,6 @@ export default {
           "Something went wrong!"
         );
       }
-    },
-    resetSearch() {
-      this.searchInput = "";
-      this.fromToObject.from = null;
-      this.fromToObject.to = null;
-      this.$refs.refClientsList.refresh();
     },
     updateGrid() {
       this.$refs.refClientsList.refresh();
