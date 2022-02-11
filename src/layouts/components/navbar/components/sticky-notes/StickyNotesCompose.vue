@@ -16,11 +16,7 @@
     <template #modal-header>
       <h5 class="modal-title">{{ note ? "Update note" : "New note" }}</h5>
       <div class="modal-actions">
-        <feather-icon
-          icon="XIcon"
-          class="ml-1 cursor-pointer"
-          @click="discardEmail"
-        />
+        <feather-icon icon="XIcon" class="ml-1 cursor-pointer" @click="discardEmail" />
       </div>
       <!-- @click="discardEmail" -->
     </template>
@@ -33,9 +29,7 @@
           variant="primary"
           @click="saveUserNote()"
           v-loading.full="isLoading"
-        >
-          Save
-        </b-button>
+        >Save</b-button>
         <!-- v-loading.full="{background: 'rgba(255,255,255,.5)', show: isLoading, color: '#FF9F43'} " -->
       </div>
       <div>{{ moment() | myGlobal }}</div>
@@ -47,9 +41,7 @@
         <!-- Field: Subject -->
         <div class="compose-mail-form-field">
           <label for="email-subject">Category:</label>
-          <div
-            class="form-control d-flex justify-content-start align-items-center"
-          >
+          <div class="form-control d-flex justify-content-start align-items-center">
             <span class="mr-1" v-for="color in colors" :key="color.id">
               <!-- :style="`${color.id == noteData.colorId?'':'color: '+color.category}; fill: ${color.category}`" -->
               <feather-icon
@@ -65,7 +57,7 @@
         </div>
         <validation-provider rules="required" v-slot="{ errors, valid }">
           <div class="compose-mail-form-field">
-            <label for="email-subject">Title: </label>
+            <label for="email-subject">Title:</label>
 
             <b-form-input
               id="email-subject"
@@ -77,16 +69,14 @@
             v-if="errors[0]"
             class="ml-2 text-danger"
             style="font-size: 13px"
-          >
-            Title {{ errors[0] }}</span
-          >
+          >Title {{ errors[0] }}</span>
         </validation-provider>
 
         <!-- Field: Message - Quill Editor -->
 
         <div class="message-editor">
           <validation-provider rules="required" v-slot="{ errors }">
-            <div v-scrollbar style="height: 250px">
+            <div style="height: 250px">
               <quill-editor
                 id="quil-content"
                 v-model="noteData.note"
@@ -98,9 +88,7 @@
               v-if="errors[0]"
               class="ml-2 text-danger"
               style="font-size: 13px"
-            >
-              Note {{ errors[0] }}</span
-            >
+            >Note {{ errors[0] }}</span>
           </validation-provider>
           <div :id="toolbarId" class="d-flex border-bottom-0">
             <!-- Add a bold button -->
@@ -137,7 +125,7 @@ export default {
     this.getColorNotes();
   },
   directives: {
-    Ripple,
+    Ripple
   },
   components: {
     quillEditor,
@@ -147,30 +135,30 @@ export default {
   },
   model: {
     prop: "shallShowEmailComposeModal",
-    event: "update:shall-show-email-compose-modal",
+    event: "update:shall-show-email-compose-modal"
   },
   props: {
     shallShowEmailComposeModal: {
       type: Boolean,
-      required: true,
+      required: true
     },
     note: {
       type: Object,
-      required: false,
-    },
+      required: false
+    }
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   data() {
     return {
       editorOption: {
         modules: {
-          toolbar: "#quill-toolbar-1",
+          toolbar: "#quill-toolbar-1"
         },
-        placeholder: "Note",
+        placeholder: "Note"
       },
       toolbarId: "quill-toolbar",
       noteData: {
@@ -178,17 +166,17 @@ export default {
         note: null,
         userId: null,
         noteId: null,
-        colorId: null,
+        colorId: null
       },
       colors: [],
       isLoading: false,
-      isLoadingFull: false,
+      isLoadingFull: false
     };
   },
   methods: {
     ...mapActions({
       setNotes: "sticky-notes/setNotes",
-      getNotes: "sticky-notes/getNotes",
+      getNotes: "sticky-notes/getNotes"
     }),
     discardEmail() {
       this.$emit("update:shall-show-email-compose-modal", false);
@@ -204,7 +192,7 @@ export default {
       }
     },
     saveUserNote() {
-      this.$refs.form.validate().then(async (confirm) => {
+      this.$refs.form.validate().then(async confirm => {
         if (!confirm) {
           return;
         }
@@ -218,7 +206,7 @@ export default {
           "top-right",
           "Congratulations",
           "CheckIcon",
-          `You've successfully ${this.note?'updated':'created'} a note`
+          `You've successfully ${this.note ? "updated" : "created"} a note`
         );
         this.$emit("update:shall-show-email-compose-modal", false);
         this.resetData();
@@ -231,9 +219,9 @@ export default {
         note: null,
         userId: null,
         noteId: null,
-        colorId: null,
+        colorId: null
       };
-    },
+    }
   },
   watch: {
     note(newVal) {
@@ -241,11 +229,11 @@ export default {
       this.noteData.note = JSON.parse(newVal.content);
       this.noteData.noteId = newVal.id;
       this.noteData.colorId = this.colors.find(
-        (color) => color.category == newVal.category
+        color => color.category == newVal.category
       ).id;
       //Mixin create class
-    },
-  },
+    }
+  }
 };
 </script>
 

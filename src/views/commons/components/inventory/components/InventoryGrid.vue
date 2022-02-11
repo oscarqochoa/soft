@@ -1,5 +1,5 @@
 <template>
-  <div class="border-info rounded">
+  <div class="border-info border-table-radius">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -12,7 +12,6 @@
       @reload="$refs['refClientsList'].refresh()"
     >
       <b-table
-        v-scrollbar
         small
         slot="table"
         no-provider-filtering

@@ -18,11 +18,11 @@
               <b-col md="12">
                 <b-row>
                   <b-col
-                    class="font-bureau-style text-gray-light m-auto text-center"
+                    class="font-bureau-style text-gray-light m-auto "
                     cols="4"
                     md="4"
                   >
-                    <p>
+                    <p class="pl-1">
                       <strong>Lead</strong>
                     </p>
                   </b-col>

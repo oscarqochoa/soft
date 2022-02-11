@@ -5,7 +5,7 @@
     >
       <b-row>
         <b-col
-          md="11"
+          md="12"
           class="d-inline-flex justify-content-start "
         >
           <b-col

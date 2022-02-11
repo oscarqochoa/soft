@@ -1,5 +1,5 @@
 <template>
-  <div class="border-info rounded">
+  <div class="border-top-info border-3 box-shadow-3 rounded-bottom">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -11,7 +11,6 @@
       @reload="$refs['refClientsList'].refresh()"
     >
       <b-table
-        v-scrollbar
         slot="table"
         no-provider-filtering
         :api-url="clientRoute"
@@ -39,15 +38,17 @@
             </a>-->
             <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
             <router-link
-              class="select-lead-name text-important"
+              class
               :to="{
                 name: 'lead-show',
                 params: { id: data.item.lead_id },
               }"
               target="_blank"
             >{{ data.item.lead_name }}</router-link>
+            <div v-if="data.item.mobile">{{data.item.mobile}}</div>
           </div>
         </template>
+
         <template #cell(seller_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span>{{ data.item.seller_name }}</span>
@@ -484,7 +485,7 @@ export default {
     },
     myProvider(ctx) {
       const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        perPage:ctx.perPage,
+        perPage: ctx.perPage,
         name_text: this.filterPrincipal.model,
         date_from: this.filter[1].model,
         date_to: this.filter[2].model,

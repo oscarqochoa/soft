@@ -50,7 +50,6 @@
             :busy="isBusy"
             :current-page="currentPage"
             :per-page="perPage"
-            v-scrollbar
           >
             <template #table-busy>
               <div class="text-center text-primary my-2">

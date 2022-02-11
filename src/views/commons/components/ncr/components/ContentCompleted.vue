@@ -1,22 +1,19 @@
 <template>
-  <div>
-    <b-card body-class="px-0">
-      <b-tabs lazy
-        active-tab-class="p-0 "
-        pills
-        card
-        :nav-wrapper-class="[bgLightDark, 'pb-0']"
-        nav-class="mb-0"
-        active-nav-item-class="bg-info box-shadow-info border-info"
-      >
-        <b-tab title="Successfull">
-          <content-sub-completed :status="1"></content-sub-completed>
-        </b-tab>
-        <b-tab title="Invalid">
-          <content-sub-completed :status="2"></content-sub-completed>
-        </b-tab>
-      </b-tabs>
-    </b-card>
+  <div class="p-1">
+    <b-tabs
+      lazy
+      active-tab-class="p-0 "
+      pills
+      nav-class="mb-0"
+      active-nav-item-class="bg-info box-shadow-info info"
+    >
+      <b-tab title="Successfull" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
+        <content-sub-completed :status="1"></content-sub-completed>
+      </b-tab>
+      <b-tab title="Invalid" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
+        <content-sub-completed :status="2"></content-sub-completed>
+      </b-tab>
+    </b-tabs>
   </div>
 </template>
 

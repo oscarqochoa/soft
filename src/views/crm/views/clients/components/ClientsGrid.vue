@@ -1,7 +1,6 @@
 <template>
   <div>
     <filter-slot
-      v-scrollbar
       :filter="filters"
       :filter-principal="filterPrincipal"
       :total-rows="totalRows"
@@ -24,7 +23,7 @@
           v-scrollbar
           show-empty
           no-provider-filtering
-          sticky-header="50vh"
+          sticky-header="65vh"
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"

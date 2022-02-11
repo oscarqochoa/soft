@@ -1,4 +1,4 @@
-import { NotificationMixin } from '@/mixins/notification'
+import NotificationMixin from '@/mixins/notification'
 import store from '@/store/index'
 
 // eslint-disable-next-line import/prefer-default-export
