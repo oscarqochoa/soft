@@ -21,7 +21,6 @@
                   <span class="input-group-text" id="basic-addon1">Client</span>
                 </div>
                 <b-form-input disabled v-model="dataVoid.client_name" />
-                <!-- <span>{{dataVoid.client_name}}</span> -->
               </div>
             </div>
             <div class="col-lg-8 col-12 col-xl-8 col-md-8 pb-1">
@@ -117,7 +116,6 @@ export default {
     return {
       mutableIfModal: this.modalRefund,
       comment: "",
-      errorContent: false,
     };
   },
   computed: {

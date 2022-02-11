@@ -44,7 +44,6 @@
         <template #cell(url_image)="data">
           <div class="image-upload">
             <input type="file" id="file_input" hidden />
-            <!-- INPUT_FILE FIN -->
             <div class="form-group">
               <figure>
                 <img v-if="data.item.url_image" width="80" height="80" :src="data.item.url_image" />
@@ -350,8 +349,9 @@ export default {
   },
   methods: {
     ...mapActions("inventory-store", ["LIST_CATEGORIES"]),
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+    async myProvider(ctx) {
+      try{
+        const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perpage: ctx.perPage,
         from: this.filter[1].model,
         to: this.filter[2].model,
@@ -361,10 +361,7 @@ export default {
         idCategory: this.filter[0].model,
         moduleId: this.module
       });
-      // Must return a promise that resolves to an array of items
-      return promise.then(data => {
-        // Pluck the array of items off our axios response
-        const items = data.data.data;
+      const items = data.data.data;
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
         this.perPage = data.data.per_page;
@@ -374,7 +371,18 @@ export default {
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
         return items || [];
-      });
+
+
+      }catch(error){
+        console.error(error)
+        this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
+      }
     },
     async getSelectCategory() {
       if (this.listCategoryAll != null) {
@@ -522,7 +530,6 @@ export default {
     },
     closeModalRepairEquipment() {
       this.modalRepairEquipment = false;
-      // this.resetSearch();
     },
     updateRepairEquipment() {
       this.$refs.refClientsList.refresh();

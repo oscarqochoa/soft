@@ -85,96 +85,12 @@
           <div class="d-flex flex-column justify-content-center align-items-center">
             <span
               class="ncr-leads-status-successful w-100"
-              v-if="data.item.status_id == 1"
-              style="background-color: #38c172;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;"
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 2"
-              style="background-color: #3490dc;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;"
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 3"
-              style="background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;"
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 4"
-              style="background-color: #ffd46a;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;"
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 5"
-              style="background-color: #ffd46a;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;"
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 6"
-              style="background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;"
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 7"
-              style="background-color: #eabc73;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;"
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 8"
-              style="background-color: #eabc73;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;"
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 9"
               style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-
-            <span
-              class="ncr-leads-status-successful"
-              v-else-if="data.item.status_id == 10"
-              style="background-color: #e13232;
                 color: white;
                 border-radius: 30px;
                 padding-left: 15px;
                 padding-right: 15px;"
+                :style="`background-color:${statusColor(data.item.status_id)}`"
             >{{ data.item.status }}</span>
           </div>
         </template>
@@ -225,7 +141,6 @@ import ncrmixin from "../mixin";
 export default {
   mixins: [ncrmixin],
   components: { vSelect, ModalTrackingStatus, ModalQuestionnaire, FilterSlot },
-  props: {},
   data() {
     return {
       totalRows: 0,
@@ -349,6 +264,7 @@ export default {
     })
   },
   methods: {
+    
     updateGrid() {
       this.$refs.refClientsList.refresh();
     },
@@ -395,7 +311,6 @@ export default {
       this.modalQuestionnaire = false;
     }
   },
-  created() {}
 };
 </script>
 

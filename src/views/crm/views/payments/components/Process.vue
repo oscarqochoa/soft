@@ -300,7 +300,6 @@ export default {
       charge: true,
       spinner: false,
       statusSelected: false,
-
       Amerror: false,
       moneyConfig: {
         decimal: ",",

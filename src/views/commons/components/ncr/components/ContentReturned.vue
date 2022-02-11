@@ -48,120 +48,19 @@
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span>{{ data.item.seller_name }}</span>
             <div>{{ data.item.date | myGlobalDay }}</div>
-            <!-- <span>{{ data.item.date | myGlobalDay }}</span> -->
           </div>
         </template>
         <template #cell(status)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span
               class="ncr-leads-status-successful w-100"
-              v-if="data.item.status_id == 1"
               style="
-                background-color: #38c172;
                 color: white;
                 border-radius: 30px;
                 padding-left: 15px;
                 padding-right: 15px;
               "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 2"
-              style="
-                background-color: #3490dc;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 3"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 4"
-              style="
-                background-color: #ffd46a;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 5"
-              style="
-                background-color: #ffd46a;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 6"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 7"
-              style="
-                background-color: #eabc73;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 8"
-              style="
-                background-color: #eabc73;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 9"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 10"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
+              :style="`background-color:${statusColor(data.item.status_id)}`"
             >{{ data.item.status }}</span>
           </div>
         </template>
@@ -217,19 +116,6 @@
         </template>
         <template #cell(cr)="data">
           <div>
-            <!-- <a
-              v-if="data.item.cr == 1"
-              :href="
-                'http://127.0.0.1:8000/crm/leads/report/' +
-                data.item.lead_id +
-                '/' +
-                data.item.score_id
-              "
-              target="_blanck"
-              style="cursor: pointer"
-            >
-              <img :src="assetsImg + '/images/icons/report2.ico'" />
-            </a>-->
             <router-link
               v-if="data.item.cr == 1"
               :to="{
@@ -610,21 +496,6 @@ export default {
                 "Something went wrong!"
               );
             }
-
-            // amgApi
-            //   .post("/lead/ncr/change-status", {
-            //     user_id: this.currentUser.user_id,
-            //     score_id: score_id,
-            //     status_id: status_id,
-            //     text: result.value
-            //   })
-            //   .then(response => {
-
-            //   })
-            //   .catch(error => {
-            //     this.$store.commit("app/SET_LOADING", false);
-
-            //   });
           }
         });
     }

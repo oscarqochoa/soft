@@ -32,16 +32,29 @@
           </template>
           <template #cell(status)="data">
             <p
-              :style="data.item.status == 'DISAPPROVED' ? 'color: #FF0000' : ( data.item.status == 'SEND' ? 'color: rgb(255 177 0);' : ( data.item.status == 'APPROVED' ? 'color: blue;' : 'color: #00CC00' ) )"
-            >{{ data.item.status }}</p>
+              :style="
+                data.item.status == 'DISAPPROVED'
+                  ? 'color: #FF0000'
+                  : data.item.status == 'SEND'
+                  ? 'color: rgb(255 177 0);'
+                  : data.item.status == 'APPROVED'
+                  ? 'color: blue;'
+                  : 'color: #00CC00'
+              "
+            >
+              {{ data.item.status }}
+            </p>
           </template>
           <template #cell(created_at)="data">
-            {{data.item.created_by}}
+            {{ data.item.created_by }}
             <br />
-            {{data.item.created_at | myGlobalDay}}
+            {{ data.item.created_at | myGlobalDay }}
           </template>
           <template #cell(commentary)="data">
-            <div style="white-space: normal;" v-html="data.item.commentary"></div>
+            <div
+              style="white-space: normal"
+              v-html="data.item.commentary"
+            ></div>
           </template>
         </b-table>
       </div>
@@ -53,14 +66,14 @@
 export default {
   props: {
     modalTrackingRequest: {
-      type: Boolean
+      type: Boolean,
     },
     requestId: {
-      type: [Number, String]
+      type: [Number, String],
     },
     global: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   components: {},
   data() {
@@ -72,36 +85,38 @@ export default {
           key: "created_at",
           label: "Created BY",
           class: "text-left",
-          sortable: false
+          sortable: false,
         },
         {
           key: "status",
           label: "Status",
           class: "text-left",
-          sortable: false
+          sortable: false,
         },
         {
           key: "commentary",
           label: "Commentary",
           class: "text-left",
-          sortable: false
-        }
-      ]
+          sortable: false,
+        },
+      ],
     };
   },
   methods: {
     closeModal() {
       this.$emit("closeTrackingRequest", false);
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}`, {
-        requestId: this.requestId
-      });
-      return promise.then(data => {
+    async myProvider(ctx) {
+      try {
+        const data = await amgApi.post(`${ctx.apiUrl}`, {
+          requestId: this.requestId,
+        });
         const items = data.data;
         return items || [];
-      });
-    }
-  }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
 };
 </script>

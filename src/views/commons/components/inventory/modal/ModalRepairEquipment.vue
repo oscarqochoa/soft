@@ -76,7 +76,6 @@ export default {
       type: [Number, String],
     },
   },
-  components: {},
   computed: {
     statusEquipment() {
       return [1, 2].includes(this.statusNewEquipment)

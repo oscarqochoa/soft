@@ -261,10 +261,19 @@
 <script>
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import PaymentService from "../service/payments.service";
-import { amgApi } from "@/service/axios";
 export default {
   components: { VueGoogleAutocomplete },
-  props: ["idlead", "session", "ifModalCard"],
+  props:{
+    idlead:{
+      type:[String,Number]
+    },
+    session:{
+      type:[String,Number]
+    },
+    ifModalCard:{
+      type:Boolean
+    }
+  },
   data() {
     return {
       mutableIfModalCard: this.ifModalCard,
@@ -314,8 +323,6 @@ export default {
       this.direccion = address_create_card_modal;
       this.address_create_card_modal =
         this.direccion.street_number + " " + this.direccion.route;
-      var x = document.getElementById("address_create_card_modal");
-      x.value = this.address_create_card_modal;
       this.form.street = this.address_create_card_modal;
       this.form.address = this.address_create_card_modal;
       this.form.state = this.direccion.administrative_area_level_1;
@@ -335,28 +342,21 @@ export default {
           this.cardnumber3 +
           "-" +
           this.cardnumber4;
-        var x = document.getElementById("address_create_card_modal");
-        if (x)
-          if (x.value != null && x.value != "") {
-            this.form.street = x.value;
-          } else {
-            this.form.street = "";
-          }
         this.showConfirmSwal().then(result => {
           if (result.isConfirmed) {
-            this.$store.commit("app/SET_LOADING", true);
+            this.addPreloader();
             amgApi
               .post("/commons/create-card", this.form)
               .then(response => {
                 this.cards = response.data;
                 this.$emit("new", this.cards);
                 this.$emit("click", false);
-                this.$store.commit("app/SET_LOADING", false);
+                this.removePreloader();
                 this.showSuccessSwal()
               })
               .catch(error => {
                 console.error(error);
-                this.$store.commit("app/SET_LOADING", false);
+                this.removePreloader();
                 this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
               });
           }

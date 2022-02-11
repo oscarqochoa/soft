@@ -150,7 +150,7 @@ export default {
       selectedOperator: 0,
       cant: 1,
       commentary: "",
-      programs: [], // Must be an array reference!
+      programs: [],
       optionsPrograms: [
         { text: "SKYPE", value: "SKYPE" },
         { text: "OUTLOOK", value: "OUTLOOK" },

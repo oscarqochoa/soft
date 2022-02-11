@@ -3,37 +3,35 @@
     <span class="title-card mb-3">Cards</span>
     <div class="col-lg-12 px-0">
       <div>
-        <div
-          
-        >
-          <div style="margin-bottom: 0" >
-            <b-table 
-         
-          slot="table"
-          no-provider-filtering
-          ref="refClientsList"
-          primary-key="id"
-          table-class="text-nowrap"
-          responsive="sm"
-          show-empty
-          sticky-header="30vh"
-              
-              :items="cards" :fields="fields">
+        <div>
+          <div style="margin-bottom: 0">
+            <b-table
+              slot="table"
+              no-provider-filtering
+              ref="refClientsList"
+              primary-key="id"
+              table-class="text-nowrap"
+              responsive="sm"
+              show-empty
+              sticky-header="30vh"
+              :items="cards"
+              :fields="fields"
+            >
               <template #cell(Select)="data">
                 <ValidationProvider
-                    name="comment"
-                    rules="required"
-                    v-slot="{ errors }"
-                  >
-                  <b-form-radio
-                  class="vs-checkbox-con"
-                  :class="{'border-danger': errors[0]}"
-                  :value="data.item.id"
-                  @change="$emit('CardId',data.item.id)"
-                  v-model="selected"
-                  plain
+                  name="comment"
+                  rules="required"
+                  v-slot="{ errors }"
                 >
-                </b-form-radio>
+                  <b-form-radio
+                    class="vs-checkbox-con"
+                    :class="{ 'border-danger': errors[0] }"
+                    :value="data.item.id"
+                    @change="$emit('CardId', data.item.id)"
+                    v-model="selected"
+                    plain
+                  >
+                  </b-form-radio>
                 </ValidationProvider>
               </template>
               <template #cell(cardnumber)="data">
@@ -90,11 +88,9 @@
       :idlead="cardsLead.lead_id"
       @new="addCard"
     ></modal-card-create>
-    
   </b-card>
 </template>
 <script>
-import { amgApi } from "@/service/axios.js";
 import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
 import PaymentService from "../service/payments.service";
 export default {
@@ -109,21 +105,14 @@ export default {
   },
   data() {
     return {
-      selected:null,
+      selected: null,
       //More information
-      statesCard: [],
-      states_leads: [],
-      dragCount: 0,
-
       cards: [],
       modalCreateCard: false,
-      modalCard: false,
-      deletecardmodal: false,
-      card_id: "",
       fields: [
         {
-          key:"Select",
-          label:"",
+          key: "Select",
+          label: "",
         },
         {
           key: "cardholdername",
@@ -158,13 +147,8 @@ export default {
   },
   mounted() {},
 
-  computed: {
-    isSupervisor() {
-      return this.cardsLead.rol == 1 || this.cardsLead.rol == 2;
-    },
-  },
+  computed: {},
   methods: {
-
     //Cards
     openModalCreateCard() {
       this.modalCreateCard = true;
@@ -176,26 +160,22 @@ export default {
     addCard(cards) {
       this.cards = cards;
     },
-    closeModalCard() {
-      this.modalCard = false;
-    },
 
-
-    openmodaldeletecard(id) {
-      this.card_id = id;
-      this.deletecardmodal = true;
-    },
-    closedModalDeleteCar() {
-      this.deletecardmodal = false;
-    },
     async searchcards() {
-      try{
-        const data = await PaymentService.searchcards({id: this.cardsLead.lead_id,})
+      try {
+        const data = await PaymentService.searchcards({
+          id: this.cardsLead.lead_id,
+        });
         this.cards = data;
-
-      }catch(error){
-        console.log(error)
-        this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+      } catch (error) {
+        console.log(error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong!"
+        );
       }
     },
   },
