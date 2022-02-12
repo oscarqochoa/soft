@@ -385,6 +385,7 @@ export default {
         return items || [];
       } catch (error) {
         console.error(error);
+        return []
       }
     },
     getAllUsers: async function () {
