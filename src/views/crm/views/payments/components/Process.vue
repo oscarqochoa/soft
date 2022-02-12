@@ -2,11 +2,14 @@
   <div>
     <b-card no-body class="mb-1">
       <div class="cont-search-paginate mx-2 mb-2 mt-2">
+        <!-- Total Form -->
         <ValidationObserver ref="form">
-          <div class="row">
+          <b-row>
+            <!-- Column Information -->
             <div class="col-lg-5 col-md-5 col-sm-12 pr-1 box">
-              <div class="row">
+              <b-row>
                 <div class="col-lg-8 col-md-8 col-sm-8">
+                  <!-- Autocompleted -->
                   <div class="form-group autocomplete">
                     <b-form-input
                       id="camposearch"
@@ -63,6 +66,7 @@
                     </b-list-group>
                   </div>
                 </div>
+                <!-- Search Continue Button -->
                 <div class="col-lg-4 col-md-4 col-sm-4">
                   <div class="form-group">
                     <b-button
@@ -79,18 +83,22 @@
                     </b-button>
                   </div>
                 </div>
-              </div>
-              <div class="row" v-if="dataLead">
+              </b-row>
+              <!-- Inputs Details -->
+              <b-row  v-if="dataLead">
+                <!-- Input Lead -->
                 <div class="col-lg-6 col-md-6 col-sm-6">
                   <b-form-group label="Lead" label-for="v-Lead">
                     <b-form-input v-model="lead" placeholder="Lead" />
                   </b-form-group>
                 </div>
+                <!-- Input Mobile -->
                 <div class="col-lg-6 col-md-6 col-sm-6">
                   <b-form-group label="Mobile" label-for="v-Mobile">
                     <b-form-input v-model="mobile" placeholder="mobile" />
                   </b-form-group>
                 </div>
+                <!-- Input Amount -->
                 <div class="col-lg-6 col-md-6 col-sm-6">
                   <ValidationProvider
                     name="price"
@@ -109,6 +117,7 @@
                     </b-form-group>
                   </ValidationProvider>
                 </div>
+                <!-- Input Type of Payment -->
                 <div class="col-lg-6 col-md-6 col-sm-6">
                   <b-form-group
                     label="Type of Payment"
@@ -135,7 +144,7 @@
                     />
                   </b-form-group>
                 </div>
-
+                <!-- List of Autorize Errors  -->
                 <div class="col-lg-12" v-if="errosList">
                   <div
                     class="form-group"
@@ -153,6 +162,7 @@
                     </ul>
                   </div>
                 </div>
+                <!-- List of Message Errors -->
                 <div class="col-lg-12" v-if="messageList">
                   <div
                     class="form-group"
@@ -173,10 +183,11 @@
                     </ul>
                   </div>
                 </div>
-              </div>
+              </b-row>
             </div>
+            <!-- Column Method Payment -->
             <div class="col-lg-7 col-md-7 col-sm-12 box">
-              <div class="row ml-2">
+              <b-row class="ml-2">
                 <b-form-group
                   label="Method of Payment"
                   class="col-lg-9 col-md-9 col-sm-9"
@@ -207,14 +218,16 @@
                     </div>
                   </ValidationProvider>
                 </b-form-group>
-              </div>
+              </b-row>
             </div>
+            <!-- List of Cards -->
             <div class="col-lg-11 col-md-12 col-sm-12 box">
               <div
                 class="col-lg-12 w-100"
                 style="display: inline-block"
                 v-if="methodpayment == 1"
               >
+              <!-- Modal Credit Cards -->
                 <modal-credit-card
                   :key="modalCreditController"
                   :cardsLead="cardsLead"
@@ -243,7 +256,7 @@
                 >
               </div>
             </div>
-          </div>
+          </b-row>
         </ValidationObserver>
       </div>
     </b-card>
@@ -263,7 +276,7 @@ export default {
     ModalCreditCard,
   },
 
-  data() {
+  data:function() {
     return {
       price: 0,
       modalCreditController: 0,
@@ -306,22 +319,22 @@ export default {
   },
 
   computed: {
-    statusSpinner() {
+    statusSpinner:function() {
       return this.spinner;
     },
-    statusSelectedSearch() {
+    statusSelectedSearch:function() {
       return this.statusSelected;
     },
-    changeDisable() {
+    changeDisable:function() {
       return this.userfilter == "" ? true : false;
     },
-    filterSearch() {
+    filterSearch:function() {
       return this.userfilter == "" ? false : true;
     },
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
-    statusResponseCode() {
+    statusResponseCode:function() {
       switch (this.responseCode) {
         case "1":
           return "Approved";
@@ -341,14 +354,14 @@ export default {
     },
   },
   methods: {
-    getCardsLead() {
+    getCardsLead:function() {
       this.cardsLead = {
         lead_id: this.user_id, //user_id
         user_id: this.currentUser.user_id,
         rol: this.currentUser.role_id,
       };
     },
-    chargeStatus() {
+    chargeStatus:function() {
       if (this.charge == false) {
         this.showConfirmSwal("DELETE", "Are you sure?").then((result) => {
           if (result.value) {
@@ -360,7 +373,7 @@ export default {
       }
     },
    
-    async searchlead() {
+    searchlead: async function() {
       if (this.userfilter != "") {
         this.spinner = true;
         this.statusSelected = true;
@@ -385,16 +398,16 @@ export default {
         this.users = null;
       }
     },
-    searchuser(id, first, last, mobile) {
+    searchuser:function(id, first, last, mobile) {
       this.user_id = id;
       this.userfilter = first + " " + last + " | " + mobile;
       this.users = null;
       this.statusSelected = false;
     },
-    getCardId(Card) {
+    getCardId:function(Card) {
       this.card_id = Card;
     },
-    async getcard() {
+    getcard:async function() {
       this.addPreloader();
       try {
         const data = await PaymentService.getCard({ id: this.user_id });
@@ -416,10 +429,10 @@ export default {
         this.showErrorSwal(error);
       }
     },
-    submitAutorize() {
+    submitAutorize:function() {
       this.subtAutorize();
     },
-    subtAutorize() {
+    subtAutorize:function() {
       this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
@@ -431,7 +444,7 @@ export default {
           if (confirm.isConfirmed) {
             try {
               this.addPreloader();
-              const data = await PaymentService.subtAutorize({
+              let params = {
                 idcard: this.card_id,
                 amount: this.amount,
                 merchant: this.merchant,
@@ -442,7 +455,8 @@ export default {
                 observationOther: this.observationOther,
                 charge: this.charge == false ? 1 : 0,
                 sendsms: this.sendsms == true ? 1 : 0,
-              });
+              }
+              const data = await PaymentService.subtAutorize(params);
               if (data.status == 200 && data.data.status == 200) {
                 if (this.methodpayment == 1) {
                   if (data.data.transaction.messages) {

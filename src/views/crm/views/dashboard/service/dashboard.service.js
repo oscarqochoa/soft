@@ -10,7 +10,5 @@ class DashboardService {
         const data = await amgApi.post('/crm/get-data-dashboard',params)
         return data
     }
-   
-    
 }
 export default new DashboardService()

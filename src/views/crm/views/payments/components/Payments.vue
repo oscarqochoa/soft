@@ -35,8 +35,12 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <!-- Column NAME -->
         <template #cell(lead_name)="data">
-          <div class="d-flex flex-column justify-content-start align-items-start">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+          <!-- Route To Lead Show -->
             <router-link
               :class="textLink"
               :to="{
@@ -44,19 +48,24 @@
                 params: { id: data.item.lead_id },
               }"
               target="_blank"
-            >{{ data.item.lead_name }}</router-link>
+              >{{ data.item.lead_name }}</router-link
+            >
           </div>
         </template>
+        <!-- Column AMOUNT -->
         <template #cell(amount)="data">
           <div class="inline" style="position: relative">
             <span
               v-if="data.item.type_t != 39 && data.item.type_t != 40"
               class="mr-1"
-            >$ {{ data.item.amount }}</span>
+              >$ {{ data.item.amount }}</span
+            >
             <span
               v-if="data.item.type_t == 39 || data.item.type_t == 40"
               class="mr-1"
-            >$ ({{ data.item.amount }})</span>
+              >$ ({{ data.item.amount }})</span
+            >
+            <!-- Getting Void Refund Info -->
             <feather-icon
               icon="EyeIcon"
               style="cursor: pointer; position: absolute; left: 70px"
@@ -64,6 +73,7 @@
               class="text-primary"
               @click="getVoidRefund(data.item.transaction_id)"
             ></feather-icon>
+            <!-- Img Void -->
             <img
               :src="assetsImg + '/images/icons/void.ico'"
               style="
@@ -92,6 +102,7 @@
                 data.item.result == 'Approved'
               "
             />
+            <!-- Img Refund -->
             <img
               :src="assetsImg + '/images/icons/refund.ico'"
               style="
@@ -123,9 +134,16 @@
             />
           </div>
         </template>
+        <!-- Column CHARGE -->
         <template #cell(charge)="data">
-          <div class="d-flex flex-column justify-content-center align-items-center">
-            <b-icon v-if="data.item.charge == 0" icon="check-circle-fill" variant="success"></b-icon>
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
+            <b-icon
+              v-if="data.item.charge == 0"
+              icon="check-circle-fill"
+              variant="success"
+            ></b-icon>
             <feather-icon
               v-if="data.item.charge == 1 || data.item.charge == null"
               icon="XCircleIcon"
@@ -133,8 +151,11 @@
             />
           </div>
         </template>
+        <!-- Column RESULT -->
         <template #cell(result)="data">
-          <div class="d-flex flex-column justify-content-center align-items-center">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
             <b-icon
               v-if="data.item.result == 'Approved'"
               icon="check-circle-fill"
@@ -155,8 +176,11 @@
             />
           </div>
         </template>
+        <!-- Column CREATED BY -->
         <template #cell(user_name)="data">
-          <div class="d-flex flex-column justify-content-start align-items-start">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
             <span>
               {{ data.item.user_name }} -
               {{ data.item.created_at | myGlobalDay }}
@@ -164,8 +188,15 @@
           </div>
         </template>
       </b-table>
+      <!-- Total Amount Footer -->
       <template #footer>
-        <b-col class="d-flex align-items-center justify-content-center justify-content-sm-start">
+        <b-col
+          class="
+            d-flex
+            align-items-center
+            justify-content-center justify-content-sm-start
+          "
+        >
           <div
             style="
               background-color: #3764ff !important;
@@ -183,7 +214,7 @@
         </b-col>
       </template>
     </filter-slot>
-
+    <!-- Modal Refund  -->
     <modal-refund
       v-if="modalRefund"
       :modalRefund="modalRefund"
@@ -193,6 +224,7 @@
       @close="closeModalRefund"
       @updateGrid="updateGrid"
     ></modal-refund>
+    <!-- Modal Void Refund Info -->
     <modal-void-refund-info
       v-if="modalVoidRefund"
       :modalVoidRefund="modalVoidRefund"
@@ -205,27 +237,32 @@
 <script>
 import { mapGetters } from "vuex";
 import vSelect from "vue-select";
+// Filters
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+// Import Service
 import PaymentService from "../service/payments.service";
+// Import Modals
 import ModalRefund from "@/views/crm/views/payments/components/ModalRefund.vue";
 import ModalVoidRefundInfo from "@/views/crm/views/payments/components/ModalVoidRefundInfo.vue";
-import filters from '../data/filters.payments.data'
-import fields from '../data/fields.payments.data'
+// Import Data
+import filters from "../data/filters.payments.data";
+import fields from "../data/fields.payments.data";
+
 export default {
   components: {
     vSelect,
     FilterSlot,
     ModalRefund,
-    ModalVoidRefundInfo
+    ModalVoidRefundInfo,
   },
-  data() {
+  data:function() {
     return {
       modalRefund: false,
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       totalAmount: 0,
       sortBy: "created_at",
@@ -242,43 +279,43 @@ export default {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: ""
+        model: "",
       },
       //data filters
       filter: filters,
       dataVoid: [],
       modalVoidRefund: false,
-      idtransaction: null
+      idtransaction: null,
     };
   },
-  mounted() {
+  mounted: function () {
     this.getAllUsers();
     this.addPaddingTd();
   },
   computed: {
-    clientRoute() {
+    clientRoute: function () {
       return "/crm/payment/get-all-lead-payments";
     },
-    fields() {
-      return this.arrayColumns.filter(column => column.visible);
+    fields: function () {
+      return this.arrayColumns.filter((column) => column.visible);
     },
     ...mapGetters({
-      currentUser: "auth/currentUser"
+      currentUser: "auth/currentUser",
     }),
     //filter status by Type of User
-    filterStatus() {
-      if(this.currentUser.user_id == 1 || this.currentUser.user_id == 2){
-        return this.filter
-      }else{
-        let newFilter = [...this.filter]
-        newFilter.splice(2,1);
-        return newFilter
+    filterStatus: function () {
+      if (this.currentUser.user_id == 1 || this.currentUser.user_id == 2) {
+        return this.filter;
+      } else {
+        let newFilter = [...this.filter];
+        newFilter.splice(2, 1);
+        return newFilter;
       }
-    }
+    },
   },
   methods: {
     //open modal refund
-    voidAuthorize(
+    voidAuthorize: function (
       idtransaction,
       idmerchant,
       amount,
@@ -292,43 +329,46 @@ export default {
         amount,
         client_name,
         settlement_date,
-        type
+        type,
       };
       this.modalRefund = true;
     },
-    closeModalRefund() {
+    closeModalRefund: function () {
       this.modalRefund = false;
     },
-    getVoidRefund(idtransaction) {
+    getVoidRefund: function (idtransaction) {
       this.idtransaction = idtransaction;
       this.modalVoidRefund = true;
     },
-    closeModalVoidRefundInfo() {
+    closeModalVoidRefundInfo: function () {
       this.modalVoidRefund = false;
     },
-    async myProvider(ctx) {
-      try{
-        const data = await  amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        perPage: ctx.perPage,
-        text: this.filterPrincipal.model,
-        from: this.filter[3].model,
-        to: this.filter[4].model,
-        result: this.filter[1].model,
-        type: this.filter[0].model,
-        user:
-          this.currentUser.user_id == 1 || this.currentUser.user_id == 2
-            ? this.filter[2].model
-            : this.currentUser.user_id
-      });
+    myProvider: async function (ctx) {
+      try {
+        let params = {
+            perPage: ctx.perPage,
+            text: this.filterPrincipal.model,
+            from: this.filter[3].model,
+            to: this.filter[4].model,
+            result: this.filter[1].model,
+            type: this.filter[0].model,
+            user:
+              this.currentUser.user_id == 1 || this.currentUser.user_id == 2
+                ? this.filter[2].model
+                : this.currentUser.user_id,
+          }
+        const data = await amgApi.post(
+          `${ctx.apiUrl}?page=${ctx.currentPage}`, params
+        );
         const items = data.data.data;
         let value = 0;
         if (items) {
-          items.forEach(element => {
+          items.forEach((element) => {
             value += parseFloat(element.amount);
           });
           const formatter = new Intl.NumberFormat("en-US", {
             style: "currency",
-            currency: "USD"
+            currency: "USD",
           });
 
           this.totalAmount = formatter.format(value);
@@ -343,20 +383,19 @@ export default {
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
         return items || [];
-
-      }catch(error){
-        console.error(error)
+      } catch (error) {
+        console.error(error);
       }
     },
-    async getAllUsers() {
+    getAllUsers: async function () {
       try {
         const data = await PaymentService.getAllUsers({
           roles: "[1,2,5]",
-          type: "0"
+          type: "0",
         });
         let firstOption = {
           value: "All",
-          id: 0
+          id: 0,
         };
         let newData = data;
         newData.unshift(firstOption);
@@ -372,10 +411,10 @@ export default {
         );
       }
     },
-    updateGrid() {
+    updateGrid: function () {
       this.$refs.refClientsList.refresh();
-    }
-  }
+    },
+  },
 };
 </script>
 

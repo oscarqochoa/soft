@@ -12,8 +12,10 @@
       @hidden="closeModal"
       :no-close-on-backdrop="true"
     >
+      <!-- Form -->
       <ValidationObserver ref="form">
         <b-row class="font-bureau-style">
+          <!-- Input Card Holder Name -->
           <b-col cols="12" md="6">
             <div class="form-group">
               <label for="card_holder">Card Holder Name</label>
@@ -30,10 +32,12 @@
               </ValidationProvider>
             </div>
           </b-col>
+          <!-- Card Number -->
           <b-col cols="12" md="6">
             <div class="form-group">
               <label for="card_number">Card Number</label>
               <b-row>
+                <!-- Input 1 -->
                 <b-col cols="3">
                   <ValidationProvider rules="required|length:4" v-slot="{errors}">
                     <b-form-input
@@ -46,6 +50,7 @@
                     />
                   </ValidationProvider>
                 </b-col>
+                <!-- Input 2 -->
                 <b-col cols="3">
                   <ValidationProvider rules="required|length:4" v-slot="{errors}">
                     <b-form-input
@@ -58,6 +63,7 @@
                     />
                   </ValidationProvider>
                 </b-col>
+                <!-- Input 3 -->
                 <b-col cols="3">
                   <ValidationProvider rules="required|length:4" v-slot="{errors}">
                     <b-form-input
@@ -70,6 +76,7 @@
                     />
                   </ValidationProvider>
                 </b-col>
+                <!-- Input 4 -->
                 <b-col cols="3">
                   <ValidationProvider rules="required" v-slot="{errors}">
                     <b-form-input
@@ -85,6 +92,7 @@
               </b-row>
             </div>
           </b-col>
+          <!-- Input MM -->
           <b-col cols="4" md="2">
             <div class="form-group">
               <label for="card-expi-month">MM</label>
@@ -101,6 +109,7 @@
               </ValidationProvider>
             </div>
           </b-col>
+          <!-- Input YY -->
           <b-col cols="4" md="2">
             <div class="form-group">
               <label for="card-expi-year">YY</label>
@@ -117,6 +126,7 @@
               </ValidationProvider>
             </div>
           </b-col>
+          <!-- Input CVV -->
           <b-col cols="4" md="2">
             <div class="form-group">
               <label for="card-cvv">CVV</label>
@@ -134,6 +144,7 @@
               </ValidationProvider>
             </div>
           </b-col>
+          <!-- Option Billing Address -->
           <b-col cols="12" md="6">
             <div class="form-group">
               <input type="text" v-model="moreInfo" class="d-none" />
@@ -157,7 +168,9 @@
             </div>
           </b-col>
         </b-row>
+        <!-- MORE INFORMATION -->
         <b-row v-if="moreInfo == 0" class="font-bureau-style">
+          <!-- Input Mailing Adress -->
           <b-col cols="12">
             <div class="form-group">
               <label for="address_create_card_modal">Mailing address</label>
@@ -175,6 +188,7 @@
               </ValidationProvider>
             </div>
           </b-col>
+          <!-- Input City -->
           <b-col cols="6">
             <div class="form-group">
               <label for="city">City</label>
@@ -190,6 +204,7 @@
               </ValidationProvider>
             </div>
           </b-col>
+          <!-- Input State -->
           <b-col cols="6">
             <div class="form-group">
               <label for="state">State</label>
@@ -210,6 +225,7 @@
               </ValidationProvider>
             </div>
           </b-col>
+          <!-- Input Zip Code -->
           <b-col cols="6">
             <div class="form-group">
               <label for="zipcode">Zip Code</label>
@@ -225,6 +241,7 @@
               </ValidationProvider>
             </div>
           </b-col>
+          <!-- Input Country -->
           <b-col cols="6">
             <div class="form-group">
               <label for="country">Country</label>
@@ -242,6 +259,7 @@
             </div>
           </b-col>
         </b-row>
+        <!-- Button Save -->
         <b-row>
           <b-col md="12" style="text-align: center;" class="mt-4">
             <b-button
@@ -274,7 +292,7 @@ export default {
       type:Boolean
     }
   },
-  data() {
+  data:function() {
     return {
       mutableIfModalCard: this.ifModalCard,
       address_create_card_modal: "",
@@ -302,7 +320,7 @@ export default {
       cardnumber4: ""
     };
   },
-  async mounted() {
+  mounted: async function() {
        try{
          const data = await PaymentService.getStates()
          this.states = data;
@@ -312,14 +330,14 @@ export default {
        }
   },
   methods: {
-    activeFocus(index, max) {
+    activeFocus:function(index, max) {
       let inputValue = this.$refs?.[`input-${index}`];
       if (inputValue.value.length === max - 1) {
         const nextElement = this.$refs?.[`input-${index + 1}`];
         if (nextElement) nextElement.focus();
       }
     },
-    getAddressData(address_create_card_modal) {
+    getAddressData:function(address_create_card_modal) {
       this.direccion = address_create_card_modal;
       this.address_create_card_modal =
         this.direccion.street_number + " " + this.direccion.route;
@@ -329,7 +347,7 @@ export default {
       this.form.city = this.direccion.locality;
       this.form.zipcode = this.direccion.postal_code;
     },
-    createCard() {
+    createCard:function() {
       this.$refs.form.validate().then(success => {
         if (!success) {
           return;
@@ -363,7 +381,7 @@ export default {
         });
       });
     },
-    closeModal() {
+    closeModal:function() {
       this.$emit("click", false);
     }
   }

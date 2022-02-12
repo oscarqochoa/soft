@@ -1,73 +1,65 @@
 <template>
   <b-card no-body class="mt-2 h-28">
-    <span class="title-card mb-3">Cards</span>
+    <!-- Card Title -->
+    <b-card-title>Cards</b-card-title>
     <div class="col-lg-12 px-0">
-      <div>
-        <div>
-          <div style="margin-bottom: 0">
-            <b-table
-              slot="table"
-              no-provider-filtering
-              ref="refClientsList"
-              primary-key="id"
-              table-class="text-nowrap"
-              responsive="sm"
-              show-empty
-              sticky-header="30vh"
-              :items="cards"
-              :fields="fields"
+      <div style="margin-bottom: 0">
+        <!-- Table -->
+        <b-table
+          slot="table"
+          no-provider-filtering
+          ref="refClientsList"
+          primary-key="id"
+          table-class="text-nowrap"
+          responsive="sm"
+          show-empty
+          sticky-header="30vh"
+          :items="cards"
+          :fields="fields"
+        >
+          <!-- Column Select -->
+          <template #cell(Select)="data">
+            <ValidationProvider
+              name="comment"
+              rules="required"
+              v-slot="{ errors }"
             >
-              <template #cell(Select)="data">
-                <ValidationProvider
-                  name="comment"
-                  rules="required"
-                  v-slot="{ errors }"
-                >
-                  <b-form-radio
-                    class="vs-checkbox-con"
-                    :class="{ 'border-danger': errors[0] }"
-                    :value="data.item.id"
-                    @change="$emit('CardId', data.item.id)"
-                    v-model="selected"
-                    plain
-                  >
-                  </b-form-radio>
-                </ValidationProvider>
-              </template>
-              <template #cell(cardnumber)="data">
-                <div
-                  class="
-                    d-flex
-                    flex-column
-                    justify-content-start
-                    align-items-start
-                  "
-                >
-                  <span> {{ "XXXX-XXXX-XXXX-" + data.item.cardnumber }} </span>
-                </div>
-              </template>
-              <template #cell(cardsecuritycode)="data">
-                <div
-                  class="
-                    d-flex
-                    flex-column
-                    justify-content-start
-                    align-items-start
-                  "
-                >
-                  <span>
-                    {{
-                      data.item.cardsecuritycode.length == 3
-                        ? "XX" + data.item.cardsecuritycode.substr(2)
-                        : "XXX" + data.item.cardsecuritycode.substr(3)
-                    }}
-                  </span>
-                </div>
-              </template>
-            </b-table>
-          </div>
-        </div>
+              <b-form-radio
+                class="vs-checkbox-con"
+                :class="{ 'border-danger': errors[0] }"
+                :value="data.item.id"
+                @change="$emit('CardId', data.item.id)"
+                v-model="selected"
+                plain
+              >
+              </b-form-radio>
+            </ValidationProvider>
+          </template>
+          <!-- Column CARD NUMBER -->
+          <template #cell(cardnumber)="data">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <span> {{ "XXXX-XXXX-XXXX-" + data.item.cardnumber }} </span>
+            </div>
+          </template>
+          <!-- Column CVC -->
+          <template #cell(cardsecuritycode)="data">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <span>
+                {{
+                  data.item.cardsecuritycode.length == 3
+                    ? "XX" + data.item.cardsecuritycode.substr(2)
+                    : "XXX" + data.item.cardsecuritycode.substr(3)
+                }}
+              </span>
+            </div>
+          </template>
+        </b-table>
       </div>
+      <!-- Buttton ADD -->
       <div class="col-lg-12 text-right pr-0 mt-4">
         <b-button
           type="button"
@@ -79,7 +71,7 @@
         </b-button>
       </div>
     </div>
-
+    <!-- Modal Create Card -->
     <modal-card-create
       v-if="modalCreateCard"
       :ifModalCard="modalCreateCard"
@@ -93,7 +85,7 @@
 <script>
 import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
 import PaymentService from "../service/payments.service";
-import fields from '../data/fields.credit.card'
+import fields from "../data/fields.credit.card";
 export default {
   components: {
     ModalCardCreate,
@@ -104,37 +96,34 @@ export default {
       default: () => ({}),
     },
   },
-  data() {
+  data:function() {
     return {
       selected: null,
       //More information
       cards: [],
       modalCreateCard: false,
       //data field
-      fields: fields
+      fields: fields,
     };
   },
 
-  created() {
+  created:function() {
     this.searchcards();
   },
-  mounted() {},
-
-  computed: {},
   methods: {
     //Cards
-    openModalCreateCard() {
+    openModalCreateCard:function() {
       this.modalCreateCard = true;
     },
-    closeModalCreateCard() {
+    closeModalCreateCard:function() {
       this.modalCreateCard = false;
     },
 
-    addCard(cards) {
+    addCard:function(cards) {
       this.cards = cards;
     },
 
-    async searchcards() {
+    searchcards: async function() {
       try {
         const data = await PaymentService.searchcards({
           id: this.cardsLead.lead_id,
