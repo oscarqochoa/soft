@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-2">
     <b-tabs
       lazy
       active-tab-class="p-0 "

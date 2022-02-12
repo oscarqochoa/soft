@@ -334,5 +334,17 @@ $borderamg: #efb911;
 }
 
 .border-table-radius {
-  border-radius: 0px 6px 6px 6px;
+  border-radius: 0px 0px 6px 6px !important;
+}
+.vertical-layout.vertical-menu-modern.menu-collapsed
+  .main-menu:not(.expanded)
+  .navigation
+  li.active
+  a {
+  background: linear-gradient(
+    118deg,
+    #0090e7,
+    rgba(0, 144, 231, 0.7)
+  ) !important;
+  color: #fff !important;
 }

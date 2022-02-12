@@ -22,29 +22,29 @@
       >Annulled</b-nav-item>
     </b-nav>
 
-    <b-card no-body class="border-primary border-table-radius px-1">
+    <b-card no-body class="border-top-primary border-3 border-table-radius">
       <router-view />
     </b-card>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'SalesMade',
+  name: "SalesMade",
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
+      currentUser: "auth/currentUser"
     }),
     isNewClient() {
-      return this.$route.name === 'sales-made-crm-new-client'
-    },
+      return this.$route.name === "sales-made-crm-new-client";
+    }
   },
   created() {
-    console.log(this.$route.name === 'sales-made-crm-new-client', 'gaaaaaa')
-  },
-}
+    console.log(this.$route.name === "sales-made-crm-new-client", "gaaaaaa");
+  }
+};
 </script>
 
 <style scoped>

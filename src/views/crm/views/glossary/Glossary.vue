@@ -5,7 +5,7 @@
         <b-button variant="success" @click="modalopen(1)">Create Glossary</b-button>
       </template>
     </header-slot>
-    <b-card class="px-1">
+    <b-card no-body>
       <filter-slot
         :filter="filter"
         :filter-principal="filterPrincipal"

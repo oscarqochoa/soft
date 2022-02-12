@@ -1,21 +1,19 @@
 <template>
-  <div>
-    <b-card body-class="p-0 ">
-      <b-tabs
-        lazy
-        v-model="tabIndex"
-        pills
-        nav-class="mb-0 mt-2"
-        active-nav-item-class="bg-info box-shadow-info border-info info"
-      >
-        <b-tab title="Done" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
-          <sales-made-new-client-component :done="1" />
-        </b-tab>
-        <b-tab title="Pending" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
-          <sales-made-new-client-component :done="0" />
-        </b-tab>
-      </b-tabs>
-    </b-card>
+  <div class="px-2">
+    <b-tabs
+      lazy
+      v-model="tabIndex"
+      pills
+      nav-class="mb-0 mt-2"
+      active-nav-item-class="bg-info box-shadow-info info"
+    >
+      <b-tab title="Done" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
+        <sales-made-new-client-component :done="1" />
+      </b-tab>
+      <b-tab title="Pending" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
+        <sales-made-new-client-component :done="0" />
+      </b-tab>
+    </b-tabs>
   </div>
 </template>
 
