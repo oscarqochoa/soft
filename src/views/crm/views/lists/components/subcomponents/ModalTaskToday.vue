@@ -12,6 +12,7 @@
       title-tag="h3"
       :no-close-on-backdrop="true"
     >
+      <!-- table -->
       <b-table
         :api-url="clientRoute"
         ref="refClientsList"
@@ -29,6 +30,7 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <!-- Column CLIENT NAME -->
         <template #cell(client_name)="data">
           <div
             class="d-flex flex-column justify-content-start align-items-start"
@@ -45,6 +47,7 @@
             </router-link>
           </div>
         </template>
+        <!-- Column DUE DATE -->
         <template #cell(due_date)="data">
           <div
             class="d-flex flex-column justify-content-center align-items-center"
@@ -52,6 +55,7 @@
             <span>{{ data.item.due_date | myGlobalDay }}</span>
           </div>
         </template>
+        <!-- Column CheckBox DONE -->
         <template #cell(done)="data">
           <div
             class="d-flex flex-column justify-content-center align-items-center"
@@ -77,6 +81,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+// Import Date
 import fields from '../../data/fields.task.data'
 export default {
   props: {
@@ -84,14 +89,14 @@ export default {
       type: Boolean,
     },
   },
-  data() {
+  data:function() {
     return {
       modaltask: this.modalTaskToday,
       arrayColumns: fields,
     };
   },
   computed:{
-    clientRoute() {
+    clientRoute:function() {
       return "/tasks/search-task-today";
     },
     ...mapGetters({
@@ -99,10 +104,10 @@ export default {
     }),
   },
   methods: {
-    closeModal() {
+    closeModal:function() {
       this.$emit("close", false);
     },
-    async myProvider(ctx) {
+    myProvider:async function(ctx) {
       try {
         const response = await amgApi.post(`${ctx.apiUrl}`, {
         id: this.currentUser.user_id,
@@ -114,7 +119,7 @@ export default {
         return []
       }
     },
-    doneTask(id, done) {
+    doneTask:function(id, done) {
         this.showConfirmSwal()
         .then((result) => {
           if (result.value) {

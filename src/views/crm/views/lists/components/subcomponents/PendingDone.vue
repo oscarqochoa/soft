@@ -1,5 +1,5 @@
 <template>
-  <div class="border-info border-table-radius">
+  <div class="border-top-info border-3 box-shadow-3 rounded-bottom">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -10,6 +10,7 @@
       :send-multiple-sms="false"
       @reload="$refs['refClientsList'].refresh()"
     >
+    <!-- Table -->
       <b-table
         slot="table"
         no-provider-filtering
@@ -35,18 +36,22 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <!-- Column CR -->
         <template #cell(credit_report)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span v-if="data.item.credit_report =='1'" class="text-danger">NO</span>
             <span v-else class="text-blue">YES</span>
           </div>
         </template>
+        <!-- Column CREATED -->
         <template #cell(created_at)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span>{{data.item.created_at | myGlobalDay}}</span>
           </div>
         </template>
+        <!-- Column ACTIONS -->
         <template #cell(action)="data">
+          <!-- Button Modal Done -->
           <div
             class="d-flex flex-column justify-content-start align-items-start"
             v-if="changeStatus"
@@ -61,6 +66,7 @@
               <feather-icon icon="FileIcon"></feather-icon>
             </b-button>
           </div>
+          <!-- Button Modal Comment -->
           <div class="d-flex flex-column justify-content-start align-items-start" v-else>
             <b-button
               v-if="data.item.status == 'done'"
@@ -75,28 +81,31 @@
         </template>
       </b-table>
     </filter-slot>
-    <modal-pending
+    <!-- Modal General Pending Or Done -->
+    <modal-general
       v-if="modalChanging"
       :ifModalCard="modalChanging"
       :objectLead="objectLead"
       @close="closeModalCreateCard"
       @update="update"
-    ></modal-pending>
+    ></modal-general>
   </div>
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-import ModalPending from "./ModalGeneral.vue";
+// Import Modal
+import ModalGeneral from "./ModalGeneral.vue";
+// Import Filter
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+// Import Data
 import ColumnFields from '../../data/fields.pendingdone.data'
 import filters from '../../data/filter.pendingdone.data'
 export default {
   components: {
     vSelect,
-    ModalPending,
+    ModalGeneral,
     FilterSlot
   },
   props: {
@@ -104,7 +113,7 @@ export default {
       type: [Number, String]
     }
   },
-  data() {
+  data:function() {
     return {
       totalRows: 0,
       paginate: {
@@ -115,57 +124,48 @@ export default {
       sortBy: "created_at",
       sortDesc: true,
       searchInput: "",
-      orderby: "",
-      order: "",
       startPage: null,
       endPage: "",
-      totalData: "",
       nextPage: "",
       toPage: null,
       isBusy: false,
-      perPageOptions: [10, 25, 50, 100],
       //data fields
       arrayColumns: ColumnFields,
-      fromToObject: {
-        from: null,
-        to: null
-      },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
         model: ""
       },
-      filters: [],
       //data filter
       filter: filters,
       modalChanging: false
     };
   },
   computed: {
-    changeStatus() {
+    // IF It's at Pending or Done Tab
+    changeStatus:function() {
       return this.status == "1" ? true : false;
     },
-    clientRoute() {
+    clientRoute:function() {
       return "/commons/list-users/get-list-of-user";
     },
-    visibleFields() {
+    visibleFields:function() {
       return this.arrayColumns.filter(column => column.visible);
     },
     ...mapGetters({
       currentUser: "auth/currentUser"
     })
   },
-  created() {},
   methods: {
-    update() {
+    update:function() {
       this.modalChanging = false;
       this.resetSearch();
     },
-    closeModalCreateCard() {
+    closeModalCreateCard:function() {
       this.modalChanging = false;
     },
-    modalChange(Lead) {
+    modalChange:function(Lead) {
       this.objectLead = Lead;
       if (this.modalChanging == false) {
         this.modalChanging = true;
@@ -173,11 +173,11 @@ export default {
         this.modalChanging = false;
       }
     },
-    resetSearch() {
+    resetSearch:function() {
       this.searchInput = "";
       this.$refs.refClientsList.refresh();
     },
-    async myProvider(ctx) {
+    myProvider: async function(ctx) {
       try{
         const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perPage: ctx.perPage,
@@ -194,13 +194,13 @@ export default {
         this.perPage = data.data.per_page;
         this.nextPage = this.startPage + 1;
         this.endPage = data.data.last_page;
-        this.totalData = data.data.total;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
         return items || [];
 
       }catch(error){
         console.error(error)
+        return []
 
       }
       

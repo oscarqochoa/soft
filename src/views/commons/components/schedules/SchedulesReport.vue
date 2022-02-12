@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <b-container>
     <b-row class="my-2">
       <b-col
         cols="12"
@@ -56,23 +56,47 @@
         </b-button>
       </b-col>
     </b-row>
-    <b-table-simple hover small caption-top responsive ref="table_report_modul">
+    <b-table-simple
+      bordered
+      small
+      caption-top
+      responsive
+      ref="table_report_modul"
+      class="custom-table"
+      cellspacing="0"
+      cellpadding="0"
+    >
       <b-thead>
         <b-tr>
           <b-th
             v-for="(item, index) in fields"
             :key="index"
-            class="text-center"
-            >{{ item.label }}</b-th
+            :class="[
+              'text-center item-header',
+              item.date == today ? 'bg-th-today' : '',
+            ]"
           >
+            {{ item.label }}
+          </b-th>
         </b-tr>
       </b-thead>
       <b-tbody>
         <b-tr v-for="(item, index) in filterUser" :key="index">
-          <b-td class="text-center">{{ item.user_name }}</b-td>
+          <b-td class="text-center item-user">
+            <div class="container">
+              <p>
+                {{ item.user_name }}
+              </p>
+            </div>
+            <span></span>
+          </b-td>
           <b-td v-for="(schedule, i) in item.json_data" :key="i">
             <div
-              :class="bgSchedule(schedule)"
+              :class="[
+                bgSchedule(schedule),
+                'item-hour',
+                schedule.date == today ? 'bg-hour-today' : '',
+              ]"
               @click="openDetails(item, schedule, schedule.checking_m, 1)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 1)"
@@ -80,7 +104,10 @@
               {{ schedule.checking_m }}
             </div>
             <div
-              class="bg-default p-s"
+              :class="[
+                'bg-default item-hour',
+                schedule.date == today ? 'bg-hour-today' : '',
+              ]"
               @click="openDetails(item, schedule, schedule.m_begining_break, 2)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 2)"
@@ -88,7 +115,10 @@
               {{ schedule.m_begining_break }}
             </div>
             <div
-              class="bg-default p-s"
+              :class="[
+                'bg-default item-hour',
+                schedule.date == today ? 'bg-hour-today' : '',
+              ]"
               @click="openDetails(item, schedule, schedule.m_finish_break, 3)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 3)"
@@ -96,14 +126,24 @@
               {{ schedule.m_finish_break }}
             </div>
             <div
-              class="bg-default p-s"
+              :class="[
+                'bg-default item-hour',
+                schedule.date == today ? 'bg-hour-today' : '',
+              ]"
               @click="openDetails(item, schedule, schedule.m_checkout, 4)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 4)"
             >
               {{ schedule.m_checkout }}
             </div>
-            <div class="bg-hours p-s">HOURS: {{ schedule.total_hours }}</div>
+            <div
+              :class="[
+                'item-count-hours',
+                schedule.date == today ? 'bg-count-hours-today' : 'bg-hours',
+              ]"
+            >
+              HOURS: {{ schedule.total_hours }}
+            </div>
           </b-td>
         </b-tr>
       </b-tbody>
@@ -225,7 +265,7 @@
         </b-container>
       </template>
     </b-sidebar>
-  </div>
+  </b-container>
 </template>
 <script>
 import SchedulesServices from "./services/schedules.service";
@@ -252,6 +292,8 @@ export default {
       keyMoreInfo: 0,
       bgBtnAdres: "background-color: rgba(51, 59, 81, 0.2) !important",
       detailsSchedule: {},
+
+      today: moment().format("YYYY-MM-DD"),
     };
   },
   mounted() {
@@ -294,9 +336,11 @@ export default {
       });
       array.forEach((element) => {
         let letter = element.dayheader.toUpperCase();
+
         this.fields.push({
           key: "field",
           label: letter.toUpperCase(),
+          date: element.date,
         });
       });
     },
@@ -422,14 +466,14 @@ export default {
 };
 </script>
   
-<style>
+<style lang="scss">
 .bg-default {
   background: rgba(0, 0, 0, 0.1);
   text-align: center;
   min-width: 150px !important;
 }
 .bg-late {
-  background: rgba(227, 52, 47, 0.1);
+  background: rgba(227, 52, 47, 0.1) !important;
   text-align: center;
   min-width: 150px !important;
 }
@@ -437,7 +481,7 @@ export default {
   margin-top: 3px;
 }
 .bg-hours {
-  background: rgba(51, 59, 81, 0.1);
+  background: rgba(143, 95, 232, 0.1) !important;
   text-align: center;
   border: 1px solid #6e6b7b;
   min-width: 150px !important;
@@ -475,5 +519,95 @@ export default {
 }
 .image-captured {
   width: 400px !important;
+}
+
+/* Table styles */
+
+.bg-th-today {
+  background-color: #8f5fe8 !important;
+  color: white;
+}
+
+.bg-hour-today {
+  background: rgba(188, 159, 241, 0.15) !important;
+}
+
+.bg-count-hours-today {
+  background: rgba(143, 95, 232, 0.5) !important;
+  text-align: center;
+  color: white !important;
+}
+
+table {
+  border-collapse: collapse !important;
+
+  & td,
+  & &-sm td {
+    padding: 0rem !important;
+  }
+}
+
+.item-header {
+  background: #f3f2f7;
+  border: 1px solid #ebe9f1 !important;
+  box-sizing: border-box;
+  padding-top: 7px !important;
+  width: 160px;
+  height: 30px;
+}
+
+.item-user {
+  position: relative;
+
+  .container {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p {
+      margin-top: 5px;
+      color: #8e8c99;
+      font-weight: 500;
+    }
+  }
+
+  span {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 24.5px;
+    background: rgba(143, 95, 232, 0.1);
+  }
+}
+
+.item-hour {
+  background: transparent;
+  border-bottom: 1px solid #ebe9f1;
+  margin-top: 1.5px;
+  margin-bottom: 1.5px;
+  padding: 0px 0px 3px 0px;
+  font-size: 12.5px;
+
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+
+  &:hover {
+    background: #f3f2f7;
+  }
+
+  &:nth-child(4) {
+    border-bottom: 1px white solid;
+    margin-bottom: 0px;
+  }
+}
+
+.item-count-hours {
+  border: none;
+  color: #484848;
+  font-weight: 600 !important;
+  font-size: 13px;
+  padding: 4px 0px 2px 0px;
+  /* border: 2px solid white !important; */
 }
 </style>

@@ -40,7 +40,7 @@
       </b-nav-item>
     </b-nav>
 
-    <b-card class="border-primary border-table-radius">
+    <b-card class="border-top-primary border-3 border-table-radius">
       <router-view :key="this.$route.name" />
     </b-card>
   </div>

@@ -1,7 +1,10 @@
 <template>
-  <b-card no-body class="mt-2 h-28">
-    <span class="title-card mb-3">Cards</span>
-    <div class="col-lg-12 px-0">
+  <b-card no-body>
+    <h4 class="title-card">Cards</h4>
+
+    <slot name="errors" />
+
+    <div class="col-lg-12 px-0 mt-1">
       <div>
         <div>
           <div style="margin-bottom: 0">
@@ -25,7 +28,7 @@
                 >
                   <b-form-radio
                     class="vs-checkbox-con"
-                    :class="{ 'border-danger': errors[0] }"
+                    :class="{ 'border-required': errors[0] }"
                     :value="data.item.id"
                     @change="$emit('CardId', data.item.id)"
                     v-model="selected"
@@ -68,6 +71,7 @@
           </div>
         </div>
       </div>
+      <!-- Buttton ADD -->
       <div class="col-lg-12 text-right pr-0 mt-4">
         <b-button
           type="button"
@@ -79,7 +83,7 @@
         </b-button>
       </div>
     </div>
-
+    <!-- Modal Create Card -->
     <modal-card-create
       v-if="modalCreateCard"
       :ifModalCard="modalCreateCard"
@@ -93,7 +97,7 @@
 <script>
 import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
 import PaymentService from "../service/payments.service";
-import fields from '../data/fields.credit.card'
+import fields from "../data/fields.credit.card";
 export default {
   components: {
     ModalCardCreate,
@@ -104,36 +108,74 @@ export default {
       default: () => ({}),
     },
   },
-  data() {
+  data:function() {
     return {
       selected: null,
       //More information
       cards: [],
       modalCreateCard: false,
-      //data field
-      fields: fields
+      modalCard: false,
+      deletecardmodal: false,
+      card_id: "",
+      fields: [
+        {
+          key: "Select",
+          label: "",
+        },
+        {
+          key: "cardholdername",
+          label: "Card Holder Name",
+        },
+        {
+          key: "cardnumber",
+          label: "Card Number",
+        },
+        {
+          key: "type_card",
+          label: "Type",
+        },
+        {
+          key: "card_expi_month",
+          label: "MM",
+        },
+        {
+          key: "card_expi_year",
+          label: "YY",
+        },
+        {
+          key: "cardsecuritycode",
+          label: "CVC",
+        },
+      ],
     };
   },
 
-  created() {
+  created:function() {
     this.searchcards();
   },
-  mounted() {},
-
-  computed: {},
   methods: {
     //Cards
-    openModalCreateCard() {
+    openModalCreateCard:function() {
       this.modalCreateCard = true;
     },
-    closeModalCreateCard() {
+    closeModalCreateCard:function() {
       this.modalCreateCard = false;
     },
 
-    addCard(cards) {
+    addCard:function(cards) {
       this.cards = cards;
     },
+    closeModalCard() {
+      this.modalCard = false;
+    },
 
+    openmodaldeletecard(id) {
+      this.card_id = id;
+      this.deletecardmodal = true;
+    },
+    closedModalDeleteCar() {
+      this.deletecardmodal = false;
+    },
     async searchcards() {
       try {
         const data = await PaymentService.searchcards({
@@ -165,5 +207,14 @@ export default {
 
 .w-15 {
   width: 15.5% !important;
+}
+
+.border-required {
+  width: 22px;
+  height: 22px;
+  border: 1px red solid;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center !important;
 }
 </style>

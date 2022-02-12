@@ -12,63 +12,47 @@
       @hidden="closeModal"
       :no-close-on-backdrop="true"
     >
-      <div>
-        <div class="campos-detail-modal row" style="margin: 0">
-          <div class="col-lg-8 col-12 col-xl-8 col-md-8 p-1">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">Client</span>
-              </div>
-              <b-form-input disabled v-model="dataVoidRefund.client_name" />
+      <b-row style="margin: 0">
+        <base-refund>
+        <!-- Row Client -->
+          <template #client>
+            <b-form-input disabled v-model="dataVoidRefund.client_name" />
+          </template>
+          <!-- Row Transaction ID -->
+          <template #transaction>
+            <b-form-input disabled v-model="dataVoidRefund.transaction_id" />
+          </template>
+          <!-- Row Amount -->
+          <template #amount>
+            <b-form-input disabled v-model="statusAmount"></b-form-input>
+          </template>
+          <!-- Row Date -->
+          <template #date>
+            <b-form-input disabled v-model="statusDate"></b-form-input>
+          </template>
+        </base-refund>
+        <!-- Row Done by -->
+        <div class="col-lg-8 col-12 col-xl-8 col-md-8 pb-1">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3">Done by</span>
             </div>
-          </div>
-          <div class="col-lg-8 col-12 col-xl-8 col-md-8 pb-1">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon2"
-                  >Transaction ID</span
-                >
-              </div>
-              <b-form-input disabled v-model="dataVoidRefund.transaction_id" />
-            </div>
-          </div>
-          <div class="col-lg-8 col-12 col-xl-8 col-md-8 pb-1">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon3">Amount</span>
-              </div>
-              <b-form-input disabled v-model="statusAmount"></b-form-input>
-            </div>
-          </div>
-          <div class="col-lg-8 col-12 col-xl-8 col-md-8 pb-1">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon3">Date</span>
-              </div>
-              <b-form-input disabled v-model="statusDate"></b-form-input>
-            </div>
-          </div>
-          <div class="col-lg-8 col-12 col-xl-8 col-md-8 pb-1">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon3">Done by</span>
-              </div>
-              <b-form-input disabled v-model="statusDone"></b-form-input>
-            </div>
-          </div>
-          <div class="col-lg-12 mt-1">
-            <div class="form-group row">
-              <span>Comment</span>
-              <b-textarea
-                disabled
-                class="input-form"
-                v-model="dataVoidRefund.comment"
-                style="height: 140px"
-              ></b-textarea>
-            </div>
+            <b-form-input disabled v-model="statusDone"></b-form-input>
           </div>
         </div>
-      </div>
+        <!-- Text Tarea Comment -->
+        <div class="col-lg-12 mt-1">
+          <div class="form-group row">
+            <span>Comment</span>
+            <b-textarea
+              disabled
+              class="input-form"
+              v-model="dataVoidRefund.comment"
+              style="height: 140px"
+            ></b-textarea>
+          </div>
+        </div>
+      </b-row>
     </b-modal>
   </div>
 </template>
@@ -76,6 +60,9 @@
 
 <script>
 import moment from "moment";
+//Import Base Refund
+import BaseRefund from "../BaseComponent/BaseRefund.vue";
+// Import Services
 import PaymentService from "../service/payments.service";
 export default {
   props: {
@@ -86,27 +73,30 @@ export default {
       type: [Number, String],
     },
   },
-  data() {
+  components: {
+    BaseRefund,
+  },
+  data: function () {
     return {
       mutableIfModal: this.modalVoidRefund,
       dataVoidRefund: [],
     };
   },
   computed: {
-    statusAmount() {
+    statusAmount: function () {
       return "$ " + this.dataVoidRefund.amount;
     },
-    statusDate() {
+    statusDate: function () {
       return moment(this.dataVoidRefund.settlement_date).format("MM/DD/YYYY");
     },
-    statusDone() {
+    statusDone: function () {
       return (
         this.dataVoidRefund.updated_by +
         " | " +
         moment(this.dataVoidRefund.updated_at).format("MM/DD/YYYY hh:mm A")
       );
     },
-    statusTitle() {
+    statusTitle: function () {
       return this.dataVoidRefund.type_transaction == 39
         ? "VOID"
         : this.dataVoidRefund.type_transaction == 40
@@ -115,25 +105,32 @@ export default {
     },
   },
   methods: {
-    closeModal() {
+    closeModal: function () {
       this.$emit("closeInfo", false);
     },
     //Getting Information of Refund
-    async getVoidRefund(idtransaction) {
-      try{
+    getVoidRefund: async function (idtransaction) {
+      try {
         this.addPreloader();
-        const data = await PaymentService.getVoidRefund({idtransaction: idtransaction,})
+        const data = await PaymentService.getVoidRefund({
+          idtransaction: idtransaction,
+        });
         this.dataVoidRefund = data[0];
         this.removePreloader();
-
-      }catch(error){
-        console.error(error)
-        this.showToast("success","top-right","Success","CheckIcon","Glossary Deleted");
+      } catch (error) {
+        console.error(error);
+        this.showToast(
+          "success",
+          "top-right",
+          "Success",
+          "CheckIcon",
+          "Glossary Deleted"
+        );
         this.removePreloader();
       }
     },
   },
-  created() {
+  created: function () {
     this.getVoidRefund(this.idtransaction);
   },
 };

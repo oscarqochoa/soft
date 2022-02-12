@@ -1,6 +1,8 @@
 <template>
   <div>
     <b-card no-body class="mb-1">
+      <!-- If  It's supervisor -->
+      <!-- Button CREATE CANCEL Group list -->
       <div class="m-2" v-if="statusCreateList">
         <b-row>
           <b-col
@@ -10,9 +12,6 @@
             sm="6"
             class="d-flex align-items-start justify-content-start mb-1 mb-md-0"
           >
-            <!-- <span
-                        style="display: inline-block;margin-left: 10px;color: black;"
-            >Total Leads Pending : 146789</span>-->
           </b-col>
           <b-col
             cols="12"
@@ -26,6 +25,7 @@
           </b-col>
         </b-row>
       </div>
+      <!-- Activate Create List -->
       <div class="m-2" v-if="newList">
         <b-card
           no-body
@@ -34,9 +34,12 @@
           :style="`${classAdd}`"
         >
           <div class="m-2">
+            <!-- Title Create List -->
             <h3 style="color: #ff9f43 !important; display: inline-block">CREATE LIST</h3>
+            <!-- Form -->
             <ValidationObserver ref="form">
               <b-row>
+                 <!-- Input Users -->
                 <b-col md="7">
                   <b-form-group label="Selec User">
                     <ValidationProvider name="comment" rules="required" v-slot="{ errors }">
@@ -45,6 +48,7 @@
                     </ValidationProvider>
                   </b-form-group>
                 </b-col>
+                <!-- Input Number -->
                 <b-col md="5">
                   <b-form-group label="Number of leads by user">
                     <ValidationProvider name="comment" rules="required" v-slot="{ errors }">
@@ -53,6 +57,7 @@
                     </ValidationProvider>
                   </b-form-group>
                 </b-col>
+                <!-- Button Submit -->
                 <b-col cols="12">
                   <b-button variant="success" type="submit" @click="saveGroup">
                     <feather-icon icon="FileIcon" size="15"></feather-icon>SAVE
@@ -63,7 +68,7 @@
           </div>
         </b-card>
       </div>
-
+      <!-- Table -->
       <filter-slot
         :filter="filter"
         :filter-principal="filterPrincipal"
@@ -100,12 +105,14 @@
               <strong>Loading ...</strong>
             </div>
           </template>
+          <!-- Column CREATE DATE -->
           <template #cell(created_at)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
               <span v-if="data.item.created_at == 'Today'">{{ data.item.created_at }}</span>
               <span v-else>{{ data.item.created_at | myDateGlobalWithHour }}</span>
             </div>
           </template>
+          <!-- Column USERS -->
           <template #cell(users)="data" v-if="getRoles">
             <div class="d-flex flex-column justify-content-start align-items-start">
               <b-button
@@ -122,11 +129,14 @@
               >{{ user.user_name }}</b-button>
             </div>
           </template>
+          <!-- Column ACTIONS -->
           <template #cell(action)="data">
+            <!-- IF It's has Role 1 or 2 -->
             <div
               class="d-flex flex-column justify-content-center align-items-center"
               v-if="getRoles"
             >
+              <!-- Button delete user -->
               <b-button
                 variant="danger"
                 class="mr-1 reset-radius btn-sm"
@@ -135,10 +145,12 @@
                 <feather-icon icon="Trash2Icon"></feather-icon>
               </b-button>
             </div>
+            <!-- IF It's has any another Rol -->
             <div
               class="d-flex flex-column justify-content-center align-items-start"
               v-if="!getRoles"
             >
+              <!-- Button Open Modal of Leads  (There's Cant > 0 and It doesn't Today) -->
               <b-button
                 v-if="data.item.cant > 0 && data.item.created_at != 'Today'"
                 variant="warning"
@@ -153,7 +165,7 @@
               >
                 <feather-icon icon="EyeIcon"></feather-icon>
               </b-button>
-
+              <!-- Button Open Modal of Leads  (It's Today and CountAllTask is equal to 0) -->
               <b-button
                 v-if="data.item.created_at == 'Today' && count_alltask==0"
                 variant="warning"
@@ -162,6 +174,7 @@
               >
                 <feather-icon icon="EyeIcon"></feather-icon>
               </b-button>
+              <!-- Button Open Modal of Leads  (It's Today  and CountAllTask is greater than 0) -->
               <b-button
                 v-if="data.item.created_at == 'Today' && count_alltask>0"
                 variant="warning"
@@ -170,6 +183,7 @@
               >
                 <feather-icon icon="EyeIcon"></feather-icon>
               </b-button>
+              <!-- Button Open Modal of Leads  (Cant is less than 0  and It doesn't Today) -->
               <b-button
                 v-if="data.item.cant <= 0 && data.item.created_at != 'Today'"
                 disabled
@@ -183,6 +197,7 @@
         </b-table>
       </filter-slot>
     </b-card>
+    <!-- Modals Leads by User-->
     <modal-by-user
       v-if="modalChanging"
       :ifModalCard="modalChanging"
@@ -193,6 +208,7 @@
       :nameUser="nameUser"
       :id="id"
     ></modal-by-user>
+    <!-- Modal Tasks of Today -->
     <modal-task-today
       v-if="modalTaskToday"
       :modalTaskToday="modalTaskToday"
@@ -206,20 +222,26 @@
 <script>
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-import ModalByUser from "./subcomponents/ModalByUser.vue";
+// Import Filter
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-import Button from "@/views/components/button/Button.vue";
+// Import Modals
 import ModalTaskToday from "./subcomponents/ModalTaskToday.vue";
+import ModalByUser from "./subcomponents/ModalByUser.vue";
+import Button from "@/views/components/button/Button.vue";
+// Import Data
+import fields from '../data/fields.list.data'
+import filtersList from '../data/filter.list.data'
+// Import Services
 import ListService from "../service/lists.service";
 export default {
   components: {
     vSelect,
+    ModalTaskToday,
     ModalByUser,
     FilterSlot,
     Button,
-    ModalTaskToday
   },
-  data() {
+  data:function() {
     return {
       modalTaskToday: false,
       totalRows: 0,
@@ -241,80 +263,14 @@ export default {
       searchInput: "",
       startPage: null,
       toPage: null,
-      totalData: "",
-      // currentPage: 1,
-      // perPage: 10,
-      perPageOptions: [10, 25, 50, 100],
-      filterController: false,
       isBusy: false,
       sortBy: "created_at",
       sortDesc: true,
-      arrayColumns: [
-        {
-          key: "created_at",
-          label: "Create Date",
-          sortable: true,
-          visible: true
-        },
-        {
-          key: "create_name",
-          label: "Create By",
-          visible: true
-        },
-        {
-          key: "cant",
-          label: "Number of Leads by user",
-          visible: true
-        },
-        {
-          key: "users",
-          label: "Users",
-          visible: true
-        },
-        {
-          key: "done",
-          label: "Done",
-          visible: true
-        },
-        {
-          key: "action",
-          label: "Actions",
-          visible: true
-        }
-      ],
-      arrayColumnsTwo: [
-        {
-          key: "created_at",
-          label: "Create Date",
-          sortable: true,
-          visible: true
-        },
-        {
-          key: "create_name",
-          label: "Create By",
-          visible: true
-        },
-        {
-          key: "cant",
-          label: "Number of Leads by user",
-          visible: true
-        },
-        {
-          key: "done",
-          label: "Done",
-          visible: true
-        },
-        {
-          key: "action",
-          label: "Actions",
-          visible: true
-        }
-      ],
+      arrayColumns: fields,
       fromToObject: {
         from: null,
         to: null
       },
-      filters: [],
       count_alltask: 0,
       count_donetask: 0,
       modalChanging: false,
@@ -323,109 +279,84 @@ export default {
       cancelList: false,
       add: null,
       newList: false,
-      filter: [
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ]
+      filter:filtersList,
     };
   },
   computed: {
     ...mapGetters({
       skin: "appConfig/skin"
     }),
-    classAdd() {
+    // Catching Mode Dark
+    classAdd:function() {
       return this.skin == "dark"
         ? "background-color:#333B51"
         : "background-color: floralwhite;";
     },
-    getRoles() {
+    getRoles:function() {
       return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
         ? true
         : false;
     },
 
-    clientRoute() {
+    clientRoute:function() {
       return "/commons/list-users/search-list-Of-user";
     },
-    visibleFields() {
-      return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
-        ? this.arrayColumns.filter(column => column.visible)
-        : this.arrayColumnsTwo.filter(column => column.visible);
+    // Change Columns
+    visibleFields:function() {
+      if(this.currentUser.role_id == 1 || this.currentUser.role_id == 2){
+        return this.arrayColumns.filter(column => column.visible)
+      }else{
+        let newArrayColumn = [...this.arrayColumns]
+        newArrayColumn.splice(3,1)
+        return newArrayColumn.filter(column => column.visible);
+        
+      }
     },
     ...mapGetters({
       currentUser: "auth/currentUser"
     }),
-    statusCreateList() {
+    // For Create Grupo List of Users
+    statusCreateList:function() {
       return this.currentUser.role_id == 2 ? true : false;
     }
   },
   methods: {
-    updatingTasks() {
+    updatingTasks:function() {
       this.$refs.refClientsList.refresh();
     },
-    openModalTaskToday() {
+    openModalTaskToday:function() {
       this.modalTaskToday = true;
     },
-    closeModalTaskToday() {
+    closeModalTaskToday:function() {
       this.modalTaskToday = false;
     },
-    refresh() {
+    refresh:function() {
       this.$refs.refClientsList.refresh();
     },
-    statusRol() {
+    statusRol:function() {
       this.add = this.currentUser.role_id == 2 ? true : false;
     },
 
-    addlist() {
+    addlist:function() {
       this.newList = true;
       this.add = false;
       this.cancelList = true;
     },
-    closelist() {
+    closelist:function() {
       this.newList = false;
       this.add = true;
       this.cancelList = false;
     },
-    updateList() {
+    updateList:function() {
       this.$refs.refClientsList.refresh();
     },
-    resetSearch() {
+    resetSearch:function() {
       this.searchInput = "";
       this.fromToObject.from = null;
       this.fromToObject.to = null;
       this.$refs.refClientsList.refresh();
     },
-    async myProvider(ctx) {
+    myProvider: async function(ctx) {
       try{
         const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perPage: ctx.perPage,
@@ -442,7 +373,6 @@ export default {
         this.perPage = data.data.per_page;
         this.nextPage = this.startPage + 1;
         this.endPage = data.data.last_page;
-        this.totalData = data.data.total;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
         if (data.data.data[0] != null) {
@@ -468,10 +398,11 @@ export default {
 
       }catch(error){
         console.error(error)
+        return []
       }
     },
 
-    async deleteUser(id) {
+    deleteUser: async function(id) {
       const confirm = await this.showConfirmSwal(
         "Are you sure?",
         "You won't be able to revert this!"
@@ -495,7 +426,7 @@ export default {
         }
       }
     },
-    async groupUsers() {
+    groupUsers: async function() {
       try {
         const data = await ListService.groupUser({ roles: "[]", type: "1" });
         this.options = data;
@@ -510,7 +441,7 @@ export default {
         );
       }
     },
-    saveGroup() {
+    saveGroup:function() {
       this.$refs.form.validate().then(async success => {
         if (!success) {
           return;
@@ -548,7 +479,7 @@ export default {
         }
       });
     },
-    modalOpen(name, id, idByUser) {
+    modalOpen:function(name, id, idByUser) {
       this.nameUser = name;
       this.id = id;
       this.idByUser = idByUser;
@@ -558,11 +489,11 @@ export default {
         this.modalChanging = false;
       }
     },
-    closeModal() {
+    closeModal:function() {
       this.modalChanging = false;
     }
   },
-  created() {
+  created:function() {
     this.groupUsers();
     this.statusRol();
   }

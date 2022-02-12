@@ -1,6 +1,6 @@
 <template>
   <div>
-    <feather-icon icon="DollarSignIcon" size="19" />
+    <tabler-icon icon="CurrencyDollarIcon" size="21" />
     <b-tooltip
       triggers="hover"
       :target="`bookmark-pay-stub`"
