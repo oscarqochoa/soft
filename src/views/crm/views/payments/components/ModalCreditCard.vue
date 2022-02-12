@@ -1,39 +1,40 @@
 <template>
-  <b-card no-body class="mt-2 h-28">
-    <span class="title-card mb-3">Cards</span>
-    <div class="col-lg-12 px-0">
+  <b-card no-body>
+    <h4 class="title-card">Cards</h4>
+
+    <slot name="errors" />
+
+    <div class="col-lg-12 px-0 mt-1">
       <div>
-        <div
-          
-        >
-          <div style="margin-bottom: 0" >
-            <b-table 
-         
-          slot="table"
-          no-provider-filtering
-          ref="refClientsList"
-          primary-key="id"
-          table-class="text-nowrap"
-          responsive="sm"
-          show-empty
-          sticky-header="30vh"
-              
-              :items="cards" :fields="fields">
+        <div>
+          <div style="margin-bottom: 0">
+            <b-table
+              slot="table"
+              no-provider-filtering
+              ref="refClientsList"
+              primary-key="id"
+              table-class="text-nowrap"
+              responsive="sm"
+              show-empty
+              sticky-header="30vh"
+              :items="cards"
+              :fields="fields"
+            >
               <template #cell(Select)="data">
                 <ValidationProvider
-                    name="comment"
-                    rules="required"
-                    v-slot="{ errors }"
-                  >
-                  <b-form-radio
-                  class="vs-checkbox-con"
-                  :class="{'border-danger': errors[0]}"
-                  :value="data.item.id"
-                  @change="$emit('CardId',data.item.id)"
-                  v-model="selected"
-                  plain
+                  name="comment"
+                  rules="required"
+                  v-slot="{ errors }"
                 >
-                </b-form-radio>
+                  <b-form-radio
+                    class="vs-checkbox-con"
+                    :class="{ 'border-required': errors[0] }"
+                    :value="data.item.id"
+                    @change="$emit('CardId', data.item.id)"
+                    v-model="selected"
+                    plain
+                  >
+                  </b-form-radio>
                 </ValidationProvider>
               </template>
               <template #cell(cardnumber)="data">
@@ -90,7 +91,6 @@
       :idlead="cardsLead.lead_id"
       @new="addCard"
     ></modal-card-create>
-    
   </b-card>
 </template>
 <script>
@@ -109,7 +109,7 @@ export default {
   },
   data() {
     return {
-      selected:null,
+      selected: null,
       //More information
       statesCard: [],
       states_leads: [],
@@ -122,8 +122,8 @@ export default {
       card_id: "",
       fields: [
         {
-          key:"Select",
-          label:"",
+          key: "Select",
+          label: "",
         },
         {
           key: "cardholdername",
@@ -164,7 +164,6 @@ export default {
     },
   },
   methods: {
-
     //Cards
     openModalCreateCard() {
       this.modalCreateCard = true;
@@ -180,7 +179,6 @@ export default {
       this.modalCard = false;
     },
 
-
     openmodaldeletecard(id) {
       this.card_id = id;
       this.deletecardmodal = true;
@@ -189,13 +187,20 @@ export default {
       this.deletecardmodal = false;
     },
     async searchcards() {
-      try{
-        const data = await PaymentService.searchcards({id: this.cardsLead.lead_id,})
+      try {
+        const data = await PaymentService.searchcards({
+          id: this.cardsLead.lead_id,
+        });
         this.cards = data;
-
-      }catch(error){
-        console.log(error)
-        this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+      } catch (error) {
+        console.log(error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong!"
+        );
       }
     },
   },
@@ -212,5 +217,14 @@ export default {
 
 .w-15 {
   width: 15.5% !important;
+}
+
+.border-required {
+  width: 22px;
+  height: 22px;
+  border: 1px red solid;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center !important;
 }
 </style>

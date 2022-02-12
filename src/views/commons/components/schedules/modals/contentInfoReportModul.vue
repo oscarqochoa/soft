@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-row>
-      <b-table-simple hover small caption-top responsive bordered>
+      <b-table-simple small caption-top responsive bordered>
         <b-thead>
           <b-tr>
             <b-th>User</b-th>
@@ -12,7 +12,11 @@
         </b-thead>
         <b-tbody>
           <b-tr v-for="(item, index) in items" :key="index">
-            <b-td>{{ item.user_name }}</b-td>
+            <b-td>
+              <div class="container">
+                <p>{{ item.user_name }}</p>
+              </div>
+            </b-td>
             <b-td>
               <div class="bg-default p-s text-left r-c">
                 HOURS: {{ item.hours }}
@@ -92,8 +96,47 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss">
 .r-c {
   padding: 5px 5px;
+}
+
+table {
+  thead {
+    text-align: center;
+  }
+
+  tbody {
+    td {
+      div {
+        background-color: white !important;
+        font-weight: 600;
+        font-size: 11px;
+        border-bottom: 2px #f3f2f7 solid;
+        cursor: pointer;
+
+        &:nth-child(2) {
+          border-bottom: none;
+        }
+      }
+
+      &:nth-child(1) {
+        .container {
+          width: 100%;
+          height: 60px;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-bottom: none;
+
+          p {
+            font-weight: 400;
+            font-size: 13px;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
