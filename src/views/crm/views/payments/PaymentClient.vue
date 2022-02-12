@@ -18,8 +18,8 @@
         :link-classes="['px-3',bgTabsNavs]"
       >Process</b-nav-item>
     </b-nav>
-    <!-- Dinamic Route -->
-    <b-card class="border-primary border-table-radius px-0">
+
+    <b-card class="border-top-primary border-3 border-table-radius px-0">
       <router-view :key="$route.name"></router-view>
     </b-card>
   </div>

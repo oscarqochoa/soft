@@ -1,7 +1,7 @@
 <template>
-  <div >
-    <!-- Tabs -->
-    <b-tabs
+  <div class="p-2">
+     <!-- Tabs -->
+    <b-tabs 
       lazy
       active-tab-class="p-0 "
       pills

@@ -1,7 +1,7 @@
 export default [
   {
     title: "Commissions",
-    icon: "PieChartIcon",
+    icon: "ChartPieIcon",
     route: "commissions-crm",
   },
 ];

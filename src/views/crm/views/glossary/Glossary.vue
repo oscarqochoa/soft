@@ -7,7 +7,7 @@
         >
       </template>
     </header-slot>
-    <b-card class="px-1">
+    <b-card no-body>
       <filter-slot
         :filter="filter"
         :filter-principal="filterPrincipal"
