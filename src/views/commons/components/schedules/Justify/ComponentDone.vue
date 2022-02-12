@@ -1,5 +1,5 @@
 <template>
-  <div class="border-info border-table-radius">
+  <div class="border-top-info border-3 box-shadow-3 rounded-bottom">
     <filter-slot
       annulled
       :fields="fields"

@@ -427,7 +427,7 @@ export default {
     },
     isTabsBorder() {
       return this.tab === 2 || this.tab === 3
-        ? "border-info border-table-radius"
+        ? "border-top-info border-3 box-shadow-3 rounded-bottom"
         : "";
     }
   },

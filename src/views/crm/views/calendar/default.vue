@@ -29,7 +29,7 @@
       </b-nav-item>
     </b-nav>
 
-    <b-card class="border-primary border-table-radius px-0">
+    <b-card class="border-top-primary border-3 border-table-radius px-0">
       <router-view />
     </b-card>
   </div>
