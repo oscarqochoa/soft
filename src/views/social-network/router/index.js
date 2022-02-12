@@ -4,6 +4,7 @@ import ClientsRouter from '@/views/social-network/views/clients/client.router'
 import MigrationsRouter from '@/views/social-network/views/migrations/migrations.router'
 import ActivitiesRouter from '@/views/social-network/views/activities/activities.router'
 import DashboardRouter from '@/views/social-network/views/dashboard/dashboard.router'
+import DashboardRouter2 from '@/views/social-network/views/dashboard2/dashboard.router'
 
 const routes = [
   { path: '/socialnetwork', redirect: { name: 'test-social-network' } },
@@ -13,6 +14,7 @@ const routes = [
   ...MigrationsRouter,
   ...ActivitiesRouter,
   ...DashboardRouter,
+  ...DashboardRouter2,
 
 ]
 

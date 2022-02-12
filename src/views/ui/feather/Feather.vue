@@ -26,7 +26,7 @@
         @click="copyIconName(icon)"
       >
         <div class="icon-wrapper">
-          <amg-icon
+          <feather-icon
             :icon="icon"
             size="24"
           />

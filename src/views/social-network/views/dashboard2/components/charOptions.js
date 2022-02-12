@@ -3,10 +3,7 @@ import { $themeColors } from '@themeConfig'
 export const areaChartOptions = {
   grid: {
     show: false,
-    padding: {
-      left: 0,
-      right: 0,
-    },
+
   },
   chart: {
     toolbar: {
@@ -26,11 +23,10 @@ export const areaChartOptions = {
   fill: {
     type: 'gradient',
     gradient: {
-      shadeIntensity: 0.9,
-      opacityFrom: 0.5,
-      opacityTo: 0.2,
-      stops: [0, 80, 100],
+      opacityFrom: 0.6,
+      opacityTo: 0.8,
     },
+
   },
   xaxis: {
     type: 'numeric',
@@ -42,27 +38,25 @@ export const areaChartOptions = {
     },
     labels: { show: false },
   },
-  yaxis: [
-    {
-      y: 0,
-      offsetX: 0,
-      offsetY: 0,
-      padding: {
-        left: 0,
-        right: 0,
-      },
+  yaxis: {
+    type: 'numeric',
+    lines: {
+      show: false,
     },
-  ],
+    axisBorder: {
+      show: false,
+    },
+    labels: { show: false },
+  },
   tooltip: {
     x: { show: false },
   },
-
   theme: {
     monochrome: {
       enabled: true,
-      color: $themeColors.primary,
-      shadeTo: 'light',
-      shadeIntensity: 0.65,
+      color: null,
+      shadeTo: 'dark',
+      shadeIntensity: 5,
     },
   },
 }

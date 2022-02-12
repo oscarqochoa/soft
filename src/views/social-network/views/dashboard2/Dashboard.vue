@@ -3,6 +3,7 @@
     <b-card
       no-body
     >
+
       <b-row class="p-1">
         <b-col
           md="auto"
@@ -99,16 +100,31 @@
           </div>
         </b-col>
       </b-row>
-      <Card
-        :key="cardUpdate"
-        :data="card"
-        :type="typeCard"
-        :date_init="dateRange.startDate"
-        :date_end="dateRange.endDate"
-        :program="programFilter"
-        :user="userFilter"
-      />
+      <!--      <Card-->
+      <!--        :key="cardUpdate"-->
+      <!--        :data="card"-->
+      <!--        :type="typeCard"-->
+      <!--        :date_init="dateRange.startDate"-->
+      <!--        :date_end="dateRange.endDate"-->
+      <!--        :program="programFilter"-->
+      <!--        :user="userFilter"-->
+      <!--      />-->
+
     </b-card>
+    <caro-card
+      v-if="subscribersGained.analyticsData"
+
+      :key="cardUpdate"
+
+      :chart-data="subscribersGained.series"
+      :data="card"
+      :type="typeCard"
+      :date_init="dateRange.startDate"
+      :date_end="dateRange.endDate"
+      :program="programFilter"
+      :user="userFilter"
+    />
+
     <div class="m-0">
       <b-card
         :title="`${chardOption.option} Balance`"
@@ -195,26 +211,32 @@
           :option-data="option"
         />
       </b-card>
-    </div></div></template>
+    </div>
+  </div></template>
 
 <script>
 
 import moment from 'moment'
 import vSelect from 'vue-select'
-import DashboardService from '@/views/social-network/views/dashboard/dashboard.service'
-import Card from '@/views/social-network/views/dashboard/components/Card.vue'
+import { kFormatter } from '@core/utils/filter'
+import DashboardService from '@/views/social-network/views/dashboard2/dashboard.service'
+import Card from '@/views/social-network/views/dashboard2/components/Card.vue'
 import AppEchartLineSocialNetwork
-from '@/views/social-network/views/dashboard/components/chard/AppEchartLineSocialNetwork.vue'
+from '@/views/social-network/views/dashboard2/components/chard/AppEchartLineSocialNetwork.vue'
+import CaroCard from '@/views/social-network/views/dashboard2/components/CaroCard.vue'
 
 export default {
   components: {
     vSelect,
     Card,
     AppEchartLineSocialNetwork,
+    CaroCard,
 
   },
   data() {
     return {
+
+      subscribersGained: { series: [{ data: [28, 40, 36, 52, 38, 60, 55] }], analyticsData: { subscribers: 92600 } },
       idEchart: 0,
       option: {
         xAxisData: [
@@ -248,15 +270,19 @@ export default {
       graph: [],
       card: [
         {
+          key: 0,
           title: 'replies',
           data: 0,
           style:
               'background: linear-gradient(75.42deg, #6943E6 24.3%, #8A67FF 99.88%, #7A6AAD 99.88%)!important;border: 1px solid #4015D0;',
           styleModal:
               'background: linear-gradient(75.42deg, #6943E6 24.3%, #8A67FF 99.88%, #7A6AAD 99.88%)!important;',
-          icon: '/images/social-network/dashboard/replies.png',
+          icon: 'MessageCircleIcon',
           cursor: true,
-          color: '#E84E4D',
+          color: '#744FEF',
+          back: 'background-color: rgba(143, 95, 232, 0.12)!important',
+          series: [],
+          key: 0,
         },
         {
           title: 'leads',
@@ -265,9 +291,13 @@ export default {
               'background: linear-gradient(75.42deg, #E84E4D 24.3%, #FF7170 99.88%)!important;border: 1px solid #D73A39;',
           styleModal:
               'background: linear-gradient(75.42deg, #E84E4D 24.3%, #FF7170 99.88%)!important;',
-          icon: '/images/social-network/dashboard/leads.png',
+          icon: 'UsersIcon',
           cursor: true,
-          color: '#744FEF',
+          color: '#E84E4D',
+          back: 'background-color: rgba(252, 66, 74, 0.12)!important',
+          series: [],
+          key: 0,
+
         },
         {
           title: 'answers',
@@ -276,9 +306,12 @@ export default {
               'background: linear-gradient(75.42deg, #E2764A 24.3%, #FF996F 99.88%)!important;border: 1px solid #CA4F1D;',
           styleModal:
               'background: linear-gradient(75.42deg, #E2764A 24.3%, #FF996F 99.88%)!important;',
-          icon: '/images/social-network/dashboard/answers.png',
+          icon: 'MessageSquareIcon',
           cursor: true,
           color: '#E67B4F',
+          back: 'background-color: rgba(255, 159, 67, 0.12)!important',
+          series: [],
+          key: 0,
         },
         {
           title: 'mobiles',
@@ -287,8 +320,11 @@ export default {
           style:
               'background: linear-gradient(75.42deg, #4BBFEA 24.3%, #54D1FF 99.88%)!important;border: 1px solid #279FCB;',
           styleModal: 'background: linear-gradient(75.42deg, #4BBFEA 24.3%, #54D1FF 99.88%)!important;',
-          icon: '/images/social-network/dashboard/mobiles.png',
+          icon: 'SmartphoneIcon',
           cursor: true,
+          back: 'background-color: rgba(0, 144, 231, 0.12)!important',
+          series: [],
+          key: 0,
         },
         {
           title: 'appointments',
@@ -298,8 +334,11 @@ export default {
               'background: linear-gradient(75.42deg, #4B56E9 24.3%, #4B56E9 24.3%, #6671FF 99.88%)!important;border: 1px solid #3B45D0;',
           styleModal:
               'background: linear-gradient(75.42deg, #4B56E9 24.3%, #4B56E9 24.3%, #6671FF 99.88%)!important;',
-          icon: '/images/social-network/dashboard/appointments.png',
+          icon: 'CalendarIcon',
           cursor: true,
+          back: 'background-color: rgba(143, 95, 232, 0.12)!important',
+          series: [],
+          key: 0,
         },
         {
           title: 'productivity',
@@ -308,8 +347,11 @@ export default {
           style: 'background: linear-gradient(75.42deg, #3ACDBB 24.3%, #42EDD8 99.88%)!important;border: 1px solid #14AC9A;',
           styleModal: 'background: linear-gradient(75.42deg, #3ACDBB 24.3%, #42EDD8 99.88%)!important;',
 
-          icon: '/images/social-network/dashboard/productivity.png',
+          icon: 'PercentIcon',
           cursor: false,
+          back: 'background-color: rgba(0, 210, 91, 0.12)!important',
+          series: [],
+          key: 0,
         },
       ],
       arrayOptions: [
@@ -392,6 +434,7 @@ export default {
         'Saturday',
         'Sunday',
       ],
+      keychart: 0,
     }
   },
   watch: {
@@ -423,12 +466,14 @@ export default {
     this.chardOption.id = 2
     this.getUsers()
     this.getGraphics()
+    this.firstGraphics()
     this.validateDate = this.showGraphForWeek ? this.endDay : this.endDayOfMonth
   },
   mounted() {
     this.getFilterCard()
   },
   methods: {
+    kFormatter,
     statusColor(name) {
       let color = ''
       switch (name) {
@@ -531,8 +576,6 @@ export default {
     },
     async getFilterCard() {
       try {
-        console.log(this.programFilter, 'program')
-        console.log(this.userFilter, 'user')
         const params = {
           from: moment(this.dateRange.startDate).format('Y-MM-D 00:00:00'),
           to: moment(this.dateRange.endDate).format('Y-MM-D 00:00:00'),
@@ -563,6 +606,7 @@ export default {
       this.dateRange.endDate = this.today
       this.changeOverlay = true
       this.getFilterCard()
+      this.keychart++
     },
     changeMonth(month) {
       this.firstDayOfMonth = moment(this.firstDayOfMonth)
@@ -574,6 +618,7 @@ export default {
         .endOf('month')
         .format('YYYY-MM-DD 00:00:00')
       this.getGraphics()
+      this.firstGraphics()
       this.validateDate = this.showGraphForWeek
         ? this.endDay
         : this.endDayOfMonth
@@ -587,6 +632,7 @@ export default {
         .add(6, 'days')
         .format('YYYY-MM-DD 00:00:00')
       this.getGraphics()
+      this.firstGraphics()
       this.validateDate = this.showGraphForWeek
         ? this.endDay
         : this.endDayOfMonth
@@ -655,6 +701,93 @@ export default {
       }
     },
 
+    async firstGraphics() {
+      try {
+        const params = {
+          from: this.showGraphForWeek ? this.firstDay : this.firstDayOfMonth,
+          to: this.showGraphForWeek ? this.endDay : this.endDayOfMonth,
+          program: this.programFilter.id,
+          user: this.userFilter.id,
+
+        }
+        this.juniorUser = false
+
+        const [replies, lead, answers, mobiles, appointments, productivity] = await Promise.all([DashboardService.getRepliesGraphic(params), DashboardService.getLeadsGraphic(params),
+          DashboardService.getAnswersGraphic(params), DashboardService.getAnswersGraphic(params), DashboardService.getMobilesGraphic(params),
+          DashboardService.getTasksGraphic(params), DashboardService.getProductivityGraphic(params)])
+
+        const infoReplies = []
+        this.card[0].series = []
+        replies.data.map(data => {
+          infoReplies.push((data.count).toString())
+        })
+
+        this.card[0].series.push({
+          data: infoReplies,
+        })
+        this.card[0].key++
+
+        const infoLead = []
+        this.card[1].series = []
+        lead.data.map(data => {
+          infoLead.push((data.count).toString())
+        })
+
+        this.card[1].series.push({
+          data: infoLead,
+        })
+        this.card[1].key++
+        console.log(this.card[1].series)
+
+        const infoAnswers = []
+        this.card[2].series = []
+        answers.data.map(data => {
+          infoAnswers.push((data.count).toString())
+        })
+
+        this.card[2].series.push({
+          data: infoAnswers,
+        })
+        this.card[2].key++
+
+        const infoMobiles = []
+        this.card[3].series = []
+        mobiles.data.map(data => {
+          infoMobiles.push((data.count).toString())
+        })
+
+        this.card[3].series.push({
+          data: infoMobiles,
+        })
+        this.card[3].key++
+        console.log(this.card[3].series)
+
+        const infoAppointments = []
+        this.card[4].series = []
+        appointments.data.map(data => {
+          infoAppointments.push((data.count).toString())
+        })
+
+        this.card[4].series.push({
+          data: infoAppointments,
+        })
+        this.card[4].key++
+
+        const infoProductivity = []
+        this.card[5].series = []
+        productivity.data.map(data => {
+          infoProductivity.push((data.count).toString())
+        })
+
+        this.card[5].series.push({
+          data: infoProductivity,
+        })
+        this.card[5].key++
+      } catch (e) {
+        this.showErrorSwal(e)
+        return []
+      }
+    },
   },
 }
 </script>
@@ -669,6 +802,7 @@ export default {
 
   color: #818181;
   font-size: large;
+  padding-top: 5px;
 }
 
 .btn-filters {
