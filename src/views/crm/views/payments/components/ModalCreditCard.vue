@@ -1,63 +1,75 @@
 <template>
-  <b-card no-body class="mt-2 h-28">
-    <!-- Card Title -->
-    <b-card-title>Cards</b-card-title>
-    <div class="col-lg-12 px-0">
-      <div style="margin-bottom: 0">
-        <!-- Table -->
-        <b-table
-          slot="table"
-          no-provider-filtering
-          ref="refClientsList"
-          primary-key="id"
-          table-class="text-nowrap"
-          responsive="sm"
-          show-empty
-          sticky-header="30vh"
-          :items="cards"
-          :fields="fields"
-        >
-          <!-- Column Select -->
-          <template #cell(Select)="data">
-            <ValidationProvider
-              name="comment"
-              rules="required"
-              v-slot="{ errors }"
+  <b-card no-body>
+    <h4 class="title-card">Cards</h4>
+
+    <slot name="errors" />
+
+    <div class="col-lg-12 px-0 mt-1">
+      <div>
+        <div>
+          <div style="margin-bottom: 0">
+            <b-table
+              slot="table"
+              no-provider-filtering
+              ref="refClientsList"
+              primary-key="id"
+              table-class="text-nowrap"
+              responsive="sm"
+              show-empty
+              sticky-header="30vh"
+              :items="cards"
+              :fields="fields"
             >
-              <b-form-radio
-                class="vs-checkbox-con"
-                :class="{ 'border-danger': errors[0] }"
-                :value="data.item.id"
-                @change="$emit('CardId', data.item.id)"
-                v-model="selected"
-                plain
-              >
-              </b-form-radio>
-            </ValidationProvider>
-          </template>
-          <!-- Column CARD NUMBER -->
-          <template #cell(cardnumber)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
-              <span> {{ "XXXX-XXXX-XXXX-" + data.item.cardnumber }} </span>
-            </div>
-          </template>
-          <!-- Column CVC -->
-          <template #cell(cardsecuritycode)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
-              <span>
-                {{
-                  data.item.cardsecuritycode.length == 3
-                    ? "XX" + data.item.cardsecuritycode.substr(2)
-                    : "XXX" + data.item.cardsecuritycode.substr(3)
-                }}
-              </span>
-            </div>
-          </template>
-        </b-table>
+              <template #cell(Select)="data">
+                <ValidationProvider
+                  name="comment"
+                  rules="required"
+                  v-slot="{ errors }"
+                >
+                  <b-form-radio
+                    class="vs-checkbox-con"
+                    :class="{ 'border-required': errors[0] }"
+                    :value="data.item.id"
+                    @change="$emit('CardId', data.item.id)"
+                    v-model="selected"
+                    plain
+                  >
+                  </b-form-radio>
+                </ValidationProvider>
+              </template>
+              <template #cell(cardnumber)="data">
+                <div
+                  class="
+                    d-flex
+                    flex-column
+                    justify-content-start
+                    align-items-start
+                  "
+                >
+                  <span> {{ "XXXX-XXXX-XXXX-" + data.item.cardnumber }} </span>
+                </div>
+              </template>
+              <template #cell(cardsecuritycode)="data">
+                <div
+                  class="
+                    d-flex
+                    flex-column
+                    justify-content-start
+                    align-items-start
+                  "
+                >
+                  <span>
+                    {{
+                      data.item.cardsecuritycode.length == 3
+                        ? "XX" + data.item.cardsecuritycode.substr(2)
+                        : "XXX" + data.item.cardsecuritycode.substr(3)
+                    }}
+                  </span>
+                </div>
+              </template>
+            </b-table>
+          </div>
+        </div>
       </div>
       <!-- Buttton ADD -->
       <div class="col-lg-12 text-right pr-0 mt-4">
@@ -102,8 +114,39 @@ export default {
       //More information
       cards: [],
       modalCreateCard: false,
-      //data field
-      fields: fields,
+      modalCard: false,
+      deletecardmodal: false,
+      card_id: "",
+      fields: [
+        {
+          key: "Select",
+          label: "",
+        },
+        {
+          key: "cardholdername",
+          label: "Card Holder Name",
+        },
+        {
+          key: "cardnumber",
+          label: "Card Number",
+        },
+        {
+          key: "type_card",
+          label: "Type",
+        },
+        {
+          key: "card_expi_month",
+          label: "MM",
+        },
+        {
+          key: "card_expi_year",
+          label: "YY",
+        },
+        {
+          key: "cardsecuritycode",
+          label: "CVC",
+        },
+      ],
     };
   },
 
@@ -122,8 +165,18 @@ export default {
     addCard:function(cards) {
       this.cards = cards;
     },
+    closeModalCard() {
+      this.modalCard = false;
+    },
 
-    searchcards: async function() {
+    openmodaldeletecard(id) {
+      this.card_id = id;
+      this.deletecardmodal = true;
+    },
+    closedModalDeleteCar() {
+      this.deletecardmodal = false;
+    },
+    async searchcards() {
       try {
         const data = await PaymentService.searchcards({
           id: this.cardsLead.lead_id,
@@ -154,5 +207,14 @@ export default {
 
 .w-15 {
   width: 15.5% !important;
+}
+
+.border-required {
+  width: 22px;
+  height: 22px;
+  border: 1px red solid;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center !important;
 }
 </style>
