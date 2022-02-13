@@ -466,7 +466,7 @@ export default {
 };
 </script>
   
-<style lang="scss">
+<style lang="scss" scoped>
 .bg-default {
   background: rgba(0, 0, 0, 0.1);
   text-align: center;

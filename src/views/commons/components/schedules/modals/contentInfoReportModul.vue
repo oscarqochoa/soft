@@ -96,7 +96,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .r-c {
   padding: 5px 5px;
 }
