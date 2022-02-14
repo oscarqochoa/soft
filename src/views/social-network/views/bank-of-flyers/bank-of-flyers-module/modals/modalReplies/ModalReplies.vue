@@ -31,12 +31,18 @@
           </template>
 
           <template v-slot:cell(nick_name)="data">
-            <p
-              class="mb-0 font-weight-bold "
-            >
-              {{ data.item.nickname }}
-            </p>
 
+            <div class="d-flex flex-column justify-content-start align-items-start">
+              <div class="mb-0 font-weight-bold text-important">
+
+                <router-link
+                  :class="[textLink]"
+                  :to="`/crm/leads/${data.item.id}`"
+                  target="_blank"
+                >      {{ data.item.nickname }}</router-link>
+
+              </div>
+            </div>
           </template>
 
           <template v-slot:cell(st_ad)="data">

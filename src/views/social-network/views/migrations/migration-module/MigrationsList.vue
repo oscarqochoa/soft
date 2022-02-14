@@ -42,9 +42,17 @@
           </template>
           <template v-slot:cell(name)="data">
 
-            <p class="d-flex      font-weight-bold p-1">
-              {{ data.item.lead_name }}
-            </p>
+            <div class="d-flex flex-column justify-content-start align-items-start">
+              <div class="mb-0 font-weight-bold text-important">
+
+                <router-link
+                  :class="[textLink]"
+                  :to="`/crm/leads/${data.item.id}`"
+                  target="_blank"
+                >  {{ data.item.lead_name }}</router-link>
+
+              </div>
+            </div>
 
           </template>
 

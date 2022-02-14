@@ -74,13 +74,13 @@
               class="w-100"
               :options="OptionProgram"
               label="option"
-              @input="getFilterCard(),getGraphics(),firstGraphics()"
+              @input="getFilterCard(),getGraphics()"
             />
 
           </div>
         </b-col>
         <b-col
-          md="2"
+          md="3"
           sm="auto"
         >
           <div
@@ -93,7 +93,7 @@
               v-model="userFilter"
               :options="users"
               label="user_name"
-              @input="getFilterCard(),getGraphics(),firstGraphics()"
+              @input="getFilterCard(),getGraphics()"
             />
 
           </div>
@@ -115,7 +115,7 @@
       >
 
         <b-row>
-          <b-col md="2">
+          <b-col md="3">
             <v-select
               v-model="chardOption"
               class="per-page-selector"
@@ -418,6 +418,7 @@ export default {
     },
   },
   created() {
+    this.$store.commit('app/SET_LOADING', true)
     this.programFilter.id = 0
     this.chardOption.option = 'Replies'
     this.chardOption.id = 2
@@ -548,7 +549,9 @@ export default {
         this.card[3].data = data.data.mobiles
         this.card[4].data = data.data.appointments
         this.card[5].data = `${data.data.productivity}%`
-
+        if (data.status === 200) {
+          this.$store.commit('app/SET_LOADING', false)
+        }
         return data
       } catch (e) {
         this.showErrorSwal(e)
@@ -669,6 +672,7 @@ export default {
 
   color: #818181;
   font-size: large;
+  padding-top: 5px;
 }
 
 .btn-filters {
@@ -693,4 +697,5 @@ export default {
   border-radius: 40px !important;
 
 }
+
 </style>

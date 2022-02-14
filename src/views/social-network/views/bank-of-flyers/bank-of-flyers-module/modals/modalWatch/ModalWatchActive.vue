@@ -53,206 +53,210 @@
     >
       <div>
         <ValidationObserver ref="form" />
-        <b-row>
-          <b-col
-            class="p-2"
-            lg="4"
-            xs="5"
-          >
-            <b-img-lazy
-              class="img-content-table-ti"
-              v-bind="mainProps"
-              :src="item.route_thumb"
-            />
-          </b-col>
-          <b-col
-            lg="7"
-            xs="7"
-            class="pt-2"
-          >
-            <b-row>
-              <b-col lg="12">
-                <b-form-group class>
-                  <b-input-group>
-                    <b-input-group-prepend>
-                      <b-input-group-text
-                        class="bg-primary text-white"
-                        style="padding-right: 5.25em"
-                      >
-                        <span>PROGRAM</span>
-                      </b-input-group-text>
-                    </b-input-group-prepend>
-                    <div class="d-flex align-items-center justify-content-around w-75">
-                      <div
-                        v-for="program in programs"
-                        :key="program.id"
-                        class="ml-1 "
-                      >
-                        <b-form-radio
-                          v-model="item.program"
-                          plain
-                          class="mr-1 "
-                          :value="program.value"
-                          name="program"
-                          :disabled="disabled"
+        <b-container>
+          <b-row>
+            <b-col
+              class="p-2  d-flex align-content-center align-items-center justify-content-center position_img "
+              xl="4"
+
+              xs="7"
+            >
+              <div>
+                <b-img-lazy
+                  class="img"
+                  v-bind="mainProps"
+                  :src="item.route_thumb"
+                />
+              </div>
+            </b-col>
+            <b-col
+              lg="7"
+              xs="7"
+              class="pt-2 fa"
+            >
+              <b-row>
+                <b-col lg="12">
+                  <b-form-group class>
+                    <b-input-group>
+                      <b-input-group-prepend>
+                        <b-input-group-text
+                          class="bg-primary text-white"
+                          style="padding-right: 5.25em"
                         >
+                          <span>PROGRAM</span>
+                        </b-input-group-text>
+                      </b-input-group-prepend>
+                      <div class="d-flex align-items-center justify-content-around w-75">
+                        <div
+                          v-for="program in programs"
+                          :key="program.id"
+                          class="ml-1 "
+                        >
+                          <b-form-radio
+                            v-model="item.program"
+                            plain
+                            class="mr-1 "
+                            :value="program.value"
+                            name="program"
+                            :disabled="disabled"
+                          >
 
-                          <b-img
-                            :src="`${baseImg}/assets${program.logo}`"
-                            style="height: 30px"
-                          />
+                            <b-img
+                              :src="`${baseImg}/assets${program.logo}`"
+                              style="height: 30px"
+                            />
 
-                        </b-form-radio></div>
-                    </div>
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col lg="12">
-                <b-form-group class>
-                  <b-input-group>
-                    <b-input-group-prepend>
-                      <b-input-group-text
-                        class="bg-primary text-white "
-                        style="padding-right: 7.15em"
+                          </b-form-radio></div>
+                      </div>
+                    </b-input-group>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col lg="12">
+                  <b-form-group class>
+                    <b-input-group>
+                      <b-input-group-prepend>
+                        <b-input-group-text
+                          class="bg-primary text-white "
+                          style="padding-right: 7.15em"
+                        >
+                          <span>STATE</span>
+                        </b-input-group-text>
+                      </b-input-group-prepend>
+                      <div
+                        class="ml-1 w-75"
                       >
-                        <span>STATE</span>
-                      </b-input-group-text>
-                    </b-input-group-prepend>
-                    <div
-                      class="ml-1 w-75"
-                    >
-                      <v-select
-                        v-model="item.state"
-                        :options="states"
-                        label="state"
-                        :reduce="val=>val.slug"
-                        :placeholder="item.state"
-                        :disabled="disabled"
-                      />
-                    </div>
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col lg="12">
-                <b-form-group class>
-                  <b-input-group>
-                    <b-input-group-prepend>
-                      <b-input-group-text
-                        class="bg-primary text-white"
-                        style="padding-right: 5em"
+                        <v-select
+                          v-model="item.state"
+                          :options="states"
+                          label="state"
+                          :reduce="val=>val.slug"
+                          :placeholder="item.state"
+                          :disabled="disabled"
+                        />
+                      </div>
+                    </b-input-group>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col lg="12">
+                  <b-form-group class>
+                    <b-input-group>
+                      <b-input-group-prepend>
+                        <b-input-group-text
+                          class="bg-primary text-white"
+                          style="padding-right: 5em"
+                        >
+                          <span>CAMPAIGN</span>
+                        </b-input-group-text>
+                      </b-input-group-prepend>
+                      <div
+                        class="ml-1 w-75"
                       >
-                        <span>CAMPAIGN</span>
-                      </b-input-group-text>
-                    </b-input-group-prepend>
-                    <div
-                      class="ml-1 w-75"
-                    >
 
-                      <v-select
-                        v-model="item.campaign"
-                        :options="items"
-                        label="campaign"
-                        :reduce="val=>val.campaign"
-                        :placeholder="item.campaign"
-                        :disabled="disabled"
-                      />
-                    </div>
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col lg="12">
-                <b-form-group class>
-                  <b-input-group>
-                    <b-input-group-prepend>
-                      <b-input-group-text
-                        class="bg-primary text-white"
-                        style="padding-right: 4em"
-                      >
-                        <span>FLYER NAME</span>
-                      </b-input-group-text>
-                    </b-input-group-prepend>
-                    <div class="ml-1 w-75">
-                      <b-input
-                        v-model="item.flyer_name"
-                        style="padding-right: 8em"
-                        type="text"
-                        :disabled="disabled"
-                      />
-                    </div>
-                  </b-input-group>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col lg="12">
+                        <v-select
+                          v-model="item.campaign"
+                          :options="items"
+                          label="campaign"
+                          :reduce="val=>val.campaign"
+                          :placeholder="item.campaign"
+                          :disabled="disabled"
+                        />
+                      </div>
+                    </b-input-group>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col lg="12">
+                  <b-form-group class>
+                    <b-input-group>
+                      <b-input-group-prepend>
+                        <b-input-group-text
+                          class="bg-primary text-white"
+                          style="padding-right: 4em"
+                        >
+                          <span>FLYER NAME</span>
+                        </b-input-group-text>
+                      </b-input-group-prepend>
+                      <div class="ml-1 w-75">
+                        <b-input
+                          v-model="item.flyer_name"
+                          style="padding-right: 8em"
+                          type="text"
+                          :disabled="disabled"
+                        />
+                      </div>
+                    </b-input-group>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col lg="12">
 
-                <b-form-group>
+                  <b-form-group>
 
-                  <b-input-group>
-                    <b-input-group-prepend>
-                      <b-input-group-text
-                        class="bg-primary text-white"
-                        style="padding-right: 6.35em"
-                      >
-                        <span>STATUS</span>
-                      </b-input-group-text>
-                    </b-input-group-prepend>
-                    <div class="ml-1 w-75 ">
-                      <v-select
-                        v-model="optionsStatus"
-                        :options="['PREACTIVE','ACTIVE', 'INACTIVE']"
-                        label="active"
-                        :disabled="disabled"
-                        @click="convert(item)"
-                      />
+                    <b-input-group>
+                      <b-input-group-prepend>
+                        <b-input-group-text
+                          class="bg-primary text-white"
+                          style="padding-right: 6.35em"
+                        >
+                          <span>STATUS</span>
+                        </b-input-group-text>
+                      </b-input-group-prepend>
+                      <div class="ml-1 w-75 ">
+                        <v-select
+                          v-model="optionsStatus"
+                          :options="['PREACTIVE','ACTIVE', 'INACTIVE']"
+                          label="active"
+                          :disabled="disabled"
+                          @click="convert(item)"
+                        />
 
-                    </div>
+                      </div>
 
-                  </b-input-group>
+                    </b-input-group>
 
-                </b-form-group>
-                <b-form-group>
+                  </b-form-group>
+                  <b-form-group>
 
-                  <b-input-group>
+                    <b-input-group>
 
-                    <b-input-group-prepend>
-                      <b-input-group-text
-                        class="bg-primary text-white "
-                      >
-                        <span>PUBLICATION DATE</span>
+                      <b-input-group-prepend>
+                        <b-input-group-text
+                          class="bg-primary text-white "
+                        >
+                          <span>PUBLICATION DATE</span>
 
-                      </b-input-group-text>
-                    </b-input-group-prepend>
-                    <div class="w-75">
-                      <b-form-datepicker
-                        v-model="item.publication_date"
-                        :disabled="disabled"
-                        class="ml-1"
-                        locale="en"
-                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                      />
+                        </b-input-group-text>
+                      </b-input-group-prepend>
+                      <div class="w-75">
+                        <b-form-datepicker
+                          v-model="item.publication_date"
+                          :disabled="disabled"
+                          class="ml-1"
+                          locale="en"
+                          :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                        />
 
-                    </div>
+                      </div>
 
-                  </b-input-group>
+                    </b-input-group>
 
-                </b-form-group>
-              </b-col>
-            </b-row>
+                  </b-form-group>
+                </b-col>
+              </b-row>
 
-          </b-col>
+            </b-col>
 
-        </b-row>
-
+          </b-row>
+        </b-container>
         <b-row class="pt-1 ">
           <b-col
-            class="pr-5"
+            class="pr-5 fa_obs"
             lg="12"
             xs="12"
           >
@@ -532,5 +536,26 @@ export default {
 
 .v-select .v-input__control {
   overflow: hidden;
+}
+
+@media (max-width: 1280px) {
+  .position_img{
+    flex: 0 0 100.3333333333%;
+    max-width: 100.3333333333%;
+
+  }
+
+  .img{
+    width: 55%;
+  }
+  .fa{
+    flex: 0 0 100%;
+    max-width: 100%;
+
+  }
+  .fa_obs{
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 </style>

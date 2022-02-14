@@ -127,13 +127,13 @@ export default {
   text-shadow: 2px 2px 2px #464e4f;
 }
 .title {
-  font-size: 15px !important;
+  font-size: 14.5px !important;
 }
 @media (max-width: 1600px) {
   .icon {
     width: 80px;
     height: 80px;
-    margin-top: -11px;
+    margin-top: -7px;
   }
   .icon img {
     width: 35px;

@@ -81,7 +81,7 @@
           </div>
         </b-col>
         <b-col
-          md="2"
+          md="3"
           sm="auto"
         >
           <div
@@ -461,6 +461,7 @@ export default {
     },
   },
   created() {
+    this.$store.commit('app/SET_LOADING', true)
     this.programFilter.id = 0
     this.chardOption.option = 'Replies'
     this.chardOption.id = 2
@@ -701,6 +702,7 @@ export default {
       }
     },
 
+    // eslint-disable-next-line consistent-return
     async firstGraphics() {
       try {
         const params = {
@@ -783,6 +785,10 @@ export default {
           data: infoProductivity,
         })
         this.card[5].key++
+
+        if (productivity.status === 200) {
+          this.$store.commit('app/SET_LOADING', false)
+        }
       } catch (e) {
         this.showErrorSwal(e)
         return []
