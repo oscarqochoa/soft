@@ -26,6 +26,9 @@ export default {
       type: Object,
       default: null,
     },
+    screen:{
+      type:Number
+    }
   },
   data() {
     return {
@@ -43,7 +46,8 @@ export default {
           width: "95%",
           left: "40px",
           right: "4%",
-          height: "320px",
+          // height: "70%", (this.screen >=180?
+          height: this.screen >=1080? "80%":"70%",
           containLabel: false,
         },
         tooltip: {
@@ -59,7 +63,7 @@ export default {
           type: "value",
           splitLine: { show: false },
           stepSize: 50,
-          height: 600,
+          height: 500,
         },
         // Data of Graphics
         series: this.optionData.series,
