@@ -2,9 +2,9 @@
   <b-row>
     <div class="col-md-12 col-lg-12 col-sm-12">
       <!-- All Screen -->
-      <b-row>
+      <b-row style="">
         <!-- Column Cards -->
-        <b-col cols="12" sm="4" md="4" lg="3" xl="2">
+        <b-col class="col-cards" cols="12" sm="4" md="4" lg="3" xl="2" style="">
           <!-- Card Leads-->
           <b-row class="pl-1 pr-1">
             <b-card
@@ -421,19 +421,46 @@
             </b-card>
           </b-row>
         </b-col>
+
         <!-- Column Graphics -->
-        <b-col class="mb-3" cols="12" sm="8" md="8" lg="9" xl="10">
-          <b-card class="col-12 h-100">
+        <b-col cols="12" sm="8" md="8" lg="9" xl="10">
+          <b-card class="col-12">
             <br />
             <br />
-            <!-- Graphic Title -->
-            <b-card-title><strong>MONTHLY GRAPHICS</strong></b-card-title>
             <!-- Content Card -->
-            <b-row class="d-flex justify-content-between flex-wrap">
-              <div class="mb-1 mb-sm-0 d-inline col-lg-7">
+            <b-row class="">
+              <div class="mb-1 mb-sm-0 d-inline col-lg-10 col-md-12 col-xl-7">
                 <b-row>
-                  <!-- Select Year -->
-                  <b-col cols="12" sm="12" md="4">
+                  <!-- Select User -->
+                  <b-col cols="12" sm="12" md="5" lg="5" class="pb-1">
+                    <v-select
+                      v-if="[1, 2].includes(currentUser.role_id)"
+                      v-model="userfilter"
+                      class="per-page-selector-user style-chooser"
+                     
+                      placeholder="Select User"
+                      label="user_name"
+                      :options="users"
+                      :reduce="(val) => val.id"
+                      @input="filtroCont()"
+                    />
+                  </b-col>
+                  <!-- Year and Sub Title -->
+                  <b-col cols="12" sm="12" md="12" lg="7" class="d-flex flex-wrap pb-1">
+                    <div
+                      class="
+                        d-flex
+                        align-items-center
+                        justify-content-center
+                        pr-1
+                      "
+                    >
+                      <!-- Graphic Sub Title -->
+                      <div>
+                        <h5><strong>MONTHLY GRAPHICS</strong></h5>
+                      </div>
+                    </div>
+                     <!-- Select Year -->
                     <v-select
                       v-model="year"
                       class="per-page-selector"
@@ -443,53 +470,39 @@
                       @input="filtroCont()"
                     />
                   </b-col>
-                  <!-- Select User -->
-                  <b-col cols="12" sm="12" md="4">
-                    <v-select
-                      v-if="[1, 2].includes(currentUser.role_id)"
-                      v-model="userfilter"
-                      class="per-page-selector-user"
-                      style="font-size: 15px"
-                      placeholder="Select User"
-                      label="user_name"
-                      :options="users"
-                      :reduce="(val) => val.id"
-                      @input="filtroCont()"
-                    />
-                  </b-col>
                 </b-row>
               </div>
               <!-- Array of Sub title Totals -->
-              <div class="col-lg-6 col-md-9 col-xl-5">
-                <b-row
+              <div
+                class="col-lg-8 col-md-12 col-xl-5 d-flex flex-wrap"
+                style="width: 100%"
+              >
+                <div
                   v-for="data in totalYearByCard"
                   :key="data.id"
-                  class="w-100"
-                  style="padding-bottom: 6px"
+                  class="d-flex flex-wrap mb-1 justify-content-between pr-1"
+                  :style="`${screenWidth<576? 'width: 100%':'width: 50%'}`"
                 >
-                  <b-col cols="7" xl="8">
-                    <div>
-                      <h3 class="font-weight-bolder">{{ data.name }}:</h3>
+                  <!-- Name of Total -->
+                  <div>
+                    <span class="font-weight-bolder">{{ data.name }}:</span>
+                  </div>
+                  <!-- Quantity of Data -->
+                  <div class="important text-center" style="float: left">
+                    <div
+                      style="background: #0090e7; border-radius: 5px; text-center;width:50px;"
+                    >
+                      <span class="font-weight-bolder" style="color: white">
+                        {{ data.total }}
+                      </span>
                     </div>
-                  </b-col>
-                  <b-col cols="5" xl="4">
-                    <div class="important text-center ml-1 mr-1">
-                      <div
-                        style="background: #0090e7; border-radius: 5px"
-                        class="ml-2 mr-2 w-100"
-                      >
-                        <h1 class="font-weight-bolder" style="color: white">
-                          {{ data.total }}
-                        </h1>
-                      </div>
-                    </div>
-                  </b-col>
-                </b-row>
+                  </div>
+                </div>
               </div>
             </b-row>
             <!-- Graphics Line -->
-            <b-card-body>
-              <app-echart-line-crm :key="idEchart" :option-data="rePaint" />
+            <b-card-body class="p-0 pb-2">
+              <app-echart-line-crm :key="idEchart" :option-data="rePaint" :screen="screen" />
             </b-card-body>
           </b-card>
         </b-col>
@@ -500,11 +513,13 @@
 
 <script>
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
+import { mapGetters } from "vuex";
 import vSelect from "vue-select";
 import moment from "moment";
+// Import Components
 import AppEchartLine from "@core/components/charts/echart/AppEchartLine.vue";
-import { mapGetters } from "vuex";
 import AppEchartLineCrm from "./components/AppEchartLineCrm.vue";
+// Import Services
 import DashboardService from "./service/dashboard.service";
 export default {
   name: "DashboardCrm",
@@ -512,12 +527,13 @@ export default {
     BCard,
     BButton,
     BCardBody,
-    AppEchartLine,
-    AppEchartLineCrm,
     BBadge,
     vSelect,
+    AppEchartLine,
+    AppEchartLineCrm,
+    
   },
-  data: function(){
+  data: function () {
     return {
       idEchart: 0,
       option: {
@@ -553,9 +569,19 @@ export default {
       years: [],
       itemCards: [true, false, false, false, false],
       item: null,
+      widthOfScreen:null,
+      heightOfScreen:null,
     };
   },
   computed: {
+    screen:function() {
+      this.heightOfScreen = window.screen.height
+      return this.heightOfScreen;
+    },
+    screenWidth:function() {
+      this.widthOfScreen = window.screen.width
+      return this.widthOfScreen
+    },
     ...mapGetters({
       skin: "appConfig/skin",
     }),
@@ -670,7 +696,10 @@ export default {
         this.totalYearByCard.push({ name: name, total: total });
       }
     },
+    // Change By Card
     changeTab: function (index) {
+      this.widthOfScreen = window.screen.width
+      this.heightOfScreen = window.screen.height
       this.changeItemCards(index);
       switch (index) {
         case 0:
@@ -739,6 +768,7 @@ export default {
         );
       }
     },
+    // Change By User or Year
     filtroCont: async function () {
       this.itemCards = [true, false, false, false, false];
       if (this.userfilter != null) {
@@ -806,13 +836,16 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.col-container {
-  display: table;
-  width: 100%;
+// Styles V-select
+.col-cards {
+  height: 70vh;
+  max-height: 70vh;
+  overflow: auto;
 }
-.col {
-  display: table-cell;
-  padding: 16px;
+// hidding scrollbar
+::-webkit-scrollbar {
+  width: 0; 
+  background: transparent;
 }
 
 .item-view-radio-group ::v-deep {
@@ -822,13 +855,6 @@ export default {
   }
 }
 
-// .ecommerce-card {
-//   &:hover {
-//     transform: translateY(-5px);
-//     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-//     background-color: aqua;
-//   }
-// }
 .div-box1 {
   background-color: #0090e7;
 }
@@ -851,8 +877,6 @@ export default {
   }
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    // background-color: #8077e6;
-    // background: linear-gradient(to right, blue, rgb(241, 196, 241));
     background: linear-gradient(90deg, #0090e7 0%, #8f5fe8 100%);
     color: white;
   }
@@ -941,11 +965,9 @@ export default {
 
 .per-page-selector {
   width: 130px;
-  height: 50px;
 }
 
 .per-page-selector-user {
   width: 200px;
-  height: 50px;
 }
 </style>
