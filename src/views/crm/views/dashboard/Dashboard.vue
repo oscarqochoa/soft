@@ -18,7 +18,7 @@
               :class="classAdd"
               :style="
                 itemCards[0] == true
-                  ? 'background: linear-gradient(to right, blue, rgb(230, 174, 230)); color: white'
+                  ? 'background: linear-gradient(90deg, #0090e7 0%, #8f5fe8 100%); color: white'
                   : classAdd == 'dark'
                   ? ''
                   : 'background-color:aliceblue'

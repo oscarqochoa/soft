@@ -242,9 +242,12 @@ import { VueAutosuggest } from "vue-autosuggest";
 import vSelect from "vue-select";
 
 import { mapGetters } from "vuex";
+// Import Services
 import PaymentService from "../service/payments.service";
+// Import Modal
 import ModalCreditCard from "@/views/crm/views/payments/components/ModalCreditCard.vue";
-import { options, optionsMethodPay } from "../data/options.process.data";
+// Import Data
+import {options,optionsMethodPay} from '../data/options.process.data'
 export default {
   name: "process-crm",
   components: {

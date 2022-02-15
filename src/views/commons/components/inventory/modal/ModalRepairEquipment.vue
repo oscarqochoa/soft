@@ -12,9 +12,11 @@
       title-tag="h3"
     >
       <div>
+        <!-- Form -->
         <ValidationObserver ref="form">
           <form @submit.prevent="saveAssignEquipment">
             <div>
+              <!-- COMMENTARY -->
               <b-row>
                 <b-col sm="12">
                   <ValidationProvider rules="required" v-slot="{ errors }">
@@ -32,7 +34,7 @@
                   </ValidationProvider>
                 </b-col>
               </b-row>
-
+              <!-- Button Submit -->
               <b-form-group>
                 <b-button
                   variant="primary"
@@ -54,6 +56,7 @@
 </template>
 
 <script>
+// Import Services
 import InventoryService from "../service/inventory.service";
 export default {
   props: {
@@ -76,29 +79,29 @@ export default {
       type: [Number, String],
     },
   },
-  computed: {
-    statusEquipment() {
-      return [1, 2].includes(this.statusNewEquipment)
-        ? "RETURN EQUIPMENT"
-        : "EQUIPMENT MAINTENANCE";
-    },
-    statusButton() {
-      return [1, 2].includes(this.statusNewEquipment)
-        ? "RETURN "
-        : "SEND FOR REPAIR";
-    },
-  },
-  data() {
+  data:function() {
     return {
       mutableIfModalEquipment: this.modalRepairEquipment,
       commentary: "",
     };
   },
+  computed: {
+    statusEquipment:function() {
+      return [1, 2].includes(this.statusNewEquipment)
+        ? "RETURN EQUIPMENT"
+        : "EQUIPMENT MAINTENANCE";
+    },
+    statusButton:function() {
+      return [1, 2].includes(this.statusNewEquipment)
+        ? "RETURN "
+        : "SEND FOR REPAIR";
+    },
+  },
   methods: {
-    closeModal() {
+    closeModal:function() {
       this.$emit("closeModalRepairEquipment", false);
     },
-    saveAssignEquipment() {
+    saveAssignEquipment:function() {
       this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
