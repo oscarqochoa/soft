@@ -253,7 +253,7 @@ export default {
     VueAutosuggest,
   },
 
-  data: function () {
+  data() {
     return {
       price: 0,
       modalCreditController: 0,
@@ -307,16 +307,16 @@ export default {
   },
 
   computed: {
-    statusSpinner: function () {
+    statusSpinner() {
       return this.spinner;
     },
-    statusSelectedSearch: function () {
+    statusSelectedSearch() {
       return this.statusSelected;
     },
-    changeDisable: function () {
+    changeDisable() {
       return this.userfilter == "" ? true : false;
     },
-    filterSearch: function () {
+    filterSearch() {
       return this.userfilter == "" ? false : true;
     },
     ...mapGetters({
@@ -324,14 +324,14 @@ export default {
     }),
   },
   methods: {
-    getCardsLead: function () {
+    getCardsLead() {
       this.cardsLead = {
         lead_id: this.user_id, //user_id
         user_id: this.currentUser.user_id,
         rol: this.currentUser.role_id,
       };
     },
-    chargeStatus: function () {
+    chargeStatus() {
       if (this.charge == false) {
         this.showConfirmSwal("DELETE", "Are you sure?").then((result) => {
           if (result.value) {
@@ -359,7 +359,7 @@ export default {
       }
       return num;
     },
-    justNumbers: function (event) {
+    justNumbers(event) {
       var charCode = window.event ? event.which : event.keyCode;
       var RE = /^\d*(\.\d{1})?\d{0,1}$/;
       if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -367,7 +367,7 @@ export default {
         event.preventDefault();
       }
     },
-    getCardId: function (Card) {
+    getCardId(Card) {
       this.card_id = Card;
     },
     async getcard() {
@@ -400,7 +400,7 @@ export default {
 
       this.subtAutorize();
     },
-    subtAutorize: function () {
+    subtAutorize() {
       this.$refs.form.validate().then(async (success) => {
         if (!success) {
           this.card_id = "";
@@ -439,12 +439,13 @@ export default {
 
                     this.$router.push({ name: "payments-crm-list" });
                   } else {
+                    this.card_id = "";
+
                     this.showErrorSwal(
                       this.responseTypes[data.data.transaction.responseCode]
                     ).then((res) => {
                       if (res) {
                         this.getcard();
-                        this.card_id = "";
                       }
                     });
                   }
@@ -466,22 +467,24 @@ export default {
                   this.messageList = false;
                   this.errosList = true;
                   if (this.methodpayment == 1) {
+                    this.card_id = "";
+
                     this.showErrorSwal(
                       this.responseTypes[data.data.transaction.responseCode]
                     ).then((res) => {
                       if (res) {
                         this.getcard();
-                        this.card_id = "";
                       }
                     });
                   }
                 } else {
+                  this.card_id = "";
+
                   this.showErrorSwal(
                     this.responseTypes[data.data.transaction.responseCode]
                   ).then((res) => {
                     if (res) {
                       this.getcard();
-                      this.card_id = "";
                     }
                   });
                 }
@@ -489,6 +492,8 @@ export default {
             } catch (error) {
               this.showErrorSwal(error);
               this.removePreloader();
+
+              this.card_id = "";
             }
           }
 

@@ -95,6 +95,7 @@
               :class="[
                 bgSchedule(schedule),
                 'item-hour',
+                isDarkTheme ? 'item-hour-dark' : 'item-hour-light',
                 schedule.date == today ? 'bg-hour-today' : '',
               ]"
               @click="openDetails(item, schedule, schedule.checking_m, 1)"
@@ -106,6 +107,7 @@
             <div
               :class="[
                 'bg-default item-hour',
+                isDarkTheme ? 'item-hour-dark' : 'item-hour-light',
                 schedule.date == today ? 'bg-hour-today' : '',
               ]"
               @click="openDetails(item, schedule, schedule.m_begining_break, 2)"
@@ -117,6 +119,7 @@
             <div
               :class="[
                 'bg-default item-hour',
+                isDarkTheme ? 'item-hour-dark' : 'item-hour-light',
                 schedule.date == today ? 'bg-hour-today' : '',
               ]"
               @click="openDetails(item, schedule, schedule.m_finish_break, 3)"
@@ -128,7 +131,8 @@
             <div
               :class="[
                 'bg-default item-hour',
-                schedule.date == today ? 'bg-hour-today' : '',
+                isDarkTheme ? 'item-hour-dark' : 'item-hour-light',
+                schedule.date == today ? 'bg-hour-today ' : '',
               ]"
               @click="openDetails(item, schedule, schedule.m_checkout, 4)"
               v-b-tooltip.hover
@@ -139,6 +143,7 @@
             <div
               :class="[
                 'item-count-hours',
+                isDarkTheme ? 'text-light' : '',
                 schedule.date == today ? 'bg-count-hours-today' : 'bg-hours',
               ]"
             >
@@ -187,10 +192,11 @@
       id="sidebar-backdrop"
       title="More info"
       bg-variant="white"
-      sidebar-class="sidebar-lg-schedule"
+      sidebar-class="sidebar-lg-schedule sidebar-schedules"
       header-class="pt-1"
       backdrop
       shadow
+      style="width: 700px !important"
     >
       <div class="px-3 py-2">
         <content-more-info-report :data="dataSchedule" :key="keyMoreInfo" />
@@ -462,6 +468,9 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    isDarkTheme() {
+      return this.$store.state.appConfig.layout.skin == "dark";
+    },
   },
 };
 </script>
@@ -530,6 +539,12 @@ export default {
 
 .bg-hour-today {
   background: rgba(188, 159, 241, 0.15) !important;
+  transition: background 0.3s ease-in-out;
+
+  &:hover {
+    background: #543e86 !important;
+    color: white;
+  }
 }
 
 .bg-count-hours-today {
@@ -583,22 +598,31 @@ table {
 
 .item-hour {
   background: transparent;
-  border-bottom: 1px solid #ebe9f1;
-  margin-top: 1.5px;
-  margin-bottom: 1.5px;
   padding: 0px 0px 3px 0px;
   font-size: 12.5px;
 
   cursor: pointer;
   transition: background 0.3s ease-in-out;
 
-  &:hover {
-    background: #f3f2f7;
-  }
-
   &:nth-child(4) {
     border-bottom: 1px white solid;
     margin-bottom: 0px;
+  }
+
+  &-light {
+    border-bottom: 1px solid #ebe9f1 !important;
+
+    &:hover {
+      background: #f3f2f7;
+    }
+  }
+
+  &-dark {
+    border-bottom: 1px solid #31343e !important;
+
+    &:hover {
+      background: #010202;
+    }
   }
 }
 
@@ -609,5 +633,9 @@ table {
   font-size: 13px;
   padding: 4px 0px 2px 0px;
   /* border: 2px solid white !important; */
+}
+
+.b-sidebar {
+  width: 40% !important;
 }
 </style>
