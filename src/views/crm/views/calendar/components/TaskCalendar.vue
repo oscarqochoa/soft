@@ -1,0 +1,78 @@
+<template>
+  <b-container
+    :class="['bg-light-' + taskColor[task.title], 'pt-50']"
+  >
+    <b-row>
+      <b-col
+        class="d-flex align-items-center font-weight-bolder"
+        style="color: black !important;"
+      >
+        <b-img
+          v-if="task.seller_image"
+          rounded
+          width="30"
+          height="32"
+          :src="task.seller_image"
+          style="margin-right: 6px !important;"
+        />
+        <b-avatar
+          v-else
+          rounded
+          size="30"
+          style="margin-right: 6px !important;"
+          :variant="'light-'+taskColor[task.title]"
+        />
+        {{ task.title }}
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <ul
+          class="p-0"
+          style="margin-left: 47px !important; font-size: 0.76em !important;"
+        >
+          <li style="color: black !important;">
+            {{ task.lead_mobile }}
+          </li>
+          <li style="color: black !important;">
+            {{ task.lead_name }}
+          </li>
+          <li style="color: black !important;">
+            {{ (task.date + ' ' + task.from) | myHourTime }} {{ (task.date + ' ' + task.to) | myHourTime }}
+          </li>
+          <li
+            class="text-danger"
+          >
+            {{ task.real_time | myHourTime }} ({{ task.state }})
+          </li>
+        </ul>
+      </b-col>
+    </b-row>
+  </b-container>
+</template>
+
+<script>
+export default {
+  name: 'TaskCalendar',
+  props: {
+    task: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      taskColor: {
+        TEL: 'primary',
+        CN: 'success',
+        Personal: 'danger',
+        Family: 'warning',
+        ETC: 'info',
+      },
+    }
+  },
+}
+</script>
+
+<style scoped>
+</style>

@@ -59,27 +59,38 @@
           >
             <b-col>
               <b-row>
-                <p
-                  class="text-center w-100 m-0 font-weight-bolder border-bottom"
-                  :class="{'current-date-class': currentDay.date() === date.date && month === currentDay.month()}"
+                <slot
+                  name="date-header"
+                  :have-events="date.haveEvents"
+                  :number-of-events="date.numberOfEvents"
+                  :events="date.events ? date.events : []"
+                  :short-day="daysList[index % 7]"
+                  :full-day="completeDaysList[index % 7]"
+                  :date="date.date"
                 >
-                  {{ daysList[index % 7] }}
-                </p>
+                  <p
+                    class="text-center w-100 m-0 font-weight-bolder border-bottom py-50"
+                    :class="{'current-date-class': currentDay.date() === date.date && month === currentDay.month()}"
+                  >
+                    {{ daysList[index % 7] }} {{ date.date }}
+                  </p>
+                </slot>
               </b-row>
-              <b-row class="h-100">
-
-                <div
-                  class="scroll-date-info"
-                >
-                  <div>
-                    {{ date.date }}
-                  </div>
-                  <slot
-                    name="date"
-                    :events="date.events ? date.events : []"
-                  />
-
-                </div>
+              <b-row>
+                <slot
+                  name="date"
+                  :events="date.events ? date.events : []"
+                  :have-events="date.haveEvents"
+                  :number-of-events="date.numberOfEvents"
+                />
+              </b-row>
+              <b-row>
+                <slot
+                  name="date-footer"
+                  :have-events="date.haveEvents"
+                  :number-of-events="date.numberOfEvents"
+                  :events="date.events ? date.events : []"
+                />
               </b-row>
             </b-col>
           </b-row>
@@ -87,7 +98,34 @@
       </div>
     </b-row>
     <b-row v-if="selectedOption === 'List'">
-      lista
+      <div
+        v-for="(day, key) in listEvents"
+        :key="key"
+        class="w-100"
+      >
+        <b-row>
+          <b-col class="d-flex align-items-center justify-content-between px-50">
+            <span>
+              {{ currentMonth }} {{ day.date }}, {{ year }}
+            </span>
+            <span>
+              {{ completeDaysList[$moment((monthsList.indexOf(currentMonth) + 1) +'/' + day.date +'/' + year).day()] }}
+            </span>
+          </b-col>
+        </b-row>
+        <b-row class="seven-columns">
+          <div
+            v-for="(event, index) in day.events"
+            :key="index"
+            class="min-date-height"
+          >
+            <slot
+              name="date-list"
+              :event="event"
+            />
+          </div>
+        </b-row>
+      </div>
     </b-row>
   </b-container>
 </template>
@@ -123,8 +161,14 @@ export default {
       selectedOption: 'Month',
       monthsList: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       daysList: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      completeDaysList: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       calendarDates: [],
     }
+  },
+  computed: {
+    listEvents() {
+      return this.calendarDates.filter(val => val.haveEvents === true)
+    },
   },
   created() {
     this.currentDay = this.$moment()
@@ -146,17 +190,22 @@ export default {
           this.calendarDates.push({
             date: lastDayOfBeforeMonth.date() - (lastDayOfBeforeMonth.day() - i),
             type: 'before',
+            haveEvents: false,
+            numberOfEvents: 0,
           })
         }
       }
       for (let i = 1; i <= this.lastDayOfCurrentMonth.date(); i += 1) {
+        const eventsOfCurrentDay = this.events.filter(event => {
+          const eventDay = this.$moment(event[this.dateLocation], this.dateLocationFormat)
+          return eventDay.date() === i
+        })
         this.calendarDates.push({
           date: i,
           type: 'current',
-          events: [...this.events.filter(event => {
-            const eventDay = this.$moment(event[this.dateLocation], this.dateLocationFormat)
-            return eventDay.date() === i
-          })],
+          events: eventsOfCurrentDay,
+          haveEvents: eventsOfCurrentDay.length > 0,
+          numberOfEvents: eventsOfCurrentDay.length,
         })
       }
       if (this.lastDayOfCurrentMonth.day() < 6) {
@@ -164,6 +213,8 @@ export default {
           this.calendarDates.push({
             date: i,
             type: 'after',
+            haveEvents: false,
+            numberOfEvents: 0,
           })
         }
       }
@@ -205,9 +256,8 @@ export default {
 }
 
 .min-date-height {
-  min-height: 80px;
-  max-height: 150px;
-  overflow: hidden;
+  min-height: 150px;
+  overflow-x: hidden;
 }
 
 .disabled-date {
@@ -218,10 +268,11 @@ export default {
   color: white;
 }
 .scroll-date-info{
-    height: 100px;
-     overflow: auto;
 }
 .scroll-date-info::-webkit-scrollbar {
   width: 0;
+}
+.min-date-height {
+  border-color: #C4C4C4 !important;
 }
 </style>

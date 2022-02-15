@@ -19,7 +19,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -42,7 +42,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -65,7 +65,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -88,7 +88,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -111,7 +111,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -134,7 +134,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -157,7 +157,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -180,7 +180,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -203,7 +203,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -226,7 +226,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -249,7 +249,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Adrian Perez',
     creator_name: 'Adrian Perez',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=993537c179e3afc0afca2ab8044fea3dc55884767003b0e6849e7da46de7fe18',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=0c1c5041afa16187d4bd6e3eef1f0c3013965380026d1d6676ff5d3d53d7e0b3',
     updater_name: null,
   },
   {
@@ -272,7 +272,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Adrian Perez',
     creator_name: 'Adrian Perez',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=993537c179e3afc0afca2ab8044fea3dc55884767003b0e6849e7da46de7fe18',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=0c1c5041afa16187d4bd6e3eef1f0c3013965380026d1d6676ff5d3d53d7e0b3',
     updater_name: null,
   },
   {
@@ -295,7 +295,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Adrian Perez',
     creator_name: 'Adrian Perez',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=993537c179e3afc0afca2ab8044fea3dc55884767003b0e6849e7da46de7fe18',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=0c1c5041afa16187d4bd6e3eef1f0c3013965380026d1d6676ff5d3d53d7e0b3',
     updater_name: null,
   },
   {
@@ -318,7 +318,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Adrian Perez',
     creator_name: 'Adrian Perez',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=993537c179e3afc0afca2ab8044fea3dc55884767003b0e6849e7da46de7fe18',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=0c1c5041afa16187d4bd6e3eef1f0c3013965380026d1d6676ff5d3d53d7e0b3',
     updater_name: null,
   },
   {
@@ -341,7 +341,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Adrian Perez',
     creator_name: 'Adrian Perez',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=993537c179e3afc0afca2ab8044fea3dc55884767003b0e6849e7da46de7fe18',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=0c1c5041afa16187d4bd6e3eef1f0c3013965380026d1d6676ff5d3d53d7e0b3',
     updater_name: null,
   },
   {
@@ -364,7 +364,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Adrian Perez',
     creator_name: 'Adrian Perez',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=993537c179e3afc0afca2ab8044fea3dc55884767003b0e6849e7da46de7fe18',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=0c1c5041afa16187d4bd6e3eef1f0c3013965380026d1d6676ff5d3d53d7e0b3',
     updater_name: null,
   },
   {
@@ -387,7 +387,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Adrian Perez',
     creator_name: 'Adrian Perez',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=993537c179e3afc0afca2ab8044fea3dc55884767003b0e6849e7da46de7fe18',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/118/IMG_1607.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=0c1c5041afa16187d4bd6e3eef1f0c3013965380026d1d6676ff5d3d53d7e0b3',
     updater_name: null,
   },
   {
@@ -410,7 +410,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -433,7 +433,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -456,7 +456,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -479,7 +479,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
   {
@@ -502,7 +502,7 @@ export default [
     lead_mobile: null,
     seller_name: 'Roger Segura',
     creator_name: 'Roger Segura',
-    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/lion.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220212%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220212T221829Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=8246327ffcfdb25a37e8d6e94d48e1c39f3636ad54330a8dd183259027b40c27',
+    seller_image: 'https://amgsoftpre.s3.amazonaws.com/USERS/IMG/1/Sett_OriginalCentered.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA6BWVK4LFDQZDOP56%2F20220214%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220214T212123Z&X-Amz-SignedHeaders=host&X-Amz-Expires=7200&X-Amz-Signature=301a076f690b3510d7ad013878c3b07c3f8647ca2cacc436883514aa6e80c75b',
     updater_name: null,
   },
 ]
