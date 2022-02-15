@@ -235,6 +235,7 @@
                 ></modal-credit-card>
               </div>
             </div>
+            <!-- Button Submit And CheckBox SEND -->
             <div class="row w-100">
               <div class="ml-1 pl-1 d-flex">
                 <div class="d-inline-block mr-1">
@@ -266,8 +267,11 @@
 <script>
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
+// Import Services
 import PaymentService from "../service/payments.service";
+// Import Modal
 import ModalCreditCard from "@/views/crm/views/payments/components/ModalCreditCard.vue";
+// Import Data
 import {options,optionsMethodPay} from '../data/options.process.data'
 export default {
   name: "process-crm",

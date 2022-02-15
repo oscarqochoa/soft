@@ -12,6 +12,7 @@
       title-tag="h3"
       :no-close-on-backdrop="true"
     >
+      <!-- Form -->
       <ValidationObserver ref="form">
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12">
@@ -20,6 +21,7 @@
               rules="required"
               v-slot="{ errors }"
             >
+              <!-- Input Category -->
               <b-form-group label>
                 <b-input-group
                   prepend="NAME"
@@ -38,7 +40,9 @@
         </div>
       </ValidationObserver>
       <b-row>
+        <!-- List of Buttons -->
         <b-col md="12" style="text-align: center" class="mt-3">
+          <!-- Button Create  -->
           <b-button
             variant="success"
             style="border-radius: 5px !important"
@@ -46,6 +50,7 @@
             v-if="!spinnerBtnCg"
             >Create</b-button
           >
+          <!-- Button Spinner -->
           <b-button
             variant="success"
             style="border-radius: 5px !important"
@@ -61,6 +66,7 @@
 </template>
 
 <script>
+// Import Services
 import GlossarydService from "../service/glossary.service"
 export default {
   props: {
@@ -68,7 +74,7 @@ export default {
       type: Boolean,
     },
   },
-  data() {
+  data:function() {
     return {
       category: null,
       spinnerBtnCg: false,
@@ -76,10 +82,10 @@ export default {
     };
   },
   methods: {
-    closeModalCategory() {
+    closeModalCategory:function() {
       this.$emit("close", false);
     },
-    createCategory() {
+    createCategory:function() {
       this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;

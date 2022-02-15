@@ -12,6 +12,7 @@
       title-tag="h3"
     >
       <div class="table-responsive">
+        <!-- Table -->
         <b-table
           :api-url="'/logistics/inventory/get-tracking-request'"
           ref="refPaymentsGrid"
@@ -30,26 +31,21 @@
               <strong>Loading ...</strong>
             </div>
           </template>
-          <template #cell(status)="data">
-            <p
-              :style="
-                data.item.status == 'DISAPPROVED'
-                  ? 'color: #FF0000'
-                  : data.item.status == 'SEND'
-                  ? 'color: rgb(255 177 0);'
-                  : data.item.status == 'APPROVED'
-                  ? 'color: blue;'
-                  : 'color: #00CC00'
-              "
-            >
-              {{ data.item.status }}
-            </p>
-          </template>
+          <!-- Column CREATED BY -->
           <template #cell(created_at)="data">
             {{ data.item.created_by }}
             <br />
             {{ data.item.created_at | myGlobalDay }}
           </template>
+          <!-- Column STATUS -->
+          <template #cell(status)="data">
+            <p
+              :style="statusColor(data.item.status)"
+            >
+              {{ data.item.status }}
+            </p>
+          </template>
+          <!-- Column COMMENTARY -->
           <template #cell(commentary)="data">
             <div
               style="white-space: normal"
@@ -63,7 +59,8 @@
 </template>
 
 <script>
-import fields from '../data/fields.viewtracking.data'
+// Import Data
+import fields from "../data/fields.viewtracking.data";
 export default {
   props: {
     modalTrackingRequest: {
@@ -76,8 +73,7 @@ export default {
       type: Object,
     },
   },
-  components: {},
-  data() {
+  data: function () {
     return {
       mutableIfModalEquipment: this.modalTrackingRequest,
       id: "",
@@ -85,10 +81,19 @@ export default {
     };
   },
   methods: {
-    closeModal() {
+    statusColor: function (status) {
+      return status == "DISAPPROVED"
+        ? "color: #FF0000"
+        : status == "SEND"
+        ? "color: rgb(255 177 0);"
+        : status == "APPROVED"
+        ? "color: blue;"
+        : "color: #00CC00";
+    },
+    closeModal: function () {
       this.$emit("closeTrackingRequest", false);
     },
-    async myProvider(ctx) {
+    myProvider: async function (ctx) {
       try {
         const data = await amgApi.post(`${ctx.apiUrl}`, {
           requestId: this.requestId,
@@ -97,6 +102,7 @@ export default {
         return items || [];
       } catch (error) {
         console.error(error);
+        return [];
       }
     },
   },

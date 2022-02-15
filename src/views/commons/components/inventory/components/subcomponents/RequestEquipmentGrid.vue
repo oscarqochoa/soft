@@ -12,6 +12,7 @@
       :send-multiple-sms="false"
       @reload="$refs['refClientsList'].refresh()"
     >
+      <!-- Table -->
       <b-table
         small
         slot="table"
@@ -35,6 +36,7 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <!-- Column PROGRAMS TO INSTALL -->
         <template #cell(programs_to_install)="data">
           <div>
             <ul id="v-for-object" class="demo">
@@ -42,12 +44,14 @@
             </ul>
           </div>
         </template>
+        <!-- Column COMMENT -->
         <template #cell(commentary)="data">
           <div
             class="tdbreak"
             style="width:100px; overflow:hidden;text-overflow:ellipsis"
           >{{ data.item.commentary }}</div>
         </template>
+        <!-- Column STATUS -->
         <template #cell(status)="data">
           <p
             :style="
@@ -59,11 +63,13 @@
             "
           >{{ data.item.status }}</p>
         </template>
+        <!-- Column CREATED BY -->
         <template #cell(created_at)="data">
           {{ data.item.created_by }}
           <br />
           {{ data.item.created_at | myGlobalDay }}
         </template>
+        <!-- Column Button Tracking -->
         <template #cell(tracking)="data">
           <div>
             <b-button
@@ -77,7 +83,7 @@
         </template>
       </b-table>
     </filter-slot>
-
+    <!-- Modal View Tracking Request -->
     <modal-view-tracking-request
       v-if="modalTrackingRequest"
       :modalTrackingRequest="modalTrackingRequest"
@@ -89,11 +95,13 @@
 </template>
 
 <script>
-import vSelect from "vue-select";
-import ModalViewTrackingRequest from "../../modal/ModalViewTrackingRequest.vue";
-import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
+import vSelect from "vue-select";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+// Import Modal
+import ModalViewTrackingRequest from "../../modal/ModalViewTrackingRequest.vue";
+// Import Data
 import fields from '../../data/fields.requestequipment.data'
 import filters from '../../data/filter.requestequipment.data'
 export default {
@@ -113,7 +121,7 @@ export default {
     ModalViewTrackingRequest,
     FilterSlot
   },
-  data() {
+  data:function() {
     return {
       totalRows: 0,
       paginate: {
@@ -128,16 +136,16 @@ export default {
       },
       startPage: null,
       toPage: null,
-      arrayColumns: fields,
       modalTrackingRequest: false,
       requestId: "",
       sortDesc: true,
+      arrayColumns: fields,
       filter: filters,
     };
   },
   computed: {
     ...mapGetters("inventory-store", ["updateRequestEquip"]),
-    statusUpdateRequestEquip() {
+    statusUpdateRequestEquip:function() {
       if (this.updateRequestEquip) {
         if(this.$refs.refClientsList === undefined){
           this.UpdateRequEquip();
@@ -151,12 +159,12 @@ export default {
   },
   methods: {
     ...mapActions("inventory-store", ["UPDATE_REQUEST_EQUIPMENT"]),
-    UpdateRequEquip() {
+    UpdateRequEquip:function() {
       if (this.updateRequestEquip) {
         this.UPDATE_REQUEST_EQUIPMENT(false);
       }
     },
-    async myProvider(ctx) {
+    myProvider:async function(ctx) {
       try{
         const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         from: this.filter[0].model == "" ? null : this.filter[0].model,
@@ -177,7 +185,6 @@ export default {
         this.end_page = data.data.last_page;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
-        // Must return an array of items or an empty array if an error occurred
         return items || [];
 
       }catch(error){
@@ -188,14 +195,15 @@ export default {
             "Error",
             "XIcon",
             "Something went wrong!"
-          );
+        );
+        return [];
       }
     },
-    openModalTrackingRequest(requestId) {
+    openModalTrackingRequest:function(requestId) {
       this.requestId = requestId;
       this.modalTrackingRequest = true;
     },
-    closeModalTrackingRequest() {
+    closeModalTrackingRequest:function() {
       this.modalTrackingRequest = false;
     }
   }
