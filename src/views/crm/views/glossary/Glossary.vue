@@ -2,12 +2,14 @@
   <div>
     <header-slot>
       <template #actions>
+        <!-- Button Create Glossary -->
         <b-button variant="success" @click="modalOpen(1)"
           >Create Glossary</b-button
         >
       </template>
     </header-slot>
     <b-card no-body>
+      <!-- Table -->
       <filter-slot
         :filter="filter"
         :filter-principal="filterPrincipal"
@@ -41,6 +43,7 @@
               <strong>Loading ...</strong>
             </div>
           </template>
+          <!-- Column TITLE -->
           <template #cell(title)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
@@ -58,6 +61,7 @@
               >
             </div>
           </template>
+          <!-- Column CREATED BY -->
           <template #cell(created_at)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
@@ -65,6 +69,7 @@
               <span>{{ data.item.created_at | myGlobalDay }}</span>
             </div>
           </template>
+          <!-- Column ACTIONS -->
           <template #cell(action)="data">
             <b-dropdown
               variant="link"
@@ -78,9 +83,11 @@
                   class="align-middle text-body"
                 />
               </template>
+              <!-- Button EDIT GLOSSARY  -->
               <b-dropdown-item @click="modalOpenEdit(2, data.item)">
                 <span class="align-middle ml-50">Edit</span>
               </b-dropdown-item>
+              <!-- Button DELETE GLOSSARY -->
               <b-dropdown-item @click="deleteGlossary(data.item)">
                 <span class="align-middle ml-50">Delete</span>
               </b-dropdown-item>
@@ -88,6 +95,7 @@
           </template>
         </b-table>
       </filter-slot>
+      <!-- Modal Glossary -->
       <modal-glossary
         v-if="modalChanging"
         :ifModalCard="modalChanging"
@@ -105,10 +113,13 @@
 <script>
 import { mapGetters } from "vuex";
 import vSelect from "vue-select";
-import ModalGlossary from "./components/ModalGlossary.vue";
-import { amgApi } from "@/service/axios";
+// Import Filter
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+// Import Modal
+import ModalGlossary from "./components/ModalGlossary.vue";
+// Import Services
 import GlossarydService from "./service/glossary.service";
+// Import Data
 import filters from './data/filter.glossary.data'
 import fields from './data/fields.glossary.data'
 export default {
@@ -117,7 +128,7 @@ export default {
     ModalGlossary,
     FilterSlot,
   },
-  data() {
+  data:function() {
     return {
       totalRows: 0,
       paginate: {
@@ -132,7 +143,6 @@ export default {
       },
       searchInput: "",
       created_by: null,
-      categorySearch: null,
       startdate: "",
       enddate: "",
       startPage: null,
@@ -157,10 +167,10 @@ export default {
     };
   },
   computed: {
-    clientRoute() {
+    clientRoute:function() {
       return "/glossary/get-all-glossaries";
     },
-    visibleFields() {
+    visibleFields:function() {
       return this.arrayColumns.filter((column) => column.visible);
     },
     ...mapGetters({
@@ -168,7 +178,7 @@ export default {
     }),
   },
   methods: {
-    async deleteGlossary(item) {
+    deleteGlossary:async function(item) {
       const confirm = await this.showConfirmSwal("DELETE", "Are you sure?");
       if (confirm.isConfirmed) {
         try {
@@ -198,14 +208,14 @@ export default {
         }
       }
     },
-    updateGlossary() {
+    updateGlossary:function() {
       this.modalChanging = false;
       this.$refs.refClientsList.refresh();
     },
-    updateCategory() {
+    updateCategory:function() {
       this.getCategories();
     },
-    modalOpen(num) {
+    modalOpen:function(num) {
       this.statusModal = num;
       if (this.modalChanging == false) {
         this.modalChanging = true;
@@ -213,7 +223,7 @@ export default {
         this.modalChanging = false;
       }
     },
-    modalOpenEdit(num, objectGlossary) {
+    modalOpenEdit:function(num, objectGlossary) {
       this.statusModal = num;
       this.objectGlossary = objectGlossary;
       if (this.modalChanging == false) {
@@ -222,11 +232,11 @@ export default {
         this.modalChanging = false;
       }
     },
-    closeModal() {
+    closeModal:function() {
       this.modalChanging = false;
       this.objectGlossary = null;
     },
-    async myProvider(ctx) {
+    myProvider:async function(ctx) {
       try {
         const data = await amgApi.post(`${ctx.apiUrl}`, {
           page: ctx.currentPage,
@@ -248,16 +258,16 @@ export default {
         return items || [];
       } catch (error) {
         console.error(error);
+        return [];
       }
     },
-    resetSearch() {
-      this.categorySearch = null;
+    resetSearch:function() {
       this.searchInput = "";
       this.fromToObject.from = null;
       this.fromToObject.to = null;
       this.$refs.refClientsList.refresh();
     },
-    async getCategories() {
+    getCategories:async function() {
       try {
         const res = await GlossarydService.getCategories();
         this.categories = res.data;
@@ -274,7 +284,7 @@ export default {
       }
     },
   },
-  created() {
+  created:function() {
     this.getCategories();
   },
 };
