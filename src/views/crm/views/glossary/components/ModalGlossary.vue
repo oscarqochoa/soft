@@ -14,6 +14,7 @@
     >
       <ValidationObserver ref="form">
         <div class="row" v-if="statusModal != '3'">
+          <!-- Input Category -->
           <div class="col-lg-6 col-md-6 col-sm-6">
             <ValidationProvider
               name="selectCategory"
@@ -33,6 +34,7 @@
               </b-form-group>
             </ValidationProvider>
           </div>
+          <!-- Input Title -->
           <div class="col-lg-6 col-md-6 col-sm-6">
             <ValidationProvider
               name="title"
@@ -51,6 +53,7 @@
           </div>
         </div>
         <b-row>
+          <!-- Sub Title Description -->
           <b-col md="12">
             <b-row class="class-inline">
               <b-col
@@ -62,6 +65,7 @@
               </b-col>
             </b-row>
           </b-col>
+          <!-- Input Text Tarea Description -->
           <b-col md="12">
             <div class="form-group mt-0">
               <ValidationProvider
@@ -80,8 +84,10 @@
           </b-col>
         </b-row>
       </ValidationObserver>
+      <!-- List of Buttons -->
       <b-row v-if="statusModal != '3'">
         <b-col md="12" style="text-align: center" class="mt-3">
+          <!-- Button Save -->
           <b-button
             variant="success"
             style="border-radius: 5px !important"
@@ -89,6 +95,7 @@
             v-if="!spinnerBtn && statusModal == '1'"
             >Save</b-button
           >
+          <!-- Button Update -->
           <b-button
             variant="success"
             style="border-radius: 5px !important"
@@ -96,6 +103,7 @@
             v-if="!spinnerBtn && statusModal == '2'"
             >Update</b-button
           >
+          <!-- Button Charge -->
           <b-button
             variant="success"
             style="border-radius: 5px !important"
@@ -107,6 +115,7 @@
         </b-col>
       </b-row>
     </b-modal>
+    <!-- Modal Add Category -->
     <modal-add-category
       v-if="modalChangingCategory"
       :ifModalCard="modalChangingCategory"
@@ -116,10 +125,12 @@
 </template>
 
 <script>
-import ModalAddCategory from "./ModalAddCategory.vue";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
+// Import Services
 import GlossarydService from "../service/glossary.service";
+// Import Modal
+import ModalAddCategory from "./ModalAddCategory.vue";
 export default {
   components: {
     vSelect,
@@ -139,7 +150,7 @@ export default {
       type: Object,
     },
   },
-  data() {
+  data:function() {
     return {
       id: null,
       spinnerBtn: false,
@@ -152,7 +163,7 @@ export default {
     };
   },
   computed: {
-    categoriesModal() {
+    categoriesModal:function() {
       let firstOption = {
         name: "Add Category",
         id: "123456##@",
@@ -162,17 +173,17 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
-    statusDescription() {
+    statusDescription:function() {
       return this.statusModal == "3" ? true : false;
     },
-    titleView() {
+    titleView:function() {
       return this.statusModal == "3"
         ? this.objectGlossary.title
         : "CREATE GLOSSARY";
     },
   },
   methods: {
-    createGlossary() {
+    createGlossary:function() {
       this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
@@ -214,7 +225,7 @@ export default {
         }
       });
     },
-    editGlossary() {
+    editGlossary:function() {
       this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
@@ -255,7 +266,7 @@ export default {
         }
       });
     },
-    openModalCategory() {
+    openModalCategory:function() {
       if (this.selectCategory == "123456##@") {
         if (this.modalChangingCategory == false) {
           this.modalChangingCategory = true;
@@ -264,30 +275,30 @@ export default {
         }
       }
     },
-    closeModalCategory() {
+    closeModalCategory:function() {
       // this.fillCategories();
       this.$emit("updateCategory", false);
       this.selectCategory = null;
       this.modalChangingCategory = false;
     },
-    closeModal() {
+    closeModal:function() {
       this.$emit("close", false);
       this.objectGlossaryChange = null;
     },
-    openModalEdit(item) {
+    openModalEdit:function(item) {
       this.id = item.id;
       this.title = item.title;
       this.description = item.description;
       this.selectCategory = item.category_id;
     },
-    initEdit() {
+    initEdit:function() {
       this.objectGlossaryChange = this.objectGlossary;
       if (this.statusModal == "2" || this.statusModal == "3") {
         this.openModalEdit(this.objectGlossary);
       }
     },
   },
-  created() {
+  created:function() {
     this.initEdit();
   },
 };
