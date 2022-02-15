@@ -225,11 +225,7 @@ export default {
       }
     },
     deleteEvent(id) {
-      this.showSwalGeneric(
-        "Are you sure?",
-        "You won't be able to revert this!",
-        "warning"
-      )
+      this.showConfirmSwal()
         .then(async result => {
           if (result.value) {
             const response = await this.A_DELETE_EVENTS(id);

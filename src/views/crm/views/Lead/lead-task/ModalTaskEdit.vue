@@ -116,7 +116,7 @@
             <b-col md="2">
               <validation-provider>
                 <b-form-group>
-                  <b-form-input :value="modul === 15 || isDisabled ? 'UNK' : lead.state" readonly />
+                  <b-form-input :value="lead.state" readonly />
                 </b-form-group>
               </validation-provider>
             </b-col>

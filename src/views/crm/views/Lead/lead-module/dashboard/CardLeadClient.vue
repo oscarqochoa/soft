@@ -190,6 +190,10 @@ export default {
               ? this.lead.lead_status
               : this.lead.valuestatuslead
         },
+        {
+          label: "Lead Owner:",
+          value: this.lead.user_owner
+        },
         this.modul !== 15
           ? {
               label: "Address:",

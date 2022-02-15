@@ -40,6 +40,7 @@
                       :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                       :options="sellers"
                       :disabled="isDisabled"
+                      :clearable="false"
                     />
                   </b-form-group>
                 </validation-provider>
@@ -65,9 +66,9 @@
                   />
                 </b-form-group>
               </b-col>
-              <b-col v-if="event.attend === 2 && event.comment" cols="12">
+              <b-col v-if="event.type !== 'task' && event.attend === 2" cols="12">
                 <validation-provider>
-                  <b-form-group label="Comment">
+                  <b-form-group label="Comment" label-for="comment">
                     <b-form-textarea :value="event.comment" :disabled="true" />
                   </b-form-group>
                 </validation-provider>
@@ -115,23 +116,26 @@
               </b-col>
             </b-row>
             <b-row>
-              <b-col md="6">
-                <validation-provider label-cols="2">
-                  <b-form-group label="Created by">
-                    <b-form-input :value="event.creator_name" :disabled="true" />
-                  </b-form-group>
-                </validation-provider>
+              <b-col md="4">
+                <b-form-group label="Lead" label-for="lead">
+                  <b-form-input id="lead" :value="event.lead_name" :disabled="true" />
+                </b-form-group>
               </b-col>
-              <b-col v-if="event.userupdate" md="6">
+              <b-col md="4">
+                <b-form-group label="Created by" label-for="creadtedby">
+                  <b-form-input :value="event.creator_name" :disabled="true" />
+                </b-form-group>
+              </b-col>
+              <b-col v-if="event.userupdate" md="4">
                 <validation-provider label-cols="2">
                   <b-form-group label="Modified by">
                     <b-form-input :value="event.updater_name" :disabled="true" />
                   </b-form-group>
                 </validation-provider>
               </b-col>
-              <b-col v-if="event.type !== 'task'" md="6">
+              <b-col v-if="event.type !== 'task'" md="4">
                 <validation-provider label-cols="2">
-                  <b-form-group label="Attended">
+                  <b-form-group label="Attended" label-for="attended">
                     <b-form-input
                       :class="event.attend ? 'text-success' : 'text-danger'"
                       :value="event.attend ? 'YES' : 'NO'"
@@ -140,29 +144,28 @@
                   </b-form-group>
                 </validation-provider>
               </b-col>
-              <b-col v-if="event.type !== 'task' && event.attend === 2" md="6">
-                <validation-provider label-cols="2">
-                  <b-form-group label="Sale Made">
-                    <b-form-input
-                      :class="event.sale_made === 'YES' ? 'text-success' : 'text-danger'"
-                      :value="event.sale_made"
-                      :disabled="true"
-                    />
-                  </b-form-group>
-                </validation-provider>
+              <b-col v-if="event.type !== 'task' && event.attend === 2" md="4">
+                <b-form-group label="Sale Made" label-for="saleMade">
+                  <b-form-input
+                    :class="event.sale_made === 'YES' ? 'text-success' : 'text-danger'"
+                    :value="event.sale_made"
+                    :disabled="true"
+                  />
+                </b-form-group>
               </b-col>
             </b-row>
           </b-col>
         </b-row>
 
         <!-- Form Actions -->
-        <div class="d-flex justify-content-center mt-2">
+        <div class="d-flex float-right mt-2">
           <b-button
             v-ripple.400="'rgba(255, 255, 255, 0.15)'"
             variant="outline-danger"
             class="mr-2"
             type="button"
             :disabled="isLoading"
+            v-if="!(event.type !== 'task' && event.attend === 2)"
             @click="onDeleteEvent"
           >
             <template v-if="isLoading">
@@ -180,6 +183,7 @@
             variant="outline-warning"
             @click="onToggleEdit"
             :disabled="isLoading"
+            v-if="!(event.type !== 'task' && event.attend === 2)"
           >
             <template v-if="isDisabled">
               <feather-icon icon="Edit2Icon" class="mr-50" />
@@ -454,11 +458,7 @@ export default {
       }
     },
     onDeleteEvent() {
-      this.showSwalGeneric(
-        "Are you sure?",
-        "You won't be able to revert this!",
-        "warning"
-      )
+      this.showConfirmSwal()
         .then(async result => {
           if (result.value) {
             this.isLoading = true;
