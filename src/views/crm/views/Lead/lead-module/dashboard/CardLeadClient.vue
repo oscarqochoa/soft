@@ -10,7 +10,7 @@
             @click="$emit('onEditLead', false)"
           >{{ leadName.name }}</a>
           <span v-else-if="onlyRead">{{ leadName.name }}</span>
-          <a v-else class="text-important" @click="$emit('onEditLead', false)">{{ leadName.name }}</a>
+          <a v-else class="text-primary" @click="$emit('onEditLead', false)">{{ leadName.name }}</a>
         </span>
       </b-card-title>
       <b-button-group class="btn-group-sm">

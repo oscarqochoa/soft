@@ -3,9 +3,7 @@
     <header-slot>
       <template #actions>
         <!-- Button Create Glossary -->
-        <b-button variant="success" @click="modalOpen(1)"
-          >Create Glossary</b-button
-        >
+        <b-button variant="primary" @click="modalOpen(1)">Create Glossary</b-button>
       </template>
     </header-slot>
     <b-card no-body>
@@ -45,9 +43,7 @@
           </template>
           <!-- Column TITLE -->
           <template #cell(title)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+            <div class="d-flex flex-column justify-content-start align-items-start">
               <b-button
                 variant="flat-primary"
                 @click="modalOpenEdit(3, data.item)"
@@ -57,31 +53,20 @@
                   padding-top: 5px;
                   padding-bottom: 5px;
                 "
-                >{{ data.item.title }}</b-button
-              >
+              >{{ data.item.title }}</b-button>
             </div>
           </template>
           <!-- Column CREATED BY -->
           <template #cell(created_at)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+            <div class="d-flex flex-column justify-content-start align-items-start">
               <span>{{ data.item.created_at | myGlobalDay }}</span>
             </div>
           </template>
           <!-- Column ACTIONS -->
           <template #cell(action)="data">
-            <b-dropdown
-              variant="link"
-              no-caret
-              :right="$store.state.appConfig.isRTL"
-            >
+            <b-dropdown variant="link" no-caret :right="$store.state.appConfig.isRTL">
               <template #button-content>
-                <feather-icon
-                  icon="MoreVerticalIcon"
-                  size="16"
-                  class="align-middle text-body"
-                />
+                <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
               </template>
               <!-- Button EDIT GLOSSARY  -->
               <b-dropdown-item @click="modalOpenEdit(2, data.item)">
@@ -120,26 +105,26 @@ import ModalGlossary from "./components/ModalGlossary.vue";
 // Import Services
 import GlossarydService from "./service/glossary.service";
 // Import Data
-import filters from './data/filter.glossary.data'
-import fields from './data/fields.glossary.data'
+import filters from "./data/filter.glossary.data";
+import fields from "./data/fields.glossary.data";
 export default {
   components: {
     vSelect,
     ModalGlossary,
-    FilterSlot,
+    FilterSlot
   },
-  data:function() {
+  data: function() {
     return {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10,
+        perPage: 10
       },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: "",
+        model: ""
       },
       searchInput: "",
       created_by: null,
@@ -156,36 +141,36 @@ export default {
       arrayColumns: fields,
       fromToObject: {
         from: null,
-        to: null,
+        to: null
       },
       categories: [],
       modalChanging: false,
       statusModal: "",
       objectGlossary: null,
       //data filters
-      filter:filters,
+      filter: filters
     };
   },
   computed: {
-    clientRoute:function() {
+    clientRoute: function() {
       return "/glossary/get-all-glossaries";
     },
-    visibleFields:function() {
-      return this.arrayColumns.filter((column) => column.visible);
+    visibleFields: function() {
+      return this.arrayColumns.filter(column => column.visible);
     },
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   methods: {
-    deleteGlossary:async function(item) {
+    deleteGlossary: async function(item) {
       const confirm = await this.showConfirmSwal("DELETE", "Are you sure?");
       if (confirm.isConfirmed) {
         try {
           this.addPreloader();
           const data = await GlossarydService.deleteGlossary({
             user_id: this.currentUser.id,
-            id: item.id,
+            id: item.id
           });
           this.removePreloader();
           this.showToast(
@@ -208,14 +193,14 @@ export default {
         }
       }
     },
-    updateGlossary:function() {
+    updateGlossary: function() {
       this.modalChanging = false;
       this.$refs.refClientsList.refresh();
     },
-    updateCategory:function() {
+    updateCategory: function() {
       this.getCategories();
     },
-    modalOpen:function(num) {
+    modalOpen: function(num) {
       this.statusModal = num;
       if (this.modalChanging == false) {
         this.modalChanging = true;
@@ -223,7 +208,7 @@ export default {
         this.modalChanging = false;
       }
     },
-    modalOpenEdit:function(num, objectGlossary) {
+    modalOpenEdit: function(num, objectGlossary) {
       this.statusModal = num;
       this.objectGlossary = objectGlossary;
       if (this.modalChanging == false) {
@@ -232,11 +217,11 @@ export default {
         this.modalChanging = false;
       }
     },
-    closeModal:function() {
+    closeModal: function() {
       this.modalChanging = false;
       this.objectGlossary = null;
     },
-    myProvider:async function(ctx) {
+    myProvider: async function(ctx) {
       try {
         const data = await amgApi.post(`${ctx.apiUrl}`, {
           page: ctx.currentPage,
@@ -244,7 +229,7 @@ export default {
           created_by: this.created_by,
           category: this.filter[0].model,
           startdate: this.filter[1].model,
-          enddate: this.filter[2].model,
+          enddate: this.filter[2].model
         });
         const items = data.data.data;
         this.startPage = data.data.from;
@@ -261,13 +246,13 @@ export default {
         return [];
       }
     },
-    resetSearch:function() {
+    resetSearch: function() {
       this.searchInput = "";
       this.fromToObject.from = null;
       this.fromToObject.to = null;
       this.$refs.refClientsList.refresh();
     },
-    getCategories:async function() {
+    getCategories: async function() {
       try {
         const res = await GlossarydService.getCategories();
         this.categories = res.data;
@@ -282,11 +267,11 @@ export default {
           "Something went wrong!"
         );
       }
-    },
+    }
   },
-  created:function() {
+  created: function() {
     this.getCategories();
-  },
+  }
 };
 </script>
 
