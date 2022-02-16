@@ -1,10 +1,22 @@
 <template>
   <b-row>
+    <header-slot></header-slot>
     <div class="col-md-12 col-lg-12 col-sm-12">
       <!-- All Screen -->
+      <!-- <h2>{{screenHeight}}</h2> -->
+      <!-- <h4>{{this.widthOfScreen}}---{{statusHeightByScreenColOne}}</h4> -->
       <b-row style="">
         <!-- Column Cards -->
-        <b-col class="col-cards" cols="12" sm="4" md="4" lg="3" xl="2" style="">
+        <b-col
+          @mousemove="statuMouse($event)"
+          class="col-tab"
+          cols="12"
+          sm="4"
+          md="4"
+          lg="3"
+          xl="2"
+          :style="statusHeightByScreenColOne"
+        >
           <!-- Card Leads-->
           <b-row class="pl-1 pr-1">
             <b-card
@@ -423,8 +435,8 @@
         </b-col>
 
         <!-- Column Graphics -->
-        <b-col cols="12" sm="8" md="8" lg="9" xl="10">
-          <b-card class="col-12">
+        <b-col class="" cols="12" sm="8" md="8" lg="9" xl="10">
+          <b-card class="col-12 mb-0" :style="statusHeightByScreenColTwo">
             <br />
             <br />
             <!-- Content Card -->
@@ -437,7 +449,6 @@
                       v-if="[1, 2].includes(currentUser.role_id)"
                       v-model="userfilter"
                       class="per-page-selector-user style-chooser"
-                     
                       placeholder="Select User"
                       label="user_name"
                       :options="users"
@@ -446,7 +457,13 @@
                     />
                   </b-col>
                   <!-- Year and Sub Title -->
-                  <b-col cols="12" sm="12" md="12" lg="7" class="d-flex flex-wrap pb-1">
+                  <b-col
+                    cols="12"
+                    sm="12"
+                    md="12"
+                    lg="7"
+                    class="d-flex flex-wrap pb-1"
+                  >
                     <div
                       class="
                         d-flex
@@ -460,7 +477,7 @@
                         <h5><strong>MONTHLY GRAPHICS</strong></h5>
                       </div>
                     </div>
-                     <!-- Select Year -->
+                    <!-- Select Year -->
                     <v-select
                       v-model="year"
                       class="per-page-selector"
@@ -481,7 +498,7 @@
                   v-for="data in totalYearByCard"
                   :key="data.id"
                   class="d-flex flex-wrap mb-1 justify-content-between pr-1"
-                  :style="`${screenWidth<576? 'width: 100%':'width: 50%'}`"
+                  :style="`${screenWidth < 576 ? 'width: 100%' : 'width: 50%'}`"
                 >
                   <!-- Name of Total -->
                   <div>
@@ -502,7 +519,11 @@
             </b-row>
             <!-- Graphics Line -->
             <b-card-body class="p-0 pb-2">
-              <app-echart-line-crm :key="idEchart" :option-data="rePaint" :screen="screen" />
+              <app-echart-line-crm
+                :key="idEchart"
+                :option-data="rePaint"
+                :screen="screenHeight"
+              />
             </b-card-body>
           </b-card>
         </b-col>
@@ -510,6 +531,8 @@
     </div>
   </b-row>
 </template>
+
+
 
 <script>
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
@@ -531,7 +554,6 @@ export default {
     vSelect,
     AppEchartLine,
     AppEchartLineCrm,
-    
   },
   data: function () {
     return {
@@ -569,18 +591,38 @@ export default {
       years: [],
       itemCards: [true, false, false, false, false],
       item: null,
-      widthOfScreen:null,
-      heightOfScreen:null,
+      widthOfScreen: null,
+      heightOfScreen: null,
     };
   },
   computed: {
-    screen:function() {
-      this.heightOfScreen = window.screen.height
+    screenHeight: function () {
+      this.heightOfScreen = window.screen.height;
       return this.heightOfScreen;
     },
-    screenWidth:function() {
-      this.widthOfScreen = window.screen.width
-      return this.widthOfScreen
+    screenWidth: function () {
+      this.widthOfScreen = window.screen.width;
+      return this.widthOfScreen;
+    },
+    statusHeightByScreenColOne() {
+      console.log(this.widthOfScreen);
+      return this.widthOfScreen >= 1920
+        ? "height: 800px !important;max-height: 900px !important;"
+        : this.widthOfScreen >= 1366
+        ? "height: 76vh;max-height: 76vh;overflow: auto;"
+        : "";
+      // if(this.widthOfScreen >=1920) {
+      //   return  "height: 800px !important;max-height: 900px !important;"
+      // }else if(this.widthOfScreen >=1366) {
+      //   return "height: 70vh;max-height: 70vh;overflow: auto;"
+      // }
+    },
+    statusHeightByScreenColTwo() {
+      return this.widthOfScreen >= 1920
+        ? "height: 800px !important;max-height: 900px !important;"
+        : this.widthOfScreen >= 1366
+        ? "height: 500px !important;max-height: 500px !important;"
+        : "";
     },
     ...mapGetters({
       skin: "appConfig/skin",
@@ -601,6 +643,15 @@ export default {
     this.yearSelect();
   },
   methods: {
+    statuMouse(event) {
+      const container = document.querySelector(".col-tab");
+
+      container.scrollHeight = event.screenY
+
+      console.log(event)
+      console.log(container.scrollHeight);
+    },
+
     statusColor: function (name) {
       let color = "";
       switch (name) {
@@ -698,8 +749,8 @@ export default {
     },
     // Change By Card
     changeTab: function (index) {
-      this.widthOfScreen = window.screen.width
-      this.heightOfScreen = window.screen.height
+      this.widthOfScreen = window.screen.width;
+      this.heightOfScreen = window.screen.height;
       this.changeItemCards(index);
       switch (index) {
         case 0:
@@ -837,14 +888,20 @@ export default {
 
 <style lang="scss" scoped>
 // Styles V-select
-.col-cards {
-  height: 70vh;
-  max-height: 70vh;
-  overflow: auto;
-}
+// .col-cards {
+//   // height: 70vh;
+//   // max-height: 70vh;
+//   height: 800px !important;
+//   max-height: 900px !important;
+//   overflow: auto;
+// }
+// .col-cards-two{
+//   height: 800px !important;
+//   max-height: 900px !important;
+// }
 // hidding scrollbar
 ::-webkit-scrollbar {
-  width: 0; 
+  width: 0;
   background: transparent;
 }
 

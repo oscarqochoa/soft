@@ -6,6 +6,13 @@ export default [
         meta: {
             isClientsTab: true,
             module: 2,
+            pageTitle: "Dashboard",
+            breadcrumb: [
+                {
+                  text: "Dashboard",
+                  active: true,
+                },
+              ],
 
         },
     }
