@@ -182,7 +182,7 @@
               class="btn-show "
               variant="primary"
               title="CHANGE"
-              @click="(showGraphForWeek = !showGraphForWeek),getGraphics(),firstGraphics()"
+              @click="(showGraphForWeek = !showGraphForWeek),getGraphics()"
             >
               <feather-icon
                 icon="CalendarIcon"
@@ -499,7 +499,7 @@ export default {
         const normal = {
           type: 'line', name: this.labelGraph, data: info, color: this.statusColor(this.labelGraph),
         }
-        console.log(info, 'indo')
+
         this.option.series = []
         this.option.series.push(
           normal,
@@ -682,7 +682,7 @@ export default {
 .btn-filters {
 
   color: white !important;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25) !important;
   width: 127px;
   height: 38px;
   left: 454px;
@@ -693,7 +693,7 @@ export default {
 .btn-show {
 
   color: white !important;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25) !important;
   width: 150px;
   height: 38px;
   left: 454px;

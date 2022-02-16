@@ -90,5 +90,15 @@ class SocialNetworkService {
       throw error
     }
   }
+
+  async updateChangeView(body) {
+    try {
+      const data = await amgApi.post('social-network/bank-of-flyers/change-view', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on updateChangeView:', error)
+      throw error
+    }
+  }
 }
 export default new SocialNetworkService()

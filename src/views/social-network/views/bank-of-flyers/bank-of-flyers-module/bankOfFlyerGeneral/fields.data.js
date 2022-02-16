@@ -57,4 +57,10 @@ export default [
     label: 'Action',
 
   },
+  {
+    key: 'views',
+    sortable: false,
+    label: 'Views',
+
+  },
 ]

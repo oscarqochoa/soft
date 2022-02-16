@@ -131,7 +131,7 @@
       >
 
         <b-row>
-          <b-col md="2">
+          <b-col md="3">
             <v-select
               v-model="chardOption"
               class="per-page-selector"
@@ -541,7 +541,7 @@ export default {
         const normal = {
           type: 'line', name: this.labelGraph, data: info, color: this.statusColor(this.labelGraph),
         }
-        console.log(info, 'indo')
+
         this.option.series = []
         this.option.series.push(
           normal,
@@ -715,8 +715,9 @@ export default {
         }
         this.juniorUser = false
 
-        const [replies, lead, answers, mobiles, appointments, productivity] = await Promise.all([DashboardService.getRepliesGraphic(params), DashboardService.getLeadsGraphic(params),
-          DashboardService.getAnswersGraphic(params), DashboardService.getAnswersGraphic(params), DashboardService.getMobilesGraphic(params),
+        const [replies, lead, answers, mobiles, appointments, productivity] = await Promise.all(
+            [DashboardService.getRepliesGraphic(params), DashboardService.getLeadsGraphic(params),
+          DashboardService.getAnswersGraphic(params), DashboardService.getMobilesGraphic(params),
           DashboardService.getTasksGraphic(params), DashboardService.getProductivityGraphic(params)])
 
         const infoReplies = []

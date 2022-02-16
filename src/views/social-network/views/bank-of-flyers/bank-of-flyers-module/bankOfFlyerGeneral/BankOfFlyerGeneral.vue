@@ -41,7 +41,7 @@
 
             ref="bank-of-flyer-general"
             sticky-header="70vh"
-            small
+
             no-provider-filtering
             :busy.sync="isBusy"
             :items="search"
@@ -50,6 +50,8 @@
             :current-page="paginate.currentPage"
             :filter="filter"
             class="font-small-3 text-center"
+            responsive="sm"
+            small
           >
             <template #table-busy>
               <div class="text-center text-primary my-2">
@@ -132,7 +134,7 @@
                 size="20"
                 class="cursor-pointer m-1"
 
-                @click="openWatchModal(data.index,2)"
+                @click="openWatchModal(data.index,2, data.item)"
               />
 
             </template>
@@ -166,7 +168,29 @@
                 </b-dropdown-item>
               </b-dropdown>
             </template>
+            <template v-slot:cell(views)="data">
 
+
+              <feather-icon
+                  v-if="data.item.status_view === 1"
+                  class="text-success m-1 "
+                  size="20"
+
+                  v-b-tooltip.hover.left="'Viewed'"
+                  icon="CheckIcon"
+              />
+
+              <feather-icon
+                  v-else
+                  size="20"
+                  class="text-warning parpadea  m-1"
+
+
+                  icon="CheckIcon"
+              />
+
+
+            </template>
           </b-table>
           <template #footer>
             <div class="text-center">
@@ -306,6 +330,7 @@ export default {
       orderby: 1,
       totalReplies: 0,
       totalNewReplies: 0,
+      flyerViewed: null,
     }
   },
   computed: {
@@ -327,6 +352,8 @@ export default {
 
   },
   async created() {
+
+
     try {
       await Promise.all([
         this.$store.dispatch('SocialNetworkGlobalStore/A_GET_PROGRAMS'),
@@ -359,10 +386,23 @@ export default {
       this.showImage = index
     },
 
-    openWatchModal(index, info) {
+    async openWatchModal(index, info, flyer={}) {
       this.modalWatch = true
       this.showWatch = index
       this.info = info
+      this.flyerViewed = flyer
+      if ( flyer.status_view !== 1) {
+        flyer.user_id = this.currentUser.user_id
+       await this.changeView(flyer);
+      }
+      flyer.status_view = 1;
+
+    },
+
+    async changeView(item){
+      const params = { id: item.fbid, user_id: this.currentUser.user_id, }
+      const data = await SocialNetworkService.updateChangeView(params)
+
     },
 
     closeWatchModal() {
@@ -474,5 +514,53 @@ export default {
 .clickable {
   cursor: pointer;
   align-content: center;
+}
+
+.parpadea {
+  animation-name: parpadeo;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  -webkit-animation-name: parpadeo;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes parpadeo {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes parpadeo {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes parpadeo {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>

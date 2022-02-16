@@ -39,6 +39,7 @@ export default {
 
           max: 400,
         }],
+
         grid: {
           width: '95%',
           left: '40px',
