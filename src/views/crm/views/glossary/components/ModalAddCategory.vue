@@ -11,6 +11,7 @@
       @hidden="closeModalCategory"
       title-tag="h3"
       :no-close-on-backdrop="true"
+      centered
     >
       <!-- Form -->
       <ValidationObserver ref="form">
