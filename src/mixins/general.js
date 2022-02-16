@@ -21,6 +21,12 @@ export default {
         ? "bg-dark"
         : "bg-white";
     },
+    isDarkSkin() {
+      return this.$store.getters["appConfig/skin"] === "dark";
+    },
+    isLightSkin() {
+      return this.$store.getters["appConfig/skin"] === "light";
+    },
   },
   methods: {
     convertProgramToModule(program) {

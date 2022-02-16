@@ -67,6 +67,7 @@
                   :short-day="daysList[index % 7]"
                   :full-day="completeDaysList[index % 7]"
                   :date="date.date"
+                  :current-date="currentDay.date() === date.date"
                 >
                   <p
                     class="text-center w-100 m-0 font-weight-bolder border-bottom py-50"
@@ -138,7 +139,7 @@ export default {
   props: {
     events: {
       type: Array,
-      default: example,
+      default: () => example,
     },
     dateLocation: {
       type: String,
@@ -170,6 +171,12 @@ export default {
       return this.calendarDates.filter(val => val.haveEvents === true)
     },
   },
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    events(_) {
+      this.addEvents()
+    },
+  },
   created() {
     this.currentDay = this.$moment()
     this.month = this.currentDay.month()
@@ -177,11 +184,17 @@ export default {
     this.assignMonth()
   },
   methods: {
+    emitEventDateChange() {
+      this.$emit('dateChange', {
+        month: this.month + 1,
+        year: this.year,
+      })
+    },
     assignMonth() {
       this.currentMonth = this.monthsList[this.month]
       const currentMonthInfo = this.$moment(`${this.month + 1}/01/${this.year}`)
       const beforeMonth = (this.month - 1 === -1) ? 11 : (this.month - 1)
-      const beforeMonthInfo = this.$moment(`${beforeMonth + 1}/01/${this.year}`)
+      const beforeMonthInfo = this.$moment(`${beforeMonth + 1}/01/${this.month - 1 === -1 ? this.year - 1 : this.year}`)
       const lastDayOfBeforeMonth = beforeMonthInfo.endOf('month')
       this.lastDayOfCurrentMonth = currentMonthInfo.endOf('month')
       this.calendarDates = []
@@ -196,16 +209,9 @@ export default {
         }
       }
       for (let i = 1; i <= this.lastDayOfCurrentMonth.date(); i += 1) {
-        const eventsOfCurrentDay = this.events.filter(event => {
-          const eventDay = this.$moment(event[this.dateLocation], this.dateLocationFormat)
-          return eventDay.date() === i
-        })
         this.calendarDates.push({
           date: i,
           type: 'current',
-          events: eventsOfCurrentDay,
-          haveEvents: eventsOfCurrentDay.length > 0,
-          numberOfEvents: eventsOfCurrentDay.length,
         })
       }
       if (this.lastDayOfCurrentMonth.day() < 6) {
@@ -218,7 +224,7 @@ export default {
           })
         }
       }
-      console.log(this.$moment('03/16/1999', 'DD-MM-YYYY'))
+      this.emitEventDateChange()
     },
     beforeMonth() {
       this.month -= 1
@@ -237,6 +243,20 @@ export default {
       }
       this.assignMonth()
     },
+    addEvents() {
+      this.calendarDates.forEach((date, index) => {
+        if (date.type === 'current') {
+          const eventsOfCurrentDay = this.events.filter(event => {
+            const eventDay = this.$moment(event[this.dateLocation], this.dateLocationFormat)
+            return eventDay.date() === date.date
+          })
+          this.$set(this.calendarDates[index], 'events', eventsOfCurrentDay)
+          this.$set(this.calendarDates[index], 'haveEvents', eventsOfCurrentDay.length > 0)
+          this.$set(this.calendarDates[index], 'numberOfEvents', eventsOfCurrentDay.length)
+        }
+      })
+      console.log(this.calendarDates)
+    },
   },
 }
 </script>
@@ -249,12 +269,6 @@ export default {
   display: grid !important;
   grid-template-columns: repeat(7, 1fr) !important;
 }
-
-.sticky-top-left {
-  top: 5px !important;
-  left: 5px !important;
-}
-
 .min-date-height {
   min-height: 150px;
   overflow-x: hidden;
@@ -266,11 +280,6 @@ export default {
 .current-date-class {
   background-color: #00D25B;
   color: white;
-}
-.scroll-date-info{
-}
-.scroll-date-info::-webkit-scrollbar {
-  width: 0;
 }
 .min-date-height {
   border-color: #C4C4C4 !important;

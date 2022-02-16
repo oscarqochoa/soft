@@ -1,6 +1,7 @@
 <template>
     <div>
         <b-card no-body>
+          <!-- Table -->
            <request-equipment-grid
             :global="currentUser"
             :module="$route.meta.module"
@@ -12,13 +13,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+// Import Table
 import RequestEquipmentGrid from "./subcomponents/RequestEquipmentGrid.vue"
 export default {
   components: {
     RequestEquipmentGrid,
-  },
-  data() {
-    return {};
   },
   computed: {
     ...mapGetters({

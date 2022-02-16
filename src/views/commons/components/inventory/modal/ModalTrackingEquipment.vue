@@ -12,6 +12,7 @@
       title-tag="h3"
     >
       <div class="table-responsive">
+        <!-- Table -->
         <b-table
           :api-url="'/logistics/inventory/get-tracking-equipment'"
           ref="refPaymentsGrid"
@@ -30,31 +31,21 @@
               <strong>Loading ...</strong>
             </div>
           </template>
-
+          <!-- Column STATUS -->
           <template #cell(status)="data">
             <p
-              :style="
-                data.item.status == 'RETURN'
-                  ? 'color: #FF0000'
-                  : data.item.status == 'REGISTERED'
-                  ? 'color: blue'
-                  : data.item.status == 'ASSIGNED'
-                  ? 'color: rgb(255 177 0);'
-                  : data.item.status == 'TO REPAIR'
-                  ? 'color: rgb(122 0 255);'
-                  : 'color: #00CC00'
-              "
+              :style="statusColor(data.item.status)"
             >
               {{ data.item.status }}
             </p>
           </template>
-
+          <!-- Column CREATED BY -->
           <template #cell(created_at)="data">
             {{ data.item.created_by }}
             <br />
             {{ data.item.created_at | myGlobalDay }}
           </template>
-
+          <!-- Column COMMENTARY -->
           <template #cell(description)="data">
             <div
               style="white-space: normal"
@@ -69,7 +60,8 @@
 
 
 <script>
-import fields from '../data/viewequipment.data'
+// Import Data
+import fields from "../data/viewequipment.data";
 export default {
   props: {
     modalTracking: {
@@ -82,17 +74,28 @@ export default {
       type: [Number, String],
     },
   },
-  data() {
+  data: function () {
     return {
       mutableIfModalEquipment: this.modalTracking,
       arrayColumns: fields,
     };
   },
   methods: {
-    closeModal() {
+    statusColor: function (status) {
+      return status == "RETURN"
+        ? "color: #FF0000"
+        : status == "REGISTERED"
+        ? "color: blue"
+        : status == "ASSIGNED"
+        ? "color: rgb(255 177 0);"
+        : status == "TO REPAIR"
+        ? "color: rgb(122 0 255);"
+        : "color: #00CC00";
+    },
+    closeModal: function () {
       this.$emit("close", false);
     },
-    async myProvider(ctx) {
+    myProvider: async function (ctx) {
       try {
         const data = await amgApi.post(`${ctx.apiUrl}`, {
           equipmentId: this.equipmentId,
@@ -101,9 +104,9 @@ export default {
         return items || [];
       } catch (error) {
         console.error(error);
+        return [];
       }
     },
   },
-  created() {},
 };
 </script>

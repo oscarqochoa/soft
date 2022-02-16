@@ -11,6 +11,7 @@
       :send-multiple-sms="false"
       @reload="$refs['refClientsList'].refresh()"
     >
+      <!-- Table -->
       <b-table
         small
         slot="table"
@@ -35,12 +36,14 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <!-- Column # -->
         <template #cell(selected)="data">
           <div v-if="validateLocation(data.item.process)">
             <b-form-checkbox v-model="data.item.selected"></b-form-checkbox>
           </div>
           <div v-else></div>
         </template>
+        <!-- Column IMAGE -->
         <template #cell(url_image)="data">
           <div class="image-upload">
             <input type="file" id="file_input" hidden />
@@ -52,34 +55,40 @@
             </div>
           </div>
         </template>
+        <!-- Column PRICE -->
         <template #cell(price)="data">{{ data.item.price != null ? "$ " + data.item.price : "" }}</template>
+        <!-- Column ASSIGNED TO -->
         <template #cell(assigned_to)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span>{{data.item.assigned_to}}</span>
             <div>{{data.item.name_module}}</div>
           </div>
         </template>
+        <!-- Column TRACKING -->
         <template #cell(tracking)="data">
           <div>
             <b-button variant="light" @click="openModalTrackingEquipment(data.item.id)">TRACKING</b-button>
           </div>
         </template>
+        <!-- Column CREATED BY -->
         <template #cell(created_at)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span>{{data.item.created_by}}</span>
             <div>{{data.item.created_at | myGlobalDay}}</div>
           </div>
         </template>
+        <!-- Columns ACTIONS -->
         <template #cell(actions)="data">
           <b-dropdown variant="link" no-caret :right="$store.state.appConfig.isRTL">
             <template #button-content>
               <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
             </template>
+            <!-- Button INFORMATION -->
             <b-dropdown-item @click="viewEquipment(data.item.id, 2)" v-if="module != 12">
               <feather-icon icon="EyeIcon" />
               <span class="align-middle ml-50">INFORMATION</span>
             </b-dropdown-item>
-
+            <!-- Button RETURN -->
             <b-dropdown-item
               v-if="
               data.item.assigned_to != null &&
@@ -98,6 +107,7 @@
               <feather-icon icon="CornerUpLeftIcon" />
               <span class="align-middle ml-50">RETURN</span>
             </b-dropdown-item>
+            <!-- Button TO REPARIR -->
             <b-dropdown-item
               v-if="[2].includes(data.item.status)"
               @click="
@@ -117,6 +127,7 @@
       </b-table>
     </filter-slot>
 
+    <!-- Modal Tracking Equipment -->
     <modal-tracking-equipment
       v-if="modalTracking"
       :modalTracking="modalTracking"
@@ -124,6 +135,7 @@
       :global="global"
       @close="closeModalTrackingEquipment"
     ></modal-tracking-equipment>
+    <!-- Modal View Equipment -->
     <modal-view-equipment
       v-if="modalViewEquipment"
       :modalViewEquipment="modalViewEquipment"
@@ -133,6 +145,7 @@
       :optionsCat="optionsCategory"
       @close="closeModalViewEquipment"
     ></modal-view-equipment>
+    <!-- Modal Repair Equipment -->
     <modal-repair-equipment
       v-if="modalRepairEquipment"
       :modalRepairEquipment="modalRepairEquipment"
@@ -151,11 +164,15 @@
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
 import vSelect from "vue-select";
+// Import Filter
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+// Import Services
+import InventoryService from "../service/inventory.service";
+// Import Modals
 import ModalTrackingEquipment from "../modal/ModalTrackingEquipment.vue";
 import ModalViewEquipment from "../modal/ModalViewEquipment.vue";
 import ModalRepairEquipment from "../modal/ModalRepairEquipment.vue";
-import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-import InventoryService from "../service/inventory.service";
+// Import Data
 import fields from '../data/fields.inventorygrid.data'
 import filters from '../data/filter.inventorygrid.data'
 export default {
@@ -172,12 +189,13 @@ export default {
   },
   components: {
     vSelect,
+    FilterSlot,
     ModalTrackingEquipment,
     ModalViewEquipment,
     ModalRepairEquipment,
-    FilterSlot
+
   },
-  data() {
+  data:function() {
     return {
       sortBy: "created_at",
       sortDesc: true,
@@ -212,14 +230,14 @@ export default {
     };
   },
   computed: {
-    visibleFields() {
+    visibleFields:function() {
       return this.arrayColumns.filter(column => column.visible);
     },
     ...mapGetters("inventory-store", ["listCategoryAll"])
   },
   methods: {
     ...mapActions("inventory-store", ["LIST_CATEGORIES"]),
-    async myProvider(ctx) {
+    myProvider:async function(ctx) {
       try{
         const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         perpage: ctx.perPage,
@@ -243,6 +261,7 @@ export default {
 
 
       }catch(error){
+        return [];
         console.error(error)
         this.showToast(
             "danger",
@@ -253,7 +272,7 @@ export default {
           );
       }
     },
-    async getSelectCategory() {
+    getSelectCategory: async function() {
       if (this.listCategoryAll != null) {
         this.optionsCategory = this.listCategoryAll;
         this.filter[0].options = this.listCategoryAll;
@@ -279,29 +298,29 @@ export default {
         }
       }
     },
-    openModalTrackingEquipment(equipmentId) {
+    openModalTrackingEquipment:function(equipmentId) {
       this.equipmentId = equipmentId;
       this.modalTracking = true;
     },
-    closeModalTrackingEquipment() {
+    closeModalTrackingEquipment:function() {
       this.modalTracking = false;
     },
-    viewEquipment(idEquipment, edit) {
+    viewEquipment:function(idEquipment, edit) {
       this.idEquipment = idEquipment;
       this.edit = edit;
       this.modalViewEquipment = true;
     },
-    closeModalViewEquipment() {
+    closeModalViewEquipment:function() {
       this.modalViewEquipment = false;
     },
-    validateLocation(current) {
+    validateLocation:function(current) {
       if (current == this.$route.meta.module && this.$route.meta.module != 19) {
         return true;
       } else {
         return false;
       }
     },
-    openValidate(param1, param2, param3, moduleId, num) {
+    openValidate:function(param1, param2, param3, moduleId, num) {
       if (num == 2) {
       } else {
         this.$swal
@@ -335,7 +354,7 @@ export default {
           });
       }
     },
-    async validatePassword(value, param1, param2, param3, moduleId, num) {
+    validatePassword:async function(value, param1, param2, param3, moduleId, num) {
       let module = 0;
       if (num == 1) {
         module = 19;
@@ -383,21 +402,21 @@ export default {
       }
        
     },
-    openModalRepairEquipment(idEquipment, status, assignTo, num) {
+    openModalRepairEquipment:function(idEquipment, status, assignTo, num) {
       this.idEquipment = idEquipment;
       this.statusNewEquipment = status;
       this.assignedTo = assignTo;
       this.num = num;
       this.modalRepairEquipment = true;
     },
-    closeModalRepairEquipment() {
+    closeModalRepairEquipment:function() {
       this.modalRepairEquipment = false;
     },
-    updateRepairEquipment() {
+    updateRepairEquipment:function() {
       this.$refs.refClientsList.refresh();
     }
   },
-  created() {
+  created:function() {
     this.getSelectCategory();
   }
 };
