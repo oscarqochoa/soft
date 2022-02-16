@@ -398,10 +398,9 @@ export default {
       }
     },
     onRowProcess(id) {
-      this.showSwalGeneric(
+      this.showConfirmSwal(
         "Are you sure?",
         "You won't be able to revert this!",
-        "warning",
         {
           input: "textarea",
           inputValidator: value => {

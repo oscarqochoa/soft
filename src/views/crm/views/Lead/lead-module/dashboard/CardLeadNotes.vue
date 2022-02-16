@@ -6,11 +6,7 @@
     <validation-observer ref="form">
       <b-row>
         <b-col>
-          <validation-provider
-            v-slot="{ errors }"
-            name="noteText"
-            rules="required"
-          >
+          <validation-provider v-slot="{ errors }" name="noteText" rules="required">
             <b-form-textarea
               v-model="note.text"
               :disabled="onlyRead || textAreaDisabled"
@@ -20,27 +16,18 @@
           </validation-provider>
         </b-col>
       </b-row>
-      <b-row
-        v-if="!dontHaveNote"
-        class="font-small-3"
-        style="margin-top: 3px"
-      >
-        <b-col
-          md="10"
-          class="d-flex align-items-center justify-content-start"
-        >
-          <span
-            class="font-weight-bolder"
-            style="margin-right: 2px"
-          >Created by:</span> {{ note.created_by_name }} (<amg-icon
+      <b-row v-if="!dontHaveNote" class="font-small-3" style="margin-top: 3px">
+        <b-col md="10" class="d-flex align-items-center justify-content-start">
+          <span class="font-weight-bolder" style="margin-right: 2px">Created by:</span>
+          {{ note.created_by_name }} (
+          <tabler-icon
             icon="CalendarIcon"
             size="12"
             style="margin-right: 4px; margin-bottom: 2px; margin-left: 2px"
-          /> {{ note.created_at | myGlobalWithHour }})
+          />
+          {{ note.created_at | myGlobalWithHour }})
         </b-col>
-        <b-col
-          class="text-right"
-        >
+        <b-col class="text-right">
           <b-button
             v-if="note.user_id === currentUser.user_id.toString()"
             size="sm"
@@ -49,11 +36,7 @@
             style="padding: 3px !important;"
             @click="enableTextArea"
           >
-            <amg-icon
-              icon="Edit2Icon"
-              size="10"
-              class="cursor-pointer"
-            />
+            <tabler-icon icon="Edit2Icon" size="10" class="cursor-pointer" />
           </b-button>
         </b-col>
       </b-row>
@@ -65,10 +48,7 @@
             class="btn-icon rounded-circle"
             @click="clickCheckIcon"
           >
-            <amg-icon
-              icon="CheckIcon"
-              class="font-small-3"
-            />
+            <tabler-icon icon="CheckIcon" class="font-small-3" />
           </b-button>
           <b-button
             size="sm"
@@ -77,30 +57,18 @@
             class="btn-icon rounded-circle"
             @click="clickXIcon"
           >
-            <amg-icon
-              icon="XIcon"
-              class="font-small-3"
-            />
+            <tabler-icon icon="XIcon" class="font-small-3" />
           </b-button>
         </b-col>
-        <b-col
-          v-if="!dontHaveNote"
-          class="d-flex align-items-center justify-content-end"
-        >
-          <amg-icon
+        <b-col v-if="!dontHaveNote" class="d-flex align-items-center justify-content-end">
+          <tabler-icon
             icon="ListIcon"
             size="20"
             class="cursor-pointer"
             style="margin-right: 10px"
             @click="openHistoryModal"
           />
-          <b-button
-            variant="primary"
-            size="sm"
-            @click="openAddNewNote"
-          >
-            Add
-          </b-button>
+          <b-button variant="primary" size="sm" @click="openAddNewNote">Add</b-button>
         </b-col>
       </b-row>
     </validation-observer>
@@ -120,122 +88,122 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import HistoryNotesModal from '@/views/crm/views/Lead/lead-module/dashboard/modal/HistoryNotesModal.vue'
-import AddNotesModal from '@/views/crm/views/Lead/lead-module/dashboard/modal/AddNotesModal'
+import { mapGetters } from "vuex";
+import HistoryNotesModal from "@/views/crm/views/Lead/lead-module/dashboard/modal/HistoryNotesModal.vue";
+import AddNotesModal from "@/views/crm/views/Lead/lead-module/dashboard/modal/AddNotesModal.vue";
 
 export default {
   components: { AddNotesModal, HistoryNotesModal },
   props: {
     modul: {
       type: Number,
-      required: true,
+      required: true
     },
     onlyRead: {
       type: Boolean,
-      required: true,
+      required: true
     },
     lead: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
       note: {
-        id: '',
-        text: '',
-        created: '',
-        user_id: '',
-        created_by: '',
+        id: "",
+        text: "",
+        created: "",
+        user_id: "",
+        created_by: ""
       },
       textAreaDisabled: true,
       historyModal: false,
-      addNoteModal: false,
-    }
+      addNoteModal: false
+    };
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
+      currentUser: "auth/currentUser"
     }),
     dontHaveNote() {
-      return this.note.id === ''
-    },
+      return this.note.id === "";
+    }
   },
   created() {
     if (this.lead.notes) {
-      [this.note] = this.lead.notes
-      this.note.created_by_name = this.note.created_by
-      this.note.created_at = this.note.created
+      [this.note] = this.lead.notes;
+      this.note.created_by_name = this.note.created_by;
+      this.note.created_at = this.note.created;
     }
-    if (this.dontHaveNote) this.textAreaDisabled = false
+    if (this.dontHaveNote) this.textAreaDisabled = false;
   },
   methods: {
     enableTextArea() {
-      this.textAreaDisabled = false
+      this.textAreaDisabled = false;
     },
     disableTextArea() {
-      this.textAreaDisabled = true
+      this.textAreaDisabled = true;
     },
     clickXIcon() {
-      if (this.dontHaveNote) this.note.text = ''
-      else this.disableTextArea()
+      if (this.dontHaveNote) this.note.text = "";
+      else this.disableTextArea();
     },
     openAddNewNote() {
-      this.addNoteModal = true
+      this.addNoteModal = true;
     },
     closeAddNewNote() {
-      this.addNoteModal = false
+      this.addNoteModal = false;
     },
     openHistoryModal() {
-      this.historyModal = true
+      this.historyModal = true;
     },
     closeHistoryModal() {
-      this.historyModal = false
+      this.historyModal = false;
     },
     async clickCheckIcon() {
-      const resolve = await this.$refs.form.validate()
+      const resolve = await this.$refs.form.validate();
       if (resolve) {
-        const result = await this.showConfirmSwal()
+        const result = await this.showConfirmSwal();
         if (result.value) {
           if (this.dontHaveNote) {
-            const response = await amgApi.post('/note/note/update-notes', {
-              created_at: '',
-              created_by: '',
-              created_by_name: '',
-              id: '',
+            const response = await amgApi.post("/note/note/update-notes", {
+              created_at: "",
+              created_by: "",
+              created_by_name: "",
+              id: "",
               lead_id: this.lead.id,
               text: this.note.text,
-              user_id: this.currentUser.user_id,
-            })
+              user_id: this.currentUser.user_id
+            });
             if (response.status === 200) {
-              [this.note] = response.data
-              this.note.user_id = this.note.created_by
-              this.disableTextArea()
+              [this.note] = response.data;
+              this.note.user_id = this.note.created_by;
+              this.disableTextArea();
             }
           } else {
-            const response = await amgApi.post('/note/note/update-notes', {
+            const response = await amgApi.post("/note/note/update-notes", {
               created_at: this.note.created_at,
               created_by: this.note.user_id,
               created_by_name: this.note.created_by_name,
               id: this.note.id,
               important: 1,
               lead_id: this.lead.id,
-              text: this.note.text,
-            })
+              text: this.note.text
+            });
             if (response.status === 200) {
-              [this.note] = response.data
-              this.note.user_id = this.note.created_by
-              this.disableTextArea()
+              [this.note] = response.data;
+              this.note.user_id = this.note.created_by;
+              this.disableTextArea();
             }
           }
         }
       }
     },
     setNewImportantNote(newImportant) {
-      this.note = newImportant
-      this.note.user_id = this.note.created_by
-    },
-  },
-}
+      this.note = newImportant;
+      this.note.user_id = this.note.created_by;
+    }
+  }
+};
 </script>
