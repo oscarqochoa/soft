@@ -148,7 +148,7 @@ import ViewMoreEvents from '@/views/crm/views/calendar/components/ViewMoreEvents
 import vSelect from 'vue-select'
 import { mapGetters, mapState } from 'vuex'
 import TaskService from '@/service/task'
-import LCalendar from '@/views/commons/calendar/LCalendar.vue'
+import LCalendar from './LCalendar.vue'
 
 export default {
   name: 'CalendarTest',

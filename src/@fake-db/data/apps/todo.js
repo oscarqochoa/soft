@@ -156,7 +156,7 @@ const data = {
     },
     {
       id: 11,
-      title: 'Refactor Code and fix the bugs and test it on server ',
+      title: 'Refactor Code and fix the bugs and calendar it on server ',
       dueDate: '2020-12-01',
       description:
         '<p>Chocolate cake topping bonbon jujubes donut sweet wafer. Marzipan gingerbread powder brownie bear claw. Chocolate bonbon sesame snaps jelly caramels oat cake.</p>',

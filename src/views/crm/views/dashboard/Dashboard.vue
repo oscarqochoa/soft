@@ -1,20 +1,28 @@
 <template>
   <b-row>
+    <header-slot></header-slot>
     <div class="col-md-12 col-lg-12 col-sm-12">
       <!-- All Screen -->
+      <!-- <h2>{{screenHeight}}</h2> -->
+      <!-- <h4>{{this.widthOfScreen}}---{{statusHeightByScreenColOne}} -- {{statusHeightByScreenColTwo}}</h4> -->
+      <!-- <h4>{{bigheightScreen}} - {{mediumheightScreen}}</h4> -->
       <b-row style="">
         <!-- Column Cards -->
-        <b-col class="col-cards" cols="12" sm="4" md="4" lg="3" xl="2" style="">
+        <b-col
+          @mousedown="statuMouse($event)"
+          class="col-tab"
+          cols="12"
+          sm="4"
+          md="4"
+          lg="3"
+          xl="2"
+          :style="statusHeightByScreenColOne"
+        >
           <!-- Card Leads-->
           <b-row class="pl-1 pr-1">
             <b-card
               @click="changeTab(0)"
-              class="
-                ecommerce-card-leads ecommerce-card
-                col-lg-12
-                h-100
-                cursor-pointer
-              "
+              class="ecommerce-card-leads ecommerce-card col-lg-12 h-100 cursor-pointer"
               :class="classAdd"
               :style="
                 itemCards[0] == true
@@ -25,19 +33,10 @@
               "
             >
               <!-- Card Title -->
-              <b-card-title :style="itemCards[0] == true ? 'color: white' : ''"
-                >Leads</b-card-title
-              >
+              <b-card-title :style="itemCards[0] == true ? 'color: white' : ''">Leads</b-card-title>
               <!-- Card Content -->
               <b-card-text>
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
+                <div class="row item-wrapper justify-content-center align-items-center">
                   <div
                     style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
@@ -46,23 +45,16 @@
                     class="mr-2 item-wrapper-font div-box1"
                   ></div>
                   <div class="mr-1">
-                    <span style="font-size: medium" class="">Today :</span>
+                    <span style="font-size: medium" class>Today :</span>
                   </div>
                   <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.leadday }}</strong></span
-                    >
+                    <span style="font-size: large">
+                      <strong>{{ global.leadday }}</strong>
+                    </span>
                   </div>
                 </div>
                 <div class="row" style="height: 10px" />
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
+                <div class="row item-wrapper justify-content-center align-items-center">
                   <div
                     style="
                       width: 17px;
@@ -79,9 +71,9 @@
                     <span style="font-size: medium">Month :</span>
                   </div>
                   <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.leadmonth }}</strong></span
-                    >
+                    <span style="font-size: large">
+                      <strong>{{ global.leadmonth }}</strong>
+                    </span>
                   </div>
                 </div>
               </b-card-text>
@@ -90,12 +82,7 @@
           <!-- Card Appointments-->
           <b-row class="pl-1 pr-1">
             <b-card
-              class="
-                ecommerce-card-appointments ecommerce-card
-                col-lg-12
-                h-150
-                cursor-pointer
-              "
+              class="ecommerce-card-appointments ecommerce-card col-lg-12 h-150 cursor-pointer"
               :class="classAdd"
               @click="changeTab(1)"
               :style="
@@ -107,19 +94,10 @@
               "
             >
               <!-- Card Title -->
-              <b-card-title :style="itemCards[1] == true ? 'color: white' : ''"
-                >Appointments</b-card-title
-              >
+              <b-card-title :style="itemCards[1] == true ? 'color: white' : ''">Appointments</b-card-title>
               <!-- Card Content -->
               <b-card-text>
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
+                <div class="row item-wrapper justify-content-center align-items-center">
                   <div
                     style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
@@ -131,20 +109,13 @@
                     <span style="font-size: medium">Today :</span>
                   </div>
                   <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.eventday }}</strong></span
-                    >
+                    <span style="font-size: large">
+                      <strong>{{ global.eventday }}</strong>
+                    </span>
                   </div>
                 </div>
                 <div class="row" style="height: 10px" />
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
+                <div class="row item-wrapper justify-content-center align-items-center">
                   <div
                     style="
                       width: 17px;
@@ -161,9 +132,9 @@
                     <span style="font-size: medium">Month :</span>
                   </div>
                   <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.eventmonth }}</strong></span
-                    >
+                    <span style="font-size: large">
+                      <strong>{{ global.eventmonth }}</strong>
+                    </span>
                   </div>
                 </div>
               </b-card-text>
@@ -172,12 +143,7 @@
           <!-- Card Tasks-->
           <b-row class="pl-1 pr-1">
             <b-card
-              class="
-                ecommerce-card-tasks ecommerce-card
-                col-lg-12
-                h-150
-                cursor-pointer
-              "
+              class="ecommerce-card-tasks ecommerce-card col-lg-12 h-150 cursor-pointer"
               :class="classAdd"
               @click="changeTab(2)"
               :style="
@@ -189,19 +155,10 @@
               "
             >
               <!-- Card Title -->
-              <b-card-title :style="itemCards[2] == true ? 'color: white' : ''"
-                >Tasks</b-card-title
-              >
+              <b-card-title :style="itemCards[2] == true ? 'color: white' : ''">Tasks</b-card-title>
               <!-- Card Content -->
               <b-card-text>
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
+                <div class="row item-wrapper justify-content-center align-items-center">
                   <div
                     style="
                       width: 17px;
@@ -218,20 +175,13 @@
                     <span style="font-size: medium">Today :</span>
                   </div>
                   <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.taskday }}</strong></span
-                    >
+                    <span style="font-size: large">
+                      <strong>{{ global.taskday }}</strong>
+                    </span>
                   </div>
                 </div>
                 <div class="row" style="height: 10px" />
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
+                <div class="row item-wrapper justify-content-center align-items-center">
                   <div
                     style="
                       width: 17px;
@@ -248,9 +198,9 @@
                     <span style="font-size: medium">Month :</span>
                   </div>
                   <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.taskmonth }}</strong></span
-                    >
+                    <span style="font-size: large">
+                      <strong>{{ global.taskmonth }}</strong>
+                    </span>
                   </div>
                 </div>
               </b-card-text>
@@ -259,12 +209,7 @@
           <!-- Card Sales-->
           <b-row class="pl-1 pr-1">
             <b-card
-              class="
-                ecommerce-card-sales ecommerce-card
-                col-lg-12
-                h-150
-                cursor-pointer
-              "
+              class="ecommerce-card-sales ecommerce-card col-lg-12 h-150 cursor-pointer"
               :class="classAdd"
               @click="changeTab(3)"
               :style="
@@ -276,19 +221,10 @@
               "
             >
               <!-- Card Title -->
-              <b-card-title :style="itemCards[3] == true ? 'color: white' : ''"
-                >Sales</b-card-title
-              >
+              <b-card-title :style="itemCards[3] == true ? 'color: white' : ''">Sales</b-card-title>
               <!-- Card Content -->
               <b-card-text>
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
+                <div class="row item-wrapper justify-content-center align-items-center">
                   <div
                     style="
                       width: 17px;
@@ -305,20 +241,13 @@
                     <span style="font-size: medium">Today :</span>
                   </div>
                   <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.vendioday }}</strong></span
-                    >
+                    <span style="font-size: large">
+                      <strong>{{ global.vendioday }}</strong>
+                    </span>
                   </div>
                 </div>
                 <div class="row" style="height: 10px" />
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
+                <div class="row item-wrapper justify-content-center align-items-center">
                   <div
                     style="
                       width: 17px;
@@ -335,9 +264,9 @@
                     <span style="font-size: medium">Month :</span>
                   </div>
                   <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.vendiomonth }}</strong></span
-                    >
+                    <span style="font-size: large">
+                      <strong>{{ global.vendiomonth }}</strong>
+                    </span>
                   </div>
                 </div>
               </b-card-text>
@@ -346,12 +275,7 @@
           <!-- Card Capturated-->
           <b-row class="pl-1 pr-1">
             <b-card
-              class="
-                ecommerce-card-capturated ecommerce-card
-                col-lg-12
-                h-150
-                cursor-pointer
-              "
+              class="ecommerce-card-capturated ecommerce-card col-lg-12 h-150 cursor-pointer"
               :class="classAdd"
               @click="changeTab(4)"
               :style="
@@ -363,19 +287,10 @@
               "
             >
               <!-- Card Title -->
-              <b-card-title :style="itemCards[4] == true ? 'color: white' : ''"
-                >Capturated</b-card-title
-              >
+              <b-card-title :style="itemCards[4] == true ? 'color: white' : ''">Capturated</b-card-title>
               <!--Card Content  -->
               <b-card-text>
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
+                <div class="row item-wrapper justify-content-center align-items-center">
                   <div
                     style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
@@ -387,20 +302,13 @@
                     <span style="font-size: medium">Today :</span>
                   </div>
                   <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.clientday }}</strong></span
-                    >
+                    <span style="font-size: large">
+                      <strong>{{ global.clientday }}</strong>
+                    </span>
                   </div>
                 </div>
                 <div class="row" style="height: 10px" />
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
+                <div class="row item-wrapper justify-content-center align-items-center">
                   <div
                     style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
@@ -412,9 +320,9 @@
                     <span style="font-size: medium">Month :</span>
                   </div>
                   <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.clientmonth }}</strong></span
-                    >
+                    <span style="font-size: large">
+                      <strong>{{ global.clientmonth }}</strong>
+                    </span>
                   </div>
                 </div>
               </b-card-text>
@@ -423,12 +331,13 @@
         </b-col>
 
         <!-- Column Graphics -->
-        <b-col cols="12" sm="8" md="8" lg="9" xl="10">
-          <b-card class="col-12">
+        <b-col class cols="12" sm="8" md="8" lg="9" xl="10">
+          <b-card class="col-12 mb-0" :style="statusHeightByScreenColTwo">
             <br />
             <br />
+            
             <!-- Content Card -->
-            <b-row class="">
+            <b-row class="" :style="allSizeOfScreen==='xxl'? 'height:130px':''">
               <div class="mb-1 mb-sm-0 d-inline col-lg-10 col-md-12 col-xl-7">
                 <b-row>
                   <!-- Select User -->
@@ -436,35 +345,31 @@
                     <v-select
                       v-if="[1, 2].includes(currentUser.role_id)"
                       v-model="userfilter"
-                      class="per-page-selector-user style-chooser"
-                     
+                      class=" style-chooser"
+                      :style="allSizeOfScreen==='xxl'?'width: 250px;font-size: 18px':'width: 200px;'"
+                      style="font-size: 15px"
                       placeholder="Select User"
                       label="user_name"
                       :options="users"
                       :reduce="(val) => val.id"
                       @input="filtroCont()"
+                      
                     />
                   </b-col>
                   <!-- Year and Sub Title -->
                   <b-col cols="12" sm="12" md="12" lg="7" class="d-flex flex-wrap pb-1">
-                    <div
-                      class="
-                        d-flex
-                        align-items-center
-                        justify-content-center
-                        pr-1
-                      "
-                    >
+                    <div class="d-flex align-items-center justify-content-center pr-1">
                       <!-- Graphic Sub Title -->
                       <div>
-                        <h5><strong>MONTHLY GRAPHICS</strong></h5>
+                        <h5><strong :style="allSizeOfScreen==='xxl'?'font-size: 150%':''">MONTHLY GRAPHICS</strong></h5>
                       </div>
                     </div>
-                     <!-- Select Year -->
+                    <!-- Select Year -->
                     <v-select
                       v-model="year"
                       class="per-page-selector"
                       style="font-size: 15px"
+                      :style="allSizeOfScreen==='xxl'?'width: 200px; font-size: 18px':'width: 130px;'"
                       :clearable="false"
                       :options="years"
                       @input="filtroCont()"
@@ -473,26 +378,23 @@
                 </b-row>
               </div>
               <!-- Array of Sub title Totals -->
-              <div
-                class="col-lg-8 col-md-12 col-xl-5 d-flex flex-wrap"
-                style="width: 100%"
-              >
+              <div class="col-lg-8 col-md-12 col-xl-5 d-flex flex-wrap" style="width: 100%">
                 <div
                   v-for="data in totalYearByCard"
                   :key="data.id"
                   class="d-flex flex-wrap mb-1 justify-content-between pr-1"
-                  :style="`${screenWidth<576? 'width: 100%':'width: 50%'}`"
+                  :style="`${allSizeOfScreen==='xs' || allSizeOfScreen==='sm' ? 'width: 100%' : 'width: 50%'}`"
                 >
                   <!-- Name of Total -->
                   <div>
-                    <span class="font-weight-bolder">{{ data.name }}:</span>
+                    <span class="font-weight-bolder " :style="allSizeOfScreen==='xxl'?'font-size: 150%':''">{{ data.name }}:</span>
                   </div>
                   <!-- Quantity of Data -->
                   <div class="important text-center" style="float: left">
                     <div
                       style="background: #0090e7; border-radius: 5px; text-center;width:50px;"
                     >
-                      <span class="font-weight-bolder" style="color: white">
+                      <span class="font-weight-bolder" style="color: white" :style="allSizeOfScreen==='xxl'?'font-size: 150%':''">
                         {{ data.total }}
                       </span>
                     </div>
@@ -500,9 +402,16 @@
                 </div>
               </div>
             </b-row>
+            <!-- Space If It's a huge Graphics -->
+            <!-- <b-row v-if="allSizeOfScreen==='xxl'" style="height:130px"></b-row> -->
             <!-- Graphics Line -->
             <b-card-body class="p-0 pb-2">
-              <app-echart-line-crm :key="idEchart" :option-data="rePaint" :screen="screen" />
+              <app-echart-line-crm
+                :key="idEchart"
+                :option-data="rePaint"
+                :screen="allSizeOfScreen"
+                :style="allSizeOfScreen==='xxl'?'height:550px':''"
+              />
             </b-card-body>
           </b-card>
         </b-col>
@@ -510,6 +419,8 @@
     </div>
   </b-row>
 </template>
+
+
 
 <script>
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
@@ -530,10 +441,9 @@ export default {
     BBadge,
     vSelect,
     AppEchartLine,
-    AppEchartLineCrm,
-    
+    AppEchartLineCrm
   },
-  data: function () {
+  data: function() {
     return {
       idEchart: 0,
       option: {
@@ -549,9 +459,9 @@ export default {
           "September",
           "October",
           "November",
-          "December",
+          "December"
         ],
-        series: [],
+        series: []
       },
       global: [],
       leads: [],
@@ -569,39 +479,83 @@ export default {
       years: [],
       itemCards: [true, false, false, false, false],
       item: null,
-      widthOfScreen:null,
-      heightOfScreen:null,
+      widthOfScreen: null,
+      heightOfScreen: null
     };
   },
   computed: {
-    screen:function() {
-      this.heightOfScreen = window.screen.height
+    ...mapGetters({
+      bigheightScreen: "app/bigheightScreen",
+      mediumheightScreen:"app/mediumheightScreen",
+      allSizeOfScreen:"app/allSizeOfScreen"
+    }),
+    screenHeight: function () {
+      this.heightOfScreen = window.screen.height;
       return this.heightOfScreen;
     },
-    screenWidth:function() {
-      this.widthOfScreen = window.screen.width
-      return this.widthOfScreen
+    statusHeightByScreenColOne() {
+      switch(this.allSizeOfScreen){
+        case "xxl":
+          return "height: 800px !important;max-height: 900px !important;"
+        case "xl":
+          return "height: 75vh;max-height: 75vh;overflow: auto;"
+        case "lg":
+          return "height: 70vh;max-height: 70vh;overflow: auto;"
+        case "md":
+          return "height: 155vh;max-height: 155vh;overflow: auto;"
+        case "sm":
+          return "height: 170vh;max-height: 180vh;overflow: auto;"
+        
+      }
+      
+    },
+    statusHeightByScreenColTwo() {
+      switch(this.allSizeOfScreen){
+        case "xxl":
+          return "height: 800px !important;max-height: 900px !important;"
+        case "xl":
+          return "height: 520px !important;max-height: 520px !important;"
+        case "lg":
+          return ""
+        case "md":
+          return ""
+        case "sm":
+          return ""
+      }
+
+      
     },
     ...mapGetters({
-      skin: "appConfig/skin",
+      skin: "appConfig/skin"
     }),
     ...mapGetters({
-      currentUser: "auth/currentUser",
+      currentUser: "auth/currentUser"
     }),
     classAdd: function () {
       return this.skin == "dark" ? "dark" : "";
     },
-    rePaint: function () {
+    rePaint: function() {
       return this.option;
-    },
+    }
   },
-  created: function () {
+  created: function() {
     this.userCreator();
     this.allData();
     this.yearSelect();
   },
   methods: {
-    statusColor: function (name) {
+    statuMouse(event) {
+      const container = document.querySelector(".col-tab");
+
+      // container.scrollHeight = event.screenY
+      // console.log(event)
+      // console.log(event.clientX)
+      // event.clientY = event.clientY
+      // console.log("sdsds",event)
+      // console.log(container.scrollHeight);
+    },
+
+    statusColor: function(name) {
       let color = "";
       switch (name) {
         case "Total leads":
@@ -622,13 +576,13 @@ export default {
       }
       return color;
     },
-    chargeDataToEchart: function (array, name) {
+    chargeDataToEchart: function(array, name) {
       if (this.option.series <= 0) {
         this.option.series.push({
           type: "line",
           name: name,
           data: array,
-          color: this.statusColor(name),
+          color: this.statusColor(name)
         });
       } else {
         let found = false;
@@ -644,25 +598,25 @@ export default {
             type: "line",
             name: name,
             data: array,
-            color: this.statusColor(name),
+            color: this.statusColor(name)
           });
         }
       }
       this.idEchart++;
     },
-    chargeDataToEchartNew: function (array, name) {
+    chargeDataToEchartNew: function(array, name) {
       this.option.series = [];
       if (this.option.series <= 0) {
         this.option.series.push({
           type: "line",
           name: name,
           data: array,
-          color: this.statusColor(name),
+          color: this.statusColor(name)
         });
       }
       this.idEchart++;
     },
-    changeItemCards: function (index) {
+    changeItemCards: function(index) {
       for (let i = 0; i < this.itemCards.length; i++) {
         if (i === index) {
           if (this.itemCards[i] == true) {
@@ -673,7 +627,7 @@ export default {
         }
       }
     },
-    changeListYear: function (name, total) {
+    changeListYear: function(name, total) {
       if (this.totalYearByCard <= 0) {
         this.totalYearByCard.push({ name: name, total: total });
       } else {
@@ -690,16 +644,16 @@ export default {
         }
       }
     },
-    changeListYearNew: function (name, total) {
+    changeListYearNew: function(name, total) {
       this.totalYearByCard = [];
       if (this.totalYearByCard <= 0) {
         this.totalYearByCard.push({ name: name, total: total });
       }
     },
     // Change By Card
-    changeTab: function (index) {
-      this.widthOfScreen = window.screen.width
-      this.heightOfScreen = window.screen.height
+    changeTab: function(index) {
+      this.widthOfScreen = window.screen.width;
+      this.heightOfScreen = window.screen.height;
       this.changeItemCards(index);
       switch (index) {
         case 0:
@@ -730,7 +684,7 @@ export default {
       }
       this.index = index;
     },
-    allData: async function (status = null) {
+    allData: async function(status = null) {
       try {
         this.addPreloader();
         let { user_id } = this.currentUser;
@@ -738,15 +692,15 @@ export default {
           user_id = 0;
         }
         const response = await DashboardService.getDashboardData({
-          created_id: user_id,
+          created_id: user_id
         });
         this.userfilter = response.data.usercreate;
         this.global = response.data;
-        this.leads = response.data.leads.map((list) => list);
-        this.quotes = response.data.quotes.map((list) => list);
-        this.calls = response.data.calls.map((list) => list);
-        this.sales = response.data.sales.map((list) => list);
-        this.captur = response.data.vendio.map((list) => list);
+        this.leads = response.data.leads.map(list => list);
+        this.quotes = response.data.quotes.map(list => list);
+        this.calls = response.data.calls.map(list => list);
+        this.sales = response.data.sales.map(list => list);
+        this.captur = response.data.vendio.map(list => list);
         this.removePreloader();
         if (status == null) {
           this.chargeDataToEchart(this.leads, "Total leads");
@@ -769,21 +723,21 @@ export default {
       }
     },
     // Change By User or Year
-    filtroCont: async function () {
+    filtroCont: async function() {
       this.itemCards = [true, false, false, false, false];
       if (this.userfilter != null) {
         try {
           this.addPreloader();
           const response = await DashboardService.getDashboardData({
             created_id: this.userfilter,
-            anio: this.year,
+            anio: this.year
           });
           this.global = response.data;
-          this.leads = response.data.leads.map((list) => list);
-          this.quotes = response.data.quotes.map((list) => list);
-          this.calls = response.data.calls.map((list) => list);
-          this.sales = response.data.sales.map((list) => list);
-          this.captur = response.data.vendio.map((list) => list);
+          this.leads = response.data.leads.map(list => list);
+          this.quotes = response.data.quotes.map(list => list);
+          this.calls = response.data.calls.map(list => list);
+          this.sales = response.data.sales.map(list => list);
+          this.captur = response.data.vendio.map(list => list);
           this.chargeDataToEchartNew(this.leads, "Total leads");
           this.changeListYearNew("Total leads", this.global.leads_year);
           this.total_year = this.global.leads_year;
@@ -804,11 +758,11 @@ export default {
         this.year = this.years[this.years.length - 1];
       }
     },
-    userCreator: async function () {
+    userCreator: async function() {
       try {
         const data = await DashboardService.userCreator({
           roles: "",
-          type: "1",
+          type: "1"
         });
         this.users = data;
       } catch (error) {
@@ -822,12 +776,12 @@ export default {
         );
       }
     },
-    yearSelect: function () {
+    yearSelect: function() {
       for (let x = 2014; x <= moment().format("YYYY"); x++) {
         this.years.push(x);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -837,14 +791,20 @@ export default {
 
 <style lang="scss" scoped>
 // Styles V-select
-.col-cards {
-  height: 70vh;
-  max-height: 70vh;
-  overflow: auto;
-}
+// .col-cards {
+//   // height: 70vh;
+//   // max-height: 70vh;
+//   height: 800px !important;
+//   max-height: 900px !important;
+//   overflow: auto;
+// }
+// .col-cards-two{
+//   height: 800px !important;
+//   max-height: 900px !important;
+// }
 // hidding scrollbar
-::-webkit-scrollbar {
-  width: 0; 
+.col-tab::-webkit-scrollbar {
+  width: 0;
   background: transparent;
 }
 

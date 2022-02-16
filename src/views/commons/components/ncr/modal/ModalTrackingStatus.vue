@@ -17,6 +17,7 @@
             <b-row>
               <b-col md="12">
                 <b-row>
+                  <!-- Sub Title -->
                   <b-col
                     class="font-bureau-style text-gray-light m-auto "
                     cols="4"
@@ -26,6 +27,7 @@
                       <strong>Lead</strong>
                     </p>
                   </b-col>
+                  <!-- Name of Lead -->
                   <b-col cols="8" md="8" class="px-1">
                     <div class>
                       <p
@@ -42,6 +44,7 @@
           </b-col>
         </b-row>
         <div>
+          <!-- Table -->
           <b-table
             ref="refClientsList"
             :items="data"
@@ -51,6 +54,7 @@
             responsive="sm"
             show-empty
             sticky-header="50vh"
+            :busy="isBusy"
           >
             <template #table-busy>
               <div class="text-center text-primary my-2">
@@ -58,6 +62,7 @@
                 <strong>Loading ...</strong>
               </div>
             </template>
+            <!-- Column PROVIDER -->
             <template #cell(plataform_ico)="data">
               <div class="d-flex flex-column justify-content-start align-items-start">
                 <img
@@ -67,6 +72,7 @@
                 />
               </div>
             </template>
+            <!-- Column CREATED BY -->
             <template #cell(created_name)="data">
               <div class="d-flex flex-column justify-content-start align-items-start">
                 <span>{{ data.item.created_name }}</span>
@@ -82,7 +88,10 @@
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
+// Import Services
+import NrcService from '../service/ncr.service'
+// Import Data
+import fields from '../data/fields.tracking.status.data'
 export default {
   props: {
     modalTrackingStatus: {
@@ -95,68 +104,34 @@ export default {
       type: [String, Number]
     }
   },
-  data() {
+  data:function() {
     return {
       ifModal: this.modalTrackingStatus,
       data: null,
-      status: false,
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
-      arrayColumns: [
-        {
-          key: "status",
-          label: "STATUS",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "plataform_ico",
-          label: "PROVIDER",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "created_name",
-          label: "CREATED BY",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "note",
-          label: "NOTE",
-          class: "text-left",
-          sortable: false
-        }
-      ],
+      arrayColumns: fields,
+      isBusy: false,
     };
   },
-  computed: {
-    statusSpinner() {
-      return this.status;
-    }
-  },
   methods: {
-    closeModal() {
+    closeModal:function() {
       this.$emit("closeTrackingStatus", false);
     },
-    getTrackingStatus() {
-      this.status = true;
-      amgApi
-        .post("/lead/ncr/get-lead-tracking-status-by-id", {
-          score_id: this.score_id
-        })
-        .then(response => {
-          if (response.status == 200) {
+    getTrackingStatus:async function() {
+      try{
+        this.isBusy = true;
+        const response = await NrcService.getTrackingStatus({score_id: this.score_id})
+        if (response.status == 200) {
             this.data = response.data;
-            this.status = false;
+            this.isBusy = false;
           }
-        })
-        .catch(error => {
-          console.error(error);
-          this.status = false;
-        });
+      }catch(error){
+        console.error(error);
+          this.isBusy = false;
+      }
     }
   },
-  created() {
+  created:function() {
     this.getTrackingStatus();
   }
 };

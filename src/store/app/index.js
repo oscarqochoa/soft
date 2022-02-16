@@ -14,13 +14,24 @@ export default {
       if (windowWidth >= $themeBreakpoints.xl) return "xl";
       if (windowWidth >= $themeBreakpoints.lg) return "lg";
       if (windowWidth >= $themeBreakpoints.md) return "md";
-      if (windowWidth >= $themeBreakpoints.sm) return "sm";
+      if (windowWidth >= $themeBreakpoints.sm) return "sm"; 
       return "xs";
     },
     bigWindow: (state, getters) => {
       return (
-        getters.currentBreakPoint === "xl" || getters.currentBreakPoint === "lg" || getters.currentBreakPoint === "xxl"
+        getters.currentBreakPoint === "xl" ||
+        getters.currentBreakPoint === "lg" ||
+        getters.currentBreakPoint === "xxl"
       );
+    },
+    bigheightScreen:(state,getters)=>{
+      return getters.currentBreakPoint === "xxl" || getters.currentBreakPoint === "lg" 
+    },
+    mediumheightScreen:(state,getters)=>{
+      return getters.currentBreakPoint === "xl"
+    },
+    allSizeOfScreen:(state,getters)=>{
+      return getters.currentBreakPoint
     },
     loading: (state) => {
       return state.loading;

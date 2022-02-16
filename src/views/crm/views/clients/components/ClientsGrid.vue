@@ -1,5 +1,13 @@
 <template>
   <div>
+    <lead-update
+      v-if="Object.keys(S_LEAD_EDIT).length"
+      :modul="modul"
+      :typeEdit="typeEdit"
+      :lead="S_LEAD_EDIT"
+      :is-add-new-user-sidebar-active.sync="isAddUpdateUserSidebarActive"
+      @update-lead="updateLead"
+    />
     <filter-slot
       :filter="filters"
       :filter-principal="filterPrincipal"
@@ -134,14 +142,6 @@
         </b-table>
       </template>
     </filter-slot>
-    <lead-update
-      v-if="isAddUpdateUserSidebarActive"
-      :modul="modul"
-      :typeEdit="typeEdit"
-      :lead="S_LEAD_EDIT"
-      :is-add-new-user-sidebar-active.sync="isAddUpdateUserSidebarActive"
-      @update-lead="updateLead"
-    />
   </div>
 </template>
 <script>
@@ -517,7 +517,12 @@ export default {
         value: "All",
         id: 0
       };
-      let newData = data;
+      let newData = data.map(item => {
+        return {
+          value: item.name,
+          id: item.id
+        };
+      });
       newData.unshift(firstOption);
       this.filters[2].options = newData;
     },

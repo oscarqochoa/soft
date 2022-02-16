@@ -91,6 +91,10 @@
                   :have-events="date.haveEvents"
                   :number-of-events="date.numberOfEvents"
                   :events="date.events ? date.events : []"
+                  :month="month"
+                  :full-month="currentMonth"
+                  :year="year"
+                  :day="date.date"
                 />
               </b-row>
             </b-col>

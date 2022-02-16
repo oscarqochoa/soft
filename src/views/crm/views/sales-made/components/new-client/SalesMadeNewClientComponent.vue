@@ -799,41 +799,31 @@
           >
         </template>
         <template #custom-foot>
-          <b-tr>
+          <b-tr class="bg-info">
             <b-td colspan="2" />
-            <b-td colspan="2" class="text-center">TCMC</b-td>
-            <b-td colspan="2" class="text-center">TCMS</b-td>
-            <b-td colspan="3" class="text-center">TFEE</b-td>
-            <b-td colspan="3" class="text-center">TIP</b-td>
-            <b-td colspan="2" class="text-center">TMA</b-td>
+            <b-td colspan="2" class="text-center text-white font-weight-bolder py-px">TCMC</b-td>
+            <b-td colspan="2" class="text-center text-white font-weight-bolder py-px">TCMS</b-td>
+            <b-td colspan="3" class="text-center text-white font-weight-bolder py-px">TFEE</b-td>
+            <b-td colspan="3" class="text-center text-white font-weight-bolder py-px">TIP</b-td>
+            <b-td colspan="2" class="text-center text-white font-weight-bolder py-px">TMA</b-td>
             <b-td :colspan="done === 0 ? 3 : 2" />
           </b-tr>
           <b-tr>
-            <b-td colspan="2" class="text-right">Subtotal</b-td>
-            <b-td colspan="2" class="text-center">{{
-              "$ " + subtotal.tcmc
-            }}</b-td>
-            <b-td colspan="2" class="text-center">{{
-              "$ " + subtotal.tcms
-            }}</b-td>
-            <b-td colspan="3" class="text-center">{{
-              "$ " + subtotal.tfee
-            }}</b-td>
-            <b-td colspan="3" class="text-center">{{
-              "$ " + subtotal.tip
-            }}</b-td>
-            <b-td colspan="2" class="text-center">{{
-              "$ " + subtotal.tma
-            }}</b-td>
+            <b-td colspan="2" class="text-right font-weight-bolder py-px">Subtotal</b-td>
+            <b-td colspan="2" class="text-center py-px">{{ '$ ' + subtotal.tcmc }}</b-td>
+            <b-td colspan="2" class="text-center py-px">{{ '$ ' + subtotal.tcms }}</b-td>
+            <b-td colspan="3" class="text-center py-px">{{ '$ ' + subtotal.tfee }}</b-td>
+            <b-td colspan="3" class="text-center py-px">{{ '$ ' + subtotal.tip }}</b-td>
+            <b-td colspan="2" class="text-center py-px">{{ '$ ' + subtotal.tma }}</b-td>
             <b-td :colspan="done === 0 ? 3 : 2" />
           </b-tr>
           <b-tr>
-            <b-td colspan="2" class="text-right">Total</b-td>
-            <b-td colspan="2" class="text-center">{{ "$ " + total.tcmc }}</b-td>
-            <b-td colspan="2" class="text-center">{{ "$ " + total.tcms }}</b-td>
-            <b-td colspan="3" class="text-center">{{ "$ " + total.tfee }}</b-td>
-            <b-td colspan="3" class="text-center">{{ "$ " + total.tip }}</b-td>
-            <b-td colspan="2" class="text-center">{{ "$ " + total.tma }}</b-td>
+            <b-td colspan="2" class="text-right font-weight-bolder py-px">Total</b-td>
+            <b-td colspan="2" class="text-center py-px">{{ '$ ' + total.tcmc }}</b-td>
+            <b-td colspan="2" class="text-center py-px">{{ '$ ' + total.tcms }}</b-td>
+            <b-td colspan="3" class="text-center py-px">{{ '$ ' + total.tfee }}</b-td>
+            <b-td colspan="3" class="text-center py-px">{{ '$ ' + total.tip }}</b-td>
+            <b-td colspan="2" class="text-center py-px">{{ '$ ' + total.tma }}</b-td>
             <b-td :colspan="done === 0 ? 3 : 2" />
           </b-tr>
         </template>
@@ -1864,17 +1854,7 @@ export default {
   margin: 2px;
 }
 
-.mt-07 {
-  margin-top: 7px;
-}
-
-.ml-07 {
-  margin-left: 7px;
-}
-
-.tr-table {
-  td {
-    align-items: center !important;
-  }
+.py-px {
+  padding: 8px !important;
 }
 </style>

@@ -1,5 +1,7 @@
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
+// import Service
+import NrcService from '../service/ncr.service'
 export default {
   computed: {
     ...mapGetters("ncr-store", ["ListSellers"]),
@@ -13,33 +15,32 @@ export default {
       this.modalQuestionnaire = true;
     },
     ...mapActions("ncr-store", ["LIST_SELLERS"]),
-    getSellers() {
+    getSellers:async function() {
       if (this.ListSellers != null) {
         this.filter[0].options = this.ListSellers;
       } else {
-        amgApi
-          .post("/commons/sellerall/2", {
+        try{
+          const response = await NrcService.getSellers({
             roles: "[3,5]",
-            type: "1",
-          })
-          .then((response) => {
+            type: "1",})
             if (response.status == 200) {
               this.filter[0].options = response.data;
               this.LIST_SELLERS(response.data);
             }
-          })
-          .catch((error) => {
-            console.error(error);
-            this.showToast(
-              "danger",
-              "top-right",
-              "Error",
-              "XIcon",
-              "Something went wrong!"
-            );
-          });
+
+        }catch(error){
+          console.error(error)
+          this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
+        }  
       }
     },
+    // Status of Table Pending, Returned and Completed
     statusColor(status){
       switch(status){
         case 1:
