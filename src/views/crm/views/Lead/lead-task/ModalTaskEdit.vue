@@ -10,7 +10,7 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col v-if="!taskForSn && modul === 15 || isDisabled">
+        <b-col v-if="(!taskForSn && modul === 15) || isDisabled">
           <validation-provider>
             <b-form-group label="Type" label-for="type" label-cols-md="4">
               <b-form-checkbox
@@ -20,13 +20,18 @@
                 name="check-button"
                 switch
                 :disabled="isDisabled"
-              >{{ task.attend_type ? 'LATER' : 'NOW' }}</b-form-checkbox>
+                >{{ task.attend_type ? "LATER" : "NOW" }}</b-form-checkbox
+              >
             </b-form-group>
           </validation-provider>
         </b-col>
         <b-col cols="6">
           <validation-provider>
-            <b-form-group label="Send Sms" label-for="sms-status" label-cols-md="4">
+            <b-form-group
+              label="Send Sms"
+              label-for="sms-status"
+              label-cols-md="4"
+            >
               <b-form-checkbox
                 id="sms-status"
                 v-model="task.sms_status"
@@ -35,12 +40,17 @@
                 name="check-button"
                 switch
                 :disabled="isDisabled"
-              >{{ task.sms_status ? 'YES' : 'NO' }}</b-form-checkbox>
+                >{{ task.sms_status ? "YES" : "NO" }}</b-form-checkbox
+              >
             </b-form-group>
           </validation-provider>
         </b-col>
         <b-col cols="12 form-group-md-2">
-          <validation-provider v-slot="{errors}" name="Subject" rules="required">
+          <validation-provider
+            v-slot="{ errors }"
+            name="Subject"
+            rules="required"
+          >
             <b-form-group label="Subject" label-for="subject" label-cols-md="2">
               <b-form-input
                 v-if="modul !== 15 || taskForSn"
@@ -54,13 +64,17 @@
                 v-else
                 v-model="task.subject"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="[ 'CALL' ]"
+                :options="['CALL']"
               />
             </b-form-group>
           </validation-provider>
         </b-col>
         <b-col v-if="authUser.role_id === 7" cols="12 form-group-md-2">
-          <validation-provider #default="validationContext" name="Type" rules="required">
+          <validation-provider
+            #default="validationContext"
+            name="Type"
+            rules="required"
+          >
             <b-form-group
               label="Type"
               label-for="method"
@@ -73,13 +87,17 @@
                 name="radio-method"
                 class="mt-50"
                 :disabled="isDisabled"
-                :options="[ { text: 'INSTANTLY', value: 1 }, { text: 'PROGRAMED', value: 2 } ]"
+                :options="[
+                  { text: 'INSTANTLY', value: 1 },
+                  { text: 'PROGRAMED', value: 2 },
+                ]"
               />
             </b-form-group>
 
             <b-form-invalid-feedback
               :state="getValidationState(validationContext)"
-            >{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+              >{{ validationContext.errors[0] }}</b-form-invalid-feedback
+            >
           </validation-provider>
         </b-col>
         <!-- DUE DATE -->
@@ -87,7 +105,11 @@
           <b-row>
             <label class="col-md-2 col-form-label">Due Date</label>
             <b-col>
-              <validation-provider #default="validationContext" name="Date" rules="required">
+              <validation-provider
+                #default="validationContext"
+                name="Date"
+                rules="required"
+              >
                 <b-form-group :state="getValidationState(validationContext)">
                   <flat-pickr
                     id="date"
@@ -131,20 +153,27 @@
               label="user_name"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="sellers"
-              :reduce="val=> val.id"
+              :reduce="(val) => val.id"
               :clearable="false"
               :disabled="isDisabled"
             >
               <template #option="data">
                 <span
-                  :class="data.state_advisors == 1? 'text-success': 'text-muted'"
-                >{{ data.user_name }}</span>
+                  :class="
+                    data.state_advisors == 1 ? 'text-success' : 'text-muted'
+                  "
+                  >{{ data.user_name }}</span
+                >
               </template>
             </v-select>
           </b-form-group>
         </b-col>
         <b-col cols="12 form-group-md-2">
-          <validation-provider v-slot="{errors}" name="Content" rules="required">
+          <validation-provider
+            v-slot="{ errors }"
+            name="Content"
+            rules="required"
+          >
             <b-form-group label="Content" label-cols-md="2" label-for="content">
               <b-form-textarea
                 id="content"
@@ -167,7 +196,9 @@
                 :disabled="isDisabled"
                 :state="getValidationState(validationContext)"
               />
-              <b-form-invalid-feedback>{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+              <b-form-invalid-feedback>{{
+                validationContext.errors[0]
+              }}</b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
           <div v-if="!isDisabled" class="d-flex justify-content-right">
@@ -212,19 +243,19 @@ import formValidation from "@core/comp-functions/forms/form-validation";
 export default {
   components: {
     flatPickr,
-    vSelect
+    vSelect,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token"
+      token: "auth/token",
     }),
     ...mapState({
-      S_USER_APPOINTEMENTS: state => state.CrmLeadStore.S_USER_APPOINTEMENTS
+      S_USER_APPOINTEMENTS: (state) => state.CrmLeadStore.S_USER_APPOINTEMENTS,
     }),
     moduleId() {
       return this.$route.meta.module;
-    }
+    },
   },
   async created() {
     this.authUser = this.currentUser;
@@ -246,35 +277,35 @@ export default {
           moment(this.task.real_time).format("MM/DD/YYYY") >
           moment().format("MM/DD/YYYY")
             ? moment().format("MM/DD/YYYY")
-            : moment(this.task.real_time).format("MM/DD/YYYY")
+            : moment(this.task.real_time).format("MM/DD/YYYY"),
       },
       sellers: [],
-      seller: null
+      seller: null,
     };
   },
   directives: { Ripple },
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
+      required: true,
     },
     task: {
       type: Object,
-      required: true
+      required: true,
     },
     taskForSn: {
       type: Number,
       required: false,
-      default: 0
+      default: 0,
     },
     isDisabled: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -286,10 +317,10 @@ export default {
       configFlatPickr: {
         dateFormat: "m/d/Y",
         locale: "en",
-        minDate: `${moment(this.task.real_time).format("MM/DD/YYYY")} `
+        minDate: `${moment(this.task.real_time).format("MM/DD/YYYY")} `,
       },
       sellers: [],
-      seller: null
+      seller: null,
     };
   },
   setup() {
@@ -297,21 +328,20 @@ export default {
       const event = { ...this.blankTask };
       this.$emit("update:task", event);
     };
-    const { refFormObserver, getValidationState } = formValidation(
-      resetuserData
-    );
+    const { refFormObserver, getValidationState } =
+      formValidation(resetuserData);
 
     return {
       refFormObserver,
       getValidationState,
-      resetuserData
+      resetuserData,
     };
   },
   methods: {
     ...mapActions({
       A_VALIDATE_TASK_FAVORITE: "TaskStore/A_VALIDATE_TASK_FAVORITE",
       A_SET_LEAD_TASK: "TaskStore/A_SET_LEAD_TASK",
-      A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE"
+      A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE",
     }),
     async getSellers() {
       try {
@@ -343,7 +373,7 @@ export default {
               asigned: this.seller,
               method: this.authUser.role_id === 7 ? this.task.method : null,
               withsms: this.task.withsms ? 1 : 0,
-              taskForSn: this.taskForSn
+              taskForSn: this.taskForSn,
             };
             const response = await this.A_SET_LEAD_TASK(params);
             await this.$emit("onReloadTasks", response.data);
@@ -364,7 +394,7 @@ export default {
           hour_date: this.$moment(
             `${this.task.date} ${this.task.hour}`,
             "m/d/Y HH:mm:ss"
-          ).format("YYYY-MM-DD HH:mm:ss")
+          ).format("YYYY-MM-DD HH:mm:ss"),
         });
         if (this.isResponseSuccess(response)) {
           if (response.data.length) {
@@ -396,7 +426,7 @@ export default {
         );
         this.isLoading = false;
       }
-    }
+    },
   },
   mounted() {
     this.task.sms_status = !!this.task.sms_status;
@@ -408,11 +438,15 @@ export default {
       "YYYY-MM-DD HH:mm:ss"
     ).format("HH:mm");
     this.task.method = this.task.method === "Instantly" ? 1 : 2;
-    const index = this.S_USER_APPOINTEMENTS.map(el => el.id).indexOf(
+    const index = this.S_USER_APPOINTEMENTS.map((el) => el.id).indexOf(
       this.task.user_id
     );
     if (index !== -1) this.task.asignedObj = this.S_USER_APPOINTEMENTS[index];
     if (this.taskForSn && !this.lead.mobile) this.task.sms_status = false;
-  }
+  },
 };
 </script>
+
+
+<style lang="scss" scoped>
+</style>
