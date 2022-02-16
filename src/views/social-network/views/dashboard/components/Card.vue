@@ -18,16 +18,58 @@
           <span class="m-b-20 font title">
             {{ i.title }}
           </span>
-          <div class="text-right">
+          <div
+            v-if="index !==3"
+            class="text-right"
+          >
+
             <span class="f-left count font">{{ i.data }}</span>
 
             <div class="icon">
               <b-img
-
+                class="size_img"
                 :src="`${baseImg}/assets${i.icon}`"
               />
             </div>
 
+          </div>
+
+          <div
+            v-if="index===3"
+          >
+
+            <div
+              class="d-flex   justify-content-center align-content-center align-items-center pad "
+              style="width: 45%; padding: 0; margin: 0; "
+            >
+              <span class="mobile ">
+                ACTIVE
+              </span>
+
+              <span
+                style="padding-left: 9px"
+                class="mobile "
+              >
+                RECOVERY
+              </span>
+            </div>
+
+            <span
+              style="padding-left: 5px"
+              class="f-left count font   "
+            >{{ i.data }}</span>
+
+            <span
+
+              class=" count font "
+              style="padding-left: 35px"
+            >{{ i.data_rec }}</span>
+            <div class="icon_mobile">
+              <b-img
+                class="size_img"
+                :src="`${baseImg}/assets${i.icon}`"
+              />
+            </div>
           </div>
         </b-card>
       </b-card-group>
@@ -111,9 +153,21 @@ export default {
   right: -5%;
   margin-top: -20px;
 }
-.icon img {
-  width: 40px;
+
+.icon_mobile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 146px;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  float: right;
+  right: -5%;
+  margin-top: -37px;
 }
+
 .count {
   float: left;
   font-size: 32px;
@@ -129,19 +183,42 @@ export default {
 .title {
   font-size: 14.5px !important;
 }
-@media (max-width: 1600px) {
-  .icon {
-    width: 80px;
-    height: 80px;
-    margin-top: -7px;
-  }
-  .icon img {
-    width: 35px;
-  }
+
+.mobile {
+  font-size: 12px !important;
 }
+
 @media (min-width: 1601px) {
   .order-card .col-lg-9 span {
     font-size: 2.8rem !important;
+  }
+}
+
+@media (max-width: 1280px) {
+  .icon {
+    width: 50px;
+    height: 50px;
+    margin-top: 17px;
+  }
+  .icon_mobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 146px;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    float: right;
+    right: -5%;
+    margin-top: 1px;
+  }
+
+  .size_img{
+    max-width: 45%;
+  }
+  .pad{
+    padding-left: 50px !important;
   }
 }
 .pointer {

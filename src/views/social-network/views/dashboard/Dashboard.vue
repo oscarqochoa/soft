@@ -2,8 +2,9 @@
   <div>
     <b-card
       no-body
+      class="pt-2"
     >
-      <b-row class="p-1">
+      <b-row>
         <b-col
           md="auto"
           sm="auto"
@@ -119,6 +120,7 @@
             <v-select
               v-model="chardOption"
               class="per-page-selector"
+              x
               style="font-size: 15px"
               :clearable="false"
               label="option"
@@ -284,6 +286,7 @@ export default {
           title: 'mobiles',
           color: '#4EC4F0',
           data: 0,
+          data_rec: 0,
           style:
               'background: linear-gradient(75.42deg, #4BBFEA 24.3%, #54D1FF 99.88%)!important;border: 1px solid #279FCB;',
           styleModal: 'background: linear-gradient(75.42deg, #4BBFEA 24.3%, #54D1FF 99.88%)!important;',
@@ -546,7 +549,8 @@ export default {
         this.card[1].data = data.data.leads
         this.card[0].data = data.data.replies
         this.card[2].data = data.data.answer
-        this.card[3].data = data.data.mobiles
+        this.card[3].data = data.data.mobiles_act
+        this.card[3].data_rec = data.data.mobiles_rec
         this.card[4].data = data.data.appointments
         this.card[5].data = `${data.data.productivity}%`
         if (data.status === 200) {
