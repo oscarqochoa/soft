@@ -11,6 +11,7 @@
       @hidden="closeModal"
       title-tag="h3"
       :no-close-on-backdrop="true"
+      centered
     >
       <ValidationObserver ref="form">
         <div class="row" v-if="statusModal != '3'">
