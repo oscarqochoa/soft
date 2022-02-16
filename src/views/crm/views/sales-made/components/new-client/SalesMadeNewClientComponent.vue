@@ -27,14 +27,14 @@
         sticky-header="70vh"
         small
         no-provider-filtering
-        :class="['text-center']"
         :busy.sync="isBusy"
         :items="search"
         :fields="filteredFields"
         :per-page="paginate.perPage"
         :current-page="paginate.currentPage"
         :filter="filter"
-        class="font-small-3"
+        class="font-small-3 "
+        :tbody-tr-class="'tr-table'"
       >
         <template #table-busy>
           <div class="text-center text-primary my-2">
@@ -47,16 +47,21 @@
         </template>
         <template v-slot:cell(selected)="row">
           <b-form-group>
-            <b-form-checkbox v-model="row.item.selected" @input="selectedRow(row.item)" />
+            <b-form-checkbox
+              v-model="row.item.selected"
+              @input="selectedRow(row.item)"
+              class="mt-1"
+            />
           </b-form-group>
         </template>
         <template v-slot:cell(client)="data">
-          <div class="text-left">
+          <div class="text-left" style="margin-bottom: -15px !important;">
             <router-link
               :class="[textLink]"
               :to="`/crm/leads/${data.item.lead_id}`"
               target="_blank"
-            >{{ data.item.client }}</router-link>
+              >{{ data.item.client }}</router-link
+            >
             <p class="mb-0">{{ data.item.mobile }}</p>
             <p class="mb-0">
               <small>{{ data.item.state }}</small>
@@ -73,81 +78,130 @@
             class="font-weight-bolder"
             @click="openModalProgram(data.item, data.index)"
           >
-            <span v-if="data.item.program === 'Business'" v-b-tooltip.bottom="'Business'">BU</span>
-            <span v-if="data.item.program === 'Boost Credit'" v-b-tooltip.bottom="'Boost Credit'">BC</span>
+            <span
+              v-if="data.item.program === 'Business'"
+              v-b-tooltip.bottom="'Business'"
+              >BU</span
+            >
+            <span
+              v-if="data.item.program === 'Boost Credit'"
+              v-b-tooltip.bottom="'Boost Credit'"
+              >BC</span
+            >
             <span
               v-if="data.item.program === 'Credit Experts'"
               v-b-tooltip.bottom="'Credit Experts'"
-            >CE</span>
+              >CE</span
+            >
             <span
               v-if="data.item.program === 'Debt Solution'"
               v-b-tooltip.bottom="'Debt Solution'"
-            >DS</span>
-            <span v-if="data.item.program === 'Tax Research'" v-b-tooltip.bottom="'Tax Research'">TR</span>
+              >DS</span
+            >
+            <span
+              v-if="data.item.program === 'Tax Research'"
+              v-b-tooltip.bottom="'Tax Research'"
+              >TR</span
+            >
             <span
               v-if="data.item.program === 'General Support'"
               v-b-tooltip.bottom="'General Support'"
-            >GS</span>
-            <span v-if="data.item.program === 'Specialist'" v-b-tooltip.bottom="'Specialist'">SP</span>
-            <span v-if="data.item.program === 'KeyBook'" v-b-tooltip.bottom="'KeyBook'">KB</span>
-            <span v-if="data.item.program === 'Paragon'" v-b-tooltip.bottom="'Paragon'">PR</span>
+              >GS</span
+            >
+            <span
+              v-if="data.item.program === 'Specialist'"
+              v-b-tooltip.bottom="'Specialist'"
+              >SP</span
+            >
+            <span
+              v-if="data.item.program === 'KeyBook'"
+              v-b-tooltip.bottom="'KeyBook'"
+              >KB</span
+            >
+            <span
+              v-if="data.item.program === 'Paragon'"
+              v-b-tooltip.bottom="'Paragon'"
+              >PR</span
+            >
             <feather-icon
               v-if="data.item.haveRates !== 1"
               icon="AlertTriangleIcon"
               style="margin-left: 5px"
             />
-            <feather-icon v-else icon="CheckCircleIcon" style="margin-left: 5px" />
+            <feather-icon
+              v-else
+              icon="CheckCircleIcon"
+              style="margin-left: 5px"
+            />
           </b-button>
         </template>
         <template v-slot:cell(captured)="data">
-          <b-row>
-            <b-col v-if="!data.item.editCaptured">
-              <p>{{ data.item.captured }}</p>
-            </b-col>
-            <b-col v-else>
+          <span>
+            <span v-if="!data.item.editCaptured">
+              {{ data.item.captured }}
+            </span>
+
+            <span v-else>
               <b-form-select
                 v-model="data.item.capturedNew"
                 text-field="label"
                 value-field="id"
                 :options="captured"
                 class="mb-1 font-small-1"
-                style="width: 80px !important;"
+                style="width: 80px !important"
                 size="sm"
               />
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <p v-if="(data.item.commission) && (G_IS_CEO || G_IS_SUPERVISOR)">
-                <small
-                  class="text-primary font-weight-bold"
-                >$ {{ data.item.commission[0].commission }}</small>
+            </span>
+
+            <div>
+              <p v-if="data.item.commission && (G_IS_CEO || G_IS_SUPERVISOR)">
+                <small class="text-primary font-weight-bold"
+                  >$ {{ data.item.commission[0].commission }}
+                </small>
               </p>
-            </b-col>
-          </b-row>
-          <b-row
-            v-if="(data.item.status == 1 || data.item.status == 3) && (G_IS_CEO || G_IS_SUPERVISOR)"
-          >
-            <b-col cols="6">
+            </div>
+
+            <div
+              class="mt-07"
+              v-if="
+                (data.item.status == 1 || data.item.status == 3) &&
+                (G_IS_CEO || G_IS_SUPERVISOR)
+              "
+            >
               <b-icon
                 v-if="!data.item.editCaptured"
                 icon="pencil-fill"
                 class="cursor-pointer"
-                @click="data.item.editCaptured = true;data.item.editCaptured = data.item.captured"
+                @click="
+                  data.item.editCaptured = true;
+                  data.item.editCaptured = data.item.captured;
+                "
               />
               <feather-icon
                 v-else
                 class="cursor-pointer"
                 icon="SaveIcon"
-                @click="saveNewCaptured(data.item.captured, data.item.capturedNew, data.item.id, data.item)"
+                @click="
+                  saveNewCaptured(
+                    data.item.captured,
+                    data.item.capturedNew,
+                    data.item.id,
+                    data.item
+                  )
+                "
               />
-            </b-col>
-            <b-col cols="6">
               <b-icon
                 v-if="!data.item.editCaptured"
-                class="cursor-pointer"
+                class="cursor-pointer ml-07"
                 icon="list-ul"
-                @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 1)"
+                @click="
+                  openTrackingCapturedByModal(
+                    data.item.program,
+                    data.item.client,
+                    data.item.id,
+                    1
+                  )
+                "
               />
               <feather-icon
                 v-else
@@ -155,39 +209,41 @@
                 icon="XSquareIcon"
                 @click="data.item.editCaptured = false"
               />
-            </b-col>
-          </b-row>
+            </div>
+          </span>
         </template>
         <template v-slot:cell(seller)="data">
-          <b-row>
-            <b-col v-if="!data.item.editSeller">
-              <p>{{ data.item.seller }}</p>
-            </b-col>
-            <b-col v-else>
+          <span>
+            <span v-if="!data.item.editSeller">
+              {{ data.item.seller }}
+            </span>
+            <span v-else>
               <b-form-select
                 v-model="data.item.sellerNew"
                 text-field="label"
                 value-field="id"
                 :options="sellers"
                 class="mb-1 font-small-1"
-                style="width: 80px !important;"
+                style="width: 80px !important"
                 size="sm"
               />
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
+            </span>
+
+            <div>
               <p v-if="data.item.commission && (G_IS_CEO || G_IS_SUPERVISOR)">
-                <small
-                  class="text-primary font-weight-bold"
-                >$ {{ data.item.commission[1].commission }}</small>
+                <small class="text-primary font-weight-bold"
+                  >$ {{ data.item.commission[1].commission }}</small
+                >
               </p>
-            </b-col>
-          </b-row>
-          <b-row
-            v-if="(data.item.status == 1 || data.item.status == 3) && (G_IS_CEO || G_IS_SUPERVISOR)"
-          >
-            <b-col cols="6">
+            </div>
+
+            <div
+              class="mt-07"
+              v-if="
+                (data.item.status == 1 || data.item.status == 3) &&
+                (G_IS_CEO || G_IS_SUPERVISOR)
+              "
+            >
               <b-icon
                 v-if="!data.item.editSeller"
                 icon="pencil-fill"
@@ -198,87 +254,128 @@
                 v-else
                 class="cursor-pointer"
                 icon="SaveIcon"
-                @click="saveNewSeller(data.item.seller, data.item.sellerNew, data.item.id, data.item)"
+                @click="
+                  saveNewSeller(
+                    data.item.seller,
+                    data.item.sellerNew,
+                    data.item.id,
+                    data.item
+                  )
+                "
               />
-            </b-col>
-            <b-col cols="6">
               <b-icon
                 v-if="!data.item.editSeller"
-                class="cursor-pointer"
+                class="cursor-pointer ml-07"
                 icon="list-ul"
-                @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 2)"
+                @click="
+                  openTrackingCapturedByModal(
+                    data.item.program,
+                    data.item.client,
+                    data.item.id,
+                    2
+                  )
+                "
               />
               <feather-icon
                 v-else
                 class="cursor-pointer"
                 icon="XSquareIcon"
-                @click="data.item.editSeller = false;data.item.sellerNew = data.item.seller"
+                @click="
+                  data.item.editSeller = false;
+                  data.item.sellerNew = data.item.seller;
+                "
               />
-            </b-col>
-          </b-row>
+            </div>
+          </span>
         </template>
         <template v-slot:cell(fee)="data">
-          <b-row v-if="!data.item.editFee">
-            <b-col>
+          <span>
+            <span v-if="!data.item.editFee">
               <money
                 v-model="data.item.fee"
-                class="mb-1 p-0 border-0 text-center"
-                v-bind="{prefix: ' $ ', precision: 2}"
-                style="width: 70px !important; padding-left: 10px; opacity: 1"
+                class="p-0 border-0"
+                v-bind="{ prefix: ' $ ', precision: 2 }"
+                style="width: 70px !important; opacity: 1"
                 disabled
               />
-            </b-col>
-          </b-row>
-          <b-row v-else>
-            <b-col>
+            </span>
+            <span v-else>
               <money
                 v-model="data.item.feeNew"
-                class="form-control form-control-sm mb-1 p-0"
-                v-bind="{prefix: ' $ ', precision: 2}"
-                style="width: 70px !important;"
+                class="form-control form-control-sm p-0"
+                v-bind="{ prefix: ' $ ', precision: 2 }"
+                style="width: 70px !important"
               />
-            </b-col>
-          </b-row>
-          <b-row
-            v-if="(data.item.status === 1 || data.item.status === 3) && (G_IS_CEO || G_IS_SUPERVISOR)"
-          >
-            <b-col cols="6">
+            </span>
+
+            <div
+              class="mt-07"
+              v-if="
+                (data.item.status === 1 || data.item.status === 3) &&
+                (G_IS_CEO || G_IS_SUPERVISOR)
+              "
+            >
               <b-icon
                 v-if="!data.item.editFee"
                 icon="pencil-fill"
                 class="cursor-pointer"
-                @click="!(data.item.haveRates !== 1) && (data.item.editFee = true)"
+                @click="
+                  !(data.item.haveRates !== 1) && (data.item.editFee = true)
+                "
               />
               <feather-icon
                 v-else
                 class="cursor-pointer"
                 icon="SaveIcon"
-                @click="saveNewFee(data.item.fee, data.item.feeNew, data.item.id, data.item)"
+                @click="
+                  saveNewFee(
+                    data.item.fee,
+                    data.item.feeNew,
+                    data.item.id,
+                    data.item
+                  )
+                "
               />
-            </b-col>
-            <b-col cols="6">
               <b-icon
                 v-if="!data.item.editFee"
                 icon="list-ul"
-                class="cursor-pointer"
-                @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 3)"
+                class="cursor-pointer ml-07"
+                @click="
+                  openTrackingCapturedByModal(
+                    data.item.program,
+                    data.item.client,
+                    data.item.id,
+                    3
+                  )
+                "
               />
               <feather-icon
                 v-else
                 class="cursor-pointer"
                 icon="XSquareIcon"
-                @click="data.item.editFee = false; data.item.feeNew = data.item.fee"
+                @click="
+                  data.item.editFee = false;
+                  data.item.feeNew = data.item.fee;
+                "
               />
-            </b-col>
-          </b-row>
+            </div>
+          </span>
         </template>
         <template v-slot:cell(initial_amount)="data">
           <div
-            :class="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
-              G_IS_CEO || G_IS_SUPERVISOR)) ? 'cursor-pointer' : ''"
-            @click="( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
-              G_IS_CEO || G_IS_SUPERVISOR) &&
-              openInitialPaymentModal(data.item, data.index)"
+            :class="
+              (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
+              G_IS_CEO ||
+              G_IS_SUPERVISOR
+                ? 'cursor-pointer'
+                : ''
+            "
+            @click="
+              ((data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
+                G_IS_CEO ||
+                G_IS_SUPERVISOR) &&
+                openInitialPaymentModal(data.item, data.index)
+            "
           >
             <b-icon
               v-if="data.item.initial_payment_status === 1"
@@ -295,57 +392,96 @@
             <p
               v-else-if="data.item.initial_payment_status === 2"
               class="text-success font-weight-bold"
-            >$ {{ data.item.initial_amount }}</p>
+            >
+              $ {{ data.item.initial_amount }}
+            </p>
           </div>
         </template>
         <template v-slot:cell(contract_fee_status)="data">
           <b-row
-            :style="data.item.user_id != currentUser.user_id && G_IS_SELLER ? 'pointer-events: none !important; opacity: 0.4 !important;': ''"
+            :style="
+              data.item.user_id != currentUser.user_id && G_IS_SELLER
+                ? 'pointer-events: none !important; opacity: 0.4 !important;'
+                : ''
+            "
             class="d-flex align-items-center justify-content-center"
           >
             <b-icon
-              v-if="data.item.contract_fee_status == 0 || (data.item.contract_fee_status == 1 &&data.item.initial_payment_status == 3)"
+              v-if="
+                data.item.contract_fee_status == 0 ||
+                (data.item.contract_fee_status == 1 &&
+                  data.item.initial_payment_status == 3)
+              "
               class="cursor-pointer font-medium-2"
               icon="file-text"
               variant="muted"
-              :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
-              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item, data.index)"
+              :style="
+                data.item.initial_payment_status == 2
+                  ? ''
+                  : 'cursor: not-allowed;'
+              "
+              @click="
+                data.item.initial_payment_status == 1
+                  ? null
+                  : openContractFeeModal(data.item, data.index)
+              "
             />
             <b-icon
-              v-if="data.item.contract_fee_status == 1 && data.item.initial_payment_status == 2"
+              v-if="
+                data.item.contract_fee_status == 1 &&
+                data.item.initial_payment_status == 2
+              "
               variant="success"
               icon="file-text"
               class="cursor-pointer font-medium-2"
-              :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
-              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item, data.index)"
+              :style="
+                data.item.initial_payment_status == 2
+                  ? ''
+                  : 'cursor: not-allowed;'
+              "
+              @click="
+                data.item.initial_payment_status == 1
+                  ? null
+                  : openContractFeeModal(data.item, data.index)
+              "
             />
             <b-icon
               v-if="data.item.contract_fee_status == 2"
               variant="danger"
               icon="file-text"
               class="cursor-pointer font-medium-2"
-              :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
-              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item, data.index)"
+              :style="
+                data.item.initial_payment_status == 2
+                  ? ''
+                  : 'cursor: not-allowed;'
+              "
+              @click="
+                data.item.initial_payment_status == 1
+                  ? null
+                  : openContractFeeModal(data.item, data.index)
+              "
             />
           </b-row>
         </template>
         <template v-slot:cell(notes_status)="data">
           <b-icon
-            v-if="data.item.creates > '2021-05-16 00:00:00' "
+            v-if="data.item.creates > '2021-05-16 00:00:00'"
             icon="chat-square-text-fill"
             class="cursor-pointer font-medium-2"
             :variant="
-              (data.item.notes_status_new == null) ? 'muted':
-              (data.item.notes_status_new == 0) ? 'success' :
-              'warning' "
+              data.item.notes_status_new == null
+                ? 'muted'
+                : data.item.notes_status_new == 0
+                ? 'success'
+                : 'warning'
+            "
             @click="notesModal(data.item, data.index)"
           />
           <b-icon
             v-else
             icon="chat-square-text-fill"
             class="cursor-pointer font-medium-2"
-            :variant="
-              (data.item.notes_status === 0) ? 'muted': 'success' "
+            :variant="data.item.notes_status === 0 ? 'muted' : 'success'"
             @click="notesModal(data.item, data.index)"
           />
         </template>
@@ -353,154 +489,286 @@
           <b-icon
             class="cursor-pointer font-medium-2"
             icon="list-check"
-            :variant="
-              (data.item.trackings) ? 'success': 'muted' "
-            @click="openTrackingModal(data.item.program, data.item.client, data.item.trackings)"
+            :variant="data.item.trackings ? 'success' : 'muted'"
+            @click="
+              openTrackingModal(
+                data.item.program,
+                data.item.client,
+                data.item.trackings
+              )
+            "
           />
         </template>
         <template v-slot:cell(files)="data">
           <feather-icon
-            :class="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||G_IS_CEO || G_IS_SUPERVISOR)) ? 'cursor-pointer text-warning' : ''"
-            :style="( (( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||G_IS_CEO || G_IS_SUPERVISOR)) ? 'fill: #ff9f43' : 'fill: #D8D8D6'"
+            :class="
+              (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
+              G_IS_CEO ||
+              G_IS_SUPERVISOR
+                ? 'cursor-pointer text-warning'
+                : ''
+            "
+            :style="
+              (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
+              G_IS_CEO ||
+              G_IS_SUPERVISOR
+                ? 'fill: #ff9f43'
+                : 'fill: #D8D8D6'
+            "
             icon="FolderIcon"
             class="font-medium-2"
-            @click="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
-              G_IS_CEO || G_IS_SUPERVISOR)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id, data.item.status, data.item.user_id, data.item.program_id, data.item.event_date)"
+            @click="
+              ((data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
+                G_IS_CEO ||
+                G_IS_SUPERVISOR) &&
+                openFilesModal(
+                  data.item.lead_id,
+                  data.item.program,
+                  data.item.client,
+                  data.item.id,
+                  data.item.status,
+                  data.item.user_id,
+                  data.item.program_id,
+                  data.item.event_date
+                )
+            "
           />
         </template>
         <template v-slot:cell(status)="data">
           <p
             class="m-0 font-weight-bold font-small-3"
             :class="'color: text-' + status[data.item.status].variant"
-          >{{ status[data.item.status].label }}</p>
+          >
+            {{ status[data.item.status].label }}
+          </p>
         </template>
         <template v-slot:cell(actions)="data">
           <b-row
             v-if="data.item.creates > '2021-05-16 00:00:00'"
             class="d-flex align-items-center justify-content-center flex-column"
-            :class="{'not-pointer':data.item.user_id != currentUser.user_id && G_IS_SELLER }"
+            :class="{
+              'not-pointer':
+                data.item.user_id != currentUser.user_id && G_IS_SELLER,
+            }"
           >
             <b-button
-              v-if=" (data.item.status == 1 || data.item.status == 7) && !G_IS_CEO && !G_IS_SUPERVISOR &&
-                data.item.contract_fee_status == 1 && data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              variant="outline-success"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(5,data.item, data.index)"
-            >Revission</b-button>
-
-            <!-- Revission to Administration for Supervisor or Ceo -->
-            <b-button
-              v-if="(data.item.status == 1 || data.item.status == 6) && (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 && data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              variant="outline-success"
-              :disabled="data.item.type == 1 && G_IS_CEO ? false: data.item.type == 0 ? false : true"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(2, data.item, data.index)"
-            >Revission</b-button>
-
-            <!-- IN SUPERVISOR REVISSION  -->
-            <b-button
-              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              variant="outline-success"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(2, data.item, data.index)"
-            >Revission</b-button>
-            <b-button
-              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              variant="outline-warning"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(7, data.item, data.index)"
-            >Return</b-button>
-            <b-button
-              v-if="data.item.status == 3 && (currentUser.user_id == data.item.user_id ||
-                G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              variant="outline-danger"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(2,data.item, data.index)"
-            >Revission</b-button>
-            <b-button
-              v-if="data.item.initial_payment_status == 1 && (G_IS_CEO || G_IS_SUPERVISOR)"
-              variant="outline-danger"
-              class="m-10px"
-              size="sm"
-              @click="annulSale(data.item)"
-            >Annul</b-button>
-          </b-row>
-
-          <b-row
-            v-else
-            :class="{'not-pointer':data.item.user_id != currentUser.user_id && G_IS_SELLER }"
-            class="d-flex align-items-center justify-content-center flex-column"
-          >
-            <b-button
-              v-if="(data.item.status == 1 || data.item.status == 7) && !G_IS_CEO && !G_IS_SUPERVISOR &&
-                data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
+              v-if="
+                (data.item.status == 1 || data.item.status == 7) &&
+                !G_IS_CEO &&
+                !G_IS_SUPERVISOR &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 &&
+                data.item.initial_payment_status == 2
+              "
               variant="outline-success"
               class="m-10px"
               size="sm"
               @click="revisionSale(5, data.item, data.index)"
-            >Revission</b-button>
+              >Revission</b-button
+            >
+
+            <!-- Revission to Administration for Supervisor or Ceo -->
             <b-button
-              v-if="(data.item.status == 1 || data.item.status == 6) && (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
-              class="m-10px"
+              v-if="
+                (data.item.status == 1 || data.item.status == 6) &&
+                (G_IS_CEO || G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 &&
+                data.item.initial_payment_status == 2
+              "
               variant="outline-success"
-              :disabled="data.item.type == 1 && G_IS_CEO ? false : data.item.type == 0 ? false : true"
+              :disabled="
+                data.item.type == 1 && G_IS_CEO
+                  ? false
+                  : data.item.type == 0
+                  ? false
+                  : true
+              "
+              class="m-10px"
               size="sm"
               @click="revisionSale(2, data.item, data.index)"
-            >Revission</b-button>
+              >Revission</b-button
+            >
+
+            <!-- IN SUPERVISOR REVISSION  -->
             <b-button
-              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
+              v-if="
+                data.item.status == 5 &&
+                (G_IS_CEO || G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 &&
+                data.item.initial_payment_status == 2
+              "
+              variant="outline-success"
+              class="m-10px"
+              size="sm"
+              @click="revisionSale(2, data.item, data.index)"
+              >Revission</b-button
+            >
+            <b-button
+              v-if="
+                data.item.status == 5 &&
+                (G_IS_CEO || G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 &&
+                data.item.initial_payment_status == 2
+              "
+              variant="outline-warning"
+              class="m-10px"
+              size="sm"
+              @click="revisionSale(7, data.item, data.index)"
+              >Return</b-button
+            >
+            <b-button
+              v-if="
+                data.item.status == 3 &&
+                (currentUser.user_id == data.item.user_id ||
+                  G_IS_CEO ||
+                  G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 &&
+                data.item.initial_payment_status == 2
+              "
+              variant="outline-danger"
+              class="m-10px"
+              size="sm"
+              @click="revisionSale(2, data.item, data.index)"
+              >Revission</b-button
+            >
+            <b-button
+              v-if="
+                data.item.initial_payment_status == 1 &&
+                (G_IS_CEO || G_IS_SUPERVISOR)
+              "
+              variant="outline-danger"
+              class="m-10px"
+              size="sm"
+              @click="annulSale(data.item)"
+              >Annul</b-button
+            >
+          </b-row>
+
+          <b-row
+            v-else
+            :class="{
+              'not-pointer':
+                data.item.user_id != currentUser.user_id && G_IS_SELLER,
+            }"
+            class="d-flex align-items-center justify-content-center flex-column"
+          >
+            <b-button
+              v-if="
+                (data.item.status == 1 || data.item.status == 7) &&
+                !G_IS_CEO &&
+                !G_IS_SUPERVISOR &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status == 1 &&
+                data.item.initial_payment_status == 2
+              "
+              variant="outline-success"
+              class="m-10px"
+              size="sm"
+              @click="revisionSale(5, data.item, data.index)"
+              >Revission</b-button
+            >
+            <b-button
+              v-if="
+                (data.item.status == 1 || data.item.status == 6) &&
+                (G_IS_CEO || G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status == 1 &&
+                data.item.initial_payment_status == 2
+              "
+              class="m-10px"
+              variant="outline-success"
+              :disabled="
+                data.item.type == 1 && G_IS_CEO
+                  ? false
+                  : data.item.type == 0
+                  ? false
+                  : true
+              "
+              size="sm"
+              @click="revisionSale(2, data.item, data.index)"
+              >Revission</b-button
+            >
+            <b-button
+              v-if="
+                data.item.status == 5 &&
+                (G_IS_CEO || G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status == 1 &&
+                data.item.initial_payment_status == 2
+              "
               class="m-10px"
               variant="outline-success"
               size="sm"
               @click="revisionSale(2, data.item, data.index)"
-            >Revission</b-button>
+              >Revission</b-button
+            >
             <b-button
-              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 && data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
+              v-if="
+                data.item.status == 5 &&
+                (G_IS_CEO || G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status_new == 0 &&
+                data.item.initial_payment_status == 2
+              "
               class="m-10px"
               variant="outline-danger"
               size="sm"
               @click="revisionSale(7, data.item, data.index)"
-            >Return</b-button>
+              >Return</b-button
+            >
             <b-button
-              v-if="data.item.status == 3 && (currentUser.user_id == data.item.user_id ||
-                G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
-                data.item.notes_status == 1 && data.item.initial_payment_status == 2"
+              v-if="
+                data.item.status == 3 &&
+                (currentUser.user_id == data.item.user_id ||
+                  G_IS_CEO ||
+                  G_IS_SUPERVISOR) &&
+                data.item.contract_fee_status == 1 &&
+                data.item.notes_status == 1 &&
+                data.item.initial_payment_status == 2
+              "
               class="m-10px"
               variant="outline-danger"
               size="sm"
               @click="revisionSale(2, data.item, data.index)"
-            >Revission</b-button>
+              >Revission</b-button
+            >
             <b-button
-              v-if="data.item.initial_payment_status == 1 && (G_IS_CEO || G_IS_SUPERVISOR)"
+              v-if="
+                data.item.initial_payment_status == 1 &&
+                (G_IS_CEO || G_IS_SUPERVISOR)
+              "
               variant="outline-danger"
               size="sm"
               class="m-10px"
               @click="annulSale(data.item)"
-            >ANNUL</b-button>
+              >ANNUL</b-button
+            >
           </b-row>
         </template>
         <template #cell(creates)="data">
           <span>{{ data.item.creates | myGlobal }}</span>
         </template>
         <template #cell(approved)="data">
-          <span class="font-weight-bold text-info">{{ data.item.approved | myGlobal }}</span>
+          <span class="font-weight-bold text-info">{{
+            data.item.approved | myGlobal
+          }}</span>
         </template>
         <template #cell(sms)="data">
-          <b-dropdown variant="link" no-caret :right="$store.state.appConfig.isRTL">
+          <b-dropdown
+            variant="link"
+            no-caret
+            :right="$store.state.appConfig.isRTL"
+          >
             <template #button-content>
-              <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
+              <feather-icon
+                icon="MoreVerticalIcon"
+                size="16"
+                class="align-middle text-body"
+              />
             </template>
             <b-dropdown-item @click="modalSmsOpen(data.item)">
               <feather-icon icon="MessageSquareIcon" />SMS
@@ -509,7 +777,12 @@
               <feather-icon icon="RotateCcwIcon" />History
             </b-dropdown-item>
             <b-dropdown-item
-              v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || G_IS_CEO || G_IS_SUPERVISOR)"
+              v-if="
+                data.item.initial_payment_status === 1 &&
+                (data.item.user_id == currentUser.user_id ||
+                  G_IS_CEO ||
+                  G_IS_SUPERVISOR)
+              "
               @click="openUrlModal(data.item)"
             >
               <feather-icon icon="LinkIcon" />Url
@@ -522,7 +795,8 @@
             variant="outline-info"
             size="sm"
             @click="returnDone(data.item.event_id, null)"
-          >Done</b-btn>
+            >Done</b-btn
+          >
         </template>
         <template #custom-foot>
           <b-tr class="bg-info">
@@ -609,8 +883,14 @@
       v-if="modal.revission"
       :modal="modal"
       :revission="modalData.revission"
-      @click="updateRow(); modal.revission = false"
-      @response="updateRow(); modal.revission = false"
+      @click="
+        updateRow();
+        modal.revission = false;
+      "
+      @response="
+        updateRow();
+        modal.revission = false;
+      "
     />
 
     <!-- NOTES -->
@@ -707,13 +987,13 @@ export default {
     ModalNotesCredit,
     ModalNotesAll,
     ModalNotesSpecialist,
-    ApproveSupervisorModal
+    ApproveSupervisorModal,
   },
   props: {
     done: {
       required: true,
-      type: Number
-    }
+      type: Number,
+    },
   },
   data() {
     return {
@@ -726,11 +1006,11 @@ export default {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: ""
+        model: "",
       },
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       basicSearch: true,
       filter: dataFilters,
@@ -747,28 +1027,28 @@ export default {
         contract_fee: false,
         notes: false,
         approveSupervisorModal: false,
-        modalSms: false
+        modalSms: false,
       },
       modalData: {
         historySms: {
           id: null,
-          leadName: ""
+          leadName: "",
         },
         sendSms: {
           leads_sms: [],
           typesms: null,
           leads_sms_o: [],
-          name_leads_arr: []
+          name_leads_arr: [],
         },
         url: {
           client: "",
           program: "",
-          amount: 0.0
+          amount: 0.0,
         },
         tracking: {
           program: "",
           client: "",
-          tabla: ""
+          tabla: "",
         },
         initial_payment: {
           payments: null,
@@ -785,24 +1065,24 @@ export default {
           idtransaction: null,
           programid: null,
           allcards: null,
-          role_id: null
+          role_id: null,
         },
         capturedByTracking: {
           program: "",
           client: "",
-          id: 0
+          id: 0,
         },
         files: {
           id: null,
           program: "",
           client: "",
           sale_id: null,
-          valorEdit: false
+          valorEdit: false,
         },
         programs: {
           programSelected: "",
           typeModal: 0,
-          salesClient: {}
+          salesClient: {},
         },
         revission: {},
         contractFee: {
@@ -813,7 +1093,7 @@ export default {
           initialPaymentStatus: null,
           editModal: false,
           statusSale: null,
-          st: null
+          st: null,
         },
         notes: {
           programSelected: "",
@@ -836,30 +1116,30 @@ export default {
           sellerName: null,
           trackings: null,
           notes_status: null,
-          notes_status_new: null
+          notes_status_new: null,
         },
         approveSupervisorModal: {
           modul: 2,
           typeApprove: 1,
-          eventId: ""
-        }
+          eventId: "",
+        },
       },
       selectAll: false,
       selectedIndex: null,
-      newRowFromSelectedIndex: null
+      newRowFromSelectedIndex: null,
     };
   },
   computed: {
     ...mapState({
-      sellers: state => state["crm-store"].sellersCrm,
-      captured: state => state["crm-store"].capturedCrm,
+      sellers: (state) => state["crm-store"].sellersCrm,
+      captured: (state) => state["crm-store"].capturedCrm,
       // TODO HACERLO GLOBAL
-      programs: state => state["crm-store"].programs,
-      sources: state => state["crm-store"].sources,
-      sts: state => state["crm-store"].states,
-      stip: state => state["crm-store"].statusip,
-      status: state => state["crm-store"].statusNewClient,
-      statusFilter: state => state["crm-store"].statusFilter
+      programs: (state) => state["crm-store"].programs,
+      sources: (state) => state["crm-store"].sources,
+      sts: (state) => state["crm-store"].states,
+      stip: (state) => state["crm-store"].statusip,
+      status: (state) => state["crm-store"].statusNewClient,
+      statusFilter: (state) => state["crm-store"].statusFilter,
     }),
     ...mapGetters({
       currentUser: "auth/currentUser",
@@ -869,11 +1149,11 @@ export default {
       G_MODULE_ID: "auth/moduleId",
       G_USER_ROLE: "auth/userRole",
       G_USER_SESSION: "auth/userSession",
-      G_ROLE_ID: "auth/roleId"
+      G_ROLE_ID: "auth/roleId",
     }),
     filteredFields() {
       if (this.done === 0) return this.fields;
-      return this.fields.filter(field => field.key !== "done");
+      return this.fields.filter((field) => field.key !== "done");
     },
     total() {
       if (this.items[0]) {
@@ -882,7 +1162,7 @@ export default {
           tcms: this.items[0].tcms,
           tfee: this.items[0].tfee,
           tip: this.items[0].tip,
-          tma: this.items[0].tma
+          tma: this.items[0].tma,
         };
       }
       return {
@@ -890,7 +1170,7 @@ export default {
         tcms: "0.00",
         tfee: "0.00",
         tip: "0.00",
-        tma: "0.00"
+        tma: "0.00",
       };
     },
     subtotal() {
@@ -977,7 +1257,7 @@ export default {
               return currentMonthlyAmount + previous;
             })
             .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
         };
       }
       return {
@@ -985,9 +1265,9 @@ export default {
         tcms: "0.00",
         tfee: "0.00",
         tip: "0.00",
-        tma: "0.00"
+        tma: "0.00",
       };
-    }
+    },
   },
   async created() {
     try {
@@ -996,19 +1276,19 @@ export default {
           module: 2,
           body: {
             roles: "[1,5,2,3]",
-            type: "1"
-          }
+            type: "1",
+          },
         }),
         this.$store.dispatch("crm-store/getCaptured", {
           module: 2,
           body: {
             roles: "[]",
-            type: "1"
-          }
+            type: "1",
+          },
         }),
         this.$store.dispatch("crm-store/getPrograms"),
         this.$store.dispatch("crm-store/getSources"),
-        this.$store.dispatch("crm-store/getStates")
+        this.$store.dispatch("crm-store/getStates"),
       ]);
       this.filter[2].options = this.captured;
       this.filter[3].options = this.sellers;
@@ -1047,7 +1327,7 @@ export default {
         if (result.value) {
           try {
             const response = await amgApi.post("/sale/update-sales-set-done", {
-              eventId: this.modalData.approveSupervisorModal.eventId
+              eventId: this.modalData.approveSupervisorModal.eventId,
             });
             if (response.status === 200) {
               this.$refs["new-client-done-table"].refresh();
@@ -1064,17 +1344,17 @@ export default {
       this.modalData.sendSms.leads_sms_o = [];
       this.modalData.sendSms.leads_sms_o.push(item.lead_id);
       this.modalData.sendSms.name_leads_arr = [
-        { name: item.client, id: item.lead_id }
+        { name: item.client, id: item.lead_id },
       ];
       this.modal.modalSms = true;
     },
     modalSmssOpen() {
       this.modalData.sendSms.typesms = 0;
-      this.modalData.sendSms.name_leads_arr = this.selected.map(el => ({
+      this.modalData.sendSms.name_leads_arr = this.selected.map((el) => ({
         name: el.client,
-        id: el.lead_id
+        id: el.lead_id,
       }));
-      this.modalData.sendSms.leads_sms = this.selected.map(el => el.lead_id);
+      this.modalData.sendSms.leads_sms = this.selected.map((el) => el.lead_id);
       this.modal.modalSms = true;
     },
     modalSmsClose() {
@@ -1118,20 +1398,20 @@ export default {
             statusip: this.filter[7].model,
             sourcesname_id: this.filter[4].model,
             done: this.done,
-            per_page: ctx.perPage
+            per_page: ctx.perPage,
           },
           ctx.currentPage
         );
         this.startPage = data.from;
         this.toPage = data.to;
         if (this.totalRows !== data.total) this.totalRows = data.total;
-        const selectedIds = this.selected.map(s => s.id);
+        const selectedIds = this.selected.map((s) => s.id);
         let index = 0;
         while (selectedIds.length > 0 && index < data.data.length) {
           if (selectedIds.includes(data.data[index].id)) {
             const { id } = data.data[index];
             data.data[index].selected = true;
-            const deleted = selectedIds.findIndex(s => s === id);
+            const deleted = selectedIds.findIndex((s) => s === id);
             if (deleted !== -1) selectedIds.splice(deleted, 1);
           }
           index += 1;
@@ -1310,7 +1590,7 @@ export default {
           data.initial_payment_status;
         this.modalData.initial_payment.feeprops = data.fee;
         const cards = await amgApi.post("/clients/search-cards-clients", {
-          id: data.lead_id
+          id: data.lead_id,
         });
         if (cards.status === 200) {
           this.modalData.initial_payment.allcards = cards.data;
@@ -1396,19 +1676,19 @@ export default {
       this.modal.files = true;
     },
     selectedRow(data) {
-      const index = this.selected.findIndex(select => select.id === data.id);
+      const index = this.selected.findIndex((select) => select.id === data.id);
       if (data.selected === true && index === -1) this.selected.push(data);
       else if (data.selected === false && index !== -1)
         this.selected.splice(index, 1);
     },
     selectedAll() {
-      if (this.selectAll) this.items.forEach(item => (item.selected = true));
-      else this.items.forEach(item => (item.selected = false));
+      if (this.selectAll) this.items.forEach((item) => (item.selected = true));
+      else this.items.forEach((item) => (item.selected = false));
     },
     async saveNewCaptured(captured, capturedNew, userId, user) {
       // eslint-disable-next-line no-param-reassign
       const [capturedNew2] = this.captured.filter(
-        val => val.id === capturedNew
+        (val) => val.id === capturedNew
       );
       if (captured === capturedNew2.label) {
         this.showToast(
@@ -1424,7 +1704,7 @@ export default {
           const response = await CrmService.saveNewCaptured({
             capt: capturedNew2.id,
             id: userId,
-            user: this.currentUser.user_id
+            user: this.currentUser.user_id,
           });
           if (response.status === 200) {
             this.showToast(
@@ -1451,7 +1731,7 @@ export default {
       }
     },
     async saveNewSeller(seller, sellerNew, userId, user) {
-      const [sellerNew2] = this.sellers.filter(val => val.id === sellerNew);
+      const [sellerNew2] = this.sellers.filter((val) => val.id === sellerNew);
       if (seller === sellerNew2.label) {
         this.showToast(
           "danger",
@@ -1466,7 +1746,7 @@ export default {
           const response = await CrmService.saveNewSeller({
             sel: sellerNew2.id,
             id: userId,
-            user: this.currentUser.user_id
+            user: this.currentUser.user_id,
           });
           if (response.status === 200) {
             this.showToast(
@@ -1507,7 +1787,7 @@ export default {
           const response = await CrmService.saveNewFee({
             fee: feeNew,
             id: userId,
-            user: this.currentUser.user_id
+            user: this.currentUser.user_id,
           });
           if (response.status === 200) {
             this.showSuccessSwal();
@@ -1535,7 +1815,7 @@ export default {
           const response = await amgApi.post("/sales-made/annul-sale", {
             id: sale.id,
             id_event: sale.event_id,
-            user: this.currentUser.user_id
+            user: this.currentUser.user_id,
           });
           if (response.status === 200) {
             this.showToast(
@@ -1560,12 +1840,12 @@ export default {
           "Some error, please try again or contact to support"
         );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .not-pointer {
   pointer-events: none;
   opacity: 0.4;

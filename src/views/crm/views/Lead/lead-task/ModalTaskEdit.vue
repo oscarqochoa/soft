@@ -24,7 +24,7 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col v-if="!taskForSn && modul === 15 || isDisabled">
+        <b-col v-if="(!taskForSn && modul === 15) || isDisabled">
           <validation-provider>
             <b-form-group
               label="Type"
@@ -38,7 +38,8 @@
                 name="check-button"
                 switch
                 :disabled="isDisabled"
-              >{{ task.attend_type ? 'LATER' : 'NOW' }}</b-form-checkbox>
+                >{{ task.attend_type ? "LATER" : "NOW" }}</b-form-checkbox
+              >
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -57,7 +58,8 @@
                 name="check-button"
                 switch
                 :disabled="isDisabled"
-              >{{ task.sms_status ? 'YES' : 'NO' }}</b-form-checkbox>
+                >{{ task.sms_status ? "YES" : "NO" }}</b-form-checkbox
+              >
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -84,7 +86,7 @@
                 v-else
                 v-model="task.subject"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="[ 'CALL' ]"
+                :options="['CALL']"
               />
             </b-form-group>
           </validation-provider>
@@ -110,13 +112,17 @@
                 name="radio-method"
                 class="mt-50"
                 :disabled="isDisabled"
-                :options="[ { text: 'INSTANTLY', value: 1 }, { text: 'PROGRAMED', value: 2 } ]"
+                :options="[
+                  { text: 'INSTANTLY', value: 1 },
+                  { text: 'PROGRAMED', value: 2 },
+                ]"
               />
             </b-form-group>
 
             <b-form-invalid-feedback
               :state="getValidationState(validationContext)"
-            >{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+              >{{ validationContext.errors[0] }}</b-form-invalid-feedback
+            >
           </validation-provider>
         </b-col>
         <!-- DUE DATE -->
@@ -179,14 +185,17 @@
               label="user_name"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="sellers"
-              :reduce="val=> val.id"
+              :reduce="(val) => val.id"
               :clearable="false"
               :disabled="isDisabled"
             >
               <template #option="data">
                 <span
-                  :class="data.state_advisors == 1? 'text-success': 'text-muted'"
-                >{{ data.user_name }}</span>
+                  :class="
+                    data.state_advisors == 1 ? 'text-success' : 'text-muted'
+                  "
+                  >{{ data.user_name }}</span
+                >
               </template>
             </v-select>
           </b-form-group>
@@ -229,7 +238,9 @@
                 :disabled="isDisabled"
                 :state="getValidationState(validationContext)"
               />
-              <b-form-invalid-feedback>{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+              <b-form-invalid-feedback>{{
+                validationContext.errors[0]
+              }}</b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
           <div
@@ -484,3 +495,7 @@ export default {
   },
 }
 </script>
+
+
+<style lang="scss" scoped>
+</style>
