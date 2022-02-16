@@ -11,15 +11,15 @@
       body-class="mb-2"
       @hidden="closeModal"
       :no-close-on-backdrop="true"
+      centered
     >
       <!-- Form -->
       <ValidationObserver ref="form">
-        <b-row class="font-bureau-style">
-          <!-- Input Card Holder Name -->
+        <b-row class="font-bureau-style mt-1">
           <b-col cols="12" md="6">
             <div class="form-group">
               <label for="card_holder">Card Holder Name</label>
-              <ValidationProvider rules="required" v-slot="{errors}">
+              <ValidationProvider rules="required" v-slot="{ errors }">
                 <b-form-input
                   class="border-hover-p"
                   id="card_holder"
@@ -27,7 +27,7 @@
                   v-model="form.cardholdername"
                   type="text"
                   placeholder="Card Holder Name"
-                  :class="{'border-danger':errors[0]}"
+                  :class="{ 'border-danger': errors[0] }"
                 />
               </ValidationProvider>
             </div>
@@ -39,53 +39,62 @@
               <b-row>
                 <!-- Input 1 -->
                 <b-col cols="3">
-                  <ValidationProvider rules="required|length:4" v-slot="{errors}">
+                  <ValidationProvider
+                    rules="required|length:4"
+                    v-slot="{ errors }"
+                  >
                     <b-form-input
                       class="border-hover-p"
                       ref="input-1"
                       @input="activeFocus(1, 4)"
                       v-model="cardnumber1"
                       type="text"
-                      :class="{'border-danger':errors[0]}"
+                      :class="{ 'border-danger': errors[0] }"
                     />
                   </ValidationProvider>
                 </b-col>
                 <!-- Input 2 -->
                 <b-col cols="3">
-                  <ValidationProvider rules="required|length:4" v-slot="{errors}">
+                  <ValidationProvider
+                    rules="required|length:4"
+                    v-slot="{ errors }"
+                  >
                     <b-form-input
                       class="border-hover-p"
                       ref="input-2"
                       @input="activeFocus(2, 4)"
                       v-model="cardnumber2"
                       type="text"
-                      :class="{'border-danger':errors[0]}"
+                      :class="{ 'border-danger': errors[0] }"
                     />
                   </ValidationProvider>
                 </b-col>
                 <!-- Input 3 -->
                 <b-col cols="3">
-                  <ValidationProvider rules="required|length:4" v-slot="{errors}">
+                  <ValidationProvider
+                    rules="required|length:4"
+                    v-slot="{ errors }"
+                  >
                     <b-form-input
                       class="border-hover-p"
                       ref="input-3"
                       @input="activeFocus(3, 4)"
                       v-model="cardnumber3"
                       type="text"
-                      :class="{'border-danger':errors[0]}"
+                      :class="{ 'border-danger': errors[0] }"
                     />
                   </ValidationProvider>
                 </b-col>
                 <!-- Input 4 -->
                 <b-col cols="3">
-                  <ValidationProvider rules="required" v-slot="{errors}">
+                  <ValidationProvider rules="required" v-slot="{ errors }">
                     <b-form-input
                       class="border-hover-p"
                       ref="input-4"
                       @input="activeFocus(4, 4)"
                       v-model="cardnumber4"
                       type="text"
-                      :class="{'border-danger':errors[0]}"
+                      :class="{ 'border-danger': errors[0] }"
                     />
                   </ValidationProvider>
                 </b-col>
@@ -96,7 +105,7 @@
           <b-col cols="4" md="2">
             <div class="form-group">
               <label for="card-expi-month">MM</label>
-              <ValidationProvider rules="required|length:2" v-slot="{errors}">
+              <ValidationProvider rules="required|length:2" v-slot="{ errors }">
                 <b-form-input
                   class="border-hover-p"
                   type="text"
@@ -104,7 +113,7 @@
                   ref="input-5"
                   @input="activeFocus(5, 2)"
                   v-model="form.card_expi_month"
-                  :class="{'border-danger':errors[0]}"
+                  :class="{ 'border-danger': errors[0] }"
                 />
               </ValidationProvider>
             </div>
@@ -113,7 +122,7 @@
           <b-col cols="4" md="2">
             <div class="form-group">
               <label for="card-expi-year">YY</label>
-              <ValidationProvider rules="required|length:2" v-slot="{errors}">
+              <ValidationProvider rules="required|length:2" v-slot="{ errors }">
                 <b-form-input
                   class="border-hover-p"
                   type="text"
@@ -121,7 +130,7 @@
                   ref="input-6"
                   @input="activeFocus(6, 2)"
                   v-model="form.card_expi_year"
-                  :class="{'border-danger':errors[0]}"
+                  :class="{ 'border-danger': errors[0] }"
                 />
               </ValidationProvider>
             </div>
@@ -130,7 +139,10 @@
           <b-col cols="4" md="2">
             <div class="form-group">
               <label for="card-cvv">CVV</label>
-              <ValidationProvider rules="required|min:3|max:4" v-slot="{errors}">
+              <ValidationProvider
+                rules="required|min:3|max:4"
+                v-slot="{ errors }"
+              >
                 <b-form-input
                   class="border-hover-p"
                   v-model="form.cardsecuritycode"
@@ -139,7 +151,7 @@
                   max="4"
                   type="text"
                   maxlength="16"
-                  :class="{'border-danger':errors[0]}"
+                  :class="{ 'border-danger': errors[0] }"
                 />
               </ValidationProvider>
             </div>
@@ -148,21 +160,25 @@
           <b-col cols="12" md="6">
             <div class="form-group">
               <input type="text" v-model="moreInfo" class="d-none" />
-              <label for="billing">Billing Address is the same the Mailling Address ?</label>
+              <label for="billing"
+                >Billing Address is the same the Mailling Address ?</label
+              >
               <b-row>
                 <b-col cols="6" class="px-1">
                   <b-button
                     @click="moreInfo = 1"
                     class="btn rounded w-100 btn-gray-selector"
-                    :variant="`${moreInfo == 1? 'primary':'' }`"
-                  >Yes</b-button>
+                    :variant="`${moreInfo == 1 ? 'primary' : ''}`"
+                    >Yes</b-button
+                  >
                 </b-col>
                 <b-col cols="6" class="px-1">
                   <b-button
                     @click="moreInfo = 0"
                     class="btn rounded w-100 btn-gray-selector"
-                    :variant="`${moreInfo == 0? 'primary':'' }`"
-                  >No</b-button>
+                    :variant="`${moreInfo == 0 ? 'primary' : ''}`"
+                    >No</b-button
+                  >
                 </b-col>
               </b-row>
             </div>
@@ -174,7 +190,7 @@
           <b-col cols="12">
             <div class="form-group">
               <label for="address_create_card_modal">Mailing address</label>
-              <ValidationProvider rules="required" v-slot="{errors}">
+              <ValidationProvider rules="required" v-slot="{ errors }">
                 <vue-google-autocomplete
                   ref="address_create_card_modal"
                   id="address_create_card_modal"
@@ -183,7 +199,7 @@
                   v-on:placechanged="getAddressData"
                   country="us"
                   v-model="form.address"
-                  :class="{'border-danger':errors[0]}"
+                  :class="{ 'border-danger': errors[0] }"
                 ></vue-google-autocomplete>
               </ValidationProvider>
             </div>
@@ -192,14 +208,14 @@
           <b-col cols="6">
             <div class="form-group">
               <label for="city">City</label>
-              <ValidationProvider rules="required" v-slot="{errors}">
+              <ValidationProvider rules="required" v-slot="{ errors }">
                 <b-form-input
                   class="border-hover-p"
                   v-model="form.city"
                   id="city"
                   type="text"
                   placeholder="City"
-                  :class="{'border-danger':errors[0]}"
+                  :class="{ 'border-danger': errors[0] }"
                 />
               </ValidationProvider>
             </div>
@@ -208,19 +224,21 @@
           <b-col cols="6">
             <div class="form-group">
               <label for="state">State</label>
-              <ValidationProvider rules="required" v-slot="{errors}">
+              <ValidationProvider rules="required" v-slot="{ errors }">
                 <select
                   name="state"
                   id="state"
                   v-model="form.state"
                   class="form-control"
-                  :class="{'border-danger':errors[0]}"
+                  :class="{ 'border-danger': errors[0] }"
                 >
                   <option
                     :value="state.slug"
                     v-for="state in states"
                     :key="state.id"
-                  >{{state.state}}</option>
+                  >
+                    {{ state.state }}
+                  </option>
                 </select>
               </ValidationProvider>
             </div>
@@ -229,14 +247,14 @@
           <b-col cols="6">
             <div class="form-group">
               <label for="zipcode">Zip Code</label>
-              <ValidationProvider rules="required" v-slot="{errors}">
+              <ValidationProvider rules="required" v-slot="{ errors }">
                 <b-form-input
                   class="border-hover-p"
                   v-model="form.zipcode"
                   id="zipcode"
                   type="text"
                   placeholder="Zip Code"
-                  :class="{'border-danger':errors[0]}"
+                  :class="{ 'border-danger': errors[0] }"
                 />
               </ValidationProvider>
             </div>
@@ -245,7 +263,7 @@
           <b-col cols="6">
             <div class="form-group">
               <label for="country">Country</label>
-              <ValidationProvider rules="required" v-slot="{errors}">
+              <ValidationProvider rules="required" v-slot="{ errors }">
                 <b-form-input
                   class="border-hover-p"
                   disabled
@@ -253,7 +271,7 @@
                   id="country"
                   type="text"
                   placeholder="Country"
-                  :class="{'border-danger':errors[0]}"
+                  :class="{ 'border-danger': errors[0] }"
                 />
               </ValidationProvider>
             </div>
@@ -261,13 +279,13 @@
         </b-row>
         <!-- Button Save -->
         <b-row>
-          <b-col md="12" style="text-align: center;" class="mt-4">
+          <b-col md="12" style="text-align: center" class="mt-4">
             <b-button
               class="btn-update-sn rounded font-bureau-style text-white"
               variant="primary"
               @click="createCard"
             >
-             Save
+              Save
             </b-button>
           </b-col>
         </b-row>
@@ -312,22 +330,28 @@ export default {
         address: "",
         cardholdername: "",
         street: "",
-        user: this.session
+        user: this.session,
       },
       cardnumber1: "",
       cardnumber2: "",
       cardnumber3: "",
-      cardnumber4: ""
+      cardnumber4: "",
     };
   },
-  mounted: async function() {
-       try{
-         const data = await PaymentService.getStates()
-         this.states = data;
-       }catch(error){
-         console.error(error)
-         this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
-       }
+  async mounted() {
+    try {
+      const data = await PaymentService.getStates();
+      this.states = data;
+    } catch (error) {
+      console.error(error);
+      this.showToast(
+        "danger",
+        "top-right",
+        "Error",
+        "XIcon",
+        "Something went wrong!"
+      );
+    }
   },
   methods: {
     activeFocus:function(index, max) {
@@ -347,8 +371,8 @@ export default {
       this.form.city = this.direccion.locality;
       this.form.zipcode = this.direccion.postal_code;
     },
-    createCard:function() {
-      this.$refs.form.validate().then(success => {
+    createCard() {
+      this.$refs.form.validate().then((success) => {
         if (!success) {
           return;
         }
@@ -360,22 +384,35 @@ export default {
           this.cardnumber3 +
           "-" +
           this.cardnumber4;
-        this.showConfirmSwal().then(result => {
+        var x = document.getElementById("address_create_card_modal");
+        if (x)
+          if (x.value != null && x.value != "") {
+            this.form.street = x.value;
+          } else {
+            this.form.street = "";
+          }
+        this.showConfirmSwal().then((result) => {
           if (result.isConfirmed) {
             this.addPreloader();
             amgApi
               .post("/commons/create-card", this.form)
-              .then(response => {
+              .then((response) => {
                 this.cards = response.data;
                 this.$emit("new", this.cards);
                 this.$emit("click", false);
-                this.removePreloader();
-                this.showSuccessSwal()
+                this.$store.commit("app/SET_LOADING", false);
+                this.showSuccessSwal();
               })
-              .catch(error => {
+              .catch((error) => {
                 console.error(error);
-                this.removePreloader();
-                this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+                this.$store.commit("app/SET_LOADING", false);
+                this.showToast(
+                  "danger",
+                  "top-right",
+                  "Error",
+                  "XIcon",
+                  "Something went wrong!"
+                );
               });
           }
         });
@@ -383,8 +420,8 @@ export default {
     },
     closeModal:function() {
       this.$emit("click", false);
-    }
-  }
+    },
+  },
 };
 </script>
 

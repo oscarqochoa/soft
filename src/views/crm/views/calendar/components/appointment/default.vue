@@ -1,11 +1,8 @@
 <template>
-  <b-container
-    class="app-calendar overflow-hidden border mt-1"
-    fluid
-  >
+  <b-container fluid>
     <b-row
       v-if="!isModal"
-      class="mt-1"
+      class="mt-1 mb-2"
     >
       <b-col class="d-flex align-items-center justify-content-start">
         <div class="mr-1">
@@ -14,7 +11,7 @@
             @click="showFilter = !showFilter"
           >
             Filter by Seller
-            <amg-icon
+            <feather-icon
               icon="FilterIcon"
               style="margin-left: 5px"
             />
@@ -28,98 +25,83 @@
             v-model="host"
             :options="sellers"
             :reduce="val => val.id"
-            @input="refetchEvents"
+            @input="emitEventDateChange"
           />
         </div>
       </b-col>
     </b-row>
     <b-row class="no-gutters">
-      <!-- Calendar -->
-      <b-col
-        cols="12"
-        class="position-relative zindex-0"
+      <l-calendar
+        ref="calendar"
+        :events="events"
+        date-location="date"
+        date-location-format="YYYY-MM-DD"
+        @dateChange="fetchEvents"
       >
-        <div class="card shadow-none border-0 mb-0 rounded-0">
-          <div class="card-body pb-0">
-            <full-calendar
-              ref="refCalendar"
-              :options="calendarOptions"
-              class="full-calendar"
-            >
-              <template #eventContent="slotProps">
-                <div class="fc-event-main mb-50">
-                  <div class="fc-event-main-frame">
-                    <div class="fc-event-time">
-                      {{ slotProps.event.start | myHourTime }}
-                    </div>
-                    <div class="fc-event-title-container">
-                      <div class="fc-event-title fc-sticky">
-                        {{ slotProps.event.title }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <b-container
-                  class="fc-event-content w-100 d-flex flex-column align-items-start justify-content-center"
-                >
-                  <b-row class="text-center">
-                    {{ slotProps.event.extendedProps.seller_name }}
-                  </b-row>
-                  <b-row class="mt-2 mt-xl-0 w-100">
-                    <b-col class="py-50 px-50">
-                      <div class="text-left">
-                        <amg-icon
-                          icon="PhoneCallIcon"
-                          class="mr-50"
-                        />
-                        <span
-                          class="font-weight-bold"
-                        >{{ slotProps.event.extendedProps.lead_mobile }}</span>
-                      </div>
-                    </b-col>
-                    <b-col class="py-50 px-50">
-                      <div class="text-left">
-                        <amg-icon
-                          icon="UserIcon"
-                          class="mr-50"
-                        />
-                        <span
-                          class="font-weight-bold"
-                          style="white-space: pre-wrap;"
-                        >{{ slotProps.event.extendedProps.lead_name }}</span>
-                      </div>
-                    </b-col>
-                    <b-col class="py-50 px-50">
-                      <div class="text-left">
-                        <amg-icon
-                          icon="WatchIcon"
-                          class="mr-50"
-                        />
-                        <span
-                          class="font-weight-bold"
-                        >{{ slotProps.event.start | myHourTime }} - {{ slotProps.event.end | myHourTime }}</span>
-                      </div>
-                    </b-col>
-                    <b-col class="py-50 px-50">
-                      <div class="text-danger text-left">
-                        <amg-icon
-                          icon="WatchIcon"
-                          class="mr-50"
-                        />
-                        <span
-                          class="font-weight-bold"
-                        >{{ slotProps.event.extendedProps.real_time | myHourTime }}({{ slotProps.event.extendedProps.state }})</span>
-                      </div>
-                    </b-col>
-                  </b-row>
-                </b-container>
-              </template>
-            </full-calendar>
+        <template #date-header="{date, fullDay, haveEvents, events}">
+          <div
+            class="py-50 text-center w-100 border-bottom font-weight-bolder"
+            style="border-color: #C4C4C4 !important;"
+            :class="haveEvents ? `bg-${taskColor[events[0].title]} text-white border-bottom-0` : ''"
+          >
+            {{ fullDay }}, {{ date }}
           </div>
-        </div>
-      </b-col>
+        </template>
+        <template #date="{events, haveEvents}">
+          <div
+            class="w-100"
+            :class="haveEvents ? `text-white` : ''"
+          >
+            <task-calendar
+              v-if="haveEvents"
+              :task="events[0]"
+            />
+          </div>
+        </template>
+        <template #date-footer="{haveEvents, events, numberOfEvents, fullMonth, year, day}">
+          <span
+            v-if="haveEvents"
+            class="px-50 pb-50 pt-0 text-right w-100"
+            :class="haveEvents ? `bg-light-${taskColor[events[0].title]} ` : ''"
+          >
+            <b-button
+              class="rounded mr-50"
+              variant="warning"
+              style="padding: 4px; background: #00AAAA !important; border-color: #00AAAA !important;"
+              @click="openModalEditEventShow(events[0])"
+            >
+              <feather-icon
+                icon="Edit2Icon"
+                size="12"
+              />
+            </b-button>
+            <b-button
+              v-if="numberOfEvents > 1"
+              class="rounded"
+              variant="warning"
+              style="padding: 4px; background: #FF7A00 !important; border-color: #FF7A00 !important;"
+              @click="openViewMoreEvents(events, fullMonth, year, day)"
+            >
+              <tabler-icon
+                icon="ListIcon"
+                size="12"
+              />
+            </b-button>
+          </span>
+        </template>
+        <template #date-list="{event}">
+          <div
+            class="w-100 p-50"
+          >
+            <task-calendar
+              class="w-100 cursor-pointer"
+              :task="event"
+              @click.native="openModalEditEventShow(event)"
+            />
+          </div>
+        </template>
+      </l-calendar>
     </b-row>
-    <!-- modal EVENT EDIT -->
     <b-modal
       :id="isModal ? 'modal-event-edit-modal' : 'modal-event-edit'"
       ok-only
@@ -132,45 +114,93 @@
       no-close-on-backdrop
     >
       <modal-event-edit
-        :modul="modul"
+        :modul="module"
         :only-read="onlyRead"
         :lead="lead"
-        :event="event"
+        :event="selectedEvent"
         @updated="updatedEvent"
       />
     </b-modal>
+    <view-more-events
+      v-if="viewMoreEventsController"
+      :events="viewMoreEventsData.events"
+      :month="viewMoreEventsData.month"
+      :year="viewMoreEventsData.year"
+      :day="viewMoreEventsData.day"
+      @close="closeViewMoreEvents"
+    >
+      <template #event-place="{event}">
+        <task-calendar
+          v-if="event.id"
+          :task="event"
+          class="cursor-pointer"
+          @click.native="openModalEditEventShow(event)"
+        />
+      </template>
+    </view-more-events>
   </b-container>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
-
-import vSelect from 'vue-select'
-import FullCalendar from '@fullcalendar/vue'
-import Ripple from 'vue-ripple-directive'
-// Full Calendar Plugins
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import listPlugin from '@fullcalendar/list'
-import interactionPlugin from '@fullcalendar/interaction'
-
+import TaskCalendar from '@/views/crm/views/calendar/components/TaskCalendar.vue'
+import CalendarService from '@/views/crm/services/calendar'
+import EventService from '@/views/crm/services/event'
 import ModalEventEdit from '@/views/crm/views/Lead/lead-event/ModalEventEdit.vue'
+import ViewMoreEvents from '@/views/crm/views/calendar/components/ViewMoreEvents.vue'
+import vSelect from 'vue-select'
+import { mapGetters, mapState } from 'vuex'
+import LCalendar from '@/views/commons/calendar/LCalendar.vue'
 
 export default {
+  name: 'CalendarTest',
   components: {
-    FullCalendar,
+    ViewMoreEvents,
+    TaskCalendar,
+    LCalendar,
     ModalEventEdit,
     vSelect,
   },
+  props: {
+    isModal: {
+      required: false,
+      default: false,
+      type: Boolean,
+    },
+  },
+  data() {
+    return {
+      taskColor: {
+        TEL: 'primary',
+        CN: 'success',
+        Personal: 'danger',
+        Family: 'warning',
+        ETC: 'info',
+      },
+      showFilter: false,
+      viewMoreEventsController: false,
+      events: [],
+      host: 0,
+      selectedEvent: {},
+      viewMoreEventsData: {
+        events: [],
+        month: 'January',
+        day: 1,
+        year: 2022,
+      },
+      module: 2,
+      onlyRead: false,
+      lead: {},
+      authUser: '',
+    }
+  },
   computed: {
+    ...mapState({
+      sellers: state => state['crm-store'].sellersCrm,
+    }),
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
-    }),
-    ...mapState({
-      sellers: state => state['crm-store'].sellersCrm,
-      /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
     }),
   },
   created() {
@@ -182,123 +212,45 @@ export default {
       },
     })
     this.authUser = this.currentUser
-    this.setDataBlank('event')
-    this.calendarConfig()
-  },
-  directives: { Ripple },
-  data() {
-    return {
-      authUser: {},
-      calendarApi: null,
-      calendarsColor: {
-        TEL: 'primary',
-        CN: 'success',
-        Personal: 'danger',
-        Family: 'warning',
-        ETC: 'info',
-      },
-      showFilter: false,
-      event: {
-        attend: null,
-        date: '',
-        from: '',
-        id: null,
-        location: '',
-        real_time: '',
-        title: '',
-        to: '',
-      },
-      modul: 2,
-      onlyRead: false,
-      lead: new Object(),
-      yearact: this.$moment().format('YYYY'),
-      monthact: this.$moment().format('MMM'),
-      host: 0,
-      calendarOptions: {
-        plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin, listPlugin],
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-          start: 'sidebarToggle, prev,next, title',
-          end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
-        },
-        events: this.fetchEvents,
-        editable: false,
-        eventResizableFromStart: true,
-        dragScroll: false,
-        dayMaxEvents: 1,
-        navLinks: true,
-        rerenderDelay: 350,
-      },
-    }
+    this.setDataBlank('selectedEvent')
   },
   methods: {
-    ...mapActions({
-      A_GET_EVENT: 'CrmEventStore/A_GET_EVENT',
-      A_GET_CALENDARS: 'CrmCalendarStore/A_GET_CALENDARS',
-    }),
-    refetchEvents() {
-      this.calendarApi.refetchEvents()
-    },
     setDataBlank(key) {
       this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = {
         ...this[key],
       }
     },
-    resetData(key) {
-      this[key] = {
-        ...this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`],
-      }
+    emitEventDateChange() {
+      this.$refs.calendar.emitEventDateChange()
     },
-    calendarConfig() {
-      this.calendarOptions.eventClassNames = ({ event: calendarEvent }) => {
-        const colorName = this.calendarsColor[calendarEvent._def.extendedProps.title] || 'info'
-        return [
-          `bg-light-${colorName}`,
-          'fc-daygrid-block-event',
-          'fc-h-event',
-        ]
-      }
-      this.calendarOptions.eventClick = ({ event: clickedEvent }) => {
-        this.openModalEditEventShow(clickedEvent._def.extendedProps.id)
-      }
+    updatedEvent() {
+      this.$bvModal.hide(
+        this.isModal ? 'modal-event-edit-modal' : 'modal-event-edit',
+      )
+      this.emitEventDateChange()
     },
-    async fetchEvents(info, successCallback) {
+    openViewMoreEvents(events, month, year, day) {
+      this.viewMoreEventsData.events = events
+      this.viewMoreEventsData.month = month
+      this.viewMoreEventsData.year = year
+      this.viewMoreEventsData.day = day
+      this.viewMoreEventsController = true
+    },
+    closeViewMoreEvents() {
+      this.viewMoreEventsController = false
+    },
+    async fetchEvents({ month, year }) {
       try {
-        if (!info) return
         this.addPreloader()
-        const currentYear = this.$moment(info.start)
-          .add(15, 'd')
-          .format('YYYY')
-        const currentMonth = this.$moment(info.start)
-          .add(15, 'd')
-          .format('MM')
+        const monthInfo = this.$moment(`${month}/1/${year}`)
         if (this.isModal) this.host = this.authUser.user_id
-        const response = await this.A_GET_CALENDARS({
-          year: currentYear,
-          month: currentMonth,
+        const response = await CalendarService.filterMonthNext({
+          year: monthInfo.format('YYYY'),
+          month: monthInfo.format('MM'),
           host: this.host ? this.host : 0,
         })
-
         if (this.isResponseSuccess(response)) {
-          const events = JSON.parse(response.data[0].events_month)
-          this.yearact = response.data[0].current_year
-          this.monthact = this.$moment(
-            response.data[0].current_month,
-            'MM',
-          ).format('MMM')
-          const data = events.map(el => ({
-            id: el.id,
-            url: '',
-            title: el.title,
-            start: `${el.date} ${el.from}`,
-            end: `${el.date} ${el.to}`,
-            allDay: false,
-            extendedProps: {
-              ...el,
-              description: el.description,
-            },
-          }))
-          successCallback(data)
+          this.events = JSON.parse(response.data[0].events_month)
           this.removePreloader()
         } else {
           this.showToast(
@@ -315,21 +267,21 @@ export default {
         this.removePreloader()
       }
     },
-    updatedEvent(body) {
-      this.refetchEvents()
-      this.$bvModal.hide(
-        this.isModal ? 'modal-event-edit-modal' : 'modal-event-edit',
-      )
+    resetData(key) {
+      this[key] = {
+        ...this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`],
+      }
     },
-    async openModalEditEventShow(id) {
+    async openModalEditEventShow(event) {
       try {
-        const response = await this.A_GET_EVENT({ id })
-        this.resetData('event')
+        const { id } = event
+        const response = await EventService.getEvent({ id })
+        this.resetData('selectedEvent')
         if (this.isResponseSuccess(response)) {
-          this.event = response.data[0]
-          this.event.user_id = {
-            label: this.event.seller_name,
-            value: this.event.seller_id,
+          [this.selectedEvent] = response.data
+          this.selectedEvent.user_id = {
+            label: this.selectedEvent.seller_name,
+            value: this.selectedEvent.seller_id,
           }
           this.$bvModal.show(
             this.isModal ? 'modal-event-edit-modal' : 'modal-event-edit',
@@ -355,54 +307,18 @@ export default {
       }
     },
   },
-  mounted() {
-    this.calendarApi = this.$refs.refCalendar.getApi()
-  },
-  props: {
-    isModal: {
-      required: false,
-      default: false,
-      type: Boolean,
-    },
-  },
 }
 </script>
 
-<style lang="scss">
-@import "@core/scss/vue/apps/calendar.scss";
-.fc-popover-body {
-  overflow: scroll;
-  height: 300px;
-  overflow-x: hidden;
+<style scoped>
+.bg-light-success {
+  background-color: rgba(0, 210, 91, 0.07) !important;
 }
-.fc-scroller::-webkit-scrollbar {
-  width: 0;
+.bg-light-primary {
+  background-color: rgba(0, 144, 231, 0.07) !important
 }
-.fc-popover-body::-webkit-scrollbar {
-  width: 5px;
-}
-/* Track */
-.fc-scroller::-webkit-scrollbar,
-.fc-popover-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-.fc-scroller::-webkit-scrollbar,
-.fc-popover-body::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-/* Handle on hover */
-.fc-scroller::-webkit-scrollbar,
-.fc-popover-body::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-.fc-timeGridWeek-button {
-  display: none !important;
-}
-.fc-timeGridDay-button {
-  display: none !important;
+.current-date-class {
+  background-color: #00D25B;
+  color: white;
 }
 </style>

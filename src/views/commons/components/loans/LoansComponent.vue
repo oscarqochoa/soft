@@ -8,65 +8,81 @@
           :block="!bigWindow"
           class="mr-1"
           @click="openModalImportLoan"
-        >Import Loan</b-button>
-        <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()">Request Loan</b-button>
+          >Import Loan</b-button
+        >
+        <b-button
+          variant="primary"
+          :block="!bigWindow"
+          @click="openModalLoan()"
+        >
+          Request Loan
+        </b-button>
       </template>
     </header-slot>
 
-    <b-nav card-header pills class="m-0">
-      <b-nav-item
-        v-if="isManagement"
-        :to="`/${route}/loans/general`"
-        exact
-        exact-active-class="active "
-        :link-classes="['px-3',bgTabsNavs]"
-      >
-        Loans
-        <span v-if="counterTab.management>0" class="ml-1">
-          <feather-icon
-            icon
-            :badge="counterTab.management > 99 ? '99+' : counterTab.management"
-            badge-classes="badge-important"
-          />
-        </span>
-      </b-nav-item>
-      <b-nav-item
-        v-if="isSupervisor"
-        :to="`/${route}/loans/loans-module/`"
-        exact
-        exact-active-class="active border-primary-i"
-        :link-classes="['px-3',bgTabsNavs]"
-      >
-        Loans by Module
-        <span v-if="counterTab.supervisor>0" class="ml-1">
-          <feather-icon
-            icon
-            :badge="counterTab.supervisor > 99 ? '99+' : counterTab.supervisor"
-            badge-classes="badge-important"
-          />
-        </span>
-      </b-nav-item>
-      <b-nav-item
-        :to="`/${route}/loans/my-loans`"
-        exact
-        exact-active-class="active border-primary-i"
-        :link-classes="['px-3',bgTabsNavs]"
-      >
-        My Loans
-        <span v-if="counterTab.my_loan>0" class="ml-1">
-          <feather-icon
-            icon
-            :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
-            badge-classes="badge-important"
-          />
-        </span>
-      </b-nav-item>
-    </b-nav>
+    <b-card no-body>
+      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark]">
+        <b-nav card-header pills class="m-0">
+          <b-nav-item
+            v-if="isManagement"
+            :to="`/${route}/loans/general`"
+            exact
+            exact-active-class="active "
+          >
+            Loans
+            <span v-if="counterTab.management > 0" class="ml-1">
+              <feather-icon
+                icon
+                :badge="
+                  counterTab.management > 99 ? '99+' : counterTab.management
+                "
+                badge-classes="badge-important"
+              />
+            </span>
+          </b-nav-item>
+          <b-nav-item
+            v-if="isSupervisor || isCeo"
+            :to="`/${route}/loans/loans-module/`"
+            exact
+            exact-active-class="active border-primary-i"
+          >
+            Loans by Module
+            <span v-if="counterTab.supervisor > 0" class="ml-1">
+              <feather-icon
+                icon
+                :badge="
+                  counterTab.supervisor > 99 ? '99+' : counterTab.supervisor
+                "
+                badge-classes="badge-important"
+              />
+            </span>
+          </b-nav-item>
+          <b-nav-item
+            :to="`/${route}/loans/my-loans`"
+            exact
+            exact-active-class="active border-primary-i"
+          >
+            My Loans
+            <span v-if="counterTab.my_loan > 0" class="ml-1">
+              <feather-icon
+                icon
+                :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
+                badge-classes="badge-important"
+              />
+            </span>
+          </b-nav-item>
+        </b-nav>
+      </b-card-header>
 
-    <b-card no-body class="border-top-primary border-3 border-table-radius px-0">
-      <router-view :key="this.$route.name" />
+      <b-card-body class="border-primary rounded">
+        <router-view :key="this.$route.name" class="mt-2" />
+      </b-card-body>
     </b-card>
-    <ModalRequestLoan v-if="modalRequest.show" :info="modalRequest" @hide="closeModalLoan" />
+    <ModalRequestLoan
+      v-if="modalRequest.show"
+      :info="modalRequest"
+      @hide="closeModalLoan"
+    />
   </div>
 </template>
 
@@ -77,14 +93,14 @@ import ModalRequestLoan from "./modals/ModalRequestLoan.vue";
 export default {
   name: "LoansComponent",
   components: {
-    ModalRequestLoan
+    ModalRequestLoan,
   },
 
   data() {
     return {
       tab: this.$route.meta.tab,
 
-      routeVar: this.$route.name
+      routeVar: this.$route.name,
     };
   },
   created() {
@@ -97,7 +113,8 @@ export default {
       researchLoans: "loans-store/researchLoans",
       counterTab: "loans-store/counterTab",
       modalRequest: "loans-store/modalRequest",
-      isSupervisor: "auth/isSupervisor"
+      isSupervisor: "auth/isSupervisor",
+      isCeo: "auth/isCeo",
     }),
     positionResponsive() {
       return this.bigWindow ? "text-right" : "";
@@ -107,7 +124,7 @@ export default {
     },
     route() {
       return this.$route.meta.route;
-    }
+    },
   },
   mounted() {
     this.modalRequest.tab = this.tab;
@@ -131,8 +148,8 @@ export default {
       }
 
       this.modalRequest.show = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

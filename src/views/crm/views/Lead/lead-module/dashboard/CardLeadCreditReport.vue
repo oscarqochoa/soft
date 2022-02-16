@@ -37,15 +37,15 @@
         </b-col>
       </b-row>
     </b-card-body>
-    <b-tabs pills>
-      <b-tab :active="!isTabPendingActive" title-link-class="border-secondary hover-primary">
+    <b-tabs pills lazy nav-class="mb-0 mt-2" active-nav-item-class="bg-primary box-shadow-info">
+      <b-tab :active="!isTabPendingActive" :title-link-class="bgTabsNavs">
         <template #title>
           <span>Obtained</span>
         </template>
 
         <card-lead-credit-report-obtained :lead="lead" :is-busy="isBusyCreditReportObtained" />
       </b-tab>
-      <b-tab :active="isTabPendingActive" title-link-class="border-secondary hover-primary">
+      <b-tab :active="isTabPendingActive" :title-link-class="bgTabsNavs">
         <template #title>
           <span>Pending</span>
           <div class="ml-50 number-circle">

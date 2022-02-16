@@ -29,21 +29,27 @@
 
       <template #cell(account_status)="data">
         <div class="text-center">
-          <b-icon v-if="data.value == 2" icon="triangle-fill" style="color: #ffc107"></b-icon>
+          <b-icon
+            v-if="data.value == 2"
+            icon="triangle-fill"
+            style="color: #ffc107"
+          ></b-icon>
           <b-icon
             v-else
             icon="circle-fill"
-            :style="`color:${data.value == 1? '#00CC00': data.value==3? '#0066FF': 'red'}`"
+            :style="`color:${
+              data.value == 1 ? '#00CC00' : data.value == 3 ? '#0066FF' : 'red'
+            }`"
           ></b-icon>
         </div>
       </template>
 
       <template #cell(created_at)="data">
-        <span>{{data.value | myGlobal}}</span>
+        <span>{{ data.value | myGlobal }}</span>
       </template>
 
       <template #cell(approve_date)="data">
-        <span>{{data.value | myGlobal}}</span>
+        <span>{{ data.value | myGlobal }}</span>
       </template>
     </b-table>
 
@@ -128,8 +134,8 @@ export default {
   props: {
     info: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
@@ -144,7 +150,7 @@ export default {
       total_programs: "",
       total_to_pay: "",
       total_supervisor_program: "",
-      discounts_penalties: null
+      discounts_penalties: null,
     };
   },
   created() {
@@ -156,7 +162,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      bigWindow: "app/bigWindow"
+      bigWindow: "app/bigWindow",
     }),
     textRightBig() {
       return this.bigWindow ? "text-right" : "text-center";
@@ -172,7 +178,7 @@ export default {
     },
     isManagement() {
       return this.info.moduleSession == 16;
-    }
+    },
   },
   methods: {
     async searchCommissions() {
@@ -247,50 +253,50 @@ export default {
       this.fields = [
         {
           key: "lead",
-          label: "Client"
+          label: "Client",
         },
         {
           key: "account",
-          label: "Account"
+          label: "Account",
         },
         {
           key: "account_status",
-          label: "Status"
+          label: "Status",
         },
         {
           key: "value",
-          label: "Program"
+          label: "Program",
         },
         {
           key: "type",
-          label: "Type"
+          label: "Type",
         },
         {
           key: "commission",
-          label: "Amount"
+          label: "Amount",
         },
         {
           key: "percentage_pay",
-          label: "Percentage to pay"
+          label: "Percentage to pay",
         },
         {
           key: "approve_date",
-          label: "Approved Date"
+          label: "Approved Date",
         },
         {
           key: "created_at",
-          label: "Created Date"
-        }
+          label: "Created Date",
+        },
       ];
     },
     filterCommissions(commissions) {
       //Get Commissions, Just for User
-      this.commissionsUser = commissions.filter(commission => {
+      this.commissionsUser = commissions.filter((commission) => {
         return commission.user_id == this.info.user;
       });
-    }
+    },
   },
-  watch: {}
+  watch: {},
 };
 </script>
 

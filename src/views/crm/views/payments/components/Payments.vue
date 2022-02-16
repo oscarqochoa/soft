@@ -1,6 +1,7 @@
 <template>
   <div>
     <filter-slot
+      v-scrollbar
       :filter="filterStatus"
       :filter-principal="filterPrincipal"
       :total-rows="totalRows"

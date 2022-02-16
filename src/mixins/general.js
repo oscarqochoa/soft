@@ -21,6 +21,12 @@ export default {
         ? "bg-dark"
         : "bg-white";
     },
+    isDarkSkin() {
+      return this.$store.getters["appConfig/skin"] === "dark";
+    },
+    isLightSkin() {
+      return this.$store.getters["appConfig/skin"] === "light";
+    },
   },
   methods: {
     convertProgramToModule(program) {
@@ -168,7 +174,8 @@ export default {
     /** *** SWALS **** */
     showConfirmSwal(
       title = "Are you sure?",
-      text = "You won't be able to revert this!"
+      text = "You won't be able to revert this!",
+      config = {}
     ) {
       return this.$swal({
         title,
@@ -182,19 +189,7 @@ export default {
           confirmButton: "btn btn-primary mr-1",
           cancelButton: "btn btn-outline-danger  ",
         },
-      });
-    },
-
-    showSwalSuccess(title, text, icon, html) {
-      this.$swal({
-        title,
-        text,
-        icon,
-        html,
-        customClass: {
-          confirmButton: "btn btn-primary",
-        },
-        buttonsStyling: false,
+        ...config,
       });
     },
     showSuccessSwal(
@@ -254,22 +249,6 @@ export default {
           confirmButton: "btn btn-danger",
         },
         buttonsStyling: false,
-      });
-    },
-
-    showSwalGeneric(title, text, icon, config = {}) {
-      return this.$swal({
-        icon,
-        title,
-        text,
-        showCancelButton: true,
-        buttonsStyling: false,
-        confirmButtonText: "Yes",
-        customClass: {
-          confirmButton: "btn btn-primary  mr-1 ",
-          cancelButton: "btn btn-outline-danger  ",
-        },
-        ...config,
       });
     },
 
