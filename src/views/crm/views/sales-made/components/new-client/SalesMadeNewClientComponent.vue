@@ -1859,6 +1859,10 @@ export default {
 }
 
 .mt-07{
+  margin-top: 7px;
+}
+
+.ml-07{
   margin-left: 7px;
 }
 </style>
