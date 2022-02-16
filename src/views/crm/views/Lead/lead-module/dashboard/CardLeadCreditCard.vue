@@ -63,10 +63,11 @@
     <!-- modal CARD CREATE -->
     <b-modal
       :id="`modal-card-create-${ key }`"
-      modal-class="modal-warning"
+      modal-class="modal-primary"
+      title-class="h3 text-white"
       centered
       size="lg"
-      title="CREATE CREDIT CARD"
+      title="Create Credit Card"
       hide-footer
       no-close-on-backdrop
     >
@@ -75,7 +76,7 @@
         :only-read="onlyRead"
         :lead="lead"
         @onReloadCards="onReloadCards"
-      /> -->
+      />-->
       <modal-card-new-create
         :modul="modul"
         :only-read="onlyRead"
@@ -90,10 +91,11 @@
     <b-modal
       v-model="viewCardModal"
       ok-only
-      modal-class="modal-warning"
+      modal-class="modal-primary"
+      title-class="h3 text-white"
       centered
       size="lg"
-      title="CREDIT CARD"
+      title="Credit Card"
       hide-footer
       no-close-on-backdrop
     >
@@ -107,29 +109,28 @@ import { mapActions, mapGetters, mapState } from "vuex";
 
 import Ripple from "vue-ripple-directive";
 
-import ModalCardShow from '../../lead-card/ModalCardShow.vue'
-import ModalCardCreate from '../../lead-card/ModalCardCreate.vue'
-import ModalCardNewCreate from '../../lead-card/ModalCardNewCreate.vue'
+import ModalCardShow from "../../lead-card/ModalCardShow.vue";
+import ModalCardCreate from "../../lead-card/ModalCardCreate.vue";
+import ModalCardNewCreate from "../../lead-card/ModalCardNewCreate.vue";
 export default {
   components: {
     ModalCardShow,
     ModalCardCreate,
-    ModalCardNewCreate,
+    ModalCardNewCreate
   },
   computed: {
-    
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
-      updatedCards:"CrmCreditCardStore/LISTCARDS" 
+      updatedCards: "CrmCreditCardStore/LISTCARDS"
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
     }),
-    statusLeadCards(){
-        return this.updatedCards!=null? this.updatedCards : this.lead.cards
-    },
+    statusLeadCards() {
+      return this.updatedCards != null ? this.updatedCards : this.lead.cards;
+    }
   },
   created() {
     this.authUser = this.currentUser;
@@ -160,11 +161,10 @@ export default {
       A_GET_EEUU_STATES: "CrmGlobalStore/A_GET_EEUU_STATES",
       A_GET_CREDIT_CARD: "CrmCreditCardStore/A_GET_CREDIT_CARD",
       A_DELETE_CREDIT_CARD: "CrmCreditCardStore/A_DELETE_CREDIT_CARD",
-      SET_DATA_CARDS_UPDATE:"CrmCreditCardStore/SET_DATA_CARDS_UPDATE"
+      SET_DATA_CARDS_UPDATE: "CrmCreditCardStore/SET_DATA_CARDS_UPDATE"
     }),
-    reloadLeadEmit(){
+    reloadLeadEmit() {
       this.$emit("reloadLead");
-      
     },
     async getStatesEeuu() {
       try {
@@ -210,15 +210,14 @@ export default {
     },
     onReloadCards(cards) {
       // this.lead.cards = cards;
-      this.SET_DATA_CARDS_UPDATE(cards)
-      this.lead.cards = this.updatedCards
+      this.SET_DATA_CARDS_UPDATE(cards);
+      this.lead.cards = this.updatedCards;
     },
     onDeleteCard(id) {
       this.isActionButtonLoading = true;
-      this.showSwalGeneric(
+      this.showConfirmSwal(
         "Delete Credit Card",
         "You won't be able to revert this!",
-        "warning",
         {
           input: "textarea",
           inputValidator: value => {
