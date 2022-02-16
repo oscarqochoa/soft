@@ -1,6 +1,6 @@
 export default [
   {
-    path: '/crm/test',
+    path: '/crm/calendar',
     name: 'test-crm',
     component: () => import('@/views/crm/views/test/View.vue'),
     meta: {

@@ -31,7 +31,7 @@
       </b-col>
     </b-row>
     <b-row class="no-gutters">
-      <luke-calendar
+      <l-calendar
         ref="calendar"
         :events="events"
         date-location="date"
@@ -100,7 +100,7 @@
             />
           </div>
         </template>
-      </luke-calendar>
+      </l-calendar>
     </b-row>
     <b-modal
       :id="isModal ? 'modal-event-edit-modal' : 'modal-event-edit'"
@@ -149,14 +149,14 @@ import ModalEventEdit from '@/views/crm/views/Lead/lead-event/ModalEventEdit.vue
 import ViewMoreEvents from '@/views/crm/views/calendar/components/ViewMoreEvents.vue'
 import vSelect from 'vue-select'
 import { mapGetters, mapState } from 'vuex'
-import LukeCalendar from '@/views/crm/views/calendar/components/test/LukeCalendar.vue'
+import LCalendar from '@/views/commons/calendar/LCalendar.vue'
 
 export default {
   name: 'CalendarTest',
   components: {
     ViewMoreEvents,
     TaskCalendar,
-    LukeCalendar,
+    LCalendar,
     ModalEventEdit,
     vSelect,
   },

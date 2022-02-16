@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import example from './test/example'
+import example from '../../../../commons/calendar/example'
 
 export default {
   name: 'ViewMoreEvents',

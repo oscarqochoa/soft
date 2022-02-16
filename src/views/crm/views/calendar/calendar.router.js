@@ -1,6 +1,5 @@
 import CalendarAppointment from '@/views/crm/views/calendar/components/appointment/default.vue'
 import CalendarTask from '@/views/crm/views/calendar/components/task/default.vue'
-import CalendarTest from '@/views/crm/views/calendar/components/test/CalendarTest.vue'
 
 export default [
   {

@@ -129,7 +129,7 @@ localize({
 //   /* eslint-disable no-useless-escape */
 //   const re = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/
 //   /* eslint-enable no-useless-escape */
-//   return re.test(val) || 'URL is invalid'
+//   return re.calendar(val) || 'URL is invalid'
 // }
 
 // export const date = val => {
@@ -138,7 +138,7 @@ localize({
 //   if (val === undefined || val === null || val.length === 0) return true
 
 //   // https://github.com/quasarframework/quasar/blob/dev/ui/src/utils/patterns.js
-//   return /^-?[\d]+\/[0-1]\d\/[0-3]\d$/.test(val) || 'Date is invalid'
+//   return /^-?[\d]+\/[0-1]\d\/[0-3]\d$/.calendar(val) || 'Date is invalid'
 // }
 
 // export const max = (val, max) => {
