@@ -1857,4 +1857,8 @@ export default {
 .py-px {
   padding: 8px !important;
 }
+
+.mt-07{
+  margin-left: 7px;
+}
 </style>
