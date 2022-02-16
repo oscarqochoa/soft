@@ -81,7 +81,7 @@
       scrollable
       hide-footer
       modal-class="modal-primary"
-      title="TASKS"
+      title="Tasks"
       title-class="h2 text-white"
     >
       <task-modal></task-modal>

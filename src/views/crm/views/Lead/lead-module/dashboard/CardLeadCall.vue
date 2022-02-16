@@ -1,5 +1,5 @@
 <template>
-  <b-card>
+  <b-card body-class="px-0">
     <template #header>
       <b-card-title>Call</b-card-title>
       <b-button-group class="btn-group-sm">
@@ -13,7 +13,7 @@
           :disabled="isLoading"
         >
           <span v-if="!isLoading">AN</span>
-          <b-spinner v-else small/>
+          <b-spinner v-else small />
         </b-button>
         <b-button
           v-if="!onlyRead"
@@ -25,7 +25,7 @@
           :disabled="isLoading"
         >
           <span v-if="!isLoading">PE</span>
-          <b-spinner v-else small/>
+          <b-spinner v-else small />
         </b-button>
         <b-button
           v-if="!onlyRead"
@@ -37,7 +37,7 @@
           :disabled="isLoading"
         >
           <span v-if="!isLoading">UN</span>
-          <b-spinner v-else small/>
+          <b-spinner v-else small />
         </b-button>
       </b-button-group>
     </template>
@@ -57,11 +57,9 @@
           <strong>Loading ...</strong>
         </div>
       </template>
-      
+
       <template #cell(index)="data">
-        <div class="w-100 text-center">
-          {{ S_CALLS.length - data.index }}
-        </div>
+        <div class="w-100 text-center">{{ S_CALLS.length - data.index }}</div>
       </template>
 
       <template #cell(done_by)="data">
@@ -74,14 +72,11 @@
             :variant="variantStatus(data.item.status)"
             class="text-uppercase"
             style="width: 9rem"
-          >
-            {{ data.item.status }}
-          </b-badge>
+          >{{ data.item.status }}</b-badge>
         </div>
       </template>
-
     </b-table>
-    
+
     <template v-if="S_CALLS.length > 9" #footer>
       <div class="text-right">
         <b-button
@@ -109,76 +104,88 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapState } from "vuex";
 
-import { mapActions, mapGetters, mapState,  } from 'vuex'
+import Ripple from "vue-ripple-directive";
 
-import Ripple from 'vue-ripple-directive'
-
-import ModalCallHistory from './ModalCallHistory.vue'
+import ModalCallHistory from "./ModalCallHistory.vue";
 
 export default {
   components: {
-    ModalCallHistory,
+    ModalCallHistory
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      currentUser: "auth/currentUser",
+      token: "auth/token"
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       S_CALLS: state => state.CrmCallStore.S_CALLS
-    }),
+    })
   },
-  created () {
-    this.authUser = this.currentUser
+  created() {
+    this.authUser = this.currentUser;
   },
-  data () {
+  data() {
     return {
       fieldsTask: [
-        { key: 'index', label: '#' },
-        { key: 'done_by' },
-        { key: 'status' },
+        { key: "index", label: "#" },
+        { key: "done_by" },
+        { key: "status" }
       ],
-      isLoading: false,
-    }
+      isLoading: false
+    };
   },
-  directives: { Ripple, },
+  directives: { Ripple },
   methods: {
     ...mapActions({
-      A_SET_CALL: 'CrmCallStore/A_SET_CALL'
+      A_SET_CALL: "CrmCallStore/A_SET_CALL"
     }),
-    variantStatus (status) {
-      if (status === 'unanswered') return 'danger'
-      if (status === 'pending') return 'warning'
-      if (status === 'answered') return 'success'
-      return 'default'
+    variantStatus(status) {
+      if (status === "unanswered") return "danger";
+      if (status === "pending") return "warning";
+      if (status === "answered") return "success";
+      return "default";
     },
-    onCall (call) {
-      this.isLoading = true
+    onCall(call) {
+      this.isLoading = true;
       this.showConfirmSwal()
-      .then(async result => {
-        if (result.value) {
-          const response = await this.A_SET_CALL({
-            lead_id: this.lead.id,
-            user_id: this.authUser.user_id,
-            call,
-          })
-          if (this.isResponseSuccess(response)) {
-            this.$emit('onReloadCall', 10)
-            this.showToast('success', 'top-right', 'Success!', 'CheckIcon', 'Successful operation')
-          } else
-            this.showToast('warning', 'top-right', 'Warning!', 'AlertTriangleIcon', `Something went wrong. ${ response.message }`)
-        }
-        this.isLoading = false
-      }).catch(error => {
-        console.log('Something went wrong onCall', error)
-        this.showErrorSwal()
-        this.isLoading = false
-      })
-    },
+        .then(async result => {
+          if (result.value) {
+            const response = await this.A_SET_CALL({
+              lead_id: this.lead.id,
+              user_id: this.authUser.user_id,
+              call
+            });
+            if (this.isResponseSuccess(response)) {
+              this.$emit("onReloadCall", 10);
+              this.showToast(
+                "success",
+                "top-right",
+                "Success!",
+                "CheckIcon",
+                "Successful operation"
+              );
+            } else
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                `Something went wrong. ${response.message}`
+              );
+          }
+          this.isLoading = false;
+        })
+        .catch(error => {
+          console.log("Something went wrong onCall", error);
+          this.showErrorSwal();
+          this.isLoading = false;
+        });
+    }
   },
-  mounted () {},
+  mounted() {},
   props: {
     modul: {
       type: Number,
@@ -197,6 +204,6 @@ export default {
       required: true
     }
   },
-  setup() {},
-}
+  setup() {}
+};
 </script>

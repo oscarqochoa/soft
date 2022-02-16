@@ -1,7 +1,7 @@
 <template>
   <validation-observer ref="refFormObserver">
     <!-- Form -->
-    <b-card>
+    <b-card footer-class="border-0">
       <template #header>
         <b-row>
           <b-col cols="12">

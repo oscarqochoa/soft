@@ -16,7 +16,7 @@
               <h3>Advanced Search</h3>
             </span>
             <span v-b-toggle.sidebar-right class="cursor-pointer">
-              <amg-icon icon="XIcon" size="20" />
+              <tabler-icon icon="XIcon" size="20" />
             </span>
           </div>
         </template>
@@ -25,9 +25,14 @@
         </b-container>
         <template #footer>
           <b-container>
-            <b-row class="d-flex align-items-center justify-content-between p-1">
+            <b-row class="d-flex p-1 float-right">
               <b-button v-b-toggle.sidebar-right variant="info" @click="resetFiltersButtons">Reset</b-button>
-              <b-button v-b-toggle.sidebar-right variant="primary" @click="sideBarSearch">Search</b-button>
+              <b-button
+                v-b-toggle.sidebar-right
+                variant="primary"
+                class="ml-1"
+                @click="sideBarSearch"
+              >Search</b-button>
             </b-row>
           </b-container>
         </template>

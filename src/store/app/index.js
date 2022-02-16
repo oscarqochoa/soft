@@ -19,7 +19,9 @@ export default {
     },
     bigWindow: (state, getters) => {
       return (
-        getters.currentBreakPoint === "xl" || getters.currentBreakPoint === "lg" || getters.currentBreakPoint === "xxl"
+        getters.currentBreakPoint === "xl" ||
+        getters.currentBreakPoint === "lg" ||
+        getters.currentBreakPoint === "xxl"
       );
     },
     loading: (state) => {

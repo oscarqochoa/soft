@@ -22,7 +22,7 @@
           class="btn-icon"
           @click="onAddMyList"
         >
-          <amg-icon icon="ClipboardIcon" />
+          <feather-icon icon="ClipboardIcon" size="18" />
         </b-button>
         <b-button
           v-if="lead.status_sn_id && modul === 2 && !lead.potential"
@@ -32,7 +32,7 @@
           class="btn-icon"
           @click="onSetPotential"
         >
-          <amg-icon icon="QuestionIcon" />
+          <amg-icon icon="QuestionIcon" size="18" />
         </b-button>
         <b-button
           v-if="lead.status_sn_id && modul === 2"
@@ -42,7 +42,7 @@
           class="btn-icon"
           @click="onNotCall"
         >
-          <amg-icon icon="PhoneSlashIcon" />
+          <amg-icon icon="PhoneSlashIcon" size="18" />
         </b-button>
         <b-button
           v-if="lead.status_sn_id && modul === 2 && (lead.not_call && lead.not_call.length)"
@@ -52,7 +52,7 @@
           class="btn-icon"
           @click="$bvModal.show('modal-trackin-not-call')"
         >
-          <amg-icon icon="ThListIcon" />
+          <amg-icon icon="ThListIcon" size="18" />
         </b-button>
       </b-button-group>
     </template>
