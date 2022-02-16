@@ -10,9 +10,13 @@
           @click="openModalImportLoan"
           >Import Loan</b-button
         >
-        <b-button variant="primary" :block="!bigWindow" @click="openModalLoan()"
-          >Request Loan</b-button
+        <b-button
+          variant="primary"
+          :block="!bigWindow"
+          @click="openModalLoan()"
         >
+          Request Loan
+        </b-button>
       </template>
     </header-slot>
 
@@ -71,7 +75,7 @@
       </b-card-header>
 
       <b-card-body class="border-primary rounded">
-        <router-view :key="this.$route.name" />
+        <router-view :key="this.$route.name" class="mt-2" />
       </b-card-body>
     </b-card>
     <ModalRequestLoan

@@ -18,7 +18,7 @@
               </div>
             </b-td>
             <b-td>
-              <div class="bg-default p-s text-left r-c">
+              <div class="bg-default p-s text-left r-c border-bottom">
                 HOURS: {{ item.hours }}
               </div>
               <div class="bg-default p-s text-left r-c">
@@ -26,7 +26,7 @@
               </div>
             </b-td>
             <b-td>
-              <div class="bg-default p-s text-left r-c">
+              <div class="bg-default p-s text-left r-c border-bottom">
                 LATES: {{ item.lates }}
               </div>
               <div class="bg-default p-s text-left r-c">
@@ -34,7 +34,7 @@
               </div>
             </b-td>
             <b-td>
-              <div class="bg-default p-s text-left r-c">
+              <div class="bg-default p-s text-left r-c border-bottom">
                 ABSENCE: {{ item.absences }}
               </div>
               <div class="bg-default p-s text-left r-c">
@@ -109,10 +109,9 @@ table {
   tbody {
     td {
       div {
-        background-color: white !important;
+        background-color: transparent !important;
         font-weight: 600;
         font-size: 11px;
-        border-bottom: 2px #f3f2f7 solid;
         cursor: pointer;
 
         &:nth-child(2) {
