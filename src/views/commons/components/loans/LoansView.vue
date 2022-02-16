@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div class="px-2">
     <b-tabs
       v-if="isTabs"
       active-tab-class="p-0 "

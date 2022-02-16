@@ -74,7 +74,7 @@
                     v-model="task.date"
                     id="date"
                     placeholder="Date"
-                    class="form-control bg-white"
+                    class="form-control"
                     :config="configFlatPickr"
                   />
                 </b-form-group>

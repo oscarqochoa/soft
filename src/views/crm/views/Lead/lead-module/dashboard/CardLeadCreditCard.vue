@@ -1,5 +1,5 @@
 <template>
-  <b-card>
+  <b-card body-class="px-0">
     <template #header>
       <b-card-title>{{ title ? title : `Credit Cards` }}</b-card-title>
     </template>
