@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import ECharts from "vue-echarts";
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/legend";
@@ -30,6 +31,14 @@ export default {
       type:String
     }
   },
+  computed:{
+     ...mapGetters({
+      bigheightScreen: "app/bigheightScreen",
+      mediumheightScreen:"app/mediumheightScreen",
+      allSizeOfScreen:"app/allSizeOfScreen"
+    }),
+    
+  },
   data() {
     return {
       line: {
@@ -47,7 +56,7 @@ export default {
           left: "40px",
           right: "4%",
           // height: "70%", (this.screen >=180?
-          height: this.screen ==='xxl'? "85%":"70%",
+          height: this.allSizeOfScreen ==='xxl'? "85%":"70%",
           containLabel: false,
         },
         tooltip: {
@@ -70,6 +79,9 @@ export default {
       },
     };
   },
+  created(){
+    // console.log("screeeeeeeeeeeeeeeeeeeen",this.screen)
+  }
 };
 </script>
 

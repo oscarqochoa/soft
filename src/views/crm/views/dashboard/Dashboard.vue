@@ -614,20 +614,7 @@ export default {
       this.heightOfScreen = window.screen.height;
       return this.heightOfScreen;
     },
-    screenWidth: function () {
-      this.widthOfScreen = window.screen.width;
-      return this.widthOfScreen;
-    },
     statusHeightByScreenColOne() {
-      // return this.widthOfScreen >= 1920
-      //   ? "height: 800px !important;max-height: 900px !important;"
-      //   : this.widthOfScreen >= 1366
-      //   ? "height: 76vh;max-height: 76vh;overflow: auto;"
-      //   : "";
-      // if(this.bigheightScreen)return "height: 800px !important;max-height: 900px !important;"
-      // if(this.mediumheightScreen) return  "height: 76vh;max-height: 76vh;overflow: auto;"
-      // return "height: 90vh;max-height: 90vh;overflow: auto;"
-      console.log(this.allSizeOfScreen)
       switch(this.allSizeOfScreen){
         case "xxl":
           return "height: 800px !important;max-height: 900px !important;"
@@ -644,15 +631,6 @@ export default {
       
     },
     statusHeightByScreenColTwo() {
-      // return this.widthOfScreen >= 1920
-      //   ? "height: 800px !important;max-height: 900px !important;"
-      //   : this.widthOfScreen >= 1366
-      //   ? "height: 500px !important;max-height: 500px !important;"
-      //   : "";
-      
-      // if(this.bigheightScreen)return "height: 800px !important;max-height: 900px !important;"
-      // if(this.mediumheightScreen) return  "height: 550px !important;max-height: 550px !important;"
-      // return ""
       switch(this.allSizeOfScreen){
         case "xxl":
           return "height: 800px !important;max-height: 900px !important;"
