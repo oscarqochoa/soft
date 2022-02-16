@@ -63,7 +63,12 @@ export default {
         //   data: this.optionData.series.data,
         //
         // },
+        legend: {
 
+          bottom: '5',
+          fontWeight: 600,
+          fontSize: '30px',
+        },
         series: this.optionData.series,
       },
     }

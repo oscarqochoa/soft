@@ -39,10 +39,43 @@
                 {{ i.title }}
 
               </span>
-              <div>          <span class="data "> {{ i.data }} </span></div>
+              <div v-if="index !==3">
+                <span class="data"> {{ i.data }} </span>
+              </div>
 
             </div>
+            <div
+              v-if="index===3"
+            >
 
+              <div
+                class="d-flex   justify-content-center align-content-center align-items-center pad "
+                style="width: 45%; padding: 0; margin: 0; "
+              >
+                <span class="mobile">
+                  ACTIVE
+                </span>
+
+                <span
+                  style="padding-left: 9px"
+                  class="mobile "
+                >
+                  RECOVERY
+                </span>
+              </div>
+
+              <span
+                style="padding-left: 9px"
+                class="data"
+              >{{ i.data }}</span>
+
+              <span
+
+                class=" data "
+                style="padding-left: 55px"
+              >{{ i.data_rec }}</span>
+
+            </div>
           </b-card-body>
           <vue-apex-charts
             :key="i.key"
@@ -160,7 +193,12 @@ export default {
   font-weight:  600;
   font-size: medium;
 }
+@media (max-width: 1280px) {
 
+  .pad{
+    padding-left: 50px !important;
+  }
+}
 .img {
   max-width: 60%;
   max-height: 60%;

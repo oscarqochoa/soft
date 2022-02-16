@@ -56,6 +56,7 @@ export default {
           type: 'value',
           splitLine: { show: false },
         },
+
         // series: {
         //   type: 'line',
         //   name: this.optionData.series.name,
@@ -63,7 +64,12 @@ export default {
         //   data: this.optionData.series.data,
         //
         // },
+        legend: {
 
+          bottom: '5',
+          fontWeight: 600,
+          fontSize: '30px',
+        },
         series: this.optionData.series,
       },
     }

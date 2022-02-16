@@ -270,7 +270,7 @@ export default {
       graph: [],
       card: [
         {
-          key: 0,
+
           title: 'replies',
           data: 0,
           style:
@@ -589,7 +589,8 @@ export default {
         this.card[1].data = data.data.leads
         this.card[0].data = data.data.replies
         this.card[2].data = data.data.answer
-        this.card[3].data = data.data.mobiles
+        this.card[3].data = data.data.mobiles_act
+        this.card[3].data_rec = data.data.mobiles_rec
         this.card[4].data = data.data.appointments
         this.card[5].data = `${data.data.productivity}%`
 
