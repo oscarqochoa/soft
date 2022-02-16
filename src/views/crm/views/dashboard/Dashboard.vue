@@ -9,7 +9,7 @@
       <b-row style="">
         <!-- Column Cards -->
         <b-col
-          @mousemove="statuMouse($event)"
+          @mousedown="statuMouse($event)"
           class="col-tab"
           cols="12"
           sm="4"
@@ -531,7 +531,6 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser"
     }),
-    
     classAdd: function () {
       return this.skin == "dark" ? "dark" : "";
     },
@@ -549,8 +548,10 @@ export default {
       const container = document.querySelector(".col-tab");
 
       // container.scrollHeight = event.screenY
-
       // console.log(event)
+      // console.log(event.clientX)
+      // event.clientY = event.clientY
+      // console.log("sdsds",event)
       // console.log(container.scrollHeight);
     },
 
@@ -802,7 +803,7 @@ export default {
 //   max-height: 900px !important;
 // }
 // hidding scrollbar
-::-webkit-scrollbar {
+.col-tab::-webkit-scrollbar {
   width: 0;
   background: transparent;
 }
