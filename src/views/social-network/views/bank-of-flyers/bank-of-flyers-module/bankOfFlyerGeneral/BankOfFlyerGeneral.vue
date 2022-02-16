@@ -57,7 +57,9 @@
                 <strong>Loading ...</strong>
               </div>
             </template>
-            <template v-slot:cell(name)="data">
+            <template
+              v-slot:cell(name)="data"
+            >
               <p class="mb-0 font-weight-bold">
                 {{ data.item.flyer_name }}
               </p>
