@@ -27,7 +27,7 @@ export default {
       default: null,
     },
     screen:{
-      type:Number
+      type:String
     }
   },
   data() {
@@ -39,7 +39,7 @@ export default {
             type: "continuous",
             min: 0,
             max: 900,
-            height: 500,
+            height: 700,
           },
         ],
         grid: {
@@ -47,7 +47,7 @@ export default {
           left: "40px",
           right: "4%",
           // height: "70%", (this.screen >=180?
-          height: this.screen >=1080? "80%":"70%",
+          height: this.screen ==='xxl'? "85%":"70%",
           containLabel: false,
         },
         tooltip: {

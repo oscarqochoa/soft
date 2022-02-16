@@ -4,7 +4,8 @@
     <div class="col-md-12 col-lg-12 col-sm-12">
       <!-- All Screen -->
       <!-- <h2>{{screenHeight}}</h2> -->
-      <!-- <h4>{{this.widthOfScreen}}---{{statusHeightByScreenColOne}}</h4> -->
+      <!-- <h4>{{this.widthOfScreen}}---{{statusHeightByScreenColOne}} -- {{statusHeightByScreenColTwo}}</h4> -->
+      <!-- <h4>{{bigheightScreen}} - {{mediumheightScreen}}</h4> -->
       <b-row style="">
         <!-- Column Cards -->
         <b-col
@@ -439,8 +440,9 @@
           <b-card class="col-12 mb-0" :style="statusHeightByScreenColTwo">
             <br />
             <br />
+            
             <!-- Content Card -->
-            <b-row class="">
+            <b-row class="" :style="allSizeOfScreen==='xxl'? 'height:130px':''">
               <div class="mb-1 mb-sm-0 d-inline col-lg-10 col-md-12 col-xl-7">
                 <b-row>
                   <!-- Select User -->
@@ -448,12 +450,15 @@
                     <v-select
                       v-if="[1, 2].includes(currentUser.role_id)"
                       v-model="userfilter"
-                      class="per-page-selector-user style-chooser"
+                      class=" style-chooser"
+                      :style="allSizeOfScreen==='xxl'?'width: 250px;font-size: 18px':'width: 200px;'"
+                      style="font-size: 15px"
                       placeholder="Select User"
                       label="user_name"
                       :options="users"
                       :reduce="(val) => val.id"
                       @input="filtroCont()"
+                      
                     />
                   </b-col>
                   <!-- Year and Sub Title -->
@@ -474,7 +479,7 @@
                     >
                       <!-- Graphic Sub Title -->
                       <div>
-                        <h5><strong>MONTHLY GRAPHICS</strong></h5>
+                        <h5><strong :style="allSizeOfScreen==='xxl'?'font-size: 150%':''">MONTHLY GRAPHICS</strong></h5>
                       </div>
                     </div>
                     <!-- Select Year -->
@@ -482,6 +487,7 @@
                       v-model="year"
                       class="per-page-selector"
                       style="font-size: 15px"
+                      :style="allSizeOfScreen==='xxl'?'width: 200px; font-size: 18px':'width: 130px;'"
                       :clearable="false"
                       :options="years"
                       @input="filtroCont()"
@@ -498,18 +504,18 @@
                   v-for="data in totalYearByCard"
                   :key="data.id"
                   class="d-flex flex-wrap mb-1 justify-content-between pr-1"
-                  :style="`${screenWidth < 576 ? 'width: 100%' : 'width: 50%'}`"
+                  :style="`${allSizeOfScreen==='xs' || allSizeOfScreen==='sm' ? 'width: 100%' : 'width: 50%'}`"
                 >
                   <!-- Name of Total -->
                   <div>
-                    <span class="font-weight-bolder">{{ data.name }}:</span>
+                    <span class="font-weight-bolder " :style="allSizeOfScreen==='xxl'?'font-size: 150%':''">{{ data.name }}:</span>
                   </div>
                   <!-- Quantity of Data -->
                   <div class="important text-center" style="float: left">
                     <div
                       style="background: #0090e7; border-radius: 5px; text-center;width:50px;"
                     >
-                      <span class="font-weight-bolder" style="color: white">
+                      <span class="font-weight-bolder" style="color: white" :style="allSizeOfScreen==='xxl'?'font-size: 150%':''">
                         {{ data.total }}
                       </span>
                     </div>
@@ -517,12 +523,15 @@
                 </div>
               </div>
             </b-row>
+            <!-- Space If It's a huge Graphics -->
+            <!-- <b-row v-if="allSizeOfScreen==='xxl'" style="height:130px"></b-row> -->
             <!-- Graphics Line -->
             <b-card-body class="p-0 pb-2">
               <app-echart-line-crm
                 :key="idEchart"
                 :option-data="rePaint"
-                :screen="screenHeight"
+                :screen="allSizeOfScreen"
+                :style="allSizeOfScreen==='xxl'?'height:550px':''"
               />
             </b-card-body>
           </b-card>
@@ -596,6 +605,11 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      bigheightScreen: "app/bigheightScreen",
+      mediumheightScreen:"app/mediumheightScreen",
+      allSizeOfScreen:"app/allSizeOfScreen"
+    }),
     screenHeight: function () {
       this.heightOfScreen = window.screen.height;
       return this.heightOfScreen;
@@ -605,24 +619,54 @@ export default {
       return this.widthOfScreen;
     },
     statusHeightByScreenColOne() {
-      console.log(this.widthOfScreen);
-      return this.widthOfScreen >= 1920
-        ? "height: 800px !important;max-height: 900px !important;"
-        : this.widthOfScreen >= 1366
-        ? "height: 76vh;max-height: 76vh;overflow: auto;"
-        : "";
-      // if(this.widthOfScreen >=1920) {
-      //   return  "height: 800px !important;max-height: 900px !important;"
-      // }else if(this.widthOfScreen >=1366) {
-      //   return "height: 70vh;max-height: 70vh;overflow: auto;"
-      // }
+      // return this.widthOfScreen >= 1920
+      //   ? "height: 800px !important;max-height: 900px !important;"
+      //   : this.widthOfScreen >= 1366
+      //   ? "height: 76vh;max-height: 76vh;overflow: auto;"
+      //   : "";
+      // if(this.bigheightScreen)return "height: 800px !important;max-height: 900px !important;"
+      // if(this.mediumheightScreen) return  "height: 76vh;max-height: 76vh;overflow: auto;"
+      // return "height: 90vh;max-height: 90vh;overflow: auto;"
+      console.log(this.allSizeOfScreen)
+      switch(this.allSizeOfScreen){
+        case "xxl":
+          return "height: 800px !important;max-height: 900px !important;"
+        case "xl":
+          return "height: 75vh;max-height: 75vh;overflow: auto;"
+        case "lg":
+          return "height: 70vh;max-height: 70vh;overflow: auto;"
+        case "md":
+          return "height: 155vh;max-height: 155vh;overflow: auto;"
+        case "sm":
+          return "height: 170vh;max-height: 180vh;overflow: auto;"
+        
+      }
+      
     },
     statusHeightByScreenColTwo() {
-      return this.widthOfScreen >= 1920
-        ? "height: 800px !important;max-height: 900px !important;"
-        : this.widthOfScreen >= 1366
-        ? "height: 500px !important;max-height: 500px !important;"
-        : "";
+      // return this.widthOfScreen >= 1920
+      //   ? "height: 800px !important;max-height: 900px !important;"
+      //   : this.widthOfScreen >= 1366
+      //   ? "height: 500px !important;max-height: 500px !important;"
+      //   : "";
+      
+      // if(this.bigheightScreen)return "height: 800px !important;max-height: 900px !important;"
+      // if(this.mediumheightScreen) return  "height: 550px !important;max-height: 550px !important;"
+      // return ""
+      switch(this.allSizeOfScreen){
+        case "xxl":
+          return "height: 800px !important;max-height: 900px !important;"
+        case "xl":
+          return "height: 550px !important;max-height: 550px !important;"
+        case "lg":
+          return ""
+        case "md":
+          return ""
+        case "sm":
+          return ""
+      }
+
+      
     },
     ...mapGetters({
       skin: "appConfig/skin",
@@ -630,6 +674,7 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    
     classAdd: function () {
       return this.skin == "dark" ? "dark" : "";
     },
@@ -646,10 +691,10 @@ export default {
     statuMouse(event) {
       const container = document.querySelector(".col-tab");
 
-      container.scrollHeight = event.screenY
+      // container.scrollHeight = event.screenY
 
-      console.log(event)
-      console.log(container.scrollHeight);
+      // console.log(event)
+      // console.log(container.scrollHeight);
     },
 
     statusColor: function (name) {
