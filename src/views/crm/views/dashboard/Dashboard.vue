@@ -514,7 +514,7 @@ export default {
         case "xxl":
           return "height: 800px !important;max-height: 900px !important;"
         case "xl":
-          return "height: 550px !important;max-height: 550px !important;"
+          return "height: 520px !important;max-height: 520px !important;"
         case "lg":
           return ""
         case "md":
