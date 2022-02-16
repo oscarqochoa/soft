@@ -1,6 +1,6 @@
 <template>
   <b-container
-    :class="['bg-light-' + taskColor[task.title], 'pt-50']"
+    :class="[`bg-light-${task.title ? taskColor[task.title] : 'primary'}`, 'pt-50']"
   >
     <b-row>
       <b-col
@@ -20,9 +20,9 @@
           rounded
           size="30"
           style="margin-right: 6px !important;"
-          :variant="'light-'+taskColor[task.title]"
+          :variant="`light-${task.title ? taskColor[task.title] : 'primary'}`"
         />
-        {{ task.title }}
+        {{ task.title ? task.title : task.subject }}
       </b-col>
     </b-row>
     <b-row>

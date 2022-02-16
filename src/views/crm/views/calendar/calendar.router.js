@@ -41,20 +41,6 @@ export default [
           ],
         },
       },
-      {
-        path: 'test',
-        component: CalendarTest,
-        name: 'crm-calendar-test',
-        meta: {
-          pageTitle: 'Calendar',
-          breadcrumb: [
-            {
-              text: 'Tasks',
-              active: true,
-            },
-          ],
-        },
-      },
     ],
     meta: {
       pageTitle: 'Calendar',
