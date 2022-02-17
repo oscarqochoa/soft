@@ -3,6 +3,9 @@ export default [
     key: 'name',
     sortable: true,
     label: 'Name',
+    tdClass: 'align-middle'
+
+
   },
   {
     key: 'mobile',

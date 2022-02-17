@@ -49,9 +49,9 @@
             :per-page="paginate.perPage"
             :current-page="paginate.currentPage"
             :filter="filter"
-            class="font-small-3 text-center"
+            class="font-small-3 "
             responsive="sm"
-            small
+
           >
             <template #table-busy>
               <div class="text-center text-primary my-2">
@@ -62,16 +62,19 @@
             <template
               v-slot:cell(name)="data"
             >
-              <p class="mb-0 font-weight-bold">
+              <div class="d-flex flex-column  justify-content-center align-items-start "
+
+              >
                 {{ data.item.flyer_name }}
-              </p>
+              </div>
             </template>
 
             <template v-slot:cell(flyer)="data">
 
-              <a
+              <div
+                  class="d-flex flex-column  justify-content-center align-items-start clickable "
                 v-b-tooltip.hover.left="'Click to view flyer'"
-                class="clickable"
+
                 @click="openImage(data.index)"
               >
                 <b-img-lazy
@@ -79,21 +82,21 @@
                   v-bind="mainProps"
                   :src="data.item.route_thumb"
                 />
-              </a>
+              </div>
 
             </template>
 
             <template v-slot:cell(program)="data">
-              <p class="mb-0 font-weight-bold ">
+              <div class="d-flex flex-column  justify-content-center align-items-start ">
 
                 <b-img
                   :src="`${baseImg}/assets${data.item.logo}`"
-                  style="width: 50px"
+                  style="width: 60px"
                   thumbnail
                   fluid
                 />
 
-              </p>
+              </div>
             </template>
 
             <template v-slot:cell(replies)="data">

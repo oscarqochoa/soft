@@ -31,8 +31,8 @@
           :current-page="paginate.currentPage"
           :filter="filter"
 
+
           responsive="sm"
-          small
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -42,8 +42,10 @@
           </template>
 
           <template v-slot:cell(name)="data">
-            <div class="d-flex flex-column justify-content-start align-items-start">
-              <div class="mb-0 font-weight-bold text-important">
+            <div class="d-flex flex-column  justify-content-center align-items-start "
+
+            >
+
 
                 <router-link
                   :class="[textLink]"
@@ -51,7 +53,7 @@
                   target="_blank"
                 >  {{ data.item.lead_name }}</router-link>
 
-              </div>
+
             </div>
 
           </template>
@@ -66,9 +68,7 @@
 
           <template v-slot:cell(account)="data">
 
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+            <div class="d-flex flex-column  justify-content-center align-items-start ">
               <span
                 v-for="(account, index) in data.item.accounts"
                 :key="index"
@@ -79,12 +79,11 @@
 
           <template v-slot:cell(status)="data">
 
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+            <div class="d-flex flex-column  justify-content-center align-items-start ">
               <template
                 v-for="(account, index) in data.item.accounts"
               >
+
                 <span
                   :key="index"
                   class="d-flex justify-content-between align-items-center"
@@ -172,7 +171,7 @@
 
           <template #cell(creation_date)="data">
             <div
-              class="d-flex flex-column justify-content-start align-items-start"
+              class="d-flex flex-column justify-content-center align-items-start"
             >
               <span
                 v-for="(account, index) in data.item.accounts"
@@ -182,38 +181,26 @@
           </template>
 
           <template #cell(fee_charges)="data">
-            <div>
-              <a
+
+              <div
+                  class="d-flex flex-column justify-content-center align-items-start"
                 v-for="(account, index) in data.item.accounts"
                 :key="index"
-              ><money
-                v-model="account.charges"
-                class="form-control form-control-sm border-0 text-center"
-                v-bind="{prefix: ' $ ', precision: 2}"
-                style="width: 90px !important; padding-left: 10px; opacity: 1; size: 40px"
-                disabled
-                value="0"
-              />
+              >
+                ${{account.charges}}
+              </div>
 
-              </a>
-            </div>
           </template>
 
           <template #cell(mp)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
-              <a
+
+              <div
+                  class="d-flex flex-column justify-content-start align-items-start"
                 v-for="(account, index) in data.item.accounts"
                 :key="index"
-              >  <money
-                v-model="account.monthly_amount"
-                class="form-control form-control-sm border-0 text-center"
-                v-bind="{prefix: ' $ ', precision: 2}"
-                style="width: 70px !important; padding-left: 10px; opacity: 1"
-                disabled
-              /></a>
+              >
 
+                ${{account.monthly_amount}}
             </div>
           </template>
 
@@ -437,10 +424,5 @@ export default {
 </script>
 
 <style scoped>
-@media (max-width: 960px) {
-  .column-table {
-    display: flex;
-    flex-direction: column;
-  }
-}
+
 </style>
