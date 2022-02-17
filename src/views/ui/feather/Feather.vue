@@ -26,7 +26,7 @@
         @click="copyIconName(icon)"
       >
         <div class="icon-wrapper">
-          <amg-icon
+          <feather-icon
             :icon="icon"
             size="24"
           />
@@ -383,6 +383,7 @@ export default {
     const { copy } = useClipboard()
 
     const copyIconName = iconName => {
+      console.log(iconName)
       copy(iconName)
 
       toast({
