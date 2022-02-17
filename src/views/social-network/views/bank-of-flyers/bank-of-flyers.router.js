@@ -15,26 +15,45 @@ export default [
         path: 'active',
         component: bankOfFlyersListActive,
         name: 'list-social-network-active',
-
+        meta: {
+          pageTitle: "Bank of flyers",
+          breadcrumb: [{
+            text: 'Active',
+            active: true,
+          }],
+        },
       },
       {
         path: 'inactive',
         component: bankOfFlyersListInactive,
         name: 'list-social-network-inactive',
-
+        meta: {
+          pageTitle: "Bank of flyers",
+          breadcrumb: [{
+            text: 'Inactive',
+            active: true,
+          }],
+        },
       },
       {
         path: 'preactive',
         component: bankOfFlyersListPreactive,
         name: 'list-social-network-preactive',
-
+        meta: {
+          pageTitle: "Bank of flyers",
+          breadcrumb: [{
+            text: 'Preactive',
+            active: true,
+          }],
+        },
       },
 
     ],
     meta: {
-      pageTitle: 'Bank Of Flyer',
+      pageTitle: "Bank of flyers",
       breadcrumb: [{
-        text: 'Bank Of Flyer',
+        text: 'Bank of flyers',
+        active: true,
       }],
     },
   },

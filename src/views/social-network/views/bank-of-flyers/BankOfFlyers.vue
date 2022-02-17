@@ -1,49 +1,43 @@
 <template>
   <div>
-    <b-card>
-      <div class="card-header">
-        <div>
-          <b-card-title>BANK OF FLYERS</b-card-title>
-        </div>
-      </div>
-      <b-nav pills>
+
+    <header-slot>
+
+    </header-slot>
+
+      <b-nav card-header pills class="m-0">
         <b-nav-item
           :to="{ name: 'list-social-network-preactive' }"
           exact
           exact-active-class="active"
-          link-classes="border-secondary hover-primary"
+          :link-classes="['px-3',bgTabsNavs]"
         >PRE ACTIVE</b-nav-item>
         <b-nav-item
           :to="{ name: 'list-social-network-active' }"
           exact
           exact-active-class="active"
-          link-classes="border-secondary hover-primary"
+          :link-classes="['px-3',bgTabsNavs]"
         >ACTIVE</b-nav-item>
         <b-nav-item
           :to="{ name: 'list-social-network-inactive' }"
           exact
           exact-active-class="active"
-          link-classes="border-secondary hover-primary"
+          :link-classes="['px-3',bgTabsNavs]"
         >INACTIVE</b-nav-item>
       </b-nav>
-      <router-view :key="$route.name" />
+    <b-card class="border-top-primary border-3 border-table-radius px-0">
+      <router-view :key="$route.name"></router-view>
+
     </b-card>
+
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+
 
 export default {
-  name: 'BankOfFlyers',
-  computed: {
-    ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token',
 
-    }),
-
-  },
 }
 </script>
 

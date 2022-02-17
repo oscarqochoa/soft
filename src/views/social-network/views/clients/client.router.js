@@ -11,7 +11,12 @@ export default [
         path: '',
         component: ClientsList,
         name: 'list-clients',
-
+        meta: {
+          pageTitle: 'Clients',
+          breadcrumb: [{
+            text: 'Clients',
+          }],
+        },
       },
 
     ],

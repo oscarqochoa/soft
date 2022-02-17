@@ -74,14 +74,10 @@ export default {
       },
     }
   },
-  mounted() {
-    console.log(this.optionData)
-  },
+
 }
 </script>
 
 <style>
-.echarts {
-  width: 100% !important;
-}
+
 </style>

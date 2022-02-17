@@ -74,9 +74,7 @@ export default {
       },
     }
   },
-  mounted() {
-    console.log(this.optionData)
-  },
+
 }
 </script>
 

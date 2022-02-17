@@ -84,11 +84,13 @@
             </template>
 
             <template v-slot:cell(program)="data">
-              <p class="mb-0 font-weight-bold">
+              <p class="mb-0 font-weight-bold ">
 
                 <b-img
                   :src="`${baseImg}/assets${data.item.logo}`"
-                  style="height: 40px"
+                  style="width: 50px"
+                  thumbnail
+                  fluid
                 />
 
               </p>

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <header-slot>
+
+    </header-slot>
     <b-card
       no-body
     >
@@ -62,7 +65,7 @@
         </b-col>
         <b-col
           md="3"
-          sm="auto"
+          sm="3"
         >
           <div
             v-if="advanceFilter"
@@ -82,7 +85,7 @@
         </b-col>
         <b-col
           md="3"
-          sm="auto"
+          sm="3"
         >
           <div
             v-if="advanceFilter"
@@ -142,14 +145,14 @@
               @input="getGraphics"
             />
           </b-col>
-          <b-col md="auto">
+          <b-col md="auto" sm="auto">
             <span
 
               style="padding-top: 7px; "
-              class="all-text day d-inline-flex pl-2 "
+              class="all-text day d-inline-flex pl-2 mobil"
             >Current {{ showGraphForWeek ? "Week" : "Month" }}</span>
           </b-col>
-          <b-col md="auto">
+          <b-col md="auto" sm="auto">
             <span
               style="padding-top: 7px"
               class="all-text d-inline-flex "
@@ -168,7 +171,7 @@
             <b-button
 
               variant="info"
-              class="btn-icon rounded-circle mr-1 "
+              class="btn-icon rounded-circle mr-1  "
               @click="showGraphForWeek ? changeWeek(-1) : changeMonth(-1)"
             >
               <feather-icon
@@ -188,7 +191,7 @@
             </b-button>
           </b-col>
 
-          <div class="d-flex align-content-center mb-1 mb-sm-0 col-lg-3">
+          <div class="d-flex align-content-center mb-1 mb-sm-0 col-lg-3 col-sm-2 col-md-2 showWeek">
             <b-button
               v-b-tooltip.hover
               style="padding-top: 7px"
@@ -657,7 +660,7 @@ export default {
           this.type = ''
         } else if (this.chardOption.id === 2) {
           const data = await DashboardService.getRepliesGraphic(params)
-          console.log(data.data)
+
           this.graph = data.data
 
           this.labelGraph = 'Replies'
@@ -741,7 +744,7 @@ export default {
           data: infoLead,
         })
         this.card[1].key++
-        console.log(this.card[1].series)
+
 
         const infoAnswers = []
         this.card[2].series = []
@@ -764,7 +767,7 @@ export default {
           data: infoMobiles,
         })
         this.card[3].key++
-        console.log(this.card[3].series)
+
 
         const infoAppointments = []
         this.card[4].series = []
@@ -833,6 +836,29 @@ export default {
   left: 454px;
   top: 215px;
   border-radius: 40px !important;
+
+}
+
+@media (max-width: 414px) {
+  .mobil{
+    padding: 0 !important;
+    padding-top: 10px !important;
+
+  }
+  .all-text {
+
+
+    font-size: medium;
+
+
+
+  }
+  @media (max-width: 1024px) {
+    .showWeek {
+      background: white;
+
+    }
+  }
 
 }
 </style>

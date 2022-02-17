@@ -7,7 +7,7 @@ export default [
     meta: {
       pageTitle: 'Migrations',
       breadcrumb: [{
-        text: 'migrations',
+        text: 'Migrations',
       }],
     },
   },

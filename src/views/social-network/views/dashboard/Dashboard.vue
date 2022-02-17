@@ -1,5 +1,8 @@
 <template>
   <div>
+    <header-slot>
+
+    </header-slot>
     <b-card
       no-body
       class="pt-2"
@@ -535,8 +538,7 @@ export default {
     },
     async getFilterCard() {
       try {
-        console.log(this.programFilter, 'program')
-        console.log(this.userFilter, 'user')
+
         const params = {
           from: moment(this.dateRange.startDate).format('Y-MM-D 00:00:00'),
           to: moment(this.dateRange.endDate).format('Y-MM-D 00:00:00'),
@@ -616,7 +618,7 @@ export default {
           this.type = ''
         } else if (this.chardOption.id === 2) {
           const data = await DashboardService.getRepliesGraphic(params)
-          console.log(data.data)
+
           this.graph = data.data
 
           this.labelGraph = 'Replies'

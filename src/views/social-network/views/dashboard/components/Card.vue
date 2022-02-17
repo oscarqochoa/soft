@@ -63,7 +63,7 @@
 
               class=" count font "
               style="padding-left: 35px"
-            >{{ i.data_rec }}</span>
+            >{{ i.data_rec  ? i.data_rec : 0 }}</span>
             <div class="icon_mobile">
               <b-img
                 class="size_img"

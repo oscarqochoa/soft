@@ -69,11 +69,14 @@
                 class="data"
               >{{ i.data }}</span>
 
+
               <span
 
-                class=" data "
+                class="data"
                 style="padding-left: 55px"
-              >{{ i.data_rec }}</span>
+              >{{ i.data_rec  ? i.data_rec : 0 }}
+
+              </span>
 
             </div>
           </b-card-body>
@@ -148,9 +151,7 @@ export default {
 
     }
   },
-  computed: {
 
-  },
 
   methods: {
     chartOptionsComputed(color) {

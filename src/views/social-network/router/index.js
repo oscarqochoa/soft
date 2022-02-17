@@ -20,6 +20,7 @@ const routes = [
 
 // eslint-disable-next-line array-callback-return
 routes.map(route => {
+
   if (route.children) {
     // eslint-disable-next-line array-callback-return
     route.children.map(child => {

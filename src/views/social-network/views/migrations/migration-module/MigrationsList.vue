@@ -1,5 +1,9 @@
 <template>
   <div>
+
+    <header-slot>
+
+    </header-slot>
     <b-card
       no-body
       class="mb-2"

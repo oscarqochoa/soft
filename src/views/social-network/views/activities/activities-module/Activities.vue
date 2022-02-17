@@ -1,87 +1,102 @@
 <template>
   <div>
+
+    <div class=" d-flex justify-content-between" >
+      <header-slot>
+
+      </header-slot>
+      <div>
+        <b-button
+            variant="primary"
+            @click="openInsertTaskModal(false)"
+        >
+          CREATE TASK
+        </b-button>
+      </div>
+
+      </div>
     <b-card
       no-body
     >
 
-      <div class="card-header">
-        <div class="d-inline justify-content-end">
-          <b-button
-            variant="primary"
-            @click="openInsertTaskModal(false)"
-          >
-            CREATE TASK
-          </b-button>
-        </div>
-        <!--        <template>-->
-        <!--          <div>-->
+<!--      <div class="card-header d-flex justify-content-end" style="background: transparent" >-->
 
-        <!--            <b-button-->
-        <!--              v-b-toggle.sidebar-right-->
-        <!--              v-b-tooltip.bottom="'Advanced Search'"-->
-        <!--              variant="primary"-->
-        <!--            >-->
-        <!--              <div class="d-flex justify-content-between">-->
-        <!--                <feather-icon-->
-        <!--                  icon="FilterIcon"-->
-        <!--                  size="15"-->
-        <!--                />-->
-        <!--              </div>-->
-        <!--            </b-button>-->
-        <!--            <b-sidebar-->
-        <!--              id="sidebar-right"-->
-        <!--              right-->
-        <!--              backdrop-->
-        <!--              bg-variant="white"-->
-        <!--              sidebar-class="sidebar-lg"-->
-        <!--              header-class="pt-1"-->
-        <!--              lazy-->
-        <!--            >-->
-        <!--              <template #header>-->
-        <!--                <div class="d-flex justify-content-between align-items-center w-100">-->
-        <!--                  <span>-->
-        <!--                    <h3>Advanced Search</h3>-->
-        <!--                  </span>-->
-        <!--                  <span-->
-        <!--                    v-b-toggle.sidebar-right-->
-        <!--                    class="cursor-pointer"-->
-        <!--                  >-->
-        <!--                    <amg-icon-->
-        <!--                      icon="XIcon"-->
-        <!--                      size="20"-->
-        <!--                    />-->
-        <!--                  </span>-->
-        <!--                </div>-->
-        <!--              </template>-->
-        <!--              <b-container>-->
-        <!--                <filters-component-->
-        <!--                  :filters="filter"-->
-        <!--                />-->
-        <!--              </b-container>-->
-        <!--              <template #footer>-->
-        <!--                <b-container>-->
-        <!--                  <b-row class="d-flex align-items-center justify-content-between p-1">-->
-        <!--                    <b-button-->
-        <!--                      v-b-toggle.sidebar-right-->
-        <!--                      variant="info"-->
-        <!--                      @click="$emit('reset-all-filters')"-->
-        <!--                    >-->
-        <!--                      Reset-->
-        <!--                    </b-button>-->
-        <!--                    <b-button-->
-        <!--                      v-b-toggle.sidebar-right-->
-        <!--                      variant="primary"-->
-        <!--                      @click="sideBarSearch"-->
-        <!--                    >-->
-        <!--                      Search-->
-        <!--                    </b-button>-->
-        <!--                  </b-row>-->
-        <!--                </b-container>-->
-        <!--              </template>-->
-        <!--            </b-sidebar>-->
-        <!--          </div>-->
-        <!--        </template>-->
-      </div>
+<!--          <b-button-->
+<!--            variant="primary"-->
+<!--            @click="openInsertTaskModal(false)"-->
+<!--          >-->
+<!--            CREATE TASK-->
+<!--          </b-button>-->
+
+<!--        &lt;!&ndash;        <template>&ndash;&gt;-->
+<!--        &lt;!&ndash;          <div>&ndash;&gt;-->
+
+<!--        &lt;!&ndash;            <b-button&ndash;&gt;-->
+<!--        &lt;!&ndash;              v-b-toggle.sidebar-right&ndash;&gt;-->
+<!--        &lt;!&ndash;              v-b-tooltip.bottom="'Advanced Search'"&ndash;&gt;-->
+<!--        &lt;!&ndash;              variant="primary"&ndash;&gt;-->
+<!--        &lt;!&ndash;            >&ndash;&gt;-->
+<!--        &lt;!&ndash;              <div class="d-flex justify-content-between">&ndash;&gt;-->
+<!--        &lt;!&ndash;                <feather-icon&ndash;&gt;-->
+<!--        &lt;!&ndash;                  icon="FilterIcon"&ndash;&gt;-->
+<!--        &lt;!&ndash;                  size="15"&ndash;&gt;-->
+<!--        &lt;!&ndash;                />&ndash;&gt;-->
+<!--        &lt;!&ndash;              </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;            </b-button>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <b-sidebar&ndash;&gt;-->
+<!--        &lt;!&ndash;              id="sidebar-right"&ndash;&gt;-->
+<!--        &lt;!&ndash;              right&ndash;&gt;-->
+<!--        &lt;!&ndash;              backdrop&ndash;&gt;-->
+<!--        &lt;!&ndash;              bg-variant="white"&ndash;&gt;-->
+<!--        &lt;!&ndash;              sidebar-class="sidebar-lg"&ndash;&gt;-->
+<!--        &lt;!&ndash;              header-class="pt-1"&ndash;&gt;-->
+<!--        &lt;!&ndash;              lazy&ndash;&gt;-->
+<!--        &lt;!&ndash;            >&ndash;&gt;-->
+<!--        &lt;!&ndash;              <template #header>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <div class="d-flex justify-content-between align-items-center w-100">&ndash;&gt;-->
+<!--        &lt;!&ndash;                  <span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <h3>Advanced Search</h3>&ndash;&gt;-->
+<!--        &lt;!&ndash;                  </span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                  <span&ndash;&gt;-->
+<!--        &lt;!&ndash;                    v-b-toggle.sidebar-right&ndash;&gt;-->
+<!--        &lt;!&ndash;                    class="cursor-pointer"&ndash;&gt;-->
+<!--        &lt;!&ndash;                  >&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <amg-icon&ndash;&gt;-->
+<!--        &lt;!&ndash;                      icon="XIcon"&ndash;&gt;-->
+<!--        &lt;!&ndash;                      size="20"&ndash;&gt;-->
+<!--        &lt;!&ndash;                    />&ndash;&gt;-->
+<!--        &lt;!&ndash;                  </span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;              </template>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <b-container>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <filters-component&ndash;&gt;-->
+<!--        &lt;!&ndash;                  :filters="filter"&ndash;&gt;-->
+<!--        &lt;!&ndash;                />&ndash;&gt;-->
+<!--        &lt;!&ndash;              </b-container>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <template #footer>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <b-container>&ndash;&gt;-->
+<!--        &lt;!&ndash;                  <b-row class="d-flex align-items-center justify-content-between p-1">&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <b-button&ndash;&gt;-->
+<!--        &lt;!&ndash;                      v-b-toggle.sidebar-right&ndash;&gt;-->
+<!--        &lt;!&ndash;                      variant="info"&ndash;&gt;-->
+<!--        &lt;!&ndash;                      @click="$emit('reset-all-filters')"&ndash;&gt;-->
+<!--        &lt;!&ndash;                    >&ndash;&gt;-->
+<!--        &lt;!&ndash;                      Reset&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </b-button>&ndash;&gt;-->
+<!--        &lt;!&ndash;                    <b-button&ndash;&gt;-->
+<!--        &lt;!&ndash;                      v-b-toggle.sidebar-right&ndash;&gt;-->
+<!--        &lt;!&ndash;                      variant="primary"&ndash;&gt;-->
+<!--        &lt;!&ndash;                      @click="sideBarSearch"&ndash;&gt;-->
+<!--        &lt;!&ndash;                    >&ndash;&gt;-->
+<!--        &lt;!&ndash;                      Search&ndash;&gt;-->
+<!--        &lt;!&ndash;                    </b-button>&ndash;&gt;-->
+<!--        &lt;!&ndash;                  </b-row>&ndash;&gt;-->
+<!--        &lt;!&ndash;                </b-container>&ndash;&gt;-->
+<!--        &lt;!&ndash;              </template>&ndash;&gt;-->
+<!--        &lt;!&ndash;            </b-sidebar>&ndash;&gt;-->
+<!--        &lt;!&ndash;          </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </template>&ndash;&gt;-->
+<!--      </div>-->
       <b-container fluid>
 
         <div class="row">
@@ -91,6 +106,7 @@
             small
             caption-top
             responsive
+
           >
 
             <b-thead>
@@ -156,18 +172,21 @@
                   v-for="(schedule,i) in item.json_data"
                   :key="i"
                 >
-                  <div v-if="schedule.isBreak == 0">
+                  <div v-if="schedule.isBreak === 0">
                     <div
                       v-if="schedule.id_tasks != null"
                       v-b-tooltip.hover
                       :title="schedule.title_task"
 
                       class="text-white cursor-pointer schedule"
-                      :style="'background:'+schedule.color+'!important' "
+                       :style="'background:'+schedule.color+'!important' "
                       @click="openSchedulesModal(schedule,item,true)"
+
                     >{{ schedule.clock_in }} to {{ schedule.clock_out }} </div>
                     <div
                       v-else
+                      :style=" skin==='dark'? 'background: black': 'background: #f1f1f1;'
+              "
                       class="cursor-pointer off"
                       @click="openSchedulesModal(schedule,item,false)"
                     >OFF</div>
@@ -223,28 +242,28 @@
       />
 
       <div
-        class="row"
-        style="margin: 1px!important;"
+          class="row"
+          style="margin: 1px!important;"
       >
         <div
-          v-for="(i,index) in tasks"
-          :key="index"
-          class="col-sm-2"
-          style="margin:0!important;padding:0!important"
+            v-for="(i,index) in tasks"
+            :key="index"
+            class="col-sm-2"
+            style="margin:0!important;padding:1px!important"
         >
           <div
-            :style="'background:'+i.color+'!important'"
-            class="border-task"
-            @click="openInsertTaskModal(true,i)"
+              :style="'background:'+i.color+'!important'"
+              class="border-task"
+              @click="openInsertTaskModal(true,i)"
           >
             <p
-              v-if="i.title.length < 24"
-              class="card-text text-white text-center cursor-pointer"
+                v-if="i.title.length < 24"
+                class="card-text text-white text-center cursor-pointer"
             >{{ i.title }}</p>
             <p
-              v-else
+                v-else
 
-              class="card-text text-white text-center cursor-pointer"
+                class="card-text text-white text-center cursor-pointer"
             >{{ i.title.substr(0,24) }}...</p>
           </div>
         </div>
@@ -306,8 +325,11 @@ export default {
       currentUser: 'auth/currentUser',
       token: 'auth/token',
       tasks: 'SocialNetworkActivities/G_TASKS',
+      skin: 'appConfig/skin',
     }),
-
+    classAdd() {
+      return this.skin === 'dark' ? 'dark' : ''
+    },
   },
 
   created() {
@@ -437,7 +459,7 @@ tbody tr td {
 }
 
 .border-task {
-  border: 1px solid white !important;
+  border: 1px solid transparent !important;
   padding-top: 1px;
   padding-bottom: 1px;
   border-radius: 7px;
