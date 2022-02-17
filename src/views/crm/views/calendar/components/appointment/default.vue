@@ -91,10 +91,10 @@
         </template>
         <template #date-list="{event}">
           <div
-            class="w-100 p-50"
+            class="w-100"
           >
             <task-calendar
-              class="w-100 cursor-pointer"
+              class="cursor-pointer"
               :task="event"
               @click.native="openModalEditEventShow(event)"
             />

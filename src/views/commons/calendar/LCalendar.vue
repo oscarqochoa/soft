@@ -106,23 +106,33 @@
       <div
         v-for="(day, key) in listEvents"
         :key="key"
-        class="w-100"
+        class="w-100 border mb-2"
+        style="border-color: #C4C4C4 !important;"
       >
-        <b-row>
-          <b-col class="d-flex align-items-center justify-content-between px-50">
-            <span>
+        <b-row
+          class="m-0"
+          style="border-color: #C4C4C4 !important; background-color: #f3f3f3!important;"
+        >
+          <b-col
+            style="border-color: #C4C4C4 !important;"
+            class="d-flex align-items-center justify-content-between px-1 border-bottom py-1"
+          >
+            <span
+              class="h5 m-0 font-weight-bolder"
+            >
               {{ currentMonth }} {{ day.date }}, {{ year }}
             </span>
-            <span>
+            <span class="h5 m-0 font-weight-bolder">
               {{ completeDaysList[$moment((monthsList.indexOf(currentMonth) + 1) +'/' + day.date +'/' + year).day()] }}
             </span>
           </b-col>
         </b-row>
-        <b-row class="seven-columns">
+        <b-row class="seven-columns m-0">
           <div
             v-for="(event, index) in day.events"
             :key="index"
-            class="min-date-height"
+            style="border-color: #C4C4C4 !important;"
+            :class="{'border-right': index % 7 !== 6, 'border-bottom': Math.trunc(index / 7) !== Math.trunc((day.events.length - 1) / 7)}"
           >
             <slot
               name="date-list"
@@ -139,7 +149,7 @@
 import example from './example'
 
 export default {
-  name: 'LukeCalendar',
+  name: 'LCalendar',
   props: {
     events: {
       type: Array,

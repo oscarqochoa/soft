@@ -38,7 +38,7 @@
         date-location-format="YYYY-MM-DD"
         @dateChange="fetchEvents"
       >
-        <template #date-header="{date, fullDay, haveEvents, events}">
+        <template #date-header="{date, fullDay, haveEvents}">
           <div
             class="py-50 text-center w-100 border-bottom font-weight-bolder"
             style="border-color: #C4C4C4 !important;"
@@ -91,7 +91,7 @@
         </template>
         <template #date-list="{event}">
           <div
-            class="w-100 p-50"
+            class="w-100"
           >
             <task-calendar
               class="w-100 cursor-pointer"
