@@ -9,8 +9,10 @@
       <b-row style="">
         <!-- Column Cards -->
         <b-col
-          @mousedown="statuMouse($event)"
+          @mouseover="statusMouse($event)" @mouseleave="statusLeave"
+          
           class="col-tab"
+          v-dragscroll="true"
           cols="12"
           sm="4"
           md="4"
@@ -36,7 +38,9 @@
               <b-card-title :style="itemCards[0] == true ? 'color: white' : ''">Leads</b-card-title>
               <!-- Card Content -->
               <b-card-text>
+                <!-- First Line -->
                 <div class="row item-wrapper justify-content-center align-items-center">
+                  <!-- Box First-->
                   <div
                     style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
@@ -44,9 +48,11 @@
                     "
                     class="mr-2 item-wrapper-font div-box1"
                   ></div>
+                  <!-- Name Today -->
                   <div class="mr-1">
                     <span style="font-size: medium" class>Today :</span>
                   </div>
+                  <!-- Total Today -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.leadday }}</strong>
@@ -54,7 +60,9 @@
                   </div>
                 </div>
                 <div class="row" style="height: 10px" />
+                <!-- Second Line -->
                 <div class="row item-wrapper justify-content-center align-items-center">
+                  <!-- Box Second-->
                   <div
                     style="
                       width: 17px;
@@ -67,9 +75,11 @@
                     "
                     class="mr-1 div-box"
                   ></div>
+                  <!-- Name Month -->
                   <div class="mr-1">
                     <span style="font-size: medium">Month :</span>
                   </div>
+                  <!-- Total Month -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.leadmonth }}</strong>
@@ -97,7 +107,9 @@
               <b-card-title :style="itemCards[1] == true ? 'color: white' : ''">Appointments</b-card-title>
               <!-- Card Content -->
               <b-card-text>
+                <!-- First Line -->
                 <div class="row item-wrapper justify-content-center align-items-center">
+                  <!-- Box First-->
                   <div
                     style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
@@ -105,9 +117,11 @@
                     "
                     class="mr-2 item-wrapper-font div-box1"
                   ></div>
+                  <!-- Name Today -->
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
                   </div>
+                  <!-- Total Today -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.eventday }}</strong>
@@ -115,7 +129,9 @@
                   </div>
                 </div>
                 <div class="row" style="height: 10px" />
+                <!-- Second Line -->
                 <div class="row item-wrapper justify-content-center align-items-center">
+                  <!-- Box Second-->
                   <div
                     style="
                       width: 17px;
@@ -128,9 +144,11 @@
                     "
                     class="mr-1 item-wrapper-font div-box"
                   ></div>
+                   <!-- Name Month -->
                   <div class="mr-1">
                     <span style="font-size: medium">Month :</span>
                   </div>
+                  <!-- Total Month -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.eventmonth }}</strong>
@@ -158,7 +176,9 @@
               <b-card-title :style="itemCards[2] == true ? 'color: white' : ''">Tasks</b-card-title>
               <!-- Card Content -->
               <b-card-text>
+                <!-- First Line -->
                 <div class="row item-wrapper justify-content-center align-items-center">
+                  <!-- Box First-->
                   <div
                     style="
                       width: 17px;
@@ -171,9 +191,11 @@
                     "
                     class="mr-2 item-wrapper-font div-box1"
                   ></div>
+                  <!-- Name Today -->
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
                   </div>
+                  <!-- Total Today -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.taskday }}</strong>
@@ -181,7 +203,9 @@
                   </div>
                 </div>
                 <div class="row" style="height: 10px" />
+                <!-- First Second -->
                 <div class="row item-wrapper justify-content-center align-items-center">
+                  <!-- Box Second-->
                   <div
                     style="
                       width: 17px;
@@ -194,9 +218,11 @@
                     "
                     class="mr-1 item-wrapper-font div-box"
                   ></div>
+                  <!-- Name Month -->
                   <div class="mr-1">
                     <span style="font-size: medium">Month :</span>
                   </div>
+                  <!-- Total Month -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.taskmonth }}</strong>
@@ -224,7 +250,9 @@
               <b-card-title :style="itemCards[3] == true ? 'color: white' : ''">Sales</b-card-title>
               <!-- Card Content -->
               <b-card-text>
+                <!-- First Line -->
                 <div class="row item-wrapper justify-content-center align-items-center">
+                  <!-- Box First -->
                   <div
                     style="
                       width: 17px;
@@ -237,9 +265,11 @@
                     "
                     class="mr-2 item-wrapper-font div-box1"
                   ></div>
+                  <!-- Name Today -->
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
                   </div>
+                  <!-- Total Today -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.vendioday }}</strong>
@@ -247,7 +277,9 @@
                   </div>
                 </div>
                 <div class="row" style="height: 10px" />
+                <!-- Second Line -->
                 <div class="row item-wrapper justify-content-center align-items-center">
+                  <!-- Box Second -->
                   <div
                     style="
                       width: 17px;
@@ -260,9 +292,11 @@
                     "
                     class="mr-1 item-wrapper-font div-box"
                   ></div>
+                  <!-- Name Month -->
                   <div class="mr-1">
                     <span style="font-size: medium">Month :</span>
                   </div>
+                  <!-- Total Month -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.vendiomonth }}</strong>
@@ -290,7 +324,9 @@
               <b-card-title :style="itemCards[4] == true ? 'color: white' : ''">Capturated</b-card-title>
               <!--Card Content  -->
               <b-card-text>
+                <!-- First Line -->
                 <div class="row item-wrapper justify-content-center align-items-center">
+                  <!-- Box First -->
                   <div
                     style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
@@ -298,9 +334,11 @@
                     "
                     class="mr-2 item-wrapper-font div-box1"
                   ></div>
+                  <!-- Name Today -->
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
                   </div>
+                  <!-- Total Today -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.clientday }}</strong>
@@ -308,7 +346,9 @@
                   </div>
                 </div>
                 <div class="row" style="height: 10px" />
+                <!-- Second Line -->
                 <div class="row item-wrapper justify-content-center align-items-center">
+                  <!-- Box Second -->
                   <div
                     style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
@@ -316,9 +356,11 @@
                     "
                     class="mr-1 item-wrapper-font div-box"
                   ></div>
+                  <!-- Name Month -->
                   <div class="mr-1">
                     <span style="font-size: medium">Month :</span>
                   </div>
+                  <!-- Total Month -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.clientmonth }}</strong>
@@ -402,8 +444,6 @@
                 </div>
               </div>
             </b-row>
-            <!-- Space If It's a huge Graphics -->
-            <!-- <b-row v-if="allSizeOfScreen==='xxl'" style="height:130px"></b-row> -->
             <!-- Graphics Line -->
             <b-card-body class="p-0 pb-2">
               <app-echart-line-crm
@@ -423,6 +463,7 @@
 
 
 <script>
+import { dragscroll } from 'vue-dragscroll'
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
 import { mapGetters } from "vuex";
 import vSelect from "vue-select";
@@ -434,6 +475,9 @@ import AppEchartLineCrm from "./components/AppEchartLineCrm.vue";
 import DashboardService from "./service/dashboard.service";
 export default {
   name: "DashboardCrm",
+  directives: {
+    dragscroll
+  },
   components: {
     BCard,
     BButton,
@@ -480,7 +524,8 @@ export default {
       itemCards: [true, false, false, false, false],
       item: null,
       widthOfScreen: null,
-      heightOfScreen: null
+      heightOfScreen: null,
+      statusMouseOver:false,
     };
   },
   computed: {
@@ -544,15 +589,17 @@ export default {
     this.yearSelect();
   },
   methods: {
-    statuMouse(event) {
-      const container = document.querySelector(".col-tab");
-
+    statusMouse(event) {
+      this.statusMouseOver = true
       // container.scrollHeight = event.screenY
       // console.log(event)
       // console.log(event.clientX)
       // event.clientY = event.clientY
       // console.log("sdsds",event)
       // console.log(container.scrollHeight);
+    },
+    statusLeave(){
+      this.statusMouseOver = false
     },
 
     statusColor: function(name) {
