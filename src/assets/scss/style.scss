@@ -355,3 +355,28 @@ $borderamg: #efb911;
 [dir] .dark-layout textarea.form-control:not(:focus) {
   border-color: #ffffff;
 } */
+
+// Only for madals of sales made (Initial Payment)
+#crm-sm-modal-initial-payment {
+  .modal-body {
+    padding: 1rem 0rem !important;
+    overflow-x: hidden;
+
+    .margin-0 {
+      margin-right: 0rem !important;
+      margin-left: 0rem !important;
+    }
+  }
+}
+
+#crm-sm-modal-contract-fee {
+  .modal-body {
+    padding: 1rem 0rem !important;
+    overflow-x: hidden;
+
+    .margin-0 {
+      margin-right: 0rem !important;
+      margin-left: 0rem !important;
+    }
+  }
+}
