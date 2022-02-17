@@ -36,7 +36,7 @@
           :filter="filter"
 
           responsive="sm"
-          small
+
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -46,8 +46,8 @@
           </template>
           <template v-slot:cell(name)="data">
 
-            <div class="d-flex flex-column justify-content-start align-items-start">
-              <div class="mb-0 font-weight-bold text-important">
+            <div class="d-flex flex-column justify-content-start align-items-start text-important">
+
 
                 <router-link
                   :class="[textLink]"
@@ -55,7 +55,7 @@
                   target="_blank"
                 >  {{ data.item.lead_name }}</router-link>
 
-              </div>
+
             </div>
 
           </template>
@@ -101,15 +101,13 @@
             </span>
           </template>
           <template v-slot:cell(programs)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
-              <span
+
+              <p
                 v-for="(program, index) in JSON.parse(data.item.programs)"
                 :key="index"
-                class="mb-0 font-weight-bold"
-              >{{ program }}</span>
-            </div>
+                class="d-flex flex-column justify-content-start align-items-center"
+              >{{ program }}</p>
+
           </template>
 
           <template v-slot:cell(created_by)="data">
