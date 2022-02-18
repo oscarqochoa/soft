@@ -7,6 +7,8 @@
     :title="title"
     :hide-footer="reading"
     @hidden="close"
+    modal-class="modal-primary"
+    title-tag="h3"
   >
     <div class="d-block">
       <validation-observer ref="vform">
@@ -20,7 +22,7 @@
               >
               <b-row class="mt-2">
                 <b-col sm="1">
-                  <label>PROGRAM:</label>
+                  <label>Program:</label>
                 </b-col>
                 <b-col
                   v-for="program in programs"
@@ -53,7 +55,7 @@
               >
               <b-row class="mt-2">
                 <b-col sm="1">
-                  <label>TYPE:</label>
+                  <label>Type:</label>
                 </b-col>
                 <b-col sm="2">
                   <b-form-radio
@@ -62,7 +64,7 @@
                     name="checkbox-1"
                     value="1"
                     unchecked-value="not_accepted"
-                  >CLIENT
+                  >Client
                   </b-form-radio>
                 </b-col>
                 <b-col sm="2">
@@ -72,7 +74,7 @@
                     name="checkbox-1"
                     value="2"
                     unchecked-value="not_accepted"
-                  >TEAM
+                  >Team
                   </b-form-radio>
                 </b-col>
                 <span
@@ -89,7 +91,7 @@
               >
               <b-row class="mt-2">
                 <b-col sm="1">
-                  <label>OPTION:</label>
+                  <label>Option:</label>
                 </b-col>
                 <b-col sm="10">
                   <b-form-textarea
@@ -126,16 +128,8 @@
       </validation-observer>
     </div>
     <template #modal-footer="{ cancel }">
-      <b-button
-          @click="cancel()"
-      >
-        CANCEL
-      </b-button>
-      <b-button
-          @click="saveUpdateAnswer"
-      >
-        OK
-      </b-button>
+      <button-cancel @click="cancel()"/>
+      <button-save @click="saveUpdateAnswer"/>
     </template>
   </b-modal>
 </template>
@@ -147,8 +141,14 @@ import { mapGetters } from 'vuex'
 import { useToast } from 'vue-toastification/composition'
 import { useClipboard } from '@vueuse/core'
 import ToastificationContent from '@core/components/toastification/ToastificationContent'
+import buttonSave from '@/views/commons/utilities/ButtonSave'
+import buttonCancel from '@/views/commons/utilities/ButtonCancel'
 
 export default {
+  components: {
+    buttonSave,
+    buttonCancel
+  },
   props: {
     mood: null,
     item: null,

@@ -169,9 +169,11 @@ export default {
     }),
   },
 
-  async created() {try {
+  async created() {
+    try {
       this.isBusy = true
       await this.getData()
+      console.log(this.S_ANSWERS)
       this.isBusy = false
       return this.answers
     } catch (e) {
@@ -244,11 +246,14 @@ export default {
       }
     },
     async getChildData(program, father, answer) {
+      console.log('children pre ', this.S_ANSWERS)
       const response = await AnswersGuideService.getAnswersGuide({ father, program })
       const index = this.answers.map(e => e.id).indexOf(father)
       response.map(e => (e.content = `${e.content}`))
       this.answers.splice(index + 1, 0, ...response)
       answer.ans_open = false
+      this.$store.dispatch('SocialNetworkAnswerGuide/A_SET_ANSWERS', this.answers)
+      console.log('children POST ', this.S_ANSWERS)
     },
 
     deleteChildData(grandpa, id, type) {

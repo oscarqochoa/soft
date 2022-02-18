@@ -4,8 +4,10 @@
     ref="modal"
     v-model="onControl"
     size="lg"
-    title="CREATE ANSWER"
+    title="Create Answer"
     @hidden="close"
+    title-tag="h3"
+    modal-class="modal-primary"
   >
     <div class="d-block">
       <validation-observer ref="vform">
@@ -19,7 +21,7 @@
                 >
                   <b-row class="mt-2">
                     <b-col sm="1">
-                      <label>PROGRAM:</label>
+                      <label>Program:</label>
                     </b-col>
                     <b-col
                       v-for="program in programs"
@@ -52,7 +54,7 @@
                 >
                 <b-row class="mt-2">
                   <b-col sm="1">
-                    <label>TYPE:</label>
+                    <label>Type:</label>
                   </b-col>
                   <b-col sm="2">
                     <b-form-radio
@@ -60,7 +62,7 @@
                         name="checkbox-1"
                         value="1"
                         unchecked-value="not_accepted"
-                    >CLIENT
+                    >Client
                     </b-form-radio>
                   </b-col>
                   <b-col sm="2">
@@ -69,7 +71,7 @@
                         name="checkbox-1"
                         value="2"
                         unchecked-value="not_accepted"
-                    >TEAM
+                    >Team
                     </b-form-radio>
                   </b-col>
                   <span
@@ -86,7 +88,7 @@
                 >
                 <b-row class="mt-2">
                   <b-col sm="1">
-                    <label>OPTION:</label>
+                    <label>Option:</label>
                   </b-col>
                   <b-col sm="11">
 
@@ -113,7 +115,7 @@
                         value="checked"
                         unchecked-value="notchecked"
                     >
-                      IS SUB OPTION?
+                      Is sub option?
                     </b-form-checkbox>
 
                     <template v-if="showAnswersTree">
@@ -170,16 +172,12 @@
       </validation-observer>
     </div>
     <template #modal-footer="{ cancel }">
-      <b-button
+      <button-cancel
         @click="cancel()"
-      >
-        CANCEL
-      </b-button>
-      <b-button
+      ></button-cancel>
+      <button-save
         @click="saveUpdateAnswer"
-      >
-        OK
-      </b-button>
+      ></button-save>
     </template>
   </b-modal>
 </template>
@@ -188,8 +186,14 @@
 
 import AnswersGuideService from '@/views/social-network/views/answers-guide/answers-guide.service'
 import { mapGetters } from 'vuex'
+import buttonSave from '@/views/commons/utilities/ButtonSave'
+import buttonCancel from '@/views/commons/utilities/ButtonCancel'
 
 export default {
+  components: {
+    buttonSave,
+    buttonCancel
+  },
   props: {
     itemTree: null,
   },
@@ -276,13 +280,11 @@ export default {
               if (this.itemTree) {
                 this.$emit('reloadTree')
               } else {
-
-                if(this.selectedProgram === this.$route.meta.program){
+                if (this.selectedProgram === this.$route.meta.program) {
                   this.$store.dispatch('SocialNetworkAnswerGuide/A_GET_ANSWERS', { father: null, program: this.selectedProgram })
-                }else{
+                } else {
                   this.$emit('reloadTable', this.selectedProgram)
                 }
-
               }
               this.showSuccessSwal('Answer has been added successfully')
               this.close()

@@ -16,6 +16,12 @@ export default {
         ? "text-warning font-weight-bolder"
         : "text-primary font-weight-bolder";
     },
+    bgTabsNavs() {
+      //getters
+      return this.$store.getters["appConfig/skin"] === "dark"
+        ? "nav-dark-tabs"
+        : "nav-light-tabs";
+    },
   },
   methods: {
     convertProgramToModule(program) {

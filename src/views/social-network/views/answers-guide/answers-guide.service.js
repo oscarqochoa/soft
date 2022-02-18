@@ -6,7 +6,6 @@ class AnswersGuide {
   async getAnswersGuide(body) {
     try {
       const data = await amgApi.post('/social-network/answers-guide/get-asnwer-guide-sn', body)
-      console.log('get answer guide ', data)
       return data.data
     } catch (error) {
       throw error

@@ -1,11 +1,7 @@
 <template>
   <div>
-    <b-card
-      no-body
-      class="mb-0 p-2"
-    >
-      <div class="card-header flex">
-        <h2>ANSWERS GUIDE</h2>
+      <div class="flex">
+        <h2>Answers Guide</h2>
         <b-button
           class="m-1"
           variant="success"
@@ -14,15 +10,20 @@
           <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />CREATE
         </b-button>
       </div>
-      <b-nav pills>
+
+      <b-nav pills class="m-0">
         <b-nav-item
           v-for="program in programs" :key="program.id"
           :to="{ name: program.route }"
-          exact
           exact-active-class="active"
-          link-classes="border-secondary hover-primary"
+          link-classes="px-3 bgTabsNavs"
+          exact
         >{{ program.value }}</b-nav-item>
       </b-nav>
+    <b-card
+        no-body
+        class="border-top-primary border-3 border-table-radius px-0"
+    >
       <router-view :key="$route.name" />
     </b-card>
     <create-modal
@@ -112,5 +113,8 @@ export default {
 .flex{
   display: flex;
   justify-content: space-between;
+}
+.bgTabsNavs{
+  background-color: #f3f2f7;
 }
 </style>
