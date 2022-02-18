@@ -40,7 +40,7 @@
             slot="table"
 
             ref="bank-of-flyer-general"
-            sticky-header="70vh"
+            sticky-header="50vh"
 
             no-provider-filtering
             :busy.sync="isBusy"
@@ -49,7 +49,7 @@
             :per-page="paginate.perPage"
             :current-page="paginate.currentPage"
             :filter="filter"
-            class="font-small-3 "
+
             responsive="sm"
 
           >
@@ -370,8 +370,7 @@ export default {
       console.error(error)
     }
 
-    this.ejemplo = 'carolina'
-    this.bri = 'bri'
+
   },
 
   methods: {

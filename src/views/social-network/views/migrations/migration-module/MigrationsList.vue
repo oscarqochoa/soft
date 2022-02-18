@@ -26,7 +26,7 @@
           slot="table"
           ref="migrationList"
           v-scrollbar
-          sticky-header="70vh"
+          sticky-header="50vh"
           no-provider-filtering
           :busy.sync="isBusy"
           :items="search"
