@@ -5,9 +5,9 @@
     v-model="onControl"
     size="lg"
     title="Create Answer"
-    @hidden="close"
-    title-tag="h3"
     modal-class="modal-primary"
+    title-tag="h3"
+    @hidden="close"
   >
     <div class="d-block">
       <validation-observer ref="vform">

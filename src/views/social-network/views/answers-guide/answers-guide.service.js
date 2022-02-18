@@ -25,6 +25,7 @@ class AnswersGuide {
   //me devuelve el arbol entero de un elemento, solo tengo que pasarle el id y me trae
   //los hijos, nietos, etc.... padre
   async getTreeAnswer(body) {
+    console.log('get tree data service')
     try {
       const data = await amgApi.post('/social-network/answers-guide/get-tree-answer', body)
       return data

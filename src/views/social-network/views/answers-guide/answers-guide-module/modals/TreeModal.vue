@@ -211,6 +211,7 @@ export default {
       this.openCreate = false
     },
     async getTreeData(id) {
+      console.log('get tree data ')
       const data = await AnswersGuideService.getTreeAnswer({ id })
       this.treeData = data.data
       // eslint-disable-next-line prefer-destructuring

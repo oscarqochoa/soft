@@ -7,7 +7,7 @@
           variant="success"
           @click="openCreateModal()"
         >
-          <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />CREATE
+          <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
         </b-button>
       </div>
 
