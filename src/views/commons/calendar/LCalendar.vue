@@ -48,7 +48,7 @@
         <b-container
           v-for="(date, index) in calendarDates"
           :key="index"
-          class="min-date-height border-top border-left"
+          class="min-date-height border-top border-left border-color"
           :class="{
             'border-right' : index%7 === 6,
             'border-bottom': Math.trunc(index / 7) + 1 === (calendarDates.length / 7),
@@ -106,23 +106,21 @@
       <div
         v-for="(day, key) in listEvents"
         :key="key"
-        class="w-100 border mb-2"
-        style="border-color: #C4C4C4 !important;"
+        class="w-100 border mb-2 border-color"
       >
         <b-row
           class="m-0"
-          style="border-color: #C4C4C4 !important; background-color: #f3f3f3!important;"
+          :style="'background-color: ' + listTitleBackgroundColor"
         >
           <b-col
-            style="border-color: #C4C4C4 !important;"
-            class="d-flex align-items-center justify-content-between px-1 border-bottom py-1"
+            class="border-color d-flex align-items-center justify-content-between px-1 border-bottom py-1"
           >
             <span
-              class="h5 m-0 font-weight-bolder"
+              class="m-0 font-weight-bolder font-medium-1"
             >
               {{ currentMonth }} {{ day.date }}, {{ year }}
             </span>
-            <span class="h5 m-0 font-weight-bolder">
+            <span class="m-0 font-weight-bolder font-medium-1">
               {{ completeDaysList[$moment((monthsList.indexOf(currentMonth) + 1) +'/' + day.date +'/' + year).day()] }}
             </span>
           </b-col>
@@ -131,7 +129,7 @@
           <div
             v-for="(event, index) in day.events"
             :key="index"
-            style="border-color: #C4C4C4 !important;"
+            class="border-color"
             :class="{'border-right': index % 7 !== 6, 'border-bottom': Math.trunc(index / 7) !== Math.trunc((day.events.length - 1) / 7)}"
           >
             <slot
@@ -163,6 +161,10 @@ export default {
       type: String,
       default: 'YYYY-MM-DD',
     },
+    listTitleBackgroundColor : {
+      type: String,
+      default: 'transparent',
+    }
   },
   data() {
     return {
@@ -295,7 +297,7 @@ export default {
   background-color: #00D25B;
   color: white;
 }
-.min-date-height {
+.border-color {
   border-color: #C4C4C4 !important;
 }
 </style>

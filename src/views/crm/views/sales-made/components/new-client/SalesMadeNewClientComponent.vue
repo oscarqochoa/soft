@@ -168,7 +168,7 @@
                 (data.item.status == 1 || data.item.status == 3) &&
                   (G_IS_CEO || G_IS_SUPERVISOR)
               "
-              class="mt-07"
+              class="mt-07 text-right mr-1"
             >
               <b-icon
                 v-if="!data.item.editCaptured"
@@ -244,7 +244,7 @@
                 (data.item.status == 1 || data.item.status == 3) &&
                   (G_IS_CEO || G_IS_SUPERVISOR)
               "
-              class="mt-07"
+              class="mt-07 text-right mr-1"
             >
               <b-icon
                 v-if="!data.item.editSeller"
@@ -293,13 +293,7 @@
         <template v-slot:cell(fee)="data">
           <span>
             <span v-if="!data.item.editFee">
-              <money
-                v-model="data.item.fee"
-                class="p-0 border-0"
-                v-bind="{ prefix: ' $ ', precision: 2 }"
-                style="width: 70px !important; opacity: 1"
-                disabled
-              />
+              $ {{parseFloat(data.item.fee).toFixed(2)}}
             </span>
             <span v-else>
               <money
@@ -315,7 +309,7 @@
                 (data.item.status === 1 || data.item.status === 3) &&
                   (G_IS_CEO || G_IS_SUPERVISOR)
               "
-              class="mt-07"
+              class="mt-07 text-right mr-1"
             >
               <b-icon
                 v-if="!data.item.editFee"

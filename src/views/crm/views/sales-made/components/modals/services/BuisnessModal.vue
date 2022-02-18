@@ -44,8 +44,8 @@
                       xs="12"
                     >
                       <b-card
-                        class="font-weight-bolder hover-card"
-                        :class="{'cursor-pointer': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
+                        class="font-weight-bolder"
+                        :class="{'cursor-pointer hover-card': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
                         bg-variant="transparent"
                         @click="!(isModalShow) && changeRate(rate)"
                       >
@@ -104,8 +104,8 @@
                         xs="12"
                       >
                         <b-card
-                          class="font-weight-bolder hover-card"
-                          :class="{'cursor-pointer': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
+                          class="font-weight-bolder"
+                          :class="{'cursor-pointer hover-card': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
                           bg-variant="transparent"
                           @click="!(isModalShow) && changeRate(rate)"
                         >
@@ -181,8 +181,8 @@
                       xs="12"
                     >
                       <b-card
-                        class="font-weight-bolder hover-card"
-                        :class="{'cursor-pointer': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
+                        class="font-weight-bolder"
+                        :class="{'cursor-pointer hover-card': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
                         bg-variant="transparent"
                         @click="!(isModalShow) && changeRate(rate)"
                       >
@@ -241,8 +241,8 @@
                         xs="12"
                       >
                         <b-card
-                          class="font-weight-bolder hover-card"
-                          :class="{'cursor-pointer': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
+                          class="font-weight-bolder"
+                          :class="{'cursor-pointer hover-card': !(isModalShow), 'border border-2' : true, 'text-white' : option === rate.id && skin === 'light', 'bg-click': option === rate.id}"
                           bg-variant="transparent"
                           @click="!(isModalShow) && changeRate(rate)"
                         >
