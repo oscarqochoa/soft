@@ -1,11 +1,13 @@
 import Vue from 'vue'
-import crmService from '@/views/crm/services/crm.service'
 import AnswersGuideService from '@/views/social-network/views/answers-guide/answers-guide.service'
 
 const state = {
   S_ANSWERS: [],
 }
 const getters = {
+  G_ANSWERS() {
+    return state.S_ANSWERS
+  },
 }
 const mutations = {
   SET_DATA(state, params) {
@@ -20,7 +22,6 @@ const actions = {
         destination: 'S_ANSWERS',
         data: response,
       })
-      console.log('ACtgionn')
       return response
     } catch (error) {
       console.log('ERROR_GET_ANSWERS [ACTION]', error)

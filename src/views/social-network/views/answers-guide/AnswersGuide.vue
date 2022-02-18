@@ -16,7 +16,7 @@
           v-for="program in programs" :key="program.id"
           :to="{ name: program.route }"
           exact-active-class="active"
-          link-classes="px-3 bgTabsNavs"
+          :link-classes="['px-3', bgTabsNavs]"
           exact
         >{{ program.value }}</b-nav-item>
       </b-nav>
@@ -100,7 +100,6 @@ export default {
       for (let i = 0; i < this.programs.length; i++) {
         this.programs[i].route = this.routes[i]
       }
-      console.log(this.programs)
     },
   },
   async created() {

@@ -36,7 +36,7 @@
                 v-if="data.item.ans_open && data.item.count_father"
                 class="pointer"
                 icon="ChevronRightIcon"
-                @click="getChildData(data.item.program, data.item.id, data.item)"
+                @click="getChildData(data.item.program, data.item.id, data.item, data)"
             />
             <feather-icon
                 v-if="!data.item.ans_open && data.item.count_father"
@@ -163,6 +163,7 @@ export default {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
+      G_ANSWERS: state => state.SocialNetworkAnswerGuide.G_ANSWERS,
     }),
     ...mapState({
       S_ANSWERS: state => state.SocialNetworkAnswerGuide.S_ANSWERS,
@@ -173,12 +174,9 @@ export default {
     try {
       this.isBusy = true
       await this.getData()
-      console.log(this.S_ANSWERS)
       this.isBusy = false
-      return this.answers
     } catch (e) {
       this.showErrorSwal(e)
-      return []
     }
   },
   setup() {
@@ -207,7 +205,8 @@ export default {
       A_GET_ANSWERS: "SocialNetworkAnswerGuide/A_GET_ANSWERS"
     }),
     async getData() {
-      this.answers = await this.getAnswerGuide(this.$route.meta.program, null)
+      const data = await this.A_GET_ANSWERS({ father: null, program: this.$route.meta.program })
+      this.answers = data
     },
     openEditWatchModal(mood, data) {
       this.mood = mood
@@ -223,10 +222,6 @@ export default {
     },
     closeTreeModal() {
       this.openTreeModal = false
-    },
-    async getAnswerGuide(program, father) {
-      const data = await this.A_GET_ANSWERS({ father, program })
-      return data
     },
     // eslint-disable-next-line consistent-return
     async deleteItem(item) {
@@ -245,18 +240,20 @@ export default {
         return []
       }
     },
-    async getChildData(program, father, answer) {
-      console.log('children pre ', this.S_ANSWERS)
+    async getChildData(program, father, answer, data) {
+      const countFather = answer.count_father
       const response = await AnswersGuideService.getAnswersGuide({ father, program })
-      const index = this.answers.map(e => e.id).indexOf(father)
-      response.map(e => (e.content = `${e.content}`))
+      const index = this.S_ANSWERS.map(e => e.id).indexOf(father)
+      response.map((e) => (e.content = "" + e.content));
+      this.answers = this.S_ANSWERS
       this.answers.splice(index + 1, 0, ...response)
-      answer.ans_open = false
+      this.answers[data.index].ans_open = false
+      this.answers[data.index].count_father = countFather
       this.$store.dispatch('SocialNetworkAnswerGuide/A_SET_ANSWERS', this.answers)
-      console.log('children POST ', this.S_ANSWERS)
     },
 
     deleteChildData(grandpa, id, type) {
+      this.answers = this.S_ANSWERS
       // eslint-disable-next-line array-callback-return,consistent-return
       this.answers = this.answers.filter(value => {
         if (!(value.grandpa == grandpa && value.type > type)) {

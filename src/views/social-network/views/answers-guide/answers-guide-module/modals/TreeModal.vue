@@ -78,23 +78,23 @@
               :class="node.type_answer === 1? 'client-bg' : 'team-bg'"
             >
               <feather-icon
-                class="mr-1 pointer no-margin icon-color"
+                class="pointer  m-0  icon-color"
                 icon="EyeIcon"
                 @click="openWatchModal(1, node)"
               />
               <feather-icon
-                class="mr-1 pointer no-margin icon-color"
+                class="pointer m-0 icon-color"
                 icon="PlusIcon"
                 @click="openCreateModal(node)"
               />
               <feather-icon
-                class="mr-1 pointer no-margin icon-color"
+                class="pointer m-0 icon-color"
                 icon="TrashIcon"
                 @click="deleteItem(node)"
               />
               <feather-icon
                 v-if="node.type_answer == 2"
-                class="mr-1 pointer no-margin icon-color"
+                class="pointer  m-0  icon-color"
                 icon="CopyIcon"
                 @click="copyAnswerName(node.content)"
               />
@@ -102,8 +102,8 @@
           </div>
         </template>
       </vue-tree>
-      <div v-else>
-        No hay contenido para mostrar
+      <div v-else class="m-1">
+        There are no records to show
       </div>
     </div>
     <edit-watch-modal
@@ -312,7 +312,6 @@ export default {
   word-break: break-word;
   white-space: pre-wrap;
 }
-
 .icons-node{
   display: flex;
   flex-direction: column;
@@ -323,9 +322,6 @@ export default {
 }
 .icons-node span{
   text-align: center;
-}
-.no-margin{
-  margin: 0 !important;
 }
 .header{
   display: flex;

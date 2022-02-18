@@ -192,7 +192,7 @@ import buttonCancel from '@/views/commons/utilities/ButtonCancel'
 export default {
   components: {
     buttonSave,
-    buttonCancel
+    buttonCancel,
   },
   props: {
     itemTree: null,
