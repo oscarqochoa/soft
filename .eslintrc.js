@@ -1,10 +1,9 @@
 module.exports = {
-  lintOnSave: false,
   root: true,
   env: {
     node: true,
   },
-  extends: ['plugin:vue/recommended', '@vue/airbnb'],
+  //extends: ['plugin:vue/recommended', '@vue/airbnb'],
   parserOptions: {
     parser: 'babel-eslint',
   },

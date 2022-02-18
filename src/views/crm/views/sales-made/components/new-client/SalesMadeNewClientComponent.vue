@@ -16,7 +16,10 @@
           :disabled="!selected.length"
           @click="modalSmssOpen"
         >
-          <feather-icon icon="MessageCircleIcon" class="mr-50" />Send SMS
+          <feather-icon
+            icon="MessageCircleIcon"
+            class="mr-50"
+          />Send SMS
         </b-button>
       </template>
 
@@ -43,26 +46,33 @@
           </div>
         </template>
         <template #head(selected)>
-          <b-form-checkbox v-model="selectAll" @input="selectedAll" />
+          <b-form-checkbox
+            v-model="selectAll"
+            @input="selectedAll"
+          />
         </template>
         <template v-slot:cell(selected)="row">
           <b-form-group>
             <b-form-checkbox
               v-model="row.item.selected"
-              @input="selectedRow(row.item)"
               class="mt-1"
+              @input="selectedRow(row.item)"
             />
           </b-form-group>
         </template>
         <template v-slot:cell(client)="data">
-          <div class="text-left" style="margin-bottom: -15px !important;">
+          <div
+            class="text-left"
+            style="margin-bottom: -15px !important;"
+          >
             <router-link
               :class="[textLink]"
               :to="`/crm/leads/${data.item.lead_id}`"
               target="_blank"
-              >{{ data.item.client }}</router-link
-            >
-            <p class="mb-0">{{ data.item.mobile }}</p>
+            >{{ data.item.client }}</router-link>
+            <p class="mb-0">
+              {{ data.item.mobile }}
+            </p>
             <p class="mb-0">
               <small>{{ data.item.state }}</small>
             </p>
@@ -81,13 +91,11 @@
             <span
               v-if="data.item.program === 'Business'"
               v-b-tooltip.bottom="'Business'"
-              >BU</span
-            >
+            >BU</span>
             <span
               v-if="data.item.program === 'Boost Credit'"
               v-b-tooltip.bottom="'Boost Credit'"
-              >BC</span
-            >
+            >BC</span>
             <span
               v-if="data.item.program === 'Credit Experts'"
               v-b-tooltip.bottom="'Credit Experts'"
@@ -96,33 +104,27 @@
             <span
               v-if="data.item.program === 'Debt Solution'"
               v-b-tooltip.bottom="'Debt Solution'"
-              >DS</span
-            >
+            >DS</span>
             <span
               v-if="data.item.program === 'Tax Research'"
               v-b-tooltip.bottom="'Tax Research'"
-              >TR</span
-            >
+            >TR</span>
             <span
               v-if="data.item.program === 'General Support'"
               v-b-tooltip.bottom="'General Support'"
-              >GS</span
-            >
+            >GS</span>
             <span
               v-if="data.item.program === 'Specialist'"
               v-b-tooltip.bottom="'Specialist'"
-              >SP</span
-            >
+            >SP</span>
             <span
               v-if="data.item.program === 'KeyBook'"
               v-b-tooltip.bottom="'KeyBook'"
-              >KB</span
-            >
+            >KB</span>
             <span
               v-if="data.item.program === 'Paragon'"
               v-b-tooltip.bottom="'Paragon'"
-              >PR</span
-            >
+            >PR</span>
             <feather-icon
               v-if="data.item.haveRates !== 1"
               icon="AlertTriangleIcon"
@@ -155,18 +157,19 @@
 
             <div>
               <p v-if="data.item.commission && (G_IS_CEO || G_IS_SUPERVISOR)">
-                <small class="text-primary font-weight-bold"
-                  >$ {{ data.item.commission[0].commission }}
+                <small
+                  class="text-primary font-weight-bold"
+                >$ {{ data.item.commission[0].commission }}
                 </small>
               </p>
             </div>
 
             <div
-              class="mt-07"
               v-if="
                 (data.item.status == 1 || data.item.status == 3) &&
-                (G_IS_CEO || G_IS_SUPERVISOR)
+                  (G_IS_CEO || G_IS_SUPERVISOR)
               "
+              class="mt-07 text-right mr-1"
             >
               <b-icon
                 v-if="!data.item.editCaptured"
@@ -238,11 +241,11 @@
             </div>
 
             <div
-              class="mt-07"
               v-if="
                 (data.item.status == 1 || data.item.status == 3) &&
-                (G_IS_CEO || G_IS_SUPERVISOR)
+                  (G_IS_CEO || G_IS_SUPERVISOR)
               "
+              class="mt-07 text-right mr-1"
             >
               <b-icon
                 v-if="!data.item.editSeller"
@@ -291,13 +294,7 @@
         <template v-slot:cell(fee)="data">
           <span>
             <span v-if="!data.item.editFee">
-              <money
-                v-model="data.item.fee"
-                class="p-0 border-0"
-                v-bind="{ prefix: ' $ ', precision: 2 }"
-                style="width: 70px !important; opacity: 1"
-                disabled
-              />
+              $ {{parseFloat(data.item.fee).toFixed(2)}}
             </span>
             <span v-else>
               <money
@@ -309,11 +306,11 @@
             </span>
 
             <div
-              class="mt-07"
               v-if="
                 (data.item.status === 1 || data.item.status === 3) &&
-                (G_IS_CEO || G_IS_SUPERVISOR)
+                  (G_IS_CEO || G_IS_SUPERVISOR)
               "
+              class="mt-07 text-right mr-1"
             >
               <b-icon
                 v-if="!data.item.editFee"
@@ -365,8 +362,8 @@
           <div
             :class="
               (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
-              G_IS_CEO ||
-              G_IS_SUPERVISOR
+                G_IS_CEO ||
+                G_IS_SUPERVISOR
                 ? 'cursor-pointer'
                 : ''
             "
@@ -409,8 +406,8 @@
             <b-icon
               v-if="
                 data.item.contract_fee_status == 0 ||
-                (data.item.contract_fee_status == 1 &&
-                  data.item.initial_payment_status == 3)
+                  (data.item.contract_fee_status == 1 &&
+                    data.item.initial_payment_status == 3)
               "
               class="cursor-pointer font-medium-2"
               icon="file-text"
@@ -429,7 +426,7 @@
             <b-icon
               v-if="
                 data.item.contract_fee_status == 1 &&
-                data.item.initial_payment_status == 2
+                  data.item.initial_payment_status == 2
               "
               variant="success"
               icon="file-text"
@@ -472,8 +469,8 @@
               data.item.notes_status_new == null
                 ? 'muted'
                 : data.item.notes_status_new == 0
-                ? 'success'
-                : 'warning'
+                  ? 'success'
+                  : 'warning'
             "
             @click="notesModal(data.item, data.index)"
           />
@@ -503,15 +500,15 @@
           <feather-icon
             :class="
               (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
-              G_IS_CEO ||
-              G_IS_SUPERVISOR
+                G_IS_CEO ||
+                G_IS_SUPERVISOR
                 ? 'cursor-pointer text-warning'
                 : ''
             "
             :style="
               (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
-              G_IS_CEO ||
-              G_IS_SUPERVISOR
+                G_IS_CEO ||
+                G_IS_SUPERVISOR
                 ? 'fill: #ff9f43'
                 : 'fill: #D8D8D6'
             "
@@ -554,98 +551,92 @@
             <b-button
               v-if="
                 (data.item.status == 1 || data.item.status == 7) &&
-                !G_IS_CEO &&
-                !G_IS_SUPERVISOR &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 &&
-                data.item.initial_payment_status == 2
+                  !G_IS_CEO &&
+                  !G_IS_SUPERVISOR &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
               "
               variant="outline-success"
               class="m-10px"
               size="sm"
               @click="revisionSale(5, data.item, data.index)"
-              >Revission</b-button
-            >
+            >Revission</b-button>
 
             <!-- Revission to Administration for Supervisor or Ceo -->
             <b-button
               v-if="
                 (data.item.status == 1 || data.item.status == 6) &&
-                (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 &&
-                data.item.initial_payment_status == 2
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
               "
               variant="outline-success"
               :disabled="
                 data.item.type == 1 && G_IS_CEO
                   ? false
                   : data.item.type == 0
-                  ? false
-                  : true
+                    ? false
+                    : true
               "
               class="m-10px"
               size="sm"
               @click="revisionSale(2, data.item, data.index)"
-              >Revission</b-button
-            >
+            >Revission</b-button>
 
             <!-- IN SUPERVISOR REVISSION  -->
             <b-button
               v-if="
                 data.item.status == 5 &&
-                (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 &&
-                data.item.initial_payment_status == 2
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
               "
               variant="outline-success"
               class="m-10px"
               size="sm"
               @click="revisionSale(2, data.item, data.index)"
-              >Revission</b-button
-            >
+            >Revission</b-button>
             <b-button
               v-if="
                 data.item.status == 5 &&
-                (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 &&
-                data.item.initial_payment_status == 2
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
               "
               variant="outline-warning"
               class="m-10px"
               size="sm"
               @click="revisionSale(7, data.item, data.index)"
-              >Return</b-button
-            >
+            >Return</b-button>
             <b-button
               v-if="
                 data.item.status == 3 &&
-                (currentUser.user_id == data.item.user_id ||
-                  G_IS_CEO ||
-                  G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 &&
-                data.item.initial_payment_status == 2
+                  (currentUser.user_id == data.item.user_id ||
+                    G_IS_CEO ||
+                    G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
               "
               variant="outline-danger"
               class="m-10px"
               size="sm"
               @click="revisionSale(2, data.item, data.index)"
-              >Revission</b-button
-            >
+            >Revission</b-button>
             <b-button
               v-if="
                 data.item.initial_payment_status == 1 &&
-                (G_IS_CEO || G_IS_SUPERVISOR)
+                  (G_IS_CEO || G_IS_SUPERVISOR)
               "
               variant="outline-danger"
               class="m-10px"
               size="sm"
               @click="annulSale(data.item)"
-              >Annul</b-button
-            >
+            >Annul</b-button>
           </b-row>
 
           <b-row
@@ -659,11 +650,11 @@
             <b-button
               v-if="
                 (data.item.status == 1 || data.item.status == 7) &&
-                !G_IS_CEO &&
-                !G_IS_SUPERVISOR &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status == 1 &&
-                data.item.initial_payment_status == 2
+                  !G_IS_CEO &&
+                  !G_IS_SUPERVISOR &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
               "
               variant="outline-success"
               class="m-10px"
@@ -671,13 +662,15 @@
               @click="revisionSale(5, data.item, data.index)"
               >Revission</b-button
             >
+
+            <!-- Revission to Administration for Supervisor or Ceo -->
             <b-button
               v-if="
                 (data.item.status == 1 || data.item.status == 6) &&
-                (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status == 1 &&
-                data.item.initial_payment_status == 2
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
               "
               class="m-10px"
               variant="outline-success"
@@ -685,20 +678,22 @@
                 data.item.type == 1 && G_IS_CEO
                   ? false
                   : data.item.type == 0
-                  ? false
-                  : true
+                    ? false
+                    : true
               "
               size="sm"
               @click="revisionSale(2, data.item, data.index)"
               >Revission</b-button
             >
+
+            <!-- IN SUPERVISOR REVISSION  -->
             <b-button
               v-if="
                 data.item.status == 5 &&
-                (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status == 1 &&
-                data.item.initial_payment_status == 2
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
               "
               class="m-10px"
               variant="outline-success"
@@ -709,10 +704,10 @@
             <b-button
               v-if="
                 data.item.status == 5 &&
-                (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 &&
-                data.item.initial_payment_status == 2
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
               "
               class="m-10px"
               variant="outline-danger"
@@ -723,12 +718,12 @@
             <b-button
               v-if="
                 data.item.status == 3 &&
-                (currentUser.user_id == data.item.user_id ||
-                  G_IS_CEO ||
-                  G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 &&
-                data.item.notes_status == 1 &&
-                data.item.initial_payment_status == 2
+                  (currentUser.user_id == data.item.user_id ||
+                    G_IS_CEO ||
+                    G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
               "
               class="m-10px"
               variant="outline-danger"
@@ -739,7 +734,7 @@
             <b-button
               v-if="
                 data.item.initial_payment_status == 1 &&
-                (G_IS_CEO || G_IS_SUPERVISOR)
+                  (G_IS_CEO || G_IS_SUPERVISOR)
               "
               variant="outline-danger"
               size="sm"
@@ -779,9 +774,9 @@
             <b-dropdown-item
               v-if="
                 data.item.initial_payment_status === 1 &&
-                (data.item.user_id == currentUser.user_id ||
-                  G_IS_CEO ||
-                  G_IS_SUPERVISOR)
+                  (data.item.user_id == currentUser.user_id ||
+                    G_IS_CEO ||
+                    G_IS_SUPERVISOR)
               "
               @click="openUrlModal(data.item)"
             >
@@ -801,29 +796,114 @@
         <template #custom-foot>
           <b-tr class="bg-info">
             <b-td colspan="2" />
-            <b-td colspan="2" class="text-center text-white font-weight-bolder py-px">TCMC</b-td>
-            <b-td colspan="2" class="text-center text-white font-weight-bolder py-px">TCMS</b-td>
-            <b-td colspan="3" class="text-center text-white font-weight-bolder py-px">TFEE</b-td>
-            <b-td colspan="3" class="text-center text-white font-weight-bolder py-px">TIP</b-td>
-            <b-td colspan="2" class="text-center text-white font-weight-bolder py-px">TMA</b-td>
+            <b-td
+              colspan="2"
+              class="text-center text-white font-weight-bolder py-px"
+            >
+              TCMC
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center text-white font-weight-bolder py-px"
+            >
+              TCMS
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center text-white font-weight-bolder py-px"
+            >
+              TFEE
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center text-white font-weight-bolder py-px"
+            >
+              TIP
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center text-white font-weight-bolder py-px"
+            >
+              TMA
+            </b-td>
             <b-td :colspan="done === 0 ? 3 : 2" />
           </b-tr>
           <b-tr>
-            <b-td colspan="2" class="text-right font-weight-bolder py-px">Subtotal</b-td>
-            <b-td colspan="2" class="text-center py-px">{{ '$ ' + subtotal.tcmc }}</b-td>
-            <b-td colspan="2" class="text-center py-px">{{ '$ ' + subtotal.tcms }}</b-td>
-            <b-td colspan="3" class="text-center py-px">{{ '$ ' + subtotal.tfee }}</b-td>
-            <b-td colspan="3" class="text-center py-px">{{ '$ ' + subtotal.tip }}</b-td>
-            <b-td colspan="2" class="text-center py-px">{{ '$ ' + subtotal.tma }}</b-td>
+            <b-td
+              colspan="2"
+              class="text-right font-weight-bolder py-px"
+            >
+              Subtotal
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center py-px"
+            >
+              {{ '$ ' + subtotal.tcmc }}
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center py-px"
+            >
+              {{ '$ ' + subtotal.tcms }}
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center py-px"
+            >
+              {{ '$ ' + subtotal.tfee }}
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center py-px"
+            >
+              {{ '$ ' + subtotal.tip }}
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center py-px"
+            >
+              {{ '$ ' + subtotal.tma }}
+            </b-td>
             <b-td :colspan="done === 0 ? 3 : 2" />
           </b-tr>
           <b-tr>
-            <b-td colspan="2" class="text-right font-weight-bolder py-px">Total</b-td>
-            <b-td colspan="2" class="text-center py-px">{{ '$ ' + total.tcmc }}</b-td>
-            <b-td colspan="2" class="text-center py-px">{{ '$ ' + total.tcms }}</b-td>
-            <b-td colspan="3" class="text-center py-px">{{ '$ ' + total.tfee }}</b-td>
-            <b-td colspan="3" class="text-center py-px">{{ '$ ' + total.tip }}</b-td>
-            <b-td colspan="2" class="text-center py-px">{{ '$ ' + total.tma }}</b-td>
+            <b-td
+              colspan="2"
+              class="text-right font-weight-bolder py-px"
+            >
+              Total
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center py-px"
+            >
+              {{ '$ ' + total.tcmc }}
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center py-px"
+            >
+              {{ '$ ' + total.tcms }}
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center py-px"
+            >
+              {{ '$ ' + total.tfee }}
+            </b-td>
+            <b-td
+              colspan="3"
+              class="text-center py-px"
+            >
+              {{ '$ ' + total.tip }}
+            </b-td>
+            <b-td
+              colspan="2"
+              class="text-center py-px"
+            >
+              {{ '$ ' + total.tma }}
+            </b-td>
             <b-td :colspan="done === 0 ? 3 : 2" />
           </b-tr>
         </template>
@@ -853,7 +933,10 @@
       :name-leads="modalData.sendSms.name_leads_arr"
       @hide="modalSmsClose"
     />
-    <tracking-modal :modal="modal" :tracking="modalData.tracking" />
+    <tracking-modal
+      :modal="modal"
+      :tracking="modalData.tracking"
+    />
     <component
       :is="modalData.programs.programSelected"
       v-if="modal.programs"
@@ -901,7 +984,11 @@
       @hide="closeModalNotes"
     />
 
-    <url-modal v-if="modal.url" :modal="modal" :url="modalData.url" />
+    <url-modal
+      v-if="modal.url"
+      :modal="modal"
+      :url="modalData.url"
+    />
     <contract-fee-modal
       v-if="modal.contract_fee"
       :modal="modal"
@@ -922,43 +1009,43 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex'
 
-import vSelect from "vue-select";
-import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
-import dataFields from "@/views/crm/views/sales-made/components/new-client/fields.data";
-import dataFilters from "@/views/crm/views/sales-made/components/new-client/filters.data";
-import CrmService from "@/views/crm/services/crm.service";
-import TrackingModal from "@/views/crm/views/sales-made/components/modals/TrackingModal.vue";
-import InitialPaymentModal from "@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue";
-import TrackingCapturedByModal from "@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue";
-import FilesModal from "@/views/crm/views/sales-made/components/modals/FilesModal.vue";
-import BusinessModal from "@/views/crm/views/sales-made/components/modals/services/BuisnessModal.vue";
-import CreditExpertsModal from "@/views/crm/views/sales-made/components/modals/services/CreditExpertsModal.vue";
-import BoostCreditModal from "@/views/crm/views/sales-made/components/modals/services/BoostCreditModal.vue";
-import GeneralSupportModal from "@/views/crm/views/sales-made/components/modals/services/GeneralSupportModal.vue";
-import KeyBookModal from "@/views/crm/views/sales-made/components/modals/services/KeyBookModal.vue";
-import ParagonModal from "@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue";
-import SpecialistModal from "@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue";
-import TaxResearchModal from "@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue";
-import DebtSolutionModal from "@/views/crm/views/sales-made/components/modals/services/DebtSolutionModal.vue";
-import RevissionModal from "@/views/crm/views/sales-made/components/modals/RevissionModal.vue";
-import UrlModal from "@/views/crm/views/sales-made/components/modals/UrlModal.vue";
-import { amgApi } from "@/service/axios";
-import ContractFeeModal from "@/views/crm/views/sales-made/components/modals/ContractFeeModal.vue";
-import ModalNotesTax from "@/views/commons/components/first-notes/ModalNotesTax.vue";
-import ModalNotesFirst from "@/views/commons/components/first-notes/ModalNotesFirst.vue";
-import ModalNotesBoost from "@/views/commons/components/first-notes/ModalNotesBoost.vue";
-import ModalNotesParagon from "@/views/commons/components/first-notes/ModalNotesParagon.vue";
-import ModalHistorySms from "@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue";
-import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
-import ModalNotesCredit from "@/views/commons/components/first-notes/ModalNotasCredit.vue";
-import ModalNotesAll from "@/views/commons/components/first-notes/ModalNotesAll.vue";
-import ModalNotesSpecialist from "@/views/commons/components/first-notes/ModalNotesSpecialist.vue";
-import ApproveSupervisorModal from "@/views/crm/views/sales-made/components/modals/ApproveSupervisorModal.vue";
+import vSelect from 'vue-select'
+import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
+import dataFields from '@/views/crm/views/sales-made/components/new-client/fields.data'
+import dataFilters from '@/views/crm/views/sales-made/components/new-client/filters.data'
+import CrmService from '@/views/crm/services/crm.service'
+import TrackingModal from '@/views/crm/views/sales-made/components/modals/TrackingModal.vue'
+import InitialPaymentModal from '@/views/crm/views/sales-made/components/modals/InitialPaymentModal.vue'
+import TrackingCapturedByModal from '@/views/crm/views/sales-made/components/modals/TrackingCapturedByModal.vue'
+import FilesModal from '@/views/crm/views/sales-made/components/modals/FilesModal.vue'
+import BusinessModal from '@/views/crm/views/sales-made/components/modals/services/BuisnessModal.vue'
+import CreditExpertsModal from '@/views/crm/views/sales-made/components/modals/services/CreditExpertsModal.vue'
+import BoostCreditModal from '@/views/crm/views/sales-made/components/modals/services/BoostCreditModal.vue'
+import GeneralSupportModal from '@/views/crm/views/sales-made/components/modals/services/GeneralSupportModal.vue'
+import KeyBookModal from '@/views/crm/views/sales-made/components/modals/services/KeyBookModal.vue'
+import ParagonModal from '@/views/crm/views/sales-made/components/modals/services/ParagonModal.vue'
+import SpecialistModal from '@/views/crm/views/sales-made/components/modals/services/SpecialistModal.vue'
+import TaxResearchModal from '@/views/crm/views/sales-made/components/modals/services/TaxResearchModal.vue'
+import DebtSolutionModal from '@/views/crm/views/sales-made/components/modals/services/DebtSolutionModal.vue'
+import RevissionModal from '@/views/crm/views/sales-made/components/modals/RevissionModal.vue'
+import UrlModal from '@/views/crm/views/sales-made/components/modals/UrlModal.vue'
+import { amgApi } from '@/service/axios'
+import ContractFeeModal from '@/views/crm/views/sales-made/components/modals/ContractFeeModal.vue'
+import ModalNotesTax from '@/views/commons/components/first-notes/ModalNotesTax.vue'
+import ModalNotesFirst from '@/views/commons/components/first-notes/ModalNotesFirst.vue'
+import ModalNotesBoost from '@/views/commons/components/first-notes/ModalNotesBoost.vue'
+import ModalNotesParagon from '@/views/commons/components/first-notes/ModalNotesParagon.vue'
+import ModalHistorySms from '@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue'
+import ModalSendSms from '@/views/crm/views/Lead/lead-sms/ModalSendSms.vue'
+import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasCredit.vue'
+import ModalNotesAll from '@/views/commons/components/first-notes/ModalNotesAll.vue'
+import ModalNotesSpecialist from '@/views/commons/components/first-notes/ModalNotesSpecialist.vue'
+import ApproveSupervisorModal from '@/views/crm/views/sales-made/components/modals/ApproveSupervisorModal.vue'
 
 export default {
-  name: "SalesMadeNewComponent",
+  name: 'SalesMadeNewComponent',
   components: {
     ModalSendSms,
     ModalHistorySms,
@@ -1003,10 +1090,10 @@ export default {
       fields: dataFields,
       totalRows: 0,
       filterPrincipal: {
-        type: "input",
-        inputType: "text",
-        placeholder: "Client...",
-        model: "",
+        type: 'input',
+        inputType: 'text',
+        placeholder: 'Client...',
+        model: '',
       },
       paginate: {
         currentPage: 1,
@@ -1032,7 +1119,7 @@ export default {
       modalData: {
         historySms: {
           id: null,
-          leadName: "",
+          leadName: '',
         },
         sendSms: {
           leads_sms: [],
@@ -1041,14 +1128,14 @@ export default {
           name_leads_arr: [],
         },
         url: {
-          client: "",
-          program: "",
+          client: '',
+          program: '',
           amount: 0.0,
         },
         tracking: {
-          program: "",
-          client: "",
-          tabla: "",
+          program: '',
+          client: '',
+          tabla: '',
         },
         initial_payment: {
           payments: null,
@@ -1068,26 +1155,26 @@ export default {
           role_id: null,
         },
         capturedByTracking: {
-          program: "",
-          client: "",
+          program: '',
+          client: '',
           id: 0,
         },
         files: {
           id: null,
-          program: "",
-          client: "",
+          program: '',
+          client: '',
           sale_id: null,
           valorEdit: false,
         },
         programs: {
-          programSelected: "",
+          programSelected: '',
           typeModal: 0,
           salesClient: {},
         },
         revission: {},
         contractFee: {
-          programName: "",
-          clientName: "",
+          programName: '',
+          clientName: '',
           saleId: null,
           id: null,
           initialPaymentStatus: null,
@@ -1096,7 +1183,7 @@ export default {
           st: null,
         },
         notes: {
-          programSelected: "",
+          programSelected: '',
           roleId: null,
           notesProgram: null,
           nameProgram: null,
@@ -1121,39 +1208,39 @@ export default {
         approveSupervisorModal: {
           modul: 2,
           typeApprove: 1,
-          eventId: "",
+          eventId: '',
         },
       },
       selectAll: false,
       selectedIndex: null,
       newRowFromSelectedIndex: null,
-    };
+    }
   },
   computed: {
     ...mapState({
-      sellers: (state) => state["crm-store"].sellersCrm,
-      captured: (state) => state["crm-store"].capturedCrm,
+      sellers: state => state['crm-store'].sellersCrm,
+      captured: state => state['crm-store'].capturedCrm,
       // TODO HACERLO GLOBAL
-      programs: (state) => state["crm-store"].programs,
-      sources: (state) => state["crm-store"].sources,
-      sts: (state) => state["crm-store"].states,
-      stip: (state) => state["crm-store"].statusip,
-      status: (state) => state["crm-store"].statusNewClient,
-      statusFilter: (state) => state["crm-store"].statusFilter,
+      programs: state => state['crm-store'].programs,
+      sources: state => state['crm-store'].sources,
+      sts: state => state['crm-store'].states,
+      stip: state => state['crm-store'].statusip,
+      status: state => state['crm-store'].statusNewClient,
+      statusFilter: state => state['crm-store'].statusFilter,
     }),
     ...mapGetters({
-      currentUser: "auth/currentUser",
-      G_IS_SUPERVISOR: "auth/isSupervisor",
-      G_IS_SELLER: "auth/isSeller",
-      G_IS_CEO: "auth/isCeo",
-      G_MODULE_ID: "auth/moduleId",
-      G_USER_ROLE: "auth/userRole",
-      G_USER_SESSION: "auth/userSession",
-      G_ROLE_ID: "auth/roleId",
+      currentUser: 'auth/currentUser',
+      G_IS_SUPERVISOR: 'auth/isSupervisor',
+      G_IS_SELLER: 'auth/isSeller',
+      G_IS_CEO: 'auth/isCeo',
+      G_MODULE_ID: 'auth/moduleId',
+      G_USER_ROLE: 'auth/userRole',
+      G_USER_SESSION: 'auth/userSession',
+      G_ROLE_ID: 'auth/roleId',
     }),
     filteredFields() {
-      if (this.done === 0) return this.fields;
-      return this.fields.filter((field) => field.key !== "done");
+      if (this.done === 0) return this.fields
+      return this.fields.filter(field => field.key !== 'done')
     },
     total() {
       if (this.items[0]) {
@@ -1163,15 +1250,15 @@ export default {
           tfee: this.items[0].tfee,
           tip: this.items[0].tip,
           tma: this.items[0].tma,
-        };
+        }
       }
       return {
-        tcmc: "0.00",
-        tcms: "0.00",
-        tfee: "0.00",
-        tip: "0.00",
-        tma: "0.00",
-      };
+        tcmc: '0.00',
+        tcms: '0.00',
+        tfee: '0.00',
+        tip: '0.00',
+        tma: '0.00',
+      }
     },
     subtotal() {
       if (this.items.length > 0) {
@@ -1180,206 +1267,204 @@ export default {
             .reduce((previous, current) => {
               const currentComissionCapturedAmount = current.commission
                 ? parseFloat(current.commission[0].commission)
-                : 0.0;
-              if (typeof previous === "object") {
+                : 0.0
+              if (typeof previous === 'object') {
                 const previousComissionCapturedAmount = previous.commission
                   ? parseFloat(previous.commission[0].commission)
-                  : 0.0;
+                  : 0.0
                 return (
-                  currentComissionCapturedAmount +
-                  previousComissionCapturedAmount
-                );
+                  currentComissionCapturedAmount
+                  + previousComissionCapturedAmount
+                )
               }
-              return currentComissionCapturedAmount + previous;
+              return currentComissionCapturedAmount + previous
             })
             .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
           tcms: this.items
             .reduce((previous, current) => {
               const currentComissionSellerAmount = current.commission
                 ? parseFloat(current.commission[1].commission)
-                : 0.0;
-              if (typeof previous === "object") {
+                : 0.0
+              if (typeof previous === 'object') {
                 const previousComissionSellerAmount = previous.commission
                   ? parseFloat(previous.commission[1].commission)
-                  : 0.0;
+                  : 0.0
                 return (
                   currentComissionSellerAmount + previousComissionSellerAmount
-                );
+                )
               }
-              return currentComissionSellerAmount + previous;
+              return currentComissionSellerAmount + previous
             })
             .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
           tfee: this.items
             .reduce((previous, current) => {
               const currentFeeAmount = current.fee
                 ? parseFloat(current.fee)
-                : 0.0;
-              if (typeof previous === "object") {
+                : 0.0
+              if (typeof previous === 'object') {
                 const previousFeeAmount = previous.fee
                   ? parseFloat(previous.fee)
-                  : 0.0;
-                return currentFeeAmount + previousFeeAmount;
+                  : 0.0
+                return currentFeeAmount + previousFeeAmount
               }
-              return currentFeeAmount + previous;
+              return currentFeeAmount + previous
             })
             .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
           tip: this.items
             .reduce((previous, current) => {
-              const currentInitialAmount =
-                current.initial_amount !== "0.00"
-                  ? parseFloat(current.initial_amount.replaceAll(",", ""))
-                  : 0.0;
-              if (typeof previous === "object") {
-                const previousInitialAmount =
-                  previous.initial_amount !== "0.00"
-                    ? parseFloat(previous.initial_amount.replaceAll(",", ""))
-                    : 0.0;
-                return currentInitialAmount + previousInitialAmount;
+              const currentInitialAmount = current.initial_amount !== '0.00'
+                ? parseFloat(current.initial_amount.replaceAll(',', ''))
+                : 0.0
+              if (typeof previous === 'object') {
+                const previousInitialAmount = previous.initial_amount !== '0.00'
+                  ? parseFloat(previous.initial_amount.replaceAll(',', ''))
+                  : 0.0
+                return currentInitialAmount + previousInitialAmount
               }
-              return currentInitialAmount + previous;
+              return currentInitialAmount + previous
             })
             .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
           tma: this.items
             .reduce((previous, current) => {
               const currentMonthlyAmount = current.monthly_amount
-                ? parseFloat(current.monthly_amount.replaceAll(",", ""))
-                : 0.0;
-              if (typeof previous === "object") {
+                ? parseFloat(current.monthly_amount.replaceAll(',', ''))
+                : 0.0
+              if (typeof previous === 'object') {
                 const previousMonthlyAmount = previous.monthly_amount
-                  ? parseFloat(previous.monthly_amount.replaceAll(",", ""))
-                  : 0.0;
-                return currentMonthlyAmount + previousMonthlyAmount;
+                  ? parseFloat(previous.monthly_amount.replaceAll(',', ''))
+                  : 0.0
+                return currentMonthlyAmount + previousMonthlyAmount
               }
-              return currentMonthlyAmount + previous;
+              return currentMonthlyAmount + previous
             })
             .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-        };
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+        }
       }
       return {
-        tcmc: "0.00",
-        tcms: "0.00",
-        tfee: "0.00",
-        tip: "0.00",
-        tma: "0.00",
-      };
+        tcmc: '0.00',
+        tcms: '0.00',
+        tfee: '0.00',
+        tip: '0.00',
+        tma: '0.00',
+      }
     },
   },
   async created() {
     try {
       await Promise.all([
-        this.$store.dispatch("crm-store/getSellers", {
+        this.$store.dispatch('crm-store/getSellers', {
           module: 2,
           body: {
-            roles: "[1,5,2,3]",
-            type: "1",
+            roles: '[1,5,2,3]',
+            type: '1',
           },
         }),
-        this.$store.dispatch("crm-store/getCaptured", {
+        this.$store.dispatch('crm-store/getCaptured', {
           module: 2,
           body: {
-            roles: "[]",
-            type: "1",
+            roles: '[]',
+            type: '1',
           },
         }),
-        this.$store.dispatch("crm-store/getPrograms"),
-        this.$store.dispatch("crm-store/getSources"),
-        this.$store.dispatch("crm-store/getStates"),
-      ]);
-      this.filter[2].options = this.captured;
-      this.filter[3].options = this.sellers;
-      this.filter[4].options = this.sources;
-      this.filter[5].options = this.statusFilter;
-      this.filter[6].options = this.programs;
-      this.filter[7].options = this.stip;
-      this.filter[8].options = this.sts;
+        this.$store.dispatch('crm-store/getPrograms'),
+        this.$store.dispatch('crm-store/getSources'),
+        this.$store.dispatch('crm-store/getStates'),
+      ])
+      this.filter[2].options = this.captured
+      this.filter[3].options = this.sellers
+      this.filter[4].options = this.sources
+      this.filter[5].options = this.statusFilter
+      this.filter[6].options = this.programs
+      this.filter[7].options = this.stip
+      this.filter[8].options = this.sts
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
 
-    this.addPaddingTd();
+    this.addPaddingTd()
   },
   methods: {
     async hideInitialPaymentModal(val) {
-      this.modal.initial_payment = false;
+      this.modal.initial_payment = false
       if (val) {
-        await this.updateRow();
+        await this.updateRow()
       }
     },
     closeModalApprove() {
-      this.modal.approveSupervisorModal = false;
+      this.modal.approveSupervisorModal = false
     },
     async returnDone(eventId, sendSupervisor) {
       this.modalData.approveSupervisorModal.eventId = Array.isArray(eventId)
         ? eventId[0]
-        : eventId;
+        : eventId
       if (this.G_IS_SELLER && sendSupervisor === null) {
-        this.modal.approveSupervisorModal = true;
+        this.modal.approveSupervisorModal = true
       } else {
         const result = await this.showConfirmSwal(
-          "Are you sure?",
-          "Are you sure set done this sale"
-        );
+          'Are you sure?',
+          'Are you sure set done this sale',
+        )
         if (result.value) {
           try {
-            const response = await amgApi.post("/sale/update-sales-set-done", {
+            const response = await amgApi.post('/sale/update-sales-set-done', {
               eventId: this.modalData.approveSupervisorModal.eventId,
-            });
+            })
             if (response.status === 200) {
-              this.$refs["new-client-done-table"].refresh();
+              this.$refs['new-client-done-table'].refresh()
             }
           } catch (error) {
-            this.showErrorSwal(error);
+            this.showErrorSwal(error)
           }
         }
       }
     },
     modalSmsOpen(item) {
-      this.modalData.sendSms.leads_sms = [];
-      this.modalData.sendSms.typesms = 1;
-      this.modalData.sendSms.leads_sms_o = [];
-      this.modalData.sendSms.leads_sms_o.push(item.lead_id);
+      this.modalData.sendSms.leads_sms = []
+      this.modalData.sendSms.typesms = 1
+      this.modalData.sendSms.leads_sms_o = []
+      this.modalData.sendSms.leads_sms_o.push(item.lead_id)
       this.modalData.sendSms.name_leads_arr = [
         { name: item.client, id: item.lead_id },
-      ];
-      this.modal.modalSms = true;
+      ]
+      this.modal.modalSms = true
     },
     modalSmssOpen() {
-      this.modalData.sendSms.typesms = 0;
-      this.modalData.sendSms.name_leads_arr = this.selected.map((el) => ({
+      this.modalData.sendSms.typesms = 0
+      this.modalData.sendSms.name_leads_arr = this.selected.map(el => ({
         name: el.client,
         id: el.lead_id,
-      }));
-      this.modalData.sendSms.leads_sms = this.selected.map((el) => el.lead_id);
-      this.modal.modalSms = true;
+      }))
+      this.modalData.sendSms.leads_sms = this.selected.map(el => el.lead_id)
+      this.modal.modalSms = true
     },
     modalSmsClose() {
-      this.modal.modalSms = false;
+      this.modal.modalSms = false
     },
     modalHistorySmsOpen(item) {
-      this.modalData.historySms.leadName = item.client;
-      this.modalData.historySms.id = item.lead_id;
-      this.$bvModal.show("modal-history-sms");
+      this.modalData.historySms.leadName = item.client
+      this.modalData.historySms.id = item.lead_id
+      this.$bvModal.show('modal-history-sms')
     },
     async search(ctx) {
       try {
-        let sortBy = 11;
-        let sortDirection = "desc";
-        if (ctx.sortBy === "client") {
-          sortBy = 0;
-          if (ctx.sortDesc) sortDirection = "desc";
-          else sortDirection = "asc";
-        } else if (ctx.sortBy === "creates") {
-          if (ctx.sortDesc) sortDirection = "desc";
-          else sortDirection = "asc";
-        } else if (ctx.sortBy === "approved") {
-          sortBy = 12;
-          if (ctx.sortDesc) sortDirection = "desc";
-          else sortDirection = "asc";
+        let sortBy = 11
+        let sortDirection = 'desc'
+        if (ctx.sortBy === 'client') {
+          sortBy = 0
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+        } else if (ctx.sortBy === 'creates') {
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
+        } else if (ctx.sortBy === 'approved') {
+          sortBy = 12
+          if (ctx.sortDesc) sortDirection = 'desc'
+          else sortDirection = 'asc'
         }
         const data = await CrmService.getSaleMade(
           {
@@ -1400,252 +1485,253 @@ export default {
             done: this.done,
             per_page: ctx.perPage,
           },
-          ctx.currentPage
-        );
-        this.startPage = data.from;
-        this.toPage = data.to;
-        if (this.totalRows !== data.total) this.totalRows = data.total;
-        const selectedIds = this.selected.map((s) => s.id);
-        let index = 0;
+          ctx.currentPage,
+        )
+        this.startPage = data.from
+        this.toPage = data.to
+        if (this.totalRows !== data.total) this.totalRows = data.total
+        const selectedIds = this.selected.map(s => s.id)
+        let index = 0
         while (selectedIds.length > 0 && index < data.data.length) {
           if (selectedIds.includes(data.data[index].id)) {
-            const { id } = data.data[index];
-            data.data[index].selected = true;
-            const deleted = selectedIds.findIndex((s) => s === id);
-            if (deleted !== -1) selectedIds.splice(deleted, 1);
+            const { id } = data.data[index]
+            data.data[index].selected = true
+            const deleted = selectedIds.findIndex(s => s === id)
+            if (deleted !== -1) selectedIds.splice(deleted, 1)
           }
-          index += 1;
+          index += 1
         }
-        this.items = data.data;
-        return this.items;
+        this.items = data.data
+        return this.items
       } catch (e) {
-        this.showToast("danger", "top-right", "Error", "XIcon", e);
-        return [];
+        this.showToast('danger', 'top-right', 'Error', 'XIcon', e)
+        return []
       }
     },
     openContractFeeModal(data, index) {
-      this.selectedIndex = index;
+      this.selectedIndex = index
       if (
-        data.user_id == this.currentUser.user_id ||
-        this.G_IS_CEO ||
-        this.G_IS_SUPERVISOR
+        data.user_id == this.currentUser.user_id
+        || this.G_IS_CEO
+        || this.G_IS_SUPERVISOR
       ) {
-        this.modalData.contractFee.editModal = true;
+        this.modalData.contractFee.editModal = true
       } else {
-        this.modalData.contractFee.editModal = false;
+        this.modalData.contractFee.editModal = false
       }
-      this.modalData.contractFee.statusSale = data.status;
-      this.modalData.contractFee.clientName = data.client;
-      this.modalData.contractFee.programName = data.program;
-      this.modalData.contractFee.id = data.lead_id;
-      this.modalData.contractFee.saleId = data.id;
-      this.modalData.contractFee.initialPaymentStatus =
-        data.initial_payment_status;
-      this.modal.contract_fee = true;
+      this.modalData.contractFee.statusSale = data.status
+      this.modalData.contractFee.clientName = data.client
+      this.modalData.contractFee.programName = data.program
+      this.modalData.contractFee.id = data.lead_id
+      this.modalData.contractFee.saleId = data.id
+      this.modalData.contractFee.initialPaymentStatus = data.initial_payment_status
+      this.modal.contract_fee = true
     },
 
     // Notes
     async notesModal(data, index) {
-      this.addPreloader();
-      this.modalData.notes.capturedName = data.captured;
-      this.modalData.notes.sellerName = data.seller;
-      this.modalData.notes.trackings = data.trackings;
-      this.modalData.notes.nameProgram = data.program;
-      this.modalData.notes.nameClient = data.client;
-      this.modalData.notes.statusSale = data.status;
-      this.modalData.notes.sourcesName = data.sourcesname;
-      this.modalData.notes.pack = data.pack;
-      this.modalData.notes.originCountry = data.origin_country;
-      this.modalData.notes.idLead = data.lead_id;
-      this.modalData.notes.created = data.creates;
-      this.modalData.notes.saleId = data.id;
-      this.modalData.notes.module = this.G_MODULE_ID;
-      this.modalData.notes.rolId = this.G_ROLE_ID;
-      this.modalData.notes.notes_status = data.notes_status;
-      this.modalData.notes.notes_status_new = data.notes_status_new;
-      this.modalData.notes.editModal =
-        this.G_IS_CEO ||
-        this.G_IS_SUPERVISOR ||
-        this.G_USER_SESSION == data.user_id;
-      this.modalData.notes.notSeller =
-        data.user_id != this.G_USER_SESSION && this.G_IS_SELLER;
+      this.addPreloader()
+      this.modalData.notes.capturedName = data.captured
+      this.modalData.notes.sellerName = data.seller
+      this.modalData.notes.trackings = data.trackings
+      this.modalData.notes.nameProgram = data.program
+      this.modalData.notes.nameClient = data.client
+      this.modalData.notes.statusSale = data.status
+      this.modalData.notes.sourcesName = data.sourcesname
+      this.modalData.notes.pack = data.pack
+      this.modalData.notes.originCountry = data.origin_country
+      this.modalData.notes.idLead = data.lead_id
+      this.modalData.notes.created = data.creates
+      this.modalData.notes.saleId = data.id
+      this.modalData.notes.module = this.G_MODULE_ID
+      this.modalData.notes.rolId = this.G_ROLE_ID
+      this.modalData.notes.notes_status = data.notes_status
+      this.modalData.notes.notes_status_new = data.notes_status_new
+      this.modalData.notes.editModal = this.G_IS_CEO
+        || this.G_IS_SUPERVISOR
+        || this.G_USER_SESSION == data.user_id
+      this.modalData.notes.notSeller = data.user_id != this.G_USER_SESSION && this.G_IS_SELLER
 
-      this.openModalNotes(data.creates, data.program_id, index);
+      this.openModalNotes(data.creates, data.program_id, index)
 
       /*  this.modalData.notes.notesProgram =
           this.modalData.notes.salesMades =
           this.modalData.notes.type = */
     },
     openModalNotes(created, program, index) {
-      this.selectedIndex = index;
+      this.selectedIndex = index
       switch (true) {
-        case created >= "2020-05-28" && program == 1:
-          this.modalData.notes.programSelected = "ModalNotesFirst"; // ready
-          break;
-        case created >= "2020-10-29" && program == 2:
-          this.modalData.notes.programSelected = "ModalNotesBoost"; // ready
-          break;
-        case created >= "2021-03-04" && program == 3:
-          this.modalData.notes.programSelected = "ModalNotesCredit"; // ready
-          break;
-        case created >= "2020-09-24" && program == 5:
-          this.modalData.notes.programSelected = "ModalNotesTax"; // ready
-          break;
-        case created >= "2020-10-23" && program == 7:
-          this.modalData.notes.programSelected = "ModalNotesSpecialist"; // ready
-          break;
+        case created >= '2020-05-28' && program == 1:
+          this.modalData.notes.programSelected = 'ModalNotesFirst' // ready
+          break
+        case created >= '2020-10-29' && program == 2:
+          this.modalData.notes.programSelected = 'ModalNotesBoost' // ready
+          break
+        case created >= '2021-03-04' && program == 3:
+          this.modalData.notes.programSelected = 'ModalNotesCredit' // ready
+          break
+        case created >= '2020-09-24' && program == 5:
+          this.modalData.notes.programSelected = 'ModalNotesTax' // ready
+          break
+        case created >= '2020-10-23' && program == 7:
+          this.modalData.notes.programSelected = 'ModalNotesSpecialist' // ready
+          break
         case program == 9:
-          this.modalData.notes.programSelected = "ModalNotesParagon"; // ready
-          break;
+          this.modalData.notes.programSelected = 'ModalNotesParagon' // ready
+          break
         default:
-          this.modalData.notes.programSelected = "ModalNotesAll"; // next
-          break;
+          this.modalData.notes.programSelected = 'ModalNotesAll' // next
+          break
       }
 
-      this.modal.notes = true;
+      this.modal.notes = true
     },
     async closeModalNotes(status) {
-      this.modal.notes = false;
+      this.modal.notes = false
       if (status) {
-        await this.updateRow();
-        this.removePreloader();
-        this.showSuccessSwal("OPERATION SUCCESSFULLY");
+        await this.updateRow()
+        this.removePreloader()
+        this.showSuccessSwal('OPERATION SUCCESSFULLY')
       }
     },
     openUrlModal(data) {
-      this.modalData.url.client = data.client;
-      this.modalData.url.program = data.program;
-      this.modalData.url.selectedLead = data;
-      this.modal.url = true;
+      this.modalData.url.client = data.client
+      this.modalData.url.program = data.program
+      this.modalData.url.selectedLead = data
+      this.modal.url = true
     },
     revisionSale(state, data, index) {
-      this.selectedIndex = index;
-      this.modalData.revission.nameProgram = data.program;
-      this.modalData.revission.idProgram = data.program_id;
-      this.modalData.revission.nameClient = data.client;
-      this.modalData.revission.type = state;
-      this.modalData.revission.idsales = data.id;
-      this.modalData.revission.initialPayment = data.initial_payment_status;
-      this.modalData.revission.account = data.account;
-      this.modalData.revission.leadId = data.lead_id;
-      this.modalData.revission.datevent = data.event_date;
-      this.modalData.revission.sellerName = data.seller;
-      this.modalData.revission.language = data.language;
-      this.modalData.revission.user_id = this.currentUser.user_id;
-      this.modalData.revission.last_name = data.last_name;
-      this.modal.revission = true;
+      this.selectedIndex = index
+      this.modalData.revission.nameProgram = data.program
+      this.modalData.revission.idProgram = data.program_id
+      this.modalData.revission.nameClient = data.client
+      this.modalData.revission.type = state
+      this.modalData.revission.idsales = data.id
+      this.modalData.revission.initialPayment = data.initial_payment_status
+      this.modalData.revission.account = data.account
+      this.modalData.revission.leadId = data.lead_id
+      this.modalData.revission.datevent = data.event_date
+      this.modalData.revission.sellerName = data.seller
+      this.modalData.revission.language = data.language
+      this.modalData.revission.user_id = this.currentUser.user_id
+      this.modalData.revission.last_name = data.last_name
+      this.modal.revission = true
     },
     async updateRow() {
       this.newRowFromSelectedIndex = await window.amgApi.post(
-        "/sales-made/get-sale-made-by-sale-id",
-        { saleId: this.items[this.selectedIndex].id }
-      );
-      Object.assign(
-        this.items[this.selectedIndex],
-        this.newRowFromSelectedIndex.data[0]
-      );
+        '/sales-made/get-sale-made-by-sale-id',
+        { saleId: this.items[this.selectedIndex].id },
+      )
+      const newRow = this.newRowFromSelectedIndex.data[0]
+      const keysNewRow = Object.keys(newRow)
+      const keysOldRow = Object.keys(this.items[this.selectedIndex])
+      keysNewRow.forEach((key) => {
+        if (keysOldRow.includes(key)) {
+          console.log(key)
+          this.$set(this.items[this.selectedIndex], key, newRow[key])
+        }
+      })
+      console.log(this.items[this.selectedIndex])
     },
     async hideModalProgram(refresh) {
       if (refresh) {
-        await this.updateRow();
+        await this.updateRow()
       }
-      this.modalData.programs.programSelected = "";
-      this.modal.programs = false;
-      this.$store.commit("app/SET_LOADING", false);
+      this.modalData.programs.programSelected = ''
+      this.modal.programs = false
+      this.$store.commit('app/SET_LOADING', false)
     },
     openTrackingModal(program, client, tabla) {
-      this.modalData.tracking.program = program;
-      this.modalData.tracking.client = client;
+      this.modalData.tracking.program = program
+      this.modalData.tracking.client = client
       if (tabla) {
-        this.modalData.tracking.tabla = JSON.parse(tabla);
-        this.modal.tracking = true;
+        this.modalData.tracking.tabla = JSON.parse(tabla)
+        this.modal.tracking = true
       }
     },
     openTrackingCapturedByModal(program, client, id, type) {
-      this.modalData.capturedByTracking.client = client;
-      this.modalData.capturedByTracking.program = program;
-      this.modalData.capturedByTracking.id = id;
-      this.modalData.capturedByTracking.type = type;
-      if (type === 1) this.modalData.capturedByTracking.tittle = "CAPTURED BY";
-      else if (type === 2) this.modalData.capturedByTracking.tittle = "SELLER";
-      else if (type === 3) this.modalData.capturedByTracking.tittle = "FEE";
-      this.modal.captuerd_by_tracking = true;
+      this.modalData.capturedByTracking.client = client
+      this.modalData.capturedByTracking.program = program
+      this.modalData.capturedByTracking.id = id
+      this.modalData.capturedByTracking.type = type
+      if (type === 1) this.modalData.capturedByTracking.tittle = 'CAPTURED BY'
+      else if (type === 2) this.modalData.capturedByTracking.tittle = 'SELLER'
+      else if (type === 3) this.modalData.capturedByTracking.tittle = 'FEE'
+      this.modal.captuerd_by_tracking = true
     },
     async openInitialPaymentModal(data, index) {
       try {
-        this.selectedIndex = index;
-        this.addPreloader();
-        this.modalData.initial_payment.programid = data.program_id;
-        this.modalData.initial_payment.sessionId = this.currentUser.user_id;
-        this.modalData.initial_payment.cfeestatus = data.contract_fee_status;
-        this.modalData.initial_payment.id_transaction = data.transaction_id;
-        this.modalData.initial_payment.editmodal =
-          data.user_id == this.currentUser.user_id ||
-          this.currentUser.role_id == 1 ||
-          this.currentUser.role_id == 2;
-        this.modalData.initial_payment.statusSale = data.status;
-        this.modalData.initial_payment.nameProgram = data.program;
-        this.modalData.initial_payment.nameClient = data.client;
-        this.modalData.initial_payment.valorInitalPaymetn =
-          data.initial_payment_status;
-        this.modalData.initial_payment.feeprops = data.fee;
-        const cards = await amgApi.post("/clients/search-cards-clients", {
+        this.selectedIndex = index
+        this.addPreloader()
+        this.modalData.initial_payment.programid = data.program_id
+        this.modalData.initial_payment.sessionId = this.currentUser.user_id
+        this.modalData.initial_payment.cfeestatus = data.contract_fee_status
+        this.modalData.initial_payment.id_transaction = data.transaction_id
+        this.modalData.initial_payment.editmodal = data.user_id == this.currentUser.user_id
+          || this.currentUser.role_id == 1
+          || this.currentUser.role_id == 2
+        this.modalData.initial_payment.statusSale = data.status
+        this.modalData.initial_payment.nameProgram = data.program
+        this.modalData.initial_payment.nameClient = data.client
+        this.modalData.initial_payment.valorInitalPaymetn = data.initial_payment_status
+        this.modalData.initial_payment.feeprops = data.fee
+        const cards = await amgApi.post('/clients/search-cards-clients', {
           id: data.lead_id,
-        });
+        })
         if (cards.status === 200) {
-          this.modalData.initial_payment.allcards = cards.data;
+          this.modalData.initial_payment.allcards = cards.data
         }
         const response = await amgApi.post(
-          "/sales-made/get-payments-sales-made",
-          { id: data.id }
-        );
+          '/sales-made/get-payments-sales-made',
+          { id: data.id },
+        )
         if (response.status === 200) {
-          [this.modalData.initial_payment.payments] = response.data;
+          [this.modalData.initial_payment.payments] = response.data
         }
-        this.modalData.initial_payment.modul = 2;
-        this.modalData.initial_payment.role_id = this.currentUser.role_id;
-        this.modal.initial_payment = true;
+        this.modalData.initial_payment.modul = 2
+        this.modalData.initial_payment.role_id = this.currentUser.role_id
+        this.modal.initial_payment = true
       } catch (error) {
-        this.showErrorSwal();
+        this.showErrorSwal()
       }
     },
     openModalProgram(data, index) {
-      this.selectedIndex = index;
+      this.selectedIndex = index
       switch (data.program_id) {
         case 1:
-          this.modalData.programs.programSelected = "business-modal";
-          break;
+          this.modalData.programs.programSelected = 'business-modal'
+          break
         case 2:
-          this.modalData.programs.programSelected = "boost-credit-modal";
-          break;
+          this.modalData.programs.programSelected = 'boost-credit-modal'
+          break
         case 3:
-          this.modalData.programs.programSelected = "credit-experts-modal";
-          break;
+          this.modalData.programs.programSelected = 'credit-experts-modal'
+          break
         case 4:
-          this.modalData.programs.programSelected = "debt-solution-modal";
-          break;
+          this.modalData.programs.programSelected = 'debt-solution-modal'
+          break
         case 5:
-          this.modalData.programs.programSelected = "tax-research-modal";
-          break;
+          this.modalData.programs.programSelected = 'tax-research-modal'
+          break
         case 6:
-          this.modalData.programs.programSelected = "general-support-modal";
-          break;
+          this.modalData.programs.programSelected = 'general-support-modal'
+          break
         case 7:
-          this.modalData.programs.programSelected = "specialist-modal";
-          break;
+          this.modalData.programs.programSelected = 'specialist-modal'
+          break
         case 8:
-          this.modalData.programs.programSelected = "key-book-modal";
-          break;
+          this.modalData.programs.programSelected = 'key-book-modal'
+          break
         case 9:
-          this.modalData.programs.programSelected = "paragon-modal";
-          break;
+          this.modalData.programs.programSelected = 'paragon-modal'
+          break
         default:
-          break;
+          break
       }
-      if (this.modalData.programs.programSelected !== "") {
-        this.modalData.programs.typeModal = data.haveRates == 1 ? 2 : 1;
-        this.modalData.programs.salesClient = data;
-        this.modal.programs = true;
+      if (this.modalData.programs.programSelected !== '') {
+        this.modalData.programs.typeModal = data.haveRates == 1 ? 2 : 1
+        this.modalData.programs.salesClient = data
+        this.modal.programs = true
       }
     },
     openFilesModal(
@@ -1656,193 +1742,191 @@ export default {
       status,
       sellerId,
       programId,
-      eventDate
+      eventDate,
     ) {
-      this.modalData.files.id = id;
-      this.modalData.files.program = program;
-      this.modalData.files.client = client;
-      this.modalData.files.sale_id = saleId;
-      this.modalData.files.programId = programId;
-      this.modalData.files.event_date = eventDate;
-      const isCeoOrSupervisor =
-        this.currentUser.role_id == "1" || this.currentUser.role_id == "2";
-      const statusNotInRevisionOrApproved = !(status == "4" || status == "2");
+      this.modalData.files.id = id
+      this.modalData.files.program = program
+      this.modalData.files.client = client
+      this.modalData.files.sale_id = saleId
+      this.modalData.files.programId = programId
+      this.modalData.files.event_date = eventDate
+      const isCeoOrSupervisor = this.currentUser.role_id == '1' || this.currentUser.role_id == '2'
+      const statusNotInRevisionOrApproved = !(status == '4' || status == '2')
       if (
-        (this.currentUser.user_id == sellerId || isCeoOrSupervisor) &&
-        statusNotInRevisionOrApproved
+        (this.currentUser.user_id == sellerId || isCeoOrSupervisor)
+        && statusNotInRevisionOrApproved
       ) {
-        this.modalData.files.valorEdit = true;
+        this.modalData.files.valorEdit = true
       }
-      this.modal.files = true;
+      this.modal.files = true
     },
     selectedRow(data) {
-      const index = this.selected.findIndex((select) => select.id === data.id);
-      if (data.selected === true && index === -1) this.selected.push(data);
-      else if (data.selected === false && index !== -1)
-        this.selected.splice(index, 1);
+      const index = this.selected.findIndex(select => select.id === data.id)
+      if (data.selected === true && index === -1) this.selected.push(data)
+      else if (data.selected === false && index !== -1) this.selected.splice(index, 1)
     },
     selectedAll() {
-      if (this.selectAll) this.items.forEach((item) => (item.selected = true));
-      else this.items.forEach((item) => (item.selected = false));
+      if (this.selectAll) this.items.forEach(item => (item.selected = true))
+      else this.items.forEach(item => (item.selected = false))
     },
     async saveNewCaptured(captured, capturedNew, userId, user) {
       // eslint-disable-next-line no-param-reassign
       const [capturedNew2] = this.captured.filter(
-        (val) => val.id === capturedNew
-      );
+        val => val.id === capturedNew,
+      )
       if (captured === capturedNew2.label) {
         this.showToast(
-          "danger",
-          "top-right",
-          "Error",
-          "XIcon",
-          "You can't select the same captured"
-        );
+          'danger',
+          'top-right',
+          'Error',
+          'XIcon',
+          "You can't select the same captured",
+        )
       } else {
-        this.$store.commit("app/SET_LOADING", true);
+        this.$store.commit('app/SET_LOADING', true)
         try {
           const response = await CrmService.saveNewCaptured({
             capt: capturedNew2.id,
             id: userId,
             user: this.currentUser.user_id,
-          });
+          })
           if (response.status === 200) {
             this.showToast(
-              "success",
-              "top-right",
-              "Success",
-              "CheckIcon",
-              "Se actualizo satisfactoriamente"
-            );
-          } else return;
+              'success',
+              'top-right',
+              'Success',
+              'CheckIcon',
+              'Se actualizo satisfactoriamente',
+            )
+          } else return
           // eslint-disable-next-line no-param-reassign
-          user.capturedNew = capturedNew2.id;
+          user.capturedNew = capturedNew2.id
           // eslint-disable-next-line no-param-reassign
-          user.captured_id = capturedNew2.id;
+          user.captured_id = capturedNew2.id
           // eslint-disable-next-line no-param-reassign
-          user.captured = capturedNew2.label;
+          user.captured = capturedNew2.label
           // eslint-disable-next-line no-param-reassign
-          user.editCaptured = false;
-          this.removePreloader();
+          user.editCaptured = false
+          this.removePreloader()
         } catch (error) {
-          this.showToast("danger", "top-right", "Error", "XIcon", error);
-          this.removePreloader();
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+          this.removePreloader()
         }
       }
     },
     async saveNewSeller(seller, sellerNew, userId, user) {
-      const [sellerNew2] = this.sellers.filter((val) => val.id === sellerNew);
+      const [sellerNew2] = this.sellers.filter(val => val.id === sellerNew)
       if (seller === sellerNew2.label) {
         this.showToast(
-          "danger",
-          "top-right",
-          "Error",
-          "XIcon",
-          "You can't select the same captured"
-        );
+          'danger',
+          'top-right',
+          'Error',
+          'XIcon',
+          "You can't select the same captured",
+        )
       } else {
-        this.addPreloader();
+        this.addPreloader()
         try {
           const response = await CrmService.saveNewSeller({
             sel: sellerNew2.id,
             id: userId,
             user: this.currentUser.user_id,
-          });
+          })
           if (response.status === 200) {
             this.showToast(
-              "success",
-              "top-right",
-              "Success",
-              "CheckIcon",
-              "Se actualizo satisfactoriamente"
-            );
-          } else return;
+              'success',
+              'top-right',
+              'Success',
+              'CheckIcon',
+              'Se actualizo satisfactoriamente',
+            )
+          } else return
           // eslint-disable-next-line no-param-reassign
-          user.sellerNew = sellerNew2.id;
+          user.sellerNew = sellerNew2.id
           // eslint-disable-next-line no-param-reassign
-          user.seller_id = sellerNew2.id;
+          user.seller_id = sellerNew2.id
           // eslint-disable-next-line no-param-reassign
-          user.seller = sellerNew2.label;
+          user.seller = sellerNew2.label
           // eslint-disable-next-line no-param-reassign
-          user.editSeller = false;
-          this.removePreloader();
+          user.editSeller = false
+          this.removePreloader()
         } catch (error) {
-          this.showToast("danger", "top-right", "Error", "XIcon", error);
-          this.removePreloader();
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+          this.removePreloader()
         }
       }
     },
     async saveNewFee(fee, feeNew, userId, user) {
       if (fee === feeNew) {
         this.showToast(
-          "danger",
-          "top-right",
-          "Error",
-          "XIcon",
-          "You can't select the same captured"
-        );
+          'danger',
+          'top-right',
+          'Error',
+          'XIcon',
+          "You can't select the same captured",
+        )
       } else {
-        this.$store.commit("app/SET_LOADING", true);
+        this.$store.commit('app/SET_LOADING', true)
         try {
           const response = await CrmService.saveNewFee({
             fee: feeNew,
             id: userId,
             user: this.currentUser.user_id,
-          });
+          })
           if (response.status === 200) {
-            this.showSuccessSwal();
-          } else return;
+            this.showSuccessSwal()
+          } else return
           // eslint-disable-next-line no-param-reassign
-          user.fee = user.feeNew;
+          user.fee = user.feeNew
           // eslint-disable-next-line no-param-reassign
-          user.feeNew = user.fee;
+          user.feeNew = user.fee
           // eslint-disable-next-line no-param-reassign
-          user.editFee = false;
-          this.$store.commit("app/SET_LOADING", false);
+          user.editFee = false
+          this.$store.commit('app/SET_LOADING', false)
         } catch (error) {
-          this.showToast("danger", "top-right", "Error", "XIcon", error);
-          this.$store.commit("app/SET_LOADING", false);
+          this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+          this.$store.commit('app/SET_LOADING', false)
         }
       }
     },
     async annulSale(sale) {
       try {
         const swal = await this.showConfirmSwal(
-          "Are you sure?",
-          "Are you sure annuled this sale"
-        );
+          'Are you sure?',
+          'Are you sure annuled this sale',
+        )
         if (swal.isConfirmed) {
-          const response = await amgApi.post("/sales-made/annul-sale", {
+          const response = await amgApi.post('/sales-made/annul-sale', {
             id: sale.id,
             id_event: sale.event_id,
             user: this.currentUser.user_id,
-          });
+          })
           if (response.status === 200) {
             this.showToast(
-              "success",
-              "top-right",
-              "Success",
-              "CheckIcon",
-              "Your sale has been annulled successfully"
-            );
-            this.$refs["new-client-done-table"].refresh();
+              'success',
+              'top-right',
+              'Success',
+              'CheckIcon',
+              'Your sale has been annulled successfully',
+            )
+            this.$refs['new-client-done-table'].refresh()
           } else {
-            this.showErrorSwal();
+            this.showErrorSwal()
           }
         }
       } catch (error) {
         this.showToast(
-          "danger",
-          "top-right",
-          "Error",
-          "Error",
-          "XIcon",
-          "Some error, please try again or contact to support"
-        );
+          'danger',
+          'top-right',
+          'Error',
+          'Error',
+          'XIcon',
+          'Some error, please try again or contact to support',
+        )
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

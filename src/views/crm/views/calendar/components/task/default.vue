@@ -36,13 +36,13 @@
         :events="events"
         date-location="due_date"
         date-location-format="YYYY-MM-DD"
+        :list-title-background-color="skin !== 'dark' ? '#f4f4f4' : ''"
         @dateChange="fetchEvents"
       >
-        <template #date-header="{date, fullDay, haveEvents, events}">
+        <template #date-header="{date, fullDay, haveEvents}">
           <div
             class="py-50 text-center w-100 border-bottom font-weight-bolder"
-            style="border-color: #C4C4C4 !important;"
-            :class="haveEvents ? `bg-primary text-white border-bottom-0` : ''"
+            :class="haveEvents ? `bg-primary text-white border-bottom-0 ${skin !== 'dark' ? 'border-c4c4c4' : ''}` : `${skin !== 'dark' ? 'border-c4c4c4' : ''}`"
           >
             {{ fullDay }}, {{ date }}
           </div>
@@ -91,7 +91,7 @@
         </template>
         <template #date-list="{event}">
           <div
-            class="w-100 p-50"
+            class="w-100"
           >
             <task-calendar
               class="w-100 cursor-pointer"
@@ -199,6 +199,7 @@ export default {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
+      skin: 'appConfig/skin'
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
   },
@@ -319,5 +320,11 @@ export default {
 .current-date-class {
   background-color: #00D25B;
   color: white;
+}
+.bg-light-gray {
+  background-color: rgba(243, 243, 243, 0.07) !important
+}
+.border-c4c4c4 {
+  border-color: #C4C4C4 !important;
 }
 </style>
