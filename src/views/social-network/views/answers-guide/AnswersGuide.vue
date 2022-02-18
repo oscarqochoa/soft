@@ -1,53 +1,34 @@
 <template>
   <div>
-    <b-card>
+    <b-card
+      no-body
+      class="mb-0 p-2"
+    >
       <div class="card-header flex">
-        <h1>ANSWERS GUIDE</h1>
+        <h2>ANSWERS GUIDE</h2>
         <b-button
           class="m-1"
-          variant="primary"
+          variant="success"
           @click="openCreateModal()"
         >
-          CREATE +
+          <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />CREATE
         </b-button>
       </div>
       <b-nav pills>
         <b-nav-item
-          :to="{ name: 'answers-guide-boost-credit' }"
+          v-for="program in programs" :key="program.id"
+          :to="{ name: program.route }"
           exact
           exact-active-class="active"
           link-classes="border-secondary hover-primary"
-        >BOOST CREDIT</b-nav-item>
-        <b-nav-item
-          :to="{ name: 'answers-guide-business' }"
-          exact
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-        >BUSINESS</b-nav-item>
-        <b-nav-item
-          :to="{ name: 'answers-guide-credit-experts' }"
-          exact
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-        >CREDIT EXPERTS</b-nav-item>
-        <b-nav-item
-          :to="{ name: 'answers-guide-tax-research' }"
-          exact
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-        >TAX RESEARCH</b-nav-item>
-        <b-nav-item
-          :to="{ name: 'answers-guide-debt-solution' }"
-          exact
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-        >DEBT SOLUTION</b-nav-item>
+        >{{ program.value }}</b-nav-item>
       </b-nav>
       <router-view :key="$route.name" />
     </b-card>
     <create-modal
       v-if="open"
       @close="closeModal"
+      @reloadTable="reloadTable"
     />
   </div>
 </template>
@@ -67,6 +48,15 @@ export default {
       open: false,
       answers: {},
       showTab: true,
+      programs: [],
+      routes: [
+        'answers-guide-boost-credit',
+        'answers-guide-business',
+        'answers-guide-credit-experts',
+        'answers-guide-debt-solution',
+        'answers-guide-tax-research',
+      ],
+      number: 0
     }
   },
   computed: {
@@ -84,6 +74,14 @@ export default {
     closeModal() {
       this.open = false
     },
+    reloadTable(programId) {
+      this.programs.forEach(program => {
+        if (program.id === programId) {
+          this.$router.push({ name: program.route })
+          this.number += 1
+        }
+      })
+    },
     async getAnswerGuide(program, father) {
       const data = await AnswersGuideService.getAnswersGuide(
         {
@@ -95,6 +93,17 @@ export default {
       this.program_active = program
       this.showTab = this.answers[0] !== undefined
     },
+    async getPrograms() {
+      this.programs = await AnswersGuideService.getFanPages()
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < this.programs.length; i++) {
+        this.programs[i].route = this.routes[i]
+      }
+      console.log(this.programs)
+    },
+  },
+  async created() {
+    await this.getPrograms()
   },
 }
 </script>

@@ -1,9 +1,4 @@
-import AnswersGuideBoostCredit from '@/views/social-network/views/answers-guide/answers-guide-module/answers-guide-boost-credit/AnswersGuideBoostCredit'
-import AnswersGuideBusiness from '@/views/social-network/views/answers-guide/answers-guide-module/answers-guide-business/AnswersGuideBusiness'
-import AnswersGuideCreditExperts from '@/views/social-network/views/answers-guide/answers-guide-module/answers-guide-credit-experts/AnswersGuideCreditExperts'
-import AnswersGuideTaxResearch from '@/views/social-network/views/answers-guide/answers-guide-module/answers-guide-tax-research/AnswersGuideTaxResearch'
-import AnswersGuideDebtSolution
-  from '@/views/social-network/views/answers-guide/answers-guide-module/answers-guide-debt-solution/AnswersGuideDebtSolution'
+import AnswersGuideGeneral from '@/views/social-network/views/answers-guide/answers-guide-module/answers-guide-general/AnswersGuideGeneral'
 
 export default [
   {
@@ -13,33 +8,47 @@ export default [
     children: [
       {
         path: 'boost-credit',
-        component: AnswersGuideBoostCredit,
+        component: AnswersGuideGeneral,
         name: 'answers-guide-boost-credit',
+        meta: {
+          program: 2,
+        },
       },
       {
         path: 'business',
-        component: AnswersGuideBusiness,
+        component: AnswersGuideGeneral,
         name: 'answers-guide-business',
-
+        meta: {
+          program: 1,
+        },
       },
       {
         path: 'credit-experts',
-        component: AnswersGuideCreditExperts,
+        component: AnswersGuideGeneral,
         name: 'answers-guide-credit-experts',
+        meta: {
+          program: 3,
+        },
       },
       {
         path: 'tax-research',
-        component: AnswersGuideTaxResearch,
+        component: AnswersGuideGeneral,
         name: 'answers-guide-tax-research',
+        meta: {
+          program: 5,
+        },
       },
       {
         path: 'debt-solution',
-        component: AnswersGuideDebtSolution,
+        component: AnswersGuideGeneral,
         name: 'answers-guide-debt-solution',
+        meta: {
+          program: 4,
+        },
       },
     ],
     meta: {
-      //permittedRoles: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      // permittedRoles: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       pageTitle: 'Answers Guide',
       breadcrumb: [{
         text: 'Answers Guide',

@@ -50,13 +50,14 @@
         </div>
       </div>
       <vue-tree
+        v-if="treeData.length!=0"
         :key="pageI"
         ref="tree"
         style="width: 100%; height: 85vh;"
         :config="treeConfig"
         :dataset="treeData"
         direction="horizontal"
-        link-style="straight"
+        linkStyle="straight"
       >
         <template v-slot:node="{ node, collapsed }">
           <div
@@ -77,23 +78,23 @@
               :class="node.type_answer === 1? 'client-bg' : 'team-bg'"
             >
               <feather-icon
-                class="mr-1 pointer no-margin"
+                class="mr-1 pointer no-margin icon-color"
                 icon="EyeIcon"
                 @click="openWatchModal(1, node)"
               />
               <feather-icon
-                class="mr-1 pointer no-margin"
+                class="mr-1 pointer no-margin icon-color"
                 icon="PlusIcon"
                 @click="openCreateModal(node)"
               />
               <feather-icon
-                class="mr-1 pointer no-margin"
+                class="mr-1 pointer no-margin icon-color"
                 icon="TrashIcon"
                 @click="deleteItem(node)"
               />
               <feather-icon
                 v-if="node.type_answer == 2"
-                class="mr-1 pointer no-margin"
+                class="mr-1 pointer no-margin icon-color"
                 icon="CopyIcon"
                 @click="copyAnswerName(node.content)"
               />
@@ -101,6 +102,9 @@
           </div>
         </template>
       </vue-tree>
+      <div v-else>
+        No hay contenido para mostrar
+      </div>
     </div>
     <edit-watch-modal
       v-if="openWatch"
@@ -188,7 +192,6 @@ export default {
       this.$emit('close')
     },
     async getReloadData() {
-      console.log('reload tree data')
       await this.getTreeData(this.treeId)
     },
     openWatchModal(mood, body) {
@@ -211,7 +214,9 @@ export default {
       const data = await AnswersGuideService.getTreeAnswer({ id })
       this.treeData = data.data
       // eslint-disable-next-line prefer-destructuring
-      this.nameTree = `${this.treeData[0].content} (${this.getProgramName(this.treeData[0].program)})`
+      if (this.treeData.length != 0) {
+        this.nameTree = `${this.treeData[0].content} (${this.getProgramName(this.treeData[0].program)})`
+      }
       this.pageI += 1
     },
     // eslint-disable-next-line consistent-return
@@ -247,10 +252,8 @@ export default {
           const data = await AnswersGuideService.deleteAnswerGuide({ id: item.id, program: item.program, user: this.currentUser.user_id })
           if (data.status === 200) {
             await this.getTreeData(this.treeId)
-            this.showSuccessSwal('Answer has been added successfully')
-            // this.$emit('new', response.data[0].program_sn, null)
-            // $emit('updateTree')
-            // this.closeModal(1)
+            this.$emit('reload')
+            this.showSuccessSwal('Answer has been deleted successfully')
           }
         }
       } catch (e) {
@@ -333,5 +336,8 @@ export default {
 .bigger{
   width: 30px !important;
   height: 30px !important;
+}
+icon-color{
+  color: black;
 }
 </style>

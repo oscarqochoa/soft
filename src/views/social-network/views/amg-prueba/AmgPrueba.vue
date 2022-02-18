@@ -37,7 +37,7 @@
           :current-page="paginate.currentPage"
           :per-page="paginate.perPage"
           :filter="searchInput"
-          :busy = "isBusy"
+          :busy= "isBusy"
         > <!--props de b table -->
           <template #table-busy>
             <div class="text-center text-primary my-2">

@@ -7,20 +7,20 @@
     :title="title"
     :hide-footer="reading"
     @hidden="close"
-    @ok="handleOk"
   >
     <div class="d-block">
-      <b-form
-        ref="form"
-        @submit.stop.prevent="handleSubmit"
-      >
+      <validation-observer ref="vform">
         <b-container>
           <b-form-row>
             <b-col>
+              <validation-provider
+                  v-slot="{ errors,valid }"
+                  name="program"
+                  rules="required"
+              >
               <b-row class="mt-2">
                 <b-col sm="1">
                   <label>PROGRAM:</label>
-
                 </b-col>
                 <b-col
                   v-for="program in programs"
@@ -39,7 +39,18 @@
                   >
                   </b-form-radio>
                 </b-col>
+                <span
+                    v-if="errors[0]"
+                    class="text-danger"
+                >
+                      Program {{ errors[0] }}</span>
               </b-row>
+              </validation-provider>
+              <validation-provider
+                  v-slot="{ errors,valid }"
+                  name="title"
+                  rules="required"
+              >
               <b-row class="mt-2">
                 <b-col sm="1">
                   <label>TYPE:</label>
@@ -64,7 +75,18 @@
                   >TEAM
                   </b-form-radio>
                 </b-col>
+                <span
+                    v-if="errors[0]"
+                    class="text-danger"
+                >
+                      Type {{ errors[0] }}</span>
               </b-row>
+              </validation-provider>
+              <validation-provider
+                  v-slot="{ errors,valid }"
+                  name="option"
+                  rules="required"
+              >
               <b-row class="mt-2">
                 <b-col sm="1">
                   <label>OPTION:</label>
@@ -91,12 +113,30 @@
                     @click="toEditingMode"
                   />
                 </b-col>
+                <span
+                    v-if="errors[0]"
+                    class="text-danger"
+                >
+                      Option {{ errors[0] }}</span>
               </b-row>
+              </validation-provider>
             </b-col>
           </b-form-row>
         </b-container>
-      </b-form>
+      </validation-observer>
     </div>
+    <template #modal-footer="{ cancel }">
+      <b-button
+          @click="cancel()"
+      >
+        CANCEL
+      </b-button>
+      <b-button
+          @click="saveUpdateAnswer"
+      >
+        OK
+      </b-button>
+    </template>
   </b-modal>
 </template>
 
@@ -136,8 +176,6 @@ export default {
     this.item.type_answer == 2 ? this.answerTypeTeam = true : this.answerTypeTeam = false
     this.onControl = true
     this.treeItem = { ...this.item }
-
-    console.log(this.treeItem)
     if (this.mood === 1) {
       this.title = 'Read Answer'
       this.reading = true
@@ -182,50 +220,32 @@ export default {
       const data = await AnswersGuideService.getFanPages()
       this.programs = data
     },
-    checkValidity() {
-      const valid = this.$refs.form.checkValidity()
-      return valid
-    },
-    handleOk(bvModalEvt) {
-      bvModalEvt.preventDefault()
-      this.handleSubmit()
-    },
     toEditingMode() {
       this.reading = false
-    },
-    async handleSubmit() {
-      if (!this.checkValidity()) {
-        return
-      }
-      await this.saveUpdateAnswer()
-      this.close()
-      this.$emit('reload')
     },
     async getAnswerGuide(program, father) {
       const data = await AnswersGuideService.getAnswersGuide({ father, program })
       return data
     },
     async saveUpdateAnswer() {
-      if (!this.checkValidity()) {
-        return
-      }
       try {
-        const response = await this.showConfirmSwal()
-        if (response.isConfirmed) {
-          const data = await AnswersGuideService.saveAnswerGuide({
-            id: this.treeItem.id,
-            program: this.treeItem.program,
-            content: this.treeItem.content,
-            user: this.currentUser.user_id,
-            father: this.treeItem.father,
-            type: this.treeItem.type_answer,
-          })
-
-          if (data.status === 200) {
-            this.showSuccessSwal('Answer has been added successfully')
-            // this.$emit('new', response.data[0].program_sn, null)
-            // $emit('updateTree')
-            // this.closeModal(1)
+        const result = await this.$refs.vform.validate()
+        if (result) {
+          const response = await this.showConfirmSwal()
+          if (response.isConfirmed) {
+            const data = await AnswersGuideService.saveAnswerGuide({
+              id: this.treeItem.id,
+              program: this.treeItem.program,
+              content: this.treeItem.content,
+              user: this.currentUser.user_id,
+              father: this.treeItem.father,
+              type: this.treeItem.type_answer,
+            })
+            if (data.status === 200) {
+              this.showSuccessSwal('Answer has been updated successfully')
+              this.close()
+              this.$emit('reload')
+            }
           }
         }
       } catch (e) {
@@ -233,8 +253,6 @@ export default {
         return []
       }
     },
-  },
-  watch: {
   },
 }
 </script>
