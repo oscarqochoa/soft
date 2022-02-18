@@ -567,10 +567,9 @@ export default {
           });
           if (response.status == 200) {
             if (response.data.code == "mobile") {
-              this.showSwalGeneric(
+              this.showConfirmSwal(
                 "Are you sure?",
                 `The phone number already exists: ${response.data.message}`,
-                "warning",
                 {
                   confirmButtonText:
                     this.typeForm == "newLead"

@@ -1,11 +1,11 @@
 <template>
   <b-container
-    :class="['bg-light-' + taskColor[task.title], 'pt-50']"
+    :class="[`bg-light-${task.title ? taskColor[task.title] : 'primary'}`, 'pt-50']"
   >
     <b-row>
       <b-col
         class="d-flex align-items-center font-weight-bolder"
-        style="color: black !important;"
+        :style="`color: ${skin === 'dark' ? 'white' : 'black'} !important;`"
       >
         <b-img
           v-if="task.seller_image"
@@ -20,9 +20,9 @@
           rounded
           size="30"
           style="margin-right: 6px !important;"
-          :variant="'light-'+taskColor[task.title]"
+          :variant="`light-${task.title ? taskColor[task.title] : 'primary'}`"
         />
-        {{ task.title }}
+        {{ task.title ? task.title : task.subject }}
       </b-col>
     </b-row>
     <b-row>
@@ -31,13 +31,13 @@
           class="p-0"
           style="margin-left: 47px !important; font-size: 0.76em !important;"
         >
-          <li style="color: black !important;">
+          <li :style="`color: ${skin === 'dark' ? 'white' : 'black'} !important;`">
             {{ task.lead_mobile }}
           </li>
-          <li style="color: black !important;">
+          <li :style="`color: ${skin === 'dark' ? 'white' : 'black'} !important;`">
             {{ task.lead_name }}
           </li>
-          <li style="color: black !important;">
+          <li :style="`color: ${skin === 'dark' ? 'white' : 'black'} !important;`">
             {{ (task.date + ' ' + task.from) | myHourTime }} {{ (task.date + ' ' + task.to) | myHourTime }}
           </li>
           <li
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: 'TaskCalendar',
   props: {
@@ -59,6 +61,11 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    ...mapGetters({
+      skin: "appConfig/skin",
+    }),
   },
   data() {
     return {

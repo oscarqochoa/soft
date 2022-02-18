@@ -13,14 +13,7 @@
         <b-spinner class="align-middle mr-1" />
         <strong>Loading ...</strong>
       </div>
-      <b-table-simple
-        v-else
-        responsive
-        sticky-header="74vh"
-        no-border-collapse
-        striped
-        bordered
-      >
+      <b-table-simple v-else responsive sticky-header="74vh" no-border-collapse striped bordered>
         <b-thead>
           <b-tr class="width-th">
             <b-th style="width: 100px !important">User</b-th>
@@ -28,77 +21,53 @@
             <template v-if="halfYear">
               <b-th>
                 Jan
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.january_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.january_percentage }}%</span>
               </b-th>
               <b-th>
                 Feb
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.february_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.february_percentage }}%</span>
               </b-th>
               <b-th>
                 Mar
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.march_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.march_percentage }}%</span>
               </b-th>
               <b-th>
                 Apr
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.april_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.april_percentage }}%</span>
               </b-th>
               <b-th>
                 May
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.may_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.may_percentage }}%</span>
               </b-th>
               <b-th>
                 Jun
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.june_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.june_percentage }}%</span>
               </b-th>
             </template>
             <template v-else>
               <b-th>
                 Jul
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.july_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.july_percentage }}%</span>
               </b-th>
               <b-th>
                 Aug
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.august_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.august_percentage }}%</span>
               </b-th>
               <b-th>
                 Sep
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.september_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.september_percentage }}%</span>
               </b-th>
               <b-th>
                 Oct
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.october_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.october_percentage }}%</span>
               </b-th>
               <b-th>
                 Nov
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.november_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.november_percentage }}%</span>
               </b-th>
               <b-th>
                 Dic
-                <span v-if="isCrm" class="float-right"
-                  >{{ percentages.december_percentage }}%</span
-                >
+                <span v-if="isCrm" class="float-right">{{ percentages.december_percentage }}%</span>
               </b-th>
             </template>
           </b-tr>
@@ -107,22 +76,13 @@
         <b-tbody>
           <b-tr v-for="(item, index) in commissions" :key="item.user_id">
             <b-td>
-              <div class="font-weight-bolder text-dark">
-                {{ item.user_name }}
-              </div>
-              <div v-if="isSupervisorCrm" class="color-gray-m fs10">
-                {{ item.main_name }}
-              </div>
+              <div class="font-weight-bolder text-dark">{{ item.user_name }}</div>
+              <div v-if="isSupervisorCrm" class="color-gray-m fs10">{{ item.main_name }}</div>
             </b-td>
             <b-td v-if="isCrm">
               <div>
                 <div class="font-weight-bold">Generated:</div>
-                <div
-                  class="margin-t-pay font-weight-bold"
-                  v-if="item.role_id != 2"
-                >
-                  % to Pay:
-                </div>
+                <div class="margin-t-pay font-weight-bold" v-if="item.role_id != 2">% to Pay:</div>
                 <div class="margin-t-pay font-weight-bold">To Pay:</div>
               </div>
             </b-td>
@@ -702,77 +662,53 @@
             <b-th class="footer-black" v-if="isCrm || isDepartment"></b-th>
             <template v-if="halfYear">
               <b-th class="footer-black">
-                <span v-if="t_jan != '0.00'" class="footer-span"
-                  >$ {{ t_jan }}</span
-                >
+                <span v-if="t_jan != '0.00'" class="footer-span">$ {{ t_jan }}</span>
                 <span v-if="t_jan == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_feb != '0.00'" class="footer-span"
-                  >$ {{ t_feb }}</span
-                >
+                <span v-if="t_feb != '0.00'" class="footer-span">$ {{ t_feb }}</span>
                 <span v-if="t_feb == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_mar != '0.00'" class="footer-span"
-                  >$ {{ t_mar }}</span
-                >
+                <span v-if="t_mar != '0.00'" class="footer-span">$ {{ t_mar }}</span>
                 <span v-if="t_mar == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_apr != '0.00'" class="footer-span"
-                  >$ {{ t_apr }}</span
-                >
+                <span v-if="t_apr != '0.00'" class="footer-span">$ {{ t_apr }}</span>
                 <span v-if="t_apr == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_may != '0.00'" class="footer-span"
-                  >$ {{ t_may }}</span
-                >
+                <span v-if="t_may != '0.00'" class="footer-span">$ {{ t_may }}</span>
                 <span v-if="t_may == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_jun != '0.00'" class="footer-span"
-                  >$ {{ t_jun }}</span
-                >
+                <span v-if="t_jun != '0.00'" class="footer-span">$ {{ t_jun }}</span>
                 <span v-if="t_jun == '0.00'" class="footer-span">-</span>
               </b-th>
             </template>
             <template v-else>
               <b-th class="footer-black">
-                <span v-if="t_jul != '0.00'" class="footer-span"
-                  >$ {{ t_jul }}</span
-                >
+                <span v-if="t_jul != '0.00'" class="footer-span">$ {{ t_jul }}</span>
                 <span v-if="t_jul == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_aug != '0.00'" class="footer-span"
-                  >$ {{ t_aug }}</span
-                >
+                <span v-if="t_aug != '0.00'" class="footer-span">$ {{ t_aug }}</span>
                 <span v-if="t_aug == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_sep != '0.00'" class="footer-span"
-                  >$ {{ t_sep }}</span
-                >
+                <span v-if="t_sep != '0.00'" class="footer-span">$ {{ t_sep }}</span>
                 <span v-if="t_sep == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_oct != '0.00'" class="footer-span"
-                  >$ {{ t_oct }}</span
-                >
+                <span v-if="t_oct != '0.00'" class="footer-span">$ {{ t_oct }}</span>
                 <span v-if="t_oct == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_nov != '0.00'" class="footer-span"
-                  >$ {{ t_nov }}</span
-                >
+                <span v-if="t_nov != '0.00'" class="footer-span">$ {{ t_nov }}</span>
                 <span v-if="t_nov == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_dec != '0.00'" class="footer-span"
-                  >$ {{ t_dec }}</span
-                >
+                <span v-if="t_dec != '0.00'" class="footer-span">$ {{ t_dec }}</span>
                 <span v-if="t_dec == '0.00'" class="footer-span">-</span>
               </b-th>
             </template>
@@ -782,77 +718,53 @@
             <b-th v-if="isCrm || isDepartment" class="footer-black"></b-th>
             <template v-if="halfYear">
               <b-th class="footer-black">
-                <span v-if="t_feb != '0.00'" class="footer-span"
-                  >$ {{ t_jan_pay }}</span
-                >
+                <span v-if="t_feb != '0.00'" class="footer-span">$ {{ t_jan_pay }}</span>
                 <span v-if="t_jan_pay == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_feb_pay != '0.00'" class="footer-span"
-                  >$ {{ t_feb_pay }}</span
-                >
+                <span v-if="t_feb_pay != '0.00'" class="footer-span">$ {{ t_feb_pay }}</span>
                 <span v-if="t_feb_pay == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_mar_pay != '0.00'" class="footer-span"
-                  >$ {{ t_mar_pay }}</span
-                >
+                <span v-if="t_mar_pay != '0.00'" class="footer-span">$ {{ t_mar_pay }}</span>
                 <span v-if="t_mar_pay == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_apr_pay != '0.00'" class="footer-span"
-                  >$ {{ t_apr_pay }}</span
-                >
+                <span v-if="t_apr_pay != '0.00'" class="footer-span">$ {{ t_apr_pay }}</span>
                 <span v-if="t_apr_pay == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_may_pay != '0.00'" class="footer-span"
-                  >$ {{ t_may_pay }}</span
-                >
+                <span v-if="t_may_pay != '0.00'" class="footer-span">$ {{ t_may_pay }}</span>
                 <span v-if="t_may_pay == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_jun_pay != '0.00'" class="footer-span"
-                  >$ {{ t_jun_pay }}</span
-                >
+                <span v-if="t_jun_pay != '0.00'" class="footer-span">$ {{ t_jun_pay }}</span>
                 <span v-if="t_jun_pay == '0.00'" class="footer-span">-</span>
               </b-th>
             </template>
             <template v-else>
               <b-th class="footer-black">
-                <span v-if="t_jul_pay != '0.00'" class="footer-span"
-                  >$ {{ t_jul_pay }}</span
-                >
+                <span v-if="t_jul_pay != '0.00'" class="footer-span">$ {{ t_jul_pay }}</span>
                 <span v-if="t_jul_pay == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_aug_pay != '0.00'" class="footer-span"
-                  >$ {{ t_aug_pay }}</span
-                >
+                <span v-if="t_aug_pay != '0.00'" class="footer-span">$ {{ t_aug_pay }}</span>
                 <span v-if="t_aug_pay == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_sep_pay != '0.00'" class="footer-span"
-                  >$ {{ t_sep_pay }}</span
-                >
+                <span v-if="t_sep_pay != '0.00'" class="footer-span">$ {{ t_sep_pay }}</span>
                 <span v-if="t_sep_pay == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_oct_pay != '0.00'" class="footer-span"
-                  >$ {{ t_oct_pay }}</span
-                >
+                <span v-if="t_oct_pay != '0.00'" class="footer-span">$ {{ t_oct_pay }}</span>
                 <span v-if="t_oct_pay == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_nov_pay != '0.00'" class="footer-span"
-                  >$ {{ t_nov_pay }}</span
-                >
+                <span v-if="t_nov_pay != '0.00'" class="footer-span">$ {{ t_nov_pay }}</span>
                 <span v-if="t_nov_pay == '0.00'" class="footer-span">-</span>
               </b-th>
               <b-th class="footer-black">
-                <span v-if="t_dec_pay != '0.00'" class="footer-span"
-                  >$ {{ t_dec_pay }}</span
-                >
+                <span v-if="t_dec_pay != '0.00'" class="footer-span">$ {{ t_dec_pay }}</span>
                 <span v-if="t_dec_pay == '0.00'" class="footer-span">-</span>
               </b-th>
             </template>
@@ -895,20 +807,20 @@ export default {
     CommissionsHeader,
     CommissionsMonthly,
     ModalCommissionsDetails,
-    ModalCommissionsPayment,
+    ModalCommissionsPayment
   },
   directives: {
-    Ripple,
+    Ripple
   },
   props: {
     module: {
       type: Number,
-      default: null,
+      default: null
     },
     tab: {
       type: String,
-      default: null,
-    },
+      default: null
+    }
   },
   mounted() {
     //when change tab supervisorCrm, set to null subProgram
@@ -940,7 +852,7 @@ export default {
       modalDetails: false,
       modalPayment: false,
       infoDetails: null,
-      infoPayment: null,
+      infoPayment: null
     };
   },
   created() {
@@ -964,7 +876,7 @@ export default {
       skin: "appConfig/skin",
       loading: "commissions-store/loading",
       moduleProgram: "commissions-store/moduleProgram",
-      isSeller: "auth/isSeller",
+      isSeller: "auth/isSeller"
     }),
 
     isManagement() {
@@ -1052,7 +964,7 @@ export default {
     },
     t_dec_pay() {
       return this.sumTotal("dec_to_pay");
-    },
+    }
   },
   methods: {
     //Sum Totals
@@ -1060,7 +972,7 @@ export default {
       if (this.isDepartment) {
         let totalMonth = 0;
         for (let i = 0; i < this.commissions.length; i++) {
-          this.commissions[i].commissions.forEach((element) => {
+          this.commissions[i].commissions.forEach(element => {
             totalMonth += element[month];
           });
         }
@@ -1109,7 +1021,7 @@ export default {
         year: this.year,
         module: this.module_id,
         supervisorCrm: this.supervisorCrm,
-        subProgram: this.isSupervisorCrm ? this.moduleProgram : null,
+        subProgram: this.isSupervisorCrm ? this.moduleProgram : null
       };
       let response =
         this.isDepartment && !this.isSupervisorCrm
@@ -1120,7 +1032,7 @@ export default {
     },
     departmentCommissions() {
       if (this.isDepartment) {
-        this.commissions.forEach((element) => {
+        this.commissions.forEach(element => {
           element.commissions = JSON.parse(element.commissions);
         });
       }
@@ -1128,7 +1040,7 @@ export default {
     async getDepartmentPercentage() {
       if (this.isCrm) {
         const params = {
-          year: this.year,
+          year: this.year
         };
         let response = await commissionsService.getDepartmentPercentage(params);
 
@@ -1143,12 +1055,12 @@ export default {
         type: 1, //Update all department
         percent: this.percentApartment,
         modul: this.module_id,
-        id_user: this.currentUser.user_id,
+        id_user: this.currentUser.user_id
       };
       let response = await commissionsService.updatePercentage(params);
       let result = await this.searchCommissions();
       this.$store.commit("app/SET_LOADING", false);
-      this.showSwalSuccess(
+      this.showSuccessSwal(
         "Percentage updated",
         "The percentage to pay of the department was updated",
         "success"
@@ -1176,7 +1088,7 @@ export default {
         modul: this.module_id,
         year: this.year,
         month: month,
-        seller: item.user_id,
+        seller: item.user_id
       };
 
       let response = await commissionsService.updatePercentage(params);
@@ -1184,7 +1096,7 @@ export default {
       this.commissions[index][percentage_pay] = valuePercentage;
       this.commissions[index][edit] = 0;
       this.$store.commit("app/SET_LOADING", false);
-      this.showSwalSuccess(
+      this.showSuccessSwal(
         "Percentage updated",
         "",
         "success",
@@ -1227,7 +1139,7 @@ export default {
         year: this.year,
         monthName: monthName,
         type: "details",
-        moduleSession: this.module,
+        moduleSession: this.module
       };
       this.modalDetails = true;
     },
@@ -1257,7 +1169,7 @@ export default {
         monthName: monthName,
         tab: this.tab,
         type: "payment",
-        year: this.year,
+        year: this.year
       };
 
       this.modalPayment = true;
@@ -1273,27 +1185,27 @@ export default {
 
     changeStatusPayment(status, user_id, ps_month) {
       if (this.isDepartment) {
-        this.commissions.forEach((element) => {
+        this.commissions.forEach(element => {
           if (element.user_id == user_id) {
-            element.commissions.forEach((item) => {
+            element.commissions.forEach(item => {
               item[ps_month] = status;
             });
           }
         });
       } else {
-        this.commissions.forEach((element) => {
+        this.commissions.forEach(element => {
           if (element.user_id == user_id) {
             element[ps_month] = status;
           }
         });
       }
-    },
+    }
   },
   watch: {
     moduleProgram(newValue, oldValue) {
       this.searchCommissions(true);
-    },
-  },
+    }
+  }
 };
 </script>
 

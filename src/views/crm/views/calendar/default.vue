@@ -19,14 +19,6 @@
         exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"
       >Tasks</b-nav-item>
-      <b-nav-item
-        :to="{name: 'crm-calendar-test'}"
-        exact
-        exact-active-class="active"
-        :link-classes="['px-3',bgTabsNavs]"
-      >
-        Test
-      </b-nav-item>
     </b-nav>
 
     <b-card class="border-top-primary border-3 border-table-radius px-0">

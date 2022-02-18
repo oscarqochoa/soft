@@ -36,13 +36,13 @@
         :events="events"
         date-location="due_date"
         date-location-format="YYYY-MM-DD"
-        :list-title-background-color="skin !== 'dark' ? '#f4f4f4' : ''"
         @dateChange="fetchEvents"
       >
-        <template #date-header="{date, fullDay, haveEvents}">
+        <template #date-header="{date, fullDay, haveEvents, events}">
           <div
             class="py-50 text-center w-100 border-bottom font-weight-bolder"
-            :class="haveEvents ? `bg-primary text-white border-bottom-0 ${skin !== 'dark' ? 'border-c4c4c4' : ''}` : `${skin !== 'dark' ? 'border-c4c4c4' : ''}`"
+            style="border-color: #C4C4C4 !important;"
+            :class="haveEvents ? `bg-primary text-white border-bottom-0` : ''"
           >
             {{ fullDay }}, {{ date }}
           </div>
@@ -91,7 +91,7 @@
         </template>
         <template #date-list="{event}">
           <div
-            class="w-100"
+            class="w-100 p-50"
           >
             <task-calendar
               class="w-100 cursor-pointer"
@@ -148,7 +148,7 @@ import ViewMoreEvents from '@/views/crm/views/calendar/components/ViewMoreEvents
 import vSelect from 'vue-select'
 import { mapGetters, mapState } from 'vuex'
 import TaskService from '@/service/task'
-import LCalendar from '@/views/commons/calendar/LCalendar.vue'
+import LCalendar from './LCalendar.vue'
 
 export default {
   name: 'CalendarTest',
@@ -199,7 +199,6 @@ export default {
     ...mapGetters({
       currentUser: 'auth/currentUser',
       token: 'auth/token',
-      skin: 'appConfig/skin'
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
   },
@@ -320,11 +319,5 @@ export default {
 .current-date-class {
   background-color: #00D25B;
   color: white;
-}
-.bg-light-gray {
-  background-color: rgba(243, 243, 243, 0.07) !important
-}
-.border-c4c4c4 {
-  border-color: #C4C4C4 !important;
 }
 </style>

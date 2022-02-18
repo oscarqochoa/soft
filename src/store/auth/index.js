@@ -1,7 +1,7 @@
-import { getUserData, getUserToken } from "@/auth/utils";
+import { getUserData, getUserToken } from '@/auth/utils'
 
-const user = getUserData();
-const token = getUserToken();
+const user = getUserData()
+const token = getUserToken()
 
 export default {
   namespaced: true,
@@ -10,58 +10,58 @@ export default {
     token,
   },
   getters: {
-    currentUser: (state) => state.currentUser,
-    token: (state) => state.token,
-    userSession: (state) => state.currentUser.user_id,
-    isSupervisor: (state) => state.currentUser.role_id == 2,
-    isCeo: (state) =>
-      state.currentUser.role_id === 1 || state.currentUser.role_id === null,
-    isSeller: (state) => state.currentUser.role_id == 5,
-    isAdvisor: (state) => state.currentUser.role_id == 3,
-    moduleId: (state) => state.currentUser.modul_id,
-    roleId: (state) => state.currentUser.role_id,
-    userRole: (state) => {
+    currentUser: state => state.currentUser,
+    token: state => state.token,
+    userSession: state => state.currentUser.user_id,
+    isSupervisor: state => state.currentUser.role_id == 2,
+    isCeo: state => state.currentUser.role_id === 1 || state.currentUser.role_id === null,
+    isSeller: state => state.currentUser.role_id == 5,
+    isAdvisor: state => state.currentUser.role_id == 3,
+    moduleId: state => state.currentUser.modul_id,
+    roleId: state => state.currentUser.role_id,
+    userRole: state => {
       const userModuls = state.currentUser.arrRoles.map(
-        (role) => role.module_id
-      );
-      if (!userModuls.includes(state.module)) return -1;
+        role => role.module_id,
+      )
+      if (!userModuls.includes(state.module)) return -1
       return state.currentUser.arrRoles.filter(
-        (role) => role.module_id === state.module
-      )[0].role_id;
+        role => role.module_id === state.module,
+      )[0].role_id
     },
   },
   mutations: {
     SET_CURRENT_USER(state, val) {
-      state.currentUser = val;
-      state.currentUser.modul_id = null;
+      state.currentUser = val
+      state.currentUser.modul_id = null
     },
     SET_TOKEN(state, val) {
-      state.token = val;
+      console.log(val)
+      state.token = val
     },
     SET_CURRENT_USER_MODULE(state, module) {
-      state.currentUser.modul_id = module;
+      state.currentUser.modul_id = module
     },
     SET_CURRENT_USER_ROLE_ID(state) {
       const roleId = state.currentUser.arrRoles.find(
-        (rol) => rol.module_id === state.currentUser.modul_id
-      );
+        rol => rol.module_id === state.currentUser.modul_id,
+      )
       if (roleId) {
-        state.currentUser.role_id = roleId.role_id;
-        state.currentUser.module_name = roleId.module_name;
+        state.currentUser.role_id = roleId.role_id
+        state.currentUser.module_name = roleId.module_name
       }
     },
   },
   actions: {
     updateCurrentUser({ commit }, user) {
-      commit("SET_CURRENT_USER", user);
+      commit('SET_CURRENT_USER', user)
     },
     updateToken({ commit }, token) {
-      commit("SET_TOKEN", token);
+      commit('SET_TOKEN', token)
     },
     updateCurrentUserModuleRole({ commit, state }, module) {
-      commit("SET_CURRENT_USER_MODULE", module);
-      commit("SET_CURRENT_USER_ROLE_ID");
-      localStorage.setItem("userData", JSON.stringify(state.currentUser));
+      commit('SET_CURRENT_USER_MODULE', module)
+      commit('SET_CURRENT_USER_ROLE_ID')
+      localStorage.setItem('userData', JSON.stringify(state.currentUser))
     },
   },
-};
+}
