@@ -1,17 +1,11 @@
 <template>
   <b-row>
     <header-slot></header-slot>
-    <div class="col-md-12 col-lg-12 col-sm-12">
+    <b-col cols="12">
       <!-- All Screen -->
-        <!-- <h4>{{statusSizeScreen}}</h4> -->
-      <!-- <h2>{{screenHeight}}</h2> -->
-      <!-- <h4>{{this.widthOfScreen}}---{{statusHeightByScreenColOne}} -- {{statusHeightByScreenColTwo}}</h4> -->
-      <!-- <h4>{{bigheightScreen}} - {{mediumheightScreen}}</h4> -->
-      <b-row style="">
+      <b-row>
         <!-- Column Cards -->
         <b-col
-          @mouseover="statusMouse($event)"
-          @mouseleave="statusLeave"
           class="col-tab"
           v-dragscroll="allSizeOfScreen === 'xs' ? false : true"
           cols="12"
@@ -20,29 +14,19 @@
           lg="3"
           xl="2"
           :style="`${statusHeightByScreenColOne}
-           ${statusSizeScreen>=1368?'height: 45vh;max-height: 45vh;overflow: auto;'
-           :statusSizeScreen>=1024? 'height: 55vh;max-height: 55vh;overflow: auto;'
-           :statusSizeScreen>=912 && allSizeOfScreen!=='xxl'?'height: 50vh;max-height: 50vh;overflow: auto;'
-           :statusSizeScreen>=800?'height: 60vh;max-height: 60vh;overflow: auto;'
-           :statusSizeScreen>=720?'height: 80vh;max-height: 80vh;overflow: auto;':''}`"
+           ${statusHeightByDevicesColOne}`"
         >
           <!-- Card Leads-->
-          <b-row class="pl-1 pr-1">
+          <b-row class="b-row-card">
             <b-card
               @click="changeTab(0)"
-              class="
-                ecommerce-card-leads ecommerce-card
-                col-lg-12
-                h-100
-                cursor-pointer
-              "
+              class="ecommerce-card-leads ecommerce-card col-lg-12 cursor-pointer"
               :class="classAdd"
               :style="
-                itemCards[0] == true
-                  ? 'background: linear-gradient(90deg, #0090e7 0%, #8f5fe8 100%); color: white'
-                  : classAdd == 'dark'
-                  ? ''
-                  : 'background-color:aliceblue'
+                switchHoverByCard(
+                  0,
+                  'linear-gradient(90deg, #0090e7 0%, #8f5fe8 100%)'
+                )
               "
             >
               <!-- Card Title -->
@@ -52,17 +36,11 @@
               <!-- Card Content -->
               <b-card-text>
                 <!-- First Line -->
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                <b-row
+                  :class="classWrapper"
                 >
                   <!-- Box First-->
                   <div
-                    style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
                       itemCards[0] == true ? 'background-color: white' : ''
                     "
@@ -78,25 +56,14 @@
                       <strong>{{ global.leadday }}</strong>
                     </span>
                   </div>
-                </div>
-                <div class="row" style="height: 10px" />
+                </b-row>
+                <b-row style="height: 10px" />
                 <!-- Second Line -->
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                <b-row
+                  :class="classWrapper"
                 >
                   <!-- Box Second-->
                   <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-
-                      border-radius: 4px;
-                    "
                     :style="
                       itemCards[0] == true ? 'background-color: white' : ''
                     "
@@ -112,27 +79,21 @@
                       <strong>{{ global.leadmonth }}</strong>
                     </span>
                   </div>
-                </div>
+                </b-row>
               </b-card-text>
             </b-card>
           </b-row>
           <!-- Card Appointments-->
-          <b-row class="pl-1 pr-1">
+          <b-row class="b-row-card">
             <b-card
-              class="
-                ecommerce-card-appointments ecommerce-card
-                col-lg-12
-                h-150
-                cursor-pointer
-              "
+              class="ecommerce-card-appointments ecommerce-card col-lg-12 cursor-pointer"
               :class="classAdd"
               @click="changeTab(1)"
               :style="
-                itemCards[1] == true
-                  ? 'background: linear-gradient(to right, #299aff, rgb(230, 174, 230));color: white'
-                  : classAdd == 'dark'
-                  ? ''
-                  : 'background-color:aliceblue'
+                switchHoverByCard(
+                  1,
+                  'linear-gradient(to right, #299aff, rgb(230, 174, 230))'
+                )
               "
             >
               <!-- Card Title -->
@@ -142,17 +103,11 @@
               <!-- Card Content -->
               <b-card-text>
                 <!-- First Line -->
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                <b-row
+                  :class="classWrapper"
                 >
                   <!-- Box First-->
                   <div
-                    style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
                       itemCards[1] == true ? 'background-color: white' : ''
                     "
@@ -168,25 +123,14 @@
                       <strong>{{ global.eventday }}</strong>
                     </span>
                   </div>
-                </div>
-                <div class="row" style="height: 10px" />
+                </b-row>
+                <b-row style="height: 10px" />
                 <!-- Second Line -->
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                <b-row
+                  :class="classWrapper"
                 >
                   <!-- Box Second-->
                   <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-
-                      border-radius: 4px;
-                    "
                     :style="
                       itemCards[1] == true ? 'background-color: white' : ''
                     "
@@ -202,27 +146,21 @@
                       <strong>{{ global.eventmonth }}</strong>
                     </span>
                   </div>
-                </div>
+                </b-row>
               </b-card-text>
             </b-card>
           </b-row>
           <!-- Card Tasks-->
-          <b-row class="pl-1 pr-1">
+          <b-row class="b-row-card">
             <b-card
-              class="
-                ecommerce-card-tasks ecommerce-card
-                col-lg-12
-                h-150
-                cursor-pointer
-              "
+              class="ecommerce-card-tasks ecommerce-card col-lg-12 cursor-pointer"
               :class="classAdd"
               @click="changeTab(2)"
               :style="
-                itemCards[2] == true
-                  ? 'background: linear-gradient(to right, #82868b, rgb(230, 174, 230));color: white'
-                  : classAdd == 'dark'
-                  ? ''
-                  : 'background-color:aliceblue'
+                switchHoverByCard(
+                  2,
+                  'linear-gradient(to right, #82868b, rgb(230, 174, 230))'
+                )
               "
             >
               <!-- Card Title -->
@@ -232,22 +170,11 @@
               <!-- Card Content -->
               <b-card-text>
                 <!-- First Line -->
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                <b-row
+                  :class="classWrapper"
                 >
                   <!-- Box First-->
                   <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-
-                      border-radius: 4px;
-                    "
                     :style="
                       itemCards[2] == true ? 'background-color: white' : ''
                     "
@@ -263,25 +190,14 @@
                       <strong>{{ global.taskday }}</strong>
                     </span>
                   </div>
-                </div>
-                <div class="row" style="height: 10px" />
-                <!-- First Second -->
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                </b-row>
+                <b-row style="height: 10px" />
+                <!-- Second Line-->
+                <b-row
+                  :class="classWrapper"
                 >
                   <!-- Box Second-->
                   <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-
-                      border-radius: 4px;
-                    "
                     :style="
                       itemCards[2] == true ? 'background-color: white' : ''
                     "
@@ -297,27 +213,21 @@
                       <strong>{{ global.taskmonth }}</strong>
                     </span>
                   </div>
-                </div>
+                </b-row>
               </b-card-text>
             </b-card>
           </b-row>
           <!-- Card Sales-->
-          <b-row class="pl-1 pr-1">
+          <b-row class="b-row-card">
             <b-card
-              class="
-                ecommerce-card-sales ecommerce-card
-                col-lg-12
-                h-150
-                cursor-pointer
-              "
+              class="ecommerce-card-sales ecommerce-card col-lg-12 cursor-pointer"
               :class="classAdd"
               @click="changeTab(3)"
               :style="
-                itemCards[3] == true
-                  ? 'background: linear-gradient(to right, #28c76f, rgb(240, 214, 240));color: white'
-                  : classAdd == 'dark'
-                  ? ''
-                  : 'background-color:aliceblue'
+                switchHoverByCard(
+                  3,
+                  'linear-gradient(to right, #28c76f, rgb(240, 214, 240))'
+                )
               "
             >
               <!-- Card Title -->
@@ -327,22 +237,11 @@
               <!-- Card Content -->
               <b-card-text>
                 <!-- First Line -->
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                <b-row
+                  :class="classWrapper"
                 >
                   <!-- Box First -->
                   <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-
-                      border-radius: 4px;
-                    "
                     :style="
                       itemCards[3] == true ? 'background-color: white' : ''
                     "
@@ -358,25 +257,14 @@
                       <strong>{{ global.vendioday }}</strong>
                     </span>
                   </div>
-                </div>
-                <div class="row" style="height: 10px" />
+                </b-row>
+                <b-row style="height: 10px" />
                 <!-- Second Line -->
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                <b-row
+                  :class="classWrapper"
                 >
                   <!-- Box Second -->
                   <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-
-                      border-radius: 4px;
-                    "
                     :style="
                       itemCards[3] == true ? 'background-color: white' : ''
                     "
@@ -392,27 +280,21 @@
                       <strong>{{ global.vendiomonth }}</strong>
                     </span>
                   </div>
-                </div>
+                </b-row>
               </b-card-text>
             </b-card>
           </b-row>
           <!-- Card Capturated-->
-          <b-row class="pl-1 pr-1">
+          <b-row class="b-row-card">
             <b-card
-              class="
-                ecommerce-card-capturated ecommerce-card
-                col-lg-12
-                h-150
-                cursor-pointer
-              "
+              class="ecommerce-card-capturated ecommerce-card col-lg-12 cursor-pointer"
               :class="classAdd"
               @click="changeTab(4)"
               :style="
-                itemCards[4] == true
-                  ? 'background: linear-gradient(to right, #e83e8c, rgb(211, 192, 211));color: white'
-                  : classAdd == 'dark'
-                  ? ''
-                  : 'background-color:aliceblue'
+                switchHoverByCard(
+                  4,
+                  'linear-gradient(to right, #e83e8c, rgb(211, 192, 211))'
+                )
               "
             >
               <!-- Card Title -->
@@ -422,17 +304,11 @@
               <!--Card Content  -->
               <b-card-text>
                 <!-- First Line -->
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                <b-row
+                  :class="classWrapper"
                 >
                   <!-- Box First -->
                   <div
-                    style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
                       itemCards[4] == true ? 'background-color: white' : ''
                     "
@@ -448,20 +324,14 @@
                       <strong>{{ global.clientday }}</strong>
                     </span>
                   </div>
-                </div>
-                <div class="row" style="height: 10px" />
+                </b-row>
+                <b-row style="height: 10px" />
                 <!-- Second Line -->
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                <b-row
+                  :class="classWrapper"
                 >
                   <!-- Box Second -->
                   <div
-                    style="width: 17px; height: 17px; border-radius: 4px"
                     :style="
                       itemCards[4] == true ? 'background-color: white' : ''
                     "
@@ -477,7 +347,7 @@
                       <strong>{{ global.clientmonth }}</strong>
                     </span>
                   </div>
-                </div>
+                </b-row>
               </b-card-text>
             </b-card>
           </b-row>
@@ -490,10 +360,7 @@
             <br />
 
             <!-- Content Card -->
-            <b-row
-              class=""
-              :style="allSizeOfScreen === 'xxl' ? 'height:130px' : ''"
-            >
+            <b-row :style="allSizeOfScreen === 'xxl' ? 'height:130px' : ''">
               <div class="mb-1 mb-sm-0 d-inline col-lg-10 col-md-12 col-xl-7">
                 <b-row>
                   <!-- Select User -->
@@ -501,7 +368,6 @@
                     <v-select
                       v-if="[1, 2].includes(currentUser.role_id)"
                       v-model="userfilter"
-                      class="style-chooser"
                       :style="
                         allSizeOfScreen === 'xxl'
                           ? 'width: 250px;font-size: 18px'
@@ -524,12 +390,7 @@
                     class="d-flex flex-wrap pb-1"
                   >
                     <div
-                      class="
-                        d-flex
-                        align-items-center
-                        justify-content-center
-                        pr-1
-                      "
+                      class="d-flex align-items-center justify-content-center pr-1"
                     >
                       <!-- Graphic Sub Title -->
                       <div>
@@ -546,7 +407,6 @@
                     <!-- Select Year -->
                     <v-select
                       v-model="year"
-                      class="per-page-selector"
                       style="font-size: 15px"
                       :style="
                         allSizeOfScreen === 'xxl'
@@ -572,7 +432,9 @@
                   :style="`${
                     allSizeOfScreen === 'xs' || allSizeOfScreen === 'sm'
                       ? 'width: 100%'
-                      : statusSizeScreen==800?'width: 100%':'width: 50%'
+                      : statusSizeScreen == 800
+                      ? 'width: 100%'
+                      : 'width: 50%'
                   }`"
                 >
                   <!-- Name of Total -->
@@ -616,25 +478,22 @@
           </b-card>
         </b-col>
       </b-row>
-    </div>
+    </b-col>
   </b-row>
 </template>
 
-
-
 <script>
-import { useWindowSize } from "@vueuse/core";
-
-import { dragscroll } from "vue-dragscroll";
-import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
-import { mapGetters } from "vuex";
-import vSelect from "vue-select";
-import moment from "moment";
+import { useWindowSize } from "@vueuse/core"
+import { dragscroll } from "vue-dragscroll"
+import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue"
+import { mapGetters } from "vuex"
+import vSelect from "vue-select"
+import moment from "moment"
 // Import Components
-import AppEchartLine from "@core/components/charts/echart/AppEchartLine.vue";
-import AppEchartLineCrm from "./components/AppEchartLineCrm.vue";
+import AppEchartLine from "@core/components/charts/echart/AppEchartLine.vue"
+import AppEchartLineCrm from "./components/AppEchartLineCrm.vue"
 // Import Services
-import DashboardService from "./service/dashboard.service";
+import DashboardService from "./service/dashboard.service"
 export default {
   name: "DashboardCrm",
   directives: {
@@ -687,56 +546,79 @@ export default {
       item: null,
       widthOfScreen: null,
       heightOfScreen: null,
-      statusMouseOver: false,
-      val: this.width,
-    };
+    }
+  },
+  created: function () {
+    this.userCreator()
+    this.allData()
+    this.yearSelect()
   },
   computed: {
-    statusSizeScreen() {
-      const { width, height } = useWindowSize();
-      // return height.value
+    classWrapper:function(){
+      return "item-wrapper justify-content-center align-items-center"
+    },
+    classAdd: function () {
+      return this.skin == "dark" ? "dark" : ""
+    },
+
+    statusSizeScreen: function () {
+      const { width, height } = useWindowSize()
       return height.value
-      // console.log(width)
-      // this.widthOfScreen= width
-      // this.heightOfScreen= height
-      // console.log("width and height",this.widthOfScreen,this.heightOfScreen)
     },
     ...mapGetters({
       bigheightScreen: "app/bigheightScreen",
       mediumheightScreen: "app/mediumheightScreen",
       allSizeOfScreen: "app/allSizeOfScreen",
     }),
-    statusHeightByScreenColOne() {
+    statusHeightByScreenColOne: function () {
       switch (this.allSizeOfScreen) {
         case "xxl":
-          return "height: 800px !important;max-height: 900px !important;";
+          return "height: 800px !important;max-height: 900px !important;"
         case "xl":
-          return "height: 75vh;max-height: 75vh;overflow: auto;";
+          return "height: 75vh;max-height: 75vh;overflow: auto;"
         case "lg":
-          return "height: 70vh;max-height: 70vh;overflow: auto;";
+          return "height: 70vh;max-height: 70vh;overflow: auto;"
         case "md":
-          return "height: 155vh;max-height: 155vh;overflow: auto;";
+          return "height: 155vh;max-height: 155vh;overflow: auto;"
         case "sm":
-          return "height: 170vh;max-height: 180vh;overflow: auto;";
+          return "height: 170vh;max-height: 180vh;overflow: auto;"
         default:
-          return "";
+          return ""
       }
     },
-    statusHeightByScreenColTwo() {
-      console.log(this.allSizeOfScreen);
+    statusHeightByDevicesColOne: function () {
+      return this.statusSizeScreen >= 1368
+        ? "height: 45vh;max-height: 45vh;overflow: auto;"
+        : this.statusSizeScreen >= 1024
+        ? "height: 55vh;max-height: 55vh;overflow: auto;"
+        : this.statusSizeScreen >= 912 && this.allSizeOfScreen !== "xxl"
+        ? "height: 50vh;max-height: 50vh;overflow: auto;"
+        : this.statusSizeScreen >= 912
+        ? ""
+        : this.statusSizeScreen >= 800
+        ? "height: 60vh;max-height: 60vh;overflow: auto;"
+        : this.statusSizeScreen >= 768
+        ? ""
+        : this.statusSizeScreen >= 720
+        ? "height: 80vh;max-height: 80vh;overflow: auto;"
+        : this.statusSizeScreen >= 540 && this.statusSizeScreen <= 600
+        ? "height: 110vh;max-height: 110vh;overflow: auto;"
+        : ""
+    },
+    statusHeightByScreenColTwo: function () {
       switch (this.allSizeOfScreen) {
         case "xxl":
-          return "height: 800px !important;max-height: 900px !important;";
+          return "height: 800px !important;max-height: 900px !important;"
         case "xl":
-          return "height: 520px !important;max-height: 520px !important;";
+          return "height: 520px !important;max-height: 520px !important;"
         case "lg":
-          return "";
+          return ""
         case "md":
-          return "";
+          return ""
         case "sm":
-          return "";
+          return ""
         default:
-          return "";
+          return ""
       }
     },
     ...mapGetters({
@@ -745,57 +627,44 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
-    classAdd: function () {
-      return this.skin == "dark" ? "dark" : "";
-    },
-    rePaint: function () {
-      return this.option;
-    },
-  },
-  watch:{
-    statusSizeScreen(newValue){
-      console.log(newValue)
-    },
-  },
-  created: function () {
-    this.userCreator();
-    this.allData();
-    this.yearSelect();
-  },
-  methods: {
-    statusMouse(event) {
-      this.statusMouseOver = true;
-      // container.scrollHeight = event.screenY
-      // console.log(event)
-      // console.log(event.clientX)
-      // event.clientY = event.clientY
-      // console.log("sdsds",event)
-      // console.log(container.scrollHeight);
-    },
-    statusLeave() {
-      this.statusMouseOver = false;
-    },
 
+    rePaint: function () {
+      return this.option
+    },
+  },
+
+  methods: {
+    switchHoverByCard(index, background) {
+      for (let i = 0; i < this.itemCards.length; i++) {
+        if (index == i) {
+          return this.itemCards[i] == true
+            ? `background: ${background};color: white`
+            : this.classAdd == "dark"
+            ? ""
+            : "background-color:aliceblue"
+        }
+      }
+    },
     statusColor: function (name) {
-      let color = "";
+      let color = ""
       switch (name) {
         case "Total leads":
-          color = "#84d0ff";
-          break;
+          color = "#84d0ff"
+          break
         case "Total Appointments":
-          color = "#299aff";
-          break;
+          color = "#299aff"
+          break
         case "Total Calls":
-          color = "#82868b";
-          break;
+          color = "#82868b"
+          break
         case "Total Sales":
-          color = "#28c76f";
-          break;
+          color = "#28c76f"
+          break
         case "Total Captured":
-          color = "#e83e8c";
-          break;
+          color = "#e83e8c"
+          break
       }
-      return color;
+      return color
     },
     chargeDataToEchart: function (array, name) {
       if (this.option.series <= 0) {
@@ -804,14 +673,14 @@ export default {
           name: name,
           data: array,
           color: this.statusColor(name),
-        });
+        })
       } else {
-        let found = false;
+        let found = false
         for (let i = 0; i < this.option.series.length; i++) {
-          let object = this.option.series[i];
+          let object = this.option.series[i]
           if (name.localeCompare(object.name) == 0) {
-            this.option.series.splice(i, 1);
-            found = true;
+            this.option.series.splice(i, 1)
+            found = true
           }
         }
         if (!found) {
@@ -820,163 +689,163 @@ export default {
             name: name,
             data: array,
             color: this.statusColor(name),
-          });
+          })
         }
       }
-      this.idEchart++;
+      this.idEchart++
     },
     chargeDataToEchartNew: function (array, name) {
-      this.option.series = [];
+      this.option.series = []
       if (this.option.series <= 0) {
         this.option.series.push({
           type: "line",
           name: name,
           data: array,
           color: this.statusColor(name),
-        });
+        })
       }
-      this.idEchart++;
+      this.idEchart++
     },
     changeItemCards: function (index) {
       for (let i = 0; i < this.itemCards.length; i++) {
         if (i === index) {
           if (this.itemCards[i] == true) {
-            this.itemCards[i] = false;
+            this.itemCards[i] = false
           } else {
-            this.itemCards[i] = true;
+            this.itemCards[i] = true
           }
         }
       }
     },
     changeListYear: function (name, total) {
       if (this.totalYearByCard <= 0) {
-        this.totalYearByCard.push({ name: name, total: total });
+        this.totalYearByCard.push({ name: name, total: total })
       } else {
-        let found = false;
+        let found = false
         for (let i = 0; i < this.totalYearByCard.length; i++) {
-          let object = this.totalYearByCard[i];
+          let object = this.totalYearByCard[i]
           if (name.localeCompare(object.name) == 0) {
-            this.totalYearByCard.splice(i, 1);
-            found = true;
+            this.totalYearByCard.splice(i, 1)
+            found = true
           }
         }
         if (!found) {
-          this.totalYearByCard.push({ name: name, total: total });
+          this.totalYearByCard.push({ name: name, total: total })
         }
       }
     },
     changeListYearNew: function (name, total) {
-      this.totalYearByCard = [];
+      this.totalYearByCard = []
       if (this.totalYearByCard <= 0) {
-        this.totalYearByCard.push({ name: name, total: total });
+        this.totalYearByCard.push({ name: name, total: total })
       }
     },
     // Change By Card
     changeTab: function (index) {
-      this.widthOfScreen = window.screen.width;
-      this.heightOfScreen = window.screen.height;
-      this.changeItemCards(index);
+      this.widthOfScreen = window.screen.width
+      this.heightOfScreen = window.screen.height
+      this.changeItemCards(index)
       switch (index) {
         case 0:
-          this.total_year = this.global.leads_year;
-          this.chargeDataToEchart(this.leads, "Total leads");
-          this.changeListYear("Total leads", this.global.leads_year);
-          break;
+          this.total_year = this.global.leads_year
+          this.chargeDataToEchart(this.leads, "Total leads")
+          this.changeListYear("Total leads", this.global.leads_year)
+          break
         case 1:
-          this.total_year = this.global.quotes_year;
-          this.chargeDataToEchart(this.quotes, "Total Appointments");
-          this.changeListYear("Total Appointments", this.global.quotes_year);
-          break;
+          this.total_year = this.global.quotes_year
+          this.chargeDataToEchart(this.quotes, "Total Appointments")
+          this.changeListYear("Total Appointments", this.global.quotes_year)
+          break
         case 2:
-          this.total_year = this.global.calls_year;
-          this.chargeDataToEchart(this.calls, "Total Calls");
-          this.changeListYear("Total Calls", this.global.calls_year);
-          break;
+          this.total_year = this.global.calls_year
+          this.chargeDataToEchart(this.calls, "Total Calls")
+          this.changeListYear("Total Calls", this.global.calls_year)
+          break
         case 3:
-          this.total_year = this.global.sales_year;
-          this.chargeDataToEchart(this.sales, "Total Sales");
-          this.changeListYear("Total Sales", this.global.sales_year);
-          break;
+          this.total_year = this.global.sales_year
+          this.chargeDataToEchart(this.sales, "Total Sales")
+          this.changeListYear("Total Sales", this.global.sales_year)
+          break
         case 4:
-          this.total_year = this.global.clients_year;
-          this.chargeDataToEchart(this.captur, "Total Captured");
-          this.changeListYear("Total Captured", this.global.clients_year);
-          break;
+          this.total_year = this.global.clients_year
+          this.chargeDataToEchart(this.captur, "Total Captured")
+          this.changeListYear("Total Captured", this.global.clients_year)
+          break
       }
-      this.index = index;
+      this.index = index
     },
     allData: async function (status = null) {
       try {
-        this.addPreloader();
-        let { user_id } = this.currentUser;
+        this.addPreloader()
+        let { user_id } = this.currentUser
         if (this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
-          user_id = 0;
+          user_id = 0
         }
         const response = await DashboardService.getDashboardData({
           created_id: user_id,
-        });
-        this.userfilter = response.data.usercreate;
-        this.global = response.data;
-        this.leads = response.data.leads.map((list) => list);
-        this.quotes = response.data.quotes.map((list) => list);
-        this.calls = response.data.calls.map((list) => list);
-        this.sales = response.data.sales.map((list) => list);
-        this.captur = response.data.vendio.map((list) => list);
-        this.removePreloader();
+        })
+        this.userfilter = response.data.usercreate
+        this.global = response.data
+        this.leads = response.data.leads.map((list) => list)
+        this.quotes = response.data.quotes.map((list) => list)
+        this.calls = response.data.calls.map((list) => list)
+        this.sales = response.data.sales.map((list) => list)
+        this.captur = response.data.vendio.map((list) => list)
+        this.removePreloader()
         if (status == null) {
-          this.chargeDataToEchart(this.leads, "Total leads");
-          this.changeListYear("Total leads", this.global.leads_year);
+          this.chargeDataToEchart(this.leads, "Total leads")
+          this.changeListYear("Total leads", this.global.leads_year)
         } else {
-          this.chargeDataToEchartNew(this.leads, "Total leads");
-          this.changeListYearNew("Total leads", this.global.leads_year);
+          this.chargeDataToEchartNew(this.leads, "Total leads")
+          this.changeListYearNew("Total leads", this.global.leads_year)
         }
-        this.total_year = this.global.leads_year;
+        this.total_year = this.global.leads_year
       } catch (error) {
-        console.log(error);
-        this.removePreloader();
+        console.log(error)
+        this.removePreloader()
         this.showToast(
           "danger",
           "top-right",
           "Error",
           "XIcon",
           "Something went wrong!"
-        );
+        )
       }
     },
     // Change By User or Year
     filtroCont: async function () {
-      this.itemCards = [true, false, false, false, false];
+      this.itemCards = [true, false, false, false, false]
       if (this.userfilter != null) {
         try {
-          this.addPreloader();
+          this.addPreloader()
           const response = await DashboardService.getDashboardData({
             created_id: this.userfilter,
             anio: this.year,
-          });
-          this.global = response.data;
-          this.leads = response.data.leads.map((list) => list);
-          this.quotes = response.data.quotes.map((list) => list);
-          this.calls = response.data.calls.map((list) => list);
-          this.sales = response.data.sales.map((list) => list);
-          this.captur = response.data.vendio.map((list) => list);
-          this.chargeDataToEchartNew(this.leads, "Total leads");
-          this.changeListYearNew("Total leads", this.global.leads_year);
-          this.total_year = this.global.leads_year;
-          this.removePreloader();
+          })
+          this.global = response.data
+          this.leads = response.data.leads.map((list) => list)
+          this.quotes = response.data.quotes.map((list) => list)
+          this.calls = response.data.calls.map((list) => list)
+          this.sales = response.data.sales.map((list) => list)
+          this.captur = response.data.vendio.map((list) => list)
+          this.chargeDataToEchartNew(this.leads, "Total leads")
+          this.changeListYearNew("Total leads", this.global.leads_year)
+          this.total_year = this.global.leads_year
+          this.removePreloader()
         } catch (error) {
-          console.error(error);
-          this.removePreloader();
+          console.error(error)
+          this.removePreloader()
           this.showToast(
             "danger",
             "top-right",
             "Error",
             "XIcon",
             "Something went wrong!"
-          );
+          )
         }
       } else {
-        this.allData("update");
-        this.year = this.years[this.years.length - 1];
+        this.allData("update")
+        this.year = this.years[this.years.length - 1]
       }
     },
     userCreator: async function () {
@@ -984,26 +853,26 @@ export default {
         const data = await DashboardService.userCreator({
           roles: "",
           type: "1",
-        });
-        this.users = data;
+        })
+        this.users = data
       } catch (error) {
-        console.log(error);
+        console.log(error)
         this.showToast(
           "danger",
           "top-right",
           "Error",
           "XIcon",
           "Something went wrong!"
-        );
+        )
       }
     },
     yearSelect: function () {
       for (let x = 2014; x <= moment().format("YYYY"); x++) {
-        this.years.push(x);
+        this.years.push(x)
       }
     },
   },
-};
+}
 </script>
 
 <style lang="scss">
@@ -1011,40 +880,29 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-// Styles V-select
-// .col-cards {
-//   // height: 70vh;
-//   // max-height: 70vh;
-//   height: 800px !important;
-//   max-height: 900px !important;
-//   overflow: auto;
-// }
-// .col-cards-two{
-//   height: 800px !important;
-//   max-height: 900px !important;
-// }
 // hidding scrollbar
 .col-tab::-webkit-scrollbar {
   width: 0;
   background: transparent;
 }
 
-.item-view-radio-group ::v-deep {
-  .btn {
-    display: flex;
-    align-items: center;
-  }
-}
-
 .div-box1 {
   background-color: #0090e7;
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
 }
 .div-box {
   background-color: #8f5fe8;
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
 }
+// All Titles
 .ecommerce-card .card-title {
   font-weight: bold;
 }
+// Card Leads
 .ecommerce-card-leads {
   &:hover {
     .div-box {
@@ -1059,6 +917,7 @@ export default {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
     background: linear-gradient(90deg, #0090e7 0%, #8f5fe8 100%);
+    // background: var(--li);
     color: white;
   }
   &:hover {
@@ -1073,6 +932,7 @@ export default {
   }
 }
 
+// Card Appointments
 .ecommerce-card-appointments {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
@@ -1090,7 +950,7 @@ export default {
     }
   }
 }
-
+// Card Tasks
 .ecommerce-card-tasks {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
@@ -1108,6 +968,7 @@ export default {
     }
   }
 }
+// Card Sales
 .ecommerce-card-sales {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
@@ -1125,7 +986,7 @@ export default {
     }
   }
 }
-
+// Card Capturated
 .ecommerce-card-capturated {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
@@ -1143,12 +1004,19 @@ export default {
     }
   }
 }
-
-.per-page-selector {
+// V-Select Year
+.select-year {
   width: 130px;
 }
 
+// V-Select User
 .per-page-selector-user {
   width: 200px;
+}
+
+// Space Cards
+.b-row-card {
+  padding-left: 13.5px;
+  padding-right: 13.5px;
 }
 </style>
