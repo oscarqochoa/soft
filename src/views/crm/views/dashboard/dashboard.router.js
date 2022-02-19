@@ -6,10 +6,10 @@ export default [
     meta: {
       isClientsTab: true,
       module: 2,
-      pageTitle: "Dashsboard",
+      pageTitle: "Dashboard",
       breadcrumb: [
         {
-          text: "Dashsboard",
+          text: "Dashboard",
           active: true,
         },
       ],
