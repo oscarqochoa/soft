@@ -56,7 +56,7 @@ export default {
           left: "40px",
           right: "4%",
           // height: "70%", (this.screen >=180?
-          height: this.allSizeOfScreen ==='xxl'? "85%":"68%",
+          height: this.allSizeOfScreen ==='xxl'? "85%":"65%",
           containLabel: false,
         },
         tooltip: {

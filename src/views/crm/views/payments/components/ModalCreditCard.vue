@@ -39,24 +39,14 @@
               </template>
               <template #cell(cardnumber)="data">
                 <div
-                  class="
-                    d-flex
-                    flex-column
-                    justify-content-start
-                    align-items-start
-                  "
+                  :class="classByColumn"
                 >
                   <span> {{ "XXXX-XXXX-XXXX-" + data.item.cardnumber }} </span>
                 </div>
               </template>
               <template #cell(cardsecuritycode)="data">
                 <div
-                  class="
-                    d-flex
-                    flex-column
-                    justify-content-start
-                    align-items-start
-                  "
+                  :class="classByColumn"
                 >
                   <span>
                     {{
@@ -95,8 +85,11 @@
   </b-card>
 </template>
 <script>
-import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
+// Import Services
 import PaymentService from "../service/payments.service";
+// Import Modal
+import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
+// Import Data
 import fields from "../data/fields.credit.card";
 export default {
   components: {
@@ -117,39 +110,14 @@ export default {
       modalCard: false,
       deletecardmodal: false,
       card_id: "",
-      fields: [
-        {
-          key: "Select",
-          label: "",
-        },
-        {
-          key: "cardholdername",
-          label: "Card Holder Name",
-        },
-        {
-          key: "cardnumber",
-          label: "Card Number",
-        },
-        {
-          key: "type_card",
-          label: "Type",
-        },
-        {
-          key: "card_expi_month",
-          label: "MM",
-        },
-        {
-          key: "card_expi_year",
-          label: "YY",
-        },
-        {
-          key: "cardsecuritycode",
-          label: "CVC",
-        },
-      ],
+      fields: fields,
     };
   },
-
+  computed:{
+    classByColumn(){
+      return "d-flex flex-column justify-content-start align-items-start"
+    }
+  },
   created:function() {
     this.searchcards();
   },
