@@ -43,6 +43,7 @@
         <template #date-header="{date, fullDay, haveEvents, events}">
           <div
             class="py-50 text-center w-100 border-bottom font-weight-bolder"
+            style="padding: 10px 0 !important;"
             :class="haveEvents ? `bg-${taskColor[events[0].title]} text-white border-bottom-0 ${skin !== 'dark' ? 'border-c4c4c4' : ''}` : `${skin !== 'dark' ? 'border-c4c4c4' : ''}`"
           >
             {{ fullDay }}, {{ date }}
@@ -54,6 +55,7 @@
             :class="haveEvents ? `text-white` : ''"
           >
             <task-calendar
+                style="padding-top: 30px !important;"
               v-if="haveEvents"
               :task="events[0]"
             />
@@ -63,6 +65,7 @@
           <span
             v-if="haveEvents"
             class="px-50 pb-50 pt-0 text-right w-100"
+            style="padding-bottom: 20px !important;"
             :class="haveEvents ? `bg-light-${taskColor[events[0].title]} ` : ''"
           >
             <b-button

@@ -2,14 +2,14 @@
   <!-- Need to add height inherit because Vue 2 don't support multiple root ele -->
   <div style="height: inherit">
     <div
-      class="body-content-overlay"
-      :class="{
+        class="body-content-overlay"
+        :class="{
         show:
           shallShowUserProfileSidebar ||
           shallShowActiveChatContactSidebar ||
           mqShallShowLeftSidebar,
       }"
-      @click="
+        @click="
         mqShallShowLeftSidebar =
           shallShowActiveChatContactSidebar =
           shallShowUserProfileSidebar =
@@ -37,42 +37,42 @@
               <!-- Toggle Icon -->
               <div class="sidebar-toggle d-block d-lg-none mr-1">
                 <feather-icon
-                  icon="MenuIcon"
-                  class="cursor-pointer"
-                  size="21"
-                  @click="mqShallShowLeftSidebar = true"
+                    icon="MenuIcon"
+                    class="cursor-pointer"
+                    size="21"
+                    @click="mqShallShowLeftSidebar = true"
                 />
               </div>
               <b-avatar
-                size="36"
-                :src="S_USER_TO_MESSAGE.avatar"
-                :icon="
+                  size="36"
+                  :src="S_USER_TO_MESSAGE.avatar"
+                  :icon="
                   S_USER_TO_MESSAGE.type == 1 ? 'person-fill' : 'people-fill'
                 "
-                class="mr-1 cursor-pointer badge-minimal"
+                  class="mr-1 cursor-pointer badge-minimal"
               />
               <!-- @click.native="shallShowActiveChatContactSidebar = true" -->
               <h6 class="mb-0">
                 <span v-if="S_USER_TO_MESSAGE.type == 1">
                   {{
-                  S_USER_TO_MESSAGE.fullName
+                    S_USER_TO_MESSAGE.fullName
                   }}
                 </span>
                 <template v-else>
                   <template v-for="user in S_USER_TO_MESSAGE.listUsers">
                     <span
-                      :key="user.id"
-                      v-if="user.id_user != currentUser.user_id"
-                      class="d-inline-flex align-items-center mr-1"
+                        :key="user.id"
+                        v-if="user.id_user != currentUser.user_id"
+                        class="d-inline-flex align-items-center mr-1"
                     >
                       <span style="margin-right: 10px">
                         {{
-                        user.user_name
+                          user.user_name
                         }}
                       </span>
                       <amg-icon
-                        icon="CircleIcon"
-                        :style="{
+                          icon="CircleIcon"
+                          :style="{
                           color: user.user_status == 1 ? '#28C76F' : 'gray',
                           fill: user.user_status == 1 ? '#28C76F' : 'gray',
                         }"
@@ -88,45 +88,45 @@
               <template v-if="searchedMessages.length > 0">
                 <span :style="{ marginRight: '10px' }">{{ from }} de {{ total }}</span>
                 <amg-icon
-                  icon="ChevronDownIcon"
-                  size="20"
-                  class="cursor-pointer"
-                  :style="{
+                    icon="ChevronDownIcon"
+                    size="20"
+                    class="cursor-pointer"
+                    :style="{
                     pointerEvents: from == 1 ? 'none' : 'auto',
                     opacity: from == 1 ? 0.5 : 1,
                   }"
-                  @click="searchMessageInChat(false, true)"
+                    @click="searchMessageInChat(false, true)"
                 />
                 <amg-icon
-                  icon="ChevronUpIcon"
-                  size="20"
-                  class="cursor-pointer"
-                  :style="{
+                    icon="ChevronUpIcon"
+                    size="20"
+                    class="cursor-pointer"
+                    :style="{
                     pointerEvents: from == total ? 'none' : 'auto',
                     opacity: from == total ? 0.5 : 1,
                     marginRight: '10px',
                   }"
-                  @click="searchMessageInChat(true, false)"
+                    @click="searchMessageInChat(true, false)"
                 />
               </template>
               <b-input-group class="input-group-merge" style="width: 68%">
                 <b-form-input
-                  id="search-messages"
-                  placeholder="Search Messages"
-                  v-model="messageToSearch"
-                  @keyup.enter="searchMessageInChat(false, false)"
+                    id="search-messages"
+                    placeholder="Search Messages"
+                    v-model="messageToSearch"
+                    @keyup.enter="searchMessageInChat(false, false)"
                 />
                 <b-input-group-append is-text>
                   <amg-icon
-                    v-if="searchedMessages.length > 0"
-                    icon="XIcon"
-                    class="cursor-pointer mr-1"
-                    @click="cleanSearchMessageInChat()"
+                      v-if="searchedMessages.length > 0"
+                      icon="XIcon"
+                      class="cursor-pointer mr-1"
+                      @click="cleanSearchMessageInChat()"
                   />
                   <amg-icon
-                    icon="SearchIcon"
-                    class="cursor-pointer"
-                    @click="searchMessageInChat(false, false)"
+                      icon="SearchIcon"
+                      class="cursor-pointer"
+                      @click="searchMessageInChat(false, false)"
                   />
                 </b-input-group-append>
               </b-input-group>
@@ -151,59 +151,59 @@
         </div>
         <!-- User Chat Area -->
         <b-overlay
-          id="overlay-background"
-          :show="isLoadingChatLog"
-          :variant="skin == 'dark' ? 'dark' : 'light'"
-          :opacity="0.85"
-          :blur="'1px'"
-          rounded="sm"
-          style="height: calc(50% - 32.5px)"
+            id="overlay-background"
+            :show="isLoadingChatLog"
+            :variant="skin == 'dark' ? 'dark' : 'light'"
+            :opacity="0.85"
+            :blur="'1px'"
+            rounded="sm"
+            style="height: calc(50% - 32.5px)"
         >
           <!-- style="height: calc(50% - 32.5px)" -->
           <!-- 46%; -->
           <vue-perfect-scrollbar
-            ref="refChatLogPS"
-            :settings="perfectScrollbarSettings"
-            class="user-chats scroll-area"
-            :style="{ height: !subjectresp ? '100%' : 'calc(100% - 78px)' }"
-            id="chat"
-            @scroll="scrollListener($event)"
+              ref="refChatLogPS"
+              :settings="perfectScrollbarSettings"
+              class="user-chats scroll-area"
+              :style="{ height: !subjectresp ? '100%' : 'calc(100% - 78px)' }"
+              id="chat"
+              @scroll="scrollListener($event)"
           >
             <chat-log
-              :chat-data="S_USER_MESSAGES"
-              @scroll-to-bottom="scrollToBottom"
-              @reply-message="onReplyMessage"
-              :profile-user-avatar="currentUser.avatar"
-              :loading="loading"
-              ref="chatLog"
+                :chat-data="S_USER_MESSAGES"
+                @scroll-to-bottom="scrollToBottom"
+                @reply-message="onReplyMessage"
+                :profile-user-avatar="currentUser.avatar"
+                :loading="loading"
+                ref="chatLog"
             />
           </vue-perfect-scrollbar>
           <div
-            v-if="subjectresp"
-            class="chat-reply pl-1 pr-1 d-flex justify-content-between align-items-center"
-            :style="{ height: '78px', overflow: 'auto' }"
+              v-if="subjectresp"
+              class="chat-reply pl-1 pr-1 d-flex justify-content-between align-items-center"
+              :style="{ height: '78px', overflow: 'auto' }"
           >
             <b-alert
-              variant="primary"
-              show
-              style="
+                variant="primary"
+                show
+                style="
                 background: rgb(29 34 46 / %) !important;
                 border-left: 5px solid #28c76f !important;
                 margin-top: 10px;
                 width: 100%;
                 padding: 10px;
               "
-              class="mr-1"
+                class="mr-1"
             >
               <h4>{{ subjectresp }}</h4>
               <span v-html="contentresp"></span>
             </b-alert>
             <span>
               <amg-icon
-                icon="XCircleIcon"
-                class="text-primary cursor-pointer"
-                size="20"
-                @click="closeReply()"
+                  icon="XCircleIcon"
+                  class="text-primary cursor-pointer"
+                  size="20"
+                  @click="closeReply()"
               />
             </span>
           </div>
@@ -212,36 +212,36 @@
 
         <!-- Message Input -->
         <chat-compose
-          style="height: calc(50% - 32.5px)"
-          @scroll-to-bottom="scrollToBottom"
-          :subjectresp="subjectresp"
-          :contentresp="contentresp"
-          @on-send-message-reply="closeReply()"
+            style="height: calc(50% - 32.5px)"
+            @scroll-to-bottom="scrollToBottom"
+            :subjectresp="subjectresp"
+            :contentresp="contentresp"
+            @on-send-message-reply="closeReply()"
         ></chat-compose>
       </div>
     </section>
 
     <!-- Active Chat Contact Details Sidebar -->
     <chat-active-chat-content-details-sidedbar
-      :shall-show-active-chat-contact-sidebar.sync="
+        :shall-show-active-chat-contact-sidebar.sync="
         shallShowActiveChatContactSidebar
       "
-      :contact="S_USER_MESSAGES.contact || {}"
+        :contact="S_USER_MESSAGES.contact || {}"
     />
 
     <!-- Sidebar -->
     <portal to="content-renderer-sidebar-left">
       <chat-left-sidebar
-        :chats-contacts="S_USER_CONTACTS"
-        :active-chat-contact-id="
+          :chats-contacts="S_USER_CONTACTS"
+          :active-chat-contact-id="
           S_USER_MESSAGES.contact ? S_USER_MESSAGES.contact.id : null
         "
-        :shall-show-user-profile-sidebar.sync="shallShowUserProfileSidebar"
-        :profile-user-data="profileUserData"
-        :profile-user-minimal-data="{ avatar: this.currentUser.avatar }"
-        :mq-shall-show-left-sidebar.sync="mqShallShowLeftSidebar"
-        @show-user-profile="showUserProfileSidebar"
-        @open-chat="openChat"
+          :shall-show-user-profile-sidebar.sync="shallShowUserProfileSidebar"
+          :profile-user-data="profileUserData"
+          :profile-user-minimal-data="{ avatar: this.currentUser.avatar }"
+          :mq-shall-show-left-sidebar.sync="mqShallShowLeftSidebar"
+          @show-user-profile="showUserProfileSidebar"
+          @open-chat="openChat"
       />
     </portal>
   </div>
@@ -354,8 +354,8 @@ export default {
     },
     async scrollListener(e) {
       if (
-        e.target.scrollTop == 0 &&
-        this.S_USER_MESSAGES.chat.chat.length < this.S_TOTAL_MESSAGES
+          e.target.scrollTop == 0 &&
+          this.S_USER_MESSAGES.chat.chat.length < this.S_TOTAL_MESSAGES
       ) {
         this.isLoadingChatLog = true;
         this.page++;
@@ -415,8 +415,8 @@ export default {
           let subjectContent = subject.textContent;
           let result = subjectContent.match(RegExp(this.messageToSearch, "gi"));
           let span = subjectContent.replace(
-            result,
-            `<span class="text-searched"> ${result} </span>`
+              result,
+              `<span class="text-searched"> ${result} </span>`
           );
           subject.innerHTML = span;
         });
@@ -424,8 +424,8 @@ export default {
           let messageContent = message.innerHTML;
           let result = messageContent.match(RegExp(this.messageToSearch, "gi"));
           let span = messageContent.replace(
-            result,
-            `<span class="text-searched"> ${result} </span>`
+              result,
+              `<span class="text-searched"> ${result} </span>`
           );
           message.innerHTML = span;
         });
@@ -443,11 +443,11 @@ export default {
         let subjects = targetSubjects[index].innerHTML;
         let messages = targetMessages[index].innerHTML;
         let nuevaCadena1 = subjects
-          .replace(RegExp(textsearch1, "gi"), "")
-          .replace(RegExp(textsearch2, "gi"), "");
+            .replace(RegExp(textsearch1, "gi"), "")
+            .replace(RegExp(textsearch2, "gi"), "");
         let nuevaCadena2 = messages
-          .replace(RegExp(textsearch1, "gi"), "")
-          .replace(RegExp(textsearch2, "gi"), "");
+            .replace(RegExp(textsearch1, "gi"), "")
+            .replace(RegExp(textsearch2, "gi"), "");
         subject.innerHTML = nuevaCadena1;
         targetMessages[index].innerHTML = nuevaCadena2;
       });
@@ -566,7 +566,7 @@ export default {
 
         // Set Last Message for active contact
         const contact = chatsContacts.value.find(
-          c => c.id === activeChat.value.contact.id
+            c => c.id === activeChat.value.contact.id
         );
         contact.chat.lastMessage = newMessageData;
 

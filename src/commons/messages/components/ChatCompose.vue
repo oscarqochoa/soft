@@ -59,7 +59,7 @@
         >
           <span class="mr-1">{{ file.name }}</span>
           <span class="cursor-pointer" @click="deleteFile(index)">
-            <amg-icon icon="XIcon" />
+            <feather-icon icon="XIcon" />
           </span>
         </b-badge>
       </div>
@@ -74,7 +74,6 @@
         <button class="ql-underline" />
         <button class="ql-align" />
         <upload-files
-          source="message-files"
           class="mr-auto cursor-pointer"
           style="margin-left: 6px; margin-top: 2px"
           v-model="note.files"
@@ -90,7 +89,7 @@
             :style="{marginRight: currentBreakPoint != 'xs'?'10px':''}"
             v-if="currentBreakPoint == 'xs'"
           >
-            <amg-icon icon="ListIcon" />
+            <feather-icon icon="ListIcon" />
           </span>
           <span v-if="currentBreakPoint != 'xs'">Quick Notes</span>
         </b-button>
@@ -103,7 +102,7 @@
           :disabled="invalid"
         >
           <span :style="{marginRight: currentBreakPoint != 'xs'?'10px':''}">
-            <amg-icon icon="SendIcon" />
+            <feather-icon icon="SendIcon" />
           </span>
           <span v-if="currentBreakPoint != 'xs'">Send</span>
         </b-button>

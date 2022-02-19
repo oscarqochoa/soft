@@ -20,7 +20,7 @@
         <b-col md="10" class="d-flex align-items-center justify-content-start">
           <span class="font-weight-bolder" style="margin-right: 2px">Created by:</span>
           {{ note.created_by_name }} (
-          <tabler-icon
+          <feather-icon
             icon="CalendarIcon"
             size="12"
             style="margin-right: 4px; margin-bottom: 2px; margin-left: 2px"
@@ -36,7 +36,7 @@
             style="padding: 3px !important;"
             @click="enableTextArea"
           >
-            <tabler-icon icon="Edit2Icon" size="10" class="cursor-pointer" />
+            <feather-icon icon="Edit2Icon" size="10" class="cursor-pointer" />
           </b-button>
         </b-col>
       </b-row>
@@ -48,7 +48,7 @@
             class="btn-icon rounded-circle"
             @click="clickCheckIcon"
           >
-            <tabler-icon icon="CheckIcon" class="font-small-3" />
+            <feather-icon icon="CheckIcon" class="font-small-3" />
           </b-button>
           <b-button
             size="sm"
@@ -57,11 +57,11 @@
             class="btn-icon rounded-circle"
             @click="clickXIcon"
           >
-            <tabler-icon icon="XIcon" class="font-small-3" />
+            <feather-icon icon="XIcon" class="font-small-3" />
           </b-button>
         </b-col>
         <b-col v-if="!dontHaveNote" class="d-flex align-items-center justify-content-end">
-          <tabler-icon
+          <feather-icon
             icon="ListIcon"
             size="20"
             class="cursor-pointer"
