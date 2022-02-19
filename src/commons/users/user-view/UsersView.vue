@@ -12,6 +12,7 @@
     </header-slot>
 
     <!-- Alert: No item found -->
+    <!-- Alert: No item found -->
     <b-alert variant="danger" :show="currentUser === undefined">
       <h4 class="alert-heading">Error fetching user data</h4>
       <div class="alert-body">
