@@ -5,8 +5,10 @@
         <!-- Total Form -->
         <ValidationObserver ref="form">
           <b-row>
+            <!-- Input Details Information -->
             <b-col lg="4" md="5" sm="12">
               <b-row>
+                <!-- Search -->
                 <b-col cols="12">
                   <b-form-group label="Entries">
                     <vue-autosuggest
@@ -37,6 +39,7 @@
                     </vue-autosuggest>
                   </b-form-group>
                 </b-col>
+                <!-- Button Continue -->
                 <b-col cols="12">
                   <b-button
                     class="d-flex justify-content-between"
@@ -52,17 +55,21 @@
                     ></feather-icon>
                   </b-button>
                 </b-col>
+                <!-- Template Inputs -->
                 <template v-if="dataLead">
+                  <!-- Mobile -->
                   <b-col cols="12">
                     <b-form-group class="mt-1" label="Mobile">
                       <b-form-input v-model="mobile" placeholder="mobile" />
                     </b-form-group>
                   </b-col>
+                  <!-- Lead -->
                   <b-col cols="12">
                     <b-form-group label="Lead">
                       <b-form-input v-model="lead" placeholder="Lead" />
                     </b-form-group>
                   </b-col>
+                  <!-- Amount -->
                   <b-col cols="12">
                     <ValidationProvider
                       name="price"
@@ -83,6 +90,7 @@
                       </b-form-group>
                     </ValidationProvider>
                   </b-col>
+                  <!-- Type Of Payment -->
                   <b-col cols="12">
                     <b-form-group class="mt-1" label="Type of Payment">
                       <ValidationProvider
@@ -111,6 +119,7 @@
                       />
                     </b-form-group>
                   </b-col>
+                  <!-- Method of Payment -->
                   <b-col cols="12">
                     <b-form-group label="Method of Payment" v-if="dataLead">
                       <ValidationProvider
@@ -147,8 +156,10 @@
                 </template>
               </b-row>
             </b-col>
+            <!-- Details By Card -->
             <b-col lg="8" md="7" sm="12">
               <b-col cols="12" v-if="methodpayment == 1">
+                <!-- Card -->
                 <modal-credit-card
                   class="mt-lg-0 mt-md-0 mt-sm-2 mt-2"
                   :key="modalCreditController"
@@ -156,6 +167,7 @@
                   @CardId="getCardId"
                 >
                   <b-row v-if="dataLead" slot="errors">
+                    <!-- Array of Error List -->
                     <b-col cols="12" v-if="errosList">
                       <div
                         class="form-group"
@@ -165,10 +177,7 @@
                             : 'color:red !important'
                         "
                       >
-                        <span v-if="responseCode == 1">Approved</span>
-                        <span v-if="responseCode == 2">Declined</span>
-                        <span v-if="responseCode == 3">Error</span>
-                        <span v-if="responseCode == 4">Held for Review</span>
+                        <span>{{ statusRespondeCode(responseCode) }}</span>
                         <ul>
                           <li
                             v-for="(items, index) in errosAutorize"
@@ -179,6 +188,7 @@
                         </ul>
                       </div>
                     </b-col>
+                    <!-- Array of Message List -->
                     <b-col cols="12" v-if="messageList">
                       <div
                         class="form-group"
@@ -188,10 +198,7 @@
                             : 'color:green !important'
                         "
                       >
-                        <span v-if="responseCode == 1">Approved</span>
-                        <span v-if="responseCode == 2">Declined</span>
-                        <span v-if="responseCode == 3">Error</span>
-                        <span v-if="responseCode == 4">Held for Review</span>
+                        <span>{{ statusRespondeCode(responseCode) }}</span>
                         <ul>
                           <li
                             v-for="(items, index) in messageAutorize"
@@ -238,16 +245,15 @@
 
 <script>
 // Components
-import { VueAutosuggest } from "vue-autosuggest";
-import vSelect from "vue-select";
-
-import { mapGetters } from "vuex";
+import { VueAutosuggest } from "vue-autosuggest"
+import vSelect from "vue-select"
+import { mapGetters } from "vuex"
 // Import Services
-import PaymentService from "../service/payments.service";
+import PaymentService from "../service/payments.service"
 // Import Modal
-import ModalCreditCard from "@/views/crm/views/payments/components/ModalCreditCard.vue";
+import ModalCreditCard from "@/views/crm/views/payments/components/ModalCreditCard.vue"
 // Import Data
-import {options,optionsMethodPay} from '../data/options.process.data'
+import { options, optionsMethodPay } from "../data/options.process.data"
 export default {
   name: "process-crm",
   components: {
@@ -256,7 +262,7 @@ export default {
     VueAutosuggest,
   },
 
-  data() {
+  data: function () {
     return {
       price: 0,
       modalCreditController: 0,
@@ -306,117 +312,106 @@ export default {
         "Error",
         "Held For Review",
       ],
-    };
+    }
   },
 
   computed: {
-    statusSpinner() {
-      return this.spinner;
+    statusSpinner: function () {
+      return this.spinner
     },
-    statusSelectedSearch() {
-      return this.statusSelected;
+    statusSelectedSearch: function () {
+      return this.statusSelected
     },
-    changeDisable() {
-      return this.userfilter == "" ? true : false;
+    changeDisable: function () {
+      return this.userfilter == "" ? true : false
     },
-    filterSearch() {
-      return this.userfilter == "" ? false : true;
+    filterSearch: function () {
+      return this.userfilter == "" ? false : true
     },
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
   },
   methods: {
-    getCardsLead() {
+    statusRespondeCode: function (value) {
+      switch (value) {
+        case "1":
+          return "Approved"
+        case "2":
+          return "Declined"
+        case "3":
+          return "Error"
+        case "4":
+          return "Held for Review"
+        default:
+          return ""
+      }
+    },
+    getCardsLead: function () {
       this.cardsLead = {
         lead_id: this.user_id, //user_id
         user_id: this.currentUser.user_id,
         rol: this.currentUser.role_id,
-      };
+      }
     },
-    chargeStatus() {
+    chargeStatus: function () {
       if (this.charge == false) {
         this.showConfirmSwal("DELETE", "Are you sure?").then((result) => {
           if (result.value) {
-            this.charge = false;
+            this.charge = false
           } else {
-            this.charge = true;
+            this.charge = true
           }
-        });
+        })
       }
     },
-    validMounthly(id) {
-      this.amount = this.globalFunction(id);
+    getCardId: function (Card) {
+      this.card_id = Card
     },
-    globalFunction(id) {
-      var x = document.getElementById("campo" + id).value;
-      if (x.indexOf(".") != -1) {
-        var numw = x.replace(/,/gi, "");
-        var dec = numw.split(".");
-        var num = dec[0].split(/(?=(?:\d{3})+$)/).join(",");
-        num = num + "." + dec[1];
-      } else {
-        var numw = x.replace(/,/gi, "");
-        var num = numw.split(/(?=(?:\d{3})+$)/).join(",");
-        num = num + ".00";
-      }
-      return num;
-    },
-    justNumbers(event) {
-      var charCode = window.event ? event.which : event.keyCode;
-      var RE = /^\d*(\.\d{1})?\d{0,1}$/;
-      if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-        //Usando la definición del DOM level 2, "return" NO funciona.
-        event.preventDefault();
-      }
-    },
-    getCardId(Card) {
-      this.card_id = Card;
-    },
-    async getcard() {
-      this.submitedForm = false;
+    getcard: async function () {
+      this.submitedForm = false
 
-      this.addPreloader();
+      this.addPreloader()
       try {
-        const data = await PaymentService.getCard({ id: this.user_id });
-        this.cards = data;
-        this.modalCreditController++;
-        this.getCardsLead();
-        this.dataLead = true;
+        const data = await PaymentService.getCard({ id: this.user_id })
+        this.cards = data
+        this.modalCreditController++
+        this.getCardsLead()
+        this.dataLead = true
         if (this.cards.length > 0) {
-          this.lead = this.cards[0].lead_name;
-          this.mobile = this.cards[0].mobile;
+          this.lead = this.cards[0].lead_name
+          this.mobile = this.cards[0].mobile
         } else {
-          this.lead = "";
-          this.mobile = "";
+          this.lead = ""
+          this.mobile = ""
         }
-        this.removePreloader();
+        this.removePreloader()
       } catch (e) {
-        console.error(e);
-        this.removePreloader();
-        this.showErrorSwal(error);
+        console.error(e)
+        this.removePreloader()
+        this.showErrorSwal(error)
       }
     },
-    submitAutorize() {
-      this.errosList = false;
-      this.submitedForm = true;
+    submitAutorize: function () {
+      this.errosList = false
+      this.submitedForm = true
 
-      this.subtAutorize();
+      this.subtAutorize()
     },
-    subtAutorize() {
+    subtAutorize: function () {
       this.$refs.form.validate().then(async (success) => {
         if (!success) {
-          this.card_id = "";
+          this.card_id = ""
 
-          return;
+          return
         } else {
           const confirm = await this.showConfirmSwal(
             "Process Payment",
             "You won't be able to revert this!"
-          );
+          )
           if (confirm.isConfirmed) {
             try {
-              this.addPreloader();
+              this.addPreloader()
               let params = {
                 idcard: this.card_id,
                 amount: this.amount,
@@ -428,9 +423,9 @@ export default {
                 observationOther: this.observationOther,
                 charge: this.charge == false ? 1 : 0,
                 sendsms: this.sendsms == true ? 1 : 0,
-              };
-              const data = await PaymentService.subtAutorize(params);
-              this.removePreloader();
+              }
+              const data = await PaymentService.subtAutorize(params)
+              this.removePreloader()
 
               if (data.status == 200 && data.data.status == 200) {
                 if (this.methodpayment == 1) {
@@ -438,19 +433,19 @@ export default {
                     this.showSuccessSwal(
                       "Success!",
                       this.responseTypes[data.data.transaction.responseCode]
-                    );
+                    )
 
-                    this.$router.push({ name: "payments-crm-list" });
+                    this.$router.push({ name: "payments-crm-list" })
                   } else {
-                    this.card_id = "";
+                    this.card_id = ""
 
                     this.showErrorSwal(
                       this.responseTypes[data.data.transaction.responseCode]
                     ).then((res) => {
                       if (res) {
-                        this.getcard();
+                        this.getcard()
                       }
-                    });
+                    })
                   }
                 } else {
                   this.showSuccessSwal(
@@ -458,92 +453,91 @@ export default {
                     "Transaction Unverified"
                   ).then((res) => {
                     if (res) {
-                      this.$emit("clickList", true);
+                      this.$emit("clickList", true)
                     }
-                  });
-                  this.$router.push({ name: "payments-crm-list" });
+                  })
+                  this.$router.push({ name: "payments-crm-list" })
                 }
               } else if (data.status == 200 && data.data.status == 500) {
                 if (data.data.transaction.errors) {
-                  this.errosAutorize = data.data.transaction.errors.error;
-                  this.responseCode = data.data.transaction.responseCode;
-                  this.messageList = false;
-                  this.errosList = true;
+                  this.errosAutorize = data.data.transaction.errors.error
+                  this.responseCode = data.data.transaction.responseCode
+                  this.messageList = false
+                  this.errosList = true
                   if (this.methodpayment == 1) {
-                    this.card_id = "";
+                    this.card_id = ""
 
                     this.showErrorSwal(
                       this.responseTypes[data.data.transaction.responseCode]
                     ).then((res) => {
                       if (res) {
-                        this.getcard();
+                        this.getcard()
                       }
-                    });
+                    })
                   }
                 } else {
-                  this.card_id = "";
+                  this.card_id = ""
 
                   this.showErrorSwal(
                     this.responseTypes[data.data.transaction.responseCode]
                   ).then((res) => {
                     if (res) {
-                      this.getcard();
+                      this.getcard()
                     }
-                  });
+                  })
                 }
               }
             } catch (error) {
-              this.showErrorSwal(error);
-              this.removePreloader();
+              this.showErrorSwal(error)
+              this.removePreloader()
 
-              this.card_id = "";
+              this.card_id = ""
             }
           }
 
-          this.card_id = "";
+          this.card_id = ""
         }
-      });
+      })
     },
-    async searchLeads(text) {
-      this.userfilter = "";
+    searchLeads: async function (text) {
+      this.userfilter = ""
 
       if (text === "" || text === undefined) {
-        this.filteredOptions = [];
-        return;
+        this.filteredOptions = []
+        return
       }
 
       try {
-        const data = await PaymentService.searchlead({ q: text });
-        this.filteredOptions = [{ data: data }];
+        const data = await PaymentService.searchlead({ q: text })
+        this.filteredOptions = [{ data: data }]
       } catch (error) {
-        console.error(error);
+        console.error(error)
         this.showToast(
           "danger",
           "top-right",
           "Error",
           "XIcon",
           "Something went wrong!"
-        );
+        )
       }
     },
-    selectHandler(value) {
-      this.user_id = value.item.id;
+    selectHandler: function (value) {
+      this.user_id = value.item.id
       this.userfilter =
         value.item.first_name +
         " " +
         value.item.last_name +
         " | " +
-        value.item.mobile;
+        value.item.mobile
 
-      this.users = null;
-      this.statusSelected = false;
+      this.users = null
+      this.statusSelected = false
     },
-    getSuggestionValue(suggestion) {
-      return suggestion.item.value;
+    getSuggestionValue: function (suggestion) {
+      return suggestion.item.value
     },
   },
-  created() {},
-};
+}
 </script>
 
 <style scoped>
@@ -576,4 +570,3 @@ export default {
   flex-wrap: wrap;
 }
 </style>
-  

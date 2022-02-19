@@ -25,7 +25,7 @@
               :style="
                 switchHoverByCard(
                   0,
-                  'linear-gradient(90deg, #0090e7 0%, #8f5fe8 100%)'
+                  'linear-gradient(90deg, #0090E7 0%, #8F5FE8 100%)'
                 )
               "
             >
@@ -36,9 +36,7 @@
               <!-- Card Content -->
               <b-card-text>
                 <!-- First Line -->
-                <b-row
-                  :class="classWrapper"
-                >
+                <b-row :class="classWrapper">
                   <!-- Box First-->
                   <div
                     :style="
@@ -50,7 +48,7 @@
                   <div class="mr-1">
                     <span style="font-size: medium" class>Today :</span>
                   </div>
-                  <!-- Total Today -->
+                  <!-- Today -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.leadday }}</strong>
@@ -59,9 +57,7 @@
                 </b-row>
                 <b-row style="height: 10px" />
                 <!-- Second Line -->
-                <b-row
-                  :class="classWrapper"
-                >
+                <b-row :class="classWrapper">
                   <!-- Box Second-->
                   <div
                     :style="
@@ -73,7 +69,7 @@
                   <div class="mr-1">
                     <span style="font-size: medium">Month :</span>
                   </div>
-                  <!-- Total Month -->
+                  <!-- Month -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.leadmonth }}</strong>
@@ -92,7 +88,7 @@
               :style="
                 switchHoverByCard(
                   1,
-                  'linear-gradient(to right, #299aff, rgb(230, 174, 230))'
+                  'linear-gradient(90deg, #FAC632 0%, #F37432 100%)'
                 )
               "
             >
@@ -103,9 +99,7 @@
               <!-- Card Content -->
               <b-card-text>
                 <!-- First Line -->
-                <b-row
-                  :class="classWrapper"
-                >
+                <b-row :class="classWrapper">
                   <!-- Box First-->
                   <div
                     :style="
@@ -117,7 +111,7 @@
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
                   </div>
-                  <!-- Total Today -->
+                  <!-- Today -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.eventday }}</strong>
@@ -126,9 +120,7 @@
                 </b-row>
                 <b-row style="height: 10px" />
                 <!-- Second Line -->
-                <b-row
-                  :class="classWrapper"
-                >
+                <b-row :class="classWrapper">
                   <!-- Box Second-->
                   <div
                     :style="
@@ -140,7 +132,7 @@
                   <div class="mr-1">
                     <span style="font-size: medium">Month :</span>
                   </div>
-                  <!-- Total Month -->
+                  <!-- Month -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.eventmonth }}</strong>
@@ -159,7 +151,7 @@
               :style="
                 switchHoverByCard(
                   2,
-                  'linear-gradient(to right, #82868b, rgb(230, 174, 230))'
+                  'linear-gradient(90deg, #961BCE 0%, #D0317D 100%)'
                 )
               "
             >
@@ -170,9 +162,7 @@
               <!-- Card Content -->
               <b-card-text>
                 <!-- First Line -->
-                <b-row
-                  :class="classWrapper"
-                >
+                <b-row :class="classWrapper">
                   <!-- Box First-->
                   <div
                     :style="
@@ -184,7 +174,7 @@
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
                   </div>
-                  <!-- Total Today -->
+                  <!-- Today -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.taskday }}</strong>
@@ -193,9 +183,7 @@
                 </b-row>
                 <b-row style="height: 10px" />
                 <!-- Second Line-->
-                <b-row
-                  :class="classWrapper"
-                >
+                <b-row :class="classWrapper">
                   <!-- Box Second-->
                   <div
                     :style="
@@ -207,7 +195,7 @@
                   <div class="mr-1">
                     <span style="font-size: medium">Month :</span>
                   </div>
-                  <!-- Total Month -->
+                  <!-- Month -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.taskmonth }}</strong>
@@ -226,7 +214,7 @@
               :style="
                 switchHoverByCard(
                   3,
-                  'linear-gradient(to right, #28c76f, rgb(240, 214, 240))'
+                  'linear-gradient(90deg, #ADD210 0%, #5F873E 100%)'
                 )
               "
             >
@@ -237,9 +225,7 @@
               <!-- Card Content -->
               <b-card-text>
                 <!-- First Line -->
-                <b-row
-                  :class="classWrapper"
-                >
+                <b-row :class="classWrapper">
                   <!-- Box First -->
                   <div
                     :style="
@@ -251,7 +237,7 @@
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
                   </div>
-                  <!-- Total Today -->
+                  <!-- Today -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.vendioday }}</strong>
@@ -260,9 +246,7 @@
                 </b-row>
                 <b-row style="height: 10px" />
                 <!-- Second Line -->
-                <b-row
-                  :class="classWrapper"
-                >
+                <b-row :class="classWrapper">
                   <!-- Box Second -->
                   <div
                     :style="
@@ -274,7 +258,7 @@
                   <div class="mr-1">
                     <span style="font-size: medium">Month :</span>
                   </div>
-                  <!-- Total Month -->
+                  <!-- Month -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.vendiomonth }}</strong>
@@ -293,7 +277,7 @@
               :style="
                 switchHoverByCard(
                   4,
-                  'linear-gradient(to right, #e83e8c, rgb(211, 192, 211))'
+                  'linear-gradient(90deg, #FE8F8F 0%, #EC1443 100%)'
                 )
               "
             >
@@ -304,9 +288,7 @@
               <!--Card Content  -->
               <b-card-text>
                 <!-- First Line -->
-                <b-row
-                  :class="classWrapper"
-                >
+                <b-row :class="classWrapper">
                   <!-- Box First -->
                   <div
                     :style="
@@ -318,7 +300,7 @@
                   <div class="mr-1">
                     <span style="font-size: medium">Today :</span>
                   </div>
-                  <!-- Total Today -->
+                  <!-- Today -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.clientday }}</strong>
@@ -327,9 +309,7 @@
                 </b-row>
                 <b-row style="height: 10px" />
                 <!-- Second Line -->
-                <b-row
-                  :class="classWrapper"
-                >
+                <b-row :class="classWrapper">
                   <!-- Box Second -->
                   <div
                     :style="
@@ -341,7 +321,7 @@
                   <div class="mr-1">
                     <span style="font-size: medium">Month :</span>
                   </div>
-                  <!-- Total Month -->
+                  <!-- Month -->
                   <div>
                     <span style="font-size: large">
                       <strong>{{ global.clientmonth }}</strong>
@@ -362,18 +342,14 @@
             <!-- Content Card -->
             <b-row :style="allSizeOfScreen === 'xxl' ? 'height:130px' : ''">
               <div class="mb-1 mb-sm-0 d-inline col-lg-10 col-md-12 col-xl-7">
-                <b-row>
+                <b-row class="d-flex align-items-center">
                   <!-- Select User -->
                   <b-col cols="12" sm="12" md="5" lg="5" class="pb-1">
                     <v-select
+                    id="v-user"
                       v-if="[1, 2].includes(currentUser.role_id)"
                       v-model="userfilter"
-                      :style="
-                        allSizeOfScreen === 'xxl'
-                          ? 'width: 250px;font-size: 18px'
-                          : 'width: 200px;'
-                      "
-                      style="font-size: 15px"
+                      :style="allSizeOfScreen==='xxl'? 'font-size: 15px;width: 244px':'width:200px'"
                       placeholder="Select User"
                       label="user_name"
                       :options="users"
@@ -394,25 +370,24 @@
                     >
                       <!-- Graphic Sub Title -->
                       <div>
-                        <h5>
-                          <strong
-                            :style="
-                              allSizeOfScreen === 'xxl' ? 'font-size: 150%' : ''
-                            "
-                            >MONTHLY GRAPHICS</strong
-                          >
-                        </h5>
+                        <span
+                          style="
+                            font-family: Rubik;
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: 15px;
+                            line-height: 11px;
+                            color: #9f9da8;
+                          "
+                          >Monthly Graphics</span
+                        >
                       </div>
                     </div>
                     <!-- Select Year -->
                     <v-select
+                     id="v-year"
                       v-model="year"
-                      style="font-size: 15px"
-                      :style="
-                        allSizeOfScreen === 'xxl'
-                          ? 'width: 200px; font-size: 18px'
-                          : 'width: 130px;'
-                      "
+                      :style="allSizeOfScreen==='xxl'?'font-size: 15px; width: 120px':'width: 120px'"
                       :clearable="false"
                       :options="years"
                       @input="filtroCont()"
@@ -424,6 +399,7 @@
               <div
                 class="col-lg-8 col-md-12 col-xl-5 d-flex flex-wrap"
                 style="width: 100%"
+                v-if="allSizeOfScreen!=='xxl'"
               >
                 <div
                   v-for="data in totalYearByCard"
@@ -431,33 +407,32 @@
                   class="d-flex flex-wrap mb-1 justify-content-between pr-1"
                   :style="`${
                     allSizeOfScreen === 'xs' || allSizeOfScreen === 'sm'
-                      ? 'width: 100%'
+                      ? 'width: 80%'
                       : statusSizeScreen == 800
                       ? 'width: 100%'
-                      : 'width: 50%'
+                      : 'width: 45%'
                   }`"
                 >
-                  <!-- Name of Total -->
-                  <div>
+                  <!-- Name of -->
+                  <div  class="d-flex justify-content-center align-items-center">
                     <span
-                      class="font-weight-bolder"
+                      class=""
+                      style="font-family: Rubik;font-style: normal;font-weight: normal;font-size: 15px;line-height: 11px;"
                       :style="
-                        allSizeOfScreen === 'xxl' ? 'font-size: 150%' : ''
+                        allSizeOfScreen === 'xxl' ? 'font-size: 150%' : 'font-size: 15px;color:#9F9DA8'
                       "
                       >{{ data.name }}:</span
                     >
                   </div>
                   <!-- Quantity of Data -->
-                  <div class="important text-center" style="float: left">
-                    <div
-                      style="background: #0090e7; border-radius: 5px; text-center;width:50px;"
+                  <div class="important " style="float: left">
+                    <div class="d-flex justify-content-center align-items-center"
+                      style="background: #0090e7; border-radius: 5px; text-center;width:50px;height: 38px;"
                     >
                       <span
                         class="font-weight-bolder"
-                        style="color: white"
-                        :style="
-                          allSizeOfScreen === 'xxl' ? 'font-size: 150%' : ''
-                        "
+                        style="color: white;font-size: 18px"
+  
                       >
                         {{ data.total }}
                       </span>
@@ -465,6 +440,35 @@
                   </div>
                 </div>
               </div>
+            </b-row>
+            <!-- If XXL Screen -->
+            <b-row v-if="allSizeOfScreen==='xxl'">
+                <b-col cols="2"  v-for="data in totalYearByCard"
+                  :key="data.id" class="d-flex justify-content-between">
+                  <div  class=" ml-2 d-flex justify-content-center align-items-center">
+                    <span
+                      class=""
+                      style="font-family: Rubik;font-style: normal;font-weight: normal;font-size: 15px;line-height: 11px;"
+                      :style="
+                        allSizeOfScreen === 'xxl' ? 'font-size: 150%' : 'font-size: 15px;color:#9F9DA8'
+                      "
+                      >{{ data.name }}:</span
+                    >
+                  </div>
+                  <div class="important " style="float: left">
+                    <div class="d-flex justify-content-center align-items-center"
+                      style="background: #0090e7; border-radius: 5px; text-center;width:50px;height: 38px;"
+                    >
+                      <span
+                        class="font-weight-bolder"
+                        style="color: white;font-size: 18px"
+  
+                      >
+                        {{ data.total }}
+                      </span>
+                    </div>
+                  </div>
+                  </b-col>
             </b-row>
             <!-- Graphics Line -->
             <b-card-body class="p-0 pb-2">
@@ -554,8 +558,8 @@ export default {
     this.yearSelect()
   },
   computed: {
-    classWrapper:function(){
-      return "item-wrapper justify-content-center align-items-center"
+    classWrapper: function () {
+      return "item-wrapper justify-content-start align-items-center"
     },
     classAdd: function () {
       return this.skin == "dark" ? "dark" : ""
@@ -596,7 +600,7 @@ export default {
         : this.statusSizeScreen >= 912
         ? ""
         : this.statusSizeScreen >= 800
-        ? "height: 60vh;max-height: 60vh;overflow: auto;"
+        ? "height: 65vh;max-height: 65vh;overflow: auto;"
         : this.statusSizeScreen >= 768
         ? ""
         : this.statusSizeScreen >= 720
@@ -610,7 +614,7 @@ export default {
         case "xxl":
           return "height: 800px !important;max-height: 900px !important;"
         case "xl":
-          return "height: 520px !important;max-height: 520px !important;"
+          return "height: 570px;max-height: 570px !important;"
         case "lg":
           return ""
         case "md":
@@ -641,27 +645,27 @@ export default {
             ? `background: ${background};color: white`
             : this.classAdd == "dark"
             ? ""
-            : "background-color:aliceblue"
+            : "background:linear-gradient(90deg, rgba(0, 144, 231, 0.1) 0%, rgba(143, 95, 232, 0.1) 100%);"
         }
       }
     },
     statusColor: function (name) {
       let color = ""
       switch (name) {
-        case "Total leads":
-          color = "#84d0ff"
+        case "Leads":
+          color = "#0090E7"
           break
-        case "Total Appointments":
-          color = "#299aff"
+        case "Appointments":
+          color = "#F37432"
           break
-        case "Total Calls":
-          color = "#82868b"
+        case "Calls":
+          color = "#D0317D"
           break
-        case "Total Sales":
-          color = "#28c76f"
+        case "Sales":
+          color = "#5F873E"
           break
-        case "Total Captured":
-          color = "#e83e8c"
+        case "Captured":
+          color = "#EC1443"
           break
       }
       return color
@@ -748,28 +752,28 @@ export default {
       switch (index) {
         case 0:
           this.total_year = this.global.leads_year
-          this.chargeDataToEchart(this.leads, "Total leads")
-          this.changeListYear("Total leads", this.global.leads_year)
+          this.chargeDataToEchart(this.leads, "Leads")
+          this.changeListYear("Leads", this.global.leads_year)
           break
         case 1:
           this.total_year = this.global.quotes_year
-          this.chargeDataToEchart(this.quotes, "Total Appointments")
-          this.changeListYear("Total Appointments", this.global.quotes_year)
+          this.chargeDataToEchart(this.quotes, "Appointments")
+          this.changeListYear("Appointments", this.global.quotes_year)
           break
         case 2:
           this.total_year = this.global.calls_year
-          this.chargeDataToEchart(this.calls, "Total Calls")
-          this.changeListYear("Total Calls", this.global.calls_year)
+          this.chargeDataToEchart(this.calls, "Calls")
+          this.changeListYear("Calls", this.global.calls_year)
           break
         case 3:
           this.total_year = this.global.sales_year
-          this.chargeDataToEchart(this.sales, "Total Sales")
-          this.changeListYear("Total Sales", this.global.sales_year)
+          this.chargeDataToEchart(this.sales, "Sales")
+          this.changeListYear("Sales", this.global.sales_year)
           break
         case 4:
           this.total_year = this.global.clients_year
-          this.chargeDataToEchart(this.captur, "Total Captured")
-          this.changeListYear("Total Captured", this.global.clients_year)
+          this.chargeDataToEchart(this.captur, "Captured")
+          this.changeListYear("Captured", this.global.clients_year)
           break
       }
       this.index = index
@@ -793,11 +797,11 @@ export default {
         this.captur = response.data.vendio.map((list) => list)
         this.removePreloader()
         if (status == null) {
-          this.chargeDataToEchart(this.leads, "Total leads")
-          this.changeListYear("Total leads", this.global.leads_year)
+          this.chargeDataToEchart(this.leads, "Leads")
+          this.changeListYear("Leads", this.global.leads_year)
         } else {
-          this.chargeDataToEchartNew(this.leads, "Total leads")
-          this.changeListYearNew("Total leads", this.global.leads_year)
+          this.chargeDataToEchartNew(this.leads, "Leads")
+          this.changeListYearNew("Leads", this.global.leads_year)
         }
         this.total_year = this.global.leads_year
       } catch (error) {
@@ -828,8 +832,8 @@ export default {
           this.calls = response.data.calls.map((list) => list)
           this.sales = response.data.sales.map((list) => list)
           this.captur = response.data.vendio.map((list) => list)
-          this.chargeDataToEchartNew(this.leads, "Total leads")
-          this.changeListYearNew("Total leads", this.global.leads_year)
+          this.chargeDataToEchartNew(this.leads, "Leads")
+          this.changeListYearNew("Leads", this.global.leads_year)
           this.total_year = this.global.leads_year
           this.removePreloader()
         } catch (error) {
@@ -879,7 +883,49 @@ export default {
 @import "~@core/scss/base/pages/app-ecommerce.scss";
 </style>
 
-<style lang="scss" scoped>
+<style lang="scss">
+// V-Select
+#v-user{
+  div.vs__dropdown-toggle{
+    border-color: #D1CFD7;
+  }
+  div.vs__dropdown-toggle:hover{
+    border: 1px solid #0090E7 !important;
+// box-sizing: border-box;
+    border-radius: 5px;
+  div > input::placeholder{
+    color: #0090E7 !important;
+    font-size: 15px;
+    font-family: Rubik;
+  }
+  div > span{
+    color: #0090E7 !important;
+  }
+  }
+  div > input::placeholder{
+    font-size: 15px;
+    font-family: Rubik;
+    color: #D1CFD7;
+  }
+  
+}
+
+#v-year{
+  div.vs__dropdown-toggle:hover{
+    border: 1px solid #0090E7 !important;
+    border-radius: 5px;
+  div > span{
+    color: #0090E7 !important;
+  }
+  }
+  div > span{
+    font-size: 15px;
+    font-family: Rubik;
+    color: #D1CFD7;
+  }
+}
+
+
 // hidding scrollbar
 .col-tab::-webkit-scrollbar {
   width: 0;
@@ -908,15 +954,12 @@ export default {
     .div-box {
       background-color: white;
     }
-  }
-  &:hover {
     .div-box1 {
       background-color: white;
     }
-  }
-  &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    background: linear-gradient(90deg, #0090e7 0%, #8f5fe8 100%);
+    background: linear-gradient(90deg, #0090E7 0%, #8F5FE8 100%)!important;
+    // background: red !important;
     // background: var(--li);
     color: white;
   }
@@ -936,7 +979,7 @@ export default {
 .ecommerce-card-appointments {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    background: linear-gradient(to right, #299aff, rgb(230, 174, 230));
+    background: linear-gradient(90deg, #FAC632 0%, #F37432 100%)!important;
     color: white;
   }
   &:hover {
@@ -954,7 +997,7 @@ export default {
 .ecommerce-card-tasks {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    background: linear-gradient(to right, #82868b, rgb(230, 174, 230));
+    background: linear-gradient(90deg, #961BCE 0%, #D0317D 100%) !important;
     color: white;
   }
   &:hover {
@@ -972,7 +1015,7 @@ export default {
 .ecommerce-card-sales {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    background: linear-gradient(to right, #28c76f, rgb(240, 214, 240));
+    background: linear-gradient(90deg, #ADD210 0%, #5F873E 100%) !important;
     color: white;
   }
   &:hover {
@@ -990,7 +1033,7 @@ export default {
 .ecommerce-card-capturated {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    background: linear-gradient(to right, #e83e8c, rgb(211, 192, 211));
+    background: linear-gradient(90deg, #FE8F8F 0%, #EC1443 100%) !important;
     color: white;
   }
   &:hover {

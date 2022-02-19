@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p>{{ statusUpdateRequestEquip }}</p>
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -145,8 +144,10 @@ export default {
   },
   computed: {
     ...mapGetters("inventory-store", ["updateRequestEquip"]),
-    statusUpdateRequestEquip:function() {
-      if (this.updateRequestEquip) {
+  },
+  watch:{
+    updateRequestEquip(newVal){
+      if (newVal) {
         if(this.$refs.refClientsList === undefined){
           this.UpdateRequEquip();
         }else{
