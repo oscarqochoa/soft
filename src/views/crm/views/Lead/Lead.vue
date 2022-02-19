@@ -324,11 +324,6 @@ export default {
       }
     }
   },
-  watch: {
-    preloading(current, old) {
-      this.isPreloading(old);
-    }
-  }
 };
 </script>
 
