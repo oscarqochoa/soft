@@ -147,6 +147,30 @@ export default {
           return "quality";
       }
     },
+    /* GENERIC TOAST */
+    showGenericToast({
+      variant = "success",
+      position = "top-right",
+      title = "Congratulations",
+      icon = "CheckIcon",
+      text = "You've successfully done it!"
+    }) {
+      this.$toast(
+        {
+          component: ToastificationContent,
+          props: {
+            title,
+            icon,
+            text,
+            variant,
+          },
+        },
+        {
+          position,
+        }
+      );
+    },
+
     /* TOAST */
     showToast(
       variant = "success",

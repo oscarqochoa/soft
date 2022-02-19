@@ -34,7 +34,11 @@
                 class="d-inline-block mr-1"
                 placeholder="Note..."
               />
-              <b-button variant="danger" :disabled="selectedCards.length <= 0" @click="deleteNote">
+              <b-button
+                variant="danger"
+                :disabled="selectedCards.length <= 0"
+                @click="deleteNote"
+              >
                 <div class="d-flex justify-content-between">
                   <span class="mr-50">
                     <feather-icon icon="TrashIcon" size="15" />
@@ -76,17 +80,23 @@
           <template #cell(cards)="data">
             <span class="cursor-pointer">
               <feather-icon
-                icon="FileTextIcon"
+                icon="FileIcon"
                 size="25"
                 :style="`color: ${data.item.category}; fill: ${data.item.category};`"
               />
             </span>
           </template>
           <template #cell(subject)="data">
-            <b-link @click="onSelectNote(data.item)">{{ data.item.subject }}</b-link>
+            <b-link @click="onSelectNote(data.item)">{{
+              data.item.subject
+            }}</b-link>
           </template>
-          <template #cell(created_at)="data">{{ data.item.created_at | myGlobalWithHour }}</template>
-          <template #cell(updated_at)="data">{{ data.item.updated_at | myGlobalWithHour }}</template>
+          <template #cell(created_at)="data">{{
+            data.item.created_at | myGlobalWithHour
+          }}</template>
+          <template #cell(updated_at)="data">{{
+            data.item.updated_at | myGlobalWithHour
+          }}</template>
           <template #cell(checkboxes)="data">
             <b-form-checkbox
               v-model="data.item.isSelected"
@@ -96,7 +106,10 @@
         </b-table>
       </div>
     </b-card>
-    <sticky-notes-compose v-model="openViewNote" :note="note"></sticky-notes-compose>
+    <sticky-notes-compose
+      v-model="openViewNote"
+      :note="note"
+    ></sticky-notes-compose>
   </div>
 </template>
 <script>
@@ -116,7 +129,7 @@ export default {
     }
   },
   directives: {
-    Ripple
+    Ripple,
   },
   data() {
     return {
@@ -126,28 +139,28 @@ export default {
         {
           key: "cards",
           label: "",
-          sortable: true
+          sortable: true,
         },
         {
           key: "subject",
           label: "Title",
-          sortable: true
+          sortable: true,
         },
         {
           key: "created_at",
           label: "Created",
-          sortable: true
+          sortable: true,
         },
         {
           key: "updated_at",
           label: "Updated",
-          sortable: true
+          sortable: true,
         },
         {
           key: "checkboxes",
           label: "",
-          sortable: true
-        }
+          sortable: true,
+        },
         // { key: "actions", label: "Acciones", class: "text-center " },
       ],
       searchInput: "",
@@ -165,24 +178,24 @@ export default {
       notesFiltered: this.notes,
       openViewNote: false,
       selectedCards: [],
-      selectAllCheckboxes: false
+      selectAllCheckboxes: false,
     };
   },
   components: {
     vSelect,
     AppCollapse,
     AppCollapseItem,
-    StickyNotesCompose
+    StickyNotesCompose,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      notes: "sticky-notes/notes"
-    })
+      notes: "sticky-notes/notes",
+    }),
   },
   methods: {
     ...mapActions({
-      getNotes: "sticky-notes/getNotes"
+      getNotes: "sticky-notes/getNotes",
     }),
     resetSearch() {
       this.searchInput = "";
@@ -196,7 +209,7 @@ export default {
       if (note.isSelected) {
         this.selectedCards.push({ id: note.id });
       } else {
-        let index = this.selectedCards.findIndex(item => item.id === note.id);
+        let index = this.selectedCards.findIndex((item) => item.id === note.id);
         if (index !== -1) this.selectedCards.splice(index, 1);
       }
     },
@@ -213,10 +226,10 @@ export default {
         cancelButtonText: "Cancel",
         customClass: {
           confirmButton: "btn btn-primary",
-          cancelButton: "btn btn-outline-danger ml-1"
+          cancelButton: "btn btn-outline-danger ml-1",
         },
-        buttonsStyling: false
-      }).then(async result => {
+        buttonsStyling: false,
+      }).then(async (result) => {
         if (result.value) {
           await StickyNotesService.deleteUserNote(
             this.selectedCards,
@@ -232,26 +245,26 @@ export default {
           );
         }
       });
-    }
+    },
   },
   watch: {
     selectAllCheckboxes(newVal) {
       if (newVal) {
-        this.selectedCards = this.notesFiltered.map(obj => ({ id: obj.id }));
-        this.notes.forEach(obj => {
+        this.selectedCards = this.notesFiltered.map((obj) => ({ id: obj.id }));
+        this.notes.forEach((obj) => {
           obj.isSelected = true;
         });
       } else {
         this.selectedCards = [];
-        this.notes.forEach(obj => {
+        this.notes.forEach((obj) => {
           obj.isSelected = false;
         });
       }
     },
     notes(newVal) {
       this.notesFiltered = newVal;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
