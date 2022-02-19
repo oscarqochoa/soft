@@ -1,4 +1,5 @@
 import { getUserData, getUserToken } from '@/auth/utils'
+import store from '@/views/crm/store'
 
 const user = getUserData()
 const token = getUserToken()
@@ -34,6 +35,19 @@ export default {
       state.currentUser = val
       state.currentUser.modul_id = null
     },
+    SET_CURRENT_USER_INFORMATION(state, { data, avatar }) {
+      state.currentUser.first_name = data.first_name
+      state.currentUser.last_name = data.last_name
+      state.currentUser.phone = data.phone
+      state.currentUser.extension = data.extension
+      state.currentUser.date_of_birth = data.date_of_birth
+      state.currentUser.country = data.country
+      state.currentUser.fullName = data.first_name + " " + data.last_name
+      state.currentUser.avatar = avatar
+
+      // Update stored data
+      localStorage.setItem("userData", JSON.stringify(state.currentUser))
+    },
     SET_TOKEN(state, val) {
       console.log(val)
       state.token = val
@@ -63,5 +77,11 @@ export default {
       commit('SET_CURRENT_USER_ROLE_ID')
       localStorage.setItem('userData', JSON.stringify(state.currentUser))
     },
+    updateCurrentUserInformation({ commit }, { data, avatar }) {
+      commit('SET_CURRENT_USER_INFORMATION', {
+        data: data,
+        avatar: avatar
+      })
+    }
   },
 }
