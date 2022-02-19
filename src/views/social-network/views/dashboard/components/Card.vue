@@ -173,7 +173,7 @@ export default {
   font-size: 32px;
 }
 .font {
-  font-family: "Rubik";
+  font-family: "Rubik",serif;
   font-style: normal !important;
   font-weight: 500;
   color: #ffffff;
@@ -194,7 +194,7 @@ export default {
   }
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1380px) {
   .icon {
     width: 50px;
     height: 50px;

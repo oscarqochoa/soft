@@ -11,21 +11,25 @@
           no-body
 
           :style="`border: 1px solid ${i.color}!important`"
-          :class="i.cursor ? 'pointer' : ''"
+          :class="i.cursor ? 'pointer' : '' "
           @click=" i.cursor ? clickCard(i,index) : ''"
         >
-          <b-card-body class="pb-0">
+          <b-card-body class="pb-0  ">
             <div
-              class="d-flex align-items-end justify-content-end "
+              class="d-flex align-items-end  justify-content-between"
             >
               <!--              <b-img-->
               <!--                class="img"-->
               <!--                :src="`${baseImg}/assets${i.icon}`"-->
               <!--              />-->
+              <span class="mb-25 mt-1 title text-uppercase ">
+                {{ i.title }}
 
+              </span>
               <b-avatar
                 :style="`${i.back}; color: ${i.color}`"
-                size="40"
+                size="4em"
+                class="icon"
               >
                 <feather-icon
                   size="21"
@@ -35,10 +39,7 @@
 
             </div>
             <div>
-              <span class="mb-25 mt-1 title text-uppercase">
-                {{ i.title }}
 
-              </span>
               <div v-if="index !==3">
                 <span class="data"> {{ i.data }} </span>
               </div>
@@ -46,44 +47,46 @@
             </div>
             <div
               v-if="index===3"
+              class="pad d-inline-flex w-100 mt-1 mb-1 "
             >
 
               <div
-                class="d-flex   justify-content-center align-content-center align-items-center pad "
-                style="width: 45%; padding: 0; margin: 0; "
+                class="cuadrado   "
+                style="width: 50%"
               >
-                <span class="mobile">
-                  ACTIVE
-                </span>
-
                 <span
-                  style="padding-left: 9px"
-                  class="mobile "
+                  class="title-mobile"
+                  style="margin-left: 9px"
                 >
-                  RECOVERY
+                  ACTIVE:
                 </span>
+                <span
+                  class="data-mobile"
+                  style="margin-left: 6px"
+                >{{ i.data }}</span>
               </div>
+              <div style="width: 50%">
+                <span
+                  style="margin-left: 6px"
+                  class="title-mobile"
+                >
+                  RECOVERY:
+                </span>
+                <span
+                  class="data-mobile"
+                  style="margin-left: 6px"
+                >{{ i.data_rec ? i.data_rec : 0 }}
 
-              <span
-                style="padding-left: 9px"
-                class="data"
-              >{{ i.data }}</span>
+                </span>
 
-
-              <span
-
-                class="data"
-                style="padding-left: 55px"
-              >{{ i.data_rec  ? i.data_rec : 0 }}
-
-              </span>
+              </div>
 
             </div>
           </b-card-body>
           <vue-apex-charts
             :key="i.key"
             type="area"
-            height="100"
+            height="60"
             width="100%"
             :options="chartOptionsComputed(i.color)"
             :series="i.series"
@@ -133,6 +136,7 @@ export default {
       default: null,
     },
 
+    // eslint-disable-next-line vue/require-default-prop
     data: null,
     type: null,
     date_init: null,
@@ -152,8 +156,8 @@ export default {
     }
   },
 
-
   methods: {
+
     chartOptionsComputed(color) {
       if (this.chartOptions === null) {
         const options = JSON.parse(JSON.stringify(areaChartOptions))
@@ -187,22 +191,46 @@ export default {
 <style scoped>
 .data {
 
-  font-size: 18px;
+  font-size: 20px;
 }
 
+.data-mobile {
+
+  font-size: 15px;
+}
 .title{
   font-weight:  600;
   font-size: medium;
 }
-@media (max-width: 1280px) {
 
-  .pad{
-    padding-left: 50px !important;
-  }
+.pad{
+  border-radius: 10px;
+  border: 1px solid rgba(207, 190, 190, 0.5) !important;
+
 }
-.img {
-  max-width: 60%;
-  max-height: 60%;
+.cuadrado{
+  border-right: 1px solid rgba(207, 190, 190, 0.5) !important;
+}
+@media (max-width: 1400px) {
+
+  .title-mobile{
+    font-size: 10px !important;
+    margin: 1px !important;
+
+  }
+  .data-mobile {
+    margin: 1px !important;
+    font-size: 12px;
+
+  }
+  .icon{
+    font-size: 60%;
+  }
+  .title{
+    font-weight:  600;
+    font-size: 13px;
+  }
+
 }
 
 </style>

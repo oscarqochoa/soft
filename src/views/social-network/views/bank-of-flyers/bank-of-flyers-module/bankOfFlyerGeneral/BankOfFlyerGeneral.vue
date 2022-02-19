@@ -77,11 +77,17 @@
 
                 @click="openImage(data.index)"
               >
-                <b-img-lazy
-                  class="img-content-table-ti"
-                  v-bind="mainProps"
-                  :src="data.item.route_thumb"
-                />
+                <b-avatar
+                    square
+                    size="4.5rem"
+                    v-bind="mainProps"
+                    :src="data.item.route_thumb"
+                    rounded="lg"
+                     >
+
+                </b-avatar>
+
+
               </div>
 
             </template>
@@ -89,9 +95,11 @@
             <template v-slot:cell(program)="data">
               <div class="d-flex flex-column  justify-content-center align-items-start ">
 
+
                 <b-img
                   :src="`${baseImg}/assets${data.item.logo}`"
-                  style="width: 60px"
+                  style="width: 4.5rem;  height: 4.5rem"
+
                   thumbnail
                   fluid
                 />
@@ -141,6 +149,12 @@
 
                 @click="openWatchModal(data.index,2, data.item)"
               />
+
+            </template>
+
+            <template v-slot:cell(publication_date)="data">
+
+              <span>{{data.item.publication_date | myGlobal }} </span>
 
             </template>
 
@@ -311,13 +325,13 @@ export default {
       mainProps: {
         center: false,
         fluidGrow: false,
-        blank: true,
-        blankColor: '#bbb',
-        height: 73,
+
+        width: 100,
+
         block: false,
+
         fluid: true,
-        rounded: true,
-        thumbnail: true,
+
       },
 
       modalWatch: false,

@@ -51,7 +51,7 @@
       title="FLYER"
       @hidden="closeModal"
     >
-      <div>
+      <div class="ml-2 " >
         <ValidationObserver ref="form" />
         <b-container>
           <b-row>
@@ -70,7 +70,7 @@
               </div>
             </b-col>
             <b-col
-              lg="7"
+              lg="8"
               xs="7"
               class="pt-2 fa"
             >
@@ -254,26 +254,26 @@
 
           </b-row>
         </b-container>
-        <b-row class="pt-1 ">
+        <b-row class="pt-1  ">
           <b-col
             class="pr-5 fa_obs"
             lg="12"
             xs="12"
           >
-            <b-form-group class>
+            <b-form-group class="observation">
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text
-                    class="bg-primary text-white pr-5"
+                    class="bg-primary text-white pr-5 observation-prepend"
                   >
                     <span>OBSERVATION</span>
                   </b-input-group-text>
                 </b-input-group-prepend>
-                <div style="width: 79%;">
+                <div  class="observation-form" style="width: 85%; ">
                   <b-form-textarea
                     v-model="item.observation"
 
-                    class="input-form ml-1"
+                    class="input-form ml-1 observer "
                     :disabled="disabled"
                   />
                 </div>
@@ -538,13 +538,16 @@ export default {
   overflow: hidden;
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1380px) {
   .position_img{
     flex: 0 0 100.3333333333%;
     max-width: 100.3333333333%;
 
   }
+ .observation{
+   padding-left: 13px;
 
+ }
   .img{
     width: 55%;
   }
@@ -556,6 +559,18 @@ export default {
   .fa_obs{
     flex: 0 0 100%;
     max-width: 100%;
+  }
+  .observation-prepend{
+    max-width: 95%;
+  }
+  .observation-form{
+
+    max-width: 77.5%;
+
+
+  }
+  .observer{
+    margin-left: 6px!important;
   }
 }
 </style>

@@ -1,9 +1,7 @@
 <template>
   <div>
 
-    <header-slot>
-
-    </header-slot>
+    <header-slot />
     <b-card
       no-body
       class="mb-2"
@@ -36,7 +34,6 @@
           :filter="filter"
 
           responsive="sm"
-
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -48,13 +45,11 @@
 
             <div class="d-flex flex-column justify-content-start align-items-start text-important">
 
-
-                <router-link
-                  :class="[textLink]"
-                  :to="`/crm/leads/${data.item.id}`"
-                  target="_blank"
-                >  {{ data.item.lead_name }}</router-link>
-
+              <router-link
+                :class="[textLink]"
+                :to="`/crm/leads/${data.item.id}`"
+                target="_blank"
+              >  {{ data.item.lead_name }}</router-link>
 
             </div>
 
@@ -102,11 +97,11 @@
           </template>
           <template v-slot:cell(programs)="data">
 
-              <p
-                v-for="(program, index) in JSON.parse(data.item.programs)"
-                :key="index"
-                class="d-flex flex-column justify-content-start align-items-center"
-              >{{ program }}</p>
+            <p
+              v-for="(program, index) in JSON.parse(data.item.programs)"
+              :key="index"
+              class="d-flex flex-column justify-content-start align-items-center"
+            >{{ program }}</p>
 
           </template>
 
@@ -177,6 +172,7 @@ export default {
 
     resetAllFilters() {
       this.filter.forEach(filter => {
+        // eslint-disable-next-line no-param-reassign
         filter.model = null
       })
       this.filterPrincipal.model = null
@@ -200,8 +196,8 @@ export default {
           per_page: this.paginate.perPage,
           orderby: orderBy,
           order: sortDirection,
-          from: this.filter[0].model,
-          to: this.filter[1].model,
+          date_from: this.filter[0].model,
+          date_to: this.filter[1].model,
           name_text: this.filterPrincipal.model,
           iduser: this.currentUser.user_id,
           idrole: 1,
@@ -280,6 +276,7 @@ export default {
       }
     },
 
+    // eslint-disable-next-line consistent-return
     async deletedMigrationLead(id) {
       const params = {
         id,

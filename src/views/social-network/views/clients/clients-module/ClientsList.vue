@@ -21,7 +21,7 @@
           id="clientsList"
           slot="table"
           ref="clientsList"
-          v-scrollbar
+          show-empty
           sticky-header="50vh"
           no-provider-filtering
           :busy.sync="isBusy"
@@ -72,6 +72,7 @@
               <span
                 v-for="(account, index) in data.item.accounts"
                 :key="index"
+                style="padding-bottom: 4px"
               >{{ account.account }}</span>
             </div>
 
@@ -79,14 +80,15 @@
 
           <template v-slot:cell(status)="data">
 
-            <div class="d-flex flex-column  justify-content-center align-items-start ">
+            <div class="d-flex flex-column  justify-content-center align-items-start  ">
               <template
                 v-for="(account, index) in data.item.accounts"
               >
 
                 <span
                   :key="index"
-                  class="d-flex justify-content-between align-items-center"
+                  class="d-flex justify-content-between align-items-center "
+                  style="padding-bottom: 4px"
                 >
                   <feather-icon
                     v-if="account.status === 1"
@@ -146,6 +148,7 @@
               <span
                 v-for="(account, index) in data.item.accounts"
                 :key="index"
+                style="padding-bottom: 4px"
               > <span>
                 <feather-icon
                   v-if="account.state_advisor === 1"
@@ -176,6 +179,7 @@
               <span
                 v-for="(account, index) in data.item.accounts"
                 :key="index"
+                style="padding-bottom: 4px"
               >{{ account.created_at | myGlobal }}</span>
             </div>
           </template>
@@ -183,7 +187,8 @@
           <template #cell(fee_charges)="data">
 
               <div
-                  class="d-flex flex-column justify-content-center align-items-start"
+                  class="d-flex flex-column justify-content-center align-items-start "
+                  style="padding-bottom: 4px"
                 v-for="(account, index) in data.item.accounts"
                 :key="index"
               >
@@ -196,6 +201,7 @@
 
               <div
                   class="d-flex flex-column justify-content-start align-items-start"
+                  style="padding-bottom: 4px"
                 v-for="(account, index) in data.item.accounts"
                 :key="index"
               >
@@ -207,10 +213,12 @@
           <template #cell(pt)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
+
             >
               <span
                 v-for="(account, index) in data.item.accounts"
                 :key="index"
+                style="padding-bottom: 4px"
               >
 
                 <b-img
