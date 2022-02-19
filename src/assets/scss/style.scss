@@ -40,13 +40,13 @@ $borderamg: #efb911;
 }
 
 .footer-black {
-  background: #666666 !important;
+  background: #0e1d44 !important;
   color: #fff !important;
   padding: 17px !important;
 }
 
 .footer-span {
-  color: #666666;
+  color: #0e1d44;
   background: #fff;
   padding: 5px 10px;
   border-radius: 5px;
@@ -302,7 +302,7 @@ $borderamg: #efb911;
 
 //navs-tabs
 .nav-dark-tabs {
-  background: #191c24;
+  background: #0e1d44;
 }
 .nav-light-tabs {
   background: #efefef;
@@ -378,5 +378,13 @@ $borderamg: #efb911;
       margin-right: 0rem !important;
       margin-left: 0rem !important;
     }
+  }
+}
+
+//header dark without box shadow
+
+.dark-layout{
+  .header-navbar {
+    box-shadow: none !important;
   }
 }
