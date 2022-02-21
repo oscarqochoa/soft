@@ -1,6 +1,6 @@
 <template>
   <b-container
-    :class="[`bg-light-${task.title ? taskColor[task.title] : 'primary'}`, 'pt-0']"
+    :class="[`bg-light-${task.title ? taskColor[task.title] : 'primary'}`, 'pt-1']"
   >
     <b-row class="d-flex align-items-center justify-content-center">
       <b-col cols="9" class="p-0 d-flex align-items-center justify-content-center flex-column">
