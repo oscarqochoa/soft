@@ -1,63 +1,58 @@
-<template>
+<template class="test-modal modal-fullscreen1">
   <b-modal
     id="modal-closing"
     ref="modal"
     v-model="onControl"
-    size="xl"
     :title="nameTree"
+    header-class="header-tree-social d-flex justify-content-center"
+    modal-class="tree-modal dialog-class"
     :hide-footer="true"
     @hidden="close"
   >
-    <div class="tree-container">
+    <template #modal-header>
+      <h3 style="color: white">
+        {{ nameTree }}
+      </h3>
+    </template>
+    <div
+      class="d-flex flex-column align-items-center"
+      @wheel="wheelIt($event)"
+    >
       <div class="header">
-        <div class="icons">
+        <div
+          class="icons"
+          style="position: absolute; left: 20px"
+        >
           <span>
             <feather-icon
               class="pointer"
               icon="CircleIcon"
-              style="display: inline; fill: #FF5749; color:#FF5749 "
-            /> Team
+              style="display: inline; fill: #ff5749; color: #ff5749"
+            />
+            <span style="font-size: 15px">&nbsp; Team</span>
+
           </span>
           <span>
             <feather-icon
               class="pointer"
               icon="CircleIcon"
-              style="display: inline;  fill: #15D6CA; color:#15D6CA"
-            /> Client
+              style="display: inline; fill: #15d6ca; color: #15d6ca"
+            />
+            <span style="font-size: 15px">&nbsp; Client</span>
           </span>
-        </div>
-        <div class="zoom">
-          <feather-icon
-            class="pointer  ml-1 bigger"
-            icon="ZoomInIcon"
-            @click="zoomIn"
-          />
-          <feather-icon
-            class="pointer  ml-1 bigger"
-            icon="ZoomOutIcon"
-            @click="zoomOut"
-          />
-          <feather-icon
-            class="pointer  ml-1 bigger"
-            icon="MinimizeIcon"
-            @click="restore"
-          />
-          <!--          <span-->
-          <!--            class="pointer ml-1"-->
-          <!--            style="font-size: 20px"-->
-          <!--            @click="restore"-->
-          <!--          >1:1</span>-->
         </div>
       </div>
       <vue-tree
-        v-if="treeData.length!=0"
+        v-if="treeData.length != 0"
         :key="pageI"
         ref="tree"
-        style="width: 100%; height: 85vh;"
+        linkStyle="straight"
+        style="width: 100%; height: 85vh"
         :config="treeConfig"
         :dataset="treeData"
         direction="horizontal"
-        linkStyle="straight"
+        collapse-enabled
+        @wheel="wheelIt($event)"
       >
         <template v-slot:node="{ node, collapsed }">
           <div
@@ -65,20 +60,22 @@
             :style="{ border: collapsed ? '2px solid grey' : '' }"
           >
             <span
-              v-if="node.content.length>80"
+              v-if="node.content.length > 50"
+              v-b-tooltip.hover.righttop
               class="text-content-tree"
-              style="line-height: 1.25; font-size: 12px;"
-            >{{ node.content.substr(0,80)+'...' }}</span>
+              style="line-height: 1.25; font-size: 12px"
+              :title="node.content"
+            >{{ node.content.substr(0, 50) + "..." }}</span>
             <span
               v-else
               class="text-content-tree"
             >{{ node.content }}</span>
             <div
               class="icons-node"
-              :class="node.type_answer === 1? 'client-bg' : 'team-bg'"
+              :class="node.type_answer === 1 ? 'client-bg' : 'team-bg'"
             >
               <feather-icon
-                class="pointer  m-0  icon-color"
+                class="pointer m-0 icon-color"
                 icon="EyeIcon"
                 @click="openWatchModal(1, node)"
               />
@@ -94,7 +91,7 @@
               />
               <feather-icon
                 v-if="node.type_answer == 2"
-                class="pointer  m-0  icon-color"
+                class="pointer m-0 icon-color"
                 icon="CopyIcon"
                 @click="copyAnswerName(node.content)"
               />
@@ -102,9 +99,47 @@
           </div>
         </template>
       </vue-tree>
-      <div v-else class="m-1">
+      <div
+        v-else
+        class="d-flex justify-content-center"
+      >
         There are no records to show
       </div>
+      <b-sidebar
+        id="sidebar-1"
+        v-model="sidebarController"
+        right
+        width="55px"
+        sidebar-class="sidebar-class-test"
+        :bg-variant="''"
+        no-header-close
+        no-header
+      >
+        <template>
+          <div class="d-flex flex-column align-items-center ">
+            <feather-icon
+              class="pointer ml-1 bigger mb-2 mt-1 fill"
+              icon="XCircleIcon"
+              @click="onControl=false"
+            />
+            <feather-icon
+              class="pointer ml-1 bigger icon fill"
+              icon="PlusCircleIcon"
+              @click="zoomIn"
+            />
+            <feather-icon
+              class="pointer ml-1 bigger icon fill"
+              icon="MinusCircleIcon"
+              @click="zoomOut"
+            />
+            <feather-icon
+              class="pointer ml-1 bigger icon"
+              icon="MinimizeIcon"
+              @click="restore"
+            />
+          </div>
+        </template>
+      </b-sidebar>
     </div>
     <edit-watch-modal
       v-if="openWatch"
@@ -115,12 +150,11 @@
     />
     <create-modal
       v-if="openCreate"
-      :itemTree="selectedItem"
+      :item-tree="selectedItem"
       @close="closeCreateModal"
       @reloadTree="getReloadData"
     />
   </b-modal>
-
 </template>
 
 <script>
@@ -154,6 +188,7 @@ export default {
       pageI: 1,
       selectedItem: null,
       mood: null,
+      sidebarController: true,
     }
   },
   async created() {
@@ -211,12 +246,16 @@ export default {
       this.openCreate = false
     },
     async getTreeData(id) {
-      console.log('get tree data ')
       const data = await AnswersGuideService.getTreeAnswer({ id })
       this.treeData = data.data
       // eslint-disable-next-line prefer-destructuring
       if (this.treeData.length != 0) {
-        this.nameTree = `${this.treeData[0].content} (${this.getProgramName(this.treeData[0].program)})`
+        const shorterName = this.treeData[0].content.length > 20
+          ? `${this.treeData[0].content.substr(0, 20)}...`
+          : this.treeData[0].content
+        this.nameTree = `${shorterName} (${this.getProgramName(
+          this.treeData[0].program,
+        )})`
       }
       this.pageI += 1
     },
@@ -245,12 +284,23 @@ export default {
     restore() {
       this.$refs.tree.restoreScale()
     },
+    wheelIt(event) {
+      if (event.deltaY < 0) {
+        this.$refs.tree.zoomIn()
+      } else {
+        this.$refs.tree.zoomOut()
+      }
+    },
     // eslint-disable-next-line consistent-return
     async deleteItem(item) {
       try {
         const response = await this.showConfirmSwal()
         if (response.isConfirmed) {
-          const data = await AnswersGuideService.deleteAnswerGuide({ id: item.id, program: item.program, user: this.currentUser.user_id })
+          const data = await AnswersGuideService.deleteAnswerGuide({
+            id: item.id,
+            program: item.program,
+            user: this.currentUser.user_id,
+          })
           if (data.status === 200) {
             await this.getTreeData(this.treeId)
             this.$emit('reload')
@@ -266,13 +316,7 @@ export default {
 }
 </script>
 
-<style scoped>
-.tree-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
+<style>
 .rich-media-node {
   width: 160px;
   padding: 0 0 0 8px;
@@ -288,7 +332,7 @@ export default {
   border: 1px solid black;
 }
 
-.icons{
+.icons {
   display: flex;
   flex-direction: column;
 }
@@ -297,11 +341,14 @@ export default {
   border-radius: 5%;
 }
 .client-bg {
-  background-color: #15D6CA !important;
+  background-color: #15d6ca !important;
   border-radius: 5%;
 }
-.pointer{
+.pointer {
   cursor: pointer;
+}
+.sidebar-class-test {
+  background-color: #0090e7 !important;
 }
 .text-content-tree {
   padding: 10px;
@@ -313,7 +360,7 @@ export default {
   word-break: break-word;
   white-space: pre-wrap;
 }
-.icons-node{
+.icons-node {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -321,20 +368,37 @@ export default {
   align-items: center;
   padding: 3px;
 }
-.icons-node span{
+.icons-node span {
   text-align: center;
 }
-.header{
-  display: flex;
-  justify-content: space-between;
-  align-self: start;
-  width: 100%;
-}
-.bigger{
+.bigger {
   width: 30px !important;
   height: 30px !important;
 }
-icon-color{
-  color: black;
+.icon{
+  color: white;
+  margin-bottom: 0.4em;
+}
+.fill{
+  fill: white;
+  color: #0090e7;
+}
+.tree-modal .modal-dialog {
+  max-width: 100%;
+  margin: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  display: flex;
+  position: fixed;
+  z-index: 100000;
+}
+.header-tree-social {
+  background-color: #ff5749 !important;
+  width: 448px;
+  height: 55px;
+  border-radius: 10px 10px 10px 10px;
 }
 </style>
