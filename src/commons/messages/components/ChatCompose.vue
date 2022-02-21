@@ -33,7 +33,7 @@
             <span class="my-suggestion-item">{{ suggestion.item.value }}</span>
           </template>
         </vue-autosuggest>
-        <amg-icon icon="AlertCircleIcon" class="text-danger" v-if="errors[0]"></amg-icon>
+        <feather-icon icon="AlertCircleIcon" class="text-danger" v-if="errors[0]"></feather-icon>
       </validation-provider>
     </div>
     <validation-provider

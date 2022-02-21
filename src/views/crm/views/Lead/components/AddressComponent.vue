@@ -3,7 +3,7 @@
     <b-col sm="12">
       <!-- Street -->
       <validation-provider
-        v-slot="{errors}"
+        v-slot="{ errors }"
         :name="`Mailing address (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
@@ -20,20 +20,37 @@
               class="form-control input-form fond-white border-hover"
               placeholder="Please type your address"
               country="us"
-              :class="{ 'border border-danger' : errors[0] }"
-              :readonly="addressData.id && disabled.street || isDisabled"
+              :class="{ 'border border-danger': errors[0] }"
+              :readonly="(addressData.id && disabled.street) || isDisabled"
               @placechanged="getAddressData"
             />
             <template v-if="addressData.id && isEditable">
-              <b-input-group-append v-if="!disabled.street" class="border-right">
-                <b-button variant="outline-primary" class="btn-sm" @click="onSubmitAddress">
-                  <amg-icon icon="SaveIcon" class="cursor-pointer" />
+              <b-input-group-append
+                v-if="!disabled.street"
+                class="border-right"
+              >
+                <b-button
+                  variant="outline-primary"
+                  class="btn-sm"
+                  @click="onSubmitAddress"
+                >
+                  <feather-icon icon="SaveIcon" class="cursor-pointer" />
                 </b-button>
               </b-input-group-append>
               <b-input-group-append class="border-right">
-                <b-button variant="outline-warning" class="btn-sm" @click="toggleData('street')">
+                <b-button
+                  variant="outline-warning"
+                  class="btn-sm"
+                  @click="toggleData('street')"
+                >
+                  <feather-icon
+                    v-if="disabled.street"
+                    icon="Edit2Icon"
+                    class="cursor-pointer"
+                  />
                   <amg-icon
-                    :icon="disabled.street ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                    v-else
+                    icon="Edit2SlashIcon"
                     class="cursor-pointer"
                   />
                 </b-button>
@@ -43,7 +60,7 @@
                 @click="$emit('onModalTrackingChangeOpen')"
               >
                 <b-input-group-text>
-                  <amg-icon icon="ListIcon" />
+                  <feather-icon icon="ListIcon" />
                 </b-input-group-text>
               </b-input-group-append>
             </template>
@@ -54,7 +71,7 @@
     <b-col md="6">
       <!-- City -->
       <validation-provider
-        v-slot="{errors}"
+        v-slot="{ errors }"
         :name="`City (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
@@ -70,7 +87,7 @@
       </validation-provider>
       <!-- Zip Code -->
       <validation-provider
-        v-slot="{errors}"
+        v-slot="{ errors }"
         :name="`Zip Code (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
@@ -88,11 +105,15 @@
     <b-col md="6">
       <!-- State -->
       <validation-provider
-        v-slot="{errors}"
+        v-slot="{ errors }"
         :name="`State (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
-        <b-form-group label="State" label-for="country" :state="errors[0] ? false : null">
+        <b-form-group
+          label="State"
+          label-for="country"
+          :state="errors[0] ? false : null"
+        >
           <v-select
             id="country"
             v-model="addressData.state"
@@ -100,13 +121,13 @@
             label="state"
             :options="G_EEUU_STATES"
             :disabled="isDisabled || disabled.street"
-            :reduce="el => el.value"
+            :reduce="(el) => el.value"
           />
         </b-form-group>
       </validation-provider>
       <!-- Country -->
       <validation-provider
-        v-slot="{errors}"
+        v-slot="{ errors }"
         :name="`Country (${addressData.prename})`"
         :rules="isRequired ? 'required' : null"
       >
@@ -131,7 +152,7 @@ import {
   BForm,
   BFormGroup,
   BFormInvalidFeedback,
-  BButton
+  BButton,
 } from "bootstrap-vue";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 
@@ -152,35 +173,35 @@ export default {
 
     // Form Validation
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
   },
   props: {
     addressData: {
       type: Object,
-      required: true
+      required: true,
     },
     isRequired: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     isDisabled: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     isEditable: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
       addSocial: false,
       blankAddressData: new Object(),
       disabled: {
-        street: true
+        street: true,
       },
       hideSSN: false,
       hideITIN: false,
@@ -188,13 +209,13 @@ export default {
       hideCPN: false,
       labssn: false,
       labitin: false,
-      location: null
+      location: null,
     };
   },
   computed: {
     ...mapGetters({
-      G_EEUU_STATES: "CrmGlobalStore/G_EEUU_STATES"
-    })
+      G_EEUU_STATES: "CrmGlobalStore/G_EEUU_STATES",
+    }),
   },
   created() {
     this.setDataBlank("addressData");
@@ -205,7 +226,7 @@ export default {
 
     return {
       refFormObserver,
-      getValidationState
+      getValidationState,
     };
   },
   mounted() {},
@@ -216,7 +237,7 @@ export default {
     },
     setDataBlank(key) {
       this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = {
-        ...this[key]
+        ...this[key],
       };
     },
     resetData(key) {
@@ -226,7 +247,7 @@ export default {
       }
     },
     getObjectToKey(array, keyId) {
-      const index = array.map(el => el.id).indexOf(keyId);
+      const index = array.map((el) => el.id).indexOf(keyId);
       if (index !== -1) return array[index];
       return null;
     },
@@ -252,8 +273,8 @@ export default {
       this.blankAddressData.zipcode = this.addressData.zipcode;
       this.blankAddressData.country = this.addressData.country;
       this.disabled.street = !this.disabled.street;
-    }
-  }
+    },
+  },
 };
 </script>
 

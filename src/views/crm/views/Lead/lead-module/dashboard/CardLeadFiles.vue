@@ -28,12 +28,16 @@
           />
           {{ data.item.file_name }}.{{ data.item.extension }}
         </a>
-        <validation-observer v-else :ref="`refFormObserver${ data.index }`">
-          <validation-provider #default="validationContext" name="File Name" rules="required">
+        <validation-observer v-else :ref="`refFormObserver${data.index}`">
+          <validation-provider
+            #default="validationContext"
+            name="File Name"
+            rules="required"
+          >
             <b-input-group label-for="file-name" class="input-group-sm">
               <b-form-input
                 id="file-name"
-                :ref="`fileName${ data.index }`"
+                :ref="`fileName${data.index}`"
                 v-model="data.item.custom_file_name"
                 :state="getValidationState(validationContext)"
                 @keyup.enter="onSubmit(data.index, data.item)"
@@ -63,7 +67,7 @@
       </template>
 
       <template #cell(created_by)="data">
-        <div style="white-space: nowrap;">
+        <div style="white-space: nowrap">
           {{ data.item.user_upload }}
           <br />
           <span>{{ data.item.created_at | myGlobalWithHour }}</span>
@@ -76,7 +80,10 @@
             variant="flat-warning"
             class="button-little-size rounded-circle"
             :disabled="isLoading"
-            @click="data.item.isDisabled = !data.item.isDisabled; data.item.custom_file_name = data.item.file_name"
+            @click="
+              data.item.isDisabled = !data.item.isDisabled;
+              data.item.custom_file_name = data.item.file_name;
+            "
           >
             <feather-icon v-if="!isLoading" icon="Edit2Icon" />
             <b-spinner v-else small />
@@ -122,7 +129,7 @@
           variant="primary"
           @click="onUploadFile"
         >
-          <amg-icon icon="UploadIcon" class="mr-50" />
+          <feather-icon icon="UploadIcon" class="mr-50" />
           <span class="align-middle">Upload</span>
         </b-button>
       </template>
@@ -143,17 +150,17 @@ import Button from "@/views/components/button/Button.vue";
 export default {
   components: {
     DragAndDrop,
-    Button
+    Button,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token"
+      token: "auth/token",
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
-      S_FILES_LEADS: event => event.CrmLeadStore.S_FILES_LEADS
-    })
+      S_FILES_LEADS: (event) => event.CrmLeadStore.S_FILES_LEADS,
+    }),
   },
   created() {
     this.authUser = this.currentUser;
@@ -165,11 +172,11 @@ export default {
       fields: [
         { key: "file_name" },
         { key: "created_by" },
-        this.modul === 15 ? { key: "actions" } : null
+        this.modul === 15 ? { key: "actions" } : null,
       ],
       files: [],
       isBusy: false,
-      isLoading: false
+      isLoading: false,
     };
   },
   directives: { Ripple },
@@ -178,7 +185,7 @@ export default {
       A_GET_FILES_LEADS: "CrmLeadStore/A_GET_FILES_LEADS",
       A_UPDATE_FILE_NAME_LEAD: "CrmLeadStore/A_UPDATE_FILE_NAME_LEAD",
       A_SET_FILE_LEAD: "CrmLeadStore/A_SET_FILE_LEAD",
-      A_DELETE_FILES_LEADS: "CrmLeadStore/A_DELETE_FILES_LEADS"
+      A_DELETE_FILES_LEADS: "CrmLeadStore/A_DELETE_FILES_LEADS",
     }),
     async getFilesLeads(orderby, order) {
       try {
@@ -186,7 +193,7 @@ export default {
         await this.A_GET_FILES_LEADS({
           id_lead: this.lead.id,
           orderby: orderby || 2,
-          order: order || "asc"
+          order: order || "asc",
         });
         this.isBusy = false;
       } catch (error) {
@@ -219,14 +226,14 @@ export default {
     async onSubmit(index, item) {
       if (await this.$refs[`refFormObserver${index}`].validate()) {
         this.showConfirmSwal()
-          .then(async result => {
+          .then(async (result) => {
             if (result.value) {
               this.isLoading = true;
 
               const response = await this.A_UPDATE_FILE_NAME_LEAD({
                 file_id: item.id,
                 name_file: item.custom_file_name,
-                user_id: this.authUser.user_id
+                user_id: this.authUser.user_id,
               });
               if (this.isResponseSuccess(response)) {
                 this.S_FILES_LEADS[index].file_name = item.custom_file_name;
@@ -250,7 +257,7 @@ export default {
               this.isLoading = false;
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.log("Something went wrong onSubmit", error);
             this.showErrorSwal();
           });
@@ -260,7 +267,7 @@ export default {
       try {
         this.addPreloader();
         const body = new FormData();
-        this.files.forEach(file => {
+        this.files.forEach((file) => {
           body.append("images[]", file, file.name);
         });
         body.append("user_id", this.authUser.user_id);
@@ -297,12 +304,12 @@ export default {
     },
     onDeleteFile(item) {
       this.showConfirmSwal()
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             this.addPreloader();
             const response = await this.A_DELETE_FILES_LEADS({
               file_id: item.id,
-              user_id: this.authUser.user_id
+              user_id: this.authUser.user_id,
             });
             if (response)
               this.showToast(
@@ -324,31 +331,31 @@ export default {
             this.removePreloader();
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Something went wrong onDeleteFile", error);
           this.showErrorSwal();
           this.removePreloader();
         });
-    }
+    },
   },
   mounted() {},
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   setup() {
     const { refFormObserver, getValidationState } = formValidation(() => {});
 
     return {
       refFormObserver,
-      getValidationState
+      getValidationState,
     };
-  }
+  },
 };
 </script>

@@ -6,7 +6,9 @@
           <template v-if="userData.id">
             <!-- SSN -->
             <validation-provider
-              v-if="hideSSN || userData.ssn || (!userData.ssn && !userData.itin)"
+              v-if="
+                hideSSN || userData.ssn || (!userData.ssn && !userData.itin)
+              "
               name="SSN"
             >
               <b-form-group label="SSN" label-for="ssn" label-cols-md="2">
@@ -22,14 +24,17 @@
                     v-mask="'###-##-####'"
                     @keyup="onValidSsn"
                   />
-                  <b-input-group-append v-if="!disabled.ssn" class="border-right">
+                  <b-input-group-append
+                    v-if="!disabled.ssn"
+                    class="border-right"
+                  >
                     <b-button
                       variant="outline-primary"
                       class="btn-sm"
                       :disabled="disabled.saveSSN"
                       @click="onSubmitFields('ssn', 4)"
                     >
-                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                      <feather-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -38,7 +43,16 @@
                       class="btn-sm"
                       @click="toggleElement('ssn')"
                     >
-                      <amg-icon :icon="disabled.ssn ? 'Edit2Icon' : 'Edit2SlashIcon'" />
+                      <feather-icon
+                        v-if="disabled.ssn"
+                        icon="Edit2Icon"
+                        class="cursor-pointer"
+                      />
+                      <amg-icon
+                        v-else
+                        icon="Edit2SlashIcon"
+                        class="cursor-pointer"
+                      />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append
@@ -46,7 +60,7 @@
                     @click="onModalTrackingChangeOpen(4, 'SSN')"
                   >
                     <b-input-group-text>
-                      <amg-icon icon="ListIcon" />
+                      <feather-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                   <b-input-group-append
@@ -54,7 +68,9 @@
                     class="border-left cursor-pointer"
                     @click="onAddSocial"
                   >
-                    <amg-icon :icon="addSocial ? 'MinusIcon' : 'PlusIcon'" />
+                    <feather-icon
+                      :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
+                    />
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
@@ -74,14 +90,17 @@
                     v-mask="'###-##-####'"
                     @keyup="onValidItin"
                   />
-                  <b-input-group-append v-if="!disabled.itin" class="border-right">
+                  <b-input-group-append
+                    v-if="!disabled.itin"
+                    class="border-right"
+                  >
                     <b-button
                       variant="outline-primary"
                       class="btn-sm"
                       :disabled="disabled.saveITIN"
                       @click="onSubmitFields('itin', 5)"
                     >
-                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                      <feather-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -90,8 +109,14 @@
                       class="btn-sm"
                       @click="toggleElement('itin')"
                     >
+                      <feather-icon
+                        v-if="disabled.itin"
+                        icon="Edit2Icon"
+                        class="cursor-pointer"
+                      />
                       <amg-icon
-                        :icon="disabled.itin ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                        v-else
+                        icon="Edit2SlashIcon"
                         class="cursor-pointer"
                       />
                     </b-button>
@@ -101,7 +126,7 @@
                     @click="onModalTrackingChangeOpen(5, 'ITIN')"
                   >
                     <b-input-group-text>
-                      <amg-icon icon="ListIcon" />
+                      <feather-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                   <b-input-group-append
@@ -111,13 +136,18 @@
                     variant="warning"
                     @click="onAddSocial"
                   >
-                    <amg-icon :icon="addSocial ? 'MinusIcon' : 'PlusIcon'" />
+                    <feather-icon
+                      :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
+                    />
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
             </validation-provider>
             <!-- CPN -->
-            <validation-provider v-if="hideSSN || (userData.ssn && userData.itin)" name="CPN">
+            <validation-provider
+              v-if="hideSSN || (userData.ssn && userData.itin)"
+              name="CPN"
+            >
               <b-form-group label="CPN" label-for="cpn" label-cols-md="2">
                 <b-input-group>
                   <b-form-input
@@ -131,14 +161,17 @@
                     v-mask="'###-##-####'"
                     @keyup="onValidCpn"
                   />
-                  <b-input-group-append v-if="!disabled.other" class="border-right">
+                  <b-input-group-append
+                    v-if="!disabled.other"
+                    class="border-right"
+                  >
                     <b-button
                       variant="outline-primary"
                       class="btn-sm"
                       :disabled="disabled.saveCPN"
                       @click="onSubmitFields('cpn', 6, 'other')"
                     >
-                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                      <feather-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -147,8 +180,14 @@
                       class="btn-sm"
                       @click="toggleElement('other')"
                     >
+                      <feather-icon
+                        v-if="disabled.other"
+                        icon="Edit2Icon"
+                        class="cursor-pointer"
+                      />
                       <amg-icon
-                        :icon="disabled.other ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                        v-else
+                        icon="Edit2SlashIcon"
                         class="cursor-pointer"
                       />
                     </b-button>
@@ -158,7 +197,7 @@
                     @click="onModalTrackingChangeOpen(6, 'CPN')"
                   >
                     <b-input-group-text>
-                      <amg-icon icon="ListIcon" />
+                      <feather-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                 </b-input-group>
@@ -184,7 +223,7 @@
                     @input="security"
                   />
                   <b-input-group-append is-text variant="warning">
-                    <amg-icon
+                    <feather-icon
                       :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
                       class="cursor-pointer"
                       @click="toggleSocial"
@@ -248,13 +287,16 @@
                   @keyup.native="phone()"
                 />
                 <template v-if="userData.id">
-                  <b-input-group-append v-if="!disabled.phone" class="border-right">
+                  <b-input-group-append
+                    v-if="!disabled.phone"
+                    class="border-right"
+                  >
                     <b-button
                       variant="outline-primary"
                       class="btn-sm"
                       @click="onSubmitFields('phoneh', 2, 'phone')"
                     >
-                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                      <feather-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -263,8 +305,14 @@
                       class="btn-sm"
                       @click="toggleElement('phone')"
                     >
+                      <feather-icon
+                        v-if="disabled.phone"
+                        icon="Edit2Icon"
+                        class="cursor-pointer"
+                      />
                       <amg-icon
-                        :icon="disabled.phone ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                        v-else
+                        icon="Edit2SlashIcon"
                         class="cursor-pointer"
                       />
                     </b-button>
@@ -274,7 +322,7 @@
                     @click="onModalTrackingChangeOpen(2, 'PHONE (H)')"
                   >
                     <b-input-group-text>
-                      <amg-icon icon="ListIcon" />
+                      <feather-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                 </template>
@@ -282,7 +330,11 @@
             </b-form-group>
           </validation-provider>
           <!-- Mobile -->
-          <validation-provider v-slot="{errors}" name="Mobile" rules="required">
+          <validation-provider
+            v-slot="{ errors }"
+            name="Mobile"
+            rules="required"
+          >
             <b-form-group label="Phone (M)" label-for="mobile">
               <b-input-group>
                 <b-form-input
@@ -295,13 +347,16 @@
                   @keyup.native="mobile()"
                 />
                 <template v-if="userData.id">
-                  <b-input-group-append v-if="!disabled.mobile" class="border-right">
+                  <b-input-group-append
+                    v-if="!disabled.mobile"
+                    class="border-right"
+                  >
                     <b-button
                       variant="outline-primary"
                       class="btn-sm"
                       @click="onSubmitFields('phonem', 3, 'mobile')"
                     >
-                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                      <feather-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -310,8 +365,14 @@
                       class="btn-sm"
                       @click="toggleElement('mobile')"
                     >
+                      <feather-icon
+                        v-if="disabled.mobile"
+                        icon="Edit2Icon"
+                        class="cursor-pointer"
+                      />
                       <amg-icon
-                        :icon="disabled.mobile ? 'Edit2Icon' : 'Edit2SlashIcon'"
+                        v-else
+                        icon="Edit2SlashIcon"
                         class="cursor-pointer"
                       />
                     </b-button>
@@ -321,7 +382,7 @@
                     @click="onModalTrackingChangeOpen(3, 'PHONE (M)')"
                   >
                     <b-input-group-text>
-                      <amg-icon icon="ListIcon" />
+                      <feather-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                 </template>
@@ -343,7 +404,8 @@
               name="another-address"
               v-model="hideWithOtherAddress"
               class="mt-2"
-            >Another address?</b-form-checkbox>
+              >Another address?</b-form-checkbox
+            >
           </b-form-group>
         </b-col>
         <b-col md="6">
@@ -356,7 +418,7 @@
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="label"
               :options="G_COUNTRIES"
-              :reduce="el => el.id"
+              :reduce="(el) => el.id"
               :clearable="false"
             />
           </b-form-group>
@@ -366,7 +428,9 @@
         v-if="hideWithOtherAddress"
         :address-data="userData.otherAddress"
         @onSubmitAddress="onSubmitAnotherAddress"
-        @onModalTrackingChangeOpen="onModalTrackingChangeOpen(8, 'OTHER ADDRESS')"
+        @onModalTrackingChangeOpen="
+          onModalTrackingChangeOpen(8, 'OTHER ADDRESS')
+        "
       />
     </b-col>
   </b-row>
@@ -379,7 +443,7 @@ import {
   BForm,
   BFormGroup,
   BFormInvalidFeedback,
-  BButton
+  BButton,
 } from "bootstrap-vue";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { required, alphaNum, email } from "@validations";
@@ -405,24 +469,24 @@ export default {
 
     // Form Validation
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
   },
   model: {
-    event: "update:is-add-new-user-sidebar-active"
+    event: "update:is-add-new-user-sidebar-active",
   },
   props: {
     userData: {
       type: Object,
-      required: true
+      required: true,
     },
     blankUserFields: {
       type: Object,
-      required: false
+      required: false,
     },
     typeForm: {
       type: String,
-      required: false // newLead, editLead
-    }
+      required: false, // newLead, editLead
+    },
   },
   data() {
     return {
@@ -437,7 +501,7 @@ export default {
         phone: true,
         mobile: true,
         saveSSN: false,
-        saveITIN: false
+        saveITIN: false,
       },
       email,
       hideSSN: false,
@@ -447,7 +511,7 @@ export default {
       labssn: false,
       labitin: false,
       location: null,
-      required
+      required,
     };
   },
   computed: {
@@ -455,8 +519,8 @@ export default {
       return this.labssn ? "SSN" : "ITIN";
     },
     ...mapGetters({
-      G_COUNTRIES: "CrmGlobalStore/G_COUNTRIES"
-    })
+      G_COUNTRIES: "CrmGlobalStore/G_COUNTRIES",
+    }),
   },
   created() {
     this.setDataBlank("userData");
@@ -466,7 +530,7 @@ export default {
 
     return {
       refFormObserver,
-      getValidationState
+      getValidationState,
     };
   },
   methods: {
@@ -476,12 +540,11 @@ export default {
       A_VALID_UNIQUE_SSN: "CrmLeadStore/A_VALID_UNIQUE_SSN",
       A_VALID_UNIQUE_ITIN: "CrmLeadStore/A_VALID_UNIQUE_ITIN",
       A_VALID_UNIQUE_CPN: "CrmLeadStore/A_VALID_UNIQUE_CPN",
-      A_UPDATE_FIELDS_LEAD: "CrmLeadStore/A_UPDATE_FIELDS_LEAD"
+      A_UPDATE_FIELDS_LEAD: "CrmLeadStore/A_UPDATE_FIELDS_LEAD",
     }),
     setDataBlank(key) {
-      this[
-        `blank${key.charAt(0).toUpperCase()}${key.slice(1)}`
-      ] = Object.assign({}, this[key]);
+      this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] =
+        Object.assign({}, this[key]);
     },
     resetData(key) {
       const object = this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`];
@@ -563,7 +626,7 @@ export default {
           this.isPreloading(true);
           this.errorFormatMobile = false;
           const response = await this.A_UNIQUE_MOBILE({
-            mobile: this.userData.mobile
+            mobile: this.userData.mobile,
           });
           if (response.status == 200) {
             if (response.data.code == "mobile") {
@@ -574,20 +637,20 @@ export default {
                   confirmButtonText:
                     this.typeForm == "newLead"
                       ? "REQUEST LEAD TO SOCIAL NETWORK"
-                      : "OK"
+                      : "OK",
                 }
               )
-                .then(async result => {
+                .then(async (result) => {
                   if (result.value && this.typeForm == "newLead") {
                     this.isPreloading(true);
                     await this.A_SET_REQUEST_LEADS({
                       lead_id: response.data.lead_id,
-                      lead_name: response.data.message
+                      lead_name: response.data.message,
                     });
                     this.isPreloading(false);
                   }
                 })
-                .catch(error => {
+                .catch((error) => {
                   throw error;
                 });
             }
@@ -617,7 +680,7 @@ export default {
         if (this.userData.ssn.length === 11) {
           this.isPreloading();
           const response = await this.A_VALID_UNIQUE_SSN({
-            ssn: this.userData.ssn
+            ssn: this.userData.ssn,
           });
           if (this.isResponseSuccess(response)) {
             if (response.data.code === "ssn") {
@@ -645,7 +708,7 @@ export default {
         if (this.userData.itin.length === 11) {
           this.isPreloading(true);
           const response = await this.A_VALID_UNIQUE_ITIN({
-            itin: this.userData.itin
+            itin: this.userData.itin,
           });
           if (this.isResponseSuccess(response)) {
             if (response.data.code === "itin") {
@@ -673,7 +736,7 @@ export default {
         if (this.userData.other.length === 11) {
           this.isPreloading(true);
           const response = await this.A_VALID_UNIQUE_CPN({
-            other: this.userData.other
+            other: this.userData.other,
           });
           if (this.isResponseSuccess(response)) {
             if (response.data.code === "cpn") {
@@ -696,7 +759,7 @@ export default {
     },
     async onSubmitFields(key, typee, subkey) {
       this.showConfirmSwal()
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             this.isPreloading(true);
             const response = await this.A_UPDATE_FIELDS_LEAD({
@@ -704,7 +767,7 @@ export default {
               typee,
               [key]: this.userData[subkey]
                 ? this.userData[subkey]
-                : this.userData[key]
+                : this.userData[key],
             });
             if (this.userData[subkey]) {
               key = subkey;
@@ -730,7 +793,7 @@ export default {
               );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("spmething went wrong onSubmitFields: ", error);
           this.isPreloading(false);
           this.showErrorSwal();
@@ -738,7 +801,7 @@ export default {
     },
     async onSubmitAddress() {
       this.showConfirmSwal()
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             this.isPreloading(true);
             const response = await this.A_UPDATE_FIELDS_LEAD({
@@ -748,7 +811,7 @@ export default {
               city: this.userData.address.city,
               state: this.userData.address.state,
               zipcode: this.userData.address.zipcode,
-              country: this.userData.address.country
+              country: this.userData.address.country,
             });
             this.isPreloading(false);
             if (this.isResponseSuccess(response)) {
@@ -769,7 +832,7 @@ export default {
               );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("spmething went wrong onSubmitAddress: ", error);
           this.isPreloading(false);
           this.showErrorSwal();
@@ -777,7 +840,7 @@ export default {
     },
     async onSubmitAnotherAddress() {
       this.showConfirmSwal()
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             this.isPreloading(true);
             const response = await this.A_UPDATE_FIELDS_LEAD({
@@ -787,7 +850,7 @@ export default {
               other_city: this.userData.otherAddress.city,
               other_state: this.userData.otherAddress.state,
               other_zipcode: this.userData.otherAddress.zipcode,
-              other_country: this.userData.otherAddress.country
+              other_country: this.userData.otherAddress.country,
             });
             this.isPreloading(false);
             if (this.isResponseSuccess(response)) {
@@ -808,7 +871,7 @@ export default {
               );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("spmething went wrong onSubmitAnotherAddress: ", error);
           this.isPreloading(false);
           this.showErrorSwal();
@@ -818,14 +881,14 @@ export default {
       this.$emit("onModalTrackingChangeOpen", {
         type,
         name,
-        mapFunction: el => ({
+        mapFunction: (el) => ({
           ...el,
           main_row: el.fields,
           main_row_hide: el.fields_secret,
-          seeHideCell: false
-        })
+          seeHideCell: false,
+        }),
       });
-    }
+    },
   },
   mounted() {
     if (this.userData.id)
@@ -835,8 +898,8 @@ export default {
     hideWithOtherAddress(current, old) {
       if (current) this.userData.another_address = 1;
       else this.userData.another_address = 0;
-    }
-  }
+    },
+  },
 };
 </script>
 

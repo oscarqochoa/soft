@@ -33,7 +33,11 @@
             }`"
             :class="{
               'text-light': skin == 'dark',
-              'text-dark': (skin == 'light' || skin == 'semi-dark' || skin == 'bordered')  && msgGrp.own == 0,
+              'text-dark':
+                (skin == 'light' ||
+                  skin == 'semi-dark' ||
+                  skin == 'bordered') &&
+                msgGrp.own == 0,
             }"
             @click="msgData.error == true ? sendMessageReply(msgData) : null"
             :id="'msg_' + msgData.message_id"
@@ -43,8 +47,8 @@
             <div
               v-if="msgData.senderId != currentUser.user_id"
               class="d-flex justify-content-between align-items-center mt-1"
-              style="width: 96%;"
-              :class="{'mx-1': currentBreakPoint != 'xs'}"
+              style="width: 96%"
+              :class="{ 'mx-1': currentBreakPoint != 'xs' }"
             >
               <span
                 ><h5>{{ msgData.senderName }}</h5></span
@@ -70,31 +74,47 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
               "
-              :style="{background: (skin == 'light' || skin == 'semi-dark' || skin == 'bordered')  && msgGrp.own == 0 ? 'rgb(142 114 248 / 25%)' : 'rgb(255 255 255 / 25%)'}"
+              :style="{
+                background:
+                  (skin == 'light' ||
+                    skin == 'semi-dark' ||
+                    skin == 'bordered') &&
+                  msgGrp.own == 0
+                    ? 'rgb(142 114 248 / 25%)'
+                    : 'rgb(255 255 255 / 25%)',
+              }"
               v-if="msgData.subjectresp && msgData.subjectresp != 'null'"
-              :class="{'mx-1': currentBreakPoint != 'xs'}"
+              :class="{ 'mx-1': currentBreakPoint != 'xs' }"
               class="py-1 px-2"
             >
-              <p
-                style="font-size: 16px;"
-              >
-               <strong>{{ msgData.subjectresp }}</strong>
+              <p style="font-size: 16px">
+                <strong>{{ msgData.subjectresp }}</strong>
               </p>
               <div
                 class="w-100 mt-1"
                 v-if="msgData.contentresp"
                 :class="{
                   'text-light': skin == 'dark',
-                  'text-dark': (skin == 'light' || skin == 'semi-dark' || skin == 'bordered')  && msgGrp.own == 0,
+                  'text-dark':
+                    (skin == 'light' ||
+                      skin == 'semi-dark' ||
+                      skin == 'bordered') &&
+                    msgGrp.own == 0,
                 }"
               >
                 <span><p v-html="msgData.contentresp"></p></span>
               </div>
             </div>
-            <hr style="border-color: rgb(255 255 255 / 77%); width: 96%;" :class="{'mx-1': currentBreakPoint != 'xs'}" v-if="msgData.subjectresp && msgData.subjectresp != 'null'" />
-            <div class="my-1 w-100" :class="{'mx-1': currentBreakPoint != 'xs'}">
-              <span
-                class="mb-1"
+            <hr
+              style="border-color: rgb(255 255 255 / 77%); width: 96%"
+              :class="{ 'mx-1': currentBreakPoint != 'xs' }"
+              v-if="msgData.subjectresp && msgData.subjectresp != 'null'"
+            />
+            <div
+              class="my-1 w-100"
+              :class="{ 'mx-1': currentBreakPoint != 'xs' }"
+            >
+              <span class="mb-1"
                 ><strong ref="refSubject" v-html="msgData.subject"></strong
               ></span>
               <p class="mt-1" ref="refMessage" v-html="msgData.msg"></p>
@@ -105,22 +125,22 @@
               v-if="msgData.was_sent == false && !msgData.error"
             ></b-spinner>
             <div
-              class="
-                d-flex
-                flex-wrap
-                text-break
-                justify-content-between
-                align-items-center
-                mt-1
-                
-              "
-              :class="{'mx-1': currentBreakPoint != 'xs'}"
+              class="d-flex flex-wrap text-break justify-content-between align-items-center mt-1"
+              :class="{ 'mx-1': currentBreakPoint != 'xs' }"
             >
               <div
                 v-for="file in msgData.files"
                 :key="file.id"
                 style="padding: 10px; border-radius: 5px"
-                :style="{background: (skin == 'light' || skin == 'semi-dark' || skin == 'bordered')  && msgGrp.own == 0 ? 'rgb(142 114 248 / 25%)' : 'rgb(255 255 255 / 25%)'}"
+                :style="{
+                  background:
+                    (skin == 'light' ||
+                      skin == 'semi-dark' ||
+                      skin == 'bordered') &&
+                    msgGrp.own == 0
+                      ? 'rgb(142 114 248 / 25%)'
+                      : 'rgb(255 255 255 / 25%)',
+                }"
                 :class="{
                   'mr-1': currentBreakPoint != 'xs',
                   'w-100 mb-1': currentBreakPoint == 'xs',
@@ -128,14 +148,14 @@
               >
                 <span>{{ file.name || file }}</span>
                 <span
-                  ><amg-icon
+                  ><feather-icon
                     icon="DownloadIcon"
                     class="text-primary"
                     style="margin-left: 20px"
                 /></span>
               </div>
             </div>
-            <div class="d-flex justify-content-end align-items-center w-100" >
+            <div class="d-flex justify-content-end align-items-center w-100">
               <span>
                 <small>{{ msgData.time | myGlobalDay }}</small>
               </span>
@@ -316,7 +336,7 @@ export default {
 };
 </script>
 
-<style >
+<style>
 .text-searched {
   background: yellow !important;
   color: black;

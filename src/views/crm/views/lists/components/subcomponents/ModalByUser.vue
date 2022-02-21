@@ -14,7 +14,7 @@
     >
       <div class="row">
         <!-- Column Filter By -->
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-6 col-md-12 col-sm-12">
           <b-form-group label="Filter by:">
             <v-select
               v-model="filters[0].model"
@@ -27,7 +27,7 @@
           </b-form-group>
         </div>
         <!-- Column MISSING-->
-        <div class="col-lg-3 col-md-3 col-sm-3">
+        <div class="col-lg-3 col-md-6 col-sm-6">
           <b-form-group>
             <b-input-group
               prepend="MISSING"
@@ -40,7 +40,7 @@
           </b-form-group>
         </div>
         <!-- Column DONE -->
-        <div class="col-lg-3 col-md-3 col-sm-3">
+        <div class="col-lg-3 col-md-6 col-sm-6">
           <b-form-group>
             <b-input-group
               prepend="DONE"

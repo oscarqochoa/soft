@@ -38,6 +38,9 @@ export default {
     isLightSkin() {
       return this.$store.getters["appConfig/skin"] === "light";
     },
+    isBigWindow() {
+      return this.$store.getters["app/bigWindow"];
+    },
   },
   methods: {
     convertProgramToModule(program) {
@@ -164,7 +167,7 @@ export default {
       position = "top-right",
       title = "Congratulations",
       icon = "CheckIcon",
-      text = "You've successfully done it!"
+      text = "You've successfully done it!",
     }) {
       this.$toast(
         {
