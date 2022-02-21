@@ -4,7 +4,6 @@
     <b-row>
       <b-col cols="12">
         <!-- All Screen -->
-        <h4>is mobile {{isMobileDevice}}</h4>
         <b-row>
           <!-- Column Cards -->
           <b-col
@@ -24,7 +23,7 @@
                 @click="changeTab(0)"
                 class="ecommerce-card col-lg-12 cursor-pointer"
                 :class="{classAdd,
-                  'ecommerce-card-leads': !itemCards[0] && !isMobileDevice,
+                  'ecommerce-card-leads': !itemCards[0] && !isTouch,
                 }"
                 :style="
                   switchHoverByCard(
@@ -89,7 +88,7 @@
               <b-card
                 class="ecommerce-card col-lg-12 cursor-pointer"
                 :class="{classAdd,
-                  'ecommerce-card-appointments': !itemCards[0] && !isMobileDevice,
+                  'ecommerce-card-appointments': !itemCards[0] && !isTouch,
                 }"
                 @click="changeTab(1)"
                 :style="
@@ -155,7 +154,7 @@
               <b-card
                 class=" ecommerce-card col-lg-12 cursor-pointer"
                 :class="{classAdd,
-                  'ecommerce-card-tasks': !itemCards[0] && !isMobileDevice,
+                  'ecommerce-card-tasks': !itemCards[0] && !isTouch,
                 }"
                 @click="changeTab(2)"
                 :style="
@@ -221,7 +220,7 @@
               <b-card
                 class=" ecommerce-card col-lg-12 cursor-pointer"
                 :class="{classAdd,
-                  'ecommerce-card-sales': !itemCards[0] && !isMobileDevice,
+                  'ecommerce-card-sales': !itemCards[0] && !isTouch,
                 }"
                 @click="changeTab(3)"
                 :style="
@@ -287,7 +286,7 @@
               <b-card
                 class="ecommerce-card col-lg-12 cursor-pointer"
                 :class="{classAdd,
-                  'ecommerce-card-capturated': !itemCards[0] && !isMobileDevice,
+                  'ecommerce-card-capturated': !itemCards[0] && !isTouch,
                 }"
                 @click="changeTab(4)"
                 :style="
@@ -502,7 +501,8 @@
 </template>
 
 <script>
-
+import isTouchDevice from 'is-touch-device'
+import { useWindowSize } from "@vueuse/core";
 import { dragscroll } from "vue-dragscroll";
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
 import { mapGetters } from "vuex";
@@ -577,13 +577,11 @@ export default {
       sizeScreenByPixels: "app/sizeScreenByPixels",
       allSizeOfScreen: "app/allSizeOfScreen",
     }),
+    isTouch(){
+      return isTouchDevice()
 
-    isMobileDevice(){
-       let details = navigator.userAgent;
-       let regexp = /android|iphone|kindle|ipad/i;
-       let isMobileDevice = regexp.test(details);
-       return isMobileDevice
     },
+
     classWrapper: function () {
       return "item-wrapper justify-content-start align-items-center";
     },
