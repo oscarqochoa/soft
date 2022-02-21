@@ -30,9 +30,11 @@
                       name="checkbox-2"
                       :value="program.id"
                       :disabled="fromTree"
-                      ><img
+                      ><b-img
                         :src="baseUrl + program.logo"
                         class="img-fan-page"
+                        thumbnail
+                        fluid
                       />
                     </b-form-radio>
                   </b-col>

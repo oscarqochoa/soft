@@ -81,34 +81,31 @@
           </template>
           <template #cell(actions)="data">
             <feather-icon
-              class="mr-1 pointer bigger"
+              class="mr-1 pointer bigger text-primary"
               icon="EyeIcon"
               @click="openEditWatchModal(1, data.item)"
             />
             <feather-icon
-              class="mr-1 pointer bigger"
-              style="color: #007bff"
+              class="mr-1 pointer bigger text-warning"
               icon="EditIcon"
               @click="openEditWatchModal(2, data.item)"
             />
             <feather-icon
-              class="mr-1 pointer bigger"
-              style="color: #dc3545"
-              icon="TrashIcon"
-              @click="deleteItem(data.item)"
-            />
-            <feather-icon
               v-if="data.item.type_answer == 2"
-              class="mr-1 pointer bigger"
+              class="mr-1 pointer bigger text-info"
               icon="CopyIcon"
               @click="copyAnswerName(data.item.content)"
             />
             <tabler-icon
               v-if="data.item.father == null && data.item.count_father"
-              class="mr-1 pointer bigger"
+              class="mr-1 pointer bigger text-success"
               icon="TreesIcon"
-              style="color: green"
               @click="openTreeModalM(data.item.id)"
+            />
+            <feather-icon
+                class="mr-1 pointer bigger text-danger"
+                icon="TrashIcon"
+                @click="deleteItem(data.item)"
             />
           </template>
         </b-table>
