@@ -2,6 +2,7 @@
   <b-card title="User Access" style="height: 93%">
     <b-row>
       <b-col>
+
         <table class="mt-2 mt-xl-0 w-100">
           <tr>
             <th class="pb-50">
@@ -41,7 +42,7 @@
           id="label-modules"
           label="Module(s)"
           label-for="modules"
-          class="mt-1"
+          class="mt-3"
         >
           <template #label>
             <span style="font-size: 14px">Module(s)</span>

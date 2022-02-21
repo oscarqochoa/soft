@@ -32,7 +32,7 @@
               v-slot="{ errors }"
               name="Ammount"
             >
-              <b-form-group label="Amount" label-for="amount" label-cols-xl="3">
+              <b-form-group label="Amount" label-for="amount" label-cols-md="4">
                 <money
                   v-model="item.amount"
                   id="amount"

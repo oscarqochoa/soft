@@ -5,9 +5,7 @@
     </template>
     <b-row>
       <b-col
-        cols="12"
-        sm="6"
-        lg="3"
+        cols="12" xl="3" lg="6" md="6" sm="12" 
         :class="['border-right', { 'border-bottom': !isBigWindow }]"
       >
         <card-lead-payment-section
@@ -22,9 +20,7 @@
         />
       </b-col>
       <b-col
-        cols="12"
-        sm="6"
-        lg="3"
+        cols="12" xl="3" lg="6" md="6" sm="12" 
         :class="['border-right', { 'border-bottom': !isBigWindow }]"
       >
         <card-lead-payment-section
@@ -39,11 +35,10 @@
         />
       </b-col>
       <b-col
-        cols="12"
-        sm="6"
-        lg="3"
+        cols="12" xl="3" lg="6" md="6" sm="12"
         :class="['border-right', { 'border-bottom': !isBigWindow }]"
       >
+      <b-col cols="12" xl="3" lg="6" md="6" sm="12" class="border-right">
         <card-lead-payment-section
           :modul="modul"
           title="Court"
@@ -55,7 +50,7 @@
           @onSubmit="onSubmit($event, 'court')"
         />
       </b-col>
-      <b-col cols="12" sm="6" lg="3">
+      <b-col cols="12" xl="3" lg="6" md="6" sm="12">
         <card-lead-payment-section
           :modul="modul"
           title="Other"
