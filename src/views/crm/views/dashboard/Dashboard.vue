@@ -4,7 +4,6 @@
     <b-row>
       <b-col cols="12">
         <!-- All Screen -->
-        <h4>type {{ isTouch }}</h4>
         <b-row>
           <!-- Column Cards -->
           <b-col
@@ -23,7 +22,7 @@
               <b-card
                 @click="changeTab(0)"
                 class="ecommerce-card col-lg-12 cursor-pointer"
-                :class="{
+                :class="{classAdd,
                   'ecommerce-card-leads': !itemCards[0] && !isTouch,
                 }"
                 :style="
@@ -87,8 +86,10 @@
             <!-- Card Appointments-->
             <b-row class="b-row-card">
               <b-card
-                class="ecommerce-card-appointments ecommerce-card col-lg-12 cursor-pointer"
-                :class="classAdd"
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-appointments': !itemCards[0] && !isTouch,
+                }"
                 @click="changeTab(1)"
                 :style="
                   switchHoverByCard(
@@ -151,8 +152,10 @@
             <!-- Card Tasks-->
             <b-row class="b-row-card">
               <b-card
-                class="ecommerce-card-tasks ecommerce-card col-lg-12 cursor-pointer"
-                :class="classAdd"
+                class=" ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-tasks': !itemCards[0] && !isTouch,
+                }"
                 @click="changeTab(2)"
                 :style="
                   switchHoverByCard(
@@ -215,8 +218,10 @@
             <!-- Card Sales-->
             <b-row class="b-row-card">
               <b-card
-                class="ecommerce-card-sales ecommerce-card col-lg-12 cursor-pointer"
-                :class="classAdd"
+                class=" ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-sales': !itemCards[0] && !isTouch,
+                }"
                 @click="changeTab(3)"
                 :style="
                   switchHoverByCard(
@@ -279,8 +284,10 @@
             <!-- Card Capturated-->
             <b-row class="b-row-card">
               <b-card
-                class="ecommerce-card-capturated ecommerce-card col-lg-12 cursor-pointer"
-                :class="classAdd"
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-capturated': !itemCards[0] && !isTouch,
+                }"
                 @click="changeTab(4)"
                 :style="
                   switchHoverByCard(
@@ -420,7 +427,7 @@
                         ? 'width: 33%'
                         : allSizeOfScreen === 'xs' || allSizeOfScreen === 'sm'
                         ? 'width: 80%'
-                        : statusSizeScreen == 800
+                        : screenHeight == 800
                         ? 'width: 100%'
                         : 'width: 45%'
                     }`"
@@ -495,7 +502,6 @@
 
 <script>
 import isTouchDevice from 'is-touch-device'
-import { useWindowSize } from "@vueuse/core";
 import { dragscroll } from "vue-dragscroll";
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
 import { mapGetters } from "vuex";
@@ -566,18 +572,15 @@ export default {
     this.yearSelect();
   },
   computed: {
+    ...mapGetters({
+      sizeScreenByPixels: "app/sizeScreenByPixels",
+      allSizeOfScreen: "app/allSizeOfScreen",
+    }),
     isTouch(){
-      // const userAgent = navigator.userAgent.toLowerCase();
-      // const isTablet = /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/.test(userAgent);
-      // const isMobile = navigator.userAgentData.mobile
-      // return isTablet || isMobile
       return isTouchDevice()
 
     },
-    screenWidth() {
-      const { width, height } = useWindowSize();
-      return width.value;
-    },
+
     classWrapper: function () {
       return "item-wrapper justify-content-start align-items-center";
     },
@@ -588,15 +591,11 @@ export default {
       return this.skin == "dark" ? "dark" : "";
     },
 
-    statusSizeScreen: function () {
-      const { width, height } = useWindowSize();
+    screenHeight: function () {
+      const { width, height } = this.sizeScreenByPixels;
       return height.value;
     },
-    ...mapGetters({
-      bigheightScreen: "app/bigheightScreen",
-      mediumheightScreen: "app/mediumheightScreen",
-      allSizeOfScreen: "app/allSizeOfScreen",
-    }),
+    
     statusHeightByScreenColOne: function () {
       switch (this.allSizeOfScreen) {
         case "xxl":
@@ -614,21 +613,21 @@ export default {
       }
     },
     statusHeightByDevicesColOne: function () {
-      return this.statusSizeScreen >= 1368
+      return this.screenHeight >= 1368
         ? "height: 45vh;max-height: 45vh;overflow: auto;"
-        : this.statusSizeScreen >= 1024
+        : this.screenHeight >= 1024
         ? "height: 60vh;max-height: 60vh;overflow: auto;"
-        : this.statusSizeScreen >= 912 && this.allSizeOfScreen !== "xxl"
+        : this.screenHeight >= 912 && this.allSizeOfScreen !== "xxl"
         ? "height: 50vh;max-height: 50vh;overflow: auto;"
-        : this.statusSizeScreen >= 912
+        : this.screenHeight >= 912
         ? ""
-        : this.statusSizeScreen >= 800
+        : this.screenHeight >= 800
         ? "height: 65vh;max-height: 65vh;overflow: auto;"
-        : this.statusSizeScreen >= 768
+        : this.screenHeight >= 768
         ? ""
-        : this.statusSizeScreen >= 720
+        : this.screenHeight >= 720
         ? "height: 80vh;max-height: 80vh;overflow: auto;"
-        : this.statusSizeScreen >= 540 && this.statusSizeScreen <= 600
+        : this.screenHeight >= 540 && this.screenHeight <= 600
         ? "height: 110vh;max-height: 110vh;overflow: auto;"
         : "";
     },
