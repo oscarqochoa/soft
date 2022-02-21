@@ -1,7 +1,7 @@
 export default[
   {
     title: 'Answers guide',
-    icon: 'PieChartIcon',
+    icon: 'BookIcon',
     route: 'answers-guide-boost-credit',
   },
 ]

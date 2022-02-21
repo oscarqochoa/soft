@@ -375,10 +375,7 @@ export default {
   width: 30px !important;
   height: 30px !important;
 }
-.icon{
-  color: white;
-  margin-bottom: 0.4em;
-}
+
 .fill{
   fill: white;
   color: #0090e7;
@@ -400,5 +397,11 @@ export default {
   width: 448px;
   height: 55px;
   border-radius: 10px 10px 10px 10px;
+}
+</style>
+<style scoped>
+.icon{
+  color: white;
+  margin-bottom: 0.4em;
 }
 </style>
