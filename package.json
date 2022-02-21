@@ -1,6 +1,6 @@
 {
-  "name": "vuexy-vuejs-react-html-laravel-admin-dashboard-template",
-  "version": "6.4.0",
+  "name": "amg-soft",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -60,6 +60,7 @@
     "vue-clipboard2": "0.3.1",
     "vue-context": "6.0.0",
     "vue-cool-lightbox": "^2.7.4",
+    "vue-dragscroll": "^3.0.1",
     "vue-echarts": "5.0.0-beta.0",
     "vue-feather-icons": "5.1.0",
     "vue-flatpickr-component": "8.1.6",
@@ -78,9 +79,10 @@
     "vue-select": "3.11.2",
     "vue-slider-component": "3.2.11",
     "vue-sweetalert2": "4.1.1",
-    "vue-tabler-icons": "^1.0.3",
+    "vue-tabler-icons": "1.0",
     "vue-the-mask": "^0.11.1",
     "vue-toastification": "1.7.11",
+    "vue-toggles": "^1.1.4",
     "vue-tour": "1.5.0",
     "vue-tree-halower": "1.8.3",
     "vue2-leaflet": "2.5.2",

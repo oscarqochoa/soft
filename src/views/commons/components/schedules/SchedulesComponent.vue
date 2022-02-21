@@ -1,107 +1,48 @@
 <template>
   <div>
-    <b-card>
-      <b-row>
-        <b-col lg="6">
-          <h2>Schedules</h2>
-        </b-col>
-      </b-row>
-    </b-card>
-    <b-card no-body>
-      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
-        <b-nav card-header pills class="m-0">
-          <b-nav-item
-            :to="`/${route}/schedules/report/`"
-            exact
-            exact-active-class="active "
-            link-classes="border-secondary hover-primary"
-          >Reports by Module</b-nav-item>
-          <b-nav-item
-            :to="`/${route}/schedules/overtime/`"
-            exact
-            exact-active-class="active border-primary-i"
-            link-classes="border-secondary hover-primary"
-          >
-            Overtime
-            <span v-if="S_OVERTIME_COUNTER > 0" class="ml-1">
-              <feather-icon
-                icon
-                :badge="S_OVERTIME_COUNTER > 99 ? '99+' : S_OVERTIME_COUNTER"
-                badge-classes="badge-danger badge-glow"
-              />
-            </span>
-          </b-nav-item>
-          <b-nav-item
-            :to="`/${route}/schedules/justifications`"
-            exact
-            exact-active-class="active border-primary-i"
-            link-classes=" border-secondary hover-primary"
-          >
-            Justifications
-            <span v-if="S_JUSTIFICATIONS_COUNTER > 0" class="ml-1">
-              <feather-icon
-                icon
-                :badge="S_JUSTIFICATIONS_COUNTER > 99 ? '99+' : S_JUSTIFICATIONS_COUNTER"
-                badge-classes="badge-danger badge-glow"
-              />
-            </span>
-          </b-nav-item>
-        </b-nav>
-      </b-card-header>
+    <header-slot />
+    <b-nav card-header pills class="m-0">
+      <b-nav-item
+        :to="`/${route}/schedules/report/`"
+        exact
+        exact-active-class="active "
+        :link-classes="['px-3',bgTabsNavs]"
+      >Reports by Module</b-nav-item>
+      <b-nav-item
+        :to="`/${route}/schedules/overtime/`"
+        exact
+        exact-active-class="active border-primary-i"
+        :link-classes="['px-3',bgTabsNavs]"
+      >
+        Overtime
+        <span v-if="S_OVERTIME_COUNTER > 0" class="ml-1">
+          <feather-icon
+            icon
+            :badge="S_OVERTIME_COUNTER > 99 ? '99+' : S_OVERTIME_COUNTER"
+            badge-classes="badge-danger badge-glow"
+          />
+        </span>
+      </b-nav-item>
+      <b-nav-item
+        :to="`/${route}/schedules/justifications`"
+        exact
+        exact-active-class="active border-primary-i"
+        :link-classes="['px-3',bgTabsNavs]"
+      >
+        Justifications
+        <span v-if="S_JUSTIFICATIONS_COUNTER > 0" class="ml-1">
+          <feather-icon
+            icon
+            :badge="S_JUSTIFICATIONS_COUNTER > 99 ? '99+' : S_JUSTIFICATIONS_COUNTER"
+            badge-classes="badge-danger badge-glow"
+          />
+        </span>
+      </b-nav-item>
+    </b-nav>
 
-      <b-card-body class="border-primary rounded">
-        <router-view :key="this.$route.name" />
-      </b-card-body>
-    </b-card>
-    <!-- <b-card body-class="pb-0">
-      <b-nav pills>
-        <b-nav-item
-          :to="`/${route}/schedules/report/`"
-          exact
-          exact-active-class="active "
-          link-classes="border-secondary hover-primary"
-        >Reports by Module</b-nav-item>
-        <b-nav-item
-          :to="`/${route}/schedules/overtime/`"
-          exact
-          exact-active-class="active border-primary-i"
-          link-classes="border-secondary hover-primary"
-        >
-          Overtime
-          <span
-            v-if="S_OVERTIME_COUNTER > 0"
-            class="ml-1"
-          >
-            <feather-icon
-              icon
-              :badge="S_OVERTIME_COUNTER > 99 ? '99+' : S_OVERTIME_COUNTER"
-              badge-classes="badge-danger badge-glow"
-            />
-          </span>
-        </b-nav-item>
-        <b-nav-item
-          :to="`/${route}/schedules/justifications`"
-          exact
-          exact-active-class="active border-primary-i"
-          link-classes=" border-secondary hover-primary"
-        >
-          Justifications
-          <span
-            v-if="S_JUSTIFICATIONS_COUNTER > 0"
-            class="ml-1"
-          >
-            <feather-icon
-              icon
-              :badge="S_JUSTIFICATIONS_COUNTER > 99 ? '99+' : S_JUSTIFICATIONS_COUNTER"
-              badge-classes="badge-danger badge-glow"
-            />
-          </span>
-        </b-nav-item>
-      </b-nav>
-
+    <b-card class="border-top-primary border-3 border-table-radius">
       <router-view :key="this.$route.name" />
-    </b-card>-->
-    <!-- <ModalRequestLoan v-if="modalRequest.show" :info="modalRequest" @hide="closeModalLoan" /> -->
+    </b-card>
   </div>
 </template>
 

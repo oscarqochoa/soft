@@ -2,7 +2,9 @@
 export default {
   namespaced: true,
   state: {
+    // List of Categories
    listCategory:null,
+  //  To update table
    updateRequestEquipment:false,
   },
   getters: {
@@ -10,6 +12,7 @@ export default {
     updateRequestEquip:(state)=> state.updateRequestEquipment
   },
   mutations: {
+    // Insert Categories
     SET_CATEGORIES(state, payload) {
       state.listCategory = payload;
     },

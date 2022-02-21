@@ -3,7 +3,6 @@
     <!-- Table Container Card -->
     <b-card no-body class="mb-0">
       <filter-slot
-        v-scrollbar
         :filter="filter"
         :filter-principal="filterPrincipal"
         :total-rows="totalLeads"

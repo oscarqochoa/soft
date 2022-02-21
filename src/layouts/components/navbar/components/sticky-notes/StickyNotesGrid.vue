@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card no-body >
+    <b-card no-body>
       <div>
         <!-- Table Top -->
         <b-row>
@@ -24,7 +24,7 @@
               icon="RefreshCcwIcon"
               size="20"
               @click="resetSearch"
-            /> -->
+            />-->
           </b-col>
           <!-- Search -->
           <b-col cols="12" md="6">
@@ -34,11 +34,15 @@
                 class="d-inline-block mr-1"
                 placeholder="Note..."
               />
-              <b-button variant="danger" :disabled="selectedCards.length <= 0" @click="deleteNote">
+              <b-button
+                variant="danger"
+                :disabled="selectedCards.length <= 0"
+                @click="deleteNote"
+              >
                 <div class="d-flex justify-content-between">
-                  <span class="mr-50"
-                    ><feather-icon icon="TrashIcon" size="15"
-                  /></span>
+                  <span class="mr-50">
+                    <feather-icon icon="TrashIcon" size="15" />
+                  </span>
 
                   <span class="text-nowrap">Delete all</span>
                 </div>
@@ -47,7 +51,7 @@
           </b-col>
         </b-row>
       </div>
-      <div v-scrollbar style="height: 500px" class="mt-1">
+      <div style="height: 500px" class="mt-1">
         <b-table
           ref="refClientsList"
           class="position-relative"
@@ -76,23 +80,23 @@
           <template #cell(cards)="data">
             <span class="cursor-pointer">
               <feather-icon
-                icon="FileTextIcon"
+                icon="FileIcon"
                 size="25"
                 :style="`color: ${data.item.category}; fill: ${data.item.category};`"
               />
             </span>
           </template>
           <template #cell(subject)="data">
-            <b-link @click="onSelectNote(data.item)">
-              {{ data.item.subject }}
-            </b-link>
+            <b-link @click="onSelectNote(data.item)">{{
+              data.item.subject
+            }}</b-link>
           </template>
-          <template #cell(created_at)="data">
-            {{ data.item.created_at | myGlobalWithHour }}
-          </template>
-          <template #cell(updated_at)="data">
-            {{ data.item.updated_at | myGlobalWithHour }}
-          </template>
+          <template #cell(created_at)="data">{{
+            data.item.created_at | myGlobalWithHour
+          }}</template>
+          <template #cell(updated_at)="data">{{
+            data.item.updated_at | myGlobalWithHour
+          }}</template>
           <template #cell(checkboxes)="data">
             <b-form-checkbox
               v-model="data.item.isSelected"
@@ -120,7 +124,7 @@ export default {
   mounted() {
     if (!this.notes) {
       this.getNotes(this.currentUser.user_id);
-    }else{
+    } else {
       this.notesFiltered = this.notes;
     }
   },
@@ -203,13 +207,13 @@ export default {
     },
     onSelectNoteCheckbox(note) {
       if (note.isSelected) {
-        this.selectedCards.push({id: note.id});
+        this.selectedCards.push({ id: note.id });
       } else {
         let index = this.selectedCards.findIndex((item) => item.id === note.id);
         if (index !== -1) this.selectedCards.splice(index, 1);
       }
     },
-    onFiltered(filteredNotes){
+    onFiltered(filteredNotes) {
       this.notesFiltered = filteredNotes;
     },
     deleteNote() {
@@ -246,7 +250,7 @@ export default {
   watch: {
     selectAllCheckboxes(newVal) {
       if (newVal) {
-        this.selectedCards = this.notesFiltered.map((obj) => ({id: obj.id}));
+        this.selectedCards = this.notesFiltered.map((obj) => ({ id: obj.id }));
         this.notes.forEach((obj) => {
           obj.isSelected = true;
         });
@@ -257,9 +261,9 @@ export default {
         });
       }
     },
-    notes(newVal){
-      this.notesFiltered = newVal
-    }
+    notes(newVal) {
+      this.notesFiltered = newVal;
+    },
   },
 };
 </script>

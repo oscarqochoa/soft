@@ -2,282 +2,241 @@
   <div>
     <b-card no-body class="mb-1">
       <div class="cont-search-paginate mx-2 mb-2 mt-2">
+        <!-- Total Form -->
         <ValidationObserver ref="form">
-          <div class="row">
-            <div class="col-lg-5 col-md-5 col-sm-12 pr-1 box">
-              <div class="row">
-                <div class="col-lg-8 col-md-8 col-sm-8">
-                  <div class="form-group autocomplete">
-                    <b-form-input
-                      id="camposearch"
-                      autocomplete="off"
-                      class="input-form"
-                      type="text"
+          <b-row>
+            <!-- Input Details Information -->
+            <b-col lg="4" md="5" sm="12">
+              <b-row>
+                <!-- Search -->
+                <b-col cols="12">
+                  <b-form-group label="Entries">
+                    <vue-autosuggest
+                      ref="autocomplete"
                       v-model="userfilter"
-                      @keyup="searchlead"
-                      ref="file"
-                      name="file"
-                      placeholder="Search Leads | Clients"
-                    ></b-form-input>
-                    <b-list-group
-                      v-if="filterSearch && users != null && !statusSpinner"
-                      class="autocomplete-results"
+                      :suggestions="filteredOptions"
+                      :get-suggestion-value="getSuggestionValue"
+                      :input-props="{
+                        id: 'autosuggest__input',
+                        class: 'form-control',
+                        placeholder: 'Search Leads | Clients',
+                      }"
+                      :limit="10"
+                      @input="searchLeads"
+                      @selected="selectHandler"
                     >
-                      <b-list-group-item
-                        class="autocomplete-result"
-                        v-for="(user, index) in users"
-                        :key="index"
-                        @click="
-                          searchuser(
-                            user.id,
-                            user.first_name,
-                            user.last_name,
-                            user.mobile
-                          )
-                        "
-                      >
-                        {{ user.first_name }} {{ user.last_name }} |
-                        {{ user.mobile }}
-                      </b-list-group-item>
-                    </b-list-group>
-                    <b-list-group
-                      class="autocomplete-results"
-                      v-if="statusSpinner"
-                    >
-                      <div class="text-center">
-                        <b-spinner variant="primary" label="Text Centered" />
-                      </div>
-                    </b-list-group>
-                    <b-list-group
-                      class="autocomplete-results"
-                      v-if="
-                        filterSearch &&
-                        users == null &&
-                        !statusSpinner &&
-                        statusSelectedSearch
-                      "
-                    >
-                      <div class="text-center">
-                        <strong>Sorry, There's not result</strong>
-                      </div>
-                    </b-list-group>
-                  </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4">
-                  <div class="form-group">
-                    <b-button
-                      class="d-flex justify-content-between"
-                      variant="primary"
-                      @click="getcard"
-                      :disabled="changeDisable"
-                    >
-                      Continue
-                      <feather-icon
-                        icon="ArrowRightIcon"
-                        size="15"
-                      ></feather-icon>
-                    </b-button>
-                  </div>
-                </div>
-              </div>
-              <div class="row" v-if="dataLead">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                  <b-form-group label="Lead" label-for="v-Lead">
-                    <b-form-input v-model="lead" placeholder="Lead" />
+                      <template slot-scope="{ suggestion }">
+                        <span class="my-suggestion-item">
+                          {{
+                            suggestion.item.first_name +
+                            " " +
+                            suggestion.item.last_name
+                          }}
+                          |
+                          {{ suggestion.item.mobile }}
+                        </span>
+                      </template>
+                    </vue-autosuggest>
                   </b-form-group>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                  <b-form-group label="Mobile" label-for="v-Mobile">
-                    <b-form-input v-model="mobile" placeholder="mobile" />
-                  </b-form-group>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                  <ValidationProvider
-                    name="price"
-                    rules="required|validate-amount"
-                    v-slot="{ errors }"
+                </b-col>
+                <!-- Button Continue -->
+                <b-col cols="12">
+                  <b-button
+                    class="d-flex justify-content-between"
+                    variant="primary"
+                    @click="getcard"
+                    :disabled="changeDisable"
                   >
-                    <b-form-group label="Amount" label-for="v-Amount">
-                      <money
-                        v-model="amount"
-                        v-bind="moneyConfig"
-                        name="price"
-                        id="price"
-                        class="form-control"
-                        :class="{ 'border-danger': errors[0] }"
-                      ></money>
+                    Continue
+                    <feather-icon
+                      icon="ArrowRightIcon"
+                      size="15"
+                      class="ml-1"
+                    ></feather-icon>
+                  </b-button>
+                </b-col>
+                <!-- Template Inputs -->
+                <template v-if="dataLead">
+                  <!-- Mobile -->
+                  <b-col cols="12">
+                    <b-form-group class="mt-1" label="Mobile">
+                      <b-form-input v-model="mobile" placeholder="mobile" />
                     </b-form-group>
-                  </ValidationProvider>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                  <b-form-group
-                    label="Type of Payment"
-                    label-for="v-TypeOfPayment"
-                  >
+                  </b-col>
+                  <!-- Lead -->
+                  <b-col cols="12">
+                    <b-form-group label="Lead">
+                      <b-form-input v-model="lead" placeholder="Lead" />
+                    </b-form-group>
+                  </b-col>
+                  <!-- Amount -->
+                  <b-col cols="12">
                     <ValidationProvider
-                      name="payment"
-                      rules="required"
+                      name="price"
+                      rules="required|validate-amount"
                       v-slot="{ errors }"
                     >
-                      <b-form-radio-group
-                        v-model="payment"
-                        :options="options"
-                        :class="{ 'border-danger': errors[0] }"
-                        name="radios-stacked"
-                        stacked
-                      />
+                      <b-form-group label="Amount">
+                        <money
+                          v-model="amount"
+                          v-bind="moneyConfig"
+                          name="price"
+                          id="price"
+                          class="form-control"
+                          :class="{
+                            'border-danger': errors[0] && submitedForm,
+                          }"
+                        ></money>
+                      </b-form-group>
                     </ValidationProvider>
-                    <br />
-                    <b-form-input
-                      v-if="payment == 3"
-                      v-model="observationOther"
-                      placeholder="Specific"
-                    />
-                  </b-form-group>
-                </div>
-
-                <div class="col-lg-12" v-if="errosList">
-                  <div
-                    class="form-group"
-                    :style="
-                      responseCode == 1
-                        ? 'color:green !important'
-                        : 'color:red !important'
-                    "
-                  >
-                    <span v-if="responseCode == 1">Approved</span>
-                    <span v-if="responseCode == 2">Declined</span>
-                    <span v-if="responseCode == 3">Error</span>
-                    <span v-if="responseCode == 4">Held for Review</span>
-                    <ul>
-                      <li v-for="(items, index) in errosAutorize" :key="index">
-                        {{ items.errorText }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="col-lg-12" v-if="messageList">
-                  <div
-                    class="form-group"
-                    :style="
-                      responseCode != 1
-                        ? 'color:red !important'
-                        : 'color:green !important'
-                    "
-                  >
-                    <span v-if="responseCode == 1">Approved</span>
-                    <span v-if="responseCode == 2">Declined</span>
-                    <span v-if="responseCode == 3">Error</span>
-                    <span v-if="responseCode == 4">Held for Review</span>
-                    <ul>
-                      <li
-                        v-for="(items, index) in messageAutorize"
-                        :key="index"
+                  </b-col>
+                  <!-- Type Of Payment -->
+                  <b-col cols="12">
+                    <b-form-group class="mt-1" label="Type of Payment">
+                      <ValidationProvider
+                        name="payment"
+                        rules="required"
+                        v-slot="{ errors }"
                       >
-                        {{ items.description }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-7 col-md-7 col-sm-12 box">
-              <div class="row ml-2">
-                <b-form-group
-                  label="Method of Payment"
-                  class="col-lg-9 col-md-9 col-sm-9"
-                  v-if="dataLead"
-                >
-                  <ValidationProvider
-                    name="comment"
-                    rules="required"
-                    v-slot="{ errors }"
-                  >
-                    <div class="row w-100">
-                      <b-form-radio-group
-                        v-model="methodpayment"
-                        :options="optionsMethodPay"
-                        class="demo-inline-spacing"
-                        :class="{ 'border-danger': errors[0] }"
-                        name="radio-inline"
+                        <b-form-radio-group
+                          class="text-danger"
+                          v-model="payment"
+                          :options="options"
+                          name="radios-stacked"
+                        />
+                        <small
+                          class="text-danger"
+                          v-if="errors[0] && submitedForm"
+                        >
+                          Type of payment is required
+                        </small>
+                      </ValidationProvider>
+                      <b-form-input
+                        v-if="payment == 3"
+                        v-model="observationOther"
+                        placeholder="Specific"
+                        class="mt-1"
                       />
-                      <b-form-checkbox
-                        class="mt-2"
-                        v-if="methodpayment == 1"
-                        v-model="charge"
-                        value="true"
-                        @input="chargeStatus()"
-                        name="radio-inline"
-                        >Charge</b-form-checkbox
+                    </b-form-group>
+                  </b-col>
+                  <!-- Method of Payment -->
+                  <b-col cols="12">
+                    <b-form-group label="Method of Payment" v-if="dataLead">
+                      <ValidationProvider
+                        name="comment"
+                        rules="required"
+                        v-slot="{ errors }"
                       >
-                    </div>
-                  </ValidationProvider>
-                </b-form-group>
-              </div>
-            </div>
-            <div class="col-lg-11 col-md-12 col-sm-12 box">
-              <div
-                class="col-lg-12 w-100"
-                style="display: inline-block"
-                v-if="methodpayment == 1"
-              >
+                        <div class="d-flex">
+                          <b-form-radio-group
+                            v-model="methodpayment"
+                            :options="optionsMethodPay"
+                            name="radio-inline"
+                          />
+
+                          <b-form-checkbox
+                            v-if="methodpayment == 1"
+                            v-model="charge"
+                            value="true"
+                            @input="chargeStatus()"
+                            name="radio-inline"
+                          >
+                            Charge
+                          </b-form-checkbox>
+                        </div>
+                        <small
+                          class="text-danger"
+                          v-if="errors[0] && submitedForm"
+                        >
+                          Method of payment is required
+                        </small>
+                      </ValidationProvider>
+                    </b-form-group>
+                  </b-col>
+                </template>
+              </b-row>
+            </b-col>
+            <!-- Details By Card -->
+            <b-col lg="8" md="7" sm="12">
+              <b-col cols="12" v-if="methodpayment == 1">
+                <!-- Card -->
                 <modal-credit-card
+                  class="mt-lg-0 mt-md-0 mt-sm-2 mt-2"
                   :key="modalCreditController"
                   :cardsLead="cardsLead"
                   @CardId="getCardId"
-                ></modal-credit-card>
-              </div>
-            </div>
-
-            <!-- <div class="row w-100">
-              <div class="col-lg-3 col-xl-3 col-md-4 col-9 ml-2 col-sm-6 ">
-                  <b-row>
-                    <b-col cols="4" cols-sm="3" cols-xl="1" cols-md="1" cols-lg="3">
-                      <b-button
-                        type="submit"
-                        variant="primary"
-                        class="pr-1"
-                        @click="submitAutorize"
-                        :disabled="changeDisable"
+                >
+                  <b-row v-if="dataLead" slot="errors">
+                    <!-- Array of Error List -->
+                    <b-col cols="12" v-if="errosList">
+                      <div
+                        class="form-group"
+                        :style="
+                          responseCode == 1
+                            ? 'color:green !important'
+                            : 'color:red !important'
+                        "
                       >
-                        Submit
-                      </b-button>
+                        <span>{{ statusRespondeCode(responseCode) }}</span>
+                        <ul>
+                          <li
+                            v-for="(items, index) in errosAutorize"
+                            :key="index"
+                          >
+                            {{ items.errorText }}
+                          </li>
+                        </ul>
+                      </div>
                     </b-col>
-                    <b-col cols="2" cols-sm="2" cols-xl="1"  cols-md="1" cols-lg="2">
-                      <b-form-checkbox
-                        v-if="methodpayment == 1"
-                        v-model="sendsms"
-                        value="true"
-                        class="custom-control-primary"
+                    <!-- Array of Message List -->
+                    <b-col cols="12" v-if="messageList">
+                      <div
+                        class="form-group"
+                        :style="
+                          responseCode != 1
+                            ? 'color:red !important'
+                            : 'color:green !important'
+                        "
                       >
-                        Send SMS
-                      </b-form-checkbox>
+                        <span>{{ statusRespondeCode(responseCode) }}</span>
+                        <ul>
+                          <li
+                            v-for="(items, index) in messageAutorize"
+                            :key="index"
+                          >
+                            {{ items.description }}
+                          </li>
+                        </ul>
+                      </div>
                     </b-col>
                   </b-row>
-              </div>
-            </div>-->
-            <div class="row w-100">
-              <div class="ml-1 pl-1 d-flex">
+                </modal-credit-card>
+              </b-col>
+            </b-col>
+
+            <b-col cols="12" v-if="dataLead">
+              <div class="mt-2 d-flex">
                 <div class="d-inline-block mr-1">
                   <b-button
                     type="submit"
                     variant="primary"
-                    class="pr-1"
                     @click="submitAutorize"
                     :disabled="changeDisable"
-                    >Submit</b-button
                   >
+                    Submit
+                  </b-button>
                 </div>
                 <b-form-checkbox
                   v-if="methodpayment == 1"
                   v-model="sendsms"
                   value="true"
                   class="custom-control-primary"
-                  >Send SMS</b-form-checkbox
                 >
+                  Send SMS
+                </b-form-checkbox>
               </div>
-            </div>
-          </div>
+            </b-col>
+          </b-row>
         </ValidationObserver>
       </div>
     </b-card>
@@ -285,33 +244,32 @@
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
-import vSelect from "vue-select";
-import { mapGetters } from "vuex";
-import PaymentService from "../service/payments.service";
-import ModalCreditCard from "@/views/crm/views/payments/components/ModalCreditCard.vue";
-
+// Components
+import { VueAutosuggest } from "vue-autosuggest"
+import vSelect from "vue-select"
+import { mapGetters } from "vuex"
+// Import Services
+import PaymentService from "../service/payments.service"
+// Import Modal
+import ModalCreditCard from "@/views/crm/views/payments/components/ModalCreditCard.vue"
+// Import Data
+import { options, optionsMethodPay } from "../data/options.process.data"
 export default {
   name: "process-crm",
   components: {
     vSelect,
     ModalCreditCard,
+    VueAutosuggest,
   },
 
-  data() {
+  data: function () {
     return {
       price: 0,
       modalCreditController: 0,
       cardsLead: {},
-      options: [
-        { text: "Realtor", value: "1" },
-        { text: "Appointment", value: "2" },
-        { text: "Others", value: "3" },
-      ],
-      optionsMethodPay: [
-        { text: "Credit Card", value: "1" },
-        { text: "Others", value: "2" },
-      ],
+      // data of options
+      options: options,
+      optionsMethodPay: optionsMethodPay,
       userfilter: "",
       users: null,
       user_id: null,
@@ -335,8 +293,6 @@ export default {
       charge: true,
       spinner: false,
       statusSelected: false,
-
-      Amerror: false,
       moneyConfig: {
         decimal: ",",
         thousands: ".",
@@ -345,136 +301,118 @@ export default {
         precision: 2,
         masked: false,
       },
-    };
+
+      submitedForm: false,
+      filteredOptions: [],
+
+      responseTypes: [
+        "Undefined",
+        "Approve",
+        "Declined",
+        "Error",
+        "Held For Review",
+      ],
+    }
   },
 
   computed: {
-    statusSpinner() {
-      return this.spinner;
+    statusSpinner: function () {
+      return this.spinner
     },
-    statusSelectedSearch() {
-      return this.statusSelected;
+    statusSelectedSearch: function () {
+      return this.statusSelected
     },
-    changeDisable() {
-      return this.userfilter == "" ? true : false;
+    changeDisable: function () {
+      return this.userfilter == "" ? true : false
     },
-    filterSearch() {
-      return this.userfilter == "" ? false : true;
+    filterSearch: function () {
+      return this.userfilter == "" ? false : true
     },
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
   },
   methods: {
-    getCardsLead() {
+    statusRespondeCode: function (value) {
+      switch (value) {
+        case "1":
+          return "Approved"
+        case "2":
+          return "Declined"
+        case "3":
+          return "Error"
+        case "4":
+          return "Held for Review"
+        default:
+          return ""
+      }
+    },
+    getCardsLead: function () {
       this.cardsLead = {
         lead_id: this.user_id, //user_id
         user_id: this.currentUser.user_id,
         rol: this.currentUser.role_id,
-      };
+      }
     },
-    chargeStatus() {
+    chargeStatus: function () {
       if (this.charge == false) {
         this.showConfirmSwal("DELETE", "Are you sure?").then((result) => {
           if (result.value) {
-            this.charge = false;
+            this.charge = false
           } else {
-            this.charge = true;
+            this.charge = true
           }
-        });
+        })
       }
     },
-    validMounthly(id) {
-      this.amount = this.globalFunction(id);
+    getCardId: function (Card) {
+      this.card_id = Card
     },
-    globalFunction(id) {
-      var x = document.getElementById("campo" + id).value;
-      if (x.indexOf(".") != -1) {
-        var numw = x.replace(/,/gi, "");
-        var dec = numw.split(".");
-        var num = dec[0].split(/(?=(?:\d{3})+$)/).join(",");
-        num = num + "." + dec[1];
-      } else {
-        var numw = x.replace(/,/gi, "");
-        var num = numw.split(/(?=(?:\d{3})+$)/).join(",");
-        num = num + ".00";
-      }
-      return num;
-    },
-    justNumbers: function (event) {
-      var charCode = window.event ? event.which : event.keyCode;
-      var RE = /^\d*(\.\d{1})?\d{0,1}$/;
-      if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-        //Usando la definición del DOM level 2, "return" NO funciona.
-        event.preventDefault();
-      }
-    },
-    async searchlead() {
-      if (this.userfilter != "") {
-        this.spinner = true;
-        this.statusSelected = true;
-        try{
-          const data = await PaymentService.searchlead({q: this.userfilter });
-          this.users = data;
-            if (this.users.length == 0) {
-              this.users = null;
-            }
-            this.spinner = false;
-        }catch(error){
-          console.error(error)
-          this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
-        }
-      } else {
-        this.users = null;
-      }
-    },
-    searchuser(id, first, last, mobile) {
-      this.user_id = id;
-      this.userfilter = first + " " + last + " | " + mobile;
-      this.users = null;
-      this.statusSelected = false;
-    },
-    getCardId(Card) {
-      this.card_id = Card;
-    },
-    async getcard() {
-      this.addPreloader();
+    getcard: async function () {
+      this.submitedForm = false
+
+      this.addPreloader()
       try {
-        const data = await PaymentService.getCard({ id: this.user_id });
-        this.cards = data;
-        this.modalCreditController++;
-        this.getCardsLead();
-        this.dataLead = true;
+        const data = await PaymentService.getCard({ id: this.user_id })
+        this.cards = data
+        this.modalCreditController++
+        this.getCardsLead()
+        this.dataLead = true
         if (this.cards.length > 0) {
-          this.lead = this.cards[0].lead_name;
-          this.mobile = this.cards[0].mobile;
+          this.lead = this.cards[0].lead_name
+          this.mobile = this.cards[0].mobile
         } else {
-          this.lead = "";
-          this.mobile = "";
+          this.lead = ""
+          this.mobile = ""
         }
-        this.removePreloader();
+        this.removePreloader()
       } catch (e) {
-        console.error(e);
-        this.removePreloader();
-        this.showErrorSwal(error);
+        console.error(e)
+        this.removePreloader()
+        this.showErrorSwal(error)
       }
     },
-    submitAutorize() {
-      this.subtAutorize();
+    submitAutorize: function () {
+      this.errosList = false
+      this.submitedForm = true
+
+      this.subtAutorize()
     },
-    subtAutorize() {
-       this.$refs.form.validate().then(async (success) => { 
+    subtAutorize: function () {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
-          return;
+          this.card_id = ""
+
+          return
         } else {
           const confirm = await this.showConfirmSwal(
             "Process Payment",
             "You won't be able to revert this!"
-          );
+          )
           if (confirm.isConfirmed) {
             try {
-              this.addPreloader();
-              const data = await PaymentService.subtAutorize({
+              this.addPreloader()
+              let params = {
                 idcard: this.card_id,
                 amount: this.amount,
                 merchant: this.merchant,
@@ -485,287 +423,121 @@ export default {
                 observationOther: this.observationOther,
                 charge: this.charge == false ? 1 : 0,
                 sendsms: this.sendsms == true ? 1 : 0,
-              });
-              if (data.status == 200 && data.data.status == 200) {
-                    if (this.methodpayment == 1) {
-                      if (data.data.transaction.messages) {
-                        this.removePreloader();
-                        this.$swal.fire({
-                          icon: "success",
-                          title:
-                            data.data.transaction.responseCode == 1
-                              ? "Approved"
-                              : data.data.transaction.responseCode == 2
-                              ? "Declined"
-                              : data.data.transaction.responseCode == 3
-                              ? "Error"
-                              : data.data.transaction.responseCode == 4
-                              ? "Held For Review"
-                              : "",
-                        });
+              }
+              const data = await PaymentService.subtAutorize(params)
+              this.removePreloader()
 
-                        this.$router.push({ name: "payments-crm-list" });
-                      } else {
-                        this.removePreloader();
-                        this.$swal
-                          .fire({
-                            icon: "error",
-                            title:
-                              data.data.transaction.responseCode == 1
-                                ? "Approved"
-                                : data.data.transaction.responseCode == 2
-                                ? "Declined"
-                                : data.data.transaction.responseCode == 3
-                                ? "Error"
-                                : data.data.transaction.responseCode == 4
-                                ? "Held For Review"
-                                : "",
-                          })
-                          .then((res) => {
-                            this.removePreloader();
-                            if (res) {
-                              this.getcard();
-                              this.card_id = "";
-                            }
-                          });
+              if (data.status == 200 && data.data.status == 200) {
+                if (this.methodpayment == 1) {
+                  if (data.data.transaction.messages) {
+                    this.showSuccessSwal(
+                      "Success!",
+                      this.responseTypes[data.data.transaction.responseCode]
+                    )
+
+                    this.$router.push({ name: "payments-crm-list" })
+                  } else {
+                    this.card_id = ""
+
+                    this.showErrorSwal(
+                      this.responseTypes[data.data.transaction.responseCode]
+                    ).then((res) => {
+                      if (res) {
+                        this.getcard()
                       }
-                    } else {
-                      this.removePreloader();
-                      this.$swal
-                        .fire({
-                          icon: "success",
-                          title: "Transaction Unverified",
-                        })
-                        .then((res) => {
-                          if (res) {
-                            this.removePreloader();
-                            this.$emit("clickList", true);
-                          }
-                        });
-                      this.$router.push({ name: "payments-crm-list" });
-                    }
-                  } else if (
-                    data.status == 200 &&
-                    data.data.status == 500
-                  ) {
-                    this.removePreloader();
-                    if (data.data.transaction.errors) {
-                      this.errosAutorize =
-                        data.data.transaction.errors.error;
-                      this.responseCode =
-                        data.data.transaction.responseCode;
-                      this.messageList = false;
-                      this.errosList = true;
-                      if (this.methodpayment == 1) {
-                        this.$swal
-                          .fire({
-                            icon: "error",
-                            title:
-                              data.data.transaction.responseCode == 1
-                                ? "Approved"
-                                : data.data.transaction.responseCode == 2
-                                ? "Declined"
-                                : data.data.transaction.responseCode == 3
-                                ? "Error"
-                                : data.data.transaction.responseCode == 4
-                                ? "Held For Review"
-                                : "",
-                          })
-                          .then((res) => {
-                            if (res) {
-                              this.getcard();
-                              this.card_id = "";
-                            }
-                          });
-                      }
-                    } else {
-                      this.removePreloader();
-                      this.$swal
-                        .fire({
-                          icon: "error",
-                          title:
-                            data.data.transaction.responseCode == 1
-                              ? "Approved"
-                              : data.data.transaction.responseCode == 2
-                              ? "Declined"
-                              : data.data.transaction.responseCode == 3
-                              ? "Error"
-                              : data.data.transaction.responseCode == 4
-                              ? "Held For Review"
-                              : "",
-                        })
-                        .then((res) => {
-                          if (res) {
-                            this.getcard();
-                            this.card_id = "";
-                            this.removePreloader();
-                          }
-                        });
-                    }
+                    })
                   }
+                } else {
+                  this.showSuccessSwal(
+                    "Success!",
+                    "Transaction Unverified"
+                  ).then((res) => {
+                    if (res) {
+                      this.$emit("clickList", true)
+                    }
+                  })
+                  this.$router.push({ name: "payments-crm-list" })
+                }
+              } else if (data.status == 200 && data.data.status == 500) {
+                if (data.data.transaction.errors) {
+                  this.errosAutorize = data.data.transaction.errors.error
+                  this.responseCode = data.data.transaction.responseCode
+                  this.messageList = false
+                  this.errosList = true
+                  if (this.methodpayment == 1) {
+                    this.card_id = ""
+
+                    this.showErrorSwal(
+                      this.responseTypes[data.data.transaction.responseCode]
+                    ).then((res) => {
+                      if (res) {
+                        this.getcard()
+                      }
+                    })
+                  }
+                } else {
+                  this.card_id = ""
+
+                  this.showErrorSwal(
+                    this.responseTypes[data.data.transaction.responseCode]
+                  ).then((res) => {
+                    if (res) {
+                      this.getcard()
+                    }
+                  })
+                }
+              }
             } catch (error) {
-              this.showErrorSwal(error);
-              this.removePreloader();
+              this.showErrorSwal(error)
+              this.removePreloader()
+
+              this.card_id = ""
             }
           }
 
-          // this.showConfirmSwal(
-          //   "Process Payment",
-          //   "You won't be able to revert this!"
-          // ).then((result) => {
-          //   if (result.value) {
-          //     this.$store.commit("app/SET_LOADING", true);
-          //     amgApi
-          //       .post("/authorize/checkout-payment", {
-          //         idcard: this.card_id,
-          //         amount: this.amount,
-          //         merchant: this.merchant,
-          //         idsession: this.currentUser.user_id,
-          //         payment: this.payment,
-          //         lead_id: this.user_id,
-          //         methodpayment: this.methodpayment,
-          //         observationOther: this.observationOther,
-          //         charge: this.charge == false ? 1 : 0,
-          //         sendsms: this.sendsms == true ? 1 : 0,
-          //       })
-          //       .then((response) => {
-          //         if (response.status == 200 && response.data.status == 200) {
-          //           if (this.methodpayment == 1) {
-          //             if (response.data.transaction.messages) {
-          //               this.$store.commit("app/SET_LOADING", false);
-          //               this.$swal.fire({
-          //                 icon: "success",
-          //                 title:
-          //                   response.data.transaction.responseCode == 1
-          //                     ? "Approved"
-          //                     : response.data.transaction.responseCode == 2
-          //                     ? "Declined"
-          //                     : response.data.transaction.responseCode == 3
-          //                     ? "Error"
-          //                     : response.data.transaction.responseCode == 4
-          //                     ? "Held For Review"
-          //                     : "",
-          //               });
-
-          //               this.$router.push({ name: "payments-crm-list" });
-          //             } else {
-          //               this.$store.commit("app/SET_LOADING", false);
-          //               this.$swal
-          //                 .fire({
-          //                   icon: "error",
-          //                   title:
-          //                     response.data.transaction.responseCode == 1
-          //                       ? "Approved"
-          //                       : response.data.transaction.responseCode == 2
-          //                       ? "Declined"
-          //                       : response.data.transaction.responseCode == 3
-          //                       ? "Error"
-          //                       : response.data.transaction.responseCode == 4
-          //                       ? "Held For Review"
-          //                       : "",
-          //                 })
-          //                 .then((res) => {
-          //                   this.$store.commit("app/SET_LOADING", false);
-          //                   if (res) {
-          //                     this.getcard();
-          //                     this.card_id = "";
-          //                   }
-          //                 });
-          //             }
-          //           } else {
-          //             this.$store.commit("app/SET_LOADING", false);
-          //             this.$swal
-          //               .fire({
-          //                 icon: "success",
-          //                 title: "Transaction Unverified",
-          //               })
-          //               .then((res) => {
-          //                 if (res) {
-          //                   this.$store.commit("app/SET_LOADING", false);
-          //                   this.$emit("clickList", true);
-          //                 }
-          //               });
-          //             this.$router.push({ name: "payments-crm-list" });
-          //           }
-          //         } else if (
-          //           response.status == 200 &&
-          //           response.data.status == 500
-          //         ) {
-          //           this.$store.commit("app/SET_LOADING", false);
-          //           if (response.data.transaction.errors) {
-          //             this.errosAutorize =
-          //               response.data.transaction.errors.error;
-          //             this.responseCode =
-          //               response.data.transaction.responseCode;
-          //             this.messageList = false;
-          //             this.errosList = true;
-          //             if (this.methodpayment == 1) {
-          //               this.$swal
-          //                 .fire({
-          //                   icon: "error",
-          //                   title:
-          //                     response.data.transaction.responseCode == 1
-          //                       ? "Approved"
-          //                       : response.data.transaction.responseCode == 2
-          //                       ? "Declined"
-          //                       : response.data.transaction.responseCode == 3
-          //                       ? "Error"
-          //                       : response.data.transaction.responseCode == 4
-          //                       ? "Held For Review"
-          //                       : "",
-          //                 })
-          //                 .then((res) => {
-          //                   if (res) {
-          //                     this.getcard();
-          //                     this.card_id = "";
-          //                   }
-          //                 });
-          //             }
-          //           } else {
-          //             this.$store.commit("app/SET_LOADING", false);
-          //             this.$swal
-          //               .fire({
-          //                 icon: "error",
-          //                 title:
-          //                   response.data.transaction.responseCode == 1
-          //                     ? "Approved"
-          //                     : response.data.transaction.responseCode == 2
-          //                     ? "Declined"
-          //                     : response.data.transaction.responseCode == 3
-          //                     ? "Error"
-          //                     : response.data.transaction.responseCode == 4
-          //                     ? "Held For Review"
-          //                     : "",
-          //               })
-          //               .then((res) => {
-          //                 if (res) {
-          //                   this.getcard();
-          //                   this.card_id = "";
-          //                   this.$store.commit("app/SET_LOADING", false);
-          //                 }
-          //               });
-          //           }
-          //         }
-          //       })
-          //       .catch((error) => {
-          //         this.$store.commit("app/SET_LOADING", false);
-          //         this.showToast(
-          //           "danger",
-          //           "top-right",
-          //           "Error",
-          //           "XIcon",
-          //           "Something went wrong!"
-          //         );
-          //         console.log(error);
-          //       });
-          //   }
-          // });
+          this.card_id = ""
         }
-      });
+      })
+    },
+    searchLeads: async function (text) {
+      this.userfilter = ""
+
+      if (text === "" || text === undefined) {
+        this.filteredOptions = []
+        return
+      }
+
+      try {
+        const data = await PaymentService.searchlead({ q: text })
+        this.filteredOptions = [{ data: data }]
+      } catch (error) {
+        console.error(error)
+        this.showToast(
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong!"
+        )
+      }
+    },
+    selectHandler: function (value) {
+      this.user_id = value.item.id
+      this.userfilter =
+        value.item.first_name +
+        " " +
+        value.item.last_name +
+        " | " +
+        value.item.mobile
+
+      this.users = null
+      this.statusSelected = false
+    },
+    getSuggestionValue: function (suggestion) {
+      return suggestion.item.value
     },
   },
-  created() {},
-};
+}
 </script>
 
 <style scoped>
@@ -798,4 +570,3 @@ export default {
   flex-wrap: wrap;
 }
 </style>
-  

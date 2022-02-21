@@ -13,9 +13,23 @@
               @click="selectedView = !selectedView"
             />
           </b-col>
-          <b-col cols="10" class="d-flex align-items-center justify-content-end">
-            <b-button class="mr-1" variant="important" @click="openModalNewFolder">New Folder</b-button>
-            <b-button variant="info" @click="openUploadFileMoadl">Add Files</b-button>
+          <b-col
+            cols="10"
+            class="d-flex align-items-center justify-content-end"
+          >
+            <b-button
+              class="mr-1"
+              variant="important"
+              @click="openModalNewFolder"
+            >
+              New Folder
+            </b-button>
+            <b-button
+              variant="info"
+              @click="openUploadFileMoadl"
+            >
+              Add Files
+            </b-button>
           </b-col>
         </b-row>
       </template>
@@ -28,7 +42,7 @@
           class="d-flex align-items-center justify-content-between cursor-pointer"
           @click="historyClicked(index)"
         >
-          <amg-icon
+          <feather-icon
             class="font-medium-5"
             :icon="route.icon"
             :class="{'text-warning' : route.icon === '', 'text-primary' : route.icon === 'HomeIcon'}"
@@ -48,7 +62,8 @@
         sm="4"
         md="3"
         lg="2"
-        xl="1"
+        xl="2"
+        :class="skin === 'dark' ? 'hover-shadow-dark' : 'hover-shadow-light'"
       >
         <file-component
           :current-user="currentUser"
@@ -57,19 +72,26 @@
           @details="openFileDetail"
           @deleteFile="deleteFile"
           @shareFile="openShareFileModal"
+          @edit="updateEditState"
         />
       </b-col>
     </b-row>
     <b-card v-else>
-      <b-table :fields="fields" :items="currentFiles" responsive small>
+      <b-table
+        :fields="fields"
+        :items="currentFiles"
+        responsive
+        small
+      >
         <template #cell(file_name)="data">
           <span
-            v-if="selectedFile !== data.item"
+            v-if="selectedFile !== data.item || !editState"
             class="cursor-pointer d-flex align-items-center justify-content-start"
             @click="contentClicked(data.item)"
           >
-            <feather-icon
-              :icon="data.item.extension ? 'FileIcon' : 'FolderIcon'"
+
+            <amg-icon
+              :icon="data.item.extension ? 'CustomFileIcon' : 'CustomFolderIcon'"
               :style="data.item.type === 'Folder' ? 'fill: #ff9f43' : ''"
               class="mr-50"
               :class="{'text-warning' : data.item.type === 'Folder'}"
@@ -107,19 +129,19 @@
               v-if="currentUser.modul_id === data.item.module_id"
               class="d-flex align-items-center justify-content-around"
             >
-              <amg-icon
+              <feather-icon
                 class="text-primary cursor-pointer"
                 icon="EditIcon"
                 size="15"
                 @click="selectedFile = data.item"
               />
-              <amg-icon
+              <feather-icon
                 class="text-danger cursor-pointer"
                 icon="TrashIcon"
                 size="15"
                 @click="asyncDeleteFile(data.item)"
               />
-              <amg-icon
+              <feather-icon
                 v-if="data.item.parent == null"
                 class="text-success cursor-pointer"
                 icon="Share2Icon"
@@ -131,23 +153,32 @@
         </template>
       </b-table>
     </b-card>
-    <b-sidebar id="sidebar-right" right bg-variant="white" lazy backdrop>
+    <b-sidebar
+      id="sidebar-right"
+      right
+      bg-variant="white"
+      lazy
+      backdrop
+    >
       <b-container>
         <b-row class="mb-1">
           <b-col
             v-if="selectedFile !== {}"
             class="d-flex align-items-center justify-content-center"
           >
+
             <amg-icon
               size="50"
-              :icon="selectedFile.type === 'Folder' ? 'FolderIcon' : 'FileIcon'"
+              :icon="selectedFile.type === 'Folder' ? 'CustomFolderIcon' : 'CustomFileIcon'"
               :class="{'text-warning' : selectedFile.type === 'Folder'}"
             />
           </b-col>
         </b-row>
         <b-row class="border-bottom border-bottom-2">
           <b-col class="d-flex align-items-center justify-content-center">
-            <h3 class="font-weight-bolder">{{ selectedFile.file_name }}</h3>
+            <h3 class="font-weight-bolder">
+              {{ selectedFile.file_name }}
+            </h3>
           </b-col>
         </b-row>
         <b-row class="mt-1">
@@ -157,24 +188,41 @@
             >Created: {{ selectedFile.created_at | myGlobal }} by {{ selectedFile.user_upload }}</p>
           </b-col>
         </b-row>
-        <b-row v-if="selectedFile.updated_at" class="mt-10">
+        <b-row
+          v-if="selectedFile.updated_at"
+          class="mt-10"
+        >
           <b-col>
-            <p class="font-medium-1">Updated: {{ selectedFile.updated_at | myGlobal }}</p>
+            <p class="font-medium-1">
+              Updated: {{ selectedFile.updated_at | myGlobal }}
+            </p>
           </b-col>
         </b-row>
-        <b-row v-if="selectedFile.type === 'Folder'" class="mt-10">
+        <b-row
+          v-if="selectedFile.type === 'Folder'"
+          class="mt-10"
+        >
           <b-col>
-            <p class="font-medium-1">Files: {{ selectedFile.countfiel }}</p>
+            <p class="font-medium-1">
+              Files: {{ selectedFile.countfiel }}
+            </p>
           </b-col>
         </b-row>
-        <b-row v-else class="mt-10">
+        <b-row
+          v-else
+          class="mt-10"
+        >
           <b-col>
-            <p class="font-medium-1">Size: {{ selectedFile.size }}</p>
+            <p class="font-medium-1">
+              Size: {{ selectedFile.size }}
+            </p>
           </b-col>
         </b-row>
         <b-row class="mt-10">
           <b-col>
-            <p class="font-medium-1">Route: {{ currentRoute }}</p>
+            <p class="font-medium-1">
+              Route: {{ currentRoute }}
+            </p>
           </b-col>
         </b-row>
         <b-row class="mt-10">
@@ -224,68 +272,80 @@
       ok-title="Ok"
       @hidden="actionOnHideUploadFileModal"
     >
-      <drag-and-drop v-model="files" :files-array="files" />
+
+      <drag-and-drop
+        v-model="files"
+        :files-array="files"
+      />
       <template #modal-footer>
-        <b-button v-show="files.length" variant="primary" @click="onUploadFile">Upload</b-button>
+        <b-button
+          v-show="files.length"
+          variant="primary"
+          @click="onUploadFile"
+        >
+          Upload
+        </b-button>
       </template>
     </b-modal>
   </div>
 </template>
 
 <script>
-import { VBTooltip } from "bootstrap-vue";
-import FileComponent from "@/views/commons/components/file-mananger/components/FileComponent";
-import ShareFileModal from "@/views/commons/components/file-mananger/modals/ShareFileModal";
-import NewFolderModal from "@/views/commons/components/file-mananger/modals/NewFolderModal";
-import DragAndDrop from "@/views/commons/utilities/DragAndDrop";
+import { VBTooltip } from 'bootstrap-vue'
+import FileComponent from '@/views/commons/components/file-mananger/components/FileComponent'
+import ShareFileModal from '@/views/commons/components/file-mananger/modals/ShareFileModal'
+import NewFolderModal from '@/views/commons/components/file-mananger/modals/NewFolderModal'
+import DragAndDrop from '@/views/commons/utilities/DragAndDrop'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "FileManangerGeneral",
+  name: 'FileManangerGeneral',
   components: {
     DragAndDrop,
     NewFolderModal,
     ShareFileModal,
-    FileComponent
+    FileComponent,
   },
   directives: {
-    "b-tooltip": VBTooltip
+    'b-tooltip': VBTooltip,
   },
   props: {
     currentUser: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
+      editState: false,
       fileModel: {
-        model: false
+        model: false,
       },
       selectedView: true,
       fields: [
         {
-          key: "file_name",
-          label: "File Name "
+          key: 'file_name',
+          label: 'File Name ',
         },
         {
-          key: "countfiel",
-          label: "Files/Size",
-          class: "text-center"
+          key: 'countfiel',
+          label: 'Files/Size',
+          class: 'text-center',
         },
         {
-          key: "user_upload",
-          label: "Created By",
-          class: "text-center"
+          key: 'user_upload',
+          label: 'Created By',
+          class: 'text-center',
         },
         {
-          key: "user_modified",
-          label: "Modified By",
-          class: "text-center"
+          key: 'user_modified',
+          label: 'Modified By',
+          class: 'text-center',
         },
         {
-          key: "actions",
-          label: "Actions"
-        }
+          key: 'actions',
+          label: 'Actions',
+        },
       ],
       shareFileModal: false,
       newFolderModal: false,
@@ -293,187 +353,203 @@ export default {
       selectedFile: {},
       history: [
         {
-          label: "",
-          icon: "HomeIcon",
+          label: '',
+          icon: 'HomeIcon',
           folderId: null,
-          folderModule: this.currentUser.modul_id
-        }
+          folderModule: this.currentUser.modul_id,
+        },
       ],
       currentFiles: [],
-      currentFolder: "",
-      currentFolderModule: "",
-      files: []
-    };
-  },
-  computed: {
-    currentRoute() {
-      let route = "";
-      this.history.forEach(r => {
-        route += `${r.label}/`;
-      });
-      return route;
+      currentFolder: '',
+      currentFolderModule: '',
+      files: [],
     }
   },
+  computed: {
+    ...mapGetters({
+      skin: 'appConfig/skin',
+    }),
+    currentRoute() {
+      let route = ''
+      this.history.forEach(r => {
+        route += `${r.label}/`
+      })
+      return route
+    },
+  },
   async created() {
-    await this.getFilesFromFolder(null);
+    await this.getFilesFromFolder(null)
   },
   methods: {
+    updateEditState(state) {
+      this.editState = state
+    },
     actionOnHideUploadFileModal() {
-      this.files = [];
+      this.files = []
     },
     async onUploadFile() {
       try {
-        const result = await this.showConfirmSwal();
+        const result = await this.showConfirmSwal()
         if (result.isConfirmed) {
-          const formData = new FormData();
+          const formData = new FormData()
           this.files.forEach(file => {
-            formData.append("images[]", file, file.name);
-          });
-          this.addPreloader();
-          formData.append("module_id", this.currentFolderModule);
-          formData.append("folder_name", "");
-          formData.append("user_id", this.currentUser.user_id);
+            formData.append('images[]', file, file.name)
+          })
+          this.addPreloader()
+          formData.append('module_id', this.currentFolderModule)
+          formData.append('folder_name', '')
+          formData.append('user_id', this.currentUser.user_id)
           formData.append(
-            "idfolder",
-            this.currentFolder ? this.currentFolder : ""
-          );
+            'idfolder',
+            this.currentFolder ? this.currentFolder : '',
+          )
           const headers = {
             headers: {
-              "Content-Type": "multipart/form-data"
+              'Content-Type': 'multipart/form-data',
             },
             // eslint-disable-next-line func-names
-            onUploadProgress: function(progressEvent) {
+            onUploadProgress: function (progressEvent) {
               this.uploadPercentage = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-            }.bind(this)
-          };
+                (progressEvent.loaded * 100) / progressEvent.total,
+              )
+            }.bind(this),
+          }
           const response = await amgApi.post(
-            "/file-manager/save-file-by-module",
+            '/file-manager/save-file-by-module',
             formData,
-            headers
-          );
+            headers,
+          )
           if (response.status === 200) {
-            this.uploadFileModal = false;
-            this.showSuccessSwal();
+            this.uploadFileModal = false
+            this.showSuccessSwal()
             await this.getFilesFromFolder(
               this.currentFolder,
-              this.currentFolderModule
-            );
+              this.currentFolderModule,
+            )
           }
         }
       } catch (error) {
-        this.showErrorSwal(error);
+        this.showErrorSwal(error)
       }
     },
     openUploadFileMoadl() {
-      this.uploadFileModal = true;
+      this.uploadFileModal = true
     },
     async getFilesFromFolder(
       folderId,
-      folderModule = this.currentUser.modul_id
+      folderModule = this.currentUser.modul_id,
     ) {
       try {
-        this.addPreloader();
+        this.addPreloader()
         const response = await amgApi.post(
-          "/file-manager/search-files-manager",
+          '/file-manager/search-files-manager',
           {
             module_id: folderModule,
-            order: "asc",
+            order: 'asc',
             orderby: 2,
             parent: folderId,
-            typee: null
-          }
-        );
-        this.currentFiles = [];
-        this.currentFiles = response.data.data;
-        this.currentFolder = folderId;
-        this.currentFolderModule = folderModule;
-        this.removePreloader();
+            typee: null,
+          },
+        )
+        this.currentFiles = []
+        this.currentFiles = response.data.data
+        this.currentFolder = folderId
+        this.currentFolderModule = folderModule
+        this.removePreloader()
       } catch (error) {
-        this.showErrorSwal(error);
-        this.removePreloader();
+        this.showErrorSwal(error)
+        this.removePreloader()
       }
     },
     async contentClicked(content) {
-      if (content.type === "Folder") {
-        await this.getFilesFromFolder(content.id, content.module_id);
+      if (content.type === 'Folder') {
+        await this.getFilesFromFolder(content.id, content.module_id)
         this.history.push({
           label: content.file_name,
-          icon: "",
+          icon: '',
           folderId: content.id,
-          folderModule: content.module_id
-        });
+          folderModule: content.module_id,
+        })
       } else {
         window.open(
           content.url,
-          "_blank" // <- This is what makes it open in a new window.
-        );
+          '_blank', // <- This is what makes it open in a new window.
+        )
       }
     },
     openModalNewFolder() {
-      this.newFolderModal = true;
+      this.newFolderModal = true
     },
     closeModalNewFolder() {
-      this.newFolderModal = false;
+      this.newFolderModal = false
     },
     closeModalNewFolderAndRefresh() {
-      this.newFolderModal = false;
-      this.getFilesFromFolder(this.currentFolder, this.currentFolderModule);
+      this.newFolderModal = false
+      this.getFilesFromFolder(this.currentFolder, this.currentFolderModule)
     },
     openShareFileModal(content) {
-      this.selectedFile = content;
-      this.shareFileModal = true;
+      this.selectedFile = content
+      this.shareFileModal = true
     },
     closeShareFileModal() {
-      this.shareFileModal = false;
+      this.shareFileModal = false
     },
     async historyClicked(index) {
-      const route = this.history[index];
-      await this.getFilesFromFolder(route.folderId, route.folderModule);
-      this.history = this.history.slice(0, index + 1);
+      const route = this.history[index]
+      await this.getFilesFromFolder(route.folderId, route.folderModule)
+      this.history = this.history.slice(0, index + 1)
     },
     openFileDetail(content) {
-      this.selectedFile = content;
+      this.selectedFile = content
     },
     async asyncDeleteFile(content) {
       const params = {
         file_id: content.id,
-        user_id: this.currentUser.user_id
-      };
+        user_id: this.currentUser.user_id,
+      }
       try {
-        const response = await this.showConfirmSwal();
+        const response = await this.showConfirmSwal()
         if (response.isConfirmed) {
-          await amgApi.post("/deletefilemodule", params);
-          this.showSuccessSwal("File has been deleted successfully");
-          this.deleteFile(content);
+          await amgApi.post('/file-manager/remove-file-from-module', params)
+          this.showSuccessSwal('File has been deleted successfully')
+          this.deleteFile(content)
         }
       } catch (error) {
-        this.showErrorSwal(error);
+        this.showErrorSwal(error)
       }
     },
     deleteFile(content) {
-      const index = this.currentFiles.indexOf(content);
-      if (index > -1) this.currentFiles.splice(index, 1);
+      const index = this.currentFiles.indexOf(content)
+      if (index > -1) this.currentFiles.splice(index, 1)
     },
     async renameFile(content) {
       const params = {
         file_id: content.id,
-        name_file: this.selectedFile.file_name
-      };
+        name_file: this.selectedFile.file_name,
+      }
       try {
         await amgApi.post(
-          "/file-manager/lead/social-network/update-file-name",
-          params
-        );
+          '/file-manager/update-file-name',
+          params,
+        )
       } catch (error) {
-        this.showErrorSwal(error);
+        this.showErrorSwal(error)
       }
-      this.selectedFile = {};
-    }
-  }
-};
+      this.selectedFile = {}
+    },
+  },
+}
 </script>
 
 <style scoped>
+.hover-shadow-light,
+.hover-shadow-dark{
+  transition: box-shadow .3s;
+}
+.hover-shadow-dark:hover {
+  box-shadow: 0 0 11px #191C24;
+}
+.hover-shadow-light:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
 </style>

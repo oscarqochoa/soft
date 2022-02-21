@@ -4,6 +4,7 @@
       <b-modal
         v-model="modalUp"
         size="xmd"
+        modal-class="modal-primary"
         header-class="p-0"
         header-bg-variant="transparent"
         scrollable
@@ -45,20 +46,14 @@
                 label="Origin Country"
                 label-class="font-weight-bolder"
               >
-                <validation-provider
-                  v-slot="{ errors }"
-                  rules="required"
-                  name="originCountry"
-                >
-                  <v-select
-                    v-model="origin_country"
-                    label="name"
-                    :reduce="value => value.id"
-                    :options="countryOptions"
-                    :disabled="valorEdit"
-                    :class="{'border-danger rounded': errors[0]}"
-                  />
-                </validation-provider>
+                <v-select
+                  v-model="origin_country"
+                  label="name"
+                  :clearable="false"
+                  :reduce="value => value.id"
+                  :options="countryOptions"
+                  :disabled="valorEdit"
+                />
               </b-form-group>
             </b-col>
             <b-col
@@ -78,20 +73,20 @@
                   <b-form-input
                     v-if="question.type == 2"
                     v-model="question.answer"
-                    :class="{'border-danger rounded' : errors[0]}"
+                    :class="{'border-danger rounded' : errors[0] && controller}"
                   />
                   <quill-editor
                     v-if="question.type === 0"
                     v-model="question.answer"
                     :disabled="valorEdit"
                     :options="{modules: { toolbar: false },}"
-                    :class="{'border-danger rounded' : errors[0]}"
+                    :class="{'border-danger rounded' : errors[0] && controller}"
                   />
                   <b-form-radio-group
                     v-if="question.type == 1"
                     v-model="question.answer"
                     :options="JSON.parse(question.options)"
-                    :class="{'border-danger rounded' : errors[0]}"
+                    :class="{'border-danger rounded' : errors[0] && controller}"
                   />
                 </b-form-group>
               </validation-provider>
@@ -294,6 +289,7 @@ export default {
   },
   data() {
     return {
+      controller: false,
       creditorsFields: [
         {
           key: 'credit',
@@ -405,10 +401,38 @@ export default {
       return true
     },
     async saveNotesCompleted() {
-      const result = await this.$refs.form.validate()
-      if (result) {
-        const { value } = await this.showConfirmSwal()
-        if (value) {
+      try {
+        if (!this.controller) this.controller = true
+        const result = await this.$refs.form.validate()
+        if (result) {
+          const { value } = await this.showConfirmSwal()
+          if (value) {
+            this.addPreloader()
+            const response = await amgApi.post('/sales-made/insert-sales-notes', {
+              notes: this.notesSales,
+              sale_id: this.notesSales[0].sale_id,
+              contact_schedule: this.contact_schedule,
+              originCountry: this.originCountry,
+              idLead: this.noteInfo.idLead,
+            })
+            if (response.status === 200) {
+              this.showSuccessSwal('Notes Successfull')
+              this.hideModal(true)
+            }
+          }
+        }
+      } catch (e) {
+        this.showErrorSwal(e)
+      } finally {
+        this.removePreloader()
+      }
+    },
+
+    async saveNotesIncomplete() {
+      try {
+        const result = await this.showConfirmSwal()
+        if (result.value) {
+          this.addPreloader()
           const response = await amgApi.post('/sales-made/insert-sales-notes', {
             notes: this.notesSales,
             sale_id: this.notesSales[0].sale_id,
@@ -417,30 +441,14 @@ export default {
             idLead: this.noteInfo.idLead,
           })
           if (response.status === 200) {
-            this.removePreloader()
             this.showSuccessSwal('Notes Successfull')
             this.hideModal(true)
           }
         }
-      }
-    },
-
-    async saveNotesIncomplete() {
-      const result = await this.showConfirmSwal()
-      if (result.value) {
-        this.addPreloader()
-        const response = await amgApi.post('/sales-made/insert-sales-notes', {
-          notes: this.notesSales,
-          sale_id: this.notesSales[0].sale_id,
-          contact_schedule: this.contact_schedule,
-          originCountry: this.originCountry,
-          idLead: this.noteInfo.idLead,
-        })
-        if (response.status === 200) {
-          this.removePreloader()
-          this.showSuccessSwal('Notes Successfull')
-          this.hideModal(true)
-        }
+      } catch (e) {
+        this.showErrorSwal(e)
+      } finally {
+        this.removePreloader()
       }
     },
     cleanNotes() {

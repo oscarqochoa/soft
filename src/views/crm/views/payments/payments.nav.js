@@ -1,7 +1,7 @@
 export default [
   {
     title: "Payments",
-    icon: "DollarSignIcon",
+    icon: "CurrencyDollarIcon",
     route: "payments-crm",
   },
 ];

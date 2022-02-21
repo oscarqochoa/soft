@@ -13,8 +13,10 @@
       scrollable
       :no-close-on-backdrop="true"
     >
+      <!-- Information -->
       <div class="m-1" id="modalBody">
         <div class="row" id="cont-list" style="height: 400px; overflow: auto">
+          <!-- LEAD AND NAME -->
           <div class="col-md-12 col-lg-9 col-12">
             <b-form-group
               label="LEAD"
@@ -33,7 +35,7 @@
               >{{ lead_name }}</div>
             </b-form-group>
           </div>
-
+          <!-- EMPLOYEED -->
           <div class="col-md-12 col-lg-9 col-12">
             <b-form-group
               label="EMPLOYEED"
@@ -49,12 +51,15 @@
           </div>
           <div class="container">
             <b-row>
+              <!-- FIRST CARD PREVIOUS DIRECTION -->
               <b-col cols="12">
                 <b-card>
                   <b-row>
+                    <!-- Title -->
                     <b-col cols="12">
                       <b-form-group label="PREVIOUS DIRECTION"></b-form-group>
                     </b-col>
+                    <!-- Mailing Address -->
                     <b-col cols="12">
                       <b-form-group label="Mailing Address">
                         <vue-google-autocomplete
@@ -70,26 +75,31 @@
                         ></vue-google-autocomplete>
                       </b-form-group>
                     </b-col>
+                    <!-- City -->
                     <b-col cols="6">
                       <b-form-group label="City">
                         <b-form-input v-model="data.city" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- State -->
                     <b-col cols="6">
                       <b-form-group label="State">
                         <b-form-input v-model="data.state" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Zip Code -->
                     <b-col cols="6">
                       <b-form-group label="Zip Code">
                         <b-form-input v-model="data.zip_code" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Country -->
                     <b-col cols="6">
                       <b-form-group label="Country">
                         <b-form-input v-model="data.mailing_country" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- COUNTRY -->
                     <b-col cols="6">
                       <b-form-group label="COUNTY">
                         <b-form-input v-model="data.country" :disabled="this.disabled"></b-form-input>
@@ -98,10 +108,11 @@
                   </b-row>
                 </b-card>
               </b-col>
-
+              <!-- SECOND CARD AUTO LOAN-->
               <b-col cols="12">
                 <b-card>
                   <b-row>
+                    <!-- Check Box Auto Loan -->
                     <b-col cols="12">
                       <b-form-group
                         label="AUTO LOAN"
@@ -123,11 +134,13 @@
                         ></b-form-checkbox>
                       </b-form-group>
                     </b-col>
+                    <!-- Company -->
                     <b-col cols="6">
                       <b-form-group label="Company">
                         <b-form-input v-model="data.al_question.company" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Monthly Payment -->
                     <b-col cols="6">
                       <b-form-group label="Monthly Payment">
                         <b-input-group prepend="$">
@@ -138,6 +151,7 @@
                         </b-input-group>
                       </b-form-group>
                     </b-col>
+                    <!-- Year Opened -->
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
                       <b-form-group label="Year Opened">
                         <b-form-input
@@ -146,11 +160,13 @@
                         ></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- No. of Months -->
                     <b-col cols="6">
                       <b-form-group label="No. of Months">
                         <b-form-input v-model="data.al_question.n_months" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Original Amount -->
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
                       <b-form-group label="Original Amount">
                         <b-input-group prepend="$">
@@ -164,10 +180,11 @@
                   </b-row>
                 </b-card>
               </b-col>
-
+              <!-- THIRD CARD MORTAGE -->
               <b-col cols="12">
                 <b-card>
                   <b-row>
+                    <!-- Check Box Mortage -->
                     <b-col cols="12">
                       <b-form-group
                         label="MORTAGE"
@@ -188,11 +205,13 @@
                         ></b-form-checkbox>
                       </b-form-group>
                     </b-col>
+                    <!-- Company -->
                     <b-col cols="6">
                       <b-form-group label="Company">
                         <b-form-input v-model="data.m_question.company" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Monthly Payment -->
                     <b-col cols="6">
                       <b-form-group label="Monthly Payment">
                         <b-input-group prepend="$">
@@ -203,6 +222,7 @@
                         </b-input-group>
                       </b-form-group>
                     </b-col>
+                    <!-- Year Opened -->
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
                       <b-form-group label="Year Opened">
                         <b-form-input
@@ -211,6 +231,7 @@
                         ></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- No. of Months -->
                     <b-col cols="6">
                       <b-form-group label="No. of Months">
                         <b-form-input
@@ -223,10 +244,11 @@
                   </b-row>
                 </b-card>
               </b-col>
-
+              <!-- FOURTH CARD STUDENT LOAN-->
               <b-col cols="12">
                 <b-card>
                   <b-row>
+                    <!-- Check BoxStudent Loan -->
                     <b-col cols="12">
                       <b-form-group
                         label="STUDENT LOAN"
@@ -247,11 +269,13 @@
                         ></b-form-checkbox>
                       </b-form-group>
                     </b-col>
+                    <!-- Company -->
                     <b-col cols="6">
                       <b-form-group label="Company">
                         <b-form-input v-model="data.sl_question.company" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Monthly Payment -->
                     <b-col cols="6">
                       <b-form-group label="Monthly Payment">
                         <b-input-group prepend="$">
@@ -262,6 +286,7 @@
                         </b-input-group>
                       </b-form-group>
                     </b-col>
+                    <!-- Year Opened -->
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
                       <b-form-group label="Year Opened">
                         <b-form-input
@@ -270,11 +295,13 @@
                         ></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- No. of Months -->
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
                       <b-form-group label="No. of Months">
                         <b-form-input v-model="data.sl_question.n_months" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Original Amount -->
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
                       <b-form-group label="Original Amount">
                         <b-input-group prepend="$">
@@ -288,23 +315,27 @@
                   </b-row>
                 </b-card>
               </b-col>
-
+              <!-- FIFTH CARD COLLECTION -->
               <b-col cols="12">
                 <b-card>
                   <b-row>
+                    <!-- Tit;e -->
                     <b-col cols="12">
                       <b-form-group label="COLLECTION"></b-form-group>
                     </b-col>
+                    <!-- Company -->
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
                       <b-form-group label="Company">
                         <b-form-input v-model="data.c_question.company" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Balance -->
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
                       <b-form-group label="Balance">
                         <b-form-input v-model="data.c_question.balance" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Year Opened -->
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
                       <b-form-group label="Year Opened">
                         <b-form-input
@@ -316,10 +347,11 @@
                   </b-row>
                 </b-card>
               </b-col>
-
+              <!-- SIXTH CARD OPEN ACCOUNTS -->
               <b-col cols="12">
                 <b-card>
                   <b-row>
+                    <!-- Check Box Open Accounts -->
                     <b-col cols="12">
                       <b-form-group
                         label="OPEN ACCOUNTS"
@@ -340,11 +372,13 @@
                         ></b-form-checkbox>
                       </b-form-group>
                     </b-col>
+                    <!-- Company -->
                     <b-col cols="6">
                       <b-form-group label="Company">
                         <b-form-input v-model="data.oa_question.company" :disabled="this.disabled"></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Monthly Payment -->
                     <b-col cols="6">
                       <b-form-group label="Monthly Payment">
                         <b-input-group prepend="$">
@@ -355,6 +389,7 @@
                         </b-input-group>
                       </b-form-group>
                     </b-col>
+                    <!-- Year Opended -->
                     <b-col cols="6" sm="4" md="4" lg="4" xl="4">
                       <b-form-group label="Year Opened">
                         <b-form-input
@@ -363,6 +398,7 @@
                         ></b-form-input>
                       </b-form-group>
                     </b-col>
+                    <!-- Original Amount -->
                     <b-col cols="6" sm="6" md="6" lg="4" xl="4">
                       <b-form-group label="Original Amount">
                         <b-input-group prepend="$">
@@ -380,6 +416,7 @@
           </div>
         </div>
       </div>
+      <!-- Button Save -->
       <div
         class="modal-footer align-items-end justify-content-end justify-content-sm-center"
         v-if="show"
@@ -391,8 +428,9 @@
 </template>
 
 <script>
-import { amgApi } from "@/service/axios";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
+// Import Services
+import NrcService from '../service/ncr.service'
 export default {
   components: {
     VueGoogleAutocomplete
@@ -475,17 +513,14 @@ export default {
     };
   },
   methods: {
-    closeModal() {
+    closeModal:function() {
       this.$emit("closeModalQuestionnaire", false);
     },
-    getQuestionnaire() {
-      this.$store.commit("app/SET_LOADING", true);
-      amgApi
-        .post("/lead/ncr/get-all-leads-questions", {
-          question_id: this.question_id
-        })
-        .then(response => {
-          if (response.status == 200) {
+    getQuestionnaire:async function() {
+      try{
+        this.addPreloader();
+        const response = await NrcService.getQuestionnaire({question_id: this.question_id})
+        if (response.status == 200) {
             this.data.employeed = response.data[0].employeed;
             this.data.mailing_address = response.data[0].mailing_address;
             this.data.city = response.data[0].city;
@@ -533,11 +568,12 @@ export default {
             this.data.oa_question.monthly_payment = oa_question.monthly_payment;
             this.data.oa_question.year_opened = oa_question.year_opened;
             this.data.oa_question.original_amount = oa_question.original_amount;
-            this.$store.commit("app/SET_LOADING", false);
+            this.removePreloader();
           }
-        })
-        .catch(errors => {
-          this.$store.commit("app/SET_LOADING", false);
+
+      }catch(error){
+        console.log(error)
+        this.removePreloader();
           if (errors.response.status == 500 || errors.response.status == 422) {
             this.showToast(
               "danger",
@@ -547,9 +583,9 @@ export default {
               "Something went wrong!"
             );
           }
-        });
+      }
     },
-    getAddressData: function(address_principal, placeResultData, id) {
+    getAddressData: function(address_principal) {
       this.direccion = address_principal;
       this.address_principal =
         this.direccion.street_number + " " + this.direccion.route;
@@ -559,7 +595,7 @@ export default {
       this.data.zip_code = this.direccion.postal_code;
       this.data.mailing_country = this.direccion.country;
     },
-    startStatus() {
+    startStatus:function() {
       if (this.question_id != null) {
         this.getQuestionnaire();
       }
@@ -571,24 +607,24 @@ export default {
         this.disabled = false;
       }
     },
-    save() {
-      this.showConfirmSwal().then(result => {
+    save:function() {
+      this.showConfirmSwal().then(async result => {
         if (result.value) {
-          this.$store.commit("app/SET_LOADING", true);
-          this.data["score_id"] = this.score_id;
-          this.data["open_account"] = this.data["open_accounts"];
-          amgApi
-            .post("/lead/ncr/create-leads-questionnaire", this.data)
-            .then(response => {
-              if (response.status == 200) {
+          try{
+            this.addPreloader();
+            this.data["score_id"] = this.score_id;
+            this.data["open_account"] = this.data["open_accounts"];
+            const response = await NrcService.saveQuestionnaire(params)
+            if (response.status == 200) {
                 this.$emit("closeModalQuestionnaire", false);
-                this.$store.commit("app/SET_LOADING", false);
+                this.removePreloader();
                 this.showSuccessSwal("OPERATION SUCCESSFULLY");
                 this.$emit("updateGrid", false);
               }
-            })
-            .catch(errors => {
-              this.$store.commit("app/SET_LOADING", false);
+
+          }catch(error){
+            console.log(error)
+            this.removePreloader();
               if (
                 errors.response.status == 500 ||
                 errors.response.status == 422
@@ -601,13 +637,13 @@ export default {
                   "Something went wrong!"
                 );
               }
-            });
+          }
         }
       });
     }
   },
 
-  created() {
+  created:function() {
     this.startStatus();
   }
 };

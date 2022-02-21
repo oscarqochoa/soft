@@ -29,7 +29,6 @@
               outlined
               show-empty
               sticky-header="50vh"
-              v-scrollbar
             >
               <template #cell(client_name)="data">
                 <b-link

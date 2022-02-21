@@ -41,13 +41,13 @@ $borderamg: #efb911;
 }
 
 .footer-black {
-  background: #666666 !important;
+  background: #0e1d44 !important;
   color: #fff !important;
   padding: 17px !important;
 }
 
 .footer-span {
-  color: #666666;
+  color: #0e1d44;
   background: #fff;
   padding: 5px 10px;
   border-radius: 5px;
@@ -218,7 +218,9 @@ $borderamg: #efb911;
   transform: translate(-12px, 4px) !important;
 }
 .hover-primary,
-.hover-important {
+.hover-important,
+.nav-dark-tabs,
+.nav-light-tabs {
   transition: 0.3s;
 }
 .hover-primary:hover {
@@ -240,8 +242,7 @@ $borderamg: #efb911;
 }
 
 .box-shadow-important {
-  box-shadow: 0 4px 8px 0 rgba($important, 0.12),
-    0 2px 4px 0 rgba($important, 0.08) !important;
+  box-shadow: 0 4px 8px 0 rgba($important, 0.12), 0 2px 4px 0 rgba($important, 0.08) !important;
 }
 
 .blue-scrollbar::-webkit-scrollbar {
@@ -291,7 +292,32 @@ $borderamg: #efb911;
 }
 
 .nav-pills .nav-link {
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 6px 6px 0px 0px;
+}
+.nav-pills .nav-link.active {
+  background-color: #0090e7 !important;
+}
+.nav-pills .nav-link.active.info {
+  background-color: #7032e2 !important;
+}
+
+//navs-tabs
+.nav-dark-tabs {
+  background: #0e1d44;
+}
+.nav-light-tabs {
+  background: #efefef;
+}
+
+.nav-dark-tabs:hover,
+.nav-light-tabs:hover {
+  background: rgba(0, 144, 231, 0.6);
+  color: white;
+}
+.nav-dark-tabs:hover.sub-tab,
+.nav-light-tabs:hover.sub-tab {
+  background: rgba(143, 95, 232, 0.6);
+  color: white;
 }
 
 .border-bottom-tab {
@@ -301,4 +327,65 @@ $borderamg: #efb911;
 .table td,
 .table th {
   vertical-align: top !important;
+}
+
+.nav-pills .nav-link.active {
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.border-table-radius {
+  border-radius: 0px 0px 6px 6px !important;
+}
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation li.active a {
+  background: linear-gradient(118deg, #0090e7, rgba(0, 144, 231, 0.7)) !important;
+  color: #fff !important;
+}
+
+// Only for schedules sidebar
+.b-sidebar.sidebar-schedules {
+  width: 40% !important;
+}
+//forms dark
+/* [dir] .dark-layout input.form-control:not(:focus) {
+  border-color: #ffffff !important;
+}
+[dir] .dark-layout .vs__dropdown-toggle {
+  border-color: #ffffff !important;
+}
+
+[dir] .dark-layout textarea.form-control:not(:focus) {
+  border-color: #ffffff;
+} */
+
+// Only for madals of sales made (Initial Payment)
+#crm-sm-modal-initial-payment {
+  .modal-body {
+    padding: 1rem 0rem !important;
+    overflow-x: hidden;
+
+    .margin-0 {
+      margin-right: 0rem !important;
+      margin-left: 0rem !important;
+    }
+  }
+}
+
+#crm-sm-modal-contract-fee {
+  .modal-body {
+    padding: 1rem 0rem !important;
+    overflow-x: hidden;
+
+    .margin-0 {
+      margin-right: 0rem !important;
+      margin-left: 0rem !important;
+    }
+  }
+}
+
+//header dark without box shadow
+
+.dark-layout{
+  .header-navbar {
+    box-shadow: none !important;
+  }
 }

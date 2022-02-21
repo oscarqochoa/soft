@@ -3,9 +3,11 @@
 
 
 $important: #FF3D60 !default;
+$primary-light: #3764FF !default;
 
 $theme-colors: (
-  "important": $important
+  "important": $important,
+  "primary-light": $primary-light
 );
 
 @import "../../../@core/scss/core.scss";

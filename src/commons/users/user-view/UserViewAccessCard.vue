@@ -18,9 +18,13 @@
               <span class="font-weight-bold">Password</span>
             </th>
             <td class="pb-50">
-              <b-button variant="flat-primary" v-b-modal.change-password-modal
-                >Change password</b-button
+              <b-button
+                variant="outline-primary"
+                size="sm"
+                v-b-modal.change-password-modal
               >
+                Change password
+              </b-button>
             </td>
           </tr>
           <tr>
@@ -61,8 +65,18 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-modal id="change-password-modal" title="Change user password" centered @ok.prevent="$refs.changePasswordModal.changePassword()" no-close-on-backdrop cancel-variant="outline-danger">
-      <change-user-password ref="changePasswordModal" @closeModal="$bvModal.hide('change-password-modal')"></change-user-password>
+    <b-modal
+      id="change-password-modal"
+      title="Change user password"
+      centered
+      @ok.prevent="$refs.changePasswordModal.changePassword()"
+      no-close-on-backdrop
+      cancel-variant="outline-danger"
+    >
+      <change-user-password
+        ref="changePasswordModal"
+        @closeModal="$bvModal.hide('change-password-modal')"
+      ></change-user-password>
     </b-modal>
   </b-card>
 </template>

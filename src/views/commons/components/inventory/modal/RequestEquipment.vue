@@ -13,11 +13,13 @@
       :no-close-on-backdrop="true"
     >
       <div>
+        <!-- Form -->
         <ValidationObserver ref="form">
           <form @submit.prevent="saveRequest">
             <div>
               <div class>
                 <b-row>
+                  <!--INPUT CATEGORY -->
                   <b-col sm="5">
                     <ValidationProvider rules="required" v-slot="{ errors }">
                       <b-form-group id="input-group-3" label="CATEGORY:">
@@ -33,6 +35,7 @@
                       </b-form-group>
                     </ValidationProvider>
                   </b-col>
+                  <!-- INPUT ASSIGN TO -->
                   <b-col sm="5">
                     <ValidationProvider rules="required" v-slot="{ errors }">
                       <b-form-group id="input-group-3" label="ASSIGN TO:">
@@ -48,6 +51,7 @@
                       </b-form-group>
                     </ValidationProvider>
                   </b-col>
+                  <!-- INPUT NUMBER -->
                   <b-col sm="2">
                     <ValidationProvider rules="required" v-slot="{ errors }">
                       <b-form-group
@@ -67,6 +71,7 @@
                       </b-form-group>
                     </ValidationProvider>
                   </b-col>
+                  <!-- LIST OF PROGRAMS -->
                   <b-col sm="12" v-if="category == 1">
                     <b-form-group
                       label="PROGRAMS:"
@@ -81,6 +86,7 @@
                       ></b-form-checkbox-group>
                     </b-form-group>
                   </b-col>
+                  <!-- INPUT TEXT TAREA COMMENTARY -->
                   <b-col sm="12">
                     <ValidationProvider rules="required" v-slot="{ errors }">
                       <b-form-group
@@ -103,7 +109,7 @@
                   </b-col>
                 </b-row>
               </div>
-
+              <!-- Button Submit -->
               <b-form-group>
                 <b-button variant="primary" style="float: right" type="submit"
                   >Send</b-button
@@ -118,10 +124,11 @@
 </template>
 
 <script>
-import InventoryService from "../service/inventory.service";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
 import vSelect from "vue-select";
+// Import Services
+import InventoryService from "../service/inventory.service";
 export default {
   props: {
     modalRequest: {
@@ -140,7 +147,7 @@ export default {
   computed: {
     ...mapGetters("inventory-store", ["listCategoryAll"]),
   },
-  data() {
+  data:function() {
     return {
       mutableModalRequestEquipment: this.modalRequest,
       optionsCategory: [],
@@ -150,7 +157,7 @@ export default {
       selectedOperator: 0,
       cant: 1,
       commentary: "",
-      programs: [], // Must be an array reference!
+      programs: [],
       optionsPrograms: [
         { text: "SKYPE", value: "SKYPE" },
         { text: "OUTLOOK", value: "OUTLOOK" },
@@ -162,14 +169,14 @@ export default {
     };
   },
   methods: {
-    closeModal() {
+    closeModal:function() {
       this.$emit("closeModalRequest", false);
     },
     ...mapActions("inventory-store", [
       "LIST_CATEGORIES",
       "UPDATE_REQUEST_EQUIPMENT",
     ]),
-    async getSelectCategory() {
+    getSelectCategory:async function() {
       if (this.listCategoryAll != null) {
         this.optionsCategory = this.listCategoryAll;
       } else {
@@ -193,7 +200,7 @@ export default {
         }
       }
     },
-    async getSelectUsers() {
+    getSelectUsers:async function() {
       try {
         const response = await InventoryService.getSelectUsers({
           moduleId: this.module,
@@ -212,7 +219,7 @@ export default {
         );
       }
     },
-    saveRequest() {
+    saveRequest:function() {
       this.$refs.form.validate().then(async(success) => {
         if (!success) {
           return;
@@ -260,7 +267,7 @@ export default {
       });
     },
   },
-  created() {
+  created:function() {
     this.getSelectCategory();
     this.getSelectUsers();
   },

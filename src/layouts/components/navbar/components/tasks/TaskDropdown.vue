@@ -1,6 +1,10 @@
 <template>
   <div>
-    <b-nav-item-dropdown right class="dropdown-notification mr-25" menu-class="dropdown-menu-media">
+    <b-nav-item-dropdown
+      right
+      class="dropdown-notification mr-25"
+      menu-class="dropdown-menu-media"
+    >
       <template #button-content>
         <feather-icon
           :badge="taskCounter"
@@ -27,38 +31,49 @@
         <template v-for="notification in S_TASKS">
           <div :key="notification.id">
             <div class="media d-flex align-items-center">
-              <h6 class="font-weight-bolder mr-auto mb-0 text-capitalize">{{ notification.type }}</h6>
+              <h6 class="font-weight-bolder mr-auto mb-0 text-capitalize">
+                {{ notification.type }}
+              </h6>
             </div>
             <!-- Account Notification -->
             <template v-for="task in notification.tasks">
               <b-link :key="task.id">
-                <b-media>
-                  <template #aside>
-                    <b-avatar size="32" variant="light-secondary">
-                      <feather-icon icon="ClipboardIcon" />
-                    </b-avatar>
-                  </template>
+                <router-link
+                  :to="{ name: 'lead-show', params: { id: task.lead_id } }"
+                >
+                  <b-media>
+                    <template #aside>
+                      <b-avatar size="32" variant="light-secondary">
+                        <feather-icon icon="ClipboardIcon" />
+                      </b-avatar>
+                    </template>
 
-                  <p class="media-heading">
-                    <span class="font-weight-bolder">{{ task.subject }}</span>
-                  </p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <small class="notification-text" style="width: calc(100% - 115px)">
-                      {{ task.client_name }} | {{ task.date | myHourTime }} |
-                      {{ task.real_time | myHourTime }}
-                    </small>
-                    <b-button
-                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                      variant="outline-primary"
-                      size="sm"
-                      style="width: 105px"
-                      block
+                    <p class="media-heading">
+                      <span class="font-weight-bolder">{{ task.subject }}</span>
+                    </p>
+                    <div
+                      class="d-flex justify-content-between align-items-center"
                     >
-                      {{ notification.type == "today" ? "" : task.cant }}
-                      {{ notification.type }}
-                    </b-button>
-                  </div>
-                </b-media>
+                      <small
+                        class="notification-text"
+                        style="width: calc(100% - 115px)"
+                      >
+                        {{ task.client_name }} | {{ task.date | myHourTime }} |
+                        {{ task.real_time | myHourTime }}
+                      </small>
+                      <b-button
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-primary"
+                        size="sm"
+                        style="width: 105px"
+                        block
+                      >
+                        {{ notification.type == "today" ? "" : task.cant }}
+                        {{ notification.type }}
+                      </b-button>
+                    </div>
+                  </b-media>
+                </router-link>
               </b-link>
             </template>
           </div>
@@ -72,7 +87,8 @@
           variant="primary"
           block
           @click="taskModal = true"
-        >See all tasks</b-button>
+          >See all tasks</b-button
+        >
       </li>
     </b-nav-item-dropdown>
     <b-modal
@@ -81,7 +97,7 @@
       scrollable
       hide-footer
       modal-class="modal-primary"
-      title="TASKS"
+      title="Tasks"
       title-class="h2 text-white"
     >
       <task-modal></task-modal>
@@ -102,36 +118,36 @@ export default {
   },
   components: {
     VuePerfectScrollbar,
-    TaskModal
+    TaskModal,
   },
   directives: {
-    Ripple
+    Ripple,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      taskCounter: "TaskStore/taskCounter"
+      taskCounter: "TaskStore/taskCounter",
     }),
     ...mapState({
-      S_TASKS: state => state.TaskStore.S_TASKS
-    })
+      S_TASKS: (state) => state.TaskStore.S_TASKS,
+    }),
   },
   data() {
     return {
       perfectScrollbarSettings: {
         maxScrollbarLength: 60,
-        wheelPropagation: false
+        wheelPropagation: false,
       },
-      taskModal: false
+      taskModal: false,
     };
   },
   methods: {
     ...mapActions({
       A_GET_TASKS: "TaskStore/A_GET_TASKS",
-      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER"
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
     }),
     ...mapMutations({
-      showTaskTodayModal: "TaskStore/M_SHOW_TASK_TODAY_MODAL"
+      showTaskTodayModal: "TaskStore/M_SHOW_TASK_TODAY_MODAL",
     }),
     async getFirstFiveUserTasks() {
       try {
@@ -142,8 +158,8 @@ export default {
       try {
         await this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id }, true);
       } catch (error) {}
-    }
-  }
+    },
+  },
 };
 </script>
 

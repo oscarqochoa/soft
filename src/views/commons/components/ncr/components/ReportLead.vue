@@ -1451,7 +1451,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      skin: "appConfig/skin"
+      skin: "appConfig/skin" 
     }),
     classAdd() {
       return this.skin == "dark" ? "dark" : "light";

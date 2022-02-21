@@ -68,7 +68,7 @@
         </b-col>
         <b-col cols="12">
           <b-form-group label="Content" label-for="content" label-cols-md="2">
-            <b-form-textarea id="content" rows="4" v-html="task.content" disabled class="bg-white" />
+            <b-form-textarea id="content" rows="4" v-html="task.content" readonly />
           </b-form-group>
         </b-col>
       </b-row>
