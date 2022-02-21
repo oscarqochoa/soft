@@ -1,5 +1,6 @@
-<template >
+<template>
   <b-modal
+    v-if="dataLoaded"
     id="modal-closing"
     ref="modal"
     v-model="onControl"
@@ -198,11 +199,14 @@ export default {
       answers: {},
       showAnswersTree: false,
       fromTree: false,
+      dataLoaded: false,
     };
   },
   async created() {
     this.onControl = true;
+    this.dataLoaded = false
     await this.getFanPages();
+    this.dataLoaded = true
     if (this.itemTree) {
       this.fromTree = true;
       this.selectedProgram = this.itemTree.program;

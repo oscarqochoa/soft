@@ -1,5 +1,6 @@
 <template>
   <b-modal
+    v-if="dataLoaded"
     id="modal-closing"
     ref="modal"
     v-model="onControl"
@@ -95,13 +96,13 @@
                   <b-col sm="1" class="flex">
                     <feather-icon
                       v-if="answerTypeTeam"
-                      class="mr-1 pointer mb-1 bigger"
+                      class="mr-1 pointer mb-1 bigger text-info"
                       icon="CopyIcon"
                       @click="copyAnswerName(treeItem.content)"
                     />
                     <feather-icon
                       v-if="reading"
-                      class="mr-1 pointer bigger"
+                      class="mr-1 pointer bigger text-warning"
                       style="color: #007bff"
                       icon="EditIcon"
                       @click="toEditingMode"
@@ -158,6 +159,7 @@ export default {
       reading: false,
       answerTypeTeam: false,
       treeItem: null,
+      dataLoaded: false,
     };
   },
   async created() {
@@ -174,7 +176,9 @@ export default {
       this.title = "Edit Answer";
       this.reading = false;
     }
+    this.dataLoaded = false
     await this.getFanPages();
+    this.dataLoaded = true
   },
   // eslint-disable-next-line vue/order-in-components
   computed: {
