@@ -4,7 +4,7 @@
       <b-card-title>Payments</b-card-title>
     </template>
     <b-row>
-      <b-col cols="12" sm="6" md="3">
+      <b-col cols="12" sm="6" md="3" class="border-right">
         <card-lead-payment-section
           :modul="modul"
           title="Realtor"
@@ -16,7 +16,7 @@
           @onSubmit="onSubmit($event, 'realtor')"
         />
       </b-col>
-      <b-col cols="12" sm="6" md="3">
+      <b-col cols="12" sm="6" md="3" class="border-right">
         <card-lead-payment-section
           :modul="modul"
           title="Lien"
@@ -28,7 +28,7 @@
           @onSubmit="onSubmit($event, 'lien')"
         />
       </b-col>
-      <b-col cols="12" sm="6" md="3">
+      <b-col cols="12" sm="6" md="3" class="border-right">
         <card-lead-payment-section
           :modul="modul"
           title="Court"
@@ -72,14 +72,14 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
-      updatedCards:"CrmCreditCardStore/LISTCARDS" 
+      updatedCards: "CrmCreditCardStore/LISTCARDS"
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
     }),
-    updateCards(){
-      this.lead.cards = this.updatedCards
+    updateCards() {
+      this.lead.cards = this.updatedCards;
     }
   },
   created() {
@@ -105,8 +105,7 @@ export default {
   directives: { Ripple },
   methods: {
     ...mapActions({
-      A_LEAD_PAYMENT: "CrmLeadStore/A_LEAD_PAYMENT",
-      
+      A_LEAD_PAYMENT: "CrmLeadStore/A_LEAD_PAYMENT"
     }),
     async onSubmit(item, ref) {
       this.showConfirmSwal()

@@ -17,6 +17,7 @@ import NotificationStore from '@/store/notification'
 import InventoryStore from '@/views/commons/components/inventory/store'
 import NCRStore from '@/views/commons/components/ncr/store'
 import UserStore from '@/store/user'
+import ProfileStore from '@/store/profile'
 import MessageStore from '@/store/message'
 import SidebarStore from '@/store/sidebar'
 
@@ -63,6 +64,7 @@ export default new Vuex.Store({
     'ncr-store': NCRStore,
     NotificationStore,
     UserStore,
+    ProfileStore,
     MessageStore,
     SidebarStore,
     SchedulesStore,

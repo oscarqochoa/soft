@@ -2,10 +2,12 @@
   <div>
     <header-slot>
       <template #actions>
-        <b-button variant="success" @click="modalopen(1)">Create Glossary</b-button>
+        <!-- Button Create Glossary -->
+        <b-button variant="primary" @click="modalOpen(1)">Create Glossary</b-button>
       </template>
     </header-slot>
-    <b-card class="px-1">
+    <b-card no-body>
+      <!-- Table -->
       <filter-slot
         :filter="filter"
         :filter-principal="filterPrincipal"
@@ -39,11 +41,12 @@
               <strong>Loading ...</strong>
             </div>
           </template>
+          <!-- Column TITLE -->
           <template #cell(title)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
               <b-button
                 variant="flat-primary"
-                @click="modalopenEdit(3, data.item)"
+                @click="modalOpenEdit(3, data.item)"
                 style="
                   padding-left: 2px;
                   padding-right: 2px;
@@ -53,28 +56,31 @@
               >{{ data.item.title }}</b-button>
             </div>
           </template>
+          <!-- Column CREATED BY -->
           <template #cell(created_at)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
               <span>{{ data.item.created_at | myGlobalDay }}</span>
             </div>
           </template>
+          <!-- Column ACTIONS -->
           <template #cell(action)="data">
             <b-dropdown variant="link" no-caret :right="$store.state.appConfig.isRTL">
               <template #button-content>
                 <feather-icon icon="MoreVerticalIcon" size="16" class="align-middle text-body" />
               </template>
-              <b-dropdown-item @click="modalopenEdit(2, data.item)">
-                <!-- <feather-icon icon="EditIcon" /> -->
+              <!-- Button EDIT GLOSSARY  -->
+              <b-dropdown-item @click="modalOpenEdit(2, data.item)">
                 <span class="align-middle ml-50">Edit</span>
               </b-dropdown-item>
+              <!-- Button DELETE GLOSSARY -->
               <b-dropdown-item @click="deleteGlossary(data.item)">
-                <!-- <feather-icon icon="TrashIcon" /> -->
                 <span class="align-middle ml-50">Delete</span>
               </b-dropdown-item>
             </b-dropdown>
           </template>
         </b-table>
       </filter-slot>
+      <!-- Modal Glossary -->
       <modal-glossary
         v-if="modalChanging"
         :ifModalCard="modalChanging"
@@ -92,17 +98,22 @@
 <script>
 import { mapGetters } from "vuex";
 import vSelect from "vue-select";
-import ModalGlossary from "./components/ModalGlossary.vue";
-import { amgApi } from "@/service/axios";
+// Import Filter
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+// Import Modal
+import ModalGlossary from "./components/ModalGlossary.vue";
+// Import Services
 import GlossarydService from "./service/glossary.service";
+// Import Data
+import filters from "./data/filter.glossary.data";
+import fields from "./data/fields.glossary.data";
 export default {
   components: {
     vSelect,
     ModalGlossary,
     FilterSlot
   },
-  data() {
+  data: function() {
     return {
       totalRows: 0,
       paginate: {
@@ -117,7 +128,6 @@ export default {
       },
       searchInput: "",
       created_by: null,
-      categorySearch: null,
       startdate: "",
       enddate: "",
       startPage: null,
@@ -127,33 +137,8 @@ export default {
       perPage: 10,
       perPageOptions: [10, 25, 50, 100],
       filterController: false,
-      arrayColumns: [
-        {
-          key: "category",
-          label: "Category",
-          visible: true
-        },
-        {
-          key: "title",
-          label: "Title",
-          visible: true
-        },
-        {
-          key: "nameuser",
-          label: "Created By",
-          visible: true
-        },
-        {
-          key: "created_at",
-          label: "Created",
-          visible: true
-        },
-        {
-          key: "action",
-          label: "Actions",
-          visible: true
-        }
-      ],
+      //data fields
+      arrayColumns: fields,
       fromToObject: {
         from: null,
         to: null
@@ -162,58 +147,15 @@ export default {
       modalChanging: false,
       statusModal: "",
       objectGlossary: null,
-      filter: [
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Category",
-          model: null,
-          options: [],
-          reduce: "id",
-          selectText: "name",
-          cols: 12
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ]
+      //data filters
+      filter: filters
     };
   },
   computed: {
-    clientRoute() {
+    clientRoute: function() {
       return "/glossary/get-all-glossaries";
     },
-    visibleFields() {
+    visibleFields: function() {
       return this.arrayColumns.filter(column => column.visible);
     },
     ...mapGetters({
@@ -221,7 +163,7 @@ export default {
     })
   },
   methods: {
-    async deleteGlossary(item) {
+    deleteGlossary: async function(item) {
       const confirm = await this.showConfirmSwal("DELETE", "Are you sure?");
       if (confirm.isConfirmed) {
         try {
@@ -251,14 +193,14 @@ export default {
         }
       }
     },
-    updateGlossary() {
+    updateGlossary: function() {
       this.modalChanging = false;
       this.$refs.refClientsList.refresh();
     },
-    updateCategory() {
+    updateCategory: function() {
       this.getCategories();
     },
-    modalopen(num) {
+    modalOpen: function(num) {
       this.statusModal = num;
       if (this.modalChanging == false) {
         this.modalChanging = true;
@@ -266,7 +208,7 @@ export default {
         this.modalChanging = false;
       }
     },
-    modalopenEdit(num, objectGlossary) {
+    modalOpenEdit: function(num, objectGlossary) {
       this.statusModal = num;
       this.objectGlossary = objectGlossary;
       if (this.modalChanging == false) {
@@ -275,23 +217,20 @@ export default {
         this.modalChanging = false;
       }
     },
-    closeModal() {
+    closeModal: function() {
       this.modalChanging = false;
       this.objectGlossary = null;
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}`, {
-        page: ctx.currentPage,
-        perPage: ctx.perPage,
-        created_by: this.created_by,
-        category: this.filter[0].model,
-        startdate: this.filter[1].model,
-        enddate: this.filter[2].model
-      });
-
-      // Must return a promise that resolves to an array of items
-      return promise.then(data => {
-        // Pluck the array of items off our axios response
+    myProvider: async function(ctx) {
+      try {
+        const data = await amgApi.post(`${ctx.apiUrl}`, {
+          page: ctx.currentPage,
+          perPage: ctx.perPage,
+          created_by: this.created_by,
+          category: this.filter[0].model,
+          startdate: this.filter[1].model,
+          enddate: this.filter[2].model
+        });
         const items = data.data.data;
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page; //
@@ -301,18 +240,19 @@ export default {
         this.totalData = data.data.total;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
-        // Must return an array of items or an empty array if an error occurred
         return items || [];
-      });
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
     },
-    resetSearch() {
-      this.categorySearch = null;
+    resetSearch: function() {
       this.searchInput = "";
       this.fromToObject.from = null;
       this.fromToObject.to = null;
       this.$refs.refClientsList.refresh();
     },
-    async getCategories() {
+    getCategories: async function() {
       try {
         const res = await GlossarydService.getCategories();
         this.categories = res.data;
@@ -329,7 +269,7 @@ export default {
       }
     }
   },
-  created() {
+  created: function() {
     this.getCategories();
   }
 };

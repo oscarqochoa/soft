@@ -18,42 +18,46 @@
         v-if="isManagement"
         :to="`/${route}/loans/general`"
         exact
-        exact-active-class="active "
+        exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"
       >
         Loans
-        <span v-if="counterTab.management>0" class="ml-1">
+        <span v-if="counterTab.management > 0" class="ml-1">
           <feather-icon
             icon
-            :badge="counterTab.management > 99 ? '99+' : counterTab.management"
+            :badge="
+                  counterTab.management > 99 ? '99+' : counterTab.management
+                "
             badge-classes="badge-important"
           />
         </span>
       </b-nav-item>
       <b-nav-item
-        v-if="isSupervisor"
+        v-if="isSupervisor || isCeo"
         :to="`/${route}/loans/loans-module/`"
         exact
-        exact-active-class="active border-primary-i"
         :link-classes="['px-3',bgTabsNavs]"
+        exact-active-class="active"
       >
         Loans by Module
-        <span v-if="counterTab.supervisor>0" class="ml-1">
+        <span v-if="counterTab.supervisor > 0" class="ml-1">
           <feather-icon
             icon
-            :badge="counterTab.supervisor > 99 ? '99+' : counterTab.supervisor"
+            :badge="
+                  counterTab.supervisor > 99 ? '99+' : counterTab.supervisor
+                "
             badge-classes="badge-important"
           />
         </span>
       </b-nav-item>
       <b-nav-item
+        exact-active-class="active"
         :to="`/${route}/loans/my-loans`"
         exact
-        exact-active-class="active border-primary-i"
         :link-classes="['px-3',bgTabsNavs]"
       >
         My Loans
-        <span v-if="counterTab.my_loan>0" class="ml-1">
+        <span v-if="counterTab.my_loan > 0" class="ml-1">
           <feather-icon
             icon
             :badge="counterTab.my_loan > 99 ? '99+' : counterTab.my_loan"
@@ -63,8 +67,8 @@
       </b-nav-item>
     </b-nav>
 
-    <b-card no-body class="border-primary border-table-radius px-0">
-      <router-view :key="this.$route.name" />
+    <b-card no-body class="border-top-primary border-3 border-table-radius px-0">
+      <router-view :key="this.$route.name" class="mt-2" />
     </b-card>
     <ModalRequestLoan v-if="modalRequest.show" :info="modalRequest" @hide="closeModalLoan" />
   </div>
@@ -97,7 +101,8 @@ export default {
       researchLoans: "loans-store/researchLoans",
       counterTab: "loans-store/counterTab",
       modalRequest: "loans-store/modalRequest",
-      isSupervisor: "auth/isSupervisor"
+      isSupervisor: "auth/isSupervisor",
+      isCeo: "auth/isCeo"
     }),
     positionResponsive() {
       return this.bigWindow ? "text-right" : "";

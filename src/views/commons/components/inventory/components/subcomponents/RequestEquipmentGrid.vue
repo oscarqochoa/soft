@@ -12,6 +12,7 @@
       :send-multiple-sms="false"
       @reload="$refs['refClientsList'].refresh()"
     >
+      <!-- Table -->
       <b-table
         small
         slot="table"
@@ -35,6 +36,7 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <!-- Column PROGRAMS TO INSTALL -->
         <template #cell(programs_to_install)="data">
           <div>
             <ul id="v-for-object" class="demo">
@@ -42,16 +44,18 @@
             </ul>
           </div>
         </template>
+        <!-- Column COMMENT -->
         <template #cell(commentary)="data">
           <div
             class="tdbreak"
             style="width:100px; overflow:hidden;text-overflow:ellipsis"
           >{{ data.item.commentary }}</div>
         </template>
+        <!-- Column STATUS -->
         <template #cell(status)="data">
           <p
             :style="
-              data.item.status == 'APPROVED'
+              data.item.status == 'DELIVERED'
                 ? 'color:#00CC00'
                 : data.item.status == 'DISAPPROVED'
                 ? 'color: #FF0000'
@@ -59,11 +63,13 @@
             "
           >{{ data.item.status }}</p>
         </template>
+        <!-- Column CREATED BY -->
         <template #cell(created_at)="data">
           {{ data.item.created_by }}
           <br />
           {{ data.item.created_at | myGlobalDay }}
         </template>
+        <!-- Column Button Tracking -->
         <template #cell(tracking)="data">
           <div>
             <b-button
@@ -77,7 +83,7 @@
         </template>
       </b-table>
     </filter-slot>
-
+    <!-- Modal View Tracking Request -->
     <modal-view-tracking-request
       v-if="modalTrackingRequest"
       :modalTrackingRequest="modalTrackingRequest"
@@ -89,11 +95,15 @@
 </template>
 
 <script>
-import vSelect from "vue-select";
-import ModalViewTrackingRequest from "../../modal/ModalViewTrackingRequest.vue";
-import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
+import vSelect from "vue-select";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+// Import Modal
+import ModalViewTrackingRequest from "../../modal/ModalViewTrackingRequest.vue";
+// Import Data
+import fields from '../../data/fields.requestequipment.data'
+import filters from '../../data/filter.requestequipment.data'
 export default {
   props: {
     global: {
@@ -111,7 +121,7 @@ export default {
     ModalViewTrackingRequest,
     FilterSlot
   },
-  data() {
+  data:function() {
     return {
       totalRows: 0,
       paginate: {
@@ -126,126 +136,37 @@ export default {
       },
       startPage: null,
       toPage: null,
-      totalData: "",
-      // currentPage: 1,
-      // perPage: 10,
-      perPageOptions: [10, 25, 50, 100],
-      arrayColumns: [
-        {
-          key: "equipment",
-          label: "Equipment",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "cant",
-          label: "Quantity",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "name_operator",
-          label: "Assign To ",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "programs_to_install",
-          label: "Programs to Install",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "commentary",
-          label: "Comment",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "status",
-          label: "Status",
-          class: "text-left",
-          sortable: true
-        },
-        {
-          key: "created_at",
-          label: "Created By",
-          class: "text-left",
-          sortable: true
-        },
-        {
-          key: "tracking",
-          label: "Tracking",
-          class: "text-left"
-        },
-        {
-          key: "actions",
-          label: "Actions",
-          class: "text-left"
-        }
-      ],
       modalTrackingRequest: false,
       requestId: "",
       sortDesc: true,
-      filter: [
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ]
+      arrayColumns: fields,
+      filter: filters,
     };
   },
   computed: {
     ...mapGetters("inventory-store", ["updateRequestEquip"]),
-    statusUpdateRequestEquip() {
+    statusUpdateRequestEquip:function() {
       if (this.updateRequestEquip) {
-        this.$refs.refClientsList.refresh();
-        this.UpdateRequEquip();
+        if(this.$refs.refClientsList === undefined){
+          this.UpdateRequEquip();
+        }else{
+          this.$refs.refClientsList.refresh();
+          this.UpdateRequEquip();
+        }
+        
       }
     }
   },
   methods: {
     ...mapActions("inventory-store", ["UPDATE_REQUEST_EQUIPMENT"]),
-    UpdateRequEquip() {
+    UpdateRequEquip:function() {
       if (this.updateRequestEquip) {
         this.UPDATE_REQUEST_EQUIPMENT(false);
       }
     },
-    resetSearch() {
-      this.fromToObject.from = null;
-      this.fromToObject.to = null;
-      this.$refs.refClientsList.refresh();
-    },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
+    myProvider:async function(ctx) {
+      try{
+        const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
         from: this.filter[0].model == "" ? null : this.filter[0].model,
         to: this.filter[1].model == "" ? null : this.filter[1].model,
         perpage: ctx.perPage,
@@ -255,27 +176,34 @@ export default {
         statusRequest: null
         // statusRequest: this.filters[0].model,
       });
-      // Must return a promise that resolves to an array of items
-      return promise.then(data => {
-        // Pluck the array of items off our axios response
-        const items = data.data.data;
+
+      const items = data.data.data;
         this.startPage = data.data.from;
         this.current_page = data.data.current_page;
         this.perpage = data.data.per_page;
         this.next_page = this.startPage + 1;
         this.end_page = data.data.last_page;
-        this.totalData = data.data.total;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
-        // Must return an array of items or an empty array if an error occurred
         return items || [];
-      });
+
+      }catch(error){
+        console.log(error)
+        this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+        );
+        return [];
+      }
     },
-    openModalTrackingRequest(requestId) {
+    openModalTrackingRequest:function(requestId) {
       this.requestId = requestId;
       this.modalTrackingRequest = true;
     },
-    closeModalTrackingRequest() {
+    closeModalTrackingRequest:function() {
       this.modalTrackingRequest = false;
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <b-card nobody>
+  <div>
     <!-- User Interface controls -->
     <div class="mx-2 mb-2 mt-2">
       <b-row>
@@ -7,7 +7,11 @@
         <b-col
           cols="12"
           md="6"
-          class="d-flex align-items-center justify-content-center justify-content-sm-start"
+          class="
+            d-flex
+            align-items-center
+            justify-content-center justify-content-sm-start
+          "
         >
           <b-pagination
             v-model="currentPage"
@@ -43,13 +47,16 @@
               ></b-form-input>
 
               <b-input-group-append>
-                <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+                <b-button :disabled="!filter" @click="filter = ''"
+                  >Clear</b-button
+                >
               </b-input-group-append>
             </b-input-group>
           </b-form-group>
         </b-col>
       </b-row>
     </div>
+
     <!-- Main table element -->
     <b-table
       :items="items"
@@ -66,14 +73,19 @@
       small
       @filtered="onFiltered"
     >
-      <template #cell(start_date)="data">{{ data.item.start_date | myGlobal }}</template>
-      <template #cell(end_date)="data">{{ data.item.end_date | myGlobal }}</template>
+      <template #cell(start_date)="data">{{
+        data.item.start_date | myGlobal
+      }}</template>
+      <template #cell(end_date)="data">{{
+        data.item.end_date | myGlobal
+      }}</template>
       <template #cell(name)="data">
         <a
           target="_blank"
           :href="item.url"
           @click="readFile(data.item.id, data.item.statusView)"
-        >{{ data.item.name }}</a>
+          >{{ data.item.name }}</a
+        >
       </template>
       <template #cell(created_by)="data">
         {{ data.item.created_by }}
@@ -82,10 +94,15 @@
     </b-table>
 
     <!-- Info modal -->
-    <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
+    <b-modal
+      :id="infoModal.id"
+      :title="infoModal.title"
+      ok-only
+      @hide="resetInfoModal"
+    >
       <pre>{{ infoModal.content }}</pre>
     </b-modal>
-  </b-card>
+  </div>
 </template>
 
 <script>
@@ -100,20 +117,20 @@ export default {
           key: "start_date",
           label: "Start Date",
           sortable: true,
-          sortDirection: "desc"
+          sortDirection: "desc",
         },
         {
           key: "end_date",
           label: "End Date",
           sortable: true,
-          class: "text-center"
+          class: "text-center",
         },
         {
           key: "name",
           label: "File ",
-          sortable: true
+          sortable: true,
         },
-        { key: "created_by", label: "Created By" }
+        { key: "created_by", label: "Created By" },
       ],
       totalRows: 1,
       currentPage: 1,
@@ -127,16 +144,16 @@ export default {
       infoModal: {
         id: "info-modal",
         title: "",
-        content: ""
+        content: "",
       },
       money: {
         decimal: ",",
         thousands: ".",
         prefix: "S/ ",
         precision: 2,
-        masked: false
+        masked: false,
       },
-      text: null
+      text: null,
     };
   },
   mounted() {
@@ -146,14 +163,14 @@ export default {
     sortOptions() {
       // Create an options list from our fields
       return this.fields
-        .filter(f => f.sortable)
-        .map(f => {
+        .filter((f) => f.sortable)
+        .map((f) => {
           return { text: f.label, value: f.key };
         });
     },
     ...mapGetters({
-      currentUser: "auth/currentUser"
-    })
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
     async readFile(id_file, statusView) {
@@ -177,7 +194,7 @@ export default {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
-    }
-  }
+    },
+  },
 };
 </script>

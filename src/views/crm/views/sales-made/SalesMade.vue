@@ -5,8 +5,8 @@
     <b-nav card-header pills class="m-0">
       <b-nav-item
         :to="{name: 'sales-made-crm-new-client'}"
-        exact-active-class="active"
-        :link-classes="['px-3',bgTabsNavs]"
+        :class="{'active bg-tab rounded-top': isNewClient}"
+        :link-classes="linkClasses"
       >New Clients</b-nav-item>
       <b-nav-item
         v-if="(currentUser.role_id == 1 || currentUser.role_id == 2)"
@@ -22,30 +22,37 @@
       >Annulled</b-nav-item>
     </b-nav>
 
-    <b-card no-body class="border-primary border-table-radius px-1">
+    <b-card no-body class="border-top-primary border-3 border-table-radius">
       <router-view />
     </b-card>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'SalesMade',
+  name: "SalesMade",
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
+      currentUser: "auth/currentUser"
     }),
     isNewClient() {
-      return this.$route.name === 'sales-made-crm-new-client'
+      return this.$route.name === "sales-made-crm-new-client";
     },
+    linkClasses() {
+      if (this.isNewClient) return ["px-3", "bg-tab", "text-white"];
+      return ["px-3", this.bgTabsNavs];
+    }
   },
   created() {
-    console.log(this.$route.name === 'sales-made-crm-new-client', 'gaaaaaa')
-  },
-}
+    console.log(this.$route.name === "sales-made-crm-new-client", "gaaaaaa");
+  }
+};
 </script>
 
 <style scoped>
+.bg-tab {
+  background-color: #0090e7;
+}
 </style>

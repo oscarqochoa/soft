@@ -23,7 +23,7 @@
           id="migrationList"
           slot="table"
           ref="migrationList"
-          v-scrollbar
+
           sticky-header="50vh"
           no-provider-filtering
           :busy.sync="isBusy"
@@ -32,7 +32,7 @@
           :per-page="paginate.perPage"
           :current-page="paginate.currentPage"
           :filter="filter"
-
+          show-empty
           responsive="sm"
         >
           <template #table-busy>
@@ -100,14 +100,14 @@
             <p
               v-for="(program, index) in JSON.parse(data.item.programs)"
               :key="index"
-              class="d-flex flex-column justify-content-start align-items-center"
+              class="d-flex flex-column justify-content-start align-items-start"
             >{{ program }}</p>
 
           </template>
 
           <template v-slot:cell(created_by)="data">
             <div
-              class="d-flex flex-column justify-content-start align-items-center"
+              class="d-flex flex-column justify-content-start align-items-start"
             >
               <p>{{ data.item.owner }}</p>
               <p>{{ data.item.created_at | myGlobalDay }}  </p>

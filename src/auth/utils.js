@@ -19,11 +19,13 @@ export const getUserToken = () => localStorage.getItem('accessToken')
  * Please note role field is just for showing purpose it's not used by anything in frontend
  * We are checking role just for ease
  * NOTE: If you have different pages to navigate based on user ability then this function can be useful. However, you need to update it.
- * @param {String} userRole Role of user
+ * @param {Object} user Role of user
  */
-export const getHomeRouteForLoggedInUser = userRole => {
-  // if (userRole === 'CEO') return '/'
-  // // if (userRole === 'client') return { name: 'access-control' }
-  // return { name: 'auth-login' }
-  return '/';
+export const getHomeRouteForLoggedInUser = user => {
+  if (typeof user === 'object' && user !== null) {
+    if (user.module) {
+      return `/${user.module}`
+    }
+  }
+  return '/'
 }

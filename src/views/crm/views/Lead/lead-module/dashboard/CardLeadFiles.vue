@@ -1,5 +1,5 @@
 <template>
-  <b-card>
+  <b-card body-class="px-0">
     <template #header>
       <b-card-title>Files</b-card-title>
     </template>
@@ -22,8 +22,8 @@
 
       <template #cell(file_name)="data">
         <a v-if="data.item.isDisabled" :href="data.item.route" target="_blank">
-          <b-icon
-            :variant="getIcon(data.item.extension).color"
+          <amg-icon
+            :class="getIcon(data.item.extension).color"
             :icon="getIcon(data.item.extension).icon"
           />
           {{ data.item.file_name }}.{{ data.item.extension }}
@@ -204,17 +204,17 @@ export default {
     getIcon(extension) {
       switch (true) {
         case extension === "pdf":
-          return { icon: "file-pdf", color: "danger" };
+          return { icon: "FilePdfIcon", color: "text-danger" };
         case ["ppt", "pptx"].includes(extension):
-          return { icon: "file-ppt", color: "warning" };
+          return { icon: "FilePowerpointIcon", color: "text-warning" };
         case ["xlsx", "csv"].includes(extension):
-          return { icon: "file-excel", color: "success" };
+          return { icon: "FileExcelIcon", color: "text-success" };
         case extension === "docx":
-          return { icon: "file-word", color: "" };
+          return { icon: "FileWordIcon", color: "text-primary" };
         case ["png", "jpg", "jpeg", "ico"].includes(extension):
-          return { icon: "file-image", color: "info" };
+          return { icon: "FileCsvIcon", color: "text-info" };
       }
-      return { icon: "file", color: "defult" };
+      return { icon: "FileChartIcon", color: "text-primary" };
     },
     async onSubmit(index, item) {
       if (await this.$refs[`refFormObserver${index}`].validate()) {

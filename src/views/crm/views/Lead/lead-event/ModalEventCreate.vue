@@ -84,7 +84,7 @@
                     :format="'HH:mm'"
                     v-model="event.from"
                     :interval="30"
-                    class="w-100 rounded bg-transparent"
+                    :class="['w-100 rounded bg-transparent', {'text-white':isDarkSkin}]"
                     placeholder="Hour"
                     style="height: 2.73rem"
                   />
@@ -96,7 +96,7 @@
                     :format="'HH:mm'"
                     v-model="event.to"
                     :interval="30"
-                    class="w-100 rounded bg-transparent"
+                    :class="['w-100 rounded bg-transparent', {'text-white':isDarkSkin}]"
                     placeholder="Hour"
                     style="height: 2.73rem"
                   />
@@ -105,7 +105,7 @@
               <b-col md="2" class="pt-2">
                 <validation-provider v-if="modul !== 15">
                   <b-form-group>
-                    <b-form-input :value="lead.state ? lead.state : 'UNK'" readonly />
+                    <b-form-input :value="lead.state ? lead.state : 'UNK'" disabled />
                   </b-form-group>
                 </validation-provider>
                 <b-button v-else variant="outline-success" @click="onGetSeller">

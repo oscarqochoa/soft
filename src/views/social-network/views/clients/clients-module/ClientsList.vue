@@ -31,7 +31,6 @@
           :current-page="paginate.currentPage"
           :filter="filter"
 
-
           responsive="sm"
         >
           <template #table-busy>
@@ -42,17 +41,15 @@
           </template>
 
           <template v-slot:cell(name)="data">
-            <div class="d-flex flex-column  justify-content-center align-items-start "
-
+            <div
+              class="d-flex flex-column  justify-content-center align-items-start "
             >
 
-
-                <router-link
-                  :class="[textLink]"
-                  :to="`/crm/leads/${data.item.lead_id}`"
-                  target="_blank"
-                >  {{ data.item.lead_name }}</router-link>
-
+              <router-link
+                :class="[textLink]"
+                :to="`/crm/leads/${data.item.lead_id}`"
+                target="_blank"
+              >  {{ data.item.lead_name }}</router-link>
 
             </div>
 
@@ -186,34 +183,33 @@
 
           <template #cell(fee_charges)="data">
 
-              <div
-                  class="d-flex flex-column justify-content-center align-items-start "
-                  style="padding-bottom: 4px"
-                v-for="(account, index) in data.item.accounts"
-                :key="index"
-              >
-                ${{account.charges}}
-              </div>
+            <div
+              v-for="(account, index) in data.item.accounts"
+              :key="index"
+              class="d-flex flex-column justify-content-center align-items-start "
+              style="padding-bottom: 4px"
+            >
+              ${{ account.charges }}
+            </div>
 
           </template>
 
           <template #cell(mp)="data">
 
-              <div
-                  class="d-flex flex-column justify-content-start align-items-start"
-                  style="padding-bottom: 4px"
-                v-for="(account, index) in data.item.accounts"
-                :key="index"
-              >
+            <div
+              v-for="(account, index) in data.item.accounts"
+              :key="index"
+              class="d-flex flex-column justify-content-start align-items-start"
+              style="padding-bottom: 4px"
+            >
 
-                ${{account.monthly_amount}}
+              ${{ account.monthly_amount }}
             </div>
           </template>
 
           <template #cell(pt)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
-
             >
               <span
                 v-for="(account, index) in data.item.accounts"
@@ -249,7 +245,10 @@
                   :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-others.ico`"
                   style="height: 20px"
                 />
-                <span v-if="account.day_payment!=null">({{ account.day_payment }})</span>
+                <span
+                  v-if="account.day_payment!=null"
+                  class="pl-1"
+                >({{ account.day_payment }})</span>
 
               </span>
             </div>

@@ -1,7 +1,7 @@
 <template>
-  <b-row>
+  <b-row class="px-2 pt-2">
     <b-col lg="4" :class="[bigWindowLeft]">
-      <b-input-group prepend="Year" :class="{'w-40':bigWindow}">
+      <b-input-group prepend="Year" :class="{ 'w-40': bigWindow }">
         <b-form-select
           v-model="year"
           :options="optionsYear"
@@ -11,15 +11,27 @@
       </b-input-group>
     </b-col>
 
-    <b-col lg="4" v-if="isSupervisorCrm" :class="[bigWindowLeft,'d-flex justify-content-center']">
+    <b-col
+      lg="4"
+      v-if="isSupervisorCrm"
+      :class="[bigWindowLeft, 'd-flex justify-content-center']"
+    >
       <b-input-group prepend="Departments">
-        <b-form-select v-model="program" :options="programs" @change="changeProgram()"></b-form-select>
+        <b-form-select
+          v-model="program"
+          :options="programs"
+          @change="changeProgram()"
+        ></b-form-select>
       </b-input-group>
     </b-col>
-    <b-col lg="4" v-if="!isSupervisorCrm && !(isCrm && isManagement) "></b-col>
+    <b-col lg="4" v-if="!isSupervisorCrm && !(isCrm && isManagement)"></b-col>
     <b-col v-if="isCrm && isManagement" lg="4 d-flex justify-content-center">
       <template>
-        <b-input-group prepend="To Pay" append="%" :class="{'w-input-percent':bigWindow}">
+        <b-input-group
+          prepend="To Pay"
+          append="%"
+          :class="{ 'w-input-percent': bigWindow }"
+        >
           <b-form-input
             min="1"
             max="100"
@@ -43,7 +55,7 @@
     <b-col lg="4" :class="[bigWindowRight]">
       <b-button
         variant="gradient-primary"
-        :class="{'btn-block': !bigWindow}"
+        :class="{ 'btn-block': !bigWindow }"
         size="sm"
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
         v-b-tooltip.hover.top="'Change part of the year'"
@@ -68,15 +80,15 @@ export default {
   props: {
     tab: {
       type: String,
-      default: ""
+      default: "",
     },
     isManagement: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   directives: {
-    Ripple
+    Ripple,
   },
   mounted() {},
   data() {
@@ -84,7 +96,7 @@ export default {
       optionsYear: [],
       editPercent: false,
       programShow: [],
-      program: null
+      program: null,
     };
   },
   async created() {
@@ -100,7 +112,7 @@ export default {
       bigWindow: "app/bigWindow",
       halfYear: "commissions-store/halfYear",
       moduleProgram: "commissions-store/moduleProgram",
-      programs: "global-store/programs"
+      programs: "global-store/programs",
     }),
     year: {
       get() {
@@ -108,7 +120,7 @@ export default {
       },
       set(value) {
         this.$store.commit("commissions-store/SET_YEAR_COMMISSIONS", value);
-      }
+      },
     },
     percentApartment: {
       get() {
@@ -119,7 +131,7 @@ export default {
           "commissions-store/SET_PERCENT_APARTMENT_COMMISSIONS",
           value
         );
-      }
+      },
     },
     isSupervisorCrm() {
       return this.tab === "supervisorCrm";
@@ -135,17 +147,17 @@ export default {
       return this.bigWindow
         ? "text-right"
         : "d-flex justify-content-center mt-1";
-    }
+    },
   },
   methods: {
     addProgramSn() {
       this.programs.unshift({
         id: null,
-        text: "All"
+        text: "All",
       });
       this.programs.push({
         value: 15,
-        text: "Social Network"
+        text: "Social Network",
       });
     },
     changeProgram() {
@@ -183,8 +195,8 @@ export default {
     updatePercentageDepartment() {
       this.editPercent = false;
       this.$emit("update-percentage");
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,7 +1,9 @@
 <template>
-  <b-card
-    :title="(score.equifax === '' && score.experian === '' && score.transunion === '') ? 'This Lead do not have credit report' : null"
-  >
+  <b-card body-class="px-0">
+    <b-card-title v-if="score.equifax === '' && score.experian === '' && score.transunion === ''">
+      <h4 class="ml-1">This Lead do not have credit report</h4>
+    </b-card-title>
+
     <template #header>
       <b-card-title>Credit Report</b-card-title>
     </template>
@@ -37,15 +39,20 @@
         </b-col>
       </b-row>
     </b-card-body>
-    <b-tabs pills>
-      <b-tab :active="!isTabPendingActive" title-link-class="border-secondary hover-primary">
+    <b-tabs
+      pills
+      lazy
+      nav-class="mb-0 mt-2 ml-1"
+      active-nav-item-class="bg-primary box-shadow-info"
+    >
+      <b-tab :active="!isTabPendingActive" :title-link-class="bgTabsNavs">
         <template #title>
           <span>Obtained</span>
         </template>
 
         <card-lead-credit-report-obtained :lead="lead" :is-busy="isBusyCreditReportObtained" />
       </b-tab>
-      <b-tab :active="isTabPendingActive" title-link-class="border-secondary hover-primary">
+      <b-tab :active="isTabPendingActive" :title-link-class="bgTabsNavs">
         <template #title>
           <span>Pending</span>
           <div class="ml-50 number-circle">

@@ -11,6 +11,7 @@
       @hidden="closeModal"
       title-tag="h3"
     >
+      <!-- TITLE FIRST IMFORMATION -->
       <div class="demo-spacing-0">
         <b-alert variant="primary" show>
           <div class="alert-body">
@@ -20,14 +21,18 @@
           </div>
         </b-alert>
       </div>
+      <!-- IF IT CHARGED -->
       <div v-if="charge">
+        <!-- Form -->
         <ValidationObserver ref="form">
           <form @submit.prevent="editEquipments">
             <div>
               <div class="p-3 pt-1 pb-3">
                 <b-row>
+                  <!-- Details -->
                   <b-col sm="8">
                     <b-row>
+                      <!-- CATEGORY -->
                       <b-col sm="6">
                         <ValidationProvider rules="required" v-slot="{ errors }">
                           <b-form-group label="CATEGORY:">
@@ -44,6 +49,7 @@
                           </b-form-group>
                         </ValidationProvider>
                       </b-col>
+                      <!-- PRICE -->
                       <b-col sm="6">
                         <ValidationProvider rules="required|validate-amount" v-slot="{ errors }">
                           <b-form-group label="PRICE:">
@@ -61,6 +67,7 @@
                           </b-form-group>
                         </ValidationProvider>
                       </b-col>
+                      <!-- MODEL -->
                       <b-col sm="6">
                         <ValidationProvider rules="required" v-slot="{ errors }">
                           <b-form-group label="MODEL:">
@@ -76,6 +83,7 @@
                           </b-form-group>
                         </ValidationProvider>
                       </b-col>
+                      <!-- CONDITION -->
                       <b-col sm="6">
                         <ValidationProvider rules="required" v-slot="{ errors }">
                           <b-form-group label="CONDITION:">
@@ -92,6 +100,7 @@
                           </b-form-group>
                         </ValidationProvider>
                       </b-col>
+                      <!-- BRAND -->
                       <b-col sm="6">
                         <ValidationProvider rules="required" v-slot="{ errors }">
                           <b-form-group label="BRAND:">
@@ -108,17 +117,9 @@
                           </b-form-group>
                         </ValidationProvider>
                       </b-col>
+                      <!-- PURCHASE DATE -->
                       <b-col sm="6">
                         <ValidationProvider rules="required" v-slot="{ errors }">
-                          <!-- <b-form-group label="PURCHASE DATE:">
-                            <b-form-datepicker
-                              v-model="dateRegister"
-                              size="sm"
-                              class="per-page-datepicker d-inline-block"
-                              disabled
-                              :class="{ 'border border-danger': errors[0] }"
-                            ></b-form-datepicker>
-                          </b-form-group>-->
                           <b-form-group label="PURCHASE DATE:">
                             <b-form-datepicker
                               v-model="dateRegister"
@@ -138,6 +139,7 @@
                       </b-col>
                     </b-row>
                   </b-col>
+                  <!-- Input File or Image -->
                   <b-col sm="4">
                     <div
                       class="form-group"
@@ -203,13 +205,7 @@
                   </b-col>
                 </b-row>
               </div>
-
-              <!-- <div
-                
-                style="background: #f7f6f2; color: #706d7d; padding: 10px"
-              >
-                SECONDARY INFORMATION
-              </div>-->
+              <!-- TITLE SECOND INFORMATION -->
               <b-alert variant="primary" v-if="category == 1" show>
                 <div class="alert-body">
                   <span>
@@ -219,6 +215,7 @@
               </b-alert>
               <div v-if="category == 1" class="p-4 pb-3">
                 <b-row>
+                  <!-- SERIE -->
                   <b-col sm="6" cols="12">
                     <b-form-group id="input-group-2" label="SERIE:">
                       <b-form-input
@@ -229,6 +226,7 @@
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
+                  <!-- PROCESSOR -->
                   <b-col sm="6">
                     <b-form-group id="input-group-2" label="PROCESSOR:">
                       <b-form-input
@@ -239,6 +237,7 @@
                       ></b-form-input>
                     </b-form-group>
                   </b-col>
+                  <!-- RAM -->
                   <b-col sm="4">
                     <b-form-group id="input-group-3" label="RAM:" style="color: #706d7d">
                       <v-select
@@ -252,6 +251,7 @@
                       />
                     </b-form-group>
                   </b-col>
+                  <!-- DISC -->
                   <b-col sm="4">
                     <b-form-group id="input-group-3" label="DISC:" style="color: #706d7d">
                       <v-select
@@ -265,6 +265,7 @@
                       />
                     </b-form-group>
                   </b-col>
+                  <!-- S. OPERATIONAL -->
                   <b-col sm="4">
                     <b-form-group id="input-group-3" label="S.OPERATIONAL:" style="color: #706d7d">
                       <v-select
@@ -278,7 +279,7 @@
                       />
                     </b-form-group>
                   </b-col>
-
+                  <!-- COMMENTARY -->
                   <b-col sm="12">
                     <b-form-group
                       id="input-group-2"
@@ -299,6 +300,7 @@
                   </b-col>
                 </b-row>
               </div>
+              <!-- BUTTTON EDIT -->
               <b-form-group>
                 <b-button
                   squared
@@ -318,6 +320,7 @@
           </form>
         </ValidationObserver>
       </div>
+      <!-- While It's Charging -->
       <div v-else>
         <div class="text-center text-primary my-2">
           <b-spinner class="align-middle mr-1"></b-spinner>
@@ -329,8 +332,11 @@
 </template>
 
 <script>
-import InventoryService from "../service/inventory.service";
 import vSelect from "vue-select";
+// Import Services
+import InventoryService from "../service/inventory.service";
+// Import Data
+import {optionsCondition,optionsDisc,optionsRam,optionsSo} from '../data/viewequipment.data'
 export default {
   components: {
     vSelect
@@ -357,35 +363,13 @@ export default {
       condition: null,
       optionsCategory: this.optionsCat,
       optionsBrand: [],
-      optionsCondition: [
-        { value: 1, text: "NEW" },
-        { value: 2, text: "REPAIRED" },
-        { value: 3, text: "USED" },
-        { value: 4, text: "NOT FUNCTIONAL" }
-      ],
+      optionsCondition: optionsCondition,
       disc: null,
-      optionsDisc: [
-        { value: "128 GB", text: "128 GB" },
-        { value: "256 GB", text: "256 GB" },
-        { value: "512 GB", text: "512 GB" },
-        { value: "1 TB", text: "1 TB" },
-        { value: "2 TB", text: "2 TB" }
-      ],
+      optionsDisc:optionsDisc,
       ram: null,
-      optionsRam: [
-        { value: "4 GB", text: "4 GB" },
-        { value: "6 GB", text: "6 GB" },
-        { value: "8 GB", text: "8 GB" },
-        { value: "12 GB", text: "12 GB" },
-        { value: "16 GB", text: "16 GB" },
-        { value: "32 GB", text: "32 GB" },
-        { value: "64 GB", text: "64 GB" }
-      ],
+      optionsRam: optionsRam,
       so: null,
-      optionsSo: [
-        { value: "WINDOWS 10", text: "WINDOWS 10" },
-        { value: "WINDOWS 11", text: "WINDOWS 11" }
-      ],
+      optionsSo: optionsSo,
       serie: "",
       processor: "",
       price: "",
@@ -415,27 +399,27 @@ export default {
     };
   },
   computed: {
-    image() {
+    image:function() {
       return this.viewImage;
     }
   },
   methods: {
-    closeModal() {
+    closeModal:function() {
       this.$emit("close", false);
     },
-    getImage(e) {
+    getImage:function(e) {
       let file = e.target.files[0];
       this.equipment.images = file;
       this.uploadImage(file);
     },
-    uploadImage(file) {
+    uploadImage:function(file) {
       let reader = new FileReader();
       reader.onload = e => {
         this.viewImage = e.target.result;
       };
       reader.readAsDataURL(file);
     },
-    async searchEquipmentById() {
+    searchEquipmentById: async function() {
       try{
         const response = await InventoryService.searchEquipmentById({equipmentId: this.idEquipment})
         if (response.status == 200) {
@@ -469,7 +453,7 @@ export default {
           );
       }
     },
-    async getSelectBrand() {
+    getSelectBrand:async function() {
       try{
         const response = await InventoryService.getSelectBrand({})
         if (response.status == 200) {
@@ -487,11 +471,10 @@ export default {
       }        
     }
   },
-  created() {
+  created:function() {
     this.searchEquipmentById();
     this.getSelectBrand();
   },
-  mounted() {}
 };
 </script>
 

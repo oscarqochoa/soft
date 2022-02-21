@@ -138,11 +138,7 @@ export default {
       this.$bvModal.show("modal-quick-sms-save");
     },
     async modalQuickDelete(id) {
-      this.showSwalGeneric(
-        "Are you sure?",
-        "You won't be able to revert this!",
-        "warning"
-      )
+      this.showConfirmSwal()
         .then(async result => {
           if (result.value) {
             const response = await this.A_DELETE_SMS_QUICK({ id });

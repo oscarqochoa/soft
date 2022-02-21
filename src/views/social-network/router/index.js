@@ -7,7 +7,7 @@ import DashboardRouter from '@/views/social-network/views/dashboard/dashboard.ro
 import DashboardRouter2 from '@/views/social-network/views/dashboard2/dashboard.router'
 
 const routes = [
-  { path: '/socialnetwork', redirect: { name: 'test-social-network' } },
+  { path: '/socialnetwork', redirect: { name: 'calendar-social-network' } },
   ...testRoute,
   ...bankOfFlyersRouter,
   ...ClientsRouter,

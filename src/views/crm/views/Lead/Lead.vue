@@ -64,7 +64,7 @@
       >Leads W Potential</b-nav-item>
     </b-nav>
 
-    <b-card class="border-primary border-table-radius px-0">
+    <b-card no-body class="border-top-primary border-3 border-table-radius px-0">
       <router-view />
     </b-card>
   </div>
@@ -324,11 +324,6 @@ export default {
       }
     }
   },
-  watch: {
-    preloading(current, old) {
-      this.isPreloading(old);
-    }
-  }
 };
 </script>
 

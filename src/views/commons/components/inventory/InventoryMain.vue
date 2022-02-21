@@ -2,6 +2,7 @@
   <div>
     <header-slot>
       <template #actions>
+        <!-- Button Request Equipment -->
         <b-button
           @click="openModalRequest()"
           v-if="![1, 19].includes($route.meta.module)"
@@ -9,14 +10,16 @@
         >Request Equipment</b-button>
       </template>
     </header-slot>
-
+    <!-- Tabs -->
     <b-nav card-header pills class="m-0">
+      <!-- Button Equipment -->
       <b-nav-item
         :to="{ name: 'inventory-crm-equipment' }"
         exact
         exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"
       >Equipment</b-nav-item>
+      <!-- Button Equipment Request -->
       <b-nav-item
         :to="{ name: 'inventory-crm-equipment-request' }"
         exact
@@ -24,7 +27,7 @@
         :link-classes="['px-3',bgTabsNavs]"
       >
         Equipment Request
-        <span class="ml-1" v-if="countRequest > 0">
+        <span class="ml-1" v-if="countRequest > 0 && $route.meta.module == 19">
           <feather-icon
             icon
             :badge="countRequest > 99 ? '+99' : countRequest"
@@ -32,6 +35,7 @@
           />
         </span>
       </b-nav-item>
+      <!-- Button To Assigned -->
       <b-nav-item
         v-if="[12, 19].includes($route.meta.module)"
         :to="{ name: 'inventory-crm-assign' }"
@@ -40,12 +44,12 @@
         :link-classes="['px-3',bgTabsNavs]"
       >To Assigned</b-nav-item>
     </b-nav>
-
-    <b-card no-body class="border-primary border-table-radius px-0">
+    <!-- Dynamic Route -->
+    <b-card no-body class="border-top-primary border-3 border-table-radius px-0">
       <p>{{ statusUpdateRequestEquip }}</p>
       <router-view :key="$route.name"></router-view>
     </b-card>
-
+    <!-- Modal Create Request Equipment -->
     <request-equipment
       v-if="modalRequest"
       :modalRequest="modalRequest"
@@ -57,14 +61,16 @@
 </template>
 
 <script>
-import RequestEquipment from "./modal/RequestEquipment.vue";
 import { mapGetters } from "vuex";
+// Import Services
 import InventoryService from "./service/inventory.service";
+// Import Modal
+import RequestEquipment from "./modal/RequestEquipment.vue";
 export default {
   components: {
     RequestEquipment
   },
-  data() {
+  data:function() {
     return {
       modalRequest: false,
       countRequest: 0
@@ -75,21 +81,20 @@ export default {
       currentUser: "auth/currentUser"
     }),
     ...mapGetters("inventory-store", ["updateRequestEquip"]),
-    statusUpdateRequestEquip() {
+    statusUpdateRequestEquip:function() {
       if (this.updateRequestEquip) {
         this.countRequestEquipment();
       }
     }
   },
   methods: {
-    openModalRequest() {
+    openModalRequest:function() {
       this.modalRequest = true;
     },
-    closeModalRequest() {
+    closeModalRequest:function() {
       this.modalRequest = false;
-      // this.$refs.inventoryRequest?.resetSearch();
     },
-    async countRequestEquipment() {
+    countRequestEquipment: async function() {
       try {
         const params = {
           id_module: this.$route.meta.module,
@@ -109,7 +114,7 @@ export default {
       }
     }
   },
-  created() {
+  created:function() {
     this.countRequestEquipment();
   }
 };
