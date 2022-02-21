@@ -41,7 +41,7 @@
           <div
             class="d-flex flex-column justify-content-start align-items-start"
           >
-          <!-- Route To Lead Show -->
+            <!-- Route To Lead Show -->
             <router-link
               :class="textLink"
               :to="{
@@ -192,11 +192,7 @@
       <!-- Total Amount Footer -->
       <template #footer>
         <b-col
-          class="
-            d-flex
-            align-items-center
-            justify-content-center justify-content-sm-start
-          "
+          class="d-flex align-items-center justify-content-center justify-content-sm-start"
         >
           <div
             style="
@@ -236,18 +232,18 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import vSelect from "vue-select";
+import { mapGetters } from "vuex"
+import vSelect from "vue-select"
 // Filters
-import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue"
 // Import Service
-import PaymentService from "../service/payments.service";
+import PaymentService from "../service/payments.service"
 // Import Modals
-import ModalRefund from "@/views/crm/views/payments/components/ModalRefund.vue";
-import ModalVoidRefundInfo from "@/views/crm/views/payments/components/ModalVoidRefundInfo.vue";
+import ModalRefund from "@/views/crm/views/payments/components/ModalRefund.vue"
+import ModalVoidRefundInfo from "@/views/crm/views/payments/components/ModalVoidRefundInfo.vue"
 // Import Data
-import filters from "../data/filters.payments.data";
-import fields from "../data/fields.payments.data";
+import filters from "../data/filters.payments.data"
+import fields from "../data/fields.payments.data"
 
 export default {
   components: {
@@ -256,7 +252,7 @@ export default {
     ModalRefund,
     ModalVoidRefundInfo,
   },
-  data:function() {
+  data: function () {
     return {
       modalRefund: false,
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
@@ -287,18 +283,18 @@ export default {
       dataVoid: [],
       modalVoidRefund: false,
       idtransaction: null,
-    };
+    }
   },
   mounted: function () {
-    this.getAllUsers();
-    this.addPaddingTd();
+    this.getAllUsers()
+    this.addPaddingTd()
   },
   computed: {
     clientRoute: function () {
-      return "/crm/payment/get-all-lead-payments";
+      return "/crm/payment/get-all-lead-payments"
     },
     fields: function () {
-      return this.arrayColumns.filter((column) => column.visible);
+      return this.arrayColumns.filter((column) => column.visible)
     },
     ...mapGetters({
       currentUser: "auth/currentUser",
@@ -306,11 +302,11 @@ export default {
     //filter status by Type of User
     filterStatus: function () {
       if (this.currentUser.user_id == 1 || this.currentUser.user_id == 2) {
-        return this.filter;
+        return this.filter
       } else {
-        let newFilter = [...this.filter];
-        newFilter.splice(2, 1);
-        return newFilter;
+        let newFilter = [...this.filter]
+        newFilter.splice(2, 1)
+        return newFilter
       }
     },
   },
@@ -331,61 +327,62 @@ export default {
         client_name,
         settlement_date,
         type,
-      };
-      this.modalRefund = true;
+      }
+      this.modalRefund = true
     },
     closeModalRefund: function () {
-      this.modalRefund = false;
+      this.modalRefund = false
     },
     getVoidRefund: function (idtransaction) {
-      this.idtransaction = idtransaction;
-      this.modalVoidRefund = true;
+      this.idtransaction = idtransaction
+      this.modalVoidRefund = true
     },
     closeModalVoidRefundInfo: function () {
-      this.modalVoidRefund = false;
+      this.modalVoidRefund = false
     },
     myProvider: async function (ctx) {
       try {
         let params = {
-            perPage: ctx.perPage,
-            text: this.filterPrincipal.model,
-            from: this.filter[3].model,
-            to: this.filter[4].model,
-            result: this.filter[1].model,
-            type: this.filter[0].model,
-            user:
-              this.currentUser.user_id == 1 || this.currentUser.user_id == 2
-                ? this.filter[2].model
-                : this.currentUser.user_id,
-          }
+          perPage: ctx.perPage,
+          text: this.filterPrincipal.model,
+          from: this.filter[3].model,
+          to: this.filter[4].model,
+          result: this.filter[1].model,
+          type: this.filter[0].model,
+          user:
+            this.currentUser.user_id == 1 || this.currentUser.user_id == 2
+              ? this.filter[2].model
+              : this.currentUser.user_id,
+        }
         const data = await amgApi.post(
-          `${ctx.apiUrl}?page=${ctx.currentPage}`, params
-        );
-        const items = data.data.data;
-        let value = 0;
+          `${ctx.apiUrl}?page=${ctx.currentPage}`,
+          params
+        )
+        const items = data.data.data
+        let value = 0
         if (items) {
           items.forEach((element) => {
-            value += parseFloat(element.amount);
-          });
+            value += parseFloat(element.amount)
+          })
           const formatter = new Intl.NumberFormat("en-US", {
             style: "currency",
             currency: "USD",
-          });
+          })
 
-          this.totalAmount = formatter.format(value);
+          this.totalAmount = formatter.format(value)
         } else {
-          this.totalAmount = 0.0;
+          this.totalAmount = 0.0
         }
-        this.startPage = data.data.from;
-        this.paginate.currentPage = data.data.current_page;
-        this.paginate.perPage = data.data.per_page;
-        this.nextPage = this.startPage + 1;
-        this.endPage = data.data.last_page;
-        this.totalRows = data.data.total;
-        this.toPage = data.data.to;
-        return items || [];
+        this.startPage = data.data.from
+        this.paginate.currentPage = data.data.current_page
+        this.paginate.perPage = data.data.per_page
+        this.nextPage = this.startPage + 1
+        this.endPage = data.data.last_page
+        this.totalRows = data.data.total
+        this.toPage = data.data.to
+        return items || []
       } catch (error) {
-        console.error(error);
+        console.error(error)
         return []
       }
     },
@@ -394,30 +391,30 @@ export default {
         const data = await PaymentService.getAllUsers({
           roles: "[1,2,5]",
           type: "0",
-        });
+        })
         let firstOption = {
           value: "All",
           id: 0,
-        };
-        let newData = data;
-        newData.unshift(firstOption);
-        this.filter[2].options = newData;
+        }
+        let newData = data
+        newData.unshift(firstOption)
+        this.filter[2].options = newData
       } catch (error) {
-        console.error(error);
+        console.error(error)
         this.showToast(
           "danger",
           "top-right",
           "Error",
           "XIcon",
           "Something went wrong with users!"
-        );
+        )
       }
     },
     updateGrid: function () {
-      this.$refs.refClientsList.refresh();
+      this.$refs.refClientsList.refresh()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -442,5 +439,3 @@ td.div {
 @import "@core/scss/vue/libs/vue-select.scss";
 @import "@core/scss/vue/libs/vue-sweetalert.scss";
 </style>
-
-

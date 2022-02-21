@@ -1928,7 +1928,7 @@ export default {
 }
 
 .py-px {
-  padding: 8px !important;
+  padding: 12px !important;
 }
 
 .mt-07{
