@@ -1,10 +1,21 @@
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+import { useWindowSize } from "@vueuse/core";
 
 export default {
   data() {
     return { baseUrl: process.env.VUE_APP_BASE_URL_ASSETS };
   },
   computed: {
+    screenWidth() {
+      const { width } = useWindowSize();
+      return width.value
+    },
+
+    screenHeight() {
+      const { height } = useWindowSize();
+      return height
+    },
+
     bgTabsNavs() {
       //getters
       return this.$store.getters["appConfig/skin"] === "dark"
