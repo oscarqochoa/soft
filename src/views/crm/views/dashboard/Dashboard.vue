@@ -502,7 +502,7 @@
 </template>
 
 <script>
-import isTouchDevice from 'is-touch-device'
+
 import { dragscroll } from "vue-dragscroll";
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
 import { mapGetters } from "vuex";
@@ -577,10 +577,7 @@ export default {
       sizeScreenByPixels: "app/sizeScreenByPixels",
       allSizeOfScreen: "app/allSizeOfScreen",
     }),
-    isTouch(){
-      return isTouchDevice()
 
-    },
     isMobileDevice(){
        let details = navigator.userAgent;
        let regexp = /android|iphone|kindle|ipad/i;
