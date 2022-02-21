@@ -371,15 +371,9 @@ export default {
 .icons-node span {
   text-align: center;
 }
-.bigger {
-  width: 30px !important;
-  height: 30px !important;
-}
 
-.fill{
-  fill: white;
-  color: #0090e7;
-}
+
+
 .tree-modal .modal-dialog {
   max-width: 100%;
   margin: 0;
@@ -403,5 +397,13 @@ export default {
 .icon{
   color: white;
   margin-bottom: 0.4em;
+}
+.fill{
+  fill: white;
+  color: #0090e7;
+}
+.bigger {
+  width: 30px !important;
+  height: 30px !important;
 }
 </style>
