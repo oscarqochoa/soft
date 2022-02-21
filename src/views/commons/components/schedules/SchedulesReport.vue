@@ -4,11 +4,7 @@
       <b-col
         cols="12"
         sm="6"
-        class="
-          d-flex
-          align-items-center
-          justify-content-center justify-content-sm-start
-        "
+        class="d-flex align-items-center justify-content-center justify-content-sm-start"
       >
         <b-button variant="success" class="mr-1" @click="exportExcel()">
           <feather-icon
@@ -218,7 +214,7 @@
             <h3 class="title-sidebar-schedule">Advanced Search</h3>
           </span>
           <span class="cursor-pointer" v-b-toggle.sidebar-advance>
-            <amg-icon icon="XIcon" size="15" />
+            <feather-icon icon="XIcon" size="15" />
           </span>
         </div>
       </template>
@@ -474,7 +470,7 @@ export default {
   },
 };
 </script>
-  
+
 <style lang="scss" scoped>
 .bg-default {
   background: rgba(0, 0, 0, 0.1);

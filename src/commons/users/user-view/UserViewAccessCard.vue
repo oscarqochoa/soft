@@ -5,7 +5,7 @@
         <table class="mt-2 mt-xl-0 w-100">
           <tr>
             <th class="pb-50">
-              <amg-icon icon="UserIcon" class="mr-75" />
+              <feather-icon icon="UserIcon" class="mr-75" />
               <span class="font-weight-bold">Email</span>
             </th>
             <td class="pb-50">
@@ -14,7 +14,7 @@
           </tr>
           <tr>
             <th class="pb-50">
-              <amg-icon icon="UserIcon" class="mr-75" />
+              <feather-icon icon="UserIcon" class="mr-75" />
               <span class="font-weight-bold">Password</span>
             </th>
             <td class="pb-50">
@@ -29,7 +29,7 @@
           </tr>
           <tr>
             <th>
-              <amg-icon icon="LockIcon" class="mr-75" />
+              <feather-icon icon="LockIcon" class="mr-75" />
               <span class="font-weight-bold">Rol</span>
             </th>
             <td>
@@ -96,5 +96,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
