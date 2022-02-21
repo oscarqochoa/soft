@@ -28,7 +28,7 @@
           </b-col>
           <b-col cols="12">
             <validation-provider rules="required|validate-amount" v-slot="{errors}" name="Ammount">
-              <b-form-group label="Amount" label-for="amount" label-cols-md="3">
+              <b-form-group label="Amount" label-for="amount" label-cols-md="4">
                 <money
                   v-model="item.amount"
                   id="amount"

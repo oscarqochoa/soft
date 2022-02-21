@@ -3,14 +3,20 @@
     <b-row class="my-2">
       <b-col
         cols="12"
-        sm="6"
+        lg="6"
+        md="6"
+        sm="8"
         class="
           d-flex
           align-items-center
           justify-content-center justify-content-sm-start
         "
       >
-        <b-button variant="success" class="mr-1" @click="exportExcel()">
+        <b-button
+          variant="success"
+          class="mr-1 mb-lg-0 mb-md-0 mb-sm-1 mb-1"
+          @click="exportExcel()"
+        >
           <feather-icon
             icon="DownloadCloudIcon"
             class="mr-50 text-center cursor-pointer"
@@ -18,7 +24,7 @@
         </b-button>
         <b-button
           variant="primary"
-          class="mr-1"
+          class="mr-1 mb-lg-0 mb-md-0 mb-sm-1 mb-1"
           v-b-toggle.sidebar-backdrop
           @click="getMoreInfo()"
         >
@@ -30,7 +36,9 @@
       </b-col>
       <b-col
         cols="12"
-        sm="6"
+        lg="6"
+        md="6"
+        sm="12"
         class="d-flex align-items-center justify-content-end align-items-center"
       >
         <b-input-group class="mr-1">

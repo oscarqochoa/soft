@@ -1,41 +1,51 @@
 <template>
   <b-card body-class="px-0">
-    <b-card-title v-if="score.equifax === '' && score.experian === '' && score.transunion === ''">
+    <b-card-title
+      v-if="
+        score.equifax === '' && score.experian === '' && score.transunion === ''
+      "
+    >
       <h4 class="ml-1">This Lead do not have credit report</h4>
     </b-card-title>
 
     <template #header>
       <b-card-title>Credit Report</b-card-title>
     </template>
-    <b-card-body v-if="score.equifax !== '' && score.experian !== '' && score.transunion !== ''">
+    <b-card-body
+      v-if="
+        score.equifax !== '' && score.experian !== '' && score.transunion !== ''
+      "
+    >
       <b-row class="justify-content-center">
         <b-col v-if="score.transunion !== ''" cols="4" class="text-center">
-          <p style="color: #0aafdb;">TransUnion</p>
+          <p style="color: #0aafdb">TransUnion</p>
           <span
             class="show-lead-score-cr"
-            style="border: 2px solid #0aafdb;"
-            :style="`color: ${ colorScoreTransunion(score.transunion) };`"
+            style="border: 2px solid #0aafdb"
+            :style="`color: ${colorScoreTransunion(score.transunion)};`"
           >
             <!-- {{ score.transunion }} -->
             <!-- {{2}} -->
-            {{transunionCharAt =='N'? '-': score.transunion}}
+            {{ transunionCharAt == "N" ? "-" : score.transunion }}
           </span>
         </b-col>
         <b-col v-if="score.experian !== ''" cols="4" class="text-center">
-          <p style="color: #0566b7;">Experian</p>
+          <p style="color: #0566b7">Experian {{ score.experian }}</p>
           <span
             class="show-lead-score-cr"
-            style="border: 2px solid #0566b7;"
-            :style="`color: ${ colorScoreTransunion(score.experian) };`"
-          >{{ experianCharAt =='N'? '-': score.experian }}</span>
+            style="border: 2px solid #0566b7"
+            :style="`color: ${colorScoreTransunion(score.experian)};`"
+            >{{ experianCharAt == "N" ? "-" : score.experian }}</span
+          >
         </b-col>
         <b-col v-if="score.equifax !== ''" cols="4" class="text-center">
-          <p style="color: #f31414;">EQUIFAX</p>
+          <p style="color: #f31414">EQUIFAX</p>
           <span
             class="show-lead-score-cr"
-            style="border: 2px solid #f31414;"
-            :style="`color: ${ colorScoreTransunion(score.equifax) };`"
-          >{{ equifaxCharAt =='N'? '-': score.equifax }}</span>
+            style="border: 2px solid #f31414"
+            :style="`color: ${colorScoreTransunion(score.equifax)};`"
+            >{{ equifaxCharAt == "N" ? "-" : score.equifax }}</span
+          >
         </b-col>
       </b-row>
     </b-card-body>
@@ -50,7 +60,10 @@
           <span>Obtained</span>
         </template>
 
-        <card-lead-credit-report-obtained :lead="lead" :is-busy="isBusyCreditReportObtained" />
+        <card-lead-credit-report-obtained
+          :lead="lead"
+          :is-busy="isBusyCreditReportObtained"
+        />
       </b-tab>
       <b-tab :active="isTabPendingActive" :title-link-class="bgTabsNavs">
         <template #title>
@@ -74,7 +87,9 @@
           v-if="modul === 4"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           variant="primary"
-          @click="/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 241 */"
+          @click="
+            /* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 241 */
+          "
         >
           <span>Add</span>
         </b-button>
@@ -90,8 +105,11 @@
           v-if="lead.typecredits"
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           variant="primary"
-          @click="/* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 254 */"
-        >Old Credentials</b-button>
+          @click="
+            /* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 254 */
+          "
+          >Old Credentials</b-button
+        >
       </div>
     </template>
 
@@ -108,13 +126,15 @@
       <template #modal-header="{ close }">
         <h5 class="modal-title h2 text-white">Request CR</h5>
 
-        <button type="button" aria-label="Close" class="close" @click="close">×</button>
+        <button type="button" aria-label="Close" class="close" @click="close">
+          ×
+        </button>
       </template>
       <modal-request-cr
         :modul="modul"
         :lead="lead"
         :item="requestCr"
-        @onSubmit="isTabPendingActive = true, isModalRequestCR = false"
+        @onSubmit="(isTabPendingActive = true), (isModalRequestCR = false)"
       />
     </b-modal>
   </b-card>
@@ -133,12 +153,12 @@ export default {
   components: {
     CardLeadCreditReportObtained,
     CardLeadCreditReportPending,
-    ModalRequestCr
+    ModalRequestCr,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token"
+      token: "auth/token",
     }),
     transunionCharAt() {
       return this.score.transunion?.charAt(0);
@@ -148,7 +168,7 @@ export default {
     },
     equifaxCharAt() {
       return this.score.equifax?.charAt(0);
-    }
+    },
   },
   created() {
     this.countCreditReportPendings();
@@ -163,24 +183,24 @@ export default {
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     onlyRead: {
       type: Boolean,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
+      required: true,
     },
     isBusyCreditReportObtained: {
       type: Boolean,
-      required: true
+      required: true,
     },
     isBusyCreditReportPending: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -188,32 +208,32 @@ export default {
       score: {
         equifax: "",
         experian: "",
-        transunion: ""
+        transunion: "",
       },
       isTabPendingActive: false,
       requestCr: {
         type_card: null,
         send_cr: null,
         documents: new Object(),
-        document: ""
+        document: "",
       },
-      isModalRequestCR: false
+      isModalRequestCR: false,
     };
   },
   methods: {
     ...mapActions({
       A_COUNT_CREDIT_REPORT_PENDINGS:
         "CrmCreditReportStore/A_COUNT_CREDIT_REPORT_PENDINGS",
-      A_GET_LEAD_DOCUMENT: "CrmLeadStore/A_GET_LEAD_DOCUMENT"
+      A_GET_LEAD_DOCUMENT: "CrmLeadStore/A_GET_LEAD_DOCUMENT",
     }),
     setDataBlank(key) {
       this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = {
-        ...this[key]
+        ...this[key],
       };
     },
     resetData(key) {
       this[key] = {
-        ...this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`]
+        ...this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`],
       };
     },
     colorScoreTransunion(score) {
@@ -227,7 +247,7 @@ export default {
       try {
         const response = await this.A_COUNT_CREDIT_REPORT_PENDINGS({
           id: this.$route.params.id,
-          modul: this.modul
+          modul: this.modul,
         });
         if (this.isResponseSuccess(response)) {
           this.countData =
@@ -255,7 +275,7 @@ export default {
     async getDocumentLead() {
       try {
         const response = await this.A_GET_LEAD_DOCUMENT({
-          lead_id: this.lead.id
+          lead_id: this.lead.id,
         });
         if (this.isResponseSuccess(response)) {
           const documents = response.data[0];
@@ -273,9 +293,9 @@ export default {
       } catch (error) {
         console.log("Something went wrong getDocumentLead", error);
       }
-    }
+    },
   },
-  setup() {}
+  setup() {},
 };
 </script>
 
