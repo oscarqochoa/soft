@@ -9,7 +9,7 @@
             <b-button
                 class="mr-05 btn-icon rounded-circle"
                 size="sm"
-                variant="transparent"
+                variant="flat-primary"
                 @click="beforeMonth"
             >
               <tabler-icon
@@ -20,7 +20,7 @@
             <b-button
                 class="mr-05 btn-icon rounded-circle"
                 size="sm"
-                variant="transparent"
+                variant="flat-primary"
                 @click="afterMonth"
             >
               <tabler-icon

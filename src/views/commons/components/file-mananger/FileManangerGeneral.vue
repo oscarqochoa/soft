@@ -1,155 +1,175 @@
 <template>
   <div>
-    <header-slot>
-      <template #actions>
-        <b-row>
-          <b-col class="d-flex align-items-center justify-content-start">
-            <feather-icon
-              v-b-tooltip.hover
-              :title="selectedView ? 'Change to list' : 'Change to explorer'"
-              class="cursor-pointer text-important"
-              size="25"
-              :icon="selectedView ? 'ListIcon' : 'FolderIcon'"
-              @click="selectedView = !selectedView"
-            />
-          </b-col>
-          <b-col
-            cols="10"
-            class="d-flex align-items-center justify-content-end"
-          >
-            <b-button
-              class="mr-1"
-              variant="important"
-              @click="openModalNewFolder"
-            >
-              New Folder
-            </b-button>
-            <b-button variant="info" @click="openUploadFileMoadl">
-              Add Files
-            </b-button>
-          </b-col>
-        </b-row>
-      </template>
-    </header-slot>
-
-    <b-row class="mb-1 pl-1">
-      <template v-for="(route, index) in history">
-        <div
-          :key="index"
-          class="d-flex align-items-center justify-content-between cursor-pointer"
-          @click="historyClicked(index)"
-        >
-          <feather-icon
-            class="font-medium-5"
-            :icon="route.icon"
-            :class="{
-              'text-warning': route.icon === '',
-              'text-primary': route.icon === 'HomeIcon',
-            }"
-          />
-          <span
-            class="ml-50 d-flex align-items-center justify-content-center font-medium-1"
-            >{{ route.label }}</span
-          >
-          <span class="font-large-1 ml-50">/</span>
-        </div>
-      </template>
-    </b-row>
-    <b-row v-if="selectedView">
-      <b-col
-        v-for="(content, index) in currentFiles"
-        :key="index"
-        cols="6"
-        sm="4"
-        md="3"
-        lg="2"
-        xl="2"
-        :class="skin === 'dark' ? 'hover-shadow-dark' : 'hover-shadow-light'"
-      >
-        <file-component
-          :current-user="currentUser"
-          :content="content"
-          @contentClicked="contentClicked"
-          @details="openFileDetail"
-          @deleteFile="deleteFile"
-          @shareFile="openShareFileModal"
-          @edit="updateEditState"
-        />
-      </b-col>
-    </b-row>
-    <b-card v-else>
-      <b-table :fields="fields" :items="currentFiles" responsive small>
-        <template #cell(file_name)="data">
-          <span
-            v-if="selectedFile !== data.item || !editState"
-            class="cursor-pointer d-flex align-items-center justify-content-start"
-            @click="contentClicked(data.item)"
-          >
-            <amg-icon
-              :icon="
-                data.item.extension ? 'CustomFileIcon' : 'CustomFolderIcon'
-              "
-              :style="data.item.type === 'Folder' ? 'fill: #ff9f43' : ''"
-              class="mr-50"
-              :class="{ 'text-warning': data.item.type === 'Folder' }"
-              size="15"
-            />
-            <span class="font-small-4">{{
-              data.item.file_name +
-              (data.item.extension ? "." + data.item.extension : "")
-            }}</span>
-          </span>
-          <b-form-input
-            v-else
-            v-model="selectedFile.file_name"
-            size="sm"
-            @keyup.enter="renameFile(data.item)"
-            @blur="renameFile(data.item)"
-          />
-        </template>
-        <template #cell(countfiel)="data">
-          <span v-if="!data.item.extension">{{ data.item.countfiel }}</span>
-          <span v-else>{{ data.item.size }}</span>
-        </template>
-        <template #cell(user_upload)="data">
-          <p>{{ data.item.user_upload }}</p>
-          <p>{{ data.item.created_at | myGlobalWithHour }}</p>
-        </template>
-        <template #cell(user_modified)="data">
-          <div v-if="data.item.user_modified">
-            <p>{{ data.item.user_modified }}</p>
-            <p>{{ data.item.updated_at | myGlobalWithHour }}</p>
-          </div>
-        </template>
-        <template #cell(actions)="data">
+    <b-card>
+      <header-slot no-border-bottom>
+        <template #actions>
           <b-row>
             <b-col
-              v-if="currentUser.modul_id === data.item.module_id"
-              class="d-flex align-items-center justify-content-around"
+                class="d-flex align-items-end justify-content-end flex-column"
             >
-              <feather-icon
-                class="text-primary cursor-pointer"
-                icon="EditIcon"
-                size="15"
-                @click="selectedFile = data.item"
-              />
-              <feather-icon
-                class="text-danger cursor-pointer"
-                icon="TrashIcon"
-                size="15"
-                @click="asyncDeleteFile(data.item)"
-              />
-              <feather-icon
-                v-if="data.item.parent == null"
-                class="text-success cursor-pointer"
-                icon="Share2Icon"
-                size="15"
-                @click="openShareFileModal(data.item)"
-              />
+              <div>
+                <b-button
+                    class="mr-1"
+                    variant="outline-info"
+                    @click="openModalNewFolder"
+                >
+                  New Folder
+                </b-button>
+                <b-button variant="outline-primary" @click="openUploadFileMoadl">
+                  Add Files
+                </b-button>
+              </div>
             </b-col>
           </b-row>
         </template>
-      </b-table>
+      </header-slot>
+    </b-card>
+    <b-card>
+      <b-row class="pl-1">
+        <template v-for="(route, index) in history">
+          <div
+              :key="index"
+              class="d-flex align-items-center justify-content-between cursor-pointer"
+              @click="historyClicked(index)"
+          >
+            <feather-icon
+                class="font-medium-5"
+                :icon="route.icon"
+                :class="{
+              'text-warning': route.icon === '',
+              'text-primary': route.icon === 'HomeIcon',
+            }"
+            />
+            <span
+                class="ml-50 d-flex align-items-center justify-content-center font-medium-1"
+            >{{ route.label }}</span
+            >
+            <span class="font-large-1 ml-50">/</span>
+          </div>
+        </template>
+      </b-row>
+    </b-card>
+    <b-card
+      class="p-0"
+      body-class="py-0"
+    >
+      <b-row class="my-1">
+        <b-col class="d-flex align-items-center justify-content-end py-0">
+          <b-form-radio-group
+              buttons
+              button-variant="outline-primary"
+              v-model="selectedView"
+          >
+            <b-form-radio
+                :value="true"
+            >
+              <feather-icon icon="FolderIcon" size="18" />
+            </b-form-radio>
+            <b-form-radio
+                :value="false"
+            >
+              <feather-icon icon="ListIcon" size="18" />
+            </b-form-radio>
+
+          </b-form-radio-group>
+        </b-col>
+      </b-row>
+      <b-row class="mb-4" v-if="selectedView">
+        <b-col
+            v-for="(content, index) in currentFiles"
+            :key="index"
+            cols="6"
+            sm="4"
+            md="3"
+            lg="2"
+            xl="2"
+            :class="skin === 'dark' ? 'hover-shadow-dark' : 'hover-shadow-light'"
+        >
+          <file-component
+              :current-user="currentUser"
+              :content="content"
+              @contentClicked="contentClicked"
+              @details="openFileDetail"
+              @deleteFile="deleteFile"
+              @shareFile="openShareFileModal"
+              @edit="updateEditState"
+          />
+        </b-col>
+      </b-row>
+      <b-row class="mb-1" v-else>
+        <b-table :fields="fields" :items="currentFiles" responsive>
+          <template #cell(file_name)="data">
+          <span
+              v-if="selectedFile !== data.item || !editState"
+              class="cursor-pointer d-flex align-items-center justify-content-start"
+              @click="contentClicked(data.item)"
+          >
+            <amg-icon
+                :icon="
+                data.item.extension ? 'CustomFileIcon' : 'CustomFolderIcon'
+              "
+                :style="data.item.type === 'Folder' ? 'fill: #ff9f43' : ''"
+                class="mr-50"
+                :class="{ 'text-warning': data.item.type === 'Folder' }"
+                size="15"
+            />
+            <span class="font-small-4">{{
+                data.item.file_name +
+                (data.item.extension ? "." + data.item.extension : "")
+              }}</span>
+          </span>
+            <b-form-input
+                v-else
+                v-model="selectedFile.file_name"
+                size="sm"
+                @keyup.enter="renameFile(data.item)"
+                @blur="renameFile(data.item)"
+            />
+          </template>
+          <template #cell(countfiel)="data">
+            <span v-if="!data.item.extension">{{ data.item.countfiel }}</span>
+            <span v-else>{{ data.item.size }}</span>
+          </template>
+          <template #cell(user_upload)="data">
+            <p>{{ data.item.user_upload }}</p>
+            <p>{{ data.item.created_at | myGlobalWithHour }}</p>
+          </template>
+          <template #cell(user_modified)="data">
+            <div v-if="data.item.user_modified">
+              <p>{{ data.item.user_modified }}</p>
+              <p>{{ data.item.updated_at | myGlobalWithHour }}</p>
+            </div>
+          </template>
+          <template #cell(actions)="data">
+            <b-row>
+              <b-col
+                  v-if="currentUser.modul_id === data.item.module_id"
+                  class="d-flex align-items-center justify-content-around"
+              >
+                <feather-icon
+                    class="text-primary cursor-pointer"
+                    icon="EditIcon"
+                    size="15"
+                    @click="selectedFile = data.item"
+                />
+                <feather-icon
+                    class="text-danger cursor-pointer"
+                    icon="TrashIcon"
+                    size="15"
+                    @click="asyncDeleteFile(data.item)"
+                />
+                <feather-icon
+                    v-if="data.item.parent == null"
+                    class="text-success cursor-pointer"
+                    icon="Share2Icon"
+                    size="15"
+                    @click="openShareFileModal(data.item)"
+                />
+              </b-col>
+            </b-row>
+          </template>
+        </b-table>
+      </b-row>
     </b-card>
     <b-sidebar id="sidebar-right" right bg-variant="white" lazy backdrop>
       <b-container>
@@ -158,7 +178,7 @@
             v-if="selectedFile !== {}"
             class="d-flex align-items-center justify-content-center"
           >
-            <feather-icon
+            <amg-icon
               size="50"
               :icon="
                 selectedFile.type === 'Folder'
@@ -250,8 +270,10 @@
       v-model="uploadFileModal"
       title="Upload File"
       modal-class="modal-primary"
+      body-class="p-50"
       button-size="sm"
       ok-title="Ok"
+      hide-footer
       @hidden="actionOnHideUploadFileModal"
     >
       <drag-and-drop v-model="files" :files-array="files" />

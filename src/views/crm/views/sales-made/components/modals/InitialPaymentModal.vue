@@ -78,7 +78,7 @@
                 : true
             "
             class="btn-icon ml-1"
-            variant="flat-danger"
+            variant="success"
             size="sm"
             @click="deleteCard(data.item.id)"
           >
@@ -113,7 +113,7 @@
             <b-input-group-append>
               <b-button
                   class="btn-icon"
-                  variant="flat-danger"
+                  variant="success"
                 :disabled="initial_payment.cfeestatus == 0 ? false : true"
                 size="sm"
                 @click="savePayment(data.item.id, 'campo' + data.item.id)"
@@ -135,7 +135,7 @@
                 : true
             "
             class="btn-icon"
-            variant="danger"
+            variant="flat-danger"
             size="sm"
             @click="deleteCard(data.item.id)"
           >

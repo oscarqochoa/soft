@@ -557,7 +557,7 @@
                   data.item.initial_payment_status == 2
               "
                   variant="outline-success"
-                  class="m-10px"
+                  class="m-10px w-100"
                   size="sm"
                   @click="revisionSale(5, data.item, data.index)"
               >Revission</b-button>
