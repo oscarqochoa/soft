@@ -1,10 +1,11 @@
 <template>
   <validation-observer ref="form">
     <b-modal
+        footer-class="px-50"
       id="crm-sm-modal-contract-fee"
       v-model="ownControl"
       title-class="h3 text-white font-weight-bolder"
-      size="lg"
+      :size="modalSize"
       modal-class="modal-primary"
       title="Contract Fee"
       scrollable
@@ -18,7 +19,7 @@
           class="sticky-top"
         />
         <b-row>
-          <b-col>
+          <b-col cols="12" md="6">
             <b-row>
               <b-col class="d-flex align-items-center">
                 <span>Fee:</span>
@@ -119,7 +120,7 @@
               </b-col>
             </b-row>
           </b-col>
-          <b-col class="mt-1">
+          <b-col cols="12" md="6" class="mt-1">
             <b-row>
               <b-col>
                 <p>Method of Payment :</p>
@@ -178,7 +179,7 @@
               >
                 Start Date :
               </b-col>
-              <b-col class="d-flex align-items-center justify-content-between">
+              <b-col class="d-flex align-items-center justify-content-center">
                 <validation-provider
                   v-slot="{ errors }"
                   name="dayCfee"
@@ -197,6 +198,7 @@
                 <validation-provider
                   v-slot="{ errors }"
                   name="monthCfee"
+                  style="margin-right: 2px; margin-left: 2px"
                   rules="required"
                 >
                   <b-form-select
@@ -246,7 +248,7 @@
         <b-col>
           <b-row>
             <b-col>
-              <b-table :items="cards" :fields="fieldsT1" size="sm">
+              <b-table :items="cards" :fields="fieldsT1" size="sm" responsive>
                 <template v-slot:cell(select)="data">
                   <b-form-radio
                     v-model="cardId"
@@ -258,10 +260,11 @@
               </b-table>
             </b-col>
           </b-row>
-          <b-container class="ml-1 pr-3">
+          <b-container class="ml-1">
             <b-row class="d-flex align-items-center justify-content-end mt-1">
               <b-col class="d-flex align-items-center justify-content-end">
                 <b-button
+                    class="mr-1"
                   v-if="!valorEdit"
                   variant="success"
                   size="sm"
@@ -275,10 +278,11 @@
         </b-col>
       </b-row>
       <template #modal-footer>
-        <b-row class="w-100">
-          <b-col class="d-flex align-items-center justify-content-end">
+        <b-row class="w-100 p-0">
+          <b-col class="d-flex align-items-center justify-content-end p-0">
             <b-button
               variant="primary"
+              size="sm"
               :disabled="!cardId && methodPayment === 0 && cardType === 0"
               @click="saveContract"
             >
@@ -352,10 +356,12 @@ export default {
         {
           label: "Card Holder Name",
           key: "cardholdername",
+          thStyle: {minWidth: "174px !important"},
         },
         {
           label: "Card Number",
           key: "cardnumber",
+          thStyle: {minWidth: "195px !important"},
           formatter: (value) => `XXXX-XXXX-XXXX-${value}`,
         },
         {
@@ -390,6 +396,10 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    modalSize() {
+      if (this.screenWidth > 992) return 'lg'
+      return 'xlg'
+    },
     valorEdit() {
       return (
         this.contractFee.editModal == false ||

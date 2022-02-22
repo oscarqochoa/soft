@@ -630,8 +630,8 @@ export default {
           mid1: [],
           mid2: [],
         },
-        fileAudio: null,
-        fileName: null,
+        fileAudio: "",
+        fileName: "",
         file: null,
       },
       noCredit: [],
@@ -719,6 +719,10 @@ export default {
     this.note.country.value = this.noteInfo.originCountry
   },
   methods: {
+    deleteAudio() {
+      this.note.fileAudio = ""
+      this.note.fileName = ""
+    },
     onAudioChange() {
       const file = this.audioCall
       const reader = new FileReader()
@@ -775,6 +779,7 @@ export default {
         note: this.answersNote(),
         originCountry: this.note.country.value,
         idLead: this.noteInfo.idLead,
+        lead_id: this.noteInfo.idLead,
       }
       return params
     },
@@ -885,7 +890,7 @@ export default {
           if (answer.question_id === 1061) this.note.information.value = answer.answer
           if (answer.question_id === 26) this.note.suggestion.value = answer.answer
           if (answer.question_id === 1055) {
-            if (answer.answer != 0) {
+            if (answer.url != 0) {
               this.note.fileAudio = answer.answer
               this.note.fileName = answer.url.split('/')[2]
             }
