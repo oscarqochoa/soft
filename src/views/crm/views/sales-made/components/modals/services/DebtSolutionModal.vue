@@ -80,6 +80,7 @@
           :header-s="headerS"
           :type-modal="typeModal"
           @hideModal="hideModal"
+          
         />
       </tab-content>
     </form-wizard>
