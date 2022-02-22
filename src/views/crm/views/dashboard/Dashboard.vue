@@ -581,7 +581,6 @@ export default {
       return isTouchDevice()
 
     },
-
     classWrapper: function () {
       return "item-wrapper justify-content-start align-items-center";
     },
@@ -596,7 +595,6 @@ export default {
       const { width, height } = this.sizeScreenByPixels;
       return height.value;
     },
-    
     statusHeightByScreenColOne: function () {
       switch (this.allSizeOfScreen) {
         case "xxl":

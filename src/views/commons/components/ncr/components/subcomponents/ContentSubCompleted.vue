@@ -116,6 +116,7 @@
         <template #cell(cr)="data">
           <div v-if="status == 1">
             <router-link
+              v-if="data.item.cr == 1"
               :to="{
                 name: 'report-lead',
                 params: {idfile:data.item.score_id,idlead:data.item.lead_id,
@@ -133,7 +134,7 @@
           </div>
           <div v-if="status == 2">
             <a :href="data.item.route_html" v-if="data.item.route_html" target="_blanck">
-              <amg-icon size="23" icon="CRInvalidIcon"></amg-icon>
+              <amg-icon size="23" style="color:blue" icon="CRInvalidIcon"></amg-icon> 
             </a>
           </div>
         </template>
