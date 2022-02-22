@@ -11,6 +11,7 @@
       body-class="mb-2"
       @hidden="closeModal"
       :no-close-on-backdrop="true"
+      centered
     >
       <!-- Form -->
       <ValidationObserver ref="form">

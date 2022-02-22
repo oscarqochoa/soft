@@ -3,7 +3,7 @@
     id="crm-sm-modal-initial-payment"
     v-model="ownControl"
     title-class="h3 text-white font-weight-bolder"
-    size="lg"
+    :size="modalSize"
     title="Initial Payment"
     scrollable
     modal-class="modal-primary"
@@ -16,7 +16,7 @@
         class="sticky-top mt-1"
       />
       <b-row>
-        <b-col>
+        <b-col sm="6" cols="12">
           <label>Amount</label>
           <b-input-group prepend="$">
             <money
@@ -27,7 +27,9 @@
             />
           </b-input-group>
         </b-col>
-        <b-col>
+        <b-col
+            sm="6" cols="12"
+        >
           <label class="mt-1">Method of Payment</label>
           <b-form-radio-group
             v-model="method"
@@ -57,7 +59,7 @@
       "
       class="mt-3 margin-0"
     >
-      <b-table small :fields="fieldsT1" :items="initial_payment.allcards">
+      <b-table small :fields="fieldsT1" :items="initial_payment.allcards" responsive>
         <template v-slot:cell(select)="data">
           <b-form-radio
             :ref="'campo' + data.item.id"
@@ -93,9 +95,9 @@
       "
       class="mt-1 margin-0"
     >
-      <b-table small :fields="fieldsT2" :items="initial_payment.allcards">
+      <b-table small :fields="fieldsT2" :items="initial_payment.allcards" responsive>
         <template v-slot:cell(amount)="data">
-          <b-input-group>
+          <b-input-group style="min-width: 130px !important;">
             <money
               :ref="'campo' + data.item.id"
               v-model="data.item.model"
@@ -110,7 +112,8 @@
             />
             <b-input-group-append>
               <b-button
-                variant="success"
+                  class="btn-icon"
+                  variant="flat-danger"
                 :disabled="initial_payment.cfeestatus == 0 ? false : true"
                 size="sm"
                 @click="savePayment(data.item.id, 'campo' + data.item.id)"
@@ -131,6 +134,7 @@
                 ? false
                 : true
             "
+            class="btn-icon"
             variant="danger"
             size="sm"
             @click="deleteCard(data.item.id)"
@@ -172,7 +176,7 @@
       v-if="method === 'credit-card' && listCards.length > 0"
       class="mt-3 margin-0"
     >
-      <b-table :fields="fieldsT3" :items="listCards" small />
+      <b-table :fields="fieldsT3" :items="listCards" small responsive/>
     </div>
     <b-row
       v-if="
@@ -317,11 +321,13 @@ export default {
         {
           label: "Card Holder Name",
           key: "cardholdername",
+          thStyle: {minWidth: "140px !important"},
         },
         {
           label: "Card Number",
           key: "cardnumber",
           formatter: (value) => `XXXX-XXXX-XXXX-${value}`,
+          thStyle: {minWidth: "160px !important"},
         },
         {
           label: "Type",
@@ -357,11 +363,13 @@ export default {
         {
           label: "Card Holder Name",
           key: "cardholdername",
+          thStyle: {minWidth: "135px !important"},
         },
         {
           label: "Card Number",
           key: "cardnumber",
           formatter: (value) => `XXXX-XXXX-XXXX-${value}`,
+          thStyle: {minWidth: "152px !important"},
         },
         {
           label: "Type",
@@ -389,24 +397,29 @@ export default {
         {
           label: "Transaction ID",
           key: "transaction_id",
+          thStyle: {minWidth: "120px !important"},
         },
         {
           label: "Amount",
           key: "amount",
           formatter: (value) => `$ ${value}`,
+          thStyle: {minWidth: "90px !important"},
         },
         {
           label: "Credit Card",
           key: "card_number",
+          thStyle: {minWidth: "110px !important"},
         },
         {
           label: "User",
           key: "user",
+          thStyle: {minWidth: "100px !important"},
         },
         {
           label: "Date",
           key: "settlement_date",
           formatter: (value) => this.$options.filters.myGlobalDay(value),
+          thStyle: {minWidth: "160px !important"},
         },
       ],
       notApiCards: false,
@@ -416,6 +429,10 @@ export default {
     };
   },
   computed: {
+    modalSize() {
+      if (this.screenWidth > 992) return 'lg'
+      return 'xlg'
+    },
     valorEdit() {
       return (
         this.initial_payment.type == 1 ||

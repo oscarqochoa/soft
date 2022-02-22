@@ -675,10 +675,12 @@ export default {
     },
   },
   async created() {
+    this.addPreloader()
     await this.getFirstNote()
     await this.listTypeBusiness()
     await this.getCountries()
     this.note.country.value = this.noteInfo.originCountry
+    this.removePreloader()
   },
   methods: {
     async saveNotesIncomplete() {
