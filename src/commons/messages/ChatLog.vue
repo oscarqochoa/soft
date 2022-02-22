@@ -125,12 +125,20 @@
               v-if="msgData.was_sent == false && !msgData.error"
             ></b-spinner>
             <div
-              class="d-flex flex-wrap text-break justify-content-between align-items-center mt-1"
+              class="
+                d-flex
+                flex-wrap
+                text-break
+                justify-content-between
+                align-items-center
+                mt-1
+              "
               :class="{ 'mx-1': currentBreakPoint != 'xs' }"
             >
+              <!-- :key="file.id" -->
               <div
-                v-for="file in msgData.files"
-                :key="file.id"
+                v-for="(file, index) in msgData.files"
+                :key="index"
                 style="padding: 10px; border-radius: 5px"
                 :style="{
                   background:
@@ -147,12 +155,15 @@
                 }"
               >
                 <span>{{ file.name || file }}</span>
-                <span
-                  ><feather-icon
-                    icon="DownloadIcon"
-                    class="text-primary"
-                    style="margin-left: 20px"
-                /></span>
+                <a :href="msgData.route_temp[index]" download target="_blank">
+                  <span>
+                    <feather-icon
+                      icon="DownloadIcon"
+                      class="text-primary"
+                      style="margin-left: 20px"
+                    />
+                  </span>
+                </a>
               </div>
             </div>
             <div class="d-flex justify-content-end align-items-center w-100">
@@ -178,6 +189,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import { computed } from "@vue/composition-api";
 import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 import Ripple from "vue-ripple-directive";
@@ -270,6 +282,9 @@ export default {
       this.note.subjectresp = "";
       this.note.contentresp = "";
     },
+    async downloadFile(url, name) {
+      // window.open(url, "_blank");
+    },
   },
 
   setup(props) {
@@ -300,6 +315,7 @@ export default {
           msgGroup.messages.push({
             msg: msg.message,
             time: msg.time,
+            temp_files: msg.route_temp,
             ...msg,
           });
         } else {
@@ -314,6 +330,7 @@ export default {
               {
                 msg: msg.message,
                 time: msg.time,
+                temp_files: msg.route_temp,
                 ...msg,
               },
             ],

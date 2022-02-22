@@ -183,7 +183,14 @@
           </vue-perfect-scrollbar>
           <div
             v-if="subjectresp"
-            class="chat-reply pl-1 pr-1 d-flex justify-content-between align-items-center"
+            class="
+              chat-reply
+              pl-1
+              pr-1
+              d-flex
+              justify-content-between
+              align-items-center
+            "
             :style="{ height: '78px', overflow: 'auto' }"
           >
             <b-alert
@@ -214,6 +221,7 @@
         <!-- Chat Reply -->
 
         <!-- Message Input -->
+
         <chat-compose
           style="height: calc(50% - 32.5px)"
           @scroll-to-bottom="scrollToBottom"
