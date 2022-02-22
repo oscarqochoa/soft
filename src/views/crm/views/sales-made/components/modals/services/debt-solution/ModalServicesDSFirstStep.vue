@@ -63,6 +63,7 @@
           <td>
             <div>{{ total_interest + " %" }}</div>
           </td>
+          <td colspan="3"/>
         </template>
       </b-table>
     </b-row>

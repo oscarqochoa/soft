@@ -1,7 +1,7 @@
 <template>
   <b-modal
     v-model="ownShow"
-    modal-class="modal-primary"
+    modal-class=" modal-primary unaclase"
     modal
     header-class="p-0"
     header-bg-variant="transparent border-bottom border-bottom-2"
@@ -29,7 +29,6 @@
       :start-index="startIndex"
       :finish-button-text="(isModalShow)? 'Close' : 'Submit'"
       back-button-text="Previous"
-      class="mb-3"
       @on-complete="formSubmitted"
     >
       <!-- accoint details tab -->
@@ -282,8 +281,8 @@ export default {
 @import "@core/scss/vue/libs/vue-wizard.scss";
 @import "@core/scss/vue/libs/vue-select.scss";
 .wizard-tab-content {
-  overflow: auto;
-  height: 300px;
+  overflow: scroll;
+  max-height: 45vh !important;
 }
 .wizard-card-footer {
   padding-top: 15px !important;
@@ -293,4 +292,10 @@ export default {
 //  top: 0 !important;
 //  z-index: 99;
 //}
+@media(min-height: 800px) {
+  .wizard-tab-content {
+    overflow: scroll;
+    max-height: 60vh !important;
+  }
+}
 </style>
