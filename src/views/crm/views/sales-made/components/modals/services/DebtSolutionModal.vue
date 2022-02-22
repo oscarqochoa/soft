@@ -190,12 +190,15 @@ export default {
       return new Promise((resolve, reject) => {
         if (this.isModalShow) resolve(true)
         else if (!this.passwordIsCorrect && this.isFirstStep) {
+          const creditorsLength = this.$refs.firstStep.getCreditorsLength()
+          const needsValidatePassword = this.$refs.firstStep.needsValidatePassword()
+          const message = `${creditorsLength > 0 ? '' : 'Please add creditor'} ${!needsValidatePassword && creditorsLength > 0 ? 'Please validate password' : ''}`
           this.showToast(
             'danger',
             'top-right',
             'Validate error',
             'XIcon',
-            'Please validate password',
+            message,
           )
           reject()
         } else {

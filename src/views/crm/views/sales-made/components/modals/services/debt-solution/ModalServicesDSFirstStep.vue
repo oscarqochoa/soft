@@ -245,6 +245,9 @@ export default {
       this.openmodal = true
       this.statemodal = 1
     },
+    needsValidatePassword() {
+      return this.creditors.filter(element => element.state1 == 1).length > 0
+    },
     async allDebtSolution() {
       try {
         const response = await amgApi.post(
@@ -519,6 +522,9 @@ export default {
       setTimeout(() => {
         this.exportPdfDisabled = false
       }, 10000)
+    },
+    getCreditorsLength() {
+      return this.creditors.length
     },
   },
 }
