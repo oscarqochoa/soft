@@ -270,6 +270,7 @@ export default {
     }
   },
   async mounted() {
+    this.addPreloader()
     this.client = this.salesClient
     if (this.program) {
       await this.searchRate()
@@ -279,6 +280,7 @@ export default {
     }
     this.totalAmount = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
     this.ownControl = true
+    this.removePreloader()
   },
   computed: {
     ...mapGetters({

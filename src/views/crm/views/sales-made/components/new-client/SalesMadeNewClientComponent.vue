@@ -1580,7 +1580,6 @@ export default {
       this.modal.notes = false
       if (status) {
         await this.updateRow()
-        await this.$refs["new-client-done-table"].refresh()
         this.removePreloader()
         this.showSuccessSwal('OPERATION SUCCESSFULLY')
       }
@@ -1627,7 +1626,6 @@ export default {
     async hideModalProgram(refresh) {
       if (refresh) {
         await this.updateRow()
-        await this.$refs["new-client-done-table"].refresh()
       }
       this.modalData.programs.programSelected = ''
       this.modal.programs = false
