@@ -93,6 +93,7 @@ class MessageService {
           subjectresp: message.subject_resp,
           files: JSON.parse(message.file_name),
           route: JSON.parse(message.route),
+          route_temp: message.route_temp,
           own: message.own,
           seen: message.seen,
           image: message.image,

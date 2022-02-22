@@ -33,7 +33,11 @@
             <span class="my-suggestion-item">{{ suggestion.item.value }}</span>
           </template>
         </vue-autosuggest>
-        <feather-icon icon="AlertCircleIcon" class="text-danger" v-if="errors[0]"></feather-icon>
+        <feather-icon
+          icon="AlertCircleIcon"
+          class="text-danger"
+          v-if="errors[0]"
+        ></feather-icon>
       </validation-provider>
     </div>
     <validation-provider
@@ -45,12 +49,15 @@
       <quill-editor
         id="quil-content"
         :value="note.content"
-        @change="v => note.content = v.html"
+        @change="(v) => (note.content = v.html)"
         :options="editorOption"
-        style="height: 50%; overflow: hidden;"
-        :style="{ background: skin=='dark'?'':'#FFF' }"
+        style="height: 50%; overflow: hidden"
+        :style="{ background: skin == 'dark' ? '' : '#FFF' }"
       />
-      <div style="height: calc(50% - 48px); overflow: auto" class="p-1 d-flex-inline">
+      <div
+        style="height: calc(50% - 48px); overflow: auto"
+        class="p-1 d-flex-inline"
+      >
         <b-badge
           variant="important"
           v-for="(file, index) in note.files"
@@ -80,13 +87,13 @@
         ></upload-files>
         <b-button
           style="height: 100%"
-          :style="{width: currentBreakPoint == 'xs'?'20%':'100px'}"
+          :style="{ width: currentBreakPoint == 'xs' ? '20%' : '100px' }"
           class="d-flex justify-content-center align-items-center mr-1"
           variant="info"
           v-b-modal.quick-notes-modal
         >
           <span
-            :style="{marginRight: currentBreakPoint != 'xs'?'10px':''}"
+            :style="{ marginRight: currentBreakPoint != 'xs' ? '10px' : '' }"
             v-if="currentBreakPoint == 'xs'"
           >
             <feather-icon icon="ListIcon" />
@@ -96,19 +103,26 @@
         <b-button
           style="height: 100%"
           class="d-flex justify-content-center align-items-center"
-          :style="{width: currentBreakPoint == 'xs'?'20%':'100px'}"
+          :style="{ width: currentBreakPoint == 'xs' ? '20%' : '100px' }"
           variant="primary"
           @click="sendMessageReply"
           :disabled="invalid"
         >
-          <span :style="{marginRight: currentBreakPoint != 'xs'?'10px':''}">
+          <span
+            :style="{ marginRight: currentBreakPoint != 'xs' ? '10px' : '' }"
+          >
             <feather-icon icon="SendIcon" />
           </span>
           <span v-if="currentBreakPoint != 'xs'">Send</span>
         </b-button>
       </div>
     </validation-provider>
-    <b-modal id="quick-notes-modal" title="Quick Notes" scrollable body-class="p-0 blue-scrollbar">
+    <b-modal
+      id="quick-notes-modal"
+      title="Quick Notes"
+      scrollable
+      body-class="p-0 blue-scrollbar"
+    >
       <chat-quick-notes @on-select-note="onSelectNote"></chat-quick-notes>
       <template #modal-footer>
         <div></div>
@@ -131,18 +145,18 @@ export default {
   props: {
     subjectresp: {
       type: String,
-      default: ""
+      default: "",
     },
     contentresp: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   async mounted() {
     await this.A_GET_USERS_TO_MESSAGE();
   },
   directives: {
-    Ripple
+    Ripple,
   },
   components: {
     // 3rd Party
@@ -150,27 +164,27 @@ export default {
     vSelect,
     ChatQuickNotes,
     VueAutosuggest,
-    UploadFiles
+    UploadFiles,
   },
   computed: {
     ...mapState({
-      S_USERS_TO_MESSAGE: state => state.MessageStore.S_USERS_TO_MESSAGE,
-      S_USER_TO_MESSAGE: state => state.MessageStore.S_USER_TO_MESSAGE,
-      S_USER_MESSAGES: state => state.MessageStore.S_USER_MESSAGES
+      S_USERS_TO_MESSAGE: (state) => state.MessageStore.S_USERS_TO_MESSAGE,
+      S_USER_TO_MESSAGE: (state) => state.MessageStore.S_USER_TO_MESSAGE,
+      S_USER_MESSAGES: (state) => state.MessageStore.S_USER_MESSAGES,
     }),
     ...mapGetters({
       currentUser: "auth/currentUser",
       skin: "appConfig/skin",
-      currentBreakPoint: "app/currentBreakPoint"
-    })
+      currentBreakPoint: "app/currentBreakPoint",
+    }),
   },
   data() {
     return {
       editorOption: {
         modules: {
-          toolbar: "#quill-toolbar"
+          toolbar: "#quill-toolbar",
         },
-        placeholder: "Message"
+        placeholder: "Message",
       },
       note: {
         temporalid: "",
@@ -182,22 +196,22 @@ export default {
         contentresp: "",
         type: "",
         text: "",
-        files: []
+        files: [],
       },
       showCcField: false,
       showBccField: false,
-      filteredOptions: []
+      filteredOptions: [],
     };
   },
   methods: {
     ...mapActions({
       A_GET_USERS_TO_MESSAGE: "MessageStore/A_GET_USERS_TO_MESSAGE",
-      A_SAVE_MESSAGE_REPLY: "MessageStore/A_SAVE_MESSAGE_REPLY"
+      A_SAVE_MESSAGE_REPLY: "MessageStore/A_SAVE_MESSAGE_REPLY",
     }),
     ...mapMutations({
       SET_LAST_CHAT_CONTACT_DATE: "MessageStore/SET_LAST_CHAT_CONTACT_DATE",
       SET_LAST_MESSAGE_TO_ACTIVE_CHAT:
-        "MessageStore/SET_LAST_MESSAGE_TO_ACTIVE_CHAT"
+        "MessageStore/SET_LAST_MESSAGE_TO_ACTIVE_CHAT",
     }),
     onSelectNote(note) {
       this.note.content = note.body;
@@ -214,7 +228,7 @@ export default {
         contentresp: "",
         type: "",
         text: "",
-        files: []
+        files: [],
       };
       this.filteredOptions = [];
       this.$refs.form.reset();
@@ -253,13 +267,13 @@ export default {
           message: this.note.content,
           time: moment().format("YYYY-MM-DD HH:mm:ss"),
           was_sent: false,
-          index: this.S_USER_MESSAGES.chat.chat.length
+          index: this.S_USER_MESSAGES.chat.chat.length,
         });
         this.$emit("scroll-to-bottom");
         await this.A_SAVE_MESSAGE_REPLY({
           ...this.note,
           index: this.S_USER_MESSAGES.chat.chat.length - 1,
-          originalMessageIndex: null
+          originalMessageIndex: null,
         });
         this.$emit("on-send-message-reply");
         await this.SET_LAST_CHAT_CONTACT_DATE(this.S_USER_TO_MESSAGE.id);
@@ -268,7 +282,7 @@ export default {
     },
     deleteFile(index) {
       this.note.files.splice(index, 1);
-    }
+    },
   },
   watch: {
     S_USER_TO_MESSAGE() {
@@ -281,8 +295,8 @@ export default {
       } else {
         this.note.subject = "";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -345,3 +359,4 @@ form ::v-deep {
   }
 }
 </style>
+
