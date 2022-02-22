@@ -16,7 +16,7 @@
             class="card-logo"
           >
             <img
-              :src="`./assets${item.module_icon}`"
+              :src="baseUrl + item.module_icon"
               alt="Logo"
               width="65"
               height="65"
@@ -38,7 +38,7 @@
             @click="redirectToOldSoft(item.module_route)"
           >
             <img
-              :src="`./assets${item.module_icon}`"
+              :src="baseUrl + item.module_icon"
               alt="Logo"
               width="65"
               height="65"

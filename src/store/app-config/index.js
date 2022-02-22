@@ -41,7 +41,11 @@ export default {
       localStorage.setItem("vuexy-skin", skin);
 
       // Update DOM for dark-layout
-      if (skin === "dark") document.body.classList.add("dark-layout");
+      if (skin === "dark") document.querySelector('html').classList.add("dark");
+      else if (document.querySelector('html').className.match("dark"))
+        document.querySelector('html').classList.remove("dark");
+
+        if (skin === "dark") document.body.classList.add("dark-layout");
       else if (document.body.className.match("dark-layout"))
         document.body.classList.remove("dark-layout");
     },
