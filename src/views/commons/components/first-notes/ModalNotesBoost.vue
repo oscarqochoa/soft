@@ -538,14 +538,15 @@ export default {
     }
   },
 
-  created() {
-    this.getFirstNote()
-    this.getListTypeGoal()
-    this.getCountrys()
+  async created() {
+    this.addPreloader()
+    await this.getFirstNote()
+    await this.getListTypeGoal()
+    await this.getCountrys()
     this.getOriginCountry()
+    this.removePreloader()
   },
 
-  mounted() {},
 
   computed: {
     ...mapGetters({

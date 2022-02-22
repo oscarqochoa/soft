@@ -337,6 +337,7 @@ export default {
     },
   },
   async created() {
+    this.addPreloader()
     await this.getNotesSales()
     await this.getCountrys()
     this.filterQuestions()
@@ -348,6 +349,7 @@ export default {
       )
     }
     this.cleanNotes()
+    this.removePreloader()
   },
   methods: {
     async getNotesSales() {

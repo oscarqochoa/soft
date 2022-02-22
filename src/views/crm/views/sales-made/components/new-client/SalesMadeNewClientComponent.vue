@@ -1032,6 +1032,7 @@ import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasC
 import ModalNotesAll from '@/views/commons/components/first-notes/ModalNotesAll.vue'
 import ModalNotesSpecialist from '@/views/commons/components/first-notes/ModalNotesSpecialist.vue'
 import ApproveSupervisorModal from '@/views/crm/views/sales-made/components/modals/ApproveSupervisorModal.vue'
+import Vue from "vue";
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -1579,6 +1580,7 @@ export default {
       this.modal.notes = false
       if (status) {
         await this.updateRow()
+        await this.$refs["new-client-done-table"].refresh()
         this.removePreloader()
         this.showSuccessSwal('OPERATION SUCCESSFULLY')
       }
@@ -1617,7 +1619,7 @@ export default {
       keysNewRow.forEach((key) => {
         if (keysOldRow.includes(key)) {
           console.log(key)
-          this.$set(this.items[this.selectedIndex], key, newRow[key])
+          Vue.set(this.items[this.selectedIndex], key, newRow[key])
         }
       })
       console.log(this.items[this.selectedIndex])
@@ -1625,10 +1627,11 @@ export default {
     async hideModalProgram(refresh) {
       if (refresh) {
         await this.updateRow()
+        await this.$refs["new-client-done-table"].refresh()
       }
       this.modalData.programs.programSelected = ''
       this.modal.programs = false
-      this.$store.commit('app/SET_LOADING', false)
+      this.removePreloader()
     },
     openTrackingModal(program, client, tabla) {
       this.modalData.tracking.program = program

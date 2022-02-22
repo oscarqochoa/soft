@@ -100,9 +100,11 @@ export default {
     }
   },
 
-  created() {
+  async created() {
     // this.modalUp = true
-    this.getCountries()
+    this.addPreloader()
+    await this.getCountries()
+    this.removePreloader()
   },
   methods: {
     hideModal(status) {
