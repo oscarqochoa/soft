@@ -2,7 +2,7 @@
   <div>
     <b-modal
       modal
-      centered
+      
       :title="`${nameUser}`"
       v-model="mutableIfModalCard"
       size="lg"
