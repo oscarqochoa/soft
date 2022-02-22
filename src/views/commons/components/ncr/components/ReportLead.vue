@@ -25,7 +25,7 @@
       </b-card>
       <b-card no-body class="mb-1">
         <div class="pb-1">
-          <table class="table table-bordered">
+          <table class="table table-bordered table-responsive">
             <tr :class="classAdd">
               <th colspan="4">
                 <span>Personal Profile</span>
@@ -248,7 +248,7 @@
       <b-card no-body class="mb-1">
         <!-- Table Credit Summary -->
         <div class="pb-1">
-          <table class="table table-bordered">
+          <table class="table table-bordered table-responsive">
             <tr :class="classAdd">
               <th colspan="4">Credit Summary</th>
             </tr>
@@ -353,7 +353,7 @@
               </b-col>
             </b-row>
           </div>
-          <table class="table table-bordered">
+          <table class="table table-bordered table-responsive">
             <tr :class="classAdd">
               <th colspan="4">
                 <span>Credit Inquiries</span>
@@ -550,7 +550,7 @@
             <b-col cols="6"></b-col>
           </b-row>
 
-          <table class="table table-bordered">
+          <table class="table table-bordered table-responsive">
             <tr :class="classAdd">
               <th colspan="4">Public Information</th>
             </tr>
@@ -774,7 +774,7 @@
               </b-col>
             </b-row>
           </div>
-          <table class="table table-bordered">
+          <table class="table table-bordered table-responsive">
             <tr :class="classAdd">
               <th colspan="4">Account History</th>
             </tr>

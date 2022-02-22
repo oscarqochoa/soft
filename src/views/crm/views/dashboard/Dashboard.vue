@@ -578,7 +578,6 @@ export default {
     }),
     isTouch(){
       return isTouchDevice()
-
     },
     classWrapper: function () {
       return "item-wrapper justify-content-start align-items-center";
