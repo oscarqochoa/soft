@@ -170,9 +170,11 @@ export default {
     },
   },
   async created() {
+    this.addPreloader()
     if (!this.salesClient.account_id) this.salesClient.account_id = this.salesClient.client_account_id
     await this.leyendDebtsolution()
     this.ownShow = true
+    this.removePreloader()
   },
   methods: {
     isLastStep() {

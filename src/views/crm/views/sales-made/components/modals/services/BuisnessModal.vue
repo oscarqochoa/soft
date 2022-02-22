@@ -566,6 +566,7 @@ export default {
     },
   },
   async mounted() {
+    this.addPreloader()
     this.client = this.salesClient;
     if (this.program) {
       await this.searchRate();
@@ -575,6 +576,7 @@ export default {
       await this.getScore();
     }
     this.ownControl = true;
+    this.removePreloader()
   },
   methods: {
     /* PRELOADER */
