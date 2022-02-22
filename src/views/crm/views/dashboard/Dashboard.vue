@@ -88,7 +88,7 @@
               <b-card
                 class="ecommerce-card col-lg-12 cursor-pointer"
                 :class="{classAdd,
-                  'ecommerce-card-appointments': !itemCards[0] && !isTouch,
+                  'ecommerce-card-appointments': !itemCards[1] && !isTouch,
                 }"
                 @click="changeTab(1)"
                 :style="
@@ -154,7 +154,7 @@
               <b-card
                 class=" ecommerce-card col-lg-12 cursor-pointer"
                 :class="{classAdd,
-                  'ecommerce-card-tasks': !itemCards[0] && !isTouch,
+                  'ecommerce-card-tasks': !itemCards[2] && !isTouch,
                 }"
                 @click="changeTab(2)"
                 :style="
@@ -220,7 +220,7 @@
               <b-card
                 class=" ecommerce-card col-lg-12 cursor-pointer"
                 :class="{classAdd,
-                  'ecommerce-card-sales': !itemCards[0] && !isTouch,
+                  'ecommerce-card-sales': !itemCards[3] && !isTouch,
                 }"
                 @click="changeTab(3)"
                 :style="
@@ -286,7 +286,7 @@
               <b-card
                 class="ecommerce-card col-lg-12 cursor-pointer"
                 :class="{classAdd,
-                  'ecommerce-card-capturated': !itemCards[0] && !isTouch,
+                  'ecommerce-card-capturated': !itemCards[4] && !isTouch,
                 }"
                 @click="changeTab(4)"
                 :style="
@@ -502,7 +502,6 @@
 
 <script>
 import isTouchDevice from 'is-touch-device'
-import { useWindowSize } from "@vueuse/core";
 import { dragscroll } from "vue-dragscroll";
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
 import { mapGetters } from "vuex";
