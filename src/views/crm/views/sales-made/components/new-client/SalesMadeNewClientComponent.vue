@@ -1032,6 +1032,7 @@ import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasC
 import ModalNotesAll from '@/views/commons/components/first-notes/ModalNotesAll.vue'
 import ModalNotesSpecialist from '@/views/commons/components/first-notes/ModalNotesSpecialist.vue'
 import ApproveSupervisorModal from '@/views/crm/views/sales-made/components/modals/ApproveSupervisorModal.vue'
+import Vue from "vue";
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -1617,7 +1618,7 @@ export default {
       keysNewRow.forEach((key) => {
         if (keysOldRow.includes(key)) {
           console.log(key)
-          this.$set(this.items[this.selectedIndex], key, newRow[key])
+          Vue.set(this.items[this.selectedIndex], key, newRow[key])
         }
       })
       console.log(this.items[this.selectedIndex])
@@ -1628,7 +1629,7 @@ export default {
       }
       this.modalData.programs.programSelected = ''
       this.modal.programs = false
-      this.$store.commit('app/SET_LOADING', false)
+      this.removePreloader()
     },
     openTrackingModal(program, client, tabla) {
       this.modalData.tracking.program = program

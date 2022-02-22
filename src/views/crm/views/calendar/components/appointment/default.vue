@@ -4,30 +4,17 @@
       v-if="!isModal"
       class="mt-1 mb-2"
     >
-      <b-col class="d-flex align-items-center justify-content-start">
-        <div class="mr-1">
-          <b-button
-            variant="outline-info"
-            @click="showFilter = !showFilter"
-          >
-            Filter by Seller
-            <feather-icon
-              icon="FilterIcon"
-              style="margin-left: 5px"
-            />
-          </b-button>
-        </div>
-        <div
-          v-if="showFilter"
-          style="width: 20%"
-        >
-          <v-select
+      <b-col
+          cols="12"
+          lg="3"
+          class="d-flex align-items-center justify-content-center">
+        <v-select
             v-model="host"
             :options="sellers"
             :reduce="val => val.id"
             @input="emitEventDateChange"
-          />
-        </div>
+            class="w-100"
+        />
       </b-col>
     </b-row>
     <b-row class="no-gutters">
@@ -109,7 +96,7 @@
     <b-modal
       :id="isModal ? 'modal-event-edit-modal' : 'modal-event-edit'"
       ok-only
-      modal-class="modal-warning"
+      modal-class="modal-primary"
       class="zindex-4"
       centered
       size="lg"

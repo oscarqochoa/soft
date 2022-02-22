@@ -2,7 +2,7 @@
   <div
     id="app"
     v-loading.full="loading"
-    class="h-100"
+    class="h-100 blue-scrollbar"
     :class="[skinClasses] "
   >
     <component :is="layout">

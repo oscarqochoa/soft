@@ -4,10 +4,11 @@
     class="w-100"
   >
     <b-modal
+      body-class="px-0"
       v-model="ownControl"
       lazy
       title-class="h3 text-white font-weight-bolder"
-      size="xmd"
+      :size="modalSize"
       modal-class="modal-primary"
       title="Files"
       hide-footer
@@ -101,7 +102,7 @@
           </b-container>
         </b-row>
         <b-row class="mt-2">
-          <b-col>
+          <b-col class="px-0">
             <b-table
               :items="itemTable"
               small
@@ -337,6 +338,10 @@ export default {
     ...mapGetters({
       currentUser: 'auth/currentUser',
     }),
+    modalSize() {
+      if (this.screenWidth > 992) return 'lg'
+      return 'xlg'
+    },
     itemTable() {
       const programid = this.files.programId
       if (this.mode === 1) {

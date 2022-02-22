@@ -63,6 +63,7 @@
           <td>
             <div>{{ total_interest + " %" }}</div>
           </td>
+          <td colspan="3"/>
         </template>
       </b-table>
     </b-row>
@@ -243,6 +244,9 @@ export default {
     addNewCreditor() {
       this.openmodal = true
       this.statemodal = 1
+    },
+    needsValidatePassword() {
+      return this.creditors.filter(element => element.state1 == 1).length > 0
     },
     async allDebtSolution() {
       try {
@@ -518,6 +522,9 @@ export default {
       setTimeout(() => {
         this.exportPdfDisabled = false
       }, 10000)
+    },
+    getCreditorsLength() {
+      return this.creditors.length
     },
   },
 }

@@ -1,7 +1,7 @@
 import testRoute from '../views/test/test.router'
 
 const routes = [
-  { path: '/socialnetwork', redirect: { name: 'calendar-social-network' } },
+  { path: '/socialnetwork', redirect: { name: 'test-social-network' } },
   ...testRoute,
 ]
 
