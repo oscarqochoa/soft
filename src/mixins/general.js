@@ -8,12 +8,12 @@ export default {
   computed: {
     screenWidth() {
       const { width } = useWindowSize();
-      return width.value
+      return width.value;
     },
 
     screenHeight() {
       const { height } = useWindowSize();
-      return height
+      return height;
     },
 
     bgTabsNavs() {
@@ -29,7 +29,7 @@ export default {
     },
     bgLightDark() {
       return this.$store.getters["appConfig/skin"] === "dark"
-        ? "bg-dark"
+        ? "bg-dark text-white"
         : "bg-white";
     },
     isDarkSkin() {
