@@ -8,14 +8,14 @@
               <b-button class="btn btn-danger" @click="returnGrid">
                 <feather-icon icon="ChevronsLeftIcon"></feather-icon>Return
               </b-button>
-              <h3
+              <span
                 class="font-weight-bold ml-2 d-inline"
                 :class="process != 1 ? 'red-text-2' : 'text-success'"
               >
                 {{
                 process != 1 ? "UNPROCESSED" : "PROCESSED BY: " + processInfo
                 }}
-              </h3>
+              </span>
             </b-col>
             <b-col cols="6" class="text-right">
               <h4 class="font-weight-bold">Provider : {{ nameProvider }}</h4>
