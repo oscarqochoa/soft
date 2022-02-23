@@ -122,7 +122,17 @@
                   :src="baseUrl + program.logo"
                   style="width: 50px"
                 />
-                <span :key="key" v-else>{{ program.value }}</span>
+
+                <!-- <span :key="key" v-else>{{ program.value }}</span>-->
+                 <!-- <span :key="key" v-else>
+                   {{program.value | myPrograms}}
+                 </span> -->
+                 
+                 <b-img v-else :src="baseImg+$options.filters.myPrograms(program.value)"
+                  :key="key" thumbnail
+                  fluid style="width: 50px"></b-img>
+
+                 
               </template>
             </div>
           </template>
@@ -211,6 +221,7 @@ export default {
       type: 0,
       actionsOptions: ["returnToSocialNetwork", "sendSMS", "historySMS"],
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
+      baseImg: process.env.VUE_APP_BASE_URL_FRONT,
       isBusy: false,
       fields: dataFields.leadFields,
       filter: dataFilters,
