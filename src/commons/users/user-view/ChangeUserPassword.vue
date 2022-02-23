@@ -3,10 +3,7 @@
     <validation-observer ref="form">
       <b-row>
         <b-col cols="12">
-          <b-form-group
-            label="Current Password"
-            label-for="current-password"
-          >
+          <b-form-group label="Current Password" label-for="current-password">
             <validation-provider
               v-slot="{ errors, valid }"
               vid="current"
@@ -27,10 +24,7 @@
           </b-form-group>
         </b-col>
         <b-col cols="12">
-          <b-form-group
-            label="New Password"
-            label-for="new-password"
-          >
+          <b-form-group label="New Password" label-for="new-password">
             <validation-provider
               v-slot="{ errors, valid }"
               rules="required|specialpassword|password:@confirm"
@@ -49,10 +43,7 @@
           </b-form-group>
         </b-col>
         <b-col cols="12">
-          <b-form-group
-            label="Confirm Password"
-            label-for="confirm-password"
-          >
+          <b-form-group label="Confirm Password" label-for="confirm-password">
             <validation-provider
               v-slot="{ errors, valid }"
               rules="required"
@@ -77,49 +68,55 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import UserService from '@/service/user/user.service'
+import { mapGetters } from "vuex";
+import UserService from "@/service/user/user.service";
 
 export default {
   data() {
     return {
       userData: {
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
       },
-    }
+    };
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
+      currentUser: "auth/currentUser",
     }),
   },
   methods: {
     async changePassword() {
-      const result = await this.$refs.form.validate()
+      const result = await this.$refs.form.validate();
       if (result) {
-        const passswordResult = await UserService.validatePasswordUser({ id_user: this.currentUser.user_id, password: this.userData.currentPassword })
+        const passswordResult = await UserService.validatePasswordUser({
+          id_user: this.currentUser.user_id,
+          ceo_password: this.userData.currentPassword,
+        });
         if (!passswordResult.data) {
-          this.$refs.form.setErrors({ current: 'is incorrect' })
+          this.$refs.form.setErrors({ current: "is incorrect" });
         } else {
-          this.addPreloader()
+          this.addPreloader();
           try {
-            const changePass = await UserService.changePasswordUser({ id_user: this.currentUser.user_id, new_password: this.userData.newPassword })
-            this.removePreloader()
-            this.showSuccessSwal('Password changed successfully')
-            this.$emit('closeModal')
+            const changePass = await UserService.changePasswordUser({
+              id_user: this.currentUser.user_id,
+              new_password: this.userData.newPassword,
+            });
+            this.removePreloader();
+            this.showSuccessSwal("Password changed successfully");
+            this.$emit("closeModal");
           } catch (error) {
-            this.removePreloader()
-            this.showErrorSwal(error)
+            this.removePreloader();
+            this.showErrorSwal(error);
           }
         }
       } else {
-        console.log('error')
+        console.log("error");
       }
     },
   },
-}
+};
 </script>
 
 <style>

@@ -909,7 +909,7 @@ export default {
         (sum, select) => sum + Number(select.value),
         0
       );
-      return total;
+      return total.toFixed(2);
     },
     totalDato7() {
       const total = this.cars.reduce((sum, car) => sum + Number(car.value), 0);
