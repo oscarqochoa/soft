@@ -79,7 +79,7 @@
                 size="18"
                 class="mr-50 text-danger"
               />
-              <span class="align-text-top text-capitalize">{{ data.item.date_even }}</span>
+              <span class="align-text-top text-capitalize">{{ data.item.date_even | myGlobal }}</span>
             </b-badge>
           </template>
 
@@ -252,7 +252,8 @@ export default {
       G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
       G_STATES: "CrmGlobalStore/G_STATES",
       G_CRS: "CrmGlobalStore/G_CRS",
-      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS"
+      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS",
+      G_UPDATE_TABLE_LEAD:"CrmLeadStore/G_UPDATE_TABLE_LEAD" 
     }),
     ...mapState({
       S_LEADS: state => state.CrmLeadStore.S_LEADS
@@ -276,7 +277,8 @@ export default {
       A_SET_SELECTED_LEADS: "CrmLeadStore/A_SET_SELECTED_LEADS",
       A_DELETE_LEADS: "CrmLeadStore/A_DELETE_LEADS",
       A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS",
-      A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST"
+      A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST",
+      A_SET_UPDATE_TABLE_LEAD:"CrmLeadStore/A_SET_UPDATE_TABLE_LEAD",
     }),
     resolveUserStatusVariant(status) {
       if (status === "Pending") return "warning";
@@ -503,7 +505,13 @@ export default {
     },
     resetQuickData(item) {
       this.quickData = item;
-    }
+    },
+    updateTableLead:function() {
+      if (this.G_UPDATE_TABLE_LEAD) {
+        this.A_SET_UPDATE_TABLE_LEAD(false);
+      }
+    },
+
   },
   mounted() {
     if (![4].includes(this.currentUser.role_id) && !this.isOnlyLead) {
@@ -515,7 +523,20 @@ export default {
     }
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
       this.actionsOptions.push("delete");
-  }
+  },
+  watch:{
+    G_UPDATE_TABLE_LEAD(newVal){
+      if (newVal) {
+        if(this.$refs.refUserListTable === undefined){ 
+          this.myProvider();
+        }else{
+          this.$refs.refUserListTable.refresh();
+          this.myProvider();
+        }
+        
+      }
+    }
+  },
 };
 </script>
 

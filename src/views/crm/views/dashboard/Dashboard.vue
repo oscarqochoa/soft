@@ -502,6 +502,7 @@
 
 <script>
 import isTouchDevice from 'is-touch-device'
+
 import { dragscroll } from "vue-dragscroll";
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
 import { mapGetters } from "vuex";
@@ -578,6 +579,7 @@ export default {
     }),
     isTouch(){
       return isTouchDevice()
+
     },
     classWrapper: function () {
       return "item-wrapper justify-content-start align-items-center";
