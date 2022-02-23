@@ -40,7 +40,7 @@ export default {
     async loginUser(module = '') {
       this.addPreloader()
       try {
-        const response = await useJwt.login({
+        const response = await useJwt.login2({
           email: this.userEmail,
           password: this.password,
         })

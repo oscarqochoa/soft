@@ -4,7 +4,7 @@ export default {
   registerEndpoint: '/jwt/register',
   refreshEndpoint: process.env.VUE_APP_BASE_URL + '/auth/refresh',
   logoutEndpoint: process.env.VUE_APP_BASE_URL + '/auth/logout',
-
+  loginEndpoint2: process.env.VUE_APP_BASE_URL + '/auth/login2',
   // This will be prefixed in authorization header with token
   // e.g. Authorization: Bearer <token>
   tokenType: 'Bearer',

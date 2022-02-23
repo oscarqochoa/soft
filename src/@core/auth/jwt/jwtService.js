@@ -99,6 +99,10 @@ export default class JwtService {
     return this.axiosIns.post(this.jwtConfig.loginEndpoint, ...args)
   }
 
+  login2(...args) {
+    return this.axiosIns.post(this.jwtConfig.loginEndpoint2, ...args)
+  }
+
   register(...args) {
     return this.axiosIns.post(this.jwtConfig.registerEndpoint, ...args)
   }
