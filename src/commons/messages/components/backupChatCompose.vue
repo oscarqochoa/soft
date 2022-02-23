@@ -1,14 +1,19 @@
 <template>
   <div>
-    <div class="media-message-container" v-on:dragover="drag = true">
-      <!-- <div
+    <div
+      class="media-message-container"
+      draggable="true"
+      @dragover.prevent="onDragOver"
+    >
+      <div
         class="on-drag"
-        v-if="drag"
-        v-on:dragleave.prevent="drag = false"
-        v-on:drop.prevent="onDrop($event)"
+        v-if="isDragOver && isGalleryOpen"
+        dropzone
+        @dragleave.prevent="drag = false"
+        @drop.prevent="onDrop"
       >
         <p>Drop Here!!</p>
-      </div> -->
+      </div>
 
       <div class="text-content">
         <div class="subject">
@@ -26,30 +31,67 @@
       <div class="media-content">
         <div class="preview-file">
           <div class="file">
-            <b-img :src="fileSelected" v-if="fileSelected != ''"></b-img>
+            <b-img
+              v-if="
+                fileSelected.file != '' &&
+                fileSelected.type == 'application/pdf'
+              "
+              :src="'https://play-lh.googleusercontent.com/9XKD5S7rwQ6FiPXSyp9SzLXfIue88ntf9sJ9K250IuHTL7pmn2-ZB0sngAX4A2Bw4w'"
+            ></b-img>
+            <b-img
+              v-if="
+                fileSelected.file != '' &&
+                (fileSelected.type == 'image/jpeg' ||
+                  fileSelected.type == 'image/jpg' ||
+                  fileSelected.type == 'image/png')
+              "
+              :src="fileSelected.file"
+            ></b-img>
+            <video
+              v-if="fileSelected.file != '' && fileSelected.type == 'video'"
+              :src="fileSelected.file"
+              controls
+            ></video>
           </div>
         </div>
 
         <div class="gallery">
           <div
-            :class="['file', { 'border-selected': image == fileSelected }]"
-            v-for="(image, index) in arrImages"
+            :class="[
+              'file',
+              { 'border-selected': item.file == fileSelected.file },
+            ]"
+            v-for="(item, index) in arrFiles"
             :key="index"
           >
-            <b-img :src="image" @click="previewFile(image)"></b-img>
+            <b-img
+              v-if="
+                item.type == 'image/jpeg' ||
+                item.type == 'image/jpg' ||
+                item.type == 'image/png'
+              "
+              :src="item.file"
+              @click="previewFile(item)"
+            ></b-img>
+            <video
+              v-if="item.type == 'video'"
+              :src="item.file"
+              @click="previewFile(item)"
+            ></video>
+            <b-img
+              v-if="item.type == 'application/pdf'"
+              @click="previewFile(item)"
+              :src="'https://play-lh.googleusercontent.com/9XKD5S7rwQ6FiPXSyp9SzLXfIue88ntf9sJ9K250IuHTL7pmn2-ZB0sngAX4A2Bw4w'"
+            ></b-img>
           </div>
 
-          <button variant="primary" @click="$refs.refInputEl.click()">
+          <button variant="primary" @click="openGallery">
             <input
               ref="refInputEl"
               type="file"
               class="d-none"
               style="width: 200px; height: 200px"
               multiple
-              @change="
-                filesChange($event.target.name, $event.target.files);
-                fileCount = $event.target.files.length;
-              "
             />
 
             <feather-icon icon="PlusIcon" size="40" class="d-inline" />
@@ -64,47 +106,49 @@
 export default {
   data() {
     return {
-      arrImages: [
-        "https://img.remediosdigitales.com/73012f/crd-2/840_560.jpg",
-        "https://cdn.motor1.com/images/mgl/pVXNY/s3/purpose-built-moto-honda-cx500-cafe-racer---right-side-angle-view.jpg",
-      ],
+      arrFiles: [],
+      fileSelected: {},
 
-      fileSelected: "",
-
-      drag: false,
+      isDragOver: false,
+      isGalleryOpen: false,
     };
   },
   computed: {},
   methods: {
+    openGallery() {
+      this.$refs.refInputEl.click();
+      this.isGalleryOpen = true;
+    },
     previewFile(file) {
-      console.log(file);
       this.fileSelected = file;
     },
-    onDrop(event) {
-      this.drag = false;
-      event.preventDefault();
-      console.log(event);
+    onDragOver() {
+      this.isDragOver = true;
     },
-    filesChange(fieldName, fileList) {
-      console.log(fieldName);
-      console.log(fileList);
-      // // handle file changes
-      // const formData = new FormData();
+    onDrop(e) {
+      let data = e.target.files || e.dataTransfer.files;
 
-      // if (!fileList.length) return;
+      data.forEach((item) => {
+        var reader = new FileReader();
+        reader.readAsDataURL(item);
+        reader.onload = () =>
+          //  console.log(reader.result);
+          this.arrFiles.push({
+            type: reader.result.split(";")[0].split(":")[1],
+            file: reader.result,
+          });
 
-      // // append the files to FormData
-      // Array.from(Array(fileList.length).keys()).map((x) => {
-      //   formData.append(fieldName, fileList[x], fileList[x].name);
-      // });
+        reader.onerror = function (error) {
+          console.log("Error: ", error);
+        };
+      });
 
-      // // save it
-      // this.save(formData);
+      this.isDragOver = false;
     },
   },
   mounted() {
-    this.arrImages.length > 0
-      ? (this.fileSelected = this.arrImages[0])
+    this.arrFiles.length > 0
+      ? (this.fileSelected = this.arrFiles[0])
       : (this.fileSelected = "");
   },
 };
@@ -112,6 +156,8 @@ export default {
 
 <style lang="scss" scoped>
 .media-message-container {
+  width: 100%;
+  height: 100%;
   position: relative;
 
   .on-drag {
@@ -128,6 +174,12 @@ export default {
     p {
       color: white;
       font-size: 50pt;
+    }
+
+    input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      z-index: -1;
     }
   }
 
@@ -166,18 +218,22 @@ export default {
       .file {
         min-width: 30%;
         max-width: 60%;
-        height: 80%;
+        min-height: 30%;
+        max-height: 80%;
         border-radius: 5px;
         color: #ff6358;
         transition: background 0.3s ease-in-out;
         margin-right: 10px;
         overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         img {
           border-radius: 3px;
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
           cursor: pointer;
         }
       }
@@ -209,6 +265,9 @@ export default {
         margin-right: 10px;
         overflow: hidden;
         padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         img {
           border-radius: 3px;
@@ -240,3 +299,5 @@ export default {
   border: 3px #ff6358 solid;
 }
 </style>
+
+

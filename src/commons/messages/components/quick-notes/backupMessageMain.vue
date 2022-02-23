@@ -153,77 +153,13 @@
           </header>
         </div>
         <!-- User Chat Area -->
-        <b-overlay
-          id="overlay-background"
-          :show="isLoadingChatLog"
-          :variant="skin == 'dark' ? 'dark' : 'light'"
-          :opacity="0.85"
-          :blur="'1px'"
-          rounded="sm"
-          style="height: calc(50% - 32.5px)"
-        >
-          <!-- style="height: calc(50% - 32.5px)" -->
-          <!-- 46%; -->
-          <vue-perfect-scrollbar
-            ref="refChatLogPS"
-            :settings="perfectScrollbarSettings"
-            class="user-chats scroll-area"
-            :style="{ height: !subjectresp ? '100%' : 'calc(100% - 78px)' }"
-            id="chat"
-            @scroll="scrollListener($event)"
-          >
-            <chat-log
-              :chat-data="S_USER_MESSAGES"
-              @scroll-to-bottom="scrollToBottom"
-              @reply-message="onReplyMessage"
-              :profile-user-avatar="currentUser.avatar"
-              :loading="loading"
-              ref="chatLog"
-            />
-          </vue-perfect-scrollbar>
-          <div
-            v-if="subjectresp"
-            class="
-              chat-reply
-              pl-1
-              pr-1
-              d-flex
-              justify-content-between
-              align-items-center
-            "
-            :style="{ height: '78px', overflow: 'auto' }"
-          >
-            <b-alert
-              variant="primary"
-              show
-              style="
-                background: rgb(29 34 46 / %) !important;
-                border-left: 5px solid #28c76f !important;
-                margin-top: 10px;
-                width: 100%;
-                padding: 10px;
-              "
-              class="mr-1"
-            >
-              <h4>{{ subjectresp }}</h4>
-              <span v-html="contentresp"></span>
-            </b-alert>
-            <span>
-              <feather-icon
-                icon="XCircleIcon"
-                class="text-primary cursor-pointer"
-                size="20"
-                @click="closeReply()"
-              />
-            </span>
-          </div>
-        </b-overlay>
+
         <!-- Chat Reply -->
 
         <!-- Message Input -->
 
         <chat-compose
-          style="height: calc(100% - 0.5px)"
+          style="height: calc(100% - 65px)"
           @scroll-to-bottom="scrollToBottom"
           :subjectresp="subjectresp"
           :contentresp="contentresp"
@@ -328,7 +264,7 @@ export default {
     },
     scrollToEnd() {
       var container = this.$el.querySelector("#chat");
-      container.scrollTop = container.scrollHeight;
+      // container.scrollTop = container.scrollHeight;
     },
     async loadMessages() {
       const messages = await this.A_GET_USER_MESSAGES({
@@ -499,7 +435,7 @@ export default {
     const refChatLogPS = ref(null);
     const scrollToBottomInChatLog = () => {
       const scrollEl = refChatLogPS.value.$el || refChatLogPS.value;
-      scrollEl.scrollTop = scrollEl.scrollHeight;
+      // scrollEl.scrollTop = scrollEl.scrollHeight;
     };
 
     // ------------------------------------------------
@@ -663,4 +599,3 @@ export default {
 @import "~@core/scss/base/pages/app-chat-list.scss";
 @import "~@core/scss/base/pages/app-email.scss";
 </style>
-
