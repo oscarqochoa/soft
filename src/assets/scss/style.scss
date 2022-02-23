@@ -246,10 +246,10 @@ $borderamg: #efb911;
   box-shadow: 0 4px 8px 0 rgba($important, 0.12), 0 2px 4px 0 rgba($important, 0.08) !important;
 }
 
-:root{
-  --scroll-light: rgba(0, 0, 0, 0.30);
-  --scroll-dark: rgba(255, 255, 255, 0.30);
-  &.dark{
+:root {
+  --scroll-light: rgba(0, 0, 0, 0.3);
+  --scroll-dark: rgba(255, 255, 255, 0.3);
+  &.dark {
     --scroll-light: var(--scroll-dark);
   }
 }
@@ -269,11 +269,10 @@ $borderamg: #efb911;
   background-color: var(--scroll-light);
 }
 
-:root{
+:root {
   scrollbar-color: var(--scroll-light) transparent;
   scrollbar-width: auto;
 }
-
 
 // html.dark::-webkit-scrollbar {
 //   width: 8px;
@@ -387,18 +386,7 @@ $borderamg: #efb911;
 } */
 
 // Only for madals of sales made (Initial Payment)
-#crm-sm-modal-initial-payment {
-  .modal-body {
-    padding: 1rem 0rem !important;
-    overflow-x: hidden;
-
-    .margin-0 {
-      margin-right: 0rem !important;
-      margin-left: 0rem !important;
-    }
-  }
-}
-
+#crm-sm-modal-initial-payment,
 #crm-sm-modal-contract-fee {
   .modal-body {
     padding: 1rem 0rem !important;
@@ -413,7 +401,7 @@ $borderamg: #efb911;
 
 //header dark without box shadow
 
-.dark-layout{
+.dark-layout {
   .header-navbar {
     box-shadow: none !important;
   }
