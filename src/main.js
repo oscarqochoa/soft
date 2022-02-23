@@ -46,6 +46,7 @@ import '@/@fake-db/db'
 import './filters/dates'
 import './filters/times'
 import './filters/number'
+import './filters/programs'
 
 // Validation rules (Vee validate)
 
