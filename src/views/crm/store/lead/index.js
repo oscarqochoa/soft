@@ -11,6 +11,7 @@ const state = {
     fromPage: 0,
     toPage: 0,
   },
+  S_UPDATE_TABLE_LEAD:false,
   S_SN_LEADS: [],
   S_W_POTENTIAL_LEADS: [],
   S_SELECTED_LEADS: [],
@@ -42,6 +43,9 @@ const state = {
   S_KEY_UPDATE_DETAILS_LEAD: 0,
 };
 const getters = {
+  G_UPDATE_TABLE_LEAD(){
+    return state.S_UPDATE_TABLE_LEAD
+  },
   G_STATE_LEADS() {
     const stateLeads = state.S_STATE_LEADS.map((el) => ({
       label: el.name,
@@ -65,6 +69,9 @@ const getters = {
   },
 };
 const mutations = {
+  SET_UPDATE_TABLE_LEAD(state,params){
+    state.S_UPDATE_TABLE_LEAD = params
+  },
   SET_DATA(state, params) {
     Vue.set(state, params.destination, params.data);
   },
@@ -299,7 +306,9 @@ const actions = {
   },
 
   /* SETS */
-
+  A_SET_UPDATE_TABLE_LEAD({ commit }, data){
+    commit("SET_UPDATE_TABLE_LEAD",data)
+  },
   A_SET_SELECTED_LEADS({ commit }, data) {
     commit("SET_DATA", {
       destination: "S_SELECTED_LEADS",
@@ -316,11 +325,12 @@ const actions = {
     try {
       const response = await crmLead.postCreateLead(body);
       if (mixins.methods.isResponseSuccess(response)) {
-        body.id = response.data.id;
-        commit("UNSHIFT_LEADS_DATA", {
-          destination: "S_LEADS",
-          data: body,
-        });
+        // body.id = response.data.id;
+        // commit("UNSHIFT_LEADS_DATA", {
+        //   destination: "S_LEADS",
+        //   data: body,
+        // });
+        commit("SET_UPDATE_TABLE_LEAD",true)
       }
       return response;
     } catch (error) {
@@ -328,6 +338,7 @@ const actions = {
       throw error;
     }
   },
+  
   async A_SET_REQUEST_LEADS({ commit }, body) {
     try {
       const response = await crmLead.postRequestLead(body);

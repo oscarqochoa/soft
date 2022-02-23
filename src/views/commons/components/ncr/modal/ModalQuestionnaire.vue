@@ -607,14 +607,14 @@ export default {
         this.disabled = false;
       }
     },
-    save:function() {
+    save() {
       this.showConfirmSwal().then(async result => {
         if (result.value) {
           try{
             this.addPreloader();
             this.data["score_id"] = this.score_id;
             this.data["open_account"] = this.data["open_accounts"];
-            const response = await NrcService.saveQuestionnaire(params)
+            const response = await NrcService.saveQuestionnaire(this.data)
             if (response.status == 200) {
                 this.$emit("closeModalQuestionnaire", false);
                 this.removePreloader();
@@ -622,21 +622,9 @@ export default {
                 this.$emit("updateGrid", false);
               }
 
-          }catch(error){
-            console.log(error)
+          }catch(errors){
+            console.log(errors)
             this.removePreloader();
-              if (
-                errors.response.status == 500 ||
-                errors.response.status == 422
-              ) {
-                this.showToast(
-                  "danger",
-                  "top-right",
-                  "Error",
-                  "XIcon",
-                  "Something went wrong!"
-                );
-              }
           }
         }
       });
