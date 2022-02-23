@@ -41,6 +41,13 @@ export default {
     isBigWindow() {
       return this.$store.getters["app/bigWindow"];
     },
+
+    isSupervisor() {
+      return this.$store.getters["auth/isSupervisor"];
+    },
+    isCeo() {
+      return this.$store.getters["auth/isCeo"];
+    },
   },
   methods: {
     convertProgramToModule(program) {

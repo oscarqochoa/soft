@@ -8,12 +8,13 @@
             v-if="currentUser.modul_id === 15"
             class="text-important"
             @click="$emit('onEditLead', false)"
-            >{{ leadName.name }}</a
-          >
+          >{{ leadName.name }}</a>
           <span v-else-if="onlyRead">{{ leadName.name }}</span>
-          <a v-else class="text-primary" @click="$emit('onEditLead', false)">{{
+          <a v-else class="text-primary" @click="$emit('onEditLead', false)">
+            {{
             leadName.name
-          }}</a>
+            }}
+          </a>
         </span>
       </b-card-title>
       <b-button-group class="btn-group-sm">
@@ -96,26 +97,26 @@ export default {
   components: {
     DetailComponent,
     ModalTrackinNotCall,
-    AmgIcon,
+    AmgIcon
   },
   props: {
     modul: {
       type: Number,
-      required: true,
+      required: true
     },
     onlyRead: {
       type: Boolean,
-      required: true,
+      required: true
     },
     lead: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
       blankLead: {},
-      isLoading: false,
+      isLoading: false
     };
   },
   created() {
@@ -124,13 +125,13 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token",
+      token: "auth/token"
     }),
     leadName() {
       if (this.currentUser.modul_id === 15) {
         return {
           name: `${this.lead.nickname} (${this.lead.lead_name})`,
-          url: true,
+          url: true
         };
       }
       if (this.onlyRead) {
@@ -141,7 +142,7 @@ export default {
     longAddress() {
       const names = [];
       if (this.lead.street) names.push(this.lead.street);
-      if (this.lead.city) names.push(this.lead.city);
+      if (this.lead.city) names.push(`<br>${this.lead.city}`);
       if (this.lead.states_eeuu_slug && this.lead.zipcode)
         names.push(`${this.lead.states_eeuu_slug} ${this.lead.zipcode}`);
       return names.join(", ");
@@ -150,45 +151,45 @@ export default {
       return [
         {
           label: "E-mail:",
-          value: this.lead.email,
+          value: this.lead.email
         },
         {
           label: "Phone:",
-          value: this.lead.mobile,
+          value: this.lead.mobile
         },
         [
           this.lead.ssn
             ? {
                 label: "SSN:",
-                value: `XXX-XX-${this.lead.ssn}`,
+                value: `XXX-XX-${this.lead.ssn}`
               }
             : null,
           this.lead.itin
             ? {
                 label: "ITIN:",
-                value: `XXX-XX-${this.lead.itin}`,
+                value: `XXX-XX-${this.lead.itin}`
               }
-            : null,
+            : null
         ],
         this.modul !== 15
           ? {
               label: "DOB:",
               value: this.lead.dob
                 ? this.$moment(this.lead.dob).format("MM/DD/YYYY")
-                : "",
+                : ""
             }
           : null,
         {
           label: "Language:",
-          value: this.lead.language === "en" ? "English" : "Spanish",
+          value: this.lead.language === "en" ? "English" : "Spanish"
         },
         {
           label: "Origin Country:",
-          value: this.lead.origin_country,
+          value: this.lead.origin_country
         },
         {
           label: "Programs:",
-          value: this.lead.name_programs,
+          value: this.lead.name_programs
         },
 
         {
@@ -196,54 +197,54 @@ export default {
           value:
             this.modul !== 15
               ? this.lead.lead_status
-              : this.lead.valuestatuslead,
+              : this.lead.valuestatuslead
         },
         {
           label: "Lead Owner:",
-          value: this.lead.user_owner,
+          value: this.lead.user_owner
         },
         this.modul !== 15
           ? {
               label: "Address:",
-              value: this.longAddress,
+              value: this.longAddress
             }
           : null,
         this.modul === 15
           ? {
               label: "CATCHER:",
-              value: this.lead.user_catcher,
+              value: this.lead.user_catcher
             }
           : null,
         this.modul === 15
           ? {
               label: "FAN PAGE:",
-              value: this.lead.fanpage,
+              value: this.lead.fanpage
             }
           : null,
         this.modul === 15
           ? {
               label: "CREATED DATE:",
-              value: this.lead.created_at,
+              value: this.lead.created_at
             }
-          : null,
+          : null
       ];
-    },
+    }
   },
   methods: {
     ...mapActions({
       A_MY_LIST_CREATE: "CrmLeadStore/A_MY_LIST_CREATE",
       A_SET_POTENTIAL: "CrmLeadStore/A_SET_POTENTIAL",
-      A_CHANGE_STATUS_SN: "CrmLeadStore/A_CHANGE_STATUS_SN",
+      A_CHANGE_STATUS_SN: "CrmLeadStore/A_CHANGE_STATUS_SN"
     }),
     onAddMyList() {
       this.showConfirmSwal()
-        .then(async (result) => {
+        .then(async result => {
           if (result.value) {
             this.isLoading = true;
             const response = await this.A_MY_LIST_CREATE({
               module_id: this.modul,
               user_id: this.currentUser.user_id,
-              lead_id: this.lead.id,
+              lead_id: this.lead.id
             });
             if (this.isResponseSuccess(response))
               this.showToast(
@@ -264,7 +265,7 @@ export default {
             this.isLoading = false;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log("spmething went wrong onAddMyList: ", error);
           this.showToast(
             "danger",
@@ -277,12 +278,12 @@ export default {
     },
     onSetPotential() {
       this.showConfirmSwal("Without Potential?")
-        .then(async (result) => {
+        .then(async result => {
           if (result.value) {
             this.isLoading = true;
             const response = await this.A_SET_POTENTIAL({
               lead_id: this.lead.id,
-              potential: 1,
+              potential: 1
             });
             if (this.isResponseSuccess(response)) {
               this.lead.potential = 1;
@@ -304,7 +305,7 @@ export default {
             this.isLoading = false;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log("spmething went wrong onSetPotential: ", error);
           this.showToast(
             "danger",
@@ -317,7 +318,7 @@ export default {
     },
     onNotCall() {
       this.showConfirmSwal("Your lead not responding to you?")
-        .then(async (result) => {
+        .then(async result => {
           if (result.value) {
             this.isLoading = true;
             const specialist = `${this.currentUser.first_name} ${this.currentUser.last_name}`;
@@ -336,7 +337,7 @@ export default {
               language: this.lead.language,
               lead_name: this.lead.last_name,
               modul_id: this.currentUser.modul_id,
-              program,
+              program
             });
             if (this.isResponseSuccess(response)) {
               this.showToast(
@@ -358,7 +359,7 @@ export default {
             this.isLoading = false;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log("spmething went wrong onNotCall: ", error);
           this.showToast(
             "danger",
@@ -368,23 +369,23 @@ export default {
             this.getInternalErrors(error)
           );
         });
-    },
+    }
   },
   directives: {
-    Ripple,
+    Ripple
   },
   model: {
     prop: "lead",
-    event: "update:lead",
+    event: "update:lead"
   },
   mounted() {
     if (this.lead.nickname && this.currentUser.modul_id === 15) {
       this.details.unshift({
         label: "Nickname:",
-        value: this.lead.nickname,
+        value: this.lead.nickname
       });
     }
-  },
+  }
 };
 </script>
 

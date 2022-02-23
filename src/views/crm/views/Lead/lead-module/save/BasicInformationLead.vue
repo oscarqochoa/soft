@@ -102,7 +102,7 @@
           </b-form-group>
         </validation-provider>
         <!-- Lead State -->
-        <b-form-group label="Status" label-for="state-lead">
+        <b-form-group label="Legal Status" label-for="state-lead">
           <v-select
             id="state-lead"
             v-model="userData.state_lead"
