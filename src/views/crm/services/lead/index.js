@@ -247,7 +247,7 @@ class CrmLead {
 
   async postUniquesItin(body) {
     try {
-      const data = await amgApi.post("/uniqueitin", body);
+      const data = await amgApi.post("/clients/unique-itin", body);
       return data;
     } catch (error) {
       throw error;
@@ -256,7 +256,7 @@ class CrmLead {
 
   async postUniquesCpn(body) {
     try {
-      const data = await amgApi.post("/uniquecpn", body);
+      const data = await amgApi.post("/clients/unique-cpn", body);
       return data;
     } catch (error) {
       throw error;
