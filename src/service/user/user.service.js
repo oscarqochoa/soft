@@ -11,7 +11,7 @@ class UserService {
   }
   async validatePasswordUser(body) {
     try {
-      const data = await amgApi.post("/validate-if-password-is-correct", body);
+      const data = await amgApi.post("/profile/validate-if-password-is-correct", body);
       return data;
     } catch (error) {
       throw error;
