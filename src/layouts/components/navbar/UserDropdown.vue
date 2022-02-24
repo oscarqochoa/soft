@@ -57,7 +57,7 @@
       @click="$refs.schedules.openModalReport()"
     >
       <schedules-report ref="schedules" class="mr-50" />
-      <span>Schedule Report</span>
+      <span>Schedule R.</span>
     </b-dropdown-item>
     <b-dropdown-item link-class="d-flex align-items-center" @click="logout">
       <feather-icon size="16" icon="LogOutIcon" class="mr-50" />
