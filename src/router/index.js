@@ -49,10 +49,12 @@ const router = new VueRouter({
 router.beforeEach((to, _, next) => {
   const isLoggedIn = isUserLoggedIn()
   const userData = getUserData()
+  const urlOriginalSoft = process.env.VUE_APP_ORIGINAL_SOFT
   if (isLoggedIn) {
     if (!canNavigate(to, userData.arrRoles)) {
       // Redirect to login if not logged in
       if (!isLoggedIn) return next({ name: 'auth-login' })
+      //if (!isLoggedIn) window.open(urlOriginalSoft, '_self')
 
       // If logged in => not authorized
       return next({ name: 'misc-not-authorized' })
