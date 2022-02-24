@@ -35,6 +35,11 @@ const LayoutHorizontal = () => import('@/layouts/horizontal/LayoutHorizontal.vue
 const LayoutFull = () => import('@/layouts/full/LayoutFull.vue')
 
 export default {
+  mounted(){
+    if (this.skin === "dark") document.querySelector('html').classList.add("dark");
+      else if (document.querySelector('html').className.match("dark"))
+        document.querySelector('html').classList.remove("dark");
+  },
   components: {
     // Layouts
     LayoutHorizontal,
@@ -50,6 +55,9 @@ export default {
     layout() {
       if (this.$route.meta.layout === 'full') return 'layout-full'
       return `layout-${this.contentLayoutType}`
+    },
+    skin() {
+      return this.$store.getters['appConfig/skin']
     },
     contentLayoutType() {
       return this.$store.state.appConfig.layout.type

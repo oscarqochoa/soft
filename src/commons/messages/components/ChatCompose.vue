@@ -27,7 +27,7 @@
       ></feather-icon>
     </div>
     <div
-      class="compose-mail-form-field chat-compose-fields"
+      class="compose-mail-form-field chat-compose-fields chat-compose-file-field"
       style="
         height: 35px;
         display: flex !important;
@@ -77,7 +77,7 @@
         @change="(v) => (note.content = v.html)"
         :options="editorOption"
         style="height: 50%; overflow: hidden"
-        class="chat-compose-fields"
+        class="chat-compose-fields-header chat-compose-file-field"
       />
       <div
         style="height: calc(50% - 48px); overflow: auto"
