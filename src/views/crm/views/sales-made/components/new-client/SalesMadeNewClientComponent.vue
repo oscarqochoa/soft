@@ -153,10 +153,10 @@
                   size="sm"
               />
             </span>
-
             <div>
-              <p v-if="data.item.commission && (G_IS_CEO || G_IS_SUPERVISOR)">
+              <p v-if="data.item.commission" class="m-0">
                 <small
+                    v-if="data.item.commission[0].change != 1 || (data.item.commission[0].change == 1  && (G_IS_CEO || G_IS_SUPERVISOR))"
                     class="text-primary font-weight-bold"
                 >$ {{ data.item.commission[0].commission }}
                 </small>
@@ -232,8 +232,9 @@
             </span>
 
             <div>
-              <p v-if="data.item.commission && (G_IS_CEO || G_IS_SUPERVISOR)">
+              <p v-if="data.item.commission">
                 <small
+                    v-if="data.item.commission[1].change != 1 || (data.item.commission[1].change == 1  && (G_IS_CEO || G_IS_SUPERVISOR))"
                     class="text-primary font-weight-bold"
                 >$ {{ data.item.commission[1].commission }}</small>
               </p>
@@ -293,7 +294,7 @@
           <template v-slot:cell(fee)="data">
           <span>
             <span v-if="!data.item.editFee">
-              $ {{parseFloat(data.item.fee).toFixed(2)}}
+              $ {{data.item.fee}}
             </span>
             <span v-else>
               <money
@@ -1291,11 +1292,11 @@ export default {
           tfee: this.items
             .reduce((previous, current) => {
               const currentFeeAmount = current.fee
-                ? parseFloat(current.fee)
+                ? parseFloat(current.fee.replaceAll(',', ''))
                 : 0.0
               if (typeof previous === 'object') {
                 const previousFeeAmount = previous.fee
-                  ? parseFloat(previous.fee)
+                  ? parseFloat(previous.fee.replaceAll(',', ''))
                   : 0.0
                 return currentFeeAmount + previousFeeAmount
               }

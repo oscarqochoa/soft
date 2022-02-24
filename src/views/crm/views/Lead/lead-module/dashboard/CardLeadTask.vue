@@ -223,7 +223,8 @@ export default {
       A_GET_TASKS: "TaskStore/A_GET_TASKS",
       A_GET_TASK: "TaskStore/A_GET_TASK",
       A_DELETE_LEAD_TASK: "TaskStore/A_DELETE_LEAD_TASK",
-      A_MAKE_FAVORITE_LEAD_TASK: "TaskStore/A_MAKE_FAVORITE_LEAD_TASK"
+      A_MAKE_FAVORITE_LEAD_TASK: "TaskStore/A_MAKE_FAVORITE_LEAD_TASK",
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER"
     }),
     async getUserAppointments() {
       try {
@@ -264,6 +265,7 @@ export default {
               taskForSn: 0
             });
             if (this.isResponseSuccess(response)) {
+              this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
               this.showToast(
                 "success",
                 "top-right",
@@ -290,6 +292,7 @@ export default {
         this.isLoading = true;
         const response = await this.A_GET_TASK({ id });
         if (this.isResponseSuccess(response)) {
+          this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
           this.task = response.data[0];
           this.isTaskDisabled = isDisabled;
           this.$bvModal.show("modal-task-edit");
@@ -327,6 +330,7 @@ export default {
               taskForSn: 0
             });
             if (this.isResponseSuccess(response)) {
+              this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
               await this.A_GET_TASKS({ id: this.currentUser.user_id });
               const index = this.lead.lead_tasks.map(el => el.id).indexOf(id);
               if (index !== -1) this.lead.lead_tasks.splice(index, 1);

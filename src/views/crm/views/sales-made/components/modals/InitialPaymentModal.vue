@@ -14,6 +14,7 @@
         :client="initial_payment.nameClient"
         :program="initial_payment.nameProgram"
         class="sticky-top mt-1"
+        :class="{'bg-background-dark': skin === 'dark', 'bg-white': skin !== 'dark'}"
       />
       <b-row>
         <b-col sm="6" cols="12">
@@ -78,7 +79,7 @@
                 : true
             "
             class="btn-icon ml-1"
-            variant="success"
+            variant="flat-danger"
             size="sm"
             @click="deleteCard(data.item.id)"
           >
@@ -101,7 +102,7 @@
             <money
               :ref="'campo' + data.item.id"
               v-model="data.item.model"
-              class="form-control"
+              class="form-control form-control-sm"
               v-bind="{
                 decimal: '.',
                 thousands: ',',
@@ -244,6 +245,7 @@ import CrmService from "@/views/crm/services/crm.service";
 import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
 import DeleteCardModal from "@/views/crm/views/sales-made/components/modals/DeleteCardModal.vue";
 import ProgramClientHeader from "@/views/crm/views/sales-made/components/modals/ProgramClientHeader.vue";
+import {mapGetters} from "vuex";
 
 export default {
   name: "InitialPaymentModal",
@@ -429,6 +431,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      skin: 'appConfig/skin'
+    }),
     modalSize() {
       if (this.screenWidth > 992) return 'lg'
       return 'xlg'
@@ -560,6 +565,8 @@ export default {
                 const res = await this.showSuccessSwal();
                 if (res.value) {
                   this.amount = response.data.data;
+                  console.log(this.$refs[refCard])
+                  this.$refs[refCard].$el.value = "$ 0.00";
                   await this.getListCards();
                   this.reloadTable = true;
                   if (this.initial_payment.programid == 2) {
@@ -596,6 +603,8 @@ export default {
             if (response.status === 200) {
               this.removePreloader();
               this.sendMessage = false;
+              console.log(this.$refs[refCard])
+              this.$refs[refCard].$el.value = "$ 0.00";
               const res = await this.showSuccessSwal();
               this.reloadTable = true;
               if (res.value) {
@@ -626,5 +635,9 @@ export default {
 
 .modal-body {
   padding: 1px 0px !important;
+}
+
+.bg-background-dark {
+  background-color: #2B2B4B !important;
 }
 </style>

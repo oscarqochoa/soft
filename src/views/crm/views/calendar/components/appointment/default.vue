@@ -27,11 +27,11 @@
 
         @dateChange="fetchEvents"
       >
-        <template #date-header="{date, fullDay, haveEvents, events}">
+        <template #date-header="{date, fullDay, haveEvents, events, currentDate}">
           <div
             class="py-50 text-center w-100 border-bottom font-weight-bolder"
             style="padding: 10px 0 !important;"
-            :class="haveEvents ? `bg-${taskColor[events[0].title]} text-white border-bottom-0 ${skin !== 'dark' ? 'border-c4c4c4' : ''}` : `${skin !== 'dark' ? 'border-c4c4c4' : ''}`"
+            :class="currentDate ? `bg-success text-white border-bottom-0 ${skin !== 'dark' ? 'border-c4c4c4' : ''}` : haveEvents ? `bg-${taskColor[events[0].title]} text-white border-bottom-0 ${skin !== 'dark' ? 'border-c4c4c4' : ''}` : `${skin !== 'dark' ? 'border-c4c4c4' : ''}`"
           >
             {{ fullDay }}, {{ date }}
           </div>
@@ -162,10 +162,10 @@ export default {
     return {
       taskColor: {
         TEL: 'primary',
-        CN: 'success',
-        Personal: 'danger',
-        Family: 'warning',
-        ETC: 'info',
+        CN: 'primary',
+        Personal: 'primary',
+        Family: 'primary',
+        ETC: 'primary',
       },
       showFilter: false,
       viewMoreEventsController: false,

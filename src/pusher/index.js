@@ -7,6 +7,7 @@ import sendFromRrhhJustifyToManagment from '@/views/crm/views/schedules/pusher/s
 import closedAllSwal from '@/views/commons/pusher/closed-all-swal.pusher'
 import alertMarkSchedules from '@/views/crm/views/schedules/pusher/alert-mark-schedules.pusher'
 import taskAlert from '@/views/commons/pusher/task-alert.pusher'
+import infoAdmToCrm from "@/views/crm/views/Lead/pusher/info-adm-to-crm.pusher";
 
 const subscribePusher = () => {
   const pusher = new Pusher(process.env.VUE_APP_PUSHER_APP_KEY, {
@@ -29,6 +30,7 @@ const subscribePusher = () => {
     sendFromRrhhJustifyToManagment()
     alertMarkSchedules()
     taskAlert()
+    infoAdmToCrm()
   } catch (error) {
     console.error(error, 'error')
   }

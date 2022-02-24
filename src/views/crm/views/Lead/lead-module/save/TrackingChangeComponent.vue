@@ -20,18 +20,22 @@
       </template>
       <template #cell(main_row)="data">
         <div class="w-100 d-flex justify-content-between">
-          <span v-if="!data.item.seeHideCell">{{
+          <span v-if="!data.item.seeHideCell">
+            {{
             data.item.main_row_hide
-              ? data.item.main_row_hide
-              : data.item.main_row
-          }}</span>
-          <span v-else>{{
+            ? data.item.main_row_hide
+            : data.item.main_row
+            }}
+          </span>
+          <span v-else>
+            {{
             data.item.main_row_hide
-              ? data.item.main_row
-              : data.item.main_row_hide
-          }}</span>
+            ? data.item.main_row
+            : data.item.main_row_hide
+            }}
+          </span>
           <feather-icon
-            v-if="data.item.main_row_hide"
+            v-if="data.item.main_row_hide && isSupervisor && isCeo"
             class="cursor-pointer mr-3"
             size="16"
             :icon="!data.item.seeHideCell ? 'EyeIcon' : 'EyeOffIcon'"
@@ -45,13 +49,17 @@
         <span>{{ data.item.created_at | myGlobalWithHour }}</span>
       </template>
       <template #cell(updated_by)="data">
-        <span v-if="data.item.updated_at">{{
+        <span v-if="data.item.updated_at">
+          {{
           data.item.updated_name_user
-        }}</span>
+          }}
+        </span>
         <br />
-        <span v-if="data.item.updated_at">{{
+        <span v-if="data.item.updated_at">
+          {{
           data.item.updated_at | myGlobalWithHour
-        }}</span>
+          }}
+        </span>
       </template>
     </b-table>
   </div>
@@ -67,12 +75,12 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token",
+      token: "auth/token"
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
-    }),
+    })
   },
   created() {
     this.authUser = this.currentUser;
@@ -83,37 +91,37 @@ export default {
       fields: [
         { key: "main_row", label: this.name },
         { key: "created_by" },
-        { key: "updated_by" },
-      ],
+        { key: "updated_by" }
+      ]
     };
   },
   directives: { Ripple },
   methods: {
     ...mapActions({
       /* A_GET_TEMPLATES: 'CrmTemplateStore/A_GET_TEMPLATES' */
-    }),
+    })
   },
   mounted() {},
   props: {
     lead: {
       type: Object,
-      required: true,
+      required: true
     },
     items: {
       type: Array,
-      required: true,
+      required: true
     },
     name: {
       type: String,
       required: false,
-      default: "name",
+      default: "name"
     },
     isBusy: {
       type: Boolean,
       required: false,
-      default: false,
-    },
+      default: false
+    }
   },
-  setup() {},
+  setup() {}
 };
 </script>
