@@ -17,38 +17,38 @@
 $primary: #0090e7;
 $info: #8f5fe8;
 $danger: #fc424a;
-$dark: #0e1d44;
+$dark: #2F2F31;
 $light: #e4eaec;
 $success: #00d25b;
 //Background bg
-$theme-dark-body-bg: #010032 !default;
+$theme-dark-body-bg: #111113 !default;
 $theme-dark-body-color: #d8d8d8 !default;
 $theme-dark-border-color: rgba(255, 255, 255, 0.2) !default;
 //#3b4253
 //Card bg
 
-$theme-dark-card-bg: #2B2B4B !default;
+$theme-dark-card-bg: #17171A !default;
 $theme-dark-box-shadow: 0 4px 24px 0 rgb(57 67 76 / 24%) !default;
 // Table color
 
 //Typography
-$theme-dark-headings-color: #d0d2d6 !default;
+$theme-dark-headings-color: rgba(255, 255, 255, 0.6) !default;
 .dark-layout .table.b-table thead tr th {
-  color: #d0d2d6; // for sticky header dark layout;
+  color: rgba(255, 255, 255, 0.6); // for sticky header dark layout;
 }
-$theme-dark-label-color: #d0d2d6 !default;
+$theme-dark-label-color: rgba(255, 255, 255, 0.8) !default;
 // $theme-dark-text-muted-color: rgb(82 77 70 / 50%) !default;
 $theme-dark-text-muted-color: rgba(255, 255, 255, 0.2) !default;
 
 //Table
-$theme-dark-table-bg: #2B2B4B !default;
-$theme-dark-table-header-bg: rgb(14 29 68) !default;
-$theme-dark-table-row-bg: #2B2B4B !default;
-$theme-dark-table-hover-bg: #010032 !default;
-$theme-dark-table-striped-bg: #010032 !default;
+$theme-dark-table-bg: #17171A !default;
+$theme-dark-table-header-bg: #2F2F31 !default;
+$theme-dark-table-row-bg: #17171A !default;
+$theme-dark-table-hover-bg: #111113 !default;
+$theme-dark-table-striped-bg: #111113 !default;
 
-$theme-dark-modal-header-bg: #010032 !default;
-$theme-dark-pagination-bg: #010032 !default;
+$theme-dark-modal-header-bg: #111113 !default;
+$theme-dark-pagination-bg: #111113 !default;
 $theme-dark-chart-bg: #384056 !default;
 $theme-dark-widget-bg: #384056 !default;
 
@@ -57,11 +57,11 @@ $theme-dark-switch-bg: #545a6a;
 $theme-dark-switch-bg-disabled: #1b2337;
 
 //Input
-$theme-dark-input-bg: #2B2B4B !default;
-$theme-dark-input-placeholder-color: rgba(255, 255, 255, 0.2) !default;
-$theme-dark-input-border-color: rgba(255, 255, 255, 0.2) !default;
+$theme-dark-input-bg: #17171A !default;
+$theme-dark-input-placeholder-color: rgba(255, 255, 255, 0.3) !default;
+$theme-dark-input-border-color: rgba(255, 255, 255, 0.4) !default;
 $theme-dark-input-disabled-bg: #24233a !default;
-$theme-dark-input-disabled-border-color: #444b60 !default;
+$theme-dark-input-disabled-border-color: rgba(255, 255, 255, 0.1) !default;
 
 $base-font-size: 13.5px !default;
 

@@ -65,6 +65,10 @@ export default {
           return "/assets/images/drag-drop/ext_files/archivodesc.png";
       }
     },
+    openFileInput(){
+      console.log(this.$refs[this.source], 'log')
+      this.$refs[this.source].$refs.input.click();
+    },
     addImage(file) {
       this.files.push(file);
       const img = new Image(),
@@ -76,7 +80,7 @@ export default {
       const files = e.target.files;
       Array.from(files).forEach((file) => this.addImage(file));
       this.$emit("input", this.files);
-      this.$refs[this.source].clear()
+      this.$refs[this.source].reset()
     },
     getFileSize(size) {
       const fSExt = ["Bytes", "KB", "MB", "GB"];

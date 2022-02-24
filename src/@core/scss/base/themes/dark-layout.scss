@@ -113,7 +113,7 @@
 
   // main navbar and header navbar shadow(generic navbar)
   .header-navbar-shadow {
-    background: linear-gradient(180deg, rgba(1, 0, 50, 0.9) 44%, rgba(1, 0, 50, 0.43) 73%, rgba(1, 0, 50, 0));
+    background: linear-gradient(180deg, rgba(17, 17, 19, 0.9) 44%, rgba(17, 17, 19, 0.43) 73%, rgba(17, 17, 19, 0));
   }
 
   // main header navbar dark style
@@ -1790,7 +1790,8 @@
         .active-chat {
           .chat-left {
             .chat-content {
-              background-color: $theme-dark-card-bg;
+              // background-color: $theme-dark-card-bg;
+              background-color: rgb(60 60 60);
               p {
                 color: $theme-dark-body-color;
               }

@@ -5,18 +5,42 @@
     tag="form"
     id="compose-mail"
     class="chat-compose-form"
-    v-slot="{ invalid }"
+    style="transition: all .2s ease;"
+    v-slot="{ invalid, errors }"
   >
     <div
-      class="compose-mail-form-field"
+      class="compose-mail-form-field chat-compose-fields-header"
+      style="
+        height: 35px;
+        display: flex !important;
+        justify-content: space-between !important;
+      "
+    >
+      <div class="d-flex w-100 text-danger" style="margin-left: -4px;">
+        {{
+          Object.values(errors).flat().length > 0 ? "Fields are missing" : ""
+        }}
+      </div>
+      <feather-icon
+        icon="XIcon"
+        class="cursor-pointer"
+        @click="closeChatCompose()"
+      ></feather-icon>
+    </div>
+    <div
+      class="compose-mail-form-field chat-compose-fields"
       style="
         height: 35px;
         display: flex !important;
         justify-content: start !important;
       "
     >
-      <label for="email-subject">Subject:</label>
-      <validation-provider rules="required" v-slot="{ errors }">
+      <label for="email-subject" style="margin-left: -4px;">Subject:</label>
+      <validation-provider
+        name="Subject"
+        rules="chat-compose-required"
+        v-slot="{ errors }"
+      >
         <vue-autosuggest
           ref="autocomplete"
           :suggestions="filteredOptions"
@@ -42,7 +66,8 @@
       </validation-provider>
     </div>
     <validation-provider
-      rules="required"
+      name="Message"
+      rules="chat-compose-required"
       tag="div"
       class="message-editor"
       style="height: calc(100% - 35px)"
@@ -53,23 +78,39 @@
         @change="(v) => (note.content = v.html)"
         :options="editorOption"
         style="height: 50%; overflow: hidden"
-        :style="{ background: skin == 'dark' ? '' : '#FFF' }"
+        class="chat-compose-fields"
       />
       <div
         style="height: calc(50% - 48px); overflow: auto"
-        class="p-1 d-flex-inline"
+        class="p-1 d-flex-inline chat-compose-fields chat-compose-file-field"
       >
-        <b-badge
-          variant="important"
-          v-for="(file, index) in note.files"
-          :key="file.id"
-          class="mr-1 mb-1"
-        >
-          <span class="mr-1">{{ file.name }}</span>
-          <span class="cursor-pointer" @click="deleteFile(index)">
-            <feather-icon icon="XIcon" />
-          </span>
-        </b-badge>
+        <template v-if="note.files.length < 1">
+          <div class="d-flex justify-content-center align-items-center">
+            <b-button
+              v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+              variant="outline-secondary"
+              class="mt-3"
+              pill
+              @click="$refs.uploadFiles.openFileInput()"
+            >
+              <tabler-icon icon="PaperclipIcon" class="mr-50" />
+              <span class="align-middle font-weight-bold">Attach Files</span>
+            </b-button>
+          </div>
+        </template>
+        <template v-else>
+          <b-badge
+            variant="important"
+            v-for="(file, index) in note.files"
+            :key="file.id"
+            class="mr-1 mb-1"
+          >
+            <span class="mr-1">{{ file.name }}</span>
+            <span class="cursor-pointer" @click="deleteFile(index)">
+              <feather-icon icon="XIcon" />
+            </span>
+          </b-badge>
+        </template>
       </div>
       <div
         id="quill-toolbar"
@@ -85,6 +126,7 @@
           class="mr-auto cursor-pointer"
           style="margin-left: 6px; margin-top: 2px"
           v-model="note.files"
+          ref="uploadFiles"
         ></upload-files>
         <b-button
           style="height: 100%"
@@ -213,7 +255,12 @@ export default {
       SET_LAST_CHAT_CONTACT_DATE: "MessageStore/SET_LAST_CHAT_CONTACT_DATE",
       SET_LAST_MESSAGE_TO_ACTIVE_CHAT:
         "MessageStore/SET_LAST_MESSAGE_TO_ACTIVE_CHAT",
+      TOGGLE_CHAT_COMPOSE: "MessageStore/TOGGLE_CHAT_COMPOSE",
     }),
+    closeChatCompose() {
+      this.$emit("close-reply");
+      this.TOGGLE_CHAT_COMPOSE(false);
+    },
     onSelectNote(note) {
       this.note.content = note.body;
       this.$bvModal.hide("quick-notes-modal");
@@ -269,6 +316,7 @@ export default {
           time: moment().format("YYYY-MM-DD HH:mm:ss"),
           was_sent: false,
           index: this.S_USER_MESSAGES.chat.chat.length,
+          route_temp: []
         });
         this.$emit("scroll-to-bottom");
         await this.A_SAVE_MESSAGE_REPLY({
@@ -279,6 +327,8 @@ export default {
         this.$emit("on-send-message-reply");
         await this.SET_LAST_CHAT_CONTACT_DATE(this.S_USER_TO_MESSAGE.id);
         this.resetNote();
+        this.TOGGLE_CHAT_COMPOSE(false);
+        
       }
     },
     deleteFile(index) {

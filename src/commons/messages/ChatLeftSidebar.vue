@@ -27,7 +27,6 @@
                 size="42"
                 class="cursor-pointer badge-minimal avatar-border-2"
                 :src="profileUserMinimalData.avatar"
-                variant="transparent"
                 badge
                 badge-variant="success"
               />
@@ -50,7 +49,7 @@
           <!-- Chats Title -->
           <h4 class="chat-list-title">Chats</h4>
           <!-- Chats -->
-          <ul class="chat-users-list chat-list media-list">
+          <ul class="chat-users-list chat-list media-list" >
             <chat-contact
               v-for="contact in filteredChatsContacts"
               :key="contact.id"
@@ -59,6 +58,7 @@
               :class="{ active: activeChatContactId === contact.coworker_id }"
               is-chat-contact
               @click="setUserToMessage(contact)"
+              class="chat-contact-item"
             />
           </ul>
         </vue-perfect-scrollbar>
