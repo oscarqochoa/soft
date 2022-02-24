@@ -30,12 +30,12 @@
                 <amg-icon
                   icon="AmgIcon"
                   size="44"
-                  :class="(skin=='dark')?'text-light':'text-dark'"
+                  :class="(skin=='dark' || skin == 'semi-dark')?'text-light':'text-dark'"
                 />
               </span>
               <h2
                 class="brand-text"
-                :class="(skin=='dark')?'text-light':'text-dark'"
+                :class="(skin=='dark' || skin == 'semi-dark')?'text-light':'text-dark'"
               >
                 {{ appName }}
               </h2>
@@ -46,7 +46,7 @@
             <b-link
               class="nav-link modern-nav-toggle"
               style="margin-top: 28px;"
-              :class="(skin=='dark')?'text-light':'text-dark'"
+              :class="(skin=='dark' || skin == 'semi-dark')?'text-light':'text-dark'"
             >
               <feather-icon
                 icon="XIcon"

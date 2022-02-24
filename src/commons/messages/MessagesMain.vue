@@ -213,11 +213,20 @@
               chat-compose-reply-field
             "
             :style="{ height: '78px', overflow: 'auto' }"
-            style="border-left: 5px solid rgb(2 255 220) !important"
           >
             <div>
-              <h5 style="color: rgb(2 255 220)">{{ subjectresp }}</h5>
-              <span v-html="contentresp"></span>
+              <h5>{{ subjectresp }}</h5>
+              <span
+                v-html="contentresp"
+                style="
+                  max-height: 2.5ch;
+                  max-width: 20ch;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: inline-block;
+                  white-space: nowrap;
+                "
+              ></span>
             </div>
 
             <!-- <b-alert
@@ -239,22 +248,21 @@
               <feather-icon
                 icon="XCircleIcon"
                 class="cursor-pointer"
-                style="color: rgb(2 255 220)"
                 size="20"
                 @click="closeReply()"
               />
             </span>
           </div>
           <b-button
-              variant="gradient-danger"
-              size="lg"
-              v-if="!S_CHAT_COMPOSE_IS_OPEN"
-              class="btn-icon rounded-circle"
-              style="position: absolute; bottom: 25px; right: 25px"
-              @click="TOGGLE_CHAT_COMPOSE(true)"
-            >
-              <tabler-icon icon="ArrowBackUpIcon" size="20" />
-            </b-button>
+            variant="gradient-danger"
+            size="lg"
+            v-if="!S_CHAT_COMPOSE_IS_OPEN"
+            class="btn-icon rounded-circle"
+            style="position: absolute; bottom: 25px; right: 25px"
+            @click="TOGGLE_CHAT_COMPOSE(true)"
+          >
+            <tabler-icon icon="ArrowBackUpIcon" size="20" />
+          </b-button>
         </b-overlay>
         <!-- Chat Reply -->
 
@@ -465,7 +473,7 @@ export default {
           container.scroll({
             behavior: "smooth",
             left: 0,
-            top: element[0].offsetTop,
+            top: element[0].$el.offsetTop,
           });
         });
 
@@ -712,17 +720,60 @@ export default {
 @import "~@core/scss/base/pages/app-email.scss";
 </style>
 
-<style scoped>
-.fade-enter-active {
-  transition: all .2s ease;
+<style scoped lang="scss">
+
+.fade-enter,
+.fade-leave-to {
+transition: 500ms ease-in-out;
+transition-property: opacity, transform;
+opacity: 0;
+transform: translateY(100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+transition: 500ms ease-in-out;
+transition-property: opacity, transform;
 }
 .fade-leave-active {
-  transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+transition: 500ms ease-in-out;
+transition-property: opacity, transform;
+opacity: 1;
+transform: translateY(0);
 }
-.fade-enter, .fade-leave-to {
-  transform: translateY(100vh);
-  opacity: 0;
-}
+
+
+
+
+
+
+
+
+// .fade-enter{
+//   transform: translateY(-100%);
+//   &-to{
+//     transform: translateY(0);
+//   }
+// }
+// .fade-leave{
+//   transform: translateY(0);
+//   &-to{
+//     transform: translateY(-100%);
+//   }
+// }
+
+// .slide-fade-enter-active {
+//   transition: all 1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+// }
+// .slide-fade-leave-active {
+//   transition: all 1.5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+// }
+// .slide-fade-enter, .slide-fade-leave-to
+// /* .slide-fade-leave-active below version 2.1.8 */ {
+//   transform: translateY(0);
+//   opacity: 0;
+// }
+
 
 
 
