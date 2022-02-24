@@ -44,11 +44,11 @@ const infoAdmToCrm = () => {
                     "<div>ADMINISTRATOR: " +
                     data.admin_name +
                     " </div>" +
-                    '<div><select name="swal-select" id="swal-select" class="form-control" style="width: 80%;">' +
+                    '<div><select name="swal-select" id="swal-select" class="form-control" style="width: 80%; margin: 5px auto;">' +
                     '<option value="4">VALIDATE INFORMATION</option>' +
                     otherSource +
                     "</select><div>" +
-                    '<div><textarea name="swal-textarea" id="swal-textarea" class="form-control" style="height: 80px;width: 80%;margin-top:15px;" rows="3" cols="50"></textarea></div>'
+                    '<div><textarea name="swal-textarea" id="swal-textarea" class="form-control" style="height: 80px;width: 80%;margin: 15px auto;" rows="3" cols="50"></textarea></div>'
                 const result = await Vue.swal.fire({
                     showCancelButton: true,
                     buttonsStyling: false,
