@@ -2,7 +2,6 @@
   <b-card title="User Access" style="height: 93%">
     <b-row>
       <b-col>
-
         <table class="mt-2 mt-xl-0 w-100">
           <tr>
             <th class="pb-50">
@@ -34,7 +33,12 @@
               <span class="font-weight-bold">Rol</span>
             </th>
             <td>
-              {{ userData.roleName }}
+              <template v-for="(role, index) in userData.arrRoles">
+                <span :key="role.role_id"
+                  >{{ role.role_name
+                  }}{{ index != userData.arrRoles.length - 1 ? ", " : "" }}</span
+                >
+              </template>
             </td>
           </tr>
         </table>
