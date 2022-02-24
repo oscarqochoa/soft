@@ -325,12 +325,12 @@ const actions = {
     try {
       const response = await crmLead.postCreateLead(body);
       if (mixins.methods.isResponseSuccess(response)) {
-        // body.id = response.data.id;
-        // commit("UNSHIFT_LEADS_DATA", {
-        //   destination: "S_LEADS",
-        //   data: body,
-        // });
-        commit("SET_UPDATE_TABLE_LEAD",true)
+        body.id = response.data.id;
+        commit("UNSHIFT_LEADS_DATA", {
+          destination: "S_LEADS",
+          data: body,
+        });
+        // commit("SET_UPDATE_TABLE_LEAD",true)
       }
       return response;
     } catch (error) {
