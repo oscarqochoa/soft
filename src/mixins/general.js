@@ -213,7 +213,7 @@ export default {
     showConfirmSwal(
       title = "Are you sure?",
       text = "You won't be able to revert this!",
-      config = {}
+      config = {},
     ) {
       return this.$swal({
         title,

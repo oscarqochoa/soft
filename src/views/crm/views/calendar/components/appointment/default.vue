@@ -162,10 +162,10 @@ export default {
     return {
       taskColor: {
         TEL: 'primary',
-        CN: 'success',
-        Personal: 'danger',
-        Family: 'warning',
-        ETC: 'info',
+        CN: 'primary',
+        Personal: 'primary',
+        Family: 'primary',
+        ETC: 'primary',
       },
       showFilter: false,
       viewMoreEventsController: false,
