@@ -1,5 +1,5 @@
 <template>
-  <!--
+<!--   
   <div class="auth-wrapper auth-v2">
     <b-row class="auth-inner m-0">
       <b-link class="brand-logo">

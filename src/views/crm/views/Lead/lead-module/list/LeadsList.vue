@@ -122,17 +122,10 @@
                   :src="baseUrl + program.logo"
                   style="width: 50px"
                 />
-
-                <!-- <span :key="key" v-else>{{ program.value }}</span>-->
-                 <!-- <span :key="key" v-else>
-                   {{program.value | myPrograms}}
-                 </span> -->
-                 
-                 <b-img v-else :src="baseImg+$options.filters.myPrograms(program.value)"
+                 <b-img v-else-if="!program.logo && program.value == 'Paragon'" :src="baseImg+$options.filters.myPrograms(program.value)"
                   :key="key" thumbnail
                   fluid style="width: 50px"></b-img>
-
-                 
+                 <span :key="key" v-else>{{ program.value }}</span>
               </template>
             </div>
           </template>

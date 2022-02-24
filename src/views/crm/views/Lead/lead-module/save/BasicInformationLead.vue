@@ -184,7 +184,7 @@ export default {
       email,
       disabledemail: false,
       configFlatPickr: {
-        dateFormat: "d/m/Y",
+        dateFormat: "m/d/Y",
         locale: "en"
       },
       programsList: []
