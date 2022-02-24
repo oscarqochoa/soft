@@ -1,5 +1,5 @@
 <template>
-  <!--
+  
   <div class="auth-wrapper auth-v2">
     <b-row class="auth-inner m-0">
       <b-link class="brand-logo">
@@ -203,8 +203,8 @@
       </b-col>
     </b-row>
   </div>
-  -->
-  <div></div>
+ 
+  <!-- <div></div> -->
 </template>
 
 <script>
@@ -287,10 +287,10 @@ export default {
       return this.sideImg
     },
   },
-  beforeCreate() {
-    const urlOriginalSoft = process.env.VUE_APP_ORIGINAL_SOFT
-    window.open(urlOriginalSoft, '_self')
-  },
+  // beforeCreate() {
+  //   const urlOriginalSoft = process.env.VUE_APP_ORIGINAL_SOFT
+  //   window.open(urlOriginalSoft, '_self')
+  // },
   async created() {
     if (this.$route.query.email && this.$route.query.password && this.$route.query.module) {
       this.userEmail = this.$route.query.email
