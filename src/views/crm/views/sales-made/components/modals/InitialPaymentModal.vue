@@ -566,7 +566,7 @@ export default {
                 if (res.value) {
                   this.amount = response.data.data;
                   console.log(this.$refs[refCard])
-                  this.$refs[refCard].$el.value = "$ 0.00";
+                  if(this.initial_payment.programid != 2) this.$refs[refCard].$el.value = "$ 0.00";
                   await this.getListCards();
                   this.reloadTable = true;
                   if (this.initial_payment.programid == 2) {
@@ -603,8 +603,6 @@ export default {
             if (response.status === 200) {
               this.removePreloader();
               this.sendMessage = false;
-              console.log(this.$refs[refCard])
-              this.$refs[refCard].$el.value = "$ 0.00";
               const res = await this.showSuccessSwal();
               this.reloadTable = true;
               if (res.value) {
