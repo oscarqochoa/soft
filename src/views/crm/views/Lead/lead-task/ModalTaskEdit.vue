@@ -304,7 +304,8 @@ export default {
     ...mapActions({
       A_VALIDATE_TASK_FAVORITE: "TaskStore/A_VALIDATE_TASK_FAVORITE",
       A_SET_LEAD_TASK: "TaskStore/A_SET_LEAD_TASK",
-      A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE"
+      A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE",
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER"
     }),
     async getSellers() {
       try {
@@ -339,6 +340,7 @@ export default {
               taskForSn: this.taskForSn
             };
             const response = await this.A_SET_LEAD_TASK(params);
+            this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
             await this.$emit("onReloadTasks", response.data);
             this.$bvModal.hide("modal-task-edit");
           }

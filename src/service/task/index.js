@@ -24,10 +24,7 @@ class TaskService {
 
   async getHistoryTasks(body) {
     try {
-      const data = await amgApi.post(
-        "/tasks/search-history-task-lead",
-        body
-      );
+      const data = await amgApi.post("/tasks/search-history-task-lead", body);
       return data;
     } catch (error) {
       throw error;
@@ -172,7 +169,7 @@ class TaskService {
 
   async changeTaskTodayModal(body) {
     try {
-      const data = await amgApi.post("/changeTasksToday", body);
+      const data = await amgApi.post("/tasks/change-status-tasks-today", body);
       return data.data;
     } catch (error) {
       throw error;
