@@ -28,7 +28,7 @@
                 class="cursor-pointer badge-minimal avatar-border-2"
                 :src="profileUserMinimalData.avatar"
                 badge
-                badge-variant="success"
+                :badge-variant="statusSession"
               />
             </div>
             <!-- Search -->
@@ -83,7 +83,7 @@ import { ref, computed } from "@vue/composition-api";
 import ChatContact from "./ChatContact.vue";
 import UserProfileSidebar from "./UserProfileSidebar.vue";
 import NewMessageCompose from './components/NewMessageCompose.vue';
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState, mapGetters } from "vuex";
 export default {
   components: {
     // BSV
@@ -134,7 +134,21 @@ export default {
   computed:{
     ...mapState({
       S_MESSAGES_COUNTER_NOTIFICATION: state => state.MessageStore.counterNotification,
-    })
+    }),
+    ...mapGetters({
+      skin: "appConfig/skin",
+      currentUser: "auth/currentUser",
+      G_USER_STATUS_SESSION: "UserStore/G_USER_STATUS_SESSION"
+    }),
+    statusSession() {
+      return this.G_USER_STATUS_SESSION === 1
+        ? "success"
+        : this.G_USER_STATUS_SESSION === 2
+        ? "warning"
+        : this.G_USER_STATUS_SESSION === 3
+        ? "danger"
+        : "secondary";
+    }
   },
   methods: {
     ...mapMutations({

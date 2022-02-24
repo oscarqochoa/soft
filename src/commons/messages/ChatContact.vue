@@ -6,7 +6,7 @@
       :badge="isChatContact"
       class="badge-minimal "
       :icon="user.type == 1 ? 'person-fill' : 'people-fill'"
-      :badge-variant="resolveAvatarBadgeVariant(user.state_coworker)"
+      :badge-variant="statusSession"
     />
     <div class="d-flex flex-column align-items-end w-100">
       <div class="chat-info flex-grow-1 w-100">
@@ -59,7 +59,17 @@ export default {
     ...mapGetters({
       skin: "appConfig/skin",
       currentUser: "auth/currentUser",
+      G_USER_STATUS_SESSION: "UserStore/G_USER_STATUS_SESSION"
     }),
+    statusSession() {
+      return this.G_USER_STATUS_SESSION === 1
+        ? "success"
+        : this.G_USER_STATUS_SESSION === 2
+        ? "warning"
+        : this.G_USER_STATUS_SESSION === 3
+        ? "danger"
+        : "secondary";
+    }
   },
   setup() {
     const { resolveAvatarBadgeVariant } = useChat();
