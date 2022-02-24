@@ -1,5 +1,5 @@
 <template>
-  <feather-icon icon="MessengerIcon" size="19" />
+  <amg-icon icon="MessengerIcon" size="19" />
 </template>
 
 <script>

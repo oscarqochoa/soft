@@ -1,0 +1,73 @@
+@import "../variables/variables";
+
+
+.chat-contact-item{
+    border-bottom: 1px solid #dbd9e0;
+    h6{
+        color: black !important;
+        font-weight: 700 !important;
+    }
+    small{
+        color: $primary !important;
+        font-weight: 700 !important;
+    }
+}
+
+.chat-contact-item.active{
+    background: #E6EFFF !important;
+}
+.chat-body {
+    .chat-content {
+      background-color: #fff !important;
+      color: black !important;
+    }
+  }
+.active-chat {
+    .chat-left {
+      .chat-content {
+        // background-color: $theme-dark-card-bg;
+        background-color: #E6EFFF !important;
+      } 
+    }
+}
+
+.dark-layout{
+    .chat-contact-item{
+        border-bottom: 1px solid $theme-dark-border-color;
+        h6, small{
+            color: white !important;
+        }
+    }
+    .chat-compose-fields{
+        background: rgba(255, 255, 255, 0.04) !important;
+    }
+    .chat-compose-fields-header{
+        background: rgba(23, 23, 26, 1) !important;
+    }
+    .chat-compose-file-field{
+        border-top: 1px solid $theme-dark-border-color;
+    }
+    .chat-contact-item.active{
+        background: #303033 !important;
+    }
+    .dark-layout-border-right{
+        border-right: 1px solid $theme-dark-border-color;
+    }
+    .chat-compose-reply-field{
+        background: rgba(255, 255, 255, 0.13) !important;
+    }
+    .chat-body {
+        .chat-content {
+          background-color: #17171A !important;
+          color: #FFF !important;
+        }
+      }
+      .active-chat {
+        .chat-left {
+          .chat-content {
+            // background-color: $theme-dark-card-bg;
+            background-color: rgb(60 60 60) !important;
+          } 
+        }
+      }
+}
