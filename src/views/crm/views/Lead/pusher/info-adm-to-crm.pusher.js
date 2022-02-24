@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import GeneralMixin from '@/mixins/general'
 import NotificationMixin from '@/mixins/notification'
 import store from '@/store'
 
