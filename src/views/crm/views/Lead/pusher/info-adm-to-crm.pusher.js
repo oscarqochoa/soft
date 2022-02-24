@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import GeneralMixin from '@/mixins/general'
 import NotificationMixin from '@/mixins/notification'
 import store from '@/store'
@@ -11,7 +12,15 @@ const infoAdmToCrm = () => {
                     '<div><h2 style="font-weight: 600;">CREDIT REPORT WAS OBTAINED CORRECTLY</h2></div>' +
                     "<div>LEAD: " + data.lead_name + " </div>" +
                     "<div>ADMINISTRATOR: " + data.admin_name + " </div>"
-                const res = await GeneralMixin.methods.showSuccessSwal('', '', htmlSwal)
+
+                const res = await Vue.swal.fire({
+                    html: htmlSwal,
+                    confirmButtonText: "Ok",
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                    },
+                    buttonsStyling: false,
+                })
                 if (res) {
                     window.open("/crm/leads/" + data.lead_id, "_blank");
                     NotificationMixin.methods.showWindowNotification(
