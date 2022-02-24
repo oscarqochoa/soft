@@ -50,18 +50,24 @@ const infoAdmToCrm = () => {
                     otherSource +
                     "</select><div>" +
                     '<div><textarea name="swal-textarea" id="swal-textarea" class="input-form" style="height: 80px;width: 80%;margin-top:5px;" rows="3" cols="50"></textarea></div>'
-                const result = await GeneralMixin.methods.showConfirmSwal('', '', {
-                        html: htmlSwal,
-                        preConfirm: function () {
-                            return new Promise(function (resolve) {
-                                resolve([
-                                    document.querySelector("#swal-select").val(),
-                                    document.querySelector("#swal-textarea").val(),
-                                ]);
-                            });
-                        }
+                const result = await Vue.swal.fire({
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Yes",
+                    customClass: {
+                        confirmButton: "btn btn-primary mr-1",
+                        cancelButton: "btn btn-outline-danger  ",
+                    },
+                    html: htmlSwal,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            resolve([
+                                document.querySelector("#swal-select").val(),
+                                document.querySelector("#swal-textarea").val(),
+                            ]);
+                        });
                     }
-                )
+                })
                 if (result) {
                     data.status = result.value[0];
                     data.note = result.value[1];
@@ -98,18 +104,24 @@ const infoAdmToCrm = () => {
                     "</select></div>" +
                     '<div><textarea name="swal-textarea" id="swal-textarea" class="input-form" style="height: 80px;width: 80%;margin-top:5px;" rows="3" cols="50"></textarea></div>'
 
-                const result = await GeneralMixin.methods.showConfirmSwal('', '', {
-                        html: htmlSwal,
-                        preConfirm: function () {
-                            return new Promise(function (resolve) {
-                                resolve([
-                                    document.querySelector("#swal-select").val(),
-                                    document.querySelector("#swal-textarea").val(),
-                                ]);
-                            });
-                        }
+                const result = await Vue.swal.fire({
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Yes",
+                    customClass: {
+                        confirmButton: "btn btn-primary mr-1",
+                        cancelButton: "btn btn-outline-danger  ",
+                    },
+                    html: htmlSwal,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            resolve([
+                                document.querySelector("#swal-select").val(),
+                                document.querySelector("#swal-textarea").val(),
+                            ]);
+                        });
                     }
-                )
+                })
                 if (result) {
                     data.status = result.value[0];
                     data.note = result.value[1];
@@ -137,7 +149,14 @@ const infoAdmToCrm = () => {
                     "<div>ADMINISTRATOR: " +
                     data.admin_name +
                     " </div>"
-                const result = GeneralMixin.methods.showConfirmSwal('', '', {
+                const result = await Vue.swal.fire({
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Yes",
+                    customClass: {
+                        confirmButton: "btn btn-primary mr-1",
+                        cancelButton: "btn btn-outline-danger  ",
+                    },
                     html: htmlSwal,
                 })
                 if (result.value) {
@@ -162,7 +181,14 @@ const infoAdmToCrm = () => {
                     "<div>ADMINISTRATOR: " +
                     data.admin_name +
                     " </div>"
-                const result = GeneralMixin.methods.showConfirmSwal('', '', {
+                const result = await Vue.swal.fire({
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "Yes",
+                    customClass: {
+                        confirmButton: "btn btn-primary mr-1",
+                        cancelButton: "btn btn-outline-danger  ",
+                    },
                     html: htmlSwal,
                 })
                 if (result.value) {
