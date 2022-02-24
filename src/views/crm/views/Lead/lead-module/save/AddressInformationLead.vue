@@ -13,7 +13,7 @@
             >
               <b-form-group label="SSN" label-for="ssn" label-cols-md="2">
                 <b-input-group>
-                  <span class="form-control" v-if="disabled.ssn">{{encryptedSSN}}</span>
+                  <span class="form-control bg-transparent" v-if="disabled.ssn">{{encryptedSSN}}</span>
                   <b-form-input
                     v-else
                     id="ssn"
@@ -70,7 +70,7 @@
             <validation-provider v-if="hideITIN || userData.itin" name="ITIN">
               <b-form-group label="ITIN" label-for="itin" label-cols-md="2">
                 <b-input-group>
-                  <span class="form-control" v-if="disabled.itin">{{encryptedITIN}}</span>
+                  <span class="form-control bg-transparent" v-if="disabled.itin">{{encryptedITIN}}</span>
                   <b-form-input
                     v-else
                     id="itin"
@@ -132,7 +132,7 @@
             >
               <b-form-group label="CPN" label-for="cpn" label-cols-md="2">
                 <b-input-group>
-                  <span class="form-control" v-if="disabled.other">{{encryptedCPN}}</span>
+                  <span class="form-control bg-transparent" v-if="disabled.other">{{encryptedCPN}}</span>
 
                   <b-form-input
                     v-else
