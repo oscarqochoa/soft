@@ -44,11 +44,11 @@ const infoAdmToCrm = () => {
                     "<div>ADMINISTRATOR: " +
                     data.admin_name +
                     " </div>" +
-                    '<div><select name="swal-select" id="swal-select" class="input-form" style="width: 80%;">' +
+                    '<div><select name="swal-select" id="swal-select" class="form-control" style="width: 80%;">' +
                     '<option value="4">VALIDATE INFORMATION</option>' +
                     otherSource +
                     "</select><div>" +
-                    '<div><textarea name="swal-textarea" id="swal-textarea" class="input-form" style="height: 80px;width: 80%;margin-top:5px;" rows="3" cols="50"></textarea></div>'
+                    '<div><textarea name="swal-textarea" id="swal-textarea" class="form-control" style="height: 80px;width: 80%;margin-top:15px;" rows="3" cols="50"></textarea></div>'
                 const result = await Vue.swal.fire({
                     showCancelButton: true,
                     buttonsStyling: false,
@@ -61,8 +61,8 @@ const infoAdmToCrm = () => {
                     preConfirm: function () {
                         return new Promise(function (resolve) {
                             resolve([
-                                document.querySelector("#swal-select").val(),
-                                document.querySelector("#swal-textarea").val(),
+                                document.querySelector("#swal-select").value,
+                                document.querySelector("#swal-textarea").value,
                             ]);
                         });
                     }
@@ -97,11 +97,11 @@ const infoAdmToCrm = () => {
                     "<div>ADMINISTRATOR: " +
                     data.admin_name +
                     " </div>" +
-                    '<div><select name="swal-select" id="swal-select" class="input-form" style="width: 80%;">' +
+                    '<div><select name="swal-select" id="swal-select" class="form-control" style="width: 80%;">' +
                     '<option value="7">INFORMATION WAS CORRECT</option>' +
                     otherSource +
                     "</select></div>" +
-                    '<div><textarea name="swal-textarea" id="swal-textarea" class="input-form" style="height: 80px;width: 80%;margin-top:5px;" rows="3" cols="50"></textarea></div>'
+                    '<div><textarea name="swal-textarea" id="swal-textarea" class="form-control" style="height: 80px;width: 80%;margin-top:5px;" rows="3" cols="50"></textarea></div>'
 
                 const result = await Vue.swal.fire({
                     showCancelButton: true,
@@ -115,8 +115,8 @@ const infoAdmToCrm = () => {
                     preConfirm: function () {
                         return new Promise(function (resolve) {
                             resolve([
-                                document.querySelector("#swal-select").val(),
-                                document.querySelector("#swal-textarea").val(),
+                                document.querySelector("#swal-select").value,
+                                document.querySelector("#swal-textarea").value,
                             ]);
                         });
                     }
