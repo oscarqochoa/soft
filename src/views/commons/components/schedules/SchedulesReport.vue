@@ -629,7 +629,7 @@ table {
     border-bottom: 1px solid #31343e !important;
 
     &:hover {
-      background: #010202;
+      background: #252541;
     }
   }
 }

@@ -109,7 +109,6 @@ export default {
     };
   },
   async created() {
-    //all Promises
     await Promise.all([
       this.getStateLeads(),
       this.getStatusLeads(),
@@ -323,7 +322,7 @@ export default {
         this.isLoading = false;
       }
     }
-  },
+  }
 };
 </script>
 

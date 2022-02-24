@@ -426,7 +426,7 @@ export default {
     async getSellers() {
       try {
         await this.A_GET_SELLERS({
-          modul: 15,
+          modul: this.currentUser.modul_id,
           body: { roles: "[]", type: "1" }
         });
       } catch (error) {
