@@ -116,7 +116,7 @@
                   <b-input-group-append
                     v-if="!hideSSN && !userData.ssn"
                     is-text
-                    class="cursor-pointer"
+                    class="cursor-pointer border-left"
                     variant="warning"
                     @click="onAddSocial"
                   >
