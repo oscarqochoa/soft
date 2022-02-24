@@ -4,11 +4,7 @@
     <b-form @submit.prevent="handleSubmit(onSubmit)" @reset.prevent="resetForm">
       <b-row>
         <b-col cols="12 mb-2">
-          <validation-provider
-            v-slot="{ errors }"
-            name="Credit Card"
-            rules="required"
-          >
+          <validation-provider v-slot="{ errors }" name="Credit Card" rules="required">
             <input v-model="item.type_card" type="text" class="d-none" />
             <b-row>
               <b-col class="font-bureau-style text-gray-light m-auto" cols="4">
@@ -20,9 +16,7 @@
                   type="button"
                   :class="{ 'btn-danger': item.type_card === 1 }"
                   @click="item.type_card = 1"
-                >
-                  Of Client
-                </button>
+                >Of Client</button>
               </b-col>
               <b-col cols="4" class="px-1">
                 <button
@@ -30,9 +24,7 @@
                   type="button"
                   :class="{ 'btn-danger': item.type_card === 2 }"
                   @click="item.type_card = 2"
-                >
-                  Other Cards
-                </button>
+                >Other Cards</button>
               </b-col>
             </b-row>
           </validation-provider>
@@ -47,11 +39,7 @@
             :items="lead.cards || []"
           >
             <template #cell(radio)="data">
-              <validation-provider
-                v-slot="{ errors }"
-                name="Ammount"
-                rules="required"
-              >
+              <validation-provider v-slot="{ errors }" name="Ammount" rules="required">
                 <b-form-radio
                   :id="`yes-or-not-card-list--${data.index}`"
                   v-model="item.id_card"
@@ -63,15 +51,19 @@
               </validation-provider>
             </template>
 
-            <template #cell(cardnumber)="data">{{
+            <template #cell(cardnumber)="data">
+              {{
               "XXXX-XXXX-XXXX-" + data.item.cardnumber
-            }}</template>
+              }}
+            </template>
 
-            <template #cell(cardsecuritycode)="data">{{
+            <template #cell(cardsecuritycode)="data">
+              {{
               data.item.cardsecuritycode.length === 3
-                ? "XX" + data.item.cardsecuritycode.substr(2)
-                : "XXX" + data.item.cardsecuritycode.substr(3)
-            }}</template>
+              ? "XX" + data.item.cardsecuritycode.substr(2)
+              : "XXX" + data.item.cardsecuritycode.substr(3)
+              }}
+            </template>
 
             <template #cell(actions)="data">
               <div class="d-flex justify-content-center">
@@ -81,10 +73,7 @@
                   :disabled="isActionButtonLoading || isLoading"
                   @click="onModalCardOpen(data.item.id)"
                 >
-                  <feather-icon
-                    v-if="!isActionButtonLoading && !isLoading"
-                    icon="EyeIcon"
-                  />
+                  <feather-icon v-if="!isActionButtonLoading && !isLoading" icon="EyeIcon" />
                   <b-spinner v-else small />
                 </b-button>
               </div>
@@ -92,11 +81,7 @@
           </b-table>
         </b-col>
         <b-col cols="6 mb-2">
-          <validation-provider
-            v-slot="{ errors }"
-            name="Send CR"
-            rules="required"
-          >
+          <validation-provider v-slot="{ errors }" name="Send CR" rules="required">
             <input v-model="item.send_cr" type="text" class="d-none" />
             <b-row>
               <b-col class="font-bureau-style text-gray-light m-auto" cols="4">
@@ -108,9 +93,7 @@
                   type="button"
                   :class="{ 'btn-danger': item.send_cr === 1 }"
                   @click="item.send_cr = 1"
-                >
-                  Yes
-                </button>
+                >Yes</button>
               </b-col>
               <b-col cols="4" class="px-1">
                 <button
@@ -118,28 +101,17 @@
                   type="button"
                   :class="{ 'btn-danger': item.send_cr === 2 }"
                   @click="item.send_cr = 2"
-                >
-                  No
-                </button>
+                >No</button>
               </b-col>
             </b-row>
           </validation-provider>
         </b-col>
         <b-col cols="6 mb-2">
-          <validation-provider
-            v-slot="{ errors }"
-            name="Security Number"
-            rules="required"
-          >
+          <validation-provider v-slot="{ errors }" name="Security Number" rules="required">
             <input v-model="item.document" type="text" class="d-none" />
             <b-row>
-              <b-col
-                class="font-bureau-style text-gray-light m-auto px-1"
-                cols="4"
-              >
-                <span :class="{ 'text-danger': errors[0] }"
-                  >Security Number</span
-                >
+              <b-col class="font-bureau-style text-gray-light m-auto px-1" cols="4">
+                <span :class="{ 'text-danger': errors[0] }">Security Number</span>
               </b-col>
               <b-col cols="8">
                 <span v-if="!item.document" class="text-danger ml-2">
@@ -154,9 +126,7 @@
                       type="button"
                       :class="{ 'btn-danger': item.document == 1 }"
                       @click="item.document = 1"
-                    >
-                      SSN
-                    </button>
+                    >SSN</button>
                   </b-col>
                   <b-col cols="4" class="px-1">
                     <button
@@ -165,9 +135,7 @@
                       type="button"
                       :class="{ 'btn-danger': item.document == 2 }"
                       @click="item.document = 2"
-                    >
-                      ITIN
-                    </button>
+                    >ITIN</button>
                   </b-col>
                   <b-col cols="4" class="px-1">
                     <button
@@ -176,9 +144,7 @@
                       type="button"
                       :class="{ 'btn-danger': item.document == 3 }"
                       @click="item.document = 3"
-                    >
-                      CPN
-                    </button>
+                    >CPN</button>
                   </b-col>
                 </b-row>
               </b-col>
@@ -186,14 +152,9 @@
             <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
           </validation-provider>
         </b-col>
-        <div
-          v-if="!item.dob"
-          class="text-danger ml-2 my-auto text-center w-100"
-        >
+        <div v-if="!item.dob" class="text-danger ml-2 my-auto text-center w-100">
           <feather-icon icon="AlertCircleIcon" />
-          <span class="ml-1 pt-1"
-            >Please fill date of birth to get Credit Report</span
-          >
+          <span class="ml-1 pt-1">Please fill date of birth to get Credit Report</span>
         </div>
         <b-col cols="12">
           <b-form-group label="Commentary (Optional)" label-for="commentary">
@@ -203,10 +164,10 @@
       </b-row>
 
       <!-- Form Actions -->
-      <div class="d-flex justify-content-center mt-2">
+      <div class="d-flex float-right mt-2">
         <b-button
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-          variant="success"
+          variant="primary"
           type="submit"
           :disabled="isLoading"
         >
@@ -255,17 +216,17 @@ export default {
   components: {
     vSelect,
     ModalCardShow,
-    AddressComponent,
+    AddressComponent
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
-      G_EEUU_STATES: "CrmGlobalStore/G_EEUU_STATES",
+      G_EEUU_STATES: "CrmGlobalStore/G_EEUU_STATES"
     }),
     creditCardToggleIcon() {
       return this.cardOriginalNumber ? "EyeOffIcon" : "EyeIcon";
-    },
+    }
   },
   created() {
     this.authUser = this.currentUser;
@@ -275,16 +236,16 @@ export default {
   props: {
     modul: {
       type: Number,
-      required: true,
+      required: true
     },
     lead: {
       type: Object,
-      required: true,
+      required: true
     },
     item: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
@@ -301,9 +262,9 @@ export default {
         { key: "card_expi_month", label: "MM" },
         { key: "card_expi_year", label: "YY" },
         { key: "cardsecuritycode", label: "CVV" },
-        { key: "actions" },
+        { key: "actions" }
       ],
-      viewCardModal: false,
+      viewCardModal: false
     };
   },
   setup() {
@@ -311,13 +272,14 @@ export default {
       const event = { ...this.blankItem };
       this.$emit("update:item", event);
     };
-    const { refFormObserver, getValidationState } =
-      formValidation(resetuserData);
+    const { refFormObserver, getValidationState } = formValidation(
+      resetuserData
+    );
 
     return {
       refFormObserver,
       getValidationState,
-      resetuserData,
+      resetuserData
     };
   },
   methods: {
@@ -326,7 +288,7 @@ export default {
       A_SET_CREDIT_CARD: "CrmCreditCardStore/A_SET_CREDIT_CARD",
       A_GET_LEAD_SEND_REQUEST: "CrmLeadStore/A_GET_LEAD_SEND_REQUEST",
       A_GET_CREDIT_REPORT_PENDINGS:
-        "CrmCreditReportStore/A_GET_CREDIT_REPORT_PENDINGS",
+        "CrmCreditReportStore/A_GET_CREDIT_REPORT_PENDINGS"
     }),
     async onModalCardOpen(id) {
       try {
@@ -359,7 +321,7 @@ export default {
     async onSubmit() {
       this.isLoading = true;
       this.showConfirmSwal()
-        .then(async (result) => {
+        .then(async result => {
           if (result.value) {
             const item = {
               user_id: this.authUser.user_id,
@@ -371,13 +333,13 @@ export default {
               note: "",
               dob: null,
               modul: this.modul,
-              ...this.item,
+              ...this.item
             };
             const response = await this.A_GET_LEAD_SEND_REQUEST(item);
             if (this.isResponseSuccess(response)) {
               await this.A_GET_CREDIT_REPORT_PENDINGS({
                 id: this.$route.params.id,
-                modul: this.modul,
+                modul: this.modul
               });
               this.$emit("onSubmit", false);
               this.showToast(
@@ -395,16 +357,18 @@ export default {
                 "AlertTriangleIcon",
                 `Something went wrong. ${response.message}`
               );
+          } else {
+            this.isLoading = false;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log("Something went wrong onModalCardOpen", error);
           this.showErrorSwal(error);
           this.isLoading = false;
         });
-    },
+    }
   },
-  mounted() {},
+  mounted() {}
 };
 </script>
 
