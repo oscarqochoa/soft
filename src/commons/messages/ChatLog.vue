@@ -141,7 +141,7 @@
                 v-if="msgData.subjectresp && msgData.subjectresp != 'null'"
                 class="border-hr"
               />
-              <div class="w-100" :class="{ 'mx-1': currentBreakPoint != 'xs' }">
+              <div :class="{ 'mx-1': currentBreakPoint != 'xs' }">
                 <span class="mb-1"
                   ><strong ref="refSubject" v-html="msgData.subject"></strong
                 ></span>
@@ -272,7 +272,7 @@
                   ><b-icon
                     icon="check-all"
                     class="h4 m-0"
-                    :style="{ color: msgData.seen == 1 ? '#00ff72' : '' }"
+                    :style="{ color: msgData.seen == 1 ? (skin == 'dark'?'#00ff72':'rgb(255 129 9)') : '' }"
                   >
                   </b-icon
                 ></span>
@@ -286,7 +286,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { computed } from "@vue/composition-api";
 import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 import Ripple from "vue-ripple-directive";
@@ -393,7 +392,6 @@ export default {
 
       let chatLog = [];
       if (props.chatData.chat) {
-        console.log(props.chatData, "chat");
         chatLog = props.chatData.chat.chat;
       }
 

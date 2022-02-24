@@ -18,7 +18,7 @@
 }
 .chat-body {
     .chat-content {
-      background-color: #fff !important;
+      background-color: #DBF1FF !important;
       color: black !important;
     }
   }
@@ -26,11 +26,30 @@
     .chat-left {
       .chat-content {
         // background-color: $theme-dark-card-bg;
-        background-color: #E6EFFF !important;
+        background-color: #F2F6F9 !important;
       } 
     }
 }
-
+.chat-compose-fields{
+    background: #F8F8F8 !important;
+}
+.chat-compose-fields-header{
+    background: #FFF !important;
+}
+.chat-compose-file-field{
+    border-top: 1px solid $theme-light-border-color;
+}
+.dark-layout-border-right{
+    border-right: 1px solid $theme-light-border-color;
+}
+.chat-compose-reply-field{
+    background: #f8f8f8 !important;
+    border-left: 5px solid rgb(255 129 9) !important;
+    color: black !important;
+    h5, svg{
+        color: rgb(255 129 9)
+    }
+}
 .dark-layout{
     .chat-contact-item{
         border-bottom: 1px solid $theme-dark-border-color;
@@ -55,6 +74,11 @@
     }
     .chat-compose-reply-field{
         background: rgba(255, 255, 255, 0.13) !important;
+        border-left: 5px solid rgb(2 255 220) !important;
+        color: #FFF !important;
+        h5, svg{
+            color: rgb(2 255 220)
+        }
     }
     .chat-body {
         .chat-content {
