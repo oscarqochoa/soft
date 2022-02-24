@@ -32,6 +32,6 @@ export const $themeConfig = {
       type: 'static', // static, sticky, hidden
     },
     customizer: true,
-    enableScrollToTop: true,
+    enableScrollToTop: false,
   },
 }
