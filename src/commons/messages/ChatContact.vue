@@ -4,9 +4,17 @@
       size="42"
       :src="user.image"
       :badge="isChatContact"
-      class="badge-minimal "
+      class="badge-minimal"
       :icon="user.type == 1 ? 'person-fill' : 'people-fill'"
-      :badge-variant="statusSession"
+      :badge-variant="
+        user.state_coworker == 1
+          ? 'success'
+          : user.state_coworker == 2
+          ? 'warning'
+          : user.state_coworker
+          ? 'danger'
+          : 'secondary'
+      "
     />
     <div class="d-flex flex-column align-items-end w-100">
       <div class="chat-info flex-grow-1 w-100">
@@ -15,22 +23,19 @@
         </h6>
       </div>
       <div class="d-flex flex-column align-items-end">
-
         <div class="chat-meta text-nowrap">
-          <small
-            class="float-right mb-25 chat-time text-right w-100"
-            >{{ user.date | myGlobalDay }}</small
-          >
-          
+          <small class="float-right mb-25 chat-time text-right w-100">{{
+            user.date | myGlobalDay
+          }}</small>
         </div>
         <span>
-            <b-badge
-              variant="danger"
-              class="badge-glow badge-pill"
-              v-if="user.cm > 0"
-              >{{ 100 > user.cm ? user.cm : '99+' }}</b-badge
-            >
-          </span>
+          <b-badge
+            variant="danger"
+            class="badge-glow badge-pill"
+            v-if="user.cm > 0"
+            >{{ 100 > user.cm ? user.cm : "99+" }}</b-badge
+          >
+        </span>
       </div>
     </div>
   </component>
@@ -59,17 +64,7 @@ export default {
     ...mapGetters({
       skin: "appConfig/skin",
       currentUser: "auth/currentUser",
-      G_USER_STATUS_SESSION: "UserStore/G_USER_STATUS_SESSION"
     }),
-    statusSession() {
-      return this.G_USER_STATUS_SESSION === 1
-        ? "success"
-        : this.G_USER_STATUS_SESSION === 2
-        ? "warning"
-        : this.G_USER_STATUS_SESSION === 3
-        ? "danger"
-        : "secondary";
-    }
   },
   setup() {
     const { resolveAvatarBadgeVariant } = useChat();
