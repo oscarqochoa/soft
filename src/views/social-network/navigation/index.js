@@ -6,6 +6,7 @@ import MigrationsNavigation from '@/views/social-network/views/migrations/migrat
 import ActivitiesNavigation from '@/views/social-network/views/activities/activities.navigation'
 import DashboardNavigation2 from '@/views/social-network/views/dashboard2/dashboard.navigation'
 import DashboardNavigation from '@/views/social-network/views/dashboard/dashboard.navigation'
+import CommissionsNavigation from '@/views/social-network/views/commissions/commissions.navigation'
 
 const navigation = [
   {
@@ -19,5 +20,6 @@ const navigation = [
   ...BankOfFlyersNavigation,
   ...ActivitiesNavigation,
   ...DashboardNavigation2,
+  ...CommissionsNavigation
 ]
 export default navigation
