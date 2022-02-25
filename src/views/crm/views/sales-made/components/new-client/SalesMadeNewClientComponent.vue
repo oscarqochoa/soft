@@ -294,7 +294,7 @@
           <template v-slot:cell(fee)="data">
           <span>
             <span v-if="!data.item.editFee">
-              $ {{data.item.fee}}
+              $ {{typeof data.item.fee === 'number' ? data.item.fee.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : data.item.fee}}
             </span>
             <span v-else>
               <money
@@ -1291,13 +1291,13 @@ export default {
             .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
           tfee: this.items
             .reduce((previous, current) => {
-              const currentFeeAmount = current.fee
+              const currentFeeAmount = current.fee && typeof current.fee === 'string'
                 ? parseFloat(current.fee.replaceAll(',', ''))
-                : 0.0
+                : typeof current.fee === 'number' ?  current.fee : 0.0
               if (typeof previous === 'object') {
-                const previousFeeAmount = previous.fee
-                  ? parseFloat(previous.fee.replaceAll(',', ''))
-                  : 0.0
+                const previousFeeAmount = previous.fee && typeof previous.fee === 'string'
+                    ? parseFloat(previous.fee.replaceAll(',', ''))
+                    : typeof previous.fee === 'number' ?  previous.fee : 0.0
                 return currentFeeAmount + previousFeeAmount
               }
               return currentFeeAmount + previous
