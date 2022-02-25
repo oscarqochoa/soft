@@ -1039,6 +1039,8 @@ export default {
       this.modalData.files.program = data.program
       this.modalData.files.client = data.client
       this.modalData.files.sale_id = data.id
+      this.modalData.files.client_account_id = data.client_account_id
+      this.modalData.files.program_id = data.program_id
       const isCeoOrSupervisor = this.currentUser.role_id == '1' || this.currentUser.role_id == '2'
       const saleStatus = data.status == '4' || data.status == '2'
       if (
