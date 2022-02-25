@@ -12,6 +12,7 @@ export default {
     S_TOTAL_MESSAGES: 0,
     S_FILTERED_MESSAGES: [],
     S_MESSAGES_COUNTER_NOTIFICATION: 0,
+    S_CHAT_COMPOSE_IS_OPEN: false,
   },
   getters: {},
   mutations: {
@@ -41,6 +42,8 @@ export default {
       let obj = state.S_USER_MESSAGES.chat.chat.find(
         (el) => el.index == payload.index
       );
+      Vue.set(obj, "files", payload.data.files_names_last_message);
+      Vue.set(obj, "route_temp", payload.data.route_temp);
       Vue.set(obj, "was_sent", payload.status);
       Vue.set(obj, "error", payload.error);
     },
@@ -66,6 +69,9 @@ export default {
     SET_MESSAGES_COUNTER_NOTIFICATION(state, payload) {
       state.S_MESSAGES_COUNTER_NOTIFICATION = payload;
     },
+    TOGGLE_CHAT_COMPOSE(state, payload) {
+      state.S_CHAT_COMPOSE_IS_OPEN = payload;
+    }
   },
   actions: {
     async A_GET_USER_CONTACTS({ commit }, body) {
@@ -142,6 +148,7 @@ export default {
             index: body.index,
             status: true,
             error: false,
+            data: response.data[0]
           });
           if (body.originalMessageIndex) {
             commit(

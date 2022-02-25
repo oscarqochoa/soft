@@ -14,6 +14,7 @@
       title-class="h3 text-white"
       hide-footer
       modal-class="modal-primary"
+      id="modal-report-of-attendance"
     >
       <content-report></content-report>
     </b-modal>

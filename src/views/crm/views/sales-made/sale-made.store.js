@@ -47,7 +47,7 @@ export default {
       { id: 0, label: 'Pending', variant: 'warning' },
       { id: 1, label: 'Pending', variant: 'warning' },
       { id: 2, label: 'Underview', variant: 'primary' },
-      { id: 3, label: 'Desapproved', variant: 'danger' },
+      { id: 3, label: 'Disapproved', variant: 'danger' },
       { id: 4, label: 'Approved', variant: 'success' },
       { id: 5, label: 'In Supervisor', variant: 'info' },
       { id: 6, label: 'In Ceo', variant: 'info' },

@@ -5,7 +5,7 @@
         <table class="mt-2 mt-xl-0 w-100">
           <tr>
             <th class="pb-50">
-              <amg-icon icon="UserIcon" class="mr-75" />
+              <feather-icon icon="UserIcon" class="mr-75" />
               <span class="font-weight-bold">Email</span>
             </th>
             <td class="pb-50">
@@ -14,7 +14,7 @@
           </tr>
           <tr>
             <th class="pb-50">
-              <amg-icon icon="UserIcon" class="mr-75" />
+              <feather-icon icon="UserIcon" class="mr-75" />
               <span class="font-weight-bold">Password</span>
             </th>
             <td class="pb-50">
@@ -29,11 +29,16 @@
           </tr>
           <tr>
             <th>
-              <amg-icon icon="LockIcon" class="mr-75" />
+              <feather-icon icon="LockIcon" class="mr-75" />
               <span class="font-weight-bold">Rol</span>
             </th>
             <td>
-              {{ userData.roleName }}
+              <template v-for="(role, index) in userData.arrRoles">
+                <span :key="role.role_id"
+                  >{{ role.role_name
+                  }}{{ index != userData.arrRoles.length - 1 ? ", " : "" }}</span
+                >
+              </template>
             </td>
           </tr>
         </table>
@@ -41,7 +46,7 @@
           id="label-modules"
           label="Module(s)"
           label-for="modules"
-          class="mt-1"
+          class="mt-3"
         >
           <template #label>
             <span style="font-size: 14px">Module(s)</span>
@@ -96,5 +101,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

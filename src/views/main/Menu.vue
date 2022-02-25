@@ -17,7 +17,7 @@
             class="card-logo"
           >
             <img
-              :src="`./assets${item.module_icon}`"
+              :src="baseUrl + item.module_icon"
               alt="Logo"
               width="65"
               height="65"
@@ -39,7 +39,7 @@
             @click="redirectToOldSoft(item.module_route)"
           >
             <img
-              :src="`./assets${item.module_icon}`"
+              :src="baseUrl + item.module_icon"
               alt="Logo"
               width="65"
               height="65"
@@ -84,11 +84,11 @@ export default {
   mounted() {},
   created() {
     this.$store.commit('appConfig/UPDATE_NAV_MENU_HIDDEN', true)
-    this.$store.commit('appConfig/UPDATE_NAVBAR_CONFIG', { type: 'floating' })
+    this.$store.commit('appConfig/UPDATE_NAVBAR_CONFIG', { type: 'sticky' })
   },
   destroyed() {
     this.$store.commit('appConfig/UPDATE_NAVBAR_CONFIG', {
-      type: this.navbarConfig,
+      type: 'sticky',
     })
     this.$store.commit('appConfig/UPDATE_NAV_MENU_HIDDEN', this.menuHidden)
     this.$store.commit('appConfig/UPDATE_LAYOUT_TYPE', 'vertical')

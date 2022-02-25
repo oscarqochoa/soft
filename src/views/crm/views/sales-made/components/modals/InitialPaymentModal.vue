@@ -3,7 +3,7 @@
     id="crm-sm-modal-initial-payment"
     v-model="ownControl"
     title-class="h3 text-white font-weight-bolder"
-    size="lg"
+    :size="modalSize"
     title="Initial Payment"
     scrollable
     modal-class="modal-primary"
@@ -14,9 +14,10 @@
         :client="initial_payment.nameClient"
         :program="initial_payment.nameProgram"
         class="sticky-top mt-1"
+        :class="{'bg-background-dark': skin === 'dark', 'bg-white': skin !== 'dark'}"
       />
       <b-row>
-        <b-col>
+        <b-col sm="6" cols="12">
           <label>Amount</label>
           <b-input-group prepend="$">
             <money
@@ -27,7 +28,9 @@
             />
           </b-input-group>
         </b-col>
-        <b-col>
+        <b-col
+            sm="6" cols="12"
+        >
           <label class="mt-1">Method of Payment</label>
           <b-form-radio-group
             v-model="method"
@@ -57,7 +60,7 @@
       "
       class="mt-3 margin-0"
     >
-      <b-table small :fields="fieldsT1" :items="initial_payment.allcards">
+      <b-table small :fields="fieldsT1" :items="initial_payment.allcards" responsive>
         <template v-slot:cell(select)="data">
           <b-form-radio
             :ref="'campo' + data.item.id"
@@ -93,13 +96,13 @@
       "
       class="mt-1 margin-0"
     >
-      <b-table small :fields="fieldsT2" :items="initial_payment.allcards">
+      <b-table small :fields="fieldsT2" :items="initial_payment.allcards" responsive>
         <template v-slot:cell(amount)="data">
-          <b-input-group>
+          <b-input-group style="min-width: 130px !important;">
             <money
               :ref="'campo' + data.item.id"
               v-model="data.item.model"
-              class="form-control"
+              class="form-control form-control-sm"
               v-bind="{
                 decimal: '.',
                 thousands: ',',
@@ -110,7 +113,8 @@
             />
             <b-input-group-append>
               <b-button
-                variant="success"
+                  class="btn-icon"
+                  variant="success"
                 :disabled="initial_payment.cfeestatus == 0 ? false : true"
                 size="sm"
                 @click="savePayment(data.item.id, 'campo' + data.item.id)"
@@ -131,7 +135,8 @@
                 ? false
                 : true
             "
-            variant="danger"
+            class="btn-icon"
+            variant="flat-danger"
             size="sm"
             @click="deleteCard(data.item.id)"
           >
@@ -172,7 +177,7 @@
       v-if="method === 'credit-card' && listCards.length > 0"
       class="mt-3 margin-0"
     >
-      <b-table :fields="fieldsT3" :items="listCards" small />
+      <b-table :fields="fieldsT3" :items="listCards" small responsive/>
     </div>
     <b-row
       v-if="
@@ -240,6 +245,7 @@ import CrmService from "@/views/crm/services/crm.service";
 import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
 import DeleteCardModal from "@/views/crm/views/sales-made/components/modals/DeleteCardModal.vue";
 import ProgramClientHeader from "@/views/crm/views/sales-made/components/modals/ProgramClientHeader.vue";
+import {mapGetters} from "vuex";
 
 export default {
   name: "InitialPaymentModal",
@@ -317,11 +323,13 @@ export default {
         {
           label: "Card Holder Name",
           key: "cardholdername",
+          thStyle: {minWidth: "140px !important"},
         },
         {
           label: "Card Number",
           key: "cardnumber",
           formatter: (value) => `XXXX-XXXX-XXXX-${value}`,
+          thStyle: {minWidth: "160px !important"},
         },
         {
           label: "Type",
@@ -357,11 +365,13 @@ export default {
         {
           label: "Card Holder Name",
           key: "cardholdername",
+          thStyle: {minWidth: "135px !important"},
         },
         {
           label: "Card Number",
           key: "cardnumber",
           formatter: (value) => `XXXX-XXXX-XXXX-${value}`,
+          thStyle: {minWidth: "152px !important"},
         },
         {
           label: "Type",
@@ -389,24 +399,29 @@ export default {
         {
           label: "Transaction ID",
           key: "transaction_id",
+          thStyle: {minWidth: "120px !important"},
         },
         {
           label: "Amount",
           key: "amount",
           formatter: (value) => `$ ${value}`,
+          thStyle: {minWidth: "90px !important"},
         },
         {
           label: "Credit Card",
           key: "card_number",
+          thStyle: {minWidth: "110px !important"},
         },
         {
           label: "User",
           key: "user",
+          thStyle: {minWidth: "100px !important"},
         },
         {
           label: "Date",
           key: "settlement_date",
           formatter: (value) => this.$options.filters.myGlobalDay(value),
+          thStyle: {minWidth: "160px !important"},
         },
       ],
       notApiCards: false,
@@ -416,6 +431,13 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      skin: 'appConfig/skin'
+    }),
+    modalSize() {
+      if (this.screenWidth > 992) return 'lg'
+      return 'xlg'
+    },
     valorEdit() {
       return (
         this.initial_payment.type == 1 ||
@@ -543,6 +565,8 @@ export default {
                 const res = await this.showSuccessSwal();
                 if (res.value) {
                   this.amount = response.data.data;
+                  console.log(this.$refs[refCard])
+                  if(this.initial_payment.programid != 2) this.$refs[refCard].$el.value = "$ 0.00";
                   await this.getListCards();
                   this.reloadTable = true;
                   if (this.initial_payment.programid == 2) {
@@ -609,5 +633,9 @@ export default {
 
 .modal-body {
   padding: 1px 0px !important;
+}
+
+.bg-background-dark {
+  background-color: #2B2B4B !important;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-row>
-      <b-table-simple hover small caption-top responsive bordered>
+      <b-table-simple small caption-top responsive bordered>
         <b-thead>
           <b-tr>
             <b-th>User</b-th>

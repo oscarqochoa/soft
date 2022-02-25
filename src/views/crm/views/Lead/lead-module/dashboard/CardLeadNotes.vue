@@ -68,7 +68,7 @@
             style="margin-right: 10px"
             @click="openHistoryModal"
           />
-          <b-button variant="primary" size="sm" @click="openAddNewNote">Add</b-button>
+          <b-button variant="primary" @click="openAddNewNote">Add</b-button>
         </b-col>
       </b-row>
     </validation-observer>

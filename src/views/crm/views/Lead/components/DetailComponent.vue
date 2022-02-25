@@ -8,7 +8,7 @@
         <template v-else-if="detail && !detail.length">
           <b-col sm="6" v-bind:key="key">
             <b-form-group :label="detail.label">
-              <span>{{ detail.value }}</span>
+              <span v-html="detail.value"></span>
             </b-form-group>
           </b-col>
         </template>

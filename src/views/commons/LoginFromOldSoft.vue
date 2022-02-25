@@ -1,12 +1,13 @@
-<template />
+<template/>
 
 <script>
 import useJwt from '@/auth/jwt/useJwt'
-import { getHomeRouteForLoggedInUser, isUserLoggedIn } from '@/auth/utils'
+import {getHomeRouteForLoggedInUser, isUserLoggedIn, getUserData} from '@/auth/utils'
 import subscribePusher from '@/pusher'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import { email, required } from '@core/utils/validations/validations'
+import {email, required} from '@core/utils/validations/validations'
 import crypto from 'crypto-js'
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: 'LoginFromOldSoft',
@@ -22,25 +23,37 @@ export default {
       loading: false,
     }
   },
+  computed: {
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    })
+  },
   async created() {
     if (this.$route.query.data) {
       const cryptoInfo = this.$route.query.data
       let jsonData = crypto.AES.decrypt(cryptoInfo.replaceAll('-', '/').replaceAll(' ', '+'), 'secret').toString(crypto.enc.Utf8)
       jsonData = JSON.parse(jsonData)
       if (isUserLoggedIn()) {
-        await this.$router.replace(getHomeRouteForLoggedInUser(jsonData))
-      } else {
-        this.userEmail = jsonData.email
-        this.password = jsonData.password
-        await this.loginUser(jsonData.module)
+        if (getUserData().email === jsonData.email) {
+          await this.A_GET_USER_STATUS_SESSION({
+            id: this.currentUser.user_id
+          });
+          await this.$router.replace(getHomeRouteForLoggedInUser(jsonData))
+        }
       }
+      this.userEmail = jsonData.email
+      this.password = jsonData.password
+      await this.loginUser(jsonData.module)
     }
   },
   methods: {
+    ...mapActions({
+      A_GET_USER_STATUS_SESSION: "UserStore/A_GET_USER_STATUS_SESSION"
+    }),
     async loginUser(module = '') {
       this.addPreloader()
       try {
-        const response = await useJwt.login({
+        const response = await useJwt.login2({
           email: this.userEmail,
           password: this.password,
         })
@@ -60,20 +73,23 @@ export default {
           // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
           if (module) userData.module = module
           this.$router
-            .replace(getHomeRouteForLoggedInUser(userData))
-            .then(() => {
-              subscribePusher()
-              this.$toast({
-                component: ToastificationContent,
-                position: 'top-right',
-                props: {
-                  title: `Welcome ${userData.fullName}`,
-                  icon: 'CoffeeIcon',
-                  variant: 'success',
-                  text: `You have successfully logged in as ${userData.roleName}. Now you can start to explore!`,
-                },
+              .replace(getHomeRouteForLoggedInUser(userData))
+              .then(() => {
+                subscribePusher()
+                this.A_GET_USER_STATUS_SESSION({
+                  id: this.currentUser.user_id
+                });
+                this.$toast({
+                  component: ToastificationContent,
+                  position: 'top-right',
+                  props: {
+                    title: `Welcome ${userData.fullName}`,
+                    icon: 'CoffeeIcon',
+                    variant: 'success',
+                    text: `You have successfully logged in as ${userData.roleName}. Now you can start to explore!`,
+                  },
+                })
               })
-            })
         }
       } catch (error) {
         this.$refs.loginForm.setErrors(error.response.data.error)

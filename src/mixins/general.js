@@ -1,10 +1,21 @@
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+import { useWindowSize } from "@vueuse/core";
 
 export default {
   data() {
     return { baseUrl: process.env.VUE_APP_BASE_URL_ASSETS };
   },
   computed: {
+    screenWidth() {
+      const { width } = useWindowSize();
+      return width.value;
+    },
+
+    screenHeight() {
+      const { height } = useWindowSize();
+      return height;
+    },
+
     bgTabsNavs() {
       //getters
       return this.$store.getters["appConfig/skin"] === "dark"
@@ -18,7 +29,7 @@ export default {
     },
     bgLightDark() {
       return this.$store.getters["appConfig/skin"] === "dark"
-        ? "bg-dark"
+        ? "bg-dark text-white"
         : "bg-white";
     },
     isDarkSkin() {
@@ -26,6 +37,16 @@ export default {
     },
     isLightSkin() {
       return this.$store.getters["appConfig/skin"] === "light";
+    },
+    isBigWindow() {
+      return this.$store.getters["app/bigWindow"];
+    },
+
+    isSupervisor() {
+      return this.$store.getters["auth/isSupervisor"];
+    },
+    isCeo() {
+      return this.$store.getters["auth/isCeo"];
     },
   },
   methods: {
@@ -153,7 +174,7 @@ export default {
       position = "top-right",
       title = "Congratulations",
       icon = "CheckIcon",
-      text = "You've successfully done it!"
+      text = "You've successfully done it!",
     }) {
       this.$toast(
         {
@@ -199,7 +220,7 @@ export default {
     showConfirmSwal(
       title = "Are you sure?",
       text = "You won't be able to revert this!",
-      config = {}
+      config = {},
     ) {
       return this.$swal({
         title,

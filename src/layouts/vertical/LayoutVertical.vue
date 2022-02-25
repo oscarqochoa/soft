@@ -4,7 +4,7 @@
     <template #navbar="{toggleVerticalMenuActive}">
       <navbar :toggleVerticalMenuActive="toggleVerticalMenuActive"></navbar>
     </template>
-    <template #vertical-menu-items="{isMouseHovered, isVerticalMenuCollapsed}">
+    <template #vertical-menu-items="{isMouseHovered, isVerticalMenuCollapsed}" v-if="$route.name != 'amg-messages'">
       <sidebar :isMouseHovered="isMouseHovered" :isVerticalMenuCollapsed="isVerticalMenuCollapsed"></sidebar>
     </template>
     <app-customizer

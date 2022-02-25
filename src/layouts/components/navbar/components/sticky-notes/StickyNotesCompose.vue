@@ -43,15 +43,14 @@
               "
             >
               <span class="mr-1" v-for="color in colors" :key="color.id">
-                <!-- :style="`${color.id == noteData.colorId?'':'color: '+color.category}; fill: ${color.category}`" -->
-
                 <div
                   @click="noteData.colorId = color.id"
                   class="border-category"
                   :style="`
-                  
                     border: 2px ${
-                      noteData.colorId == color.id ? color.category : 'white'
+                      noteData.colorId == color.id
+                        ? color.category
+                        : 'transparent'
                     } solid;`"
                 >
                   <div

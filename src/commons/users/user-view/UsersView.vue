@@ -122,11 +122,11 @@ export default {
   },
   created() {
     this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", true);
-    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", { type: "floating" });
+    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", { type: "sticky" });
   },
   destroyed() {
     this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", {
-      type: this.navbarConfig,
+      type: 'sticky',
     });
     this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", this.menuHidden);
     this.$store.commit("appConfig/UPDATE_LAYOUT_TYPE", "vertical");
