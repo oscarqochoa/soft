@@ -56,6 +56,7 @@ export const areaChartOptions = {
   tooltip: {
     x: { show: false },
   },
+
   theme: {
     monochrome: {
       enabled: true,

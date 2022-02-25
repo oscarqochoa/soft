@@ -33,12 +33,14 @@
         small
         no-provider-filtering
         :class="['text-center']"
+        class="font-small-3"
         :busy.sync="isBusy"
         :items="search"
         :fields="fields"
         :per-page="paginate.perPage"
         :current-page="paginate.currentPage"
         :filter="filter"
+
       >
         <template #table-busy>
           <div class="text-center text-primary my-2">

@@ -1,42 +1,42 @@
 <template>
   <div>
     <lead-update
-      v-if="Object.keys(S_LEAD_EDIT).length"
-      :modul="modul"
-      :typeEdit="typeEdit"
-      :lead="S_LEAD_EDIT"
-      :is-add-new-user-sidebar-active.sync="isAddUpdateUserSidebarActive"
-      @update-lead="updateLead"
+        v-if="Object.keys(S_LEAD_EDIT).length"
+        :modul="modul"
+        :typeEdit="typeEdit"
+        :lead="S_LEAD_EDIT"
+        :is-add-new-user-sidebar-active.sync="isAddUpdateUserSidebarActive"
+        @update-lead="updateLead"
     />
     <filter-slot
-      :filter="filters"
-      :filter-principal="filterPrincipal"
-      :total-rows="totalRows"
-      :paginate="paginate"
-      :start-page="startPage"
-      :to-page="toPage"
-      @reset-all-filters="resetAllFilters"
-      @reload="$refs['refClientsList'].refresh()"
+        :filter="filters"
+        :filter-principal="filterPrincipal"
+        :total-rows="totalRows"
+        :paginate="paginate"
+        :start-page="startPage"
+        :to-page="toPage"
+        @reset-all-filters="resetAllFilters"
+        @reload="$refs['refClientsList'].refresh()"
     >
       <template #table>
         <b-table
-          ref="refClientsList"
-          :api-url="clientRoute"
-          class="position-relative"
-          :items="myProvider"
-          :fields="visibleFields"
-          primary-key="id"
-          table-class="text-nowrap"
-          responsive="sm"
-          show-empty
-          no-provider-filtering
-          sticky-header="65vh"
-          :busy="isBusy"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          :current-page="paginate.currentPage"
-          :per-page="paginate.perPage"
-          :filter="searchInput"
+            ref="refClientsList"
+            :api-url="clientRoute"
+            class="position-relative"
+            :items="myProvider"
+            :fields="visibleFields"
+            primary-key="id"
+            table-class="text-nowrap"
+            responsive="sm"
+            show-empty
+            no-provider-filtering
+            sticky-header="65vh"
+            :busy="isBusy"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
+            :current-page="paginate.currentPage"
+            :per-page="paginate.perPage"
+            :filter="searchInput"
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -46,23 +46,23 @@
           </template>
           <template #cell(lead_name)="data">
             <a
-              :class="textLink"
-              @click="openEditLeads(data.item.lead_id, data.index)"
+                :class="textLink"
+                @click="openEditLeads(data.item.lead_id, data.index)"
             >{{data.value}}</a>
           </template>
           <template #cell(accounts2)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
               <span
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
-                :key="index"
+                  v-for="(account, index) in JSON.parse(data.item.accounts)"
+                  :key="index"
               >{{ account.account }}</span>
             </div>
           </template>
           <template #cell(programs)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
               <span
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
-                :key="index"
+                  v-for="(account, index) in JSON.parse(data.item.accounts)"
+                  :key="index"
               >{{ account.program }}</span>
             </div>
           </template>
@@ -71,47 +71,47 @@
               <template v-for="(account, index) in JSON.parse(data.item.accounts)">
                 <span :key="index" class="d-flex justify-content-between align-items-center">
                   <feather-icon
-                    v-if="account.status == 1"
-                    icon="CircleIcon"
-                    size="13"
-                    :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                      v-if="account.status == 1"
+                      icon="CircleIcon"
+                      size="13"
+                      :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                   />
                   <div
-                    v-if="account.status == 2"
-                    class="client-status client-status-hold1"
-                    :style="`top: 50%;margin-right: 5px; background: ${
+                      v-if="account.status == 2"
+                      class="client-status client-status-hold1"
+                      :style="`top: 50%;margin-right: 5px; background: ${
                       account.validate_sp == 2 ? 'red' : ''
                     }`"
                   />
                   <feather-icon
-                    v-if="account.status == 3"
-                    icon="CircleIcon"
-                    size="13"
-                    :style="`color: #0066FF; border-color: #0066FF; background: #0066FF; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                      v-if="account.status == 3"
+                      icon="CircleIcon"
+                      size="13"
+                      :style="`color: #0066FF; border-color: #0066FF; background: #0066FF; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                   />
                   <feather-icon
-                    v-if="
+                      v-if="
                       account.status == 4 ||
                       account.status == 5 ||
                       account.status == 6
                     "
-                    icon="CircleIcon"
-                    size="13"
-                    :style="`color: red; border-color: red; background: red; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                      icon="CircleIcon"
+                      size="13"
+                      :style="`color: red; border-color: red; background: red; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                   />
                   <span>
                     {{
-                    account.status == 1
-                    ? "Active"
-                    : account.status == 2
-                    ? "Hold"
-                    : account.status == 3
-                    ? "Transition"
-                    : account.status == 4
-                    ? "Canceled"
-                    : account.status == 5
-                    ? "Loyal"
-                    : "Closed"
+                      account.status == 1
+                          ? "Active"
+                          : account.status == 2
+                              ? "Hold"
+                              : account.status == 3
+                                  ? "Transition"
+                                  : account.status == 4
+                                      ? "Canceled"
+                                      : account.status == 5
+                                          ? "Loyal"
+                                          : "Closed"
                     }}
                   </span>
                 </span>
@@ -121,22 +121,22 @@
           <template #cell(advisors)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
               <span
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
-                :key="index"
+                  v-for="(account, index) in JSON.parse(data.item.accounts)"
+                  :key="index"
               >{{ account.advisor_name }}</span>
             </div>
           </template>
           <template #cell(ext)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
               <span
-                v-for="(account, index) in JSON.parse(data.item.accounts)"
-                :key="index"
+                  v-for="(account, index) in JSON.parse(data.item.accounts)"
+                  :key="index"
               >{{ account.advisor_extension }}</span>
             </div>
           </template>
           <template #cell(created_at)="data">
             {{
-            data.item.created_at | myGlobal
+              data.item.created_at | myGlobal
             }}
           </template>
         </b-table>
@@ -383,8 +383,8 @@ export default {
     },
     clientRoute() {
       return this.$route.meta.isClientsTab
-        ? "/clients/search-clients"
-        : "/clients/search-share-clients";
+          ? "/clients/search-clients"
+          : "/clients/search-share-clients";
     },
     visibleFields() {
       return this.arrayColumns.filter(column => column.visible);
@@ -424,7 +424,7 @@ export default {
       A_GET_PROGRAMS: "CrmGlobalStore/A_GET_PROGRAMS",
       A_GET_CREDIT_REPORTS: "CrmCreditReportStore/A_GET_CREDIT_REPORTS",
       A_GET_CREDIT_REPORT_PENDINGS:
-        "CrmCreditReportStore/A_GET_CREDIT_REPORT_PENDINGS",
+          "CrmCreditReportStore/A_GET_CREDIT_REPORT_PENDINGS",
       A_GET_CALLS: "CrmCallStore/A_GET_CALLS",
       A_GET_STATE_LEADS: "CrmLeadStore/A_GET_STATE_LEADS",
       A_GET_STATUS_LEADS: "CrmLeadStore/A_GET_STATUS_LEADS",
@@ -487,7 +487,7 @@ export default {
         type: this.paymentType,
         day: this.paymentDay,
         rol_id: this.currentUser.arrRoles.find(rol => rol.module_id == 2)
-          .role_id,
+            .role_id,
         session: this.currentUser.user_id,
         modul: this.modul
       };
@@ -506,7 +506,7 @@ export default {
     updateLead(lead) {
       //Full name
       this.items[this.editSelectedIndex].lead_name = `${
-        lead.first_name
+          lead.first_name
       } ${lead.middle_name || ""} ${lead.last_name}`;
       //Mobile
       this.items[this.editSelectedIndex].mobile = lead.mobile;

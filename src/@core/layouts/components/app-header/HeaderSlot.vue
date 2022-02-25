@@ -21,12 +21,11 @@
                 />
               </b-breadcrumb-item>
               <b-breadcrumb-item
-                v-for="item in $route.meta.breadcrumb"
-                :key="item.text"
-                :active="item.active"
-                :to="item.to"
-                >{{ item.text }}</b-breadcrumb-item
-              >
+                  v-for="item in $route.meta.breadcrumb"
+                  :key="item.text"
+                  :active="item.active"
+                  :to="item.to"
+              >{{ item.text }}</b-breadcrumb-item>
             </b-breadcrumb>
           </div>
         </b-col>
