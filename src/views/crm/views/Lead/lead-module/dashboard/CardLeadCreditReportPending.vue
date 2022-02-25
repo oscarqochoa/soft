@@ -3,12 +3,12 @@
     <b-card-body class="px-0">
       <b-table
         show-empty
-        sticky-header
+        sticky-header="17vh"
         striped
         responsive="sm"
         :fields="fieldsEvent"
         :items="S_CREDIT_REPORT_PENDINGS"
-        :busy.sync="isBusy"
+        :busy="busy"
         class="mb-0"
         small
       >
@@ -103,7 +103,11 @@ export default {
         event.CrmCreditReportStore.S_CREDIT_REPORT_PENDINGS
     })
   },
-  created() {},
+  async created() {
+    this.busy = true;
+    await this.getCreditReportsPending();
+    this.busy = false;
+  },
   directives: { Ripple },
   data() {
     return {
@@ -114,13 +118,15 @@ export default {
         { key: "actions" }
       ],
       scoreId: null,
-      modalTrackingStatus: false
+      modalTrackingStatus: false,
+      busy: false
     };
   },
   methods: {
     ...mapActions({
       /* A_GET_TEMPLATES: 'CrmTemplateStore/A_GET_TEMPLATES' */
-      A_GET_CREDIT_REPORT_PENDINGS: "CrmCreditReportStore/A_GET_CREDIT_REPORTS",
+      A_GET_CREDIT_REPORT_PENDINGS:
+        "CrmCreditReportStore/A_GET_CREDIT_REPORT_PENDINGS",
       A_COUNT_CREDIT_REPORT_PENDINGS:
         "CrmCreditReportStore/A_COUNT_CREDIT_REPORT_PENDINGS"
     }),
@@ -131,7 +137,7 @@ export default {
     async countPendingTab() {
       try {
         await this.A_COUNT_CREDIT_REPORT_PENDINGS({
-          id: this.currentUser.user_id,
+          id: this.lead.id,
           modul: this.currentUser.modul_id
         });
       } catch (error) {
@@ -141,7 +147,7 @@ export default {
     async getCreditReportsPending() {
       try {
         const response = await this.A_GET_CREDIT_REPORT_PENDINGS({
-          id: this.currentUser.user_id,
+          id: this.lead.id,
           modul: this.currentUser.modul_id
         });
         if (this.isResponseSuccess(response)) {

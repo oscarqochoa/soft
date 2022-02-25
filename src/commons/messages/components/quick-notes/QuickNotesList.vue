@@ -281,6 +281,7 @@ export default {
     closeModal() {
       this.$bvModal.hide("new-quick-note");
       this.$refs.refQuickNotesList.refresh();
+      this.$store.dispatch('MessageStore/A_GET_QUICK_NOTES', {id: this.currentUser.user_id});
     },
     editQuickNote(quickNote) {
       this.selectedQuickNote.title = quickNote.title;

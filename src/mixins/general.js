@@ -41,6 +41,13 @@ export default {
     isBigWindow() {
       return this.$store.getters["app/bigWindow"];
     },
+
+    isSupervisor() {
+      return this.$store.getters["auth/isSupervisor"];
+    },
+    isCeo() {
+      return this.$store.getters["auth/isCeo"];
+    },
   },
   methods: {
     convertProgramToModule(program) {
@@ -213,7 +220,7 @@ export default {
     showConfirmSwal(
       title = "Are you sure?",
       text = "You won't be able to revert this!",
-      config = {}
+      config = {},
     ) {
       return this.$swal({
         title,

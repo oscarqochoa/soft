@@ -285,6 +285,7 @@
       button-size="sm"
       ok-title="Ok"
       hide-footer
+      centered
       @hidden="actionOnHideUploadFileModal"
     >
       <drag-and-drop v-model="files" :files-array="files" />

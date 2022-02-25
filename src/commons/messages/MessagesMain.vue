@@ -160,15 +160,35 @@
           :opacity="0.85"
           :blur="'1px'"
           rounded="sm"
-          style="height: calc(50% - 32.5px)"
+          :style="{
+            height: S_CHAT_COMPOSE_IS_OPEN
+              ? 'calc(calc( 50% - 35px ) - 32.5px)'
+              : 'calc(100% - 65px)',
+          }"
         >
+          <!-- whithout chat log -->
+
+          <!-- style="height: calc(100% - 65px)"
+          :style="{ height: !subjectresp ? '100%' : '100%' }" -->
+
+          <!-- end wihout chat log -->
+
+          <!-- with chat-log  -->
           <!-- style="height: calc(50% - 32.5px)" -->
-          <!-- 46%; -->
+          <!-- :style="{ height: !subjectresp ? '100%' : 'calc(100% - 78px)' }" -->
+
+          <!--  end with chat-log  -->
           <vue-perfect-scrollbar
             ref="refChatLogPS"
             :settings="perfectScrollbarSettings"
             class="user-chats scroll-area"
-            :style="{ height: !subjectresp ? '100%' : 'calc(100% - 78px)' }"
+            :style="{
+              height: S_CHAT_COMPOSE_IS_OPEN
+                ? !subjectresp
+                  ? '100%'
+                  : 'calc(100% - 78px)'
+                : '100%',
+            }"
             id="chat"
             @scroll="scrollListener($event)"
           >
@@ -190,10 +210,26 @@
               d-flex
               justify-content-between
               align-items-center
+              chat-compose-reply-field
             "
             :style="{ height: '78px', overflow: 'auto' }"
           >
-            <b-alert
+            <div>
+              <h5>{{ subjectresp }}</h5>
+              <span
+                v-html="contentresp"
+                style="
+                  max-height: 2.5ch;
+                  max-width: 20ch;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: inline-block;
+                  white-space: nowrap;
+                "
+              ></span>
+            </div>
+
+            <!-- <b-alert
               variant="primary"
               show
               style="
@@ -207,28 +243,41 @@
             >
               <h4>{{ subjectresp }}</h4>
               <span v-html="contentresp"></span>
-            </b-alert>
+            </b-alert> -->
             <span>
               <feather-icon
                 icon="XCircleIcon"
-                class="text-primary cursor-pointer"
+                class="cursor-pointer"
                 size="20"
                 @click="closeReply()"
               />
             </span>
           </div>
+          <b-button
+            variant="gradient-danger"
+            size="lg"
+            v-if="!S_CHAT_COMPOSE_IS_OPEN"
+            class="btn-icon rounded-circle"
+            style="position: absolute; bottom: 25px; right: 25px"
+            @click="TOGGLE_CHAT_COMPOSE(true)"
+          >
+            <tabler-icon icon="ArrowBackUpIcon" size="20" />
+          </b-button>
         </b-overlay>
         <!-- Chat Reply -->
 
         <!-- Message Input -->
-
-        <chat-compose
-          style="height: calc(100% - 0.5px)"
-          @scroll-to-bottom="scrollToBottom"
-          :subjectresp="subjectresp"
-          :contentresp="contentresp"
-          @on-send-message-reply="closeReply()"
-        ></chat-compose>
+        <transition name="fade">
+          <chat-compose
+            style="height: calc(50% - 32.5px)"
+            @scroll-to-bottom="scrollToBottom"
+            :subjectresp="subjectresp"
+            :contentresp="contentresp"
+            @close-reply="closeReply()"
+            @on-send-message-reply="closeReply()"
+            v-if="S_CHAT_COMPOSE_IS_OPEN"
+          ></chat-compose>
+        </transition>
       </div>
     </section>
 
@@ -271,7 +320,7 @@ import ChatActiveChatContentDetailsSidedbar from "./ChatActiveChatContentDetails
 import ChatLog from "./ChatLog.vue";
 import useChat from "./useChat";
 import ChatCompose from "./components/ChatCompose.vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 
 export default {
   async mounted() {
@@ -314,6 +363,8 @@ export default {
       S_USER_TO_MESSAGE: (state) => state.MessageStore.S_USER_TO_MESSAGE,
       S_USER_MESSAGES: (state) => state.MessageStore.S_USER_MESSAGES,
       S_TOTAL_MESSAGES: (state) => state.MessageStore.S_TOTAL_MESSAGES,
+      S_CHAT_COMPOSE_IS_OPEN: (state) =>
+        state.MessageStore.S_CHAT_COMPOSE_IS_OPEN,
     }),
   },
   methods: {
@@ -322,7 +373,11 @@ export default {
       A_GET_USER_MESSAGES: "MessageStore/A_GET_USER_MESSAGES",
       A_SEARCH_MESSAGES_IN_CHAT: "MessageStore/A_SEARCH_MESSAGES_IN_CHAT",
     }),
+    ...mapMutations({
+      TOGGLE_CHAT_COMPOSE: "MessageStore/TOGGLE_CHAT_COMPOSE",
+    }),
     onReplyMessage(msgData) {
+      this.TOGGLE_CHAT_COMPOSE(true);
       this.subjectresp = msgData.subjectresp;
       this.contentresp = msgData.contentresp;
     },
@@ -418,7 +473,7 @@ export default {
           container.scroll({
             behavior: "smooth",
             left: 0,
-            top: element[0].offsetTop,
+            top: element[0].$el.offsetTop,
           });
         });
 
@@ -470,12 +525,13 @@ export default {
     },
   },
   created() {
-    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", true);
-    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", { type: "floating" });
+    // this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", true);
+    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", { type: "hidden" });
+    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", false);
   },
   destroyed() {
     this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", {
-      type: this.navbarConfig,
+      type: 'sticky',
     });
     this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", this.menuHidden);
     this.$store.commit("appConfig/UPDATE_LAYOUT_TYPE", "vertical");
@@ -664,3 +720,61 @@ export default {
 @import "~@core/scss/base/pages/app-email.scss";
 </style>
 
+<style scoped lang="scss">
+
+.fade-enter,
+.fade-leave-to {
+transition: 500ms ease-in-out;
+transition-property: opacity, transform;
+opacity: 0;
+transform: translateY(100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+transition: 500ms ease-in-out;
+transition-property: opacity, transform;
+}
+.fade-leave-active {
+transition: 500ms ease-in-out;
+transition-property: opacity, transform;
+opacity: 1;
+transform: translateY(0);
+}
+
+
+
+
+
+
+
+
+// .fade-enter{
+//   transform: translateY(-100%);
+//   &-to{
+//     transform: translateY(0);
+//   }
+// }
+// .fade-leave{
+//   transform: translateY(0);
+//   &-to{
+//     transform: translateY(-100%);
+//   }
+// }
+
+// .slide-fade-enter-active {
+//   transition: all 1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+// }
+// .slide-fade-leave-active {
+//   transition: all 1.5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+// }
+// .slide-fade-enter, .slide-fade-leave-to
+// /* .slide-fade-leave-active below version 2.1.8 */ {
+//   transform: translateY(0);
+//   opacity: 0;
+// }
+
+
+
+
+</style>

@@ -7,8 +7,9 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 $borderamg: #efb911;
 @import "components/card";
 @import "components/kendo";
-@import "components/form-wizard";
 @import "components/vue-tree";
+@import "components/form-wizard";
+@import "components/messages";
 @import "variables/new-colors";
 @import "variables/variables";
 .client-status {
@@ -188,14 +189,8 @@ $borderamg: #efb911;
     }
   }
 }
-.dark-layout {
-  .modal-backdrop {
-    background-color: #0b1822 !important;
-  }
-}
-.modal-backdrop {
-  opacity: 0.85 !important;
-}
+
+
 
 //Modal XMD
 
@@ -247,10 +242,10 @@ $borderamg: #efb911;
   box-shadow: 0 4px 8px 0 rgba($important, 0.12), 0 2px 4px 0 rgba($important, 0.08) !important;
 }
 
-:root {
-  --scroll-light: rgba(0, 0, 0, 0.3);
-  --scroll-dark: rgba(255, 255, 255, 0.3);
-  &.dark {
+:root{
+  --scroll-light: rgba(0, 0, 0, 0.30);
+  --scroll-dark: rgba(255, 255, 255, 0.15);
+  &.dark{
     --scroll-light: var(--scroll-dark);
   }
 }
@@ -332,7 +327,7 @@ $borderamg: #efb911;
 
 //navs-tabs
 .nav-dark-tabs {
-  background: #0e1d44;
+  background: #2F2F31;
 }
 .nav-light-tabs {
   background: #efefef;
@@ -400,10 +395,35 @@ $borderamg: #efb911;
   }
 }
 
+.modal-backdrop {
+  backdrop-filter: blur(11px) !important;
+  opacity: 0.80;
+}
+
+
 //header dark without box shadow
 
-.dark-layout {
+
+
+
+.dark-layout{
   .header-navbar {
     box-shadow: none !important;
+  }
+  .card {
+    box-shadow: none !important;
+  }
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.80) !important;
+    backdrop-filter: blur(11px) !important;
+  }
+  .col-form-label{
+    color: rgba(255, 255, 255, 0.6) !important;
+  }
+  .input-group .input-group-text{
+    border-color: $theme-dark-input-border-color;
+  }
+  .border-hr{
+    border-color: $theme-dark-input-placeholder-color !important;
   }
 }

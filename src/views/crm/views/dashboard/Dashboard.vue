@@ -20,10 +20,12 @@
             <!-- Card Leads-->
             <b-row class="b-row-card">
               <b-card
-                  @click="changeTab(0)"
-                  class="ecommerce-card-leads ecommerce-card col-lg-12 cursor-pointer"
-                  :class="classAdd"
-                  :style="
+                @click="changeTab(0)"
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-leads': !itemCards[0] && !isTouch,
+                }"
+                :style="
                   switchHoverByCard(
                     0,
                     'linear-gradient(90deg, #0090E7 0%, #8F5FE8 100%)'
@@ -84,10 +86,12 @@
             <!-- Card Appointments-->
             <b-row class="b-row-card">
               <b-card
-                  class="ecommerce-card-appointments ecommerce-card col-lg-12 cursor-pointer"
-                  :class="classAdd"
-                  @click="changeTab(1)"
-                  :style="
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-appointments': !itemCards[1] && !isTouch,
+                }"
+                @click="changeTab(1)"
+                :style="
                   switchHoverByCard(
                     1,
                     'linear-gradient(90deg, #FAC632 0%, #F37432 100%)'
@@ -148,10 +152,12 @@
             <!-- Card Tasks-->
             <b-row class="b-row-card">
               <b-card
-                  class="ecommerce-card-tasks ecommerce-card col-lg-12 cursor-pointer"
-                  :class="classAdd"
-                  @click="changeTab(2)"
-                  :style="
+                class=" ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-tasks': !itemCards[2] && !isTouch,
+                }"
+                @click="changeTab(2)"
+                :style="
                   switchHoverByCard(
                     2,
                     'linear-gradient(90deg, #961BCE 0%, #D0317D 100%)'
@@ -212,10 +218,12 @@
             <!-- Card Sales-->
             <b-row class="b-row-card">
               <b-card
-                  class="ecommerce-card-sales ecommerce-card col-lg-12 cursor-pointer"
-                  :class="classAdd"
-                  @click="changeTab(3)"
-                  :style="
+                class=" ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-sales': !itemCards[3] && !isTouch,
+                }"
+                @click="changeTab(3)"
+                :style="
                   switchHoverByCard(
                     3,
                     'linear-gradient(90deg, #ADD210 0%, #5F873E 100%)'
@@ -276,10 +284,12 @@
             <!-- Card Capturated-->
             <b-row class="b-row-card">
               <b-card
-                  class="ecommerce-card-capturated ecommerce-card col-lg-12 cursor-pointer"
-                  :class="classAdd"
-                  @click="changeTab(4)"
-                  :style="
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-capturated': !itemCards[4] && !isTouch,
+                }"
+                @click="changeTab(4)"
+                :style="
                   switchHoverByCard(
                     4,
                     'linear-gradient(90deg, #FE8F8F 0%, #EC1443 100%)'
@@ -350,10 +360,11 @@
                     <!-- Select User -->
                     <b-col cols="12" sm="12" md="12" lg="5" class="pb-1">
                       <v-select
-                          id="v-user"
-                          v-if="[1, 2].includes(currentUser.role_id)"
-                          v-model="userfilter"
-                          :style="
+                        id="v-user"
+                        v-if="[1, 2].includes(currentUser.role_id)"
+                        showIcons="false"
+                        v-model="userfilter"
+                        :style="
                           allSizeOfScreen === 'xxl'
                             ? 'font-size: 15px;width: 244px'
                             : allSizeOfScreen === 'lg'
@@ -380,16 +391,8 @@
                       >
                         <!-- Graphic Sub Title -->
                         <div>
-                          <span
-                              style="
-                              font-family: Rubik;
-                              font-style: normal;
-                              font-weight: normal;
-                              font-size: 15px;
-                              line-height: 11px;
-                              color: #9f9da8;
-                            "
-                          >Monthly Graphics</span
+                          <span class="ClassWord" style="color: #9f9da8"
+                            >Monthly Graphics</span
                           >
                         </div>
                       </div>
@@ -411,16 +414,18 @@
                 </div>
                 <!-- Array of Sub title Totals -->
                 <div
-                    class="col-lg-8 col-md-12 col-xl-5 d-flex flex-wrap"
-                    style="width: 100%"
-                    v-if="allSizeOfScreen !== 'xxl'"
+                  class="col-lg-12 col-md-12 col-xl-5 d-flex flex-wrap"
+                  style="width: 100%"
+                  v-if="allSizeOfScreen !== 'xxl'"
                 >
                   <div
-                      v-for="data in totalYearByCard"
-                      :key="data.id"
-                      class="d-flex flex-wrap mb-1 justify-content-between pr-1"
-                      :style="`${
-                      allSizeOfScreen === 'xs' || allSizeOfScreen === 'sm'
+                    v-for="data in totalYearByCard"
+                    :key="data.id"
+                    class="d-flex flex-wrap mb-1 justify-content-between pr-1"
+                    :style="`${
+                      allSizeOfScreen === 'lg'
+                        ? 'width: 33%'
+                        : allSizeOfScreen === 'xs' || allSizeOfScreen === 'sm'
                         ? 'width: 80%'
                         : screenHeight == 800
                         ? 'width: 100%'
@@ -428,19 +433,10 @@
                     }`"
                   >
                     <!-- Name of -->
-                    <div
-                        class="d-flex justify-content-center align-items-center"
-                    >
+                    <div :class="flexCenter">
                       <span
-                          class=""
-                          style="
-                          font-family: Rubik;
-                          font-style: normal;
-                          font-weight: normal;
-                          font-size: 15px;
-                          line-height: 11px;
-                        "
-                          :style="
+                        class="ClassWord"
+                        :style="
                           allSizeOfScreen === 'xxl'
                             ? 'font-size: 150%'
                             : 'font-size: 15px;color:#9F9DA8'
@@ -450,14 +446,8 @@
                     </div>
                     <!-- Quantity of Data -->
                     <div class="important" style="float: left">
-                      <div
-                          class="d-flex justify-content-center align-items-center"
-                          style="background: #0090e7; border-radius: 5px; text-center;width:50px;height: 38px;"
-                      >
-                        <span
-                            class="font-weight-bolder"
-                            style="color: white; font-size: 18px"
-                        >
+                      <div :class="flexCenter" class="box-number">
+                        <span class="font-weight-bolder data-subtitle-num">
                           {{ data.total }}
                         </span>
                       </div>
@@ -473,19 +463,10 @@
                     :key="data.id"
                     class="d-flex justify-content-between"
                 >
-                  <div
-                      class="ml-2 d-flex justify-content-center align-items-center"
-                  >
+                  <div class="ml-2" :class="flexCenter">
                     <span
-                        class=""
-                        style="
-                        font-family: Rubik;
-                        font-style: normal;
-                        font-weight: normal;
-                        font-size: 15px;
-                        line-height: 11px;
-                      "
-                        :style="
+                      class="ClassWord"
+                      :style="
                         allSizeOfScreen === 'xxl'
                           ? 'font-size: 150%'
                           : 'font-size: 15px;color:#9F9DA8'
@@ -494,14 +475,8 @@
                     >
                   </div>
                   <div class="important" style="float: left">
-                    <div
-                        class="d-flex justify-content-center align-items-center"
-                        style="background: #0090e7; border-radius: 5px; text-center;width:50px;height: 38px;"
-                    >
-                      <span
-                          class="font-weight-bolder"
-                          style="color: white; font-size: 18px"
-                      >
+                    <div class="box-number" :class="flexCenter">
+                      <span class="font-weight-bolder data-subtitle-num">
                         {{ data.total }}
                       </span>
                     </div>
@@ -637,23 +612,23 @@ export default {
       }
     },
     statusHeightByDevicesColOne: function () {
-      return this.statusSizeScreen >= 1368
-          ? "height: 45vh;max-height: 45vh;overflow: auto;"
-          : this.statusSizeScreen >= 1024
-              ? "height: 55vh;max-height: 55vh;overflow: auto;"
-              : this.statusSizeScreen >= 912 && this.allSizeOfScreen !== "xxl"
-                  ? "height: 50vh;max-height: 50vh;overflow: auto;"
-                  : this.statusSizeScreen >= 912
-                      ? ""
-                      : this.statusSizeScreen >= 800
-                          ? "height: 65vh;max-height: 65vh;overflow: auto;"
-                          : this.statusSizeScreen >= 768
-                              ? ""
-                              : this.statusSizeScreen >= 720
-                                  ? "height: 80vh;max-height: 80vh;overflow: auto;"
-                                  : this.statusSizeScreen >= 540 && this.statusSizeScreen <= 600
-                                      ? "height: 110vh;max-height: 110vh;overflow: auto;"
-                                      : "";
+      return this.screenHeight >= 1368
+        ? "height: 45vh;max-height: 45vh;overflow: auto;"
+        : this.screenHeight >= 1024
+        ? "height: 60vh;max-height: 60vh;overflow: auto;"
+        : this.screenHeight >= 912 && this.allSizeOfScreen !== "xxl"
+        ? "height: 50vh;max-height: 50vh;overflow: auto;"
+        : this.screenHeight >= 912
+        ? ""
+        : this.screenHeight >= 800
+        ? "height: 65vh;max-height: 65vh;overflow: auto;"
+        : this.screenHeight >= 768
+        ? ""
+        : this.screenHeight >= 720
+        ? "height: 80vh;max-height: 80vh;overflow: auto;"
+        : this.screenHeight >= 540 && this.screenHeight <= 600
+        ? "height: 110vh;max-height: 110vh;overflow: auto;"
+        : "";
     },
     statusHeightByScreenColTwo: function () {
       console.log(this.allSizeOfScreen)

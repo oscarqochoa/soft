@@ -323,19 +323,60 @@ const actions = {
   },
   async A_SET_LEADS({ commit }, body) {
     try {
-      const response = await crmLead.postCreateLead(body)
+      const response = await crmLead.postCreateLead(body);
+      body.state_hour = body.state
+
+      for(let i = 0; i < body.program.length; i++){
+        switch(body.program[i].value){
+          case "Business":
+            body.program[i] = {
+              ...body.program[i],
+              ...{logo:`/images/logos/logo-${'bu'}.png`}
+            }
+            break
+          case "Boost Credit":
+            body.program[i] = {
+              ...body.program[i],
+              ...{logo:`/images/logos/logo-${'bc'}.png`}
+            }
+            break
+          case "Credit Experts":
+            body.program[i] = {
+              ...body.program[i],
+              ...{logo:`/images/logos/logo-${'ce'}.png`}
+            }
+            break
+          case "Debt Solution":
+            body.program[i] = {
+              ...body.program[i],
+              ...{logo:`/images/logos/logo-${'ds'}.png`}
+            }
+            break
+          case "Tax Research":
+            body.program[i] = {
+              ...body.program[i],
+              ...{logo:`/images/logos/logo-${'tr'}.png`}
+            }
+            break
+          default:
+            body.program[i] = {
+              ...body.program[i],
+              ...{logo:""}
+            }
+            break
+        }
+      }
+
+      
+      body.programs = JSON.stringify(body.program)
+      console.log(body)
       if (mixins.methods.isResponseSuccess(response)) {
-        // body.id = response.data.id;
-        // commit("UNSHIFT_LEADS_DATA", {
-        //   destination: "S_LEADS",
-        //   data: body,
-        // });
-        commit("SET_UPDATE_TABLE_LEAD",true)
         body.id = response.data.id
         commit('UNSHIFT_LEADS_DATA', {
           destination: 'S_LEADS',
           data: body,
-        })
+        });
+        // commit("SET_UPDATE_TABLE_LEAD",true)
       }
       return response
     } catch (error) {

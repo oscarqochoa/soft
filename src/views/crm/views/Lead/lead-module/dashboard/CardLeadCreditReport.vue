@@ -35,8 +35,7 @@
             class="show-lead-score-cr"
             style="border: 2px solid #0566b7"
             :style="`color: ${colorScoreTransunion(score.experian)};`"
-            >{{ experianCharAt == "N" ? "-" : score.experian }}</span
-          >
+          >{{ experianCharAt == "N" ? "-" : score.experian }}</span>
         </b-col>
         <b-col v-if="score.equifax !== ''" cols="4" class="text-center">
           <p style="color: #f31414">EQUIFAX</p>
@@ -44,8 +43,7 @@
             class="show-lead-score-cr"
             style="border: 2px solid #f31414"
             :style="`color: ${colorScoreTransunion(score.equifax)};`"
-            >{{ equifaxCharAt == "N" ? "-" : score.equifax }}</span
-          >
+          >{{ equifaxCharAt == "N" ? "-" : score.equifax }}</span>
         </b-col>
       </b-row>
     </b-card-body>
@@ -60,10 +58,7 @@
           <span>Obtained</span>
         </template>
 
-        <card-lead-credit-report-obtained
-          :lead="lead"
-          :is-busy="isBusyCreditReportObtained"
-        />
+        <card-lead-credit-report-obtained :lead="lead" :is-busy="isBusyCreditReportObtained" />
       </b-tab>
       <b-tab :active="isTabPendingActive" :title-link-class="bgTabsNavs">
         <template #title>
@@ -108,8 +103,7 @@
           @click="
             /* *INTEGRATE* resources\js\components\lead\showlead\ContentCreditReport.vue - line: 254 */
           "
-          >Old Credentials</b-button
-        >
+        >Old Credentials</b-button>
       </div>
     </template>
 
@@ -122,19 +116,18 @@
       centered
       size="lg"
       hide-footer
+      @hidden="resetModalRequestCR"
     >
       <template #modal-header="{ close }">
         <h5 class="modal-title h2 text-white">Request CR</h5>
 
-        <button type="button" aria-label="Close" class="close" @click="close">
-          ×
-        </button>
+        <button type="button" aria-label="Close" class="close" @click="close">×</button>
       </template>
       <modal-request-cr
         :modul="modul"
         :lead="lead"
         :item="requestCr"
-        @onSubmit="(isTabPendingActive = true), (isModalRequestCR = false)"
+        @onSubmit="(isTabPendingActive = true), (isModalRequestCR = false), (keyModalRequestCR = Math.random())"
       />
     </b-modal>
   </b-card>
@@ -153,12 +146,12 @@ export default {
   components: {
     CardLeadCreditReportObtained,
     CardLeadCreditReportPending,
-    ModalRequestCr,
+    ModalRequestCr
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token",
+      token: "auth/token"
     }),
     transunionCharAt() {
       return this.score.transunion?.charAt(0);
@@ -168,7 +161,7 @@ export default {
     },
     equifaxCharAt() {
       return this.score.equifax?.charAt(0);
-    },
+    }
   },
   created() {
     this.countCreditReportPendings();
@@ -183,57 +176,66 @@ export default {
   props: {
     modul: {
       type: Number,
-      required: true,
+      required: true
     },
     onlyRead: {
       type: Boolean,
-      required: true,
+      required: true
     },
     lead: {
       type: Object,
-      required: true,
+      required: true
     },
     isBusyCreditReportObtained: {
       type: Boolean,
-      required: true,
+      required: true
     },
     isBusyCreditReportPending: {
       type: Boolean,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
       countData: 0,
+      keyModalRequestCR: 0,
       score: {
         equifax: "",
         experian: "",
-        transunion: "",
+        transunion: ""
       },
       isTabPendingActive: false,
       requestCr: {
         type_card: null,
         send_cr: null,
         documents: new Object(),
-        document: "",
+        document: ""
       },
-      isModalRequestCR: false,
+      isModalRequestCR: false
     };
   },
   methods: {
     ...mapActions({
       A_COUNT_CREDIT_REPORT_PENDINGS:
         "CrmCreditReportStore/A_COUNT_CREDIT_REPORT_PENDINGS",
-      A_GET_LEAD_DOCUMENT: "CrmLeadStore/A_GET_LEAD_DOCUMENT",
+      A_GET_LEAD_DOCUMENT: "CrmLeadStore/A_GET_LEAD_DOCUMENT"
     }),
+    resetModalRequestCR() {
+      this.requestCr = {
+        type_card: null,
+        send_cr: null,
+        documents: new Object(),
+        document: ""
+      };
+    },
     setDataBlank(key) {
       this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = {
-        ...this[key],
+        ...this[key]
       };
     },
     resetData(key) {
       this[key] = {
-        ...this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`],
+        ...this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`]
       };
     },
     colorScoreTransunion(score) {
@@ -247,7 +249,7 @@ export default {
       try {
         const response = await this.A_COUNT_CREDIT_REPORT_PENDINGS({
           id: this.$route.params.id,
-          modul: this.modul,
+          modul: this.modul
         });
         if (this.isResponseSuccess(response)) {
           this.countData =
@@ -275,7 +277,7 @@ export default {
     async getDocumentLead() {
       try {
         const response = await this.A_GET_LEAD_DOCUMENT({
-          lead_id: this.lead.id,
+          lead_id: this.lead.id
         });
         if (this.isResponseSuccess(response)) {
           const documents = response.data[0];
@@ -293,9 +295,9 @@ export default {
       } catch (error) {
         console.log("Something went wrong getDocumentLead", error);
       }
-    },
+    }
   },
-  setup() {},
+  setup() {}
 };
 </script>
 

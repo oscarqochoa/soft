@@ -148,7 +148,7 @@
               class="d-flex align-items-center justify-content-between py-1 border border-top-0 border-left-0"
             >
               <span>Retainer Fee</span>
-              <span class="font-weight-bolder">{{ "$ " + this.mont15 }}</span>
+              <span class="font-weight-bolder">{{ "$ " + percentageRetainerFee }}</span>
               <b-form-select
                 v-model="porctrf"
                 class="w-25 font-weight-bolder"
@@ -345,6 +345,9 @@ export default {
       currentUser: 'auth/currentUser',
       skin: 'appConfig/skin',
     }),
+    percentageRetainerFee() {
+      return parseFloat(this.total_balance * this.porctrf).toFixed(2)
+    }
   },
   watch: {
     porctrf() {

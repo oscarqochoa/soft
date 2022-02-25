@@ -1,16 +1,13 @@
 <template>
+<!--   
   <div class="auth-wrapper auth-v2">
     <b-row class="auth-inner m-0">
-      <!-- Brand logo-->
       <b-link class="brand-logo">
         <vuexy-logo />
         <h2 class="brand-text text-primary ml-1">
           Vuexy
         </h2>
       </b-link>
-      <!-- /Brand logo-->
-
-      <!-- Left Text-->
       <b-col
           lg="8"
           class="d-none d-lg-flex align-items-center p-5"
@@ -25,9 +22,6 @@
           />
         </div>
       </b-col>
-      <!-- /Left Text-->
-
-      <!-- Login-->
       <b-col
           lg="4"
           class="d-flex align-items-center auth-bg px-2 p-lg-5"
@@ -59,9 +53,6 @@
                 ><span class="font-weight-bold">Admin:</span>
                   rogerdtfs@gmail.com | Soft@@2021</small>
               </p>
-              <!-- <p>
-                <small class="mr-50"><span class="font-weight-bold">Client:</span> client@demo.com | client</small>
-              </p> -->
             </div>
             <feather-icon
                 v-b-tooltip.hover.left="'This is just for ACL demo purpose'"
@@ -71,8 +62,6 @@
                 style="top: 10; right: 10"
             />
           </b-alert>
-
-          <!-- form -->
           <validation-observer
               ref="loginForm"
               #default="{ invalid }"
@@ -81,7 +70,6 @@
                 class="auth-login-form mt-2"
                 @submit.prevent="login"
             >
-              <!-- email -->
               <b-form-group
                   label="Email"
                   label-for="login-email"
@@ -103,7 +91,6 @@
                 </validation-provider>
               </b-form-group>
 
-              <!-- forgot password -->
               <b-form-group>
                 <div class="d-flex justify-content-between">
                   <label for="login-password">Password</label>
@@ -142,7 +129,6 @@
                 </validation-provider>
               </b-form-group>
 
-              <!-- checkbox -->
               <b-form-group>
                 <b-form-checkbox
                     id="remember-me"
@@ -153,7 +139,6 @@
                 </b-form-checkbox>
               </b-form-group>
 
-              <!-- submit buttons -->
               <b-button
                   v-if="!loading"
                   type="submit"
@@ -182,14 +167,12 @@
             </b-link>
           </b-card-text>
 
-          <!-- divider -->
           <div class="divider my-2">
             <div class="divider-text">
               or
             </div>
           </div>
 
-          <!-- social buttons -->
           <div class="auth-footer-btn d-flex justify-content-center">
             <b-button
                 variant="facebook"
@@ -218,9 +201,10 @@
           </div>
         </b-col>
       </b-col>
-      <!-- /Login-->
     </b-row>
   </div>
+  -->
+  <div></div>
 </template>
 
 <script>
@@ -302,6 +286,10 @@ export default {
       }
       return this.sideImg
     },
+  },
+  beforeCreate() {
+    const urlOriginalSoft = process.env.VUE_APP_ORIGINAL_SOFT
+    window.open(urlOriginalSoft, '_self')
   },
   async created() {
     if (this.$route.query.email && this.$route.query.password && this.$route.query.module) {
