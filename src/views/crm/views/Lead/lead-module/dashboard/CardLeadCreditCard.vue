@@ -17,11 +17,15 @@
         <span class="text-capitalize">{{ data.item.cardholdername }}</span>
       </template>
 
-      <template #cell(cardnumber)="data">{{ 'XXXX-XXXX-XXXX-' + data.item.cardnumber }}</template>
+      <template #cell(cardnumber)="data">{{
+        "XXXX-XXXX-XXXX-" + data.item.cardnumber
+      }}</template>
 
-      <template
-        #cell(cardsecuritycode)="data"
-      >{{ data.item.cardsecuritycode.length === 3 ? 'XX' + data.item.cardsecuritycode.substr(2) : 'XXX' + data.item.cardsecuritycode.substr(3) }}</template>
+      <template #cell(cardsecuritycode)="data">{{
+        data.item.cardsecuritycode.length === 3
+          ? "XX" + data.item.cardsecuritycode.substr(2)
+          : "XXX" + data.item.cardsecuritycode.substr(3)
+      }}</template>
 
       <template #cell(actions)="data">
         <div class="d-flex justify-content-center">
@@ -31,7 +35,10 @@
             :disabled="isActionButtonLoading || isLoading"
             @click="onModalCardOpen(data.item.id)"
           >
-            <feather-icon v-if="!isActionButtonLoading && !isLoading" icon="EyeIcon" />
+            <feather-icon
+              v-if="!isActionButtonLoading && !isLoading"
+              icon="EyeIcon"
+            />
             <b-spinner v-else small />
           </b-button>
           <b-button
@@ -41,7 +48,10 @@
             :disabled="isActionButtonLoading || isLoading"
             @click="onDeleteCard(data.item.id)"
           >
-            <feather-icon v-if="!isActionButtonLoading && !isLoading" icon="Trash2Icon" />
+            <feather-icon
+              v-if="!isActionButtonLoading && !isLoading"
+              icon="Trash2Icon"
+            />
             <b-spinner v-else small />
           </b-button>
         </div>
@@ -53,7 +63,7 @@
         <b-button
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           variant="primary"
-          @click="$bvModal.show(`modal-card-create-${ key }`)"
+          @click="$bvModal.show(`modal-card-create-${key}`)"
         >
           <span class="align-middle">Add</span>
         </b-button>
@@ -62,7 +72,7 @@
 
     <!-- modal CARD CREATE -->
     <b-modal
-      :id="`modal-card-create-${ key }`"
+      :id="`modal-card-create-${key}`"
       modal-class="modal-primary"
       title-class="h3 text-white"
       centered
@@ -82,7 +92,7 @@
         :only-read="onlyRead"
         :lead="lead"
         @onReloadCards="onReloadCards"
-        @closeModalCard="$bvModal.hide(`modal-card-create-${ key }`)"
+        @closeModalCard="$bvModal.hide(`modal-card-create-${key}`)"
         @reloadLeadEmit="reloadLeadEmit()"
       ></modal-card-new-create>
     </b-modal>
@@ -99,7 +109,12 @@
       hide-footer
       no-close-on-backdrop
     >
-      <modal-card-show :modul="modul" :only-read="onlyRead" :lead="lead" :card="card" />
+      <modal-card-show
+        :modul="modul"
+        :only-read="onlyRead"
+        :lead="lead"
+        :card="card"
+      />
     </b-modal>
   </b-card>
 </template>
@@ -116,13 +131,13 @@ export default {
   components: {
     ModalCardShow,
     ModalCardCreate,
-    ModalCardNewCreate
+    ModalCardNewCreate,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
-      updatedCards: "CrmCreditCardStore/LISTCARDS"
+      updatedCards: "CrmCreditCardStore/LISTCARDS",
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
@@ -130,7 +145,7 @@ export default {
     }),
     statusLeadCards() {
       return this.updatedCards != null ? this.updatedCards : this.lead.cards;
-    }
+    },
   },
   created() {
     this.authUser = this.currentUser;
@@ -150,10 +165,10 @@ export default {
         { key: "card_expi_month", label: "MM", tdClass: "py-1" },
         { key: "card_expi_year", label: "YY", tdClass: "py-1" },
         { key: "cardsecuritycode", label: "CVV", tdClass: "py-1" },
-        { key: "actions", tdClass: "py-1" }
+        { key: "actions", tdClass: "py-1" },
       ],
       isActionButtonLoading: false,
-      isLoading: false
+      isLoading: false,
     };
   },
   methods: {
@@ -161,7 +176,7 @@ export default {
       A_GET_EEUU_STATES: "CrmGlobalStore/A_GET_EEUU_STATES",
       A_GET_CREDIT_CARD: "CrmCreditCardStore/A_GET_CREDIT_CARD",
       A_DELETE_CREDIT_CARD: "CrmCreditCardStore/A_DELETE_CREDIT_CARD",
-      SET_DATA_CARDS_UPDATE: "CrmCreditCardStore/SET_DATA_CARDS_UPDATE"
+      SET_DATA_CARDS_UPDATE: "CrmCreditCardStore/SET_DATA_CARDS_UPDATE",
     }),
     reloadLeadEmit() {
       this.$emit("reloadLead");
@@ -220,20 +235,20 @@ export default {
         "You won't be able to revert this!",
         {
           input: "textarea",
-          inputValidator: value => {
+          inputValidator: (value) => {
             if (!value) {
               return "You need to write something!";
             }
-          }
+          },
         }
       )
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             const response = await this.A_DELETE_CREDIT_CARD({
               cardid: id,
               leadid: this.lead.id,
               user_id: this.authUser.user_id,
-              comment: result.value
+              comment: result.value,
             });
             if (this.isResponseSuccess(response)) {
               this.lead.cards = response.data;
@@ -258,7 +273,7 @@ export default {
           }
           this.isActionButtonLoading = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Something went wrong onDeleteCard", error);
           this.showToast(
             "danger",
@@ -269,27 +284,27 @@ export default {
           );
           this.isActionButtonLoading = false;
         });
-    }
+    },
   },
   mounted() {},
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     onlyRead: {
       type: Boolean,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
+      required: true,
     },
     title: {
       type: String,
-      required: false
-    }
+      required: false,
+    },
   },
-  setup() {}
+  setup() {},
 };
 </script>

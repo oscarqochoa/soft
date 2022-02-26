@@ -48,6 +48,9 @@ export default {
     isCeo() {
       return this.$store.getters["auth/isCeo"];
     },
+    isCoordinator(){
+      return this.$store.getters["auth/isCoordinator"];
+    }
   },
   methods: {
     convertProgramToModule(program) {
