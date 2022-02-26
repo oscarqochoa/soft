@@ -34,7 +34,7 @@
 
       <!-- Column: Action -->
       <template #cell(image)="data">
-        <div class="text-center" v-b-tooltip.hover :title="data.item.image? 'view image' :''">
+        <div class="text-center">
           <b-icon
             icon="image-fill"
             font-scale="1.5"
