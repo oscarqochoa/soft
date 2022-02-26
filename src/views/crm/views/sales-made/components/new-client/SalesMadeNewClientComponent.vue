@@ -782,7 +782,7 @@
                 @click="returnDone(data.item.event_id, null)"
             >Done</b-btn>
           </template>
-          <template #custom-foot>
+          <template v-if="G_IS_CEO || G_IS_SUPERVISOR" #custom-foot>
             <b-tr class="bg-info">
               <b-td colspan="2" />
               <b-td
