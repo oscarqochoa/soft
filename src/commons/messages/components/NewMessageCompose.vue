@@ -25,7 +25,9 @@
         <feather-icon
           icon="XIcon"
           class="ml-1 cursor-pointer"
-          @click="$emit('update:shall-show-email-compose-modal', false), resetNote()"
+          @click="
+            $emit('update:shall-show-email-compose-modal', false), resetNote()
+          "
         />
         <!-- <feather-icon
           icon="XIcon"
@@ -44,12 +46,14 @@
           variant="primary"
           @click="sendMessageReply"
           class="mr-auto"
-        >Send</b-button>
+          >Send</b-button
+        >
         <b-button
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           variant="info"
           v-b-modal.quick-notes-new-message
-        >Quick Notes</b-button>
+          >Quick Notes</b-button
+        >
       </div>
 
       <!-- Footer: Right Content -->
@@ -82,7 +86,7 @@
             :reduce="(user) => user"
           >
             <template #option="{ status_session, name }">
-              <amg-icon
+              <feather-icon
                 icon="CircleIcon"
                 :style="`fill: ${
                   status_session == 1 ? '#28C76F' : 'gray'
@@ -92,7 +96,7 @@
             </template>
 
             <template #selected-option="{ status_session, name }">
-              <amg-icon
+              <feather-icon
                 icon="CircleIcon"
                 :style="`fill: ${
                   status_session == 1 ? '#28C76F' : 'gray'
@@ -101,7 +105,11 @@
               <span class="ml-50">{{ name }}</span>
             </template>
           </v-select>
-          <amg-icon icon="AlertCircleIcon" class="text-danger" v-if="errors[0]"></amg-icon>
+          <feather-icon
+            icon="AlertCircleIcon"
+            class="text-danger"
+            v-if="errors[0]"
+          ></feather-icon>
         </validation-provider>
       </div>
       <!-- Field: Subject -->
@@ -123,23 +131,34 @@
           >
             <template slot-scope="{ suggestion }">
               <span class="my-suggestion-item">
-                {{
-                suggestion.item.value
-                }}
+                {{ suggestion.item.value }}
               </span>
             </template>
           </vue-autosuggest>
-          <amg-icon icon="AlertCircleIcon" class="text-danger" v-if="errors[0]"></amg-icon>
+          <feather-icon
+            icon="AlertCircleIcon"
+            class="text-danger"
+            v-if="errors[0]"
+          ></feather-icon>
         </validation-provider>
       </div>
 
       <!-- Field: Message - Quill Editor -->
       <validation-provider rules="required" tag="div" class="message-editor">
-        <quill-editor id="quil-content" :options="editorOption" v-model="note.content" />
+        <quill-editor
+          id="quil-content"
+          :options="editorOption"
+          v-model="note.content"
+        />
         <div
           class="p-1 d-flex-inline"
-          :style="{ borderTop: skin == 'dark'?'1px solid rgba(146, 151, 165, 0.2)':'1px solid rgba(34, 41, 47, 0.05)'}"
-          v-if="note.files.length>0"
+          :style="{
+            borderTop:
+              skin == 'dark'
+                ? '1px solid rgba(146, 151, 165, 0.2)'
+                : '1px solid rgba(34, 41, 47, 0.05)',
+          }"
+          v-if="note.files.length > 0"
         >
           <b-badge
             variant="important"
@@ -149,11 +168,14 @@
           >
             <span class="mr-1">{{ file.name }}</span>
             <span class="cursor-pointer" @click="deleteFile(index)">
-              <amg-icon icon="XIcon" />
+              <feather-icon icon="XIcon" />
             </span>
           </b-badge>
         </div>
-        <div id="quill-toolbar-new-message" class="d-flex border-bottom-0 align-items-center">
+        <div
+          id="quill-toolbar-new-message"
+          class="d-flex border-bottom-0 align-items-center"
+        >
           <!-- Add a bold button -->
           <button class="ql-bold" />
           <button class="ql-italic" />
@@ -177,7 +199,6 @@
   </b-modal>
 </template>
 
-
 <script>
 import { quillEditor } from "vue-quill-editor";
 import Ripple from "vue-ripple-directive";
@@ -192,7 +213,7 @@ export default {
     await this.A_GET_USERS_TO_MESSAGE();
   },
   directives: {
-    Ripple
+    Ripple,
   },
   components: {
     // 3rd Party
@@ -200,36 +221,36 @@ export default {
     vSelect,
     ChatQuickNotes,
     VueAutosuggest,
-    UploadFiles
+    UploadFiles,
   },
   model: {
     prop: "shallShowEmailComposeModal",
-    event: "update:shall-show-email-compose-modal"
+    event: "update:shall-show-email-compose-modal",
   },
   props: {
     shallShowEmailComposeModal: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     ...mapState({
-      S_USERS_TO_MESSAGE: state => state.MessageStore.S_USERS_TO_MESSAGE,
-      S_USER_TO_MESSAGE: state => state.MessageStore.S_USER_TO_MESSAGE,
-      S_USER_MESSAGES: state => state.MessageStore.S_USER_MESSAGES
+      S_USERS_TO_MESSAGE: (state) => state.MessageStore.S_USERS_TO_MESSAGE,
+      S_USER_TO_MESSAGE: (state) => state.MessageStore.S_USER_TO_MESSAGE,
+      S_USER_MESSAGES: (state) => state.MessageStore.S_USER_MESSAGES,
     }),
     ...mapGetters({
       currentUser: "auth/currentUser",
-      skin: "appConfig/skin"
-    })
+      skin: "appConfig/skin",
+    }),
   },
   data() {
     return {
       editorOption: {
         modules: {
-          toolbar: "#quill-toolbar-new-message"
+          toolbar: "#quill-toolbar-new-message",
         },
-        placeholder: "Message"
+        placeholder: "Message",
       },
       note: {
         temporalid: "",
@@ -241,21 +262,21 @@ export default {
         contentresp: "",
         type: "",
         text: "",
-        files: []
+        files: [],
       },
-      filteredOptions: []
+      filteredOptions: [],
     };
   },
   methods: {
     ...mapActions({
       A_GET_USERS_TO_MESSAGE: "MessageStore/A_GET_USERS_TO_MESSAGE",
       A_SAVE_MESSAGE_REPLY: "MessageStore/A_SAVE_MESSAGE_REPLY",
-      A_GET_USER_CONTACTS: "MessageStore/A_GET_USER_CONTACTS"
+      A_GET_USER_CONTACTS: "MessageStore/A_GET_USER_CONTACTS",
     }),
     ...mapMutations({
       SET_LAST_CHAT_CONTACT_DATE: "MessageStore/SET_LAST_CHAT_CONTACT_DATE",
       SET_LAST_MESSAGE_TO_ACTIVE_CHAT:
-        "MessageStore/SET_LAST_MESSAGE_TO_ACTIVE_CHAT"
+        "MessageStore/SET_LAST_MESSAGE_TO_ACTIVE_CHAT",
     }),
     onSelectNote(note) {
       this.note.content = note.body;
@@ -272,7 +293,7 @@ export default {
         contentresp: "",
         type: "",
         text: "",
-        files: []
+        files: [],
       };
       this.filteredOptions = [];
       this.$refs.formComposeMessage.reset();
@@ -306,11 +327,11 @@ export default {
           this.note.type = this.S_USER_TO_MESSAGE.type;
           await this.A_SAVE_MESSAGE_REPLY({
             ...this.note,
-            endpoint: "/messages/save-message"
+            endpoint: "/messages/save-message",
           });
           this.resetNote();
           await this.A_GET_USER_CONTACTS({
-            id: this.currentUser.user_id
+            id: this.currentUser.user_id,
           });
           this.removePreloader();
           this.$emit("update:shall-show-email-compose-modal", false);
@@ -323,8 +344,8 @@ export default {
     },
     deleteFile(index) {
       this.note.files.splice(index, 1);
-    }
-  }
+    },
+  },
 };
 </script>
 

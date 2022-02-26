@@ -14,7 +14,7 @@
                 <button
                   class="btn btn-outline-secondary rounded btn-sm w-100 btn-gray-selector"
                   type="button"
-                  :class="{'btn-danger': item.type_card === 1}"
+                  :class="{ 'btn-danger': item.type_card === 1 }"
                   @click="item.type_card = 1"
                 >Of Client</button>
               </b-col>
@@ -22,7 +22,7 @@
                 <button
                   class="btn btn-outline-secondary rounded btn-sm w-100 btn-gray-selector"
                   type="button"
-                  :class="{'btn-danger': item.type_card === 2}"
+                  :class="{ 'btn-danger': item.type_card === 2 }"
                   @click="item.type_card = 2"
                 >Other Cards</button>
               </b-col>
@@ -41,7 +41,7 @@
             <template #cell(radio)="data">
               <validation-provider v-slot="{ errors }" name="Ammount" rules="required">
                 <b-form-radio
-                  :id="`yes-or-not-card-list--${ data.index }`"
+                  :id="`yes-or-not-card-list--${data.index}`"
                   v-model="item.id_card"
                   :name="`yes-or-not-card-list-`"
                   class="mt-0"
@@ -51,11 +51,19 @@
               </validation-provider>
             </template>
 
-            <template #cell(cardnumber)="data">{{ 'XXXX-XXXX-XXXX-' + data.item.cardnumber }}</template>
+            <template #cell(cardnumber)="data">
+              {{
+              "XXXX-XXXX-XXXX-" + data.item.cardnumber
+              }}
+            </template>
 
-            <template
-              #cell(cardsecuritycode)="data"
-            >{{ data.item.cardsecuritycode.length === 3 ? 'XX' + data.item.cardsecuritycode.substr(2) : 'XXX' + data.item.cardsecuritycode.substr(3) }}</template>
+            <template #cell(cardsecuritycode)="data">
+              {{
+              data.item.cardsecuritycode.length === 3
+              ? "XX" + data.item.cardsecuritycode.substr(2)
+              : "XXX" + data.item.cardsecuritycode.substr(3)
+              }}
+            </template>
 
             <template #cell(actions)="data">
               <div class="d-flex justify-content-center">
@@ -83,7 +91,7 @@
                 <button
                   class="btn btn-outline-secondary rounded btn-sm w-100 btn-gray-selector"
                   type="button"
-                  :class="{'btn-danger': item.send_cr === 1}"
+                  :class="{ 'btn-danger': item.send_cr === 1 }"
                   @click="item.send_cr = 1"
                 >Yes</button>
               </b-col>
@@ -91,7 +99,7 @@
                 <button
                   class="btn btn-outline-secondary rounded btn-sm w-100 btn-gray-selector"
                   type="button"
-                  :class="{'btn-danger': item.send_cr === 2}"
+                  :class="{ 'btn-danger': item.send_cr === 2 }"
                   @click="item.send_cr = 2"
                 >No</button>
               </b-col>
@@ -107,7 +115,7 @@
               </b-col>
               <b-col cols="8">
                 <span v-if="!item.document" class="text-danger ml-2">
-                  <amg-icon icon="AlertCircleIcon" />
+                  <feather-icon icon="AlertCircleIcon" />
                   <span class="ml-1 pt-1">Please fill document number</span>
                 </span>
                 <b-row>
@@ -116,7 +124,7 @@
                       v-if="item.documents.ssn"
                       class="btn btn-outline-secondary rounded btn-sm w-100 btn-gray-selector"
                       type="button"
-                      :class="{'btn-danger': item.document == 1}"
+                      :class="{ 'btn-danger': item.document == 1 }"
                       @click="item.document = 1"
                     >SSN</button>
                   </b-col>
@@ -125,7 +133,7 @@
                       v-if="item.documents.itin"
                       class="btn btn-outline-secondary rounded btn-sm w-100 btn-gray-selector"
                       type="button"
-                      :class="{'btn-danger': item.document == 2}"
+                      :class="{ 'btn-danger': item.document == 2 }"
                       @click="item.document = 2"
                     >ITIN</button>
                   </b-col>
@@ -134,7 +142,7 @@
                       v-if="item.documents.other"
                       class="btn btn-outline-secondary rounded btn-sm w-100 btn-gray-selector"
                       type="button"
-                      :class="{'btn-danger': item.document == 3}"
+                      :class="{ 'btn-danger': item.document == 3 }"
                       @click="item.document = 3"
                     >CPN</button>
                   </b-col>
@@ -145,7 +153,7 @@
           </validation-provider>
         </b-col>
         <div v-if="!item.dob" class="text-danger ml-2 my-auto text-center w-100">
-          <amg-icon icon="AlertCircleIcon" />
+          <feather-icon icon="AlertCircleIcon" />
           <span class="ml-1 pt-1">Please fill date of birth to get Credit Report</span>
         </div>
         <b-col cols="12">
@@ -156,10 +164,10 @@
       </b-row>
 
       <!-- Form Actions -->
-      <div class="d-flex justify-content-center mt-2">
+      <div class="d-flex float-right mt-2">
         <b-button
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-          variant="success"
+          variant="primary"
           type="submit"
           :disabled="isLoading"
         >
@@ -349,6 +357,8 @@ export default {
                 "AlertTriangleIcon",
                 `Something went wrong. ${response.message}`
               );
+          } else {
+            this.isLoading = false;
           }
         })
         .catch(error => {

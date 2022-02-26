@@ -4,7 +4,7 @@ export default [
         name: 'amg-messages',
         component: () => import('./MessagesMain.vue'),
         meta: {
-            layout: "horizontal",
+            layout: "vertical",
             contentClass: 'chat-application email-application messages-application',
             contentRenderer: 'sidebar-left',
             

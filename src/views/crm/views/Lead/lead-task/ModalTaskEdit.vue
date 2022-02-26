@@ -10,7 +10,7 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col v-if="!taskForSn && modul === 15 || isDisabled">
+        <b-col v-if="(!taskForSn && modul === 15) || isDisabled">
           <validation-provider>
             <b-form-group label="Type" label-for="type" label-cols-md="4">
               <b-form-checkbox
@@ -20,7 +20,7 @@
                 name="check-button"
                 switch
                 :disabled="isDisabled"
-              >{{ task.attend_type ? 'LATER' : 'NOW' }}</b-form-checkbox>
+              >{{ task.attend_type ? "LATER" : "NOW" }}</b-form-checkbox>
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -35,7 +35,7 @@
                 name="check-button"
                 switch
                 :disabled="isDisabled"
-              >{{ task.sms_status ? 'YES' : 'NO' }}</b-form-checkbox>
+              >{{ task.sms_status ? "YES" : "NO" }}</b-form-checkbox>
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -54,7 +54,7 @@
                 v-else
                 v-model="task.subject"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="[ 'CALL' ]"
+                :options="['CALL']"
               />
             </b-form-group>
           </validation-provider>
@@ -73,7 +73,10 @@
                 name="radio-method"
                 class="mt-50"
                 :disabled="isDisabled"
-                :options="[ { text: 'INSTANTLY', value: 1 }, { text: 'PROGRAMED', value: 2 } ]"
+                :options="[
+                  { text: 'INSTANTLY', value: 1 },
+                  { text: 'PROGRAMED', value: 2 },
+                ]"
               />
             </b-form-group>
 
@@ -116,7 +119,7 @@
             <b-col md="2">
               <validation-provider>
                 <b-form-group>
-                  <b-form-input :value="modul === 15 || isDisabled ? 'UNK' : lead.state" readonly />
+                  <b-form-input :value="lead.state" readonly />
                 </b-form-group>
               </validation-provider>
             </b-col>
@@ -131,13 +134,15 @@
               label="user_name"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="sellers"
-              :reduce="val=> val.id"
+              :reduce="(val) => val.id"
               :clearable="false"
               :disabled="isDisabled"
             >
               <template #option="data">
                 <span
-                  :class="data.state_advisors == 1? 'text-success': 'text-muted'"
+                  :class="
+                    data.state_advisors == 1 ? 'text-success' : 'text-muted'
+                  "
                 >{{ data.user_name }}</span>
               </template>
             </v-select>
@@ -167,7 +172,11 @@
                 :disabled="isDisabled"
                 :state="getValidationState(validationContext)"
               />
-              <b-form-invalid-feedback>{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+              <b-form-invalid-feedback>
+                {{
+                validationContext.errors[0]
+                }}
+              </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
           <div v-if="!isDisabled" class="d-flex justify-content-right">
@@ -228,29 +237,9 @@ export default {
   },
   async created() {
     this.authUser = this.currentUser;
-    this.blankTask = Object.assign({}, this.task);
+    this.blankTask = { ...this.task };
     await this.getSellers();
     this.removePreloader();
-  },
-  data() {
-    return {
-      authUser: {},
-      blankTask: {},
-      isLoading: false,
-      maxDate: new Date(2050, 9, 1),
-      minDate: "",
-      configFlatPickr: {
-        dateFormat: "m/d/Y",
-        locale: "en",
-        minDate:
-          moment(this.task.real_time).format("MM/DD/YYYY") >
-          moment().format("MM/DD/YYYY")
-            ? moment().format("MM/DD/YYYY")
-            : moment(this.task.real_time).format("MM/DD/YYYY")
-      },
-      sellers: [],
-      seller: null
-    };
   },
   directives: { Ripple },
   props: {
@@ -286,7 +275,11 @@ export default {
       configFlatPickr: {
         dateFormat: "m/d/Y",
         locale: "en",
-        minDate: `${moment(this.task.real_time).format("MM/DD/YYYY")} `
+        minDate:
+          moment(this.task.real_time).format("MM/DD/YYYY") >
+          moment().format("MM/DD/YYYY")
+            ? moment().format("MM/DD/YYYY")
+            : moment(this.task.real_time).format("MM/DD/YYYY")
       },
       sellers: [],
       seller: null
@@ -311,7 +304,8 @@ export default {
     ...mapActions({
       A_VALIDATE_TASK_FAVORITE: "TaskStore/A_VALIDATE_TASK_FAVORITE",
       A_SET_LEAD_TASK: "TaskStore/A_SET_LEAD_TASK",
-      A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE"
+      A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE",
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER"
     }),
     async getSellers() {
       try {
@@ -346,6 +340,7 @@ export default {
               taskForSn: this.taskForSn
             };
             const response = await this.A_SET_LEAD_TASK(params);
+            this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
             await this.$emit("onReloadTasks", response.data);
             this.$bvModal.hide("modal-task-edit");
           }
@@ -416,3 +411,7 @@ export default {
   }
 };
 </script>
+
+
+<style lang="scss" scoped>
+</style>

@@ -31,7 +31,6 @@
           :current-page="paginate.currentPage"
           :per-page="paginate.perPage"
           :filter="searchInput"
-          striped
           no-provider-filtering
           thead-class="text-center"
           tbody-class="text-center"
@@ -45,21 +44,28 @@
 
           <template #cell(amount_loan)="data">
             <div>
-              <span style="color:#4141af">$ {{ data.value }}</span>
+              <span style="color: #4141af">$ {{ data.value }}</span>
             </div>
           </template>
 
           <template #cell(balance)="data">
             <div>
-              <span style="color:#4141af">$ {{ data.value }}</span>
+              <span style="color: #4141af">$ {{ data.value }}</span>
             </div>
           </template>
 
           <template #cell(due_payment)="data">
             <div>
               <b
-                :class="data.item.status_loan == 4 ? 'text-dark' :( data.item.due_date > dateNow ) ? 'text-success ' : 'text-danger'"
-              >{{ data.item.due_id ? '$'+ data.item.due_payment : '-' }}</b>
+                :class="
+                  data.item.status_loan == 4
+                    ? 'text-dark'
+                    : data.item.due_date > dateNow
+                    ? 'text-success '
+                    : 'text-danger'
+                "
+                >{{ data.item.due_id ? "$" + data.item.due_payment : "-" }}</b
+              >
             </div>
           </template>
 
@@ -74,7 +80,9 @@
                 @click="editDatePay(data.item)"
               />
               <b-icon
-                v-if="isManagement && data.item.due == 1 && data.item.is_tracking"
+                v-if="
+                  isManagement && data.item.due == 1 && data.item.is_tracking
+                "
                 icon="pencil-square"
                 variant="secondary cursor-pointer ml2"
                 font-scale="1"
@@ -87,11 +95,26 @@
           </template>
 
           <template #cell(payment_time)="data">
-            <div>{{ data.item.payment_time }} {{ data.item.payment_time > 1 ? 'Dues' : (data.item.payment_time == 0 ? '-' : 'Due') }}</div>
+            <div>
+              {{ data.item.payment_time }}
+              {{
+                data.item.payment_time > 1
+                  ? "Dues"
+                  : data.item.payment_time == 0
+                  ? "-"
+                  : "Due"
+              }}
+            </div>
           </template>
 
           <template #cell(due_id)="data">
-            <div>{{ data.item.due_id ? changeOrdinal(data.item.due) + ' Due' : 'Finished' }}</div>
+            <div>
+              {{
+                data.item.due_id
+                  ? changeOrdinal(data.item.due) + " Due"
+                  : "Finished"
+              }}
+            </div>
           </template>
 
           <template #cell(created_at)="data">
@@ -105,8 +128,18 @@
           <template #cell(status)="data">
             <b-badge
               class="fs100 w-100"
-              :variant="data.item.status_loan ==4? 'dark' : data.item.status_tracking == 2?'danger': data.item.rol_tracking == 4 && data.item.status_tracking ==1? 'success': 'warning'"
-            >{{ data.value }}</b-badge>
+              :variant="
+                data.item.status_loan == 4
+                  ? 'dark'
+                  : data.item.status_tracking == 2
+                  ? 'danger'
+                  : data.item.rol_tracking == 4 &&
+                    data.item.status_tracking == 1
+                  ? 'success'
+                  : 'warning'
+              "
+              >{{ data.value }}</b-badge
+            >
           </template>
 
           <template #cell(id_loan)="data">
@@ -133,7 +166,7 @@
               <b-icon icon="info-circle-fill" />
             </b-button>
             <b-button
-              v-if="tab==1 && data.item.status_loan == 3"
+              v-if="tab == 1 && data.item.status_loan == 3"
               v-b-tooltip.hover
               size="sm"
               title="ADD NEW PAY"
@@ -144,8 +177,11 @@
               <b-icon icon="wallet-fill" />
             </b-button>
             <span
-              v-if="(tab==1 || isManagement)&& [3,4].includes(data.item.status_loan)"
-              style="position:relative"
+              v-if="
+                (tab == 1 || isManagement) &&
+                [3, 4].includes(data.item.status_loan)
+              "
+              style="position: relative"
             >
               <b-button
                 v-b-tooltip.hover
@@ -158,13 +194,22 @@
                 <feather-icon
                   icon="FileTextIcon"
                   size="16"
-                  :badge="data.item.counter > 0? data.item.counter > 9 ? '9+' : data.item.counter : ''"
+                  :badge="
+                    data.item.counter > 0
+                      ? data.item.counter > 9
+                        ? '9+'
+                        : data.item.counter
+                      : ''
+                  "
                   badge-classes="badge-danger badge-glow"
                 />
               </b-button>
             </span>
             <b-button
-              v-if="(tab==1 || isManagement)&& [3,4].includes(data.item.status_loan)"
+              v-if="
+                (tab == 1 || isManagement) &&
+                [3, 4].includes(data.item.status_loan)
+              "
               v-b-tooltip.hover
               size="sm"
               title="INVOICE"
@@ -179,10 +224,26 @@
       </template>
     </filter-slot>
 
-    <ModalTrackingLoan v-if="modalsInfo.tracking" :info="modalsInfo" @hide="closeModals" />
-    <ModalNewPay v-if="modalsInfo.newPay" :info="modalsInfo" @hide="closeModals" />
-    <ModalRevisionPayment v-if="modalsInfo.revisionPay" :info="modalsInfo" @hide="closeModals" />
-    <ModalInvoice v-if="modalsInfo.invoice" :info="modalsInfo" @hide="closeModals" />
+    <ModalTrackingLoan
+      v-if="modalsInfo.tracking"
+      :info="modalsInfo"
+      @hide="closeModals"
+    />
+    <ModalNewPay
+      v-if="modalsInfo.newPay"
+      :info="modalsInfo"
+      @hide="closeModals"
+    />
+    <ModalRevisionPayment
+      v-if="modalsInfo.revisionPay"
+      :info="modalsInfo"
+      @hide="closeModals"
+    />
+    <ModalInvoice
+      v-if="modalsInfo.invoice"
+      :info="modalsInfo"
+      @hide="closeModals"
+    />
   </div>
 </template>
 
@@ -203,7 +264,7 @@ import loansService from "@/views/commons/components/loans/services/loans.servic
 export default {
   name: "LoansTable",
   directives: {
-    Ripple
+    Ripple,
   },
   components: {
     vSelect,
@@ -213,17 +274,17 @@ export default {
     ModalNewPay,
     ModalRevisionPayment,
     ModalInvoice,
-    FilterSlot
+    FilterSlot,
   },
   props: {
     tab: {
       type: Number,
-      default: null
+      default: null,
     },
     status: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   data() {
     return {
@@ -233,7 +294,7 @@ export default {
         revisionPay: false,
         invoice: false,
         idLoan: null,
-        dueId: null
+        dueId: null,
       },
       module: this.$route.meta.module,
       loans: [],
@@ -256,7 +317,7 @@ export default {
       formatDate: {
         year: "numeric",
         month: "numeric",
-        day: "numeric"
+        day: "numeric",
       },
       loanSelected: [],
       dateNow: moment().format("YYYY-MM-DD"),
@@ -264,74 +325,74 @@ export default {
       sortDesc: true,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       arrayColumns: [
         {
           key: "username",
           label: "User",
           tdClass: "font-weight-bolder py-1",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "amount_loan",
           label: "Amount Loan",
           tdClass: "font-weight-bolder",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "balance",
           label: "Balance Loan",
           tdClass: "font-weight-bolder",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "due_payment",
           label: "Monthly Payment",
           tdClass: "font-weight-bolder",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "due_date",
           label: "Pay day",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "payment_time",
           label: "Dues",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "due_id",
           label: "Current Due",
           tdClass: "text-center",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "created_at",
           label: "Creation Date",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "process",
           label: "Status Location",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "status",
           label: "Status",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "id_loan",
           label: "Tracking",
-          thClass: "font-weight-bolder py-1"
+          thClass: "font-weight-bolder py-1",
         },
         {
           key: "status_loan",
           label: "Actions",
-          thClass: "font-weight-bolder py-1"
-        }
+          thClass: "font-weight-bolder py-1",
+        },
       ],
       searchInput: "",
       orderby: "",
@@ -348,13 +409,13 @@ export default {
       isClientsTab: false,
       fromToObject: {
         from: null,
-        to: null
+        to: null,
       },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Search User...",
-        model: ""
+        model: "",
       },
       filters: [
         {
@@ -370,8 +431,8 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric"
-          }
+            day: "numeric",
+          },
         },
         {
           type: "datepicker",
@@ -386,8 +447,8 @@ export default {
           dateFormatOptions: {
             year: "numeric",
             month: "numeric",
-            day: "numeric"
-          }
+            day: "numeric",
+          },
         },
         {
           type: "select",
@@ -403,13 +464,13 @@ export default {
             { value: 1, label: "Pending" },
             { value: 4, label: "Disapproved" },
             { value: 6, label: "Approved" },
-            { value: 2, label: "Finished" }
+            { value: 2, label: "Finished" },
           ],
           reduce: "value",
-          selectText: "label"
-        }
+          selectText: "label",
+        },
       ],
-      programs: []
+      programs: [],
     };
   },
   created() {},
@@ -420,18 +481,20 @@ export default {
       skin: "appConfig/skin",
       loading: "commissions-store/loading",
       researchLoans: "loans-store/researchLoans",
-      modalRequest: "loans-store/modalRequest"
+      modalRequest: "loans-store/modalRequest",
     }),
     isManagement() {
       return this.module === 16;
     },
     isTabsBorder() {
-      return this.tab === 2 || this.tab === 3 ? "border-info rounded" : "";
-    }
+      return this.tab === 2 || this.tab === 3
+        ? "border-top-info border-3 box-shadow-3 rounded-bottom"
+        : "";
+    },
   },
   methods: {
     ...mapMutations({
-      setLoading: "app/SET_LOADING"
+      setLoading: "app/SET_LOADING",
     }),
 
     // Searching Table
@@ -449,7 +512,7 @@ export default {
           enddate: this.filters[1].model,
           status: this.status,
           status_search: this.filters[2].model,
-          perPage: this.paginate.perPage
+          perPage: this.paginate.perPage,
         };
         const response = await loansService.getLoans(params);
         this.loans = response.data;
@@ -484,24 +547,24 @@ export default {
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, update it!"
+          confirmButtonText: "Yes, update it!",
         })
-        .then(result => {
+        .then((result) => {
           if (result.value) {
             this.addPreloader();
             axios
               .post("/api/loans/update-date-first-due", {
                 id_loan: this.loanSelected.id_loan,
                 due_date: this.loanSelected.due_date,
-                user_id: this.global.layout.id
+                user_id: this.global.layout.id,
               })
-              .then(response => {
+              .then((response) => {
                 this.removePreloader();
                 this.showModalDate = false;
                 this.reloadSearch();
                 swal.fire("Success!", response.data.message, "success");
               })
-              .catch(error => {
+              .catch((error) => {
                 this.removePreloader();
                 swal.fire("Error!", "Something went wrong!", "error");
               });
@@ -566,15 +629,15 @@ export default {
         this.$store.commit("loans-store/ADD_ONE_RESEARCH");
         this.$store.dispatch("loans-store/loadCounterTab");
       }
-    }
+    },
   },
   watch: {
     researchLoans(newValue) {
       if (newValue) {
         this.resetSearch();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

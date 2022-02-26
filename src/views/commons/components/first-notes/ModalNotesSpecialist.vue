@@ -5,6 +5,7 @@
     header-class="p-0"
     header-bg-variant="transparent"
     scrollable
+    modal-class="modal-primary"
     @hide="hideModal(false)"
   >
     <template #modal-header>
@@ -207,25 +208,19 @@
       </b-row>
       <b-row>
         <b-col cols="5">
-          <validation-provider
-            v-slot="{ errors }"
-            name="originCountry"
-            rules="required"
+          <b-form-group
+            label="Origin Country"
+            label-class="font-weight-bolder"
           >
-            <b-form-group
-              label="Origin Country"
-              label-class="font-weight-bolder"
-            >
-              <v-select
-                v-model="note.country.value"
-                :class="{'border-danger rounded': errors[0]}"
-                :disabled="disabled"
-                label="name"
-                :reduce="value => value.id"
-                :options="note.country.options"
-              />
-            </b-form-group>
-          </validation-provider>
+            <v-select
+              v-model="note.country.value"
+              :clearable="false"
+              :disabled="disabled"
+              label="name"
+              :reduce="value => value.id"
+              :options="note.country.options"
+            />
+          </b-form-group>
         </b-col>
       </b-row>
       <b-row>
@@ -585,9 +580,11 @@ export default {
     },
   },
   async created() {
+    this.addPreloader()
     await this.getFirstNote()
     await this.getCountries()
     this.note.country.value = this.noteInfo.originCountry
+    this.removePreloader()
   },
   methods: {
     changeTypeService(newValue) {

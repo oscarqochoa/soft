@@ -1,0 +1,52 @@
+.k-timepicker {
+    span {
+        span {
+            background: transparent !important;
+        }
+    }
+}
+
+.k-animation-container {
+    .k-list-container {
+        &::-webkit-scrollbar {
+            width: 13px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: #f0f0f0;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #ff6358;
+        }
+    }
+}
+
+.dark-layout .k-animation-container {
+    background: #010032 !important;
+
+    .k-list-container {
+        background: #010032 !important;
+
+        &::-webkit-scrollbar {
+            width: 13px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: #010032;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #ff6358;
+        }
+
+        .k-list {
+            li {
+
+                &:hover {
+                    background: #252831 !important;
+                }
+            }
+        }
+    }
+}

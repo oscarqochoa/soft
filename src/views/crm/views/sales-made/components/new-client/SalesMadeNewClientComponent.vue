@@ -1,7 +1,6 @@
 <template>
-  <div class="border-info rounded">
+  <div class="border-top-info border-3 box-shadow-3 rounded-bottom">
     <filter-slot
-      v-scrollbar
       :filter="filter"
       :filter-principal="filterPrincipal"
       :total-rows="totalRows"
@@ -24,550 +23,881 @@
         </b-button>
       </template>
 
-      <b-table
-        id="new-client-done-table"
-        slot="table"
-        ref="new-client-done-table"
-        :has-provider="true"
-        sticky-header="70vh"
-        small
-        no-provider-filtering
-        :class="['text-center']"
-        :busy.sync="isBusy"
-        :items="search"
-        :fields="filteredFields"
-        :per-page="paginate.perPage"
-        :current-page="paginate.currentPage"
-        :filter="filter"
-        class="font-small-3"
-      >
-        <template #table-busy>
-          <div class="text-center text-primary my-2">
-            <b-spinner class="align-middle mr-1" />
-            <strong>Loading ...</strong>
-          </div>
-        </template>
-        <template #head(selected)>
-          <b-form-checkbox
-            v-model="selectAll"
-            @input="selectedAll"
-          />
-        </template>
-        <template v-slot:cell(selected)="row">
-          <b-form-group>
+      <template #table>
+        <b-table
+            id="new-client-done-table"
+            ref="new-client-done-table"
+            sticky-header="70vh"
+            small
+            no-provider-filtering
+            :busy.sync="isBusy"
+            :items="search"
+            :fields="filteredFields"
+            :per-page="paginate.perPage"
+            :current-page="paginate.currentPage"
+            :filter="filter"
+            class="font-small-3 "
+            :tbody-tr-class="'tr-table'"
+        >
+          <template #table-busy>
+            <div class="text-center text-primary my-2">
+              <b-spinner class="align-middle mr-1" />
+              <strong>Loading ...</strong>
+            </div>
+          </template>
+          <template #head(selected)>
             <b-form-checkbox
-              v-model="row.item.selected"
-              @input="selectedRow(row.item)"
+                v-model="selectAll"
+                @input="selectedAll"
             />
-          </b-form-group>
-        </template>
-        <template v-slot:cell(client)="data">
-          <div class="text-left">
-            <router-link
-              :class="[textLink]"
-              :to="`/crm/leads/${data.item.lead_id}`"
-              target="_blank"
-            >{{ data.item.client }}</router-link>
-            <p class="mb-0">
-              {{ data.item.mobile }}
-            </p>
-            <p class="mb-0">
-              <small>{{ data.item.state }}</small>
-            </p>
-            <p>
-              <small>{{ data.item.sourcesname }}</small>
-            </p>
-          </div>
-        </template>
-        <template v-slot:cell(program)="data">
-          <b-button
-            :style="`color: white !important; border-color: ${data.item.program_color} !important; background-color: ${data.item.program_color} !important;`"
-            size="sm"
-            class="font-weight-bolder"
-            @click="openModalProgram(data.item, data.index)"
-          >
-            <span
-              v-if="data.item.program === 'Business'"
-              v-b-tooltip.bottom="'Business'"
-            >BU</span>
-            <span
-              v-if="data.item.program === 'Boost Credit'"
-              v-b-tooltip.bottom="'Boost Credit'"
-            >BC</span>
-            <span
-              v-if="data.item.program === 'Credit Experts'"
-              v-b-tooltip.bottom="'Credit Experts'"
-            >CE</span>
-            <span
-              v-if="data.item.program === 'Debt Solution'"
-              v-b-tooltip.bottom="'Debt Solution'"
-            >DS</span>
-            <span
-              v-if="data.item.program === 'Tax Research'"
-              v-b-tooltip.bottom="'Tax Research'"
-            >TR</span>
-            <span
-              v-if="data.item.program === 'General Support'"
-              v-b-tooltip.bottom="'General Support'"
-            >GS</span>
-            <span
-              v-if="data.item.program === 'Specialist'"
-              v-b-tooltip.bottom="'Specialist'"
-            >SP</span>
-            <span
-              v-if="data.item.program === 'KeyBook'"
-              v-b-tooltip.bottom="'KeyBook'"
-            >KB</span>
-            <span
-              v-if="data.item.program === 'Paragon'"
-              v-b-tooltip.bottom="'Paragon'"
-            >PR</span>
-            <feather-icon
-              v-if="data.item.haveRates !== 1"
-              icon="AlertTriangleIcon"
-              style="margin-left: 5px"
-            />
-            <feather-icon
-              v-else
-              icon="CheckCircleIcon"
-              style="margin-left: 5px"
-            />
-          </b-button>
-        </template>
-        <template v-slot:cell(captured)="data">
-          <b-row>
-            <b-col v-if="!data.item.editCaptured">
-              <p>{{ data.item.captured }}</p>
-            </b-col>
-            <b-col v-else>
-              <b-form-select
-                v-model="data.item.capturedNew"
-                text-field="label"
-                value-field="id"
-                :options="captured"
-                class="mb-1 font-small-1"
-                style="width: 80px !important;"
-                size="sm"
+          </template>
+          <template v-slot:cell(selected)="row">
+            <b-form-group>
+              <b-form-checkbox
+                  v-model="row.item.selected"
+                  class="mt-1"
+                  @input="selectedRow(row.item)"
               />
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <p v-if="(data.item.commission) && (G_IS_CEO || G_IS_SUPERVISOR)">
-                <small
-                  class="text-primary font-weight-bold"
-                >$ {{ JSON.parse(data.item.commission)[0].commission }}</small>
-              </p>
-            </b-col>
-          </b-row>
-          <b-row
-            v-if="(data.item.status == 1 || data.item.status == 3) && (G_IS_CEO || G_IS_SUPERVISOR)"
-          >
-            <b-col cols="6">
-              <b-icon
-                v-if="!data.item.editCaptured"
-                icon="pencil-fill"
-                class="cursor-pointer"
-                @click="data.item.editCaptured = true;data.item.editCaptured = data.item.captured"
-              />
-              <feather-icon
-                v-else
-                class="cursor-pointer"
-                icon="SaveIcon"
-                @click="saveNewCaptured(data.item.captured, data.item.capturedNew, data.item.id, data.item)"
-              />
-            </b-col>
-            <b-col cols="6">
-              <b-icon
-                v-if="!data.item.editCaptured"
-                class="cursor-pointer"
-                icon="list-ul"
-                @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 1)"
-              />
-              <feather-icon
-                v-else
-                class="cursor-pointer"
-                icon="XSquareIcon"
-                @click="data.item.editCaptured = false"
-              />
-            </b-col>
-          </b-row>
-        </template>
-        <template v-slot:cell(seller)="data">
-          <b-row>
-            <b-col v-if="!data.item.editSeller">
-              <p>{{ data.item.seller }}</p>
-            </b-col>
-            <b-col v-else>
-              <b-form-select
-                v-model="data.item.sellerNew"
-                text-field="label"
-                value-field="id"
-                :options="sellers"
-                class="mb-1 font-small-1"
-                style="width: 80px !important;"
-                size="sm"
-              />
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <p v-if="data.item.commission && (G_IS_CEO || G_IS_SUPERVISOR)">
-                <small
-                  class="text-primary font-weight-bold"
-                >$ {{ JSON.parse(data.item.commission)[1].commission }}</small>
-              </p>
-            </b-col>
-          </b-row>
-          <b-row
-            v-if="(data.item.status == 1 || data.item.status == 3) && (G_IS_CEO || G_IS_SUPERVISOR)"
-          >
-            <b-col cols="6">
-              <b-icon
-                v-if="!data.item.editSeller"
-                icon="pencil-fill"
-                class="cursor-pointer"
-                @click="data.item.editSeller = true"
-              />
-              <feather-icon
-                v-else
-                class="cursor-pointer"
-                icon="SaveIcon"
-                @click="saveNewSeller(data.item.seller, data.item.sellerNew, data.item.id, data.item)"
-              />
-            </b-col>
-            <b-col cols="6">
-              <b-icon
-                v-if="!data.item.editSeller"
-                class="cursor-pointer"
-                icon="list-ul"
-                @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 2)"
-              />
-              <feather-icon
-                v-else
-                class="cursor-pointer"
-                icon="XSquareIcon"
-                @click="data.item.editSeller = false;data.item.sellerNew = data.item.seller"
-              />
-            </b-col>
-          </b-row>
-        </template>
-        <template v-slot:cell(fee)="data">
-          <b-row v-if="!data.item.editFee">
-            <b-col>
-              <money
-                v-model="data.item.fee"
-                class="mb-1 p-0 border-0 text-center"
-                v-bind="{prefix: ' $ ', precision: 2}"
-                style="width: 70px !important; padding-left: 10px; opacity: 1"
-                disabled
-              />
-            </b-col>
-          </b-row>
-          <b-row v-else>
-            <b-col>
-              <money
-                v-model="data.item.feeNew"
-                class="form-control form-control-sm mb-1 p-0"
-                v-bind="{prefix: ' $ ', precision: 2}"
-                style="width: 70px !important;"
-              />
-            </b-col>
-          </b-row>
-          <b-row
-            v-if="(data.item.status === 1 || data.item.status === 3) && (G_IS_CEO || G_IS_SUPERVISOR)"
-          >
-            <b-col cols="6">
-              <b-icon
-                v-if="!data.item.editFee"
-                icon="pencil-fill"
-                class="cursor-pointer"
-                @click="!(data.item.haveRates !== 1) && (data.item.editFee = true)"
-              />
-              <feather-icon
-                v-else
-                class="cursor-pointer"
-                icon="SaveIcon"
-                @click="saveNewFee(data.item.fee, data.item.feeNew, data.item.id, data.item)"
-              />
-            </b-col>
-            <b-col cols="6">
-              <b-icon
-                v-if="!data.item.editFee"
-                icon="list-ul"
-                class="cursor-pointer"
-                @click="openTrackingCapturedByModal(data.item.program, data.item.client, data.item.id, 3)"
-              />
-              <feather-icon
-                v-else
-                class="cursor-pointer"
-                icon="XSquareIcon"
-                @click="data.item.editFee = false; data.item.feeNew = data.item.fee"
-              />
-            </b-col>
-          </b-row>
-        </template>
-        <template v-slot:cell(initial_amount)="data">
-          <div
-            :class="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
-              G_IS_CEO || G_IS_SUPERVISOR)) ? 'cursor-pointer' : ''"
-            @click="( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
-              G_IS_CEO || G_IS_SUPERVISOR) &&
-              openInitialPaymentModal(data.item, data.index)"
-          >
-            <b-icon
-              v-if="data.item.initial_payment_status === 1"
-              icon="wallet2"
-              variant="muted"
-              class="font-medium-2"
-            />
-            <b-icon
-              v-else-if="data.item.initial_payment_status === 3"
-              icon="wallet2"
-              variant="warning"
-              class="font-medium-2"
-            />
-            <p
-              v-else-if="data.item.initial_payment_status === 2"
-              class="text-success font-weight-bold"
-            >$ {{ data.item.initial_amount }}</p>
-          </div>
-        </template>
-        <template v-slot:cell(contract_fee_status)="data">
-          <b-row
-            :style="data.item.user_id != currentUser.user_id && G_IS_SELLER ? 'pointer-events: none !important; opacity: 0.4 !important;': ''"
-            class="d-flex align-items-center justify-content-center"
-          >
-            <b-icon
-              v-if="data.item.contract_fee_status == 0 || (data.item.contract_fee_status == 1 &&data.item.initial_payment_status == 3)"
-              class="cursor-pointer font-medium-2"
-              icon="file-text"
-              variant="muted"
-              :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
-              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item, data.index)"
-            />
-            <b-icon
-              v-if="data.item.contract_fee_status == 1 && data.item.initial_payment_status == 2"
-              variant="success"
-              icon="file-text"
-              class="cursor-pointer font-medium-2"
-              :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
-              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item, data.index)"
-            />
-            <b-icon
-              v-if="data.item.contract_fee_status == 2"
-              variant="danger"
-              icon="file-text"
-              class="cursor-pointer font-medium-2"
-              :style="data.item.initial_payment_status == 2 ? '' : 'cursor: not-allowed;'"
-              @click="data.item.initial_payment_status == 1 ? null:openContractFeeModal(data.item, data.index)"
-            />
-          </b-row>
-        </template>
-        <template v-slot:cell(notes_status)="data">
-          <b-icon
-            v-if="data.item.creates > '2021-05-16 00:00:00' "
-            icon="chat-square-text-fill"
-            class="cursor-pointer font-medium-2"
-            :variant="
-              (data.item.notes_status_new == null) ? 'muted':
-              (data.item.notes_status_new == 0) ? 'success' :
-              'warning' "
-            @click="notesModal(data.item, data.index)"
-          />
-          <b-icon
-            v-else
-            icon="chat-square-text-fill"
-            class="cursor-pointer font-medium-2"
-            :variant="
-              (data.item.notes_status === 0) ? 'muted': 'success' "
-            @click="notesModal(data.item, data.index)"
-          />
-        </template>
-        <template v-slot:cell(trackings)="data">
-          <b-icon
-            class="cursor-pointer font-medium-2"
-            icon="list-check"
-            :variant="
-              (data.item.trackings) ? 'success': 'muted' "
-            @click="openTrackingModal(data.item.program, data.item.client, data.item.trackings)"
-          />
-        </template>
-        <template v-slot:cell(files)="data">
-          <feather-icon
-            :class="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||G_IS_CEO || G_IS_SUPERVISOR)) ? 'cursor-pointer text-warning' : ''"
-            :style="( (( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||G_IS_CEO || G_IS_SUPERVISOR)) ? 'fill: #ff9f43' : 'fill: #D8D8D6'"
-            icon="FolderIcon"
-            class="font-medium-2"
-            @click="(( ( (data.item.user_id == currentUser.user_id) && G_IS_SELLER) ||
-              G_IS_CEO || G_IS_SUPERVISOR)) && openFilesModal(data.item.lead_id, data.item.program, data.item.client, data.item.id, data.item.status, data.item.user_id, data.item.program_id, data.item.event_date)"
-          />
-        </template>
-        <template v-slot:cell(status)="data">
-          <p
-            class="m-0 font-weight-bold font-small-3"
-            :class="'color: text-' + status[data.item.status].variant"
-          >{{ status[data.item.status].label }}</p>
-        </template>
-        <template v-slot:cell(actions)="data">
-          <b-row
-            v-if="data.item.creates > '2021-05-16 00:00:00'"
-            class="d-flex align-items-center justify-content-center flex-column"
-            :class="{'not-pointer':data.item.user_id != currentUser.user_id && G_IS_SELLER }"
-          >
-            <b-button
-              v-if=" (data.item.status == 1 || data.item.status == 7) && !G_IS_CEO && !G_IS_SUPERVISOR &&
-                data.item.contract_fee_status == 1 && data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              variant="outline-success"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(5,data.item, data.index)"
-            >Revission</b-button>
-
-            <!-- Revission to Administration for Supervisor or Ceo -->
-            <b-button
-              v-if="(data.item.status == 1 || data.item.status == 6) && (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 && data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              variant="outline-success"
-              :disabled="data.item.type == 1 && G_IS_CEO ? false: data.item.type == 0 ? false : true"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(2, data.item, data.index)"
-            >Revission</b-button>
-
-            <!-- IN SUPERVISOR REVISSION  -->
-            <b-button
-              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              variant="outline-success"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(2, data.item, data.index)"
-            >Revission</b-button>
-            <b-button
-              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              variant="outline-warning"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(7, data.item, data.index)"
-            >Return</b-button>
-            <b-button
-              v-if="data.item.status == 3 && (currentUser.user_id == data.item.user_id ||
-                G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
-                data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              variant="outline-danger"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(2,data.item, data.index)"
-            >Revission</b-button>
-            <b-button
-              v-if="data.item.initial_payment_status == 1 && (G_IS_CEO || G_IS_SUPERVISOR)"
-              variant="outline-danger"
-              class="m-10px"
-              size="sm"
-              @click="annulSale(data.item)"
-            >Annul</b-button>
-          </b-row>
-
-          <b-row
-            v-else
-            :class="{'not-pointer':data.item.user_id != currentUser.user_id && G_IS_SELLER }"
-            class="d-flex align-items-center justify-content-center flex-column"
-          >
-            <b-button
-              v-if="(data.item.status == 1 || data.item.status == 7) && !G_IS_CEO && !G_IS_SUPERVISOR &&
-                data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
-              variant="outline-success"
-              class="m-10px"
-              size="sm"
-              @click="revisionSale(5, data.item, data.index)"
-            >Revission</b-button>
-            <b-button
-              v-if="(data.item.status == 1 || data.item.status == 6) && (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
-              class="m-10px"
-              variant="outline-success"
-              :disabled="data.item.type == 1 && G_IS_CEO ? false : data.item.type == 0 ? false : true"
-              size="sm"
-              @click="revisionSale(2, data.item, data.index)"
-            >Revission</b-button>
-            <b-button
-              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 && data.item.notes_status == 1 && data.item.initial_payment_status == 2"
-              class="m-10px"
-              variant="outline-success"
-              size="sm"
-              @click="revisionSale(2, data.item, data.index)"
-            >Revission</b-button>
-            <b-button
-              v-if="data.item.status == 5 && (G_IS_CEO || G_IS_SUPERVISOR) &&
-                data.item.contract_fee_status == 1 && data.item.notes_status_new == 0 && data.item.initial_payment_status == 2"
-              class="m-10px"
-              variant="outline-danger"
-              size="sm"
-              @click="revisionSale(7, data.item, data.index)"
-            >Return</b-button>
-            <b-button
-              v-if="data.item.status == 3 && (currentUser.user_id == data.item.user_id ||
-                G_IS_CEO || G_IS_SUPERVISOR) && data.item.contract_fee_status == 1 &&
-                data.item.notes_status == 1 && data.item.initial_payment_status == 2"
-              class="m-10px"
-              variant="outline-danger"
-              size="sm"
-              @click="revisionSale(2, data.item, data.index)"
-            >Revission</b-button>
-            <b-button
-              v-if="data.item.initial_payment_status == 1 && (G_IS_CEO || G_IS_SUPERVISOR)"
-              variant="outline-danger"
-              size="sm"
-              class="m-10px"
-              @click="annulSale(data.item)"
-            >ANNUL</b-button>
-          </b-row>
-        </template>
-        <template #cell(creates)="data">
-          <span>{{ data.item.creates | myGlobal }}</span>
-        </template>
-        <template #cell(approved)="data">
-          <span class="font-weight-bold text-info">{{ data.item.approved | myGlobal }}</span>
-        </template>
-        <template #cell(sms)="data">
-          <b-dropdown
-            variant="link"
-            no-caret
-            :right="$store.state.appConfig.isRTL"
-          >
-            <template #button-content>
-              <feather-icon
-                icon="MoreVerticalIcon"
-                size="16"
-                class="align-middle text-body"
-              />
-            </template>
-            <b-dropdown-item @click="modalSmsOpen(data.item)">
-              <feather-icon icon="MessageSquareIcon" />SMS
-            </b-dropdown-item>
-            <b-dropdown-item @click="modalHistorySmsOpen(data.item)">
-              <feather-icon icon="RotateCcwIcon" />History
-            </b-dropdown-item>
-            <b-dropdown-item
-              v-if="data.item.initial_payment_status === 1 && (data.item.user_id == currentUser.user_id || G_IS_CEO || G_IS_SUPERVISOR)"
-              @click="openUrlModal(data.item)"
+            </b-form-group>
+          </template>
+          <template v-slot:cell(client)="data">
+            <div
+                class="text-left"
+                style="margin-bottom: -15px !important;"
             >
-              <feather-icon icon="LinkIcon" />Url
-            </b-dropdown-item>
-          </b-dropdown>
-        </template>
-        <template #cell(done)="data">
-          <b-btn
-            v-if="data.item.initial_payment_status == 2"
-            variant="outline-info"
-            size="sm"
-            @click="returnDone(data.item.event_id, null)"
-          >Done</b-btn>
-        </template>
-      </b-table>
+              <router-link
+                  :class="[textLink]"
+                  :to="`/crm/leads/${data.item.lead_id}`"
+                  target="_blank"
+              >{{ data.item.client }}</router-link>
+              <p class="mb-0">
+                {{ data.item.mobile }}
+              </p>
+              <p class="mb-0">
+                <small>{{ data.item.state }}</small>
+              </p>
+              <p>
+                <small>{{ data.item.sourcesname }}</small>
+              </p>
+            </div>
+          </template>
+          <template v-slot:cell(program)="data">
+            <b-button
+                :style="`color: white !important; border-color: ${data.item.program_color} !important; background-color: ${data.item.program_color} !important;`"
+                size="sm"
+                class="font-weight-bolder"
+                @click="openModalProgram(data.item, data.index)"
+            >
+            <span
+                v-if="data.item.program === 'Business'"
+                v-b-tooltip.bottom="'Business'"
+            >BU</span>
+              <span
+                  v-if="data.item.program === 'Boost Credit'"
+                  v-b-tooltip.bottom="'Boost Credit'"
+              >BC</span>
+              <span
+                  v-if="data.item.program === 'Credit Experts'"
+                  v-b-tooltip.bottom="'Credit Experts'"
+              >CE</span>
+              <span
+                  v-if="data.item.program === 'Debt Solution'"
+                  v-b-tooltip.bottom="'Debt Solution'"
+              >DS</span>
+              <span
+                  v-if="data.item.program === 'Tax Research'"
+                  v-b-tooltip.bottom="'Tax Research'"
+              >TR</span>
+              <span
+                  v-if="data.item.program === 'General Support'"
+                  v-b-tooltip.bottom="'General Support'"
+              >GS</span>
+              <span
+                  v-if="data.item.program === 'Specialist'"
+                  v-b-tooltip.bottom="'Specialist'"
+              >SP</span>
+              <span
+                  v-if="data.item.program === 'KeyBook'"
+                  v-b-tooltip.bottom="'KeyBook'"
+              >KB</span>
+              <span
+                  v-if="data.item.program === 'Paragon'"
+                  v-b-tooltip.bottom="'Paragon'"
+              >PR</span>
+              <feather-icon
+                  v-if="data.item.haveRates !== 1"
+                  icon="AlertTriangleIcon"
+                  style="margin-left: 5px"
+              />
+              <feather-icon
+                  v-else
+                  icon="CheckCircleIcon"
+                  style="margin-left: 5px"
+              />
+            </b-button>
+          </template>
+          <template v-slot:cell(captured)="data">
+          <span>
+            <span v-if="!data.item.editCaptured">
+              {{ data.item.captured }}
+            </span>
+
+            <span v-else>
+              <b-form-select
+                  v-model="data.item.capturedNew"
+                  text-field="label"
+                  value-field="id"
+                  :options="captured"
+                  class="mb-1 font-small-1"
+                  style="width: 80px !important"
+                  size="sm"
+              />
+            </span>
+            <div>
+              <p v-if="data.item.commission" class="m-0">
+                <small
+                    v-if="data.item.commission[0].change != 1 || (data.item.commission[0].change == 1  && (G_IS_CEO || G_IS_SUPERVISOR))"
+                    class="text-primary font-weight-bold"
+                >$ {{ data.item.commission[0].commission }}
+                </small>
+              </p>
+            </div>
+
+            <div
+                v-if="
+                (data.item.status == 1 || data.item.status == 3) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR)
+              "
+                class="mt-07 text-right mr-1"
+            >
+              <b-icon
+                  v-if="!data.item.editCaptured"
+                  icon="pencil-fill"
+                  class="cursor-pointer"
+                  @click="
+                  data.item.editCaptured = true;
+                  data.item.editCaptured = data.item.captured;
+                "
+              />
+              <feather-icon
+                  v-else
+                  class="cursor-pointer"
+                  icon="SaveIcon"
+                  @click="
+                  saveNewCaptured(
+                    data.item.captured,
+                    data.item.capturedNew,
+                    data.item.id,
+                    data.item
+                  )
+                "
+              />
+              <b-icon
+                  v-if="!data.item.editCaptured"
+                  class="cursor-pointer ml-07"
+                  icon="list-ul"
+                  @click="
+                  openTrackingCapturedByModal(
+                    data.item.program,
+                    data.item.client,
+                    data.item.id,
+                    1
+                  )
+                "
+              />
+              <feather-icon
+                  v-else
+                  class="cursor-pointer"
+                  icon="XSquareIcon"
+                  @click="data.item.editCaptured = false"
+              />
+            </div>
+          </span>
+          </template>
+          <template v-slot:cell(seller)="data">
+          <span>
+            <span v-if="!data.item.editSeller">
+              {{ data.item.seller }}
+            </span>
+            <span v-else>
+              <b-form-select
+                  v-model="data.item.sellerNew"
+                  text-field="label"
+                  value-field="id"
+                  :options="sellers"
+                  class="mb-1 font-small-1"
+                  style="width: 80px !important"
+                  size="sm"
+              />
+            </span>
+
+            <div>
+              <p v-if="data.item.commission">
+                <small
+                    v-if="data.item.commission[1].change != 1 || (data.item.commission[1].change == 1  && (G_IS_CEO || G_IS_SUPERVISOR))"
+                    class="text-primary font-weight-bold"
+                >$ {{ data.item.commission[1].commission }}</small>
+              </p>
+            </div>
+
+            <div
+                v-if="
+                (data.item.status == 1 || data.item.status == 3) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR)
+              "
+                class="mt-07 text-right mr-1"
+            >
+              <b-icon
+                  v-if="!data.item.editSeller"
+                  icon="pencil-fill"
+                  class="cursor-pointer"
+                  @click="data.item.editSeller = true"
+              />
+              <feather-icon
+                  v-else
+                  class="cursor-pointer"
+                  icon="SaveIcon"
+                  @click="
+                  saveNewSeller(
+                    data.item.seller,
+                    data.item.sellerNew,
+                    data.item.id,
+                    data.item
+                  )
+                "
+              />
+              <b-icon
+                  v-if="!data.item.editSeller"
+                  class="cursor-pointer ml-07"
+                  icon="list-ul"
+                  @click="
+                  openTrackingCapturedByModal(
+                    data.item.program,
+                    data.item.client,
+                    data.item.id,
+                    2
+                  )
+                "
+              />
+              <feather-icon
+                  v-else
+                  class="cursor-pointer"
+                  icon="XSquareIcon"
+                  @click="
+                  data.item.editSeller = false;
+                  data.item.sellerNew = data.item.seller;
+                "
+              />
+            </div>
+          </span>
+          </template>
+          <template v-slot:cell(fee)="data">
+          <span>
+            <span v-if="!data.item.editFee">
+              $ {{data.item.fee}}
+            </span>
+            <span v-else>
+              <money
+                  v-model="data.item.feeNew"
+                  class="form-control form-control-sm p-0"
+                  v-bind="{ prefix: ' $ ', precision: 2 }"
+                  style="width: 70px !important"
+              />
+            </span>
+
+            <div
+                v-if="
+                (data.item.status === 1 || data.item.status === 3) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR)
+              "
+                class="mt-07 text-right mr-1"
+            >
+              <b-icon
+                  v-if="!data.item.editFee"
+                  icon="pencil-fill"
+                  class="cursor-pointer"
+                  @click="
+                  !(data.item.haveRates !== 1) && (data.item.editFee = true)
+                "
+              />
+              <feather-icon
+                  v-else
+                  class="cursor-pointer"
+                  icon="SaveIcon"
+                  @click="
+                  saveNewFee(
+                    data.item.fee,
+                    data.item.feeNew,
+                    data.item.id,
+                    data.item
+                  )
+                "
+              />
+              <b-icon
+                  v-if="!data.item.editFee"
+                  icon="list-ul"
+                  class="cursor-pointer ml-07"
+                  @click="
+                  openTrackingCapturedByModal(
+                    data.item.program,
+                    data.item.client,
+                    data.item.id,
+                    3
+                  )
+                "
+              />
+              <feather-icon
+                  v-else
+                  class="cursor-pointer"
+                  icon="XSquareIcon"
+                  @click="
+                  data.item.editFee = false;
+                  data.item.feeNew = data.item.fee;
+                "
+              />
+            </div>
+          </span>
+          </template>
+          <template v-slot:cell(initial_amount)="data">
+            <div
+                :class="
+              (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
+                G_IS_CEO ||
+                G_IS_SUPERVISOR
+                ? 'cursor-pointer'
+                : ''
+            "
+                @click="
+              ((data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
+                G_IS_CEO ||
+                G_IS_SUPERVISOR) &&
+                openInitialPaymentModal(data.item, data.index)
+            "
+            >
+              <b-icon
+                  v-if="data.item.initial_payment_status === 1"
+                  icon="wallet2"
+                  variant="muted"
+                  class="font-medium-2"
+              />
+              <b-icon
+                  v-else-if="data.item.initial_payment_status === 3"
+                  icon="wallet2"
+                  variant="warning"
+                  class="font-medium-2"
+              />
+              <p
+                  v-else-if="data.item.initial_payment_status === 2"
+                  class="text-success font-weight-bold"
+              >
+                $ {{ data.item.initial_amount }}
+              </p>
+            </div>
+          </template>
+          <template v-slot:cell(contract_fee_status)="data">
+            <b-row
+                :style="
+              data.item.user_id != currentUser.user_id && G_IS_SELLER
+                ? 'pointer-events: none !important; opacity: 0.4 !important;'
+                : ''
+            "
+                class="d-flex align-items-center justify-content-center"
+            >
+              <b-icon
+                  v-if="
+                data.item.contract_fee_status == 0 ||
+                  (data.item.contract_fee_status == 1 &&
+                    data.item.initial_payment_status == 3)
+              "
+                  class="cursor-pointer font-medium-2"
+                  icon="file-text"
+                  variant="muted"
+                  :style="
+                data.item.initial_payment_status == 2
+                  ? ''
+                  : 'cursor: not-allowed;'
+              "
+                  @click="
+                data.item.initial_payment_status == 1
+                  ? null
+                  : openContractFeeModal(data.item, data.index)
+              "
+              />
+              <b-icon
+                  v-if="
+                data.item.contract_fee_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+                  variant="success"
+                  icon="file-text"
+                  class="cursor-pointer font-medium-2"
+                  :style="
+                data.item.initial_payment_status == 2
+                  ? ''
+                  : 'cursor: not-allowed;'
+              "
+                  @click="
+                data.item.initial_payment_status == 1
+                  ? null
+                  : openContractFeeModal(data.item, data.index)
+              "
+              />
+              <b-icon
+                  v-if="data.item.contract_fee_status == 2"
+                  variant="danger"
+                  icon="file-text"
+                  class="cursor-pointer font-medium-2"
+                  :style="
+                data.item.initial_payment_status == 2
+                  ? ''
+                  : 'cursor: not-allowed;'
+              "
+                  @click="
+                data.item.initial_payment_status == 1
+                  ? null
+                  : openContractFeeModal(data.item, data.index)
+              "
+              />
+            </b-row>
+          </template>
+          <template v-slot:cell(notes_status)="data">
+            <b-icon
+                v-if="data.item.creates > '2021-05-16 00:00:00'"
+                icon="chat-square-text-fill"
+                class="cursor-pointer font-medium-2"
+                :variant="
+              data.item.notes_status_new == null
+                ? 'muted'
+                : data.item.notes_status_new == 0
+                  ? 'success'
+                  : 'warning'
+            "
+                @click="notesModal(data.item, data.index)"
+            />
+            <b-icon
+                v-else
+                icon="chat-square-text-fill"
+                class="cursor-pointer font-medium-2"
+                :variant="data.item.notes_status === 0 ? 'muted' : 'success'"
+                @click="notesModal(data.item, data.index)"
+            />
+          </template>
+          <template v-slot:cell(trackings)="data">
+            <b-icon
+                class="cursor-pointer font-medium-2"
+                icon="list-check"
+                :variant="data.item.trackings ? 'success' : 'muted'"
+                @click="
+              openTrackingModal(
+                data.item.program,
+                data.item.client,
+                data.item.trackings
+              )
+            "
+            />
+          </template>
+          <template v-slot:cell(files)="data">
+            <feather-icon
+                :class="
+              (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
+                G_IS_CEO ||
+                G_IS_SUPERVISOR
+                ? 'cursor-pointer text-warning'
+                : ''
+            "
+                :style="
+              (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
+                G_IS_CEO ||
+                G_IS_SUPERVISOR
+                ? 'fill: #ff9f43'
+                : 'fill: #D8D8D6'
+            "
+                icon="FolderIcon"
+                class="font-medium-2"
+                @click="
+              ((data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
+                G_IS_CEO ||
+                G_IS_SUPERVISOR) &&
+                openFilesModal(
+                  data.item.lead_id,
+                  data.item.program,
+                  data.item.client,
+                  data.item.id,
+                  data.item.status,
+                  data.item.user_id,
+                  data.item.program_id,
+                  data.item.event_date
+                )
+            "
+            />
+          </template>
+          <template v-slot:cell(status)="data">
+            <p
+                class="m-0 font-weight-bold font-small-3"
+                :class="'color: text-' + status[data.item.status].variant"
+            >
+              {{ status[data.item.status].label }}
+            </p>
+          </template>
+          <template v-slot:cell(actions)="data">
+            <b-row
+                v-if="data.item.creates > '2021-05-16 00:00:00'"
+                class="d-flex align-items-center justify-content-center flex-column"
+                :class="{
+              'not-pointer':
+                data.item.user_id != currentUser.user_id && G_IS_SELLER,
+            }"
+            >
+              <b-button
+                  v-if="
+                (data.item.status == 1 || data.item.status == 7) &&
+                  !G_IS_CEO &&
+                  !G_IS_SUPERVISOR &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
+              "
+                  variant="outline-success"
+                  class="m-10px w-100"
+                  size="sm"
+                  @click="revisionSale(5, data.item, data.index)"
+              >Revission</b-button>
+
+              <!-- Revission to Administration for Supervisor or Ceo -->
+              <b-button
+                  v-if="
+                (data.item.status == 1 || data.item.status == 6) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
+              "
+                  variant="outline-success"
+                  :disabled="
+                data.item.type == 1 && G_IS_CEO
+                  ? false
+                  : data.item.type == 0
+                    ? false
+                    : true
+              "
+                  class="m-10px"
+                  size="sm"
+                  @click="revisionSale(2, data.item, data.index)"
+              >Revission</b-button>
+
+              <!-- IN SUPERVISOR REVISSION  -->
+              <b-button
+                  v-if="
+                data.item.status == 5 &&
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
+              "
+                  variant="outline-success"
+                  class="m-10px"
+                  size="sm"
+                  @click="revisionSale(2, data.item, data.index)"
+              >Revission</b-button>
+              <b-button
+                  v-if="
+                data.item.status == 5 &&
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
+              "
+                  variant="outline-warning"
+                  class="m-10px"
+                  size="sm"
+                  @click="revisionSale(7, data.item, data.index)"
+              >Return</b-button>
+              <b-button
+                  v-if="
+                data.item.status == 3 &&
+                  (currentUser.user_id == data.item.user_id ||
+                    G_IS_CEO ||
+                    G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
+              "
+                  variant="outline-danger"
+                  class="m-10px"
+                  size="sm"
+                  @click="revisionSale(2, data.item, data.index)"
+              >Revission</b-button>
+              <b-button
+                  v-if="
+                data.item.initial_payment_status == 1 &&
+                  (G_IS_CEO || G_IS_SUPERVISOR)
+              "
+                  variant="outline-danger"
+                  class="m-10px"
+                  size="sm"
+                  @click="annulSale(data.item)"
+              >Annul</b-button>
+            </b-row>
+
+            <b-row
+                v-else
+                :class="{
+              'not-pointer':
+                data.item.user_id != currentUser.user_id && G_IS_SELLER,
+            }"
+                class="d-flex align-items-center justify-content-center flex-column"
+            >
+              <b-button
+                  v-if="
+                (data.item.status == 1 || data.item.status == 7) &&
+                  !G_IS_CEO &&
+                  !G_IS_SUPERVISOR &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+                  variant="outline-success"
+                  class="m-10px"
+                  size="sm"
+                  @click="revisionSale(5, data.item, data.index)"
+              >Revission</b-button>
+              <b-button
+                  v-if="
+                (data.item.status == 1 || data.item.status == 6) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+                  class="m-10px"
+                  variant="outline-success"
+                  :disabled="
+                data.item.type == 1 && G_IS_CEO
+                  ? false
+                  : data.item.type == 0
+                    ? false
+                    : true
+              "
+                  size="sm"
+                  @click="revisionSale(2, data.item, data.index)"
+              >Revission</b-button>
+              <b-button
+                  v-if="
+                data.item.status == 5 &&
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+                  class="m-10px"
+                  variant="outline-success"
+                  size="sm"
+                  @click="revisionSale(2, data.item, data.index)"
+              >Revission</b-button>
+              <b-button
+                  v-if="
+                data.item.status == 5 &&
+                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status_new == 0 &&
+                  data.item.initial_payment_status == 2
+              "
+                  class="m-10px"
+                  variant="outline-danger"
+                  size="sm"
+                  @click="revisionSale(7, data.item, data.index)"
+              >Return</b-button>
+              <b-button
+                  v-if="
+                data.item.status == 3 &&
+                  (currentUser.user_id == data.item.user_id ||
+                    G_IS_CEO ||
+                    G_IS_SUPERVISOR) &&
+                  data.item.contract_fee_status == 1 &&
+                  data.item.notes_status == 1 &&
+                  data.item.initial_payment_status == 2
+              "
+                  class="m-10px"
+                  variant="outline-danger"
+                  size="sm"
+                  @click="revisionSale(2, data.item, data.index)"
+              >Revission</b-button>
+              <b-button
+                  v-if="
+                data.item.initial_payment_status == 1 &&
+                  (G_IS_CEO || G_IS_SUPERVISOR)
+              "
+                  variant="outline-danger"
+                  size="sm"
+                  class="m-10px"
+                  @click="annulSale(data.item)"
+              >ANNUL</b-button>
+            </b-row>
+          </template>
+          <template #cell(creates)="data">
+            <span>{{ data.item.creates | myGlobal }}</span>
+          </template>
+          <template #cell(approved)="data">
+          <span class="font-weight-bold text-info">{{
+              data.item.approved | myGlobal
+            }}</span>
+          </template>
+          <template #cell(sms)="data">
+            <b-dropdown
+                variant="link"
+                no-caret
+                :right="$store.state.appConfig.isRTL"
+            >
+              <template #button-content>
+                <feather-icon
+                    icon="MoreVerticalIcon"
+                    size="16"
+                    class="align-middle text-body"
+                />
+              </template>
+              <b-dropdown-item @click="modalSmsOpen(data.item)">
+                <feather-icon icon="MessageSquareIcon" />SMS
+              </b-dropdown-item>
+              <b-dropdown-item @click="modalHistorySmsOpen(data.item)">
+                <feather-icon icon="RotateCcwIcon" />History
+              </b-dropdown-item>
+              <b-dropdown-item
+                  v-if="
+                data.item.initial_payment_status === 1 &&
+                  (data.item.user_id == currentUser.user_id ||
+                    G_IS_CEO ||
+                    G_IS_SUPERVISOR)
+              "
+                  @click="openUrlModal(data.item)"
+              >
+                <feather-icon icon="LinkIcon" />Url
+              </b-dropdown-item>
+            </b-dropdown>
+          </template>
+          <template #cell(done)="data">
+            <b-btn
+                v-if="data.item.initial_payment_status == 2"
+                variant="outline-info"
+                size="sm"
+                @click="returnDone(data.item.event_id, null)"
+            >Done</b-btn>
+          </template>
+          <template #custom-foot>
+            <b-tr class="bg-info">
+              <b-td colspan="2" />
+              <b-td
+                  colspan="2"
+                  class="text-center text-white font-weight-bolder py-px"
+              >
+                TCMC
+              </b-td>
+              <b-td
+                  colspan="2"
+                  class="text-center text-white font-weight-bolder py-px"
+              >
+                TCMS
+              </b-td>
+              <b-td
+                  colspan="3"
+                  class="text-center text-white font-weight-bolder py-px"
+              >
+                TFEE
+              </b-td>
+              <b-td
+                  colspan="3"
+                  class="text-center text-white font-weight-bolder py-px"
+              >
+                TIP
+              </b-td>
+              <b-td
+                  colspan="2"
+                  class="text-center text-white font-weight-bolder py-px"
+              >
+                TMA
+              </b-td>
+              <b-td :colspan="done === 0 ? 3 : 2" />
+            </b-tr>
+            <b-tr>
+              <b-td
+                  colspan="2"
+                  class="text-right font-weight-bolder py-px"
+              >
+                Subtotal
+              </b-td>
+              <b-td
+                  colspan="2"
+                  class="text-center py-px"
+              >
+                {{ '$ ' + subtotal.tcmc }}
+              </b-td>
+              <b-td
+                  colspan="2"
+                  class="text-center py-px"
+              >
+                {{ '$ ' + subtotal.tcms }}
+              </b-td>
+              <b-td
+                  colspan="3"
+                  class="text-center py-px"
+              >
+                {{ '$ ' + subtotal.tfee }}
+              </b-td>
+              <b-td
+                  colspan="3"
+                  class="text-center py-px"
+              >
+                {{ '$ ' + subtotal.tip }}
+              </b-td>
+              <b-td
+                  colspan="2"
+                  class="text-center py-px"
+              >
+                {{ '$ ' + subtotal.tma }}
+              </b-td>
+              <b-td :colspan="done === 0 ? 3 : 2" />
+            </b-tr>
+            <b-tr>
+              <b-td
+                  colspan="2"
+                  class="text-right font-weight-bolder py-px"
+              >
+                Total
+              </b-td>
+              <b-td
+                  colspan="2"
+                  class="text-center py-px"
+              >
+                {{ '$ ' + total.tcmc }}
+              </b-td>
+              <b-td
+                  colspan="2"
+                  class="text-center py-px"
+              >
+                {{ '$ ' + total.tcms }}
+              </b-td>
+              <b-td
+                  colspan="3"
+                  class="text-center py-px"
+              >
+                {{ '$ ' + total.tfee }}
+              </b-td>
+              <b-td
+                  colspan="3"
+                  class="text-center py-px"
+              >
+                {{ '$ ' + total.tip }}
+              </b-td>
+              <b-td
+                  colspan="2"
+                  class="text-center py-px"
+              >
+                {{ '$ ' + total.tma }}
+              </b-td>
+              <b-td :colspan="done === 0 ? 3 : 2" />
+            </b-tr>
+          </template>
+        </b-table>
+      </template>
     </filter-slot>
     <b-modal
       id="modal-history-sms"
@@ -626,8 +956,14 @@
       v-if="modal.revission"
       :modal="modal"
       :revission="modalData.revission"
-      @click="updateRow(); modal.revission = false"
-      @response="updateRow(); modal.revission = false"
+      @click="
+        updateRow();
+        modal.revission = false;
+      "
+      @response="
+        updateRow();
+        modal.revission = false;
+      "
     />
 
     <!-- NOTES -->
@@ -697,6 +1033,7 @@ import ModalNotesCredit from '@/views/commons/components/first-notes/ModalNotasC
 import ModalNotesAll from '@/views/commons/components/first-notes/ModalNotesAll.vue'
 import ModalNotesSpecialist from '@/views/commons/components/first-notes/ModalNotesSpecialist.vue'
 import ApproveSupervisorModal from '@/views/crm/views/sales-made/components/modals/ApproveSupervisorModal.vue'
+import Vue from "vue";
 
 export default {
   name: 'SalesMadeNewComponent',
@@ -738,7 +1075,7 @@ export default {
   },
   data() {
     return {
-      items: {},
+      items: [],
       selected: [],
       isBusy: false,
       fields: dataFields,
@@ -896,6 +1233,117 @@ export default {
       if (this.done === 0) return this.fields
       return this.fields.filter(field => field.key !== 'done')
     },
+    total() {
+      if (this.items[0]) {
+        return {
+          tcmc: this.items[0].tcmc,
+          tcms: this.items[0].tcms,
+          tfee: this.items[0].tfee,
+          tip: this.items[0].tip,
+          tma: this.items[0].tma,
+        }
+      }
+      return {
+        tcmc: '0.00',
+        tcms: '0.00',
+        tfee: '0.00',
+        tip: '0.00',
+        tma: '0.00',
+      }
+    },
+    subtotal() {
+      if (this.items.length > 0) {
+        return {
+          tcmc: this.items
+            .reduce((previous, current) => {
+              const currentComissionCapturedAmount = current.commission
+                ? parseFloat(current.commission[0].commission)
+                : 0.0
+              if (typeof previous === 'object') {
+                const previousComissionCapturedAmount = previous.commission
+                  ? parseFloat(previous.commission[0].commission)
+                  : 0.0
+                return (
+                  currentComissionCapturedAmount
+                  + previousComissionCapturedAmount
+                )
+              }
+              return currentComissionCapturedAmount + previous
+            })
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          tcms: this.items
+            .reduce((previous, current) => {
+              const currentComissionSellerAmount = current.commission
+                ? parseFloat(current.commission[1].commission)
+                : 0.0
+              if (typeof previous === 'object') {
+                const previousComissionSellerAmount = previous.commission
+                  ? parseFloat(previous.commission[1].commission)
+                  : 0.0
+                return (
+                  currentComissionSellerAmount + previousComissionSellerAmount
+                )
+              }
+              return currentComissionSellerAmount + previous
+            })
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          tfee: this.items
+            .reduce((previous, current) => {
+              const currentFeeAmount = current.fee
+                ? parseFloat(current.fee.replaceAll(',', ''))
+                : 0.0
+              if (typeof previous === 'object') {
+                const previousFeeAmount = previous.fee
+                  ? parseFloat(previous.fee.replaceAll(',', ''))
+                  : 0.0
+                return currentFeeAmount + previousFeeAmount
+              }
+              return currentFeeAmount + previous
+            })
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          tip: this.items
+            .reduce((previous, current) => {
+              const currentInitialAmount = current.initial_amount !== '0.00'
+                ? parseFloat(current.initial_amount.replaceAll(',', ''))
+                : 0.0
+              if (typeof previous === 'object') {
+                const previousInitialAmount = previous.initial_amount !== '0.00'
+                  ? parseFloat(previous.initial_amount.replaceAll(',', ''))
+                  : 0.0
+                return currentInitialAmount + previousInitialAmount
+              }
+              return currentInitialAmount + previous
+            })
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+          tma: this.items
+            .reduce((previous, current) => {
+              const currentMonthlyAmount = current.monthly_amount
+                ? parseFloat(current.monthly_amount.replaceAll(',', ''))
+                : 0.0
+              if (typeof previous === 'object') {
+                const previousMonthlyAmount = previous.monthly_amount
+                  ? parseFloat(previous.monthly_amount.replaceAll(',', ''))
+                  : 0.0
+                return currentMonthlyAmount + previousMonthlyAmount
+              }
+              return currentMonthlyAmount + previous
+            })
+            .toFixed(2)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+        }
+      }
+      return {
+        tcmc: '0.00',
+        tcms: '0.00',
+        tfee: '0.00',
+        tip: '0.00',
+        tma: '0.00',
+      }
+    },
   },
   async created() {
     try {
@@ -1045,7 +1493,7 @@ export default {
           index += 1
         }
         this.items = data.data
-        return this.items || []
+        return this.items
       } catch (e) {
         this.showToast('danger', 'top-right', 'Error', 'XIcon', e)
         return []
@@ -1161,8 +1609,20 @@ export default {
       this.modal.revission = true
     },
     async updateRow() {
-      this.newRowFromSelectedIndex = await window.amgApi.post('/sales-made/get-sale-made-by-sale-id', { saleId: this.items[this.selectedIndex].id })
-      Object.assign(this.items[this.selectedIndex], this.newRowFromSelectedIndex.data[0])
+      this.newRowFromSelectedIndex = await window.amgApi.post(
+        '/sales-made/get-sale-made-by-sale-id',
+        { saleId: this.items[this.selectedIndex].id },
+      )
+      const newRow = this.newRowFromSelectedIndex.data[0]
+      const keysNewRow = Object.keys(newRow)
+      const keysOldRow = Object.keys(this.items[this.selectedIndex])
+      keysNewRow.forEach((key) => {
+        if (keysOldRow.includes(key)) {
+          console.log(key)
+          Vue.set(this.items[this.selectedIndex], key, newRow[key])
+        }
+      })
+      console.log(this.items[this.selectedIndex])
     },
     async hideModalProgram(refresh) {
       if (refresh) {
@@ -1170,7 +1630,7 @@ export default {
       }
       this.modalData.programs.programSelected = ''
       this.modal.programs = false
-      this.$store.commit('app/SET_LOADING', false)
+      this.removePreloader()
     },
     openTrackingModal(program, client, tabla) {
       this.modalData.tracking.program = program
@@ -1202,7 +1662,6 @@ export default {
           || this.currentUser.role_id == 1
           || this.currentUser.role_id == 2
         this.modalData.initial_payment.statusSale = data.status
-        this.modalData.initial_payment.comissions = data.commission
         this.modalData.initial_payment.nameProgram = data.program
         this.modalData.initial_payment.nameClient = data.client
         this.modalData.initial_payment.valorInitalPaymetn = data.initial_payment_status
@@ -1461,12 +1920,24 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .not-pointer {
   pointer-events: none;
   opacity: 0.4;
 }
 .m-10px {
   margin: 2px;
+}
+
+.py-px {
+  padding: 12px !important;
+}
+
+.mt-07{
+  margin-top: 7px;
+}
+
+.ml-07{
+  margin-left: 7px;
 }
 </style>

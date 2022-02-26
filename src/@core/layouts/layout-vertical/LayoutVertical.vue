@@ -126,6 +126,7 @@ export default {
       navbarType,
       footerType,
       isNavMenuHidden,
+      layoutType
     } = useAppConfig()
 
     const {
@@ -154,7 +155,8 @@ export default {
       layoutClasses,
       navbarTypeClass,
       footerTypeClass,
-
+      navbarType,
+      layoutType,
       // App Config
       routerTransition,
       navbarBackgroundColor,

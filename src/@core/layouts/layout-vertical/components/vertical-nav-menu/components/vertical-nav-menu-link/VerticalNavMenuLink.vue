@@ -3,19 +3,20 @@
     v-if="canViewVerticalNavMenuLink(item)"
     class="nav-item"
     :class="{
-      'active': isActive,
-      'disabled': item.disabled
+      active: isActive,
+      disabled: item.disabled,
     }"
   >
     <b-link v-bind="linkProps" class="d-flex align-items-center">
-      <amg-icon :icon="item.icon || 'CircleIcon'" />
+      <feather-icon :icon="item.icon || 'CircleIcon'" />
       <span class="menu-title text-truncate">{{ t(item.title) }}</span>
       <b-badge
         v-if="item.tag"
         pill
         :variant="item.tagVariant || 'primary'"
         class="mr-1 ml-auto"
-      >{{ item.tag }}</b-badge>
+        >{{ item.tag }}</b-badge
+      >
     </b-link>
   </li>
 </template>
@@ -30,14 +31,14 @@ import mixinVerticalNavMenuLink from "./mixinVerticalNavMenuLink";
 export default {
   components: {
     BLink,
-    BBadge
+    BBadge,
   },
   mixins: [mixinVerticalNavMenuLink],
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
     const { isActive, linkProps, updateIsActive } = useVerticalNavMenuLink(
@@ -55,8 +56,8 @@ export default {
       canViewVerticalNavMenuLink,
 
       // i18n
-      t
+      t,
     };
-  }
+  },
 };
 </script>

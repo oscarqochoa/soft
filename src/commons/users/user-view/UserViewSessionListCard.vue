@@ -11,6 +11,7 @@
       :fields="arrayColumns"
       class="mb-0"
       v-if="!loading"
+      style="max-height: 210px; overflow: auto;"
     >
       <template #table-busy>
         <div class="text-center text-primary my-2">

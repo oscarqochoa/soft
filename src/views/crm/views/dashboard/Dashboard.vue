@@ -1,465 +1,533 @@
 <template>
-  <div class="row">
-    <div class="col-md-12 col-lg-12 col-sm-12">
-      <b-row class="">
-        <b-col class="" cols="12" sm="4" md="4" lg="3" xl="2">
-          <b-row class="pl-1 pr-1">
+  <div>
+    <header-slot></header-slot>
+    <b-row>
+      <b-col cols="12">
+        <!-- All Screen -->
+        <b-row>
+          <!-- Column Cards -->
+          <b-col
+              class="col-tab"
+              v-dragscroll="allSizeOfScreen === 'xs' ? false : true"
+              cols="12"
+              sm="4"
+              md="4"
+              lg="3"
+              xl="2"
+              :style="`${statusHeightByScreenColOne}
+             ${statusHeightByDevicesColOne}`"
+          >
+            <!-- Card Leads-->
+            <b-row class="b-row-card">
               <b-card
-              
-              @click="change_tab(0)"
-              class="ecommerce-card-leads ecommerce-card col-lg-12 h-100 cursor-pointer"
-              :class="classAdd"
-              :style="
-                itemCards[0] == true
-                  ? 'background: linear-gradient(to right, blue, rgb(230, 174, 230)); color: white'
-                  : classAdd=='dark'? '':'background-color:aliceblue'
-              "
-            >
-              <b-card-title :style="itemCards[0] == true?'color: white':''">Leads</b-card-title>
-              <b-card-text>
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
+                @click="changeTab(0)"
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-leads': !itemCards[0] && !isTouch,
+                }"
+                :style="
+                  switchHoverByCard(
+                    0,
+                    'linear-gradient(90deg, #0090E7 0%, #8F5FE8 100%)'
+                  )
+                "
+              >
+                <!-- Card Title -->
+                <b-card-title
+                    :style="itemCards[0] == true ? 'color: white' : ''"
+                >Leads</b-card-title
                 >
-                  <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-                      border-radius: 4px;
-                    "
-                    :style="itemCards[0] == true?'background-color: white':''"
-                    class="mr-2 item-wrapper-font div-box1 "
-                  ></div>
-                  <div class="mr-1 ">
-                    <span style="font-size: medium" class="">Today :</span>
-                  </div>
-                  <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.leadday }}</strong></span
-                    >
-                  </div>
-                </div>
-                <div class="row" style="height: 10px" />
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
-                  <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-                     
-                      border-radius: 4px;
-                    "
-                    :style="itemCards[0] == true?'background-color: white':''"
-                    class="mr-1 div-box"
-                  ></div>
-                  <div class="mr-1">
-                    <span style="font-size: medium">Month :</span>
-                  </div>
-                  <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.leadmonth }}</strong></span
-                    >
-                  </div>
-                </div>
-              </b-card-text>
-            </b-card>
-            
-          </b-row>
-
-          <b-row class="pl-1 pr-1">
-            <b-card
-              
-              class="ecommerce-card-appointments ecommerce-card col-lg-12 h-150 cursor-pointer"
-              :class="classAdd"
-              @click="change_tab(1)"
-              :style="
-                itemCards[1] == true
-                  ? 'background: linear-gradient(to right, #299aff, rgb(230, 174, 230));color: white'
-                  :  classAdd=='dark'? '':'background-color:aliceblue'
-              "
-            >
-            <b-card-title :style="itemCards[1] == true?'color: white':''">Appointments</b-card-title>
-              <b-card-text>
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
-                  <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-                      border-radius: 4px;
-                    "
-                    :style="itemCards[1] == true?'background-color: white':''"
-                    class="mr-2 item-wrapper-font div-box1"
-                  ></div>
-                  <div class="mr-1">
-                    <span style="font-size: medium">Today :</span>
-                  </div>
-                  <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.eventday }}</strong></span
-                    >
-                  </div>
-                </div>
-                <div class="row" style="height: 10px" />
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
-                  <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-                     
-                      border-radius: 4px;
-                    "
-                    :style="itemCards[1] == true?'background-color: white':''"
-                    class="mr-1 item-wrapper-font div-box"
-                  ></div>
-                  <div class="mr-1">
-                    <span style="font-size: medium">Month :</span>
-                  </div>
-                  <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.eventmonth }}</strong></span
-                    >
-                  </div>
-                </div>
-              </b-card-text>
-            </b-card>
-          </b-row>
-          <b-row class="pl-1 pr-1">
-            <b-card
-              class="ecommerce-card-tasks ecommerce-card col-lg-12 h-150 cursor-pointer"
-              :class="classAdd"
-              @click="change_tab(2)"
-              :style="
-                itemCards[2] == true
-                  ? 'background: linear-gradient(to right, #82868b, rgb(230, 174, 230));color: white'
-                  : classAdd=='dark'? '':'background-color:aliceblue'
-              "
-            >
-            <b-card-title :style="itemCards[2] == true?'color: white':''">Tasks</b-card-title>
-              <b-card-text>
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
-                  <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-                      
-                      border-radius: 4px;
-                    "
-                    :style="itemCards[2] == true?'background-color: white':''"
-                    class="mr-2 item-wrapper-font div-box1"
-                  ></div>
-                  <div class="mr-1">
-                    <span style="font-size: medium">Today :</span>
-                  </div>
-                  <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.taskday }}</strong></span
-                    >
-                  </div>
-                </div>
-                <div class="row" style="height: 10px" />
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
-                  <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-                      
-                      border-radius: 4px;
-                    "
-                    :style="itemCards[2] == true?'background-color: white':''"
-                    class="mr-1 item-wrapper-font div-box"
-                  ></div>
-                  <div class="mr-1">
-                    <span style="font-size: medium">Month :</span>
-                  </div>
-                  <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.taskmonth }}</strong></span
-                    >
-                  </div>
-                </div>
-              </b-card-text>
-            </b-card>
-          </b-row>
-          <b-row class="pl-1 pr-1">
-            <b-card
-              class="ecommerce-card-sales ecommerce-card col-lg-12 h-150 cursor-pointer"
-              :class="classAdd"
-              @click="change_tab(3)"
-              :style="
-                itemCards[3] == true
-                  ? 'background: linear-gradient(to right, #28c76f, rgb(240, 214, 240));color: white'
-                  : classAdd=='dark'? '':'background-color:aliceblue'
-              "
-            >
-            <b-card-title :style="itemCards[3] == true?'color: white':''">Sales</b-card-title>
-              <b-card-text>
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
-                  <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-                      
-                      border-radius: 4px;
-                    "
-                    :style="itemCards[3] == true?'background-color: white':''"
-                    class="mr-2 item-wrapper-font div-box1"
-                  ></div>
-                  <div class="mr-1">
-                    <span style="font-size: medium">Today :</span>
-                  </div>
-                  <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.vendioday }}</strong></span
-                    >
-                  </div>
-                </div>
-                <div class="row" style="height: 10px" />
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
-                  <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-                      
-                      border-radius: 4px;
-                    "
-                    :style="itemCards[3] == true?'background-color: white':''"
-                    class="mr-1 item-wrapper-font div-box"
-                  ></div>
-                  <div class="mr-1">
-                    <span style="font-size: medium">Month :</span>
-                  </div>
-                  <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.vendiomonth }}</strong></span
-                    >
-                  </div>
-                </div>
-              </b-card-text>
-            </b-card>
-          </b-row>
-          <b-row class="pl-1 pr-1">
-            <b-card
-              class="ecommerce-card-capturated ecommerce-card col-lg-12 h-150 cursor-pointer"
-              :class="classAdd"
-              @click="change_tab(4)"
-              :style="
-                itemCards[4] == true
-                  ? 'background: linear-gradient(to right, #e83e8c, rgb(211, 192, 211));color: white'
-                  : classAdd=='dark'? '':'background-color:aliceblue'
-              "
-            >
-            <b-card-title :style="itemCards[4] == true?'color: white':''">Capturated</b-card-title>
-              <b-card-text>
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
-                  <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-                      border-radius: 4px;
-                    "
-                    :style="itemCards[4] == true?'background-color: white':''"
-                    class="mr-2 item-wrapper-font div-box1"
-                  ></div>
-                  <div class="mr-1">
-                    <span style="font-size: medium">Today :</span>
-                  </div>
-                  <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.clientday }}</strong></span
-                    >
-                  </div>
-                </div>
-                <div class="row" style="height: 10px" />
-                <div
-                  class="
-                    row
-                    item-wrapper
-                    justify-content-center
-                    align-items-center
-                  "
-                >
-                  <div
-                    style="
-                      width: 17px;
-                      height: 17px;
-                      
-                      border-radius: 4px;
-                    "
-                    :style="itemCards[4] == true?'background-color: white':''"
-                    class="mr-1 item-wrapper-font div-box"
-                  ></div>
-                  <div class="mr-1">
-                    <span style="font-size: medium">Month :</span>
-                  </div>
-                  <div>
-                    <span style="font-size: large"
-                      ><strong>{{ global.clientmonth }}</strong></span
-                    >
-                  </div>
-                </div>
-              </b-card-text>
-            </b-card>
-          </b-row>
-        </b-col>
-        <b-col class="mb-3" cols="12" sm="8" md="8" lg="9" xl="10">
-          <b-card title="" class="col-12 h-100">
-            <br />
-            <br />
-            <div class="d-flex justify-content-between flex-wrap row">
-              <div class="mb-1 mb-sm-0 d-inline col-lg-7">
-                <b-row>
-                  <b-col cols="12" sm="12" md="12">
-                    <span class="text-muted w-100">MONTHLY GRAPHICS</span>
-                  </b-col>
-                  <b-col cols="12" sm="12" md="4">
-                    <v-select
-                      v-model="year"
-                      class="per-page-selector"
-                      style="font-size: 15px"
-                      :clearable="false"
-                      :options="years"
-                      @input="filtrocont()"
-                    />
-                  </b-col>
-                  <b-col cols="12" sm="12" md="4">
-                    <v-select
-                      v-if="[1, 2].includes(currentUser.role_id)"
-                      v-model="userfilter"
-                      class="per-page-selector-user"
-                      
-                      style="font-size: 15px;"
-                      placeholder="Select User"
-                      label="user_name"
-                      :options="users"
-                      :reduce="(val) => val.id"
-                      @input="filtrocont()"
-                    />
-                  </b-col>
-                </b-row>
-              </div>
-              <div class=" mb-1 mb-sm-0 col-lg-5 col-md-5 inline">
-                <!-- <b-row class="w-100">
-                  <div>
-                    <h1 class="font-weight-bolder">TOTAL:</h1>
-                  </div>
-                  <div class="important text-center ml-1 mr-1">
+                <!-- Card Content -->
+                <b-card-text>
+                  <!-- First Line -->
+                  <b-row :class="classWrapper">
+                    <!-- Box First-->
                     <div
-                      style="background-color: blue; border-radius: 4px"
-                      class="ml-2 mr-2 w-100"
+                        :style="
+                        itemCards[0] == true ? 'background-color: white' : ''
+                      "
+                        class="mr-2 item-wrapper-font div-box1"
+                    ></div>
+                    <!-- Name Today -->
+                    <div class="mr-1">
+                      <span style="font-size: medium" class>Today :</span>
+                    </div>
+                    <!-- Today -->
+                    <div>
+                      <span style="font-size: large">
+                        <strong>{{ global.leadday }}</strong>
+                      </span>
+                    </div>
+                  </b-row>
+                  <b-row style="height: 10px" />
+                  <!-- Second Line -->
+                  <b-row :class="classWrapper">
+                    <!-- Box Second-->
+                    <div
+                        :style="
+                        itemCards[0] == true ? 'background-color: white' : ''
+                      "
+                        class="mr-1 div-box"
+                    ></div>
+                    <!-- Name Month -->
+                    <div class="mr-1">
+                      <span style="font-size: medium">Month :</span>
+                    </div>
+                    <!-- Month -->
+                    <div>
+                      <span style="font-size: large">
+                        <strong>{{ global.leadmonth }}</strong>
+                      </span>
+                    </div>
+                  </b-row>
+                </b-card-text>
+              </b-card>
+            </b-row>
+            <!-- Card Appointments-->
+            <b-row class="b-row-card">
+              <b-card
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-appointments': !itemCards[1] && !isTouch,
+                }"
+                @click="changeTab(1)"
+                :style="
+                  switchHoverByCard(
+                    1,
+                    'linear-gradient(90deg, #FAC632 0%, #F37432 100%)'
+                  )
+                "
+              >
+                <!-- Card Title -->
+                <b-card-title
+                    :style="itemCards[1] == true ? 'color: white' : ''"
+                >Appointments</b-card-title
+                >
+                <!-- Card Content -->
+                <b-card-text>
+                  <!-- First Line -->
+                  <b-row :class="classWrapper">
+                    <!-- Box First-->
+                    <div
+                        :style="
+                        itemCards[1] == true ? 'background-color: white' : ''
+                      "
+                        class="mr-2 item-wrapper-font div-box1"
+                    ></div>
+                    <!-- Name Today -->
+                    <div class="mr-1">
+                      <span style="font-size: medium">Today :</span>
+                    </div>
+                    <!-- Today -->
+                    <div>
+                      <span style="font-size: large">
+                        <strong>{{ global.eventday }}</strong>
+                      </span>
+                    </div>
+                  </b-row>
+                  <b-row style="height: 10px" />
+                  <!-- Second Line -->
+                  <b-row :class="classWrapper">
+                    <!-- Box Second-->
+                    <div
+                        :style="
+                        itemCards[1] == true ? 'background-color: white' : ''
+                      "
+                        class="mr-1 item-wrapper-font div-box"
+                    ></div>
+                    <!-- Name Month -->
+                    <div class="mr-1">
+                      <span style="font-size: medium">Month :</span>
+                    </div>
+                    <!-- Month -->
+                    <div>
+                      <span style="font-size: large">
+                        <strong>{{ global.eventmonth }}</strong>
+                      </span>
+                    </div>
+                  </b-row>
+                </b-card-text>
+              </b-card>
+            </b-row>
+            <!-- Card Tasks-->
+            <b-row class="b-row-card">
+              <b-card
+                class=" ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-tasks': !itemCards[2] && !isTouch,
+                }"
+                @click="changeTab(2)"
+                :style="
+                  switchHoverByCard(
+                    2,
+                    'linear-gradient(90deg, #961BCE 0%, #D0317D 100%)'
+                  )
+                "
+              >
+                <!-- Card Title -->
+                <b-card-title
+                    :style="itemCards[2] == true ? 'color: white' : ''"
+                >Tasks</b-card-title
+                >
+                <!-- Card Content -->
+                <b-card-text>
+                  <!-- First Line -->
+                  <b-row :class="classWrapper">
+                    <!-- Box First-->
+                    <div
+                        :style="
+                        itemCards[2] == true ? 'background-color: white' : ''
+                      "
+                        class="mr-2 item-wrapper-font div-box1"
+                    ></div>
+                    <!-- Name Today -->
+                    <div class="mr-1">
+                      <span style="font-size: medium">Today :</span>
+                    </div>
+                    <!-- Today -->
+                    <div>
+                      <span style="font-size: large">
+                        <strong>{{ global.taskday }}</strong>
+                      </span>
+                    </div>
+                  </b-row>
+                  <b-row style="height: 10px" />
+                  <!-- Second Line-->
+                  <b-row :class="classWrapper">
+                    <!-- Box Second-->
+                    <div
+                        :style="
+                        itemCards[2] == true ? 'background-color: white' : ''
+                      "
+                        class="mr-1 item-wrapper-font div-box"
+                    ></div>
+                    <!-- Name Month -->
+                    <div class="mr-1">
+                      <span style="font-size: medium">Month :</span>
+                    </div>
+                    <!-- Month -->
+                    <div>
+                      <span style="font-size: large">
+                        <strong>{{ global.taskmonth }}</strong>
+                      </span>
+                    </div>
+                  </b-row>
+                </b-card-text>
+              </b-card>
+            </b-row>
+            <!-- Card Sales-->
+            <b-row class="b-row-card">
+              <b-card
+                class=" ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-sales': !itemCards[3] && !isTouch,
+                }"
+                @click="changeTab(3)"
+                :style="
+                  switchHoverByCard(
+                    3,
+                    'linear-gradient(90deg, #ADD210 0%, #5F873E 100%)'
+                  )
+                "
+              >
+                <!-- Card Title -->
+                <b-card-title
+                    :style="itemCards[3] == true ? 'color: white' : ''"
+                >Sales</b-card-title
+                >
+                <!-- Card Content -->
+                <b-card-text>
+                  <!-- First Line -->
+                  <b-row :class="classWrapper">
+                    <!-- Box First -->
+                    <div
+                        :style="
+                        itemCards[3] == true ? 'background-color: white' : ''
+                      "
+                        class="mr-2 item-wrapper-font div-box1"
+                    ></div>
+                    <!-- Name Today -->
+                    <div class="mr-1">
+                      <span style="font-size: medium">Today :</span>
+                    </div>
+                    <!-- Today -->
+                    <div>
+                      <span style="font-size: large">
+                        <strong>{{ global.vendioday }}</strong>
+                      </span>
+                    </div>
+                  </b-row>
+                  <b-row style="height: 10px" />
+                  <!-- Second Line -->
+                  <b-row :class="classWrapper">
+                    <!-- Box Second -->
+                    <div
+                        :style="
+                        itemCards[3] == true ? 'background-color: white' : ''
+                      "
+                        class="mr-1 item-wrapper-font div-box"
+                    ></div>
+                    <!-- Name Month -->
+                    <div class="mr-1">
+                      <span style="font-size: medium">Month :</span>
+                    </div>
+                    <!-- Month -->
+                    <div>
+                      <span style="font-size: large">
+                        <strong>{{ global.vendiomonth }}</strong>
+                      </span>
+                    </div>
+                  </b-row>
+                </b-card-text>
+              </b-card>
+            </b-row>
+            <!-- Card Capturated-->
+            <b-row class="b-row-card">
+              <b-card
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{classAdd,
+                  'ecommerce-card-capturated': !itemCards[4] && !isTouch,
+                }"
+                @click="changeTab(4)"
+                :style="
+                  switchHoverByCard(
+                    4,
+                    'linear-gradient(90deg, #FE8F8F 0%, #EC1443 100%)'
+                  )
+                "
+              >
+                <!-- Card Title -->
+                <b-card-title
+                    :style="itemCards[4] == true ? 'color: white' : ''"
+                >Capturated</b-card-title
+                >
+                <!--Card Content  -->
+                <b-card-text>
+                  <!-- First Line -->
+                  <b-row :class="classWrapper">
+                    <!-- Box First -->
+                    <div
+                        :style="
+                        itemCards[4] == true ? 'background-color: white' : ''
+                      "
+                        class="mr-2 item-wrapper-font div-box1"
+                    ></div>
+                    <!-- Name Today -->
+                    <div class="mr-1">
+                      <span style="font-size: medium">Today :</span>
+                    </div>
+                    <!-- Today -->
+                    <div>
+                      <span style="font-size: large">
+                        <strong>{{ global.clientday }}</strong>
+                      </span>
+                    </div>
+                  </b-row>
+                  <b-row style="height: 10px" />
+                  <!-- Second Line -->
+                  <b-row :class="classWrapper">
+                    <!-- Box Second -->
+                    <div
+                        :style="
+                        itemCards[4] == true ? 'background-color: white' : ''
+                      "
+                        class="mr-1 item-wrapper-font div-box"
+                    ></div>
+                    <!-- Name Month -->
+                    <div class="mr-1">
+                      <span style="font-size: medium">Month :</span>
+                    </div>
+                    <!-- Month -->
+                    <div>
+                      <span style="font-size: large">
+                        <strong>{{ global.clientmonth }}</strong>
+                      </span>
+                    </div>
+                  </b-row>
+                </b-card-text>
+              </b-card>
+            </b-row>
+          </b-col>
+          <!-- Column Graphics -->
+          <b-col class cols="12" sm="8" md="8" lg="9" xl="10">
+            <b-card class="col-12 mb-0" :style="statusHeightByScreenColTwo">
+              <br />
+              <br />
+              <!-- Content Card -->
+              <b-row :style="allSizeOfScreen === 'xxl' ? 'height:130px' : ''">
+                <div class="mb-1 mb-sm-0 d-inline col-lg-10 col-md-12 col-xl-7">
+                  <b-row class="d-flex align-items-center">
+                    <!-- Select User -->
+                    <b-col cols="12" sm="12" md="12" lg="5" class="pb-1">
+                      <v-select
+                        id="v-user"
+                        v-if="[1, 2].includes(currentUser.role_id)"
+                        showIcons="false"
+                        v-model="userfilter"
+                        :style="
+                          allSizeOfScreen === 'xxl'
+                            ? 'font-size: 15px;width: 244px'
+                            : allSizeOfScreen === 'lg'
+                            ? 'width:200px'
+                            : 'width:100%'
+                        "
+                          placeholder="Select User"
+                          label="user_name"
+                          :options="users"
+                          :reduce="(val) => val.id"
+                          @input="filtroCont()"
+                      />
+                    </b-col>
+                    <!-- Year and Sub Title -->
+                    <b-col
+                        cols="12"
+                        sm="12"
+                        md="12"
+                        lg="7"
+                        class="d-flex flex-wrap pb-1"
                     >
-                      <h1 class="font-weight-bolder" style="color: white">
-                        {{ total_year }}
-                      </h1>
+                      <div
+                          class="d-flex align-items-center justify-content-center pr-1"
+                      >
+                        <!-- Graphic Sub Title -->
+                        <div>
+                          <span class="ClassWord" style="color: #9f9da8"
+                            >Monthly Graphics</span
+                          >
+                        </div>
+                      </div>
+                      <!-- Select Year -->
+                      <v-select
+                          id="v-year"
+                          v-model="year"
+                          :style="
+                          allSizeOfScreen === 'xxl'
+                            ? 'font-size: 15px; width: 120px'
+                            : 'width: 120px'
+                        "
+                          :clearable="false"
+                          :options="years"
+                          @input="filtroCont()"
+                      />
+                    </b-col>
+                  </b-row>
+                </div>
+                <!-- Array of Sub title Totals -->
+                <div
+                  class="col-lg-12 col-md-12 col-xl-5 d-flex flex-wrap"
+                  style="width: 100%"
+                  v-if="allSizeOfScreen !== 'xxl'"
+                >
+                  <div
+                    v-for="data in totalYearByCard"
+                    :key="data.id"
+                    class="d-flex flex-wrap mb-1 justify-content-between pr-1"
+                    :style="`${
+                      allSizeOfScreen === 'lg'
+                        ? 'width: 33%'
+                        : allSizeOfScreen === 'xs' || allSizeOfScreen === 'sm'
+                        ? 'width: 80%'
+                        : screenHeight == 800
+                        ? 'width: 100%'
+                        : 'width: 45%'
+                    }`"
+                  >
+                    <!-- Name of -->
+                    <div :class="flexCenter">
+                      <span
+                        class="ClassWord"
+                        :style="
+                          allSizeOfScreen === 'xxl'
+                            ? 'font-size: 150%'
+                            : 'font-size: 15px;color:#9F9DA8'
+                        "
+                      >{{ data.name }}:</span
+                      >
+                    </div>
+                    <!-- Quantity of Data -->
+                    <div class="important" style="float: left">
+                      <div :class="flexCenter" class="box-number">
+                        <span class="font-weight-bolder data-subtitle-num">
+                          {{ data.total }}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </b-row> -->
-                <b-row v-for="data in totalYearByCard" :key="data.id"  class="w-100" style="padding-bottom:6px">
-                  <div>
-                    <h3 class="font-weight-bolder">{{data.name}}:</h3>
-                  </div>
-                  <div class="important text-center ml-1 mr-1" style="position: absolute; left: 170px;width:90px">
-                    <div
-                      style="background: #0090E7; border-radius: 5px;"
-                      class="ml-2 mr-2 w-100"
+                </div>
+              </b-row>
+              <!-- If XXL Screen -->
+              <b-row v-if="allSizeOfScreen === 'xxl'">
+                <b-col
+                    cols="2"
+                    v-for="data in totalYearByCard"
+                    :key="data.id"
+                    class="d-flex justify-content-between"
+                >
+                  <div class="ml-2" :class="flexCenter">
+                    <span
+                      class="ClassWord"
+                      :style="
+                        allSizeOfScreen === 'xxl'
+                          ? 'font-size: 150%'
+                          : 'font-size: 15px;color:#9F9DA8'
+                      "
+                    >{{ data.name }}:</span
                     >
-                      <h1 class="font-weight-bolder" style="color: white">
+                  </div>
+                  <div class="important" style="float: left">
+                    <div class="box-number" :class="flexCenter">
+                      <span class="font-weight-bolder data-subtitle-num">
                         {{ data.total }}
-                      </h1>
+                      </span>
                     </div>
                   </div>
-                </b-row>
-               
-              </div>
-            </div>
-            <b-card-body class="mb-2">
-              <app-echart-line-crm :key="idEchart" :option-data="repaint" />
-            </b-card-body>
-          </b-card>
-        </b-col>
-      </b-row>
-    </div>
+                </b-col>
+              </b-row>
+              <!-- Graphics Line -->
+              <b-card-body class="p-0 pb-2">
+                <app-echart-line-crm
+                    :key="idEchart"
+                    :option-data="rePaint"
+                    :screen="allSizeOfScreen"
+                    :style="allSizeOfScreen === 'xxl' ? 'height:550px' : ''"
+                />
+              </b-card-body>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script>
+import isTouchDevice from 'is-touch-device'
+
+import { dragscroll } from "vue-dragscroll";
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
+import { mapGetters } from "vuex";
 import vSelect from "vue-select";
 import moment from "moment";
+// Import Components
 import AppEchartLine from "@core/components/charts/echart/AppEchartLine.vue";
-import { mapGetters } from "vuex";
 import AppEchartLineCrm from "./components/AppEchartLineCrm.vue";
+// Import Services
 import DashboardService from "./service/dashboard.service";
 export default {
   name: "DashboardCrm",
+  directives: {
+    dragscroll,
+  },
   components: {
     BCard,
     BButton,
     BCardBody,
-    AppEchartLine,
-    AppEchartLineCrm,
     BBadge,
     vSelect,
+    AppEchartLine,
+    AppEchartLineCrm,
   },
-  data() {
+  data: function () {
     return {
       idEchart: 0,
       option: {
@@ -488,161 +556,251 @@ export default {
       userfilter: "",
       value: "",
       total_year: 0,
-      totalYearByCard:[],
+      totalYearByCard: [],
       index: 0,
       users: [],
       year: moment().format("YYYY"),
       years: [],
-      nameOfTab: "Leads",
       itemCards: [true, false, false, false, false],
       item: null,
+      widthOfScreen: null,
+      heightOfScreen: null,
     };
+  },
+  created: function () {
+    this.userCreator();
+    this.allData();
+    this.yearSelect();
   },
   computed: {
     ...mapGetters({
-      skin: "appConfig/skin"
+      sizeScreenByPixels: "app/sizeScreenByPixels",
+      allSizeOfScreen: "app/allSizeOfScreen",
+    }),
+    isTouch(){
+      return isTouchDevice()
+
+    },
+    classWrapper: function () {
+      return "item-wrapper justify-content-start align-items-center";
+    },
+    flexCenter:function(){
+      return "d-flex justify-content-center align-items-center"
+    },
+    classAdd: function () {
+      return this.skin == "dark" ? "dark" : "";
+    },
+
+    screenHeight: function () {
+      const { width, height } = this.sizeScreenByPixels;
+      return height.value;
+    },
+    statusHeightByScreenColOne: function () {
+      switch (this.allSizeOfScreen) {
+        case "xxl":
+          return "height: 800px !important;max-height: 900px !important;";
+        case "xl":
+          return "height: 85vh;max-height: 85vh;overflow: auto;";
+        case "lg":
+          return "height: 75vh;max-height: 75vh;overflow: auto;";
+        case "md":
+          return "height: 155vh;max-height: 155vh;overflow: auto;";
+        case "sm":
+          return "height: 170vh;max-height: 180vh;overflow: auto;";
+        default:
+          return "";
+      }
+    },
+    statusHeightByDevicesColOne: function () {
+      return this.screenHeight >= 1368
+        ? "height: 45vh;max-height: 45vh;overflow: auto;"
+        : this.screenHeight >= 1024
+        ? "height: 60vh;max-height: 60vh;overflow: auto;"
+        : this.screenHeight >= 912 && this.allSizeOfScreen !== "xxl"
+        ? "height: 50vh;max-height: 50vh;overflow: auto;"
+        : this.screenHeight >= 912
+        ? ""
+        : this.screenHeight >= 800
+        ? "height: 65vh;max-height: 65vh;overflow: auto;"
+        : this.screenHeight >= 768
+        ? ""
+        : this.screenHeight >= 720
+        ? "height: 80vh;max-height: 80vh;overflow: auto;"
+        : this.screenHeight >= 540 && this.screenHeight <= 600
+        ? "height: 110vh;max-height: 110vh;overflow: auto;"
+        : "";
+    },
+    statusHeightByScreenColTwo: function () {
+      console.log(this.allSizeOfScreen)
+      switch (this.allSizeOfScreen) {
+        case "xxl":
+          return "height: 800px !important;max-height: 900px !important;";
+        case "xl":
+          return "height: 570px;max-height: 570px !important;";
+        case "lg":
+          return "";
+        case "md":
+          return "";
+        case "sm":
+          return "";
+        default:
+          return "";
+      }
+    },
+    ...mapGetters({
+      skin: "appConfig/skin",
     }),
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
-    classAdd() {
-      return this.skin == "dark" ? "dark" : "";
-    },
-    repaint() {
+
+    rePaint: function () {
       return this.option;
     },
   },
-  created() {
-    this.userCreator();
-    this.allData();
-    this.year_select();
-  },
+
   methods: {
-    statusColor(name){
-      let color = ''
-      switch(name){
-        case "Total leads":
-          color ='#84d0ff'
-          break
-        case "Total Appointments":
-          color= '#299aff'
-          break
-        case "Total Calls":
-          color ='#82868b'
-          break
-        case "Total Sales":
-          color = '#28c76f'
-          break
-        case "Total Captured":
-          color = '#e83e8c'
-          break
+    switchHoverByCard(index, background) {
+      for (let i = 0; i < this.itemCards.length; i++) {
+        if (index == i) {
+          return this.itemCards[i] == true
+              ? `background: ${background};color: white`
+              : this.classAdd == "dark"
+                  ? ""
+                  : "background:linear-gradient(90deg, rgba(0, 144, 231, 0.1) 0%, rgba(143, 95, 232, 0.1) 100%);";
+        }
       }
-      return color
     },
-    chargeDataToEchart(array, name) {
-      if (this.option.series<= 0) {
-        this.option.series.push({ type: "line", name: name, data: array,color: this.statusColor(name), });
-      } 
-      else {
+    statusColor: function (name) {
+      let color = "";
+      switch (name) {
+        case "Leads":
+          color = "#0090E7";
+          break;
+        case "Appointments":
+          color = "#F37432";
+          break;
+        case "Calls":
+          color = "#D0317D";
+          break;
+        case "Sales":
+          color = "#5F873E";
+          break;
+        case "Captured":
+          color = "#EC1443";
+          break;
+      }
+      return color;
+    },
+    chargeDataToEchart: function (array, name) {
+      if (this.option.series <= 0) {
+        this.option.series.push({
+          type: "line",
+          name: name,
+          data: array,
+          color: this.statusColor(name),
+        });
+      } else {
         let found = false;
         for (let i = 0; i < this.option.series.length; i++) {
-          let object = this.option.series[i]
+          let object = this.option.series[i];
           if (name.localeCompare(object.name) == 0) {
             this.option.series.splice(i, 1);
             found = true;
           }
-          
         }
         if (!found) {
-            this.option.series.push({ type: "line", name: name, data: array,color: this.statusColor(name) });
-          }
+          this.option.series.push({
+            type: "line",
+            name: name,
+            data: array,
+            color: this.statusColor(name),
+          });
+        }
       }
       this.idEchart++;
     },
-    chargeDataToEchartNew(array,name){
-      this.option.series = []
-      if (this.option.series<= 0) {
-        this.option.series.push({ type: "line", name: name, data: array ,color: this.statusColor(name)});
-      } 
+    chargeDataToEchartNew: function (array, name) {
+      this.option.series = [];
+      if (this.option.series <= 0) {
+        this.option.series.push({
+          type: "line",
+          name: name,
+          data: array,
+          color: this.statusColor(name),
+        });
+      }
       this.idEchart++;
     },
-
-    changeItemCards(index) {
+    changeItemCards: function (index) {
       for (let i = 0; i < this.itemCards.length; i++) {
         if (i === index) {
-          if(this.itemCards[i]== true){
-            this.itemCards[i] = false
-          }else{
+          if (this.itemCards[i] == true) {
+            this.itemCards[i] = false;
+          } else {
             this.itemCards[i] = true;
           }
-          
-        } 
+        }
       }
     },
-    changeListYear(name,total){
-      if (this.totalYearByCard<= 0) {
-        this.totalYearByCard.push({name:name,total:total})
+    changeListYear: function (name, total) {
+      if (this.totalYearByCard <= 0) {
+        this.totalYearByCard.push({ name: name, total: total });
       } else {
         let found = false;
         for (let i = 0; i < this.totalYearByCard.length; i++) {
-          let object = this.totalYearByCard[i]
+          let object = this.totalYearByCard[i];
           if (name.localeCompare(object.name) == 0) {
             this.totalYearByCard.splice(i, 1);
             found = true;
           }
-          
         }
         if (!found) {
-            this.totalYearByCard.push({name:name,total:total})
-          }
+          this.totalYearByCard.push({ name: name, total: total });
+        }
       }
-      
     },
-    changeListYearNew(name,total){
-      this.totalYearByCard = []
-      if (this.totalYearByCard<= 0) {
-        this.totalYearByCard.push({name:name,total:total})
-      } 
+    changeListYearNew: function (name, total) {
+      this.totalYearByCard = [];
+      if (this.totalYearByCard <= 0) {
+        this.totalYearByCard.push({ name: name, total: total });
+      }
     },
-    change_tab(index) {
+    // Change By Card
+    changeTab: function (index) {
+      this.widthOfScreen = window.screen.width;
+      this.heightOfScreen = window.screen.height;
       this.changeItemCards(index);
       switch (index) {
         case 0:
           this.total_year = this.global.leads_year;
-          this.chargeDataToEchart(this.leads, "Total leads");
-          this.changeListYear("Total leads",this.global.leads_year)
-          this.nameOfTab = "Leads";
-
+          this.chargeDataToEchart(this.leads, "Leads");
+          this.changeListYear("Leads", this.global.leads_year);
           break;
         case 1:
           this.total_year = this.global.quotes_year;
-          this.chargeDataToEchart(this.quotes, "Total Appointments");
-          this.changeListYear("Total Appointments",this.global.quotes_year)
-          this.nameOfTab = "Appointments";
+          this.chargeDataToEchart(this.quotes, "Appointments");
+          this.changeListYear("Appointments", this.global.quotes_year);
           break;
         case 2:
           this.total_year = this.global.calls_year;
-          this.chargeDataToEchart(this.calls, "Total Calls");
-          this.changeListYear("Total Calls",this.global.calls_year)
-          this.nameOfTab = "Tasks";
+          this.chargeDataToEchart(this.calls, "Calls");
+          this.changeListYear("Calls", this.global.calls_year);
           break;
         case 3:
           this.total_year = this.global.sales_year;
-          this.chargeDataToEchart(this.sales, "Total Sales");
-          this.changeListYear("Total Sales",this.global.sales_year)
-          this.nameOfTab = "Sales";
+          this.chargeDataToEchart(this.sales, "Sales");
+          this.changeListYear("Sales", this.global.sales_year);
           break;
         case 4:
           this.total_year = this.global.clients_year;
-          this.chargeDataToEchart(this.captur, "Total Captured");
-          this.changeListYear("Total Captured",this.global.clients_year)
-          this.nameOfTab = "Captured";
-
+          this.chargeDataToEchart(this.captur, "Captured");
+          this.changeListYear("Captured", this.global.clients_year);
           break;
       }
       this.index = index;
     },
-    async allData(status=null) {
+    allData: async function (status = null) {
       try {
         this.addPreloader();
         let { user_id } = this.currentUser;
@@ -658,33 +816,31 @@ export default {
         this.quotes = response.data.quotes.map((list) => list);
         this.calls = response.data.calls.map((list) => list);
         this.sales = response.data.sales.map((list) => list);
-        this.captur = response.data.vendio.map((list) => list); // error
+        this.captur = response.data.vendio.map((list) => list);
         this.removePreloader();
-        
-        if(status ==null){
-          this.chargeDataToEchart(this.leads, "Total leads");
-          this.changeListYear("Total leads",this.global.leads_year)
-        }else{
-          this.chargeDataToEchartNew(this.leads, "Total leads")
-          this.changeListYearNew("Total leads",this.global.leads_year)
+        if (status == null) {
+          this.chargeDataToEchart(this.leads, "Leads");
+          this.changeListYear("Leads", this.global.leads_year);
+        } else {
+          this.chargeDataToEchartNew(this.leads, "Leads");
+          this.changeListYearNew("Leads", this.global.leads_year);
         }
         this.total_year = this.global.leads_year;
-        
-        this.nameOfTab = "Leads";
       } catch (error) {
         console.log(error);
         this.removePreloader();
         this.showToast(
-          "danger",
-          "top-right",
-          "Error",
-          "XIcon",
-          "Something went wrong!"
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
         );
       }
     },
-    async filtrocont() {
-      this.itemCards =  [true, false, false, false, false]
+    // Change By User or Year
+    filtroCont: async function () {
+      this.itemCards = [true, false, false, false, false];
       if (this.userfilter != null) {
         try {
           this.addPreloader();
@@ -698,28 +854,27 @@ export default {
           this.calls = response.data.calls.map((list) => list);
           this.sales = response.data.sales.map((list) => list);
           this.captur = response.data.vendio.map((list) => list);
-          this.chargeDataToEchartNew(this.leads, "Total leads");
-          this.changeListYearNew("Total leads",this.global.leads_year)
+          this.chargeDataToEchartNew(this.leads, "Leads");
+          this.changeListYearNew("Leads", this.global.leads_year);
           this.total_year = this.global.leads_year;
           this.removePreloader();
         } catch (error) {
           console.error(error);
           this.removePreloader();
           this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong!"
+              "danger",
+              "top-right",
+              "Error",
+              "XIcon",
+              "Something went wrong!"
           );
         }
       } else {
-        
         this.allData("update");
-        this.year =  this.years[this.years.length - 1]
+        this.year = this.years[this.years.length - 1];
       }
     },
-    async userCreator() {
+    userCreator: async function () {
       try {
         const data = await DashboardService.userCreator({
           roles: "",
@@ -729,15 +884,15 @@ export default {
       } catch (error) {
         console.log(error);
         this.showToast(
-          "danger",
-          "top-right",
-          "Error",
-          "XIcon",
-          "Something went wrong!"
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
         );
       }
     },
-    year_select() {
+    yearSelect: function () {
       for (let x = 2014; x <= moment().format("YYYY"); x++) {
         this.years.push(x);
       }
@@ -750,56 +905,100 @@ export default {
 @import "~@core/scss/base/pages/app-ecommerce.scss";
 </style>
 
-<style lang="scss" scoped>
-.col-container {
-  display: table;
-  width: 100%;
+<style lang="scss">
+.data-subtitle-num {
+  color: white;
+  font-size: 18px;
 }
-.col {
-  display: table-cell;
-  padding: 16px;
+.box-number {
+  background: #0090e7;
+  border-radius: 5px;
+  width: 50px;
+  height: 38px;
+}
+.ClassWord {
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 11px;
 }
 
-
-.item-view-radio-group ::v-deep {
-  .btn {
-    display: flex;
-    align-items: center;
+// V-Select
+#v-user {
+  div.vs__dropdown-toggle {
+    border-color: #d1cfd7;
+  }
+  div.vs__dropdown-toggle:hover {
+    border: 1px solid #0090e7 !important;
+    // box-sizing: border-box;
+    border-radius: 5px;
+    div > input::placeholder {
+      color: #0090e7 !important;
+      font-size: 15px;
+      font-family: Rubik;
+    }
+    div > span {
+      color: #0090e7 !important;
+    }
+  }
+  div > input::placeholder {
+    font-size: 15px;
+    font-family: Rubik;
+    color: #d1cfd7;
   }
 }
 
-// .ecommerce-card {
-//   &:hover {
-//     transform: translateY(-5px);
-//     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-//     background-color: aqua;
-//   }
-// }
-.div-box1{
-  background-color: #0090E7;
+#v-year {
+  div.vs__dropdown-toggle:hover {
+    border: 1px solid #0090e7 !important;
+    border-radius: 5px;
+    div > span {
+      color: #0090e7 !important;
+    }
+  }
+  div > span {
+    font-size: 15px;
+    font-family: Rubik;
+    color: #d1cfd7;
+  }
 }
-.div-box{
-  background-color: #8F5FE8
+
+// hidding scrollbar
+.col-tab::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
+
+.div-box1 {
+  background-color: #0090e7;
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+}
+.div-box {
+  background-color: #8f5fe8;
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+}
+// All Titles
 .ecommerce-card .card-title {
   font-weight: bold;
 }
+// Card Leads
 .ecommerce-card-leads {
-  &:hover{
-    .div-box{
-      background-color:white
-    }
-  }
-  &:hover{
-    .div-box1{
-      background-color:white
-    }
-  }
   &:hover {
+    .div-box {
+      background-color: white;
+    }
+    .div-box1 {
+      background-color: white;
+    }
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    // background-color: #8077e6;
-    // background: linear-gradient(to right, blue, rgb(241, 196, 241));
-    background: linear-gradient(90deg, #0090E7 0%, #8F5FE8 100%);
+    background: linear-gradient(90deg, #0090e7 0%, #8f5fe8 100%) !important;
+    // background: red !important;
+    // background: var(--li);
     color: white;
   }
   &:hover {
@@ -814,10 +1013,11 @@ export default {
   }
 }
 
-.ecommerce-card-appointments{
+// Card Appointments
+.ecommerce-card-appointments {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    background: linear-gradient(to right, #299aff, rgb(230, 174, 230));
+    background: linear-gradient(90deg, #fac632 0%, #f37432 100%) !important;
     color: white;
   }
   &:hover {
@@ -831,11 +1031,11 @@ export default {
     }
   }
 }
-
-.ecommerce-card-tasks{
+// Card Tasks
+.ecommerce-card-tasks {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    background: linear-gradient(to right, #82868b, rgb(230, 174, 230));
+    background: linear-gradient(90deg, #961bce 0%, #d0317d 100%) !important;
     color: white;
   }
   &:hover {
@@ -849,10 +1049,11 @@ export default {
     }
   }
 }
-.ecommerce-card-sales{
+// Card Sales
+.ecommerce-card-sales {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    background: linear-gradient(to right, #28c76f, rgb(240, 214, 240));
+    background: linear-gradient(90deg, #add210 0%, #5f873e 100%) !important;
     color: white;
   }
   &:hover {
@@ -866,11 +1067,11 @@ export default {
     }
   }
 }
-
-.ecommerce-card-capturated{
+// Card Capturated
+.ecommerce-card-capturated {
   &:hover {
     box-shadow: 0 4px 25px 0 rgba(black, 0.25);
-    background: linear-gradient(to right, #e83e8c, rgb(211, 192, 211));
+    background: linear-gradient(90deg, #fe8f8f 0%, #ec1443 100%) !important;
     color: white;
   }
   &:hover {
@@ -884,15 +1085,19 @@ export default {
     }
   }
 }
-
-.per-page-selector {
+// V-Select Year
+.select-year {
   width: 130px;
-  height: 50px;
 }
 
+// V-Select User
 .per-page-selector-user {
   width: 200px;
-  height: 50px;
-  
+}
+
+// Space Cards
+.b-row-card {
+  padding-left: 13.5px;
+  padding-right: 13.5px;
 }
 </style>

@@ -43,7 +43,7 @@ export default {
           },
         },
         legend: {
-          left: '0',
+          left: '20',
         },
         grid: {
           width: '95%',

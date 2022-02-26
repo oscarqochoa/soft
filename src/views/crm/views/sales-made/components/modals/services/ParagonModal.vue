@@ -30,11 +30,10 @@
             <template v-for="(name, index) in packsName">
               <b-col
                 :key="index"
-                lg="4"
               >
                 <b-card
                   :header="name"
-                  header-class="border-bottom"
+                  header-class="border-bottom py-1"
                   :header-bg-variant="skin === 'dark' ? 'dark' : 'light'"
                   body-class="p-0"
                   class="border"
@@ -229,6 +228,7 @@ export default {
     },
   },
   async mounted() {
+    this.addPreloader()
     this.client = this.salesClient
     if (this.program) {
       await this.searchRate()
@@ -237,6 +237,7 @@ export default {
       await this.getScore()
     }
     this.ownControl = true
+    this.removePreloader()
   },
   methods: {
     /* PRELOADER */

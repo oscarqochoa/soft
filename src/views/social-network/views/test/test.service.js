@@ -1,5 +1,5 @@
 import { amgApi } from '@/service/axios'
-// Singular service on test view before refactoring
+// Singular service on calendar view before refactoring
 class SocialNetworkService {
 }
 

@@ -42,31 +42,30 @@
         </div>
       </template>
     </header-slot>
-    <b-card no-body>
-      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
-        <b-nav card-header pills class="m-0">
-          <b-nav-item
-            exact-active-class="active border-radius-tabs"
-            exact
-            :to="`/${routeModule}/leads/`"
-          >Leads</b-nav-item>
-          <b-nav-item
-            exact-active-class="active border-radius-tabs"
-            exact
-            :to="`/${routeModule}/leads/sn`"
-          >Leads Sn</b-nav-item>
-          <b-nav-item
-            v-if="[1, 2].includes(currentUser.role_id) || isOnlyLead"
-            exact-active-class="active border-radius-tabs"
-            exact
-            :to="`/${routeModule}/leads/w-potential`"
-          >Leads W Potential</b-nav-item>
-        </b-nav>
-      </b-card-header>
+    <b-nav card-header pills class="m-0">
+      <b-nav-item
+        exact-active-class="active"
+        :link-classes="['px-3',bgTabsNavs]"
+        exact
+        :to="`/${routeModule}/leads/`"
+      >Leads</b-nav-item>
+      <b-nav-item
+        exact-active-class="active"
+        :link-classes="['px-3',bgTabsNavs]"
+        exact
+        :to="`/${routeModule}/leads/sn`"
+      >Leads Sn</b-nav-item>
+      <b-nav-item
+        v-if="[1, 2].includes(currentUser.role_id) || isOnlyLead"
+        exact-active-class="active"
+        :link-classes="['px-3',bgTabsNavs]"
+        exact
+        :to="`/${routeModule}/leads/w-potential`"
+      >Leads W Potential</b-nav-item>
+    </b-nav>
 
-      <b-card-body class="border-primary rounded">
-        <router-view />
-      </b-card-body>
+    <b-card no-body class="border-top-primary border-3 border-table-radius px-0">
+      <router-view />
     </b-card>
   </div>
 </template>
@@ -110,7 +109,6 @@ export default {
     };
   },
   async created() {
-    //all Promises
     await Promise.all([
       this.getStateLeads(),
       this.getStatusLeads(),
@@ -323,11 +321,6 @@ export default {
         this.showErrorSwal(error);
         this.isLoading = false;
       }
-    }
-  },
-  watch: {
-    preloading(current, old) {
-      this.isPreloading(old);
     }
   }
 };

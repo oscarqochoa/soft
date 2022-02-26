@@ -347,6 +347,7 @@ export default {
     },
   },
   async mounted() {
+    this.addPreloader()
     await this.getSelects()
     if (this.program) {
       await this.searchRate()
@@ -356,6 +357,7 @@ export default {
     }
     this.ownControl = true
     this.totalAmount = this.rates.reduce((sum, rate) => sum + rate.subtotal, 0)
+    this.removePreloader()
   },
   methods: {
     /* PRELOADER */

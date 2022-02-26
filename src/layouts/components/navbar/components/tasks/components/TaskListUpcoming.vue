@@ -6,11 +6,11 @@
         <strong>Loading ...</strong>
       </div>
       <template v-else>
-        <div v-for="(tasks,index) in tasksUpcoming" :key="index">
+        <div v-for="(tasks, index) in tasksUpcoming" :key="index">
           <b-alert variant="info" class="mb-0" show>
             <div class="alert-body">
               <span>
-                <strong>{{tasks.day_name}}</strong>
+                <strong>{{ tasks.day_name }}</strong>
                 {{ tasks.date }} - ({{ tasks.sum_day }})
               </span>
             </div>
@@ -29,17 +29,21 @@
               outlined
               show-empty
               sticky-header="50vh"
-              v-scrollbar
             >
               <template #cell(client_name)="data">
                 <b-link
                   class="text-important"
-                  :to="data.item.account_id==null? `/${data.item.route}/leads/${data.item.lead_id}` : `/${data.item.route}/clients/account/'${data.item.account_id}`"
+                  :to="
+                    data.item.account_id == null
+                      ? `/${data.item.route}/leads/${data.item.lead_id}`
+                      : `/${data.item.route}/clients/account/'${data.item.account_id}`
+                  "
                   target="_blank"
-                >{{ data.item.client_name }}</b-link>
+                  >{{ data.item.client_name }}</b-link
+                >
                 <br />
                 <span>
-                  <amg-icon icon="SmartphoneIcon"></amg-icon>
+                  <feather-icon icon="SmartphoneIcon"></feather-icon>
                   {{ data.item.mobile }}
                 </span>
               </template>
@@ -48,7 +52,7 @@
                 <br />
                 <span style="font-weight: bold">
                   {{ data.item.real_time | myGlobalDay }} ({{
-                  data.item.state_hour
+                    data.item.state_hour
                   }})
                 </span>
               </template>
@@ -101,8 +105,16 @@
         </div>
       </template>
     </div>
-    <ModalEditTask v-if="modalEdit" @hide="closeModalEditTask" :infoTask="infoTask" />
-    <ModalShowTask v-if="modalShow" @hide="closeModalShowTask" :infoTask="infoTask" />
+    <ModalEditTask
+      v-if="modalEdit"
+      @hide="closeModalEditTask"
+      :infoTask="infoTask"
+    />
+    <ModalShowTask
+      v-if="modalShow"
+      @hide="closeModalShowTask"
+      :infoTask="infoTask"
+    />
   </div>
 </template>
 <script>
@@ -116,20 +128,20 @@ export default {
   props: {
     type: {
       type: [Number, String],
-      default: 1
+      default: 1,
     },
     taskToday: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   directives: {
-    Ripple
+    Ripple,
   },
   components: {
     vSelect,
     ModalEditTask,
-    ModalShowTask
+    ModalShowTask,
   },
   data() {
     return {
@@ -139,25 +151,25 @@ export default {
           key: "client_name",
           label: "Client Name",
           sortable: true,
-          visible: true
+          visible: true,
         },
         {
           key: "subject",
           label: "Subject",
           sortable: true,
-          visible: true
+          visible: true,
         },
         {
           key: "due_date",
           label: "Date / Hour",
-          visible: true
+          visible: true,
         },
-        { key: "actions", label: "Actions" }
+        { key: "actions", label: "Actions" },
       ],
       modalEdit: false,
       modalShow: false,
       infoTask: {},
-      tasksUpcoming: []
+      tasksUpcoming: [],
     };
   },
   created() {
@@ -165,12 +177,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser"
-    })
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
     ...mapActions({
-      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER"
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
     }),
     async getTasksUpcoming() {
       this.isLoading = true;
@@ -179,7 +191,7 @@ export default {
         orderby: 5,
         type: this.type,
         id: this.currentUser.user_id,
-        api_url: "tasks/get-all-tasks"
+        api_url: "tasks/get-all-tasks",
       };
       const data = await TaskService.getAllTask(params);
       this.tasksUpcoming = data.data;
@@ -265,11 +277,10 @@ export default {
           throw error;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
-
 
 <style lang="scss">
 @import "@core/scss/vue/libs/vue-select.scss";

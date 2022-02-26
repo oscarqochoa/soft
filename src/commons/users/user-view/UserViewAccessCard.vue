@@ -5,7 +5,7 @@
         <table class="mt-2 mt-xl-0 w-100">
           <tr>
             <th class="pb-50">
-              <amg-icon icon="UserIcon" class="mr-75" />
+              <feather-icon icon="UserIcon" class="mr-75" />
               <span class="font-weight-bold">Email</span>
             </th>
             <td class="pb-50">
@@ -14,22 +14,31 @@
           </tr>
           <tr>
             <th class="pb-50">
-              <amg-icon icon="UserIcon" class="mr-75" />
+              <feather-icon icon="UserIcon" class="mr-75" />
               <span class="font-weight-bold">Password</span>
             </th>
             <td class="pb-50">
-              <b-button variant="flat-primary" v-b-modal.change-password-modal
-                >Change password</b-button
+              <b-button
+                variant="outline-primary"
+                size="sm"
+                v-b-modal.change-password-modal
               >
+                Change password
+              </b-button>
             </td>
           </tr>
           <tr>
             <th>
-              <amg-icon icon="LockIcon" class="mr-75" />
+              <feather-icon icon="LockIcon" class="mr-75" />
               <span class="font-weight-bold">Rol</span>
             </th>
             <td>
-              {{ userData.roleName }}
+              <template v-for="(role, index) in userData.arrRoles">
+                <span :key="role.role_id"
+                  >{{ role.role_name
+                  }}{{ index != userData.arrRoles.length - 1 ? ", " : "" }}</span
+                >
+              </template>
             </td>
           </tr>
         </table>
@@ -37,7 +46,7 @@
           id="label-modules"
           label="Module(s)"
           label-for="modules"
-          class="mt-1"
+          class="mt-3"
         >
           <template #label>
             <span style="font-size: 14px">Module(s)</span>
@@ -61,8 +70,18 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-modal id="change-password-modal" title="Change user password" centered @ok.prevent="$refs.changePasswordModal.changePassword()" no-close-on-backdrop cancel-variant="outline-danger">
-      <change-user-password ref="changePasswordModal" @closeModal="$bvModal.hide('change-password-modal')"></change-user-password>
+    <b-modal
+      id="change-password-modal"
+      title="Change user password"
+      centered
+      @ok.prevent="$refs.changePasswordModal.changePassword()"
+      no-close-on-backdrop
+      cancel-variant="outline-danger"
+    >
+      <change-user-password
+        ref="changePasswordModal"
+        @closeModal="$bvModal.hide('change-password-modal')"
+      ></change-user-password>
     </b-modal>
   </b-card>
 </template>
@@ -82,5 +101,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

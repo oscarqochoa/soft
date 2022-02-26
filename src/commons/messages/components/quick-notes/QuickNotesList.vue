@@ -8,9 +8,10 @@
             sm="6"
             class="d-flex align-items-center justify-content-center justify-content-sm-start"
           >
-            <span
-              class="text-muted"
-            >Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries</span>
+            <span class="text-muted"
+              >Showing {{ startPage }} to {{ toPage }} of
+              {{ totalData }} entries</span
+            >
           </b-col>
           <!-- Pagination -->
           <b-col
@@ -65,7 +66,9 @@
           </b-col>
           <!-- Search -->
           <b-col cols="12" md="6">
-            <div class="d-flex align-items-center justify-content-end align-items-center">
+            <div
+              class="d-flex align-items-center justify-content-end align-items-center"
+            >
               <b-button
                 variant="primary"
                 v-ripple.400="'rgba(255, 255, 255, 0.15)'"
@@ -108,17 +111,22 @@
             </div>
           </template>
           <template #cell(body)="data">
-            <span v-html="data.item.body" :class="{'text-break': currentBreakPoint != 'xs'}"></span>
+            <span
+              v-html="data.item.body"
+              :class="{ 'text-break': currentBreakPoint != 'xs' }"
+            ></span>
           </template>
-          <template #cell(created_at)="data">{{ data.item.created_at | myGlobal }}</template>
+          <template #cell(created_at)="data">{{
+            data.item.created_at | myGlobal
+          }}</template>
           <template #cell(actions)="data">
-            <amg-icon
+            <feather-icon
               icon="Edit2Icon"
               size="15"
               class="text-warning cursor-pointer mr-1"
               @click="editQuickNote(data.item)"
             />
-            <amg-icon
+            <feather-icon
               icon="TrashIcon"
               size="15"
               class="text-danger cursor-pointer"
@@ -134,9 +142,10 @@
             sm="6"
             class="d-flex align-items-center justify-content-center justify-content-sm-start"
           >
-            <span
-              class="text-muted"
-            >Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries</span>
+            <span class="text-muted"
+              >Showing {{ startPage }} to {{ toPage }} of
+              {{ totalData }} entries</span
+            >
           </b-col>
           <!-- Pagination -->
           <b-col
@@ -188,11 +197,11 @@ import QuickNotesCreate from "./QuickNotesCreate.vue";
 import { mapGetters } from "vuex";
 export default {
   directives: {
-    Ripple
+    Ripple,
   },
   components: {
     vSelect,
-    QuickNotesCreate
+    QuickNotesCreate,
   },
   data() {
     return {
@@ -202,18 +211,18 @@ export default {
         {
           key: "title",
           label: "Title",
-          sortable: true
+          sortable: true,
         },
         {
           key: "body",
           label: "Body",
-          sortable: true
+          sortable: true,
         },
         {
           key: "created_at",
-          label: "Date creation"
+          label: "Date creation",
         },
-        { key: "actions", label: "Acciones", class: "text-center " }
+        { key: "actions", label: "Acciones", class: "text-center " },
       ],
       searchInput: "",
       orderby: "",
@@ -231,15 +240,15 @@ export default {
         title: null,
         body: null,
         id: "",
-        user_id: null
-      }
+        user_id: null,
+      },
     };
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      currentBreakPoint: "app/currentBreakPoint"
-    })
+      currentBreakPoint: "app/currentBreakPoint",
+    }),
   },
   methods: {
     onChangeFilter() {
@@ -251,7 +260,7 @@ export default {
         current_page: ctx.currentPage,
         perpage: ctx.perPage,
         text: ctx.filter,
-        id: this.currentUser.user_id
+        id: this.currentUser.user_id,
       };
       const data = await QuickNotesService.getQuickNotes(params);
       let items = data.data;
@@ -272,6 +281,7 @@ export default {
     closeModal() {
       this.$bvModal.hide("new-quick-note");
       this.$refs.refQuickNotesList.refresh();
+      this.$store.dispatch('MessageStore/A_GET_QUICK_NOTES', {id: this.currentUser.user_id});
     },
     editQuickNote(quickNote) {
       this.selectedQuickNote.title = quickNote.title;
@@ -284,7 +294,7 @@ export default {
         title: null,
         body: null,
         id: "",
-        user_id: null
+        user_id: null,
       };
     },
     async deleteQuickNote(quickNoteId) {
@@ -293,8 +303,8 @@ export default {
         await QuickNotesService.deleteQuickNote({ id: quickNoteId });
         this.$refs.refQuickNotesList.refresh();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

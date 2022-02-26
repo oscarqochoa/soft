@@ -135,7 +135,7 @@ export default {
             })
             if (response.status === 200) {
               this.removePreloader()
-              this.showConfirmSwal()
+              this.showSuccessSwal('Success', 'SMS sent successfully')
               this.ownControl = false
               this.$emit('closeModal')
             }

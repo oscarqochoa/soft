@@ -1,56 +1,55 @@
 <template>
   <div>
     <!-- Table Container Card -->
-    <b-card no-body class="mb-0">
+    <b-card no-body class="mb-0 border-0 p-0">
       <filter-slot
-        v-scrollbar
-        :filter="filter"
-        :filter-principal="filterPrincipal"
-        :total-rows="S_LEADS.total"
-        :paginate="paginate"
-        :start-page="S_LEADS.fromPage"
-        :to-page="S_LEADS.toPage"
-        @reload="myProvider"
-        @onChangeCurrentPage="onChangeCurrentPage"
+          :filter="filter"
+          :filter-principal="filterPrincipal"
+          :total-rows="S_LEADS.total"
+          :paginate="paginate"
+          :start-page="S_LEADS.fromPage"
+          :to-page="S_LEADS.toPage"
+          @reload="myProvider"
+          @onChangeCurrentPage="onChangeCurrentPage"
       >
         <template #buttons>
           <b-button
-            variant="success"
-            class="ml-1"
-            :disabled="!leadsSelecteds.length"
-            @click="modalSmssOpen"
+              variant="success"
+              class="ml-1"
+              :disabled="!leadsSelecteds.length"
+              @click="modalSmssOpen"
           >
             <feather-icon icon="MessageCircleIcon" class="mr-50" />Send SMS
           </b-button>
           <b-button
-            v-if="[5].includes(currentUser.role_id)"
-            variant="success"
-            class="ml-1"
-            :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.assign_id).includes(currentUser.user_id))"
-            @click="addListSeller()"
+              v-if="[5].includes(currentUser.role_id)"
+              variant="success"
+              class="ml-1"
+              :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.assign_id).includes(currentUser.user_id))"
+              @click="addListSeller()"
           >
             <feather-icon icon="ListIcon" class="mr-50" />ADD LIST
           </b-button>
         </template>
 
         <b-table
-          slot="table"
-          ref="refUserListTable"
-          class="position-relative font-small-3"
-          primary-key="id"
-          empty-text="No matching records found"
-          select-mode="multi"
-          responsive="sm"
-          table-class="text-nowrap"
-          sticky-header="73vh"
-          small
-          show-empty
-          :sort-by.sync="sortBy"
-          :fields="fields"
-          :items="S_LEADS.items"
-          :sort-desc.sync="isSortDirDesc"
-          :busy.sync="isBusy"
-          @row-selected="onRowSelected"
+            slot="table"
+            ref="refUserListTable"
+            class="position-relative font-small-3"
+            primary-key="id"
+            empty-text="No matching records found"
+            select-mode="multi"
+            responsive="sm"
+            table-class="text-nowrap"
+            sticky-header="68vh"
+            small
+            show-empty
+            :sort-by.sync="sortBy"
+            :fields="fields"
+            :items="S_LEADS.items"
+            :sort-desc.sync="isSortDirDesc"
+            :busy.sync="isBusy"
+            @row-selected="onRowSelected"
         >
           <!-- Head: Check -->
           <template #head(selected)>
@@ -75,14 +74,12 @@
           <template #cell(date_even)="data">
             <b-badge v-if="data.item.date_even" pill variant="light-danger" class="text-capitalize">
               <feather-icon
-                v-if="data.item.date_even"
-                icon="CalendarIcon"
-                size="18"
-                class="mr-50 text-danger"
+                  v-if="data.item.date_even"
+                  icon="CalendarIcon"
+                  size="18"
+                  class="mr-50 text-danger"
               />
-              <span class="align-text-top text-capitalize">{{
-                data.item.date_even
-              }}</span>
+              <span class="align-text-top text-capitalize">{{ data.item.date_even | myGlobal }}</span>
             </b-badge>
           </template>
 
@@ -90,9 +87,9 @@
           <template #cell(lead_name)="data">
             <div style="white-space: pre-wrap;">
               <router-link
-                :class="textLink"
-                :to="`/${routeModule}/leads/${data.item.id}`"
-                target="_blank"
+                  :class="textLink"
+                  :to="`/${routeModule}/leads/${data.item.id}`"
+                  target="_blank"
               >{{ data.item.lead_name }}</router-link>
             </div>
           </template>
@@ -100,21 +97,17 @@
           <!-- Column: Status -->
           <template #cell(status)="data">
             <b-badge
-              pill
-              :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
-              class="text-capitalize"
-              >{{ data.item.status }}</b-badge
-            >
+                pill
+                :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
+                class="text-capitalize"
+            >{{ data.item.status }}</b-badge>
           </template>
 
           <!-- Column: Credit Report -->
           <template #cell(credit_report)="data">
             <strong
-              :class="`text-${
-                data.item.credit_report == 1 ? 'danger' : 'success'
-              }`"
-              >{{ data.item.credit_report == 1 ? "NO" : "YES" }}</strong
-            >
+                :class="`text-${ (data.item.credit_report == 1) ? 'danger' : 'success' }`"
+            >{{ (data.item.credit_report == 1) ? 'NO' : 'YES' }}</strong>
           </template>
 
           <!-- Column: Programs -->
@@ -122,14 +115,17 @@
             <div v-if="data.item.programs" class="d-flex flex-column" style="gap: .5rem">
               <template v-for="(program, key) in JSON.parse(data.item.programs)">
                 <b-img
-                  v-if="program.logo"
-                  :key="key"
-                  thumbnail
-                  fluid
-                  :src="baseUrl + program.logo"
-                  style="width: 50px"
+                    v-if="program.logo"
+                    :key="key"
+                    thumbnail
+                    fluid
+                    :src="baseUrl + program.logo"
+                    style="width: 50px"
                 />
-                <span :key="key" v-else>{{ program.value }}</span>
+                 <b-img v-else-if="!program.logo && program.value == 'Paragon'" :src="baseImg+$options.filters.myPrograms(program.value)"
+                  :key="key" thumbnail
+                  fluid style="width: 50px"></b-img>
+                 <span :key="key" v-else>{{ program.value }}</span>
               </template>
             </div>
           </template>
@@ -151,12 +147,12 @@
           <!-- Column: Actions -->
           <template #cell(actions)="data">
             <actions-table
-              :options="actionsOptions"
-              :row-data="data.item"
-              @onRowDelete="onRowDelete"
-              @onRowProcess="onRowProcess"
-              @modalSmsOpen="modalSmsOpen"
-              @modalHistorySmsOpen="modalHistorySmsOpen"
+                :options="actionsOptions"
+                :row-data="data.item"
+                @onRowDelete="onRowDelete"
+                @onRowProcess="onRowProcess"
+                @modalSmsOpen="modalSmsOpen"
+                @modalHistorySmsOpen="modalHistorySmsOpen"
             />
           </template>
         </b-table>
@@ -166,30 +162,30 @@
     <!-- modal SEND SMS -->
 
     <modal-send-sms
-      v-if="modalSms"
-      :smss="leads_sms"
-      :modul="currentUser.modul_id"
-      :typesms="typesms"
-      :sms="leads_sms_o"
-      :name-leads="name_leads_arr"
-      @hide="modalSmsClose"
+        v-if="modalSms"
+        :smss="leads_sms"
+        :modul="currentUser.modul_id"
+        :typesms="typesms"
+        :sms="leads_sms_o"
+        :name-leads="name_leads_arr"
+        @hide="modalSmsClose"
     />
 
     <!-- modal HISTORY SMS -->
     <b-modal
-      id="modal-history-sms"
-      ok-only
-      modal-class="modal-primary"
-      title-class="text-white h4"
-      centered
-      size="lg"
-      title="History of Sms"
-      hide-footer
+        id="modal-history-sms"
+        ok-only
+        modal-class="modal-primary"
+        title-class="text-white h4"
+        centered
+        size="lg"
+        title="History of Sms"
+        hide-footer
     >
       <modal-history-sms
-        :id="historySms.id"
-        :modul="currentUser.modul_id"
-        :lead-name="historySms.leadName"
+          :id="historySms.id"
+          :modul="currentUser.modul_id"
+          :lead-name="historySms.leadName"
       />
     </b-modal>
   </div>
@@ -218,6 +214,7 @@ export default {
       type: 0,
       actionsOptions: ["returnToSocialNetwork", "sendSMS", "historySMS"],
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
+      baseImg: process.env.VUE_APP_BASE_URL_FRONT,
       isBusy: false,
       fields: dataFields.leadFields,
       filter: dataFilters,
@@ -259,7 +256,8 @@ export default {
       G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
       G_STATES: "CrmGlobalStore/G_STATES",
       G_CRS: "CrmGlobalStore/G_CRS",
-      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS"
+      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS",
+      G_UPDATE_TABLE_LEAD:"CrmLeadStore/G_UPDATE_TABLE_LEAD" 
     }),
     ...mapState({
       S_LEADS: state => state.CrmLeadStore.S_LEADS
@@ -271,11 +269,12 @@ export default {
       return this.$route.meta.module;
     }
   },
-  created() {
+  async created() {
     this.addPaddingTd();
-    this.myProvider();
+    await this.myProvider();
     this.setOptionsOnFilters();
   },
+
   methods: {
     ...mapActions({
       A_GET_LEADS: "CrmLeadStore/A_GET_LEADS",
@@ -283,7 +282,8 @@ export default {
       A_SET_SELECTED_LEADS: "CrmLeadStore/A_SET_SELECTED_LEADS",
       A_DELETE_LEADS: "CrmLeadStore/A_DELETE_LEADS",
       A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS",
-      A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST"
+      A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST",
+      A_SET_UPDATE_TABLE_LEAD:"CrmLeadStore/A_SET_UPDATE_TABLE_LEAD",
     }),
     resolveUserStatusVariant(status) {
       if (status === "Pending") return "warning";
@@ -300,7 +300,7 @@ export default {
     },
     onSelectedRow(data) {
       const index = this.leadsSelecteds.findIndex(
-        select => select.id === data.id
+          select => select.id === data.id
       );
       if (data.selected === true && index === -1)
         this.leadsSelecteds.push(data);
@@ -337,15 +337,16 @@ export default {
       } catch (error) {
         console.log("Somtehing went wrong myProvider", error);
         this.showToast(
-          "danger",
-          "top-right",
-          "Oop!",
-          "AlertOctagonIcon",
-          this.getInternalErrors(error)
+            "danger",
+            "top-right",
+            "Oop!",
+            "AlertOctagonIcon",
+            this.getInternalErrors(error)
         );
       }
     },
     setOptionsOnFilters() {
+      console.log(this.filter);
       this.filter[2].options = this.G_STATUS_LEADS;
       this.filter[3].options = this.G_OWNERS;
       this.filter[4].options = this.G_OWNERS;
@@ -354,6 +355,7 @@ export default {
       this.filter[7].options = this.G_STATES;
       this.filter[8].options = this.G_SOURCE_NAMES;
       this.filter[9].options = this.G_TYPE_DOCS;
+      console.log(this.filter);
     },
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;
@@ -391,11 +393,11 @@ export default {
           if (this.isResponseSuccess(response)) {
             this.removePreloader();
             this.showToast(
-              "success",
-              "top-right",
-              "Deleted!",
-              "CheckIcon",
-              "The Lead has been deleted."
+                "success",
+                "top-right",
+                "Deleted!",
+                "CheckIcon",
+                "The Lead has been deleted."
             );
           }
         } catch (error) {
@@ -405,51 +407,50 @@ export default {
       }
     },
     onRowProcess(id) {
-      this.showSwalGeneric(
-        "Are you sure?",
-        "You won't be able to revert this!",
-        "warning",
-        {
-          input: "textarea",
-          inputValidator: value => {
-            if (!value) {
-              return "You need to write something!";
+      this.showConfirmSwal(
+          "Are you sure?",
+          "You won't be able to revert this!",
+          {
+            input: "textarea",
+            inputValidator: value => {
+              if (!value) {
+                return "You need to write something!";
+              }
             }
           }
-        }
       )
-        .then(async (result) => {
-          if (result.value) {
-            const { user_id, role_id } = this.currentUser;
-            const response = await this.A_PROCESS_LEADS({
-              lead_id: id,
-              status: 3,
-              user_id,
-              description: result.value
-            });
-            if (this.isResponseSuccess(response)) {
-              this.showToast(
-                "success",
-                "top-right",
-                "Success!",
-                "CheckIcon",
-                "Successful operation"
-              );
-            } else {
-              this.showToast(
-                "warning",
-                "top-right",
-                "Warning!",
-                "AlertTriangleIcon",
-                `Something went wrong.${response.message}`
-              );
+          .then(async result => {
+            if (result.value) {
+              const { user_id, role_id } = this.currentUser;
+              const response = await this.A_PROCESS_LEADS({
+                lead_id: id,
+                status: 3,
+                user_id,
+                description: result.value
+              });
+              if (this.isResponseSuccess(response)) {
+                this.showToast(
+                    "success",
+                    "top-right",
+                    "Success!",
+                    "CheckIcon",
+                    "Successful operation"
+                );
+              } else {
+                this.showToast(
+                    "warning",
+                    "top-right",
+                    "Warning!",
+                    "AlertTriangleIcon",
+                    `Something went wrong.${response.message}`
+                );
+              }
             }
-          }
-        })
-        .catch(error => {
-          console.log("Something went wrong onRowProcess:", error);
-          this.showErrorSwal(error);
-        });
+          })
+          .catch(error => {
+            console.log("Something went wrong onRowProcess:", error);
+            this.showErrorSwal(error);
+          });
     },
     modalSmsOpen(item) {
       this.rowData = item;
@@ -479,15 +480,15 @@ export default {
     },
     async addListSeller() {
       const confirm = await this.showConfirmSwal(
-        "Are you sure?",
-        "You are going to add this leads to your List"
+          "Are you sure?",
+          "You are going to add this leads to your List"
       );
       if (confirm.isConfirmed) {
         this.addPreloader();
         //filter just the owner of the lead
         const leadList = this.leadsSelecteds
-          .filter(el => el.assign_id === this.currentUser.user_id)
-          .map(el => el.id);
+            .filter(el => el.assign_id === this.currentUser.user_id)
+            .map(el => el.id);
         try {
           const params = {
             user_id: this.currentUser.user_id,
@@ -497,11 +498,11 @@ export default {
           const response = await this.A_ADD_SELLER_LIST(params);
           this.removePreloader();
           this.showToast(
-            "success",
-            "top-right",
-            "Success!",
-            "CheckIcon",
-            "Leads were added to your list"
+              "success",
+              "top-right",
+              "Success!",
+              "CheckIcon",
+              "Leads were added to your list"
           );
         } catch (error) {
           this.removePreloader();
@@ -511,7 +512,13 @@ export default {
     },
     resetQuickData(item) {
       this.quickData = item;
-    }
+    },
+    updateTableLead:function() {
+      if (this.G_UPDATE_TABLE_LEAD) {
+        this.A_SET_UPDATE_TABLE_LEAD(false);
+      }
+    },
+
   },
   mounted() {
     if (![4].includes(this.currentUser.role_id) && !this.isOnlyLead) {
@@ -523,7 +530,20 @@ export default {
     }
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
       this.actionsOptions.push("delete");
-  }
+  },
+  watch:{
+    G_UPDATE_TABLE_LEAD(newVal){
+      if (newVal) {
+        if(this.$refs.refUserListTable === undefined){ 
+          this.myProvider();
+        }else{
+          this.$refs.refUserListTable.refresh();
+          this.myProvider();
+        }
+        
+      }
+    }
+  },
 };
 </script>
 

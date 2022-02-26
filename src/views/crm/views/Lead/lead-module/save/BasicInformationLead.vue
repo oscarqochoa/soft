@@ -58,7 +58,7 @@
             id="without-email"
             name="without-email"
             value="without-email"
-            @change="disabledemail = disabledemail"
+            @input="disabledemail = !disabledemail"
           >Client has not email</b-form-checkbox>
         </b-form-group>
       </b-col>
@@ -102,7 +102,7 @@
           </b-form-group>
         </validation-provider>
         <!-- Lead State -->
-        <b-form-group label="Status" label-for="state-lead">
+        <b-form-group label="Legal Status" label-for="state-lead">
           <v-select
             id="state-lead"
             v-model="userData.state_lead"
@@ -184,7 +184,7 @@ export default {
       email,
       disabledemail: false,
       configFlatPickr: {
-        dateFormat: "d/m/Y",
+        dateFormat: "m/d/Y",
         locale: "en"
       },
       programsList: []

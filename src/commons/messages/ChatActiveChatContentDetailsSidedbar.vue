@@ -28,7 +28,7 @@
           />
         </div>
         <h4 class="chat-user-name">
-          {{ contact.fullName }}
+            {{ contact.fullName }}
         </h4>
         <span class="user-post text-capitalize">{{ contact.role }}</span>
       </div>

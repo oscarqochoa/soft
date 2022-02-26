@@ -1,7 +1,6 @@
 <template>
   <div>
     <filter-slot
-      v-scrollbar
       :filter="filterStatus"
       :filter-principal="filterPrincipal"
       :total-rows="totalRows"
@@ -12,7 +11,6 @@
       @reload="$refs['refClientsList'].refresh()"
     >
       <b-table
-        v-scrollbar
         small
         slot="table"
         no-provider-filtering
@@ -37,8 +35,12 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <!-- Column NAME -->
         <template #cell(lead_name)="data">
-          <div class="d-flex flex-column justify-content-start align-items-start">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <!-- Route To Lead Show -->
             <router-link
               :class="textLink"
               :to="{
@@ -46,19 +48,24 @@
                 params: { id: data.item.lead_id },
               }"
               target="_blank"
-            >{{ data.item.lead_name }}</router-link>
+              >{{ data.item.lead_name }}</router-link
+            >
           </div>
         </template>
+        <!-- Column AMOUNT -->
         <template #cell(amount)="data">
           <div class="inline" style="position: relative">
             <span
               v-if="data.item.type_t != 39 && data.item.type_t != 40"
               class="mr-1"
-            >$ {{ data.item.amount }}</span>
+              >$ {{ data.item.amount }}</span
+            >
             <span
               v-if="data.item.type_t == 39 || data.item.type_t == 40"
               class="mr-1"
-            >$ ({{ data.item.amount }})</span>
+              >$ ({{ data.item.amount }})</span
+            >
+            <!-- Getting Void Refund Info -->
             <feather-icon
               icon="EyeIcon"
               style="cursor: pointer; position: absolute; left: 70px"
@@ -66,6 +73,7 @@
               class="text-primary"
               @click="getVoidRefund(data.item.transaction_id)"
             ></feather-icon>
+            <!-- Img Void -->
             <img
               :src="assetsImg + '/images/icons/void.ico'"
               style="
@@ -94,6 +102,7 @@
                 data.item.result == 'Approved'
               "
             />
+            <!-- Img Refund -->
             <img
               :src="assetsImg + '/images/icons/refund.ico'"
               style="
@@ -125,9 +134,16 @@
             />
           </div>
         </template>
+        <!-- Column CHARGE -->
         <template #cell(charge)="data">
-          <div class="d-flex flex-column justify-content-center align-items-center">
-            <b-icon v-if="data.item.charge == 0" icon="check-circle-fill" variant="success"></b-icon>
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
+            <b-icon
+              v-if="data.item.charge == 0"
+              icon="check-circle-fill"
+              variant="success"
+            ></b-icon>
             <feather-icon
               v-if="data.item.charge == 1 || data.item.charge == null"
               icon="XCircleIcon"
@@ -135,8 +151,11 @@
             />
           </div>
         </template>
+        <!-- Column RESULT -->
         <template #cell(result)="data">
-          <div class="d-flex flex-column justify-content-center align-items-center">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
             <b-icon
               v-if="data.item.result == 'Approved'"
               icon="check-circle-fill"
@@ -157,8 +176,11 @@
             />
           </div>
         </template>
+        <!-- Column CREATED BY -->
         <template #cell(user_name)="data">
-          <div class="d-flex flex-column justify-content-start align-items-start">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
             <span>
               {{ data.item.user_name }} -
               {{ data.item.created_at | myGlobalDay }}
@@ -166,11 +188,14 @@
           </div>
         </template>
       </b-table>
+      <!-- Total Amount Footer -->
       <template #footer>
-        <b-col class="d-flex align-items-center justify-content-center justify-content-sm-start">
+        <b-col
+          class="d-flex align-items-center justify-content-center justify-content-sm-start"
+        >
           <div
+            class="bg-info"
             style="
-              background-color: #3764ff !important;
               padding: 5px;
               border-radius: 30px;
               padding-left: 15px;
@@ -185,7 +210,7 @@
         </b-col>
       </template>
     </filter-slot>
-
+    <!-- Modal Refund  -->
     <modal-refund
       v-if="modalRefund"
       :modalRefund="modalRefund"
@@ -195,6 +220,7 @@
       @close="closeModalRefund"
       @updateGrid="updateGrid"
     ></modal-refund>
+    <!-- Modal Void Refund Info -->
     <modal-void-refund-info
       v-if="modalVoidRefund"
       :modalVoidRefund="modalVoidRefund"
@@ -206,100 +232,42 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { amgApi } from "@/service/axios";
 import vSelect from "vue-select";
+// Filters
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+// Import Service
 import PaymentService from "../service/payments.service";
+// Import Modals
 import ModalRefund from "@/views/crm/views/payments/components/ModalRefund.vue";
 import ModalVoidRefundInfo from "@/views/crm/views/payments/components/ModalVoidRefundInfo.vue";
+// Import Data
+import filters from "../data/filters.payments.data";
+import fields from "../data/fields.payments.data";
+
 export default {
   components: {
     vSelect,
     FilterSlot,
     ModalRefund,
-    ModalVoidRefundInfo
+    ModalVoidRefundInfo,
   },
-  data() {
+  data: function () {
     return {
       modalRefund: false,
       assetsImg: process.env.VUE_APP_BASE_URL_ASSETS,
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       totalAmount: 0,
       sortBy: "created_at",
       sortDesc: true,
-      arrayColumns: [
-        {
-          key: "lead_name",
-          label: "Name",
-
-          visible: true
-        },
-        {
-          key: "type_transaction",
-          label: "Type",
-          visible: true
-        },
-        {
-          key: "transaction_id",
-          label: "Transaction ID",
-          visible: true
-        },
-        {
-          key: "amount",
-          label: "Amount",
-          visible: true
-        },
-        {
-          key: "charge",
-          label: "Charge",
-          visible: true
-        },
-        {
-          key: "result",
-          label: "Result",
-          visible: true
-        },
-        {
-          key: "card_number",
-          label: "Credit Card",
-          visible: true
-        },
-        {
-          key: "account",
-          label: "Account",
-          visible: true
-        },
-        {
-          key: "program",
-          label: "Program",
-          visible: true
-        },
-        {
-          key: "user_name",
-          label: "Created By",
-          visible: true
-        }
-        // {
-        //   key: "created_at",
-        //   label: "Creation Date",
-        //   sortable: true,
-        //   visible: true,
-        // },
-        // { key: "actions", label: "Acciones", class: "text-center " },
-      ],
-      searchInput: "",
-      orderby: "",
-      order: "",
+      //fields data
+      arrayColumns: fields,
       startPage: null,
       endPage: "",
-      totalData: "",
-      // perPage: 10,
       nextPage: "",
-      // currentPage: 1,
       toPage: null,
       isBusy: false,
       perPageOptions: [10, 25, 50, 100],
@@ -307,182 +275,43 @@ export default {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: ""
+        model: "",
       },
-      filter: [
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Type",
-          model: null,
-          options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Realtor" },
-            { value: 2, label: "Appointment" },
-            { value: 3, label: "Inital Payment" },
-            { value: 4, label: "Others" }
-          ],
-          reduce: "value",
-          selectText: "label",
-          cols: 12
-        },
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Result",
-          model: null,
-          options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Approved" },
-            { value: 2, label: "Declined" },
-            { value: 3, label: "Underview" }
-          ],
-          reduce: "value",
-          selectText: "label",
-          cols: 12
-        },
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "User",
-          model: null,
-          options: [],
-          reduce: "id",
-          selectText: "user_name",
-          cols: 12
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ],
-      filter2: [
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Type",
-          model: null,
-          options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Realtor" },
-            { value: 2, label: "Appointment" },
-            { value: 3, label: "Inital Payment" },
-            { value: 4, label: "Others" }
-          ],
-          reduce: "value",
-          selectText: "label",
-          cols: 12
-        },
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Result",
-          model: null,
-          options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Approved" },
-            { value: 2, label: "Declined" },
-            { value: 3, label: "Underview" }
-          ],
-          reduce: "value",
-          selectText: "label",
-          cols: 12
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ],
-      filterController: false,
-      modalRefund: false,
+      //data filters
+      filter: filters,
       dataVoid: [],
       modalVoidRefund: false,
-      idtransaction: null
+      idtransaction: null,
     };
   },
-  mounted() {
+  mounted: function () {
     this.getAllUsers();
     this.addPaddingTd();
   },
   computed: {
-    clientRoute() {
+    clientRoute: function () {
       return "/crm/payment/get-all-lead-payments";
     },
-    fields() {
-      return this.arrayColumns.filter(column => column.visible);
+    fields: function () {
+      return this.arrayColumns.filter((column) => column.visible);
     },
     ...mapGetters({
-      currentUser: "auth/currentUser"
+      currentUser: "auth/currentUser",
     }),
-    filterStatus() {
-      return this.currentUser.user_id == 1 || this.currentUser.user_id == 2
-        ? this.filter
-        : this.filter2;
-    }
+    //filter status by Type of User
+    filterStatus: function () {
+      if (this.currentUser.user_id == 1 || this.currentUser.user_id == 2) {
+        return this.filter;
+      } else {
+        let newFilter = [...this.filter];
+        newFilter.splice(2, 1);
+        return newFilter;
+      }
+    },
   },
   methods: {
-    voidAuthorize(
+    //open modal refund
+    voidAuthorize: function (
       idtransaction,
       idmerchant,
       amount,
@@ -496,78 +325,75 @@ export default {
         amount,
         client_name,
         settlement_date,
-        type
+        type,
       };
       this.modalRefund = true;
     },
-    closeModalRefund() {
+    closeModalRefund: function () {
       this.modalRefund = false;
     },
-    getVoidRefund(idtransaction) {
+    getVoidRefund: function (idtransaction) {
       this.idtransaction = idtransaction;
       this.modalVoidRefund = true;
     },
-    closeModalVoidRefundInfo() {
+    closeModalVoidRefundInfo: function () {
       this.modalVoidRefund = false;
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        perPage: ctx.perPage,
-        text: this.filterPrincipal.model,
-        from: this.filter[3].model,
-        to: this.filter[4].model,
-        result: this.filter[1].model,
-        type: this.filter[0].model,
-        user:
-          this.currentUser.user_id == 1 || this.currentUser.user_id == 2
-            ? this.filter[2].model
-            : this.currentUser.user_id
-      });
-
-      // Must return a promise that resolves to an array of items
-      return promise.then(data => {
-        // Pluck the array of items off our axios response
+    myProvider: async function (ctx) {
+      try {
+        let params = {
+          perPage: ctx.perPage,
+          text: this.filterPrincipal.model,
+          from: this.filter[3].model,
+          to: this.filter[4].model,
+          result: this.filter[1].model,
+          type: this.filter[0].model,
+          user:
+            this.currentUser.user_id == 1 || this.currentUser.user_id == 2
+              ? this.filter[2].model
+              : this.currentUser.user_id,
+        };
+        const data = await amgApi.post(
+          `${ctx.apiUrl}?page=${ctx.currentPage}`,
+          params
+        );
         const items = data.data.data;
         let value = 0;
         if (items) {
-          items.forEach(element => {
+          items.forEach((element) => {
             value += parseFloat(element.amount);
           });
           const formatter = new Intl.NumberFormat("en-US", {
             style: "currency",
-            currency: "USD"
+            currency: "USD",
           });
 
           this.totalAmount = formatter.format(value);
         } else {
           this.totalAmount = 0.0;
         }
-
         this.startPage = data.data.from;
         this.paginate.currentPage = data.data.current_page;
         this.paginate.perPage = data.data.per_page;
         this.nextPage = this.startPage + 1;
         this.endPage = data.data.last_page;
-        this.totalData = data.data.total;
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
-        // Must return an array of items or an empty array if an error occurred
         return items || [];
-      });
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
     },
-    onChangeFilter() {
-      this.$refs.refClientsList.refresh();
-    },
-
-    async getAllUsers() {
+    getAllUsers: async function () {
       try {
         const data = await PaymentService.getAllUsers({
           roles: "[1,2,5]",
-          type: "0"
+          type: "0",
         });
         let firstOption = {
           value: "All",
-          id: 0
+          id: 0,
         };
         let newData = data;
         newData.unshift(firstOption);
@@ -579,20 +405,14 @@ export default {
           "top-right",
           "Error",
           "XIcon",
-          "Something went wrong!"
+          "Something went wrong with users!"
         );
       }
     },
-    resetSearch() {
-      this.searchInput = "";
-      this.fromToObject.from = null;
-      this.fromToObject.to = null;
+    updateGrid: function () {
       this.$refs.refClientsList.refresh();
     },
-    updateGrid() {
-      this.$refs.refClientsList.refresh();
-    }
-  }
+  },
 };
 </script>
 
@@ -612,14 +432,9 @@ td.div {
     flex-direction: column;
   }
 }
-// b-table{
-//    width: 100%;;
-// }
 </style>
 
 <style lang="scss">
 @import "@core/scss/vue/libs/vue-select.scss";
 @import "@core/scss/vue/libs/vue-sweetalert.scss";
 </style>
-
-

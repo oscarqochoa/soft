@@ -1,11 +1,10 @@
 <template>
-  <label :for="source">
-    <amg-icon icon="PaperclipIcon" class="font-weight-bold" />
-    <input
-      type="file"
-      :id="source"
+  <label>
+    <feather-icon icon="PaperclipIcon" class="font-weight-bold" />
+    <b-form-file
+      :ref="source"
       :accept="image ? 'image/png, image/jpeg' : '*'"
-      v-on:change="onInputChange"
+      @change="onInputChange"
       :multiple="!single"
       style="display: none"
     />
@@ -36,9 +35,6 @@ export default {
       },
       errorFile: false,
       files: [],
-      disable: {
-        upload: false,
-      },
       folder_id: "",
       sendto: "",
       responsable: "",
@@ -69,6 +65,10 @@ export default {
           return "/assets/images/drag-drop/ext_files/archivodesc.png";
       }
     },
+    openFileInput(){
+      console.log(this.$refs[this.source], 'log')
+      this.$refs[this.source].$refs.input.click();
+    },
     addImage(file) {
       this.files.push(file);
       const img = new Image(),
@@ -80,6 +80,7 @@ export default {
       const files = e.target.files;
       Array.from(files).forEach((file) => this.addImage(file));
       this.$emit("input", this.files);
+      this.$refs[this.source].reset()
     },
     getFileSize(size) {
       const fSExt = ["Bytes", "KB", "MB", "GB"];

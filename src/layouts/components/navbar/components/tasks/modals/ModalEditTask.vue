@@ -48,7 +48,7 @@
                   @click="openModalQuickTasks"
                   v-ripple.400="'rgba(255, 255, 255, 0.15)'"
                 >
-                  <amg-icon icon="AlignJustifyIcon"></amg-icon>&nbsp; Quick Tasks
+                  <feather-icon icon="AlignJustifyIcon"></feather-icon>&nbsp; Quick Tasks
                 </b-button>
               </b-col>
             </b-row>
@@ -74,7 +74,7 @@
                     v-model="task.date"
                     id="date"
                     placeholder="Date"
-                    class="form-control bg-white"
+                    class="form-control"
                     :config="configFlatPickr"
                   />
                 </b-form-group>

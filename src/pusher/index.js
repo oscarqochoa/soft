@@ -7,6 +7,9 @@ import sendFromRrhhJustifyToManagment from '@/views/crm/views/schedules/pusher/s
 import closedAllSwal from '@/views/commons/pusher/closed-all-swal.pusher'
 import alertMarkSchedules from '@/views/crm/views/schedules/pusher/alert-mark-schedules.pusher'
 import taskAlert from '@/views/commons/pusher/task-alert.pusher'
+import { paragonNewCommentNotification } from '@/views/social-network/views/bank-of-flyers/bank-of-flyers.pusher'
+import infoAdmToCrm from "@/views/crm/views/Lead/pusher/info-adm-to-crm.pusher";
+import changeUserStatusSession from "@/views/commons/pusher/change-user-status-session.pusher";
 
 const subscribePusher = () => {
   const pusher = new Pusher(process.env.VUE_APP_PUSHER_APP_KEY, {
@@ -28,7 +31,10 @@ const subscribePusher = () => {
     sendJustifyFromSupervisor()
     sendFromRrhhJustifyToManagment()
     alertMarkSchedules()
+    paragonNewCommentNotification()
     taskAlert()
+    infoAdmToCrm()
+    changeUserStatusSession()
   } catch (error) {
     console.error(error, 'error')
   }

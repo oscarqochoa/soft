@@ -12,6 +12,7 @@
       title-tag="h3"
     >
       <div class="table-responsive">
+        <!-- Table -->
         <b-table
           :api-url="'/logistics/inventory/get-tracking-request'"
           ref="refPaymentsGrid"
@@ -30,18 +31,26 @@
               <strong>Loading ...</strong>
             </div>
           </template>
+          <!-- Column CREATED BY -->
+          <template #cell(created_at)="data">
+            {{ data.item.created_by }}
+            <br />
+            {{ data.item.created_at | myGlobalDay }}
+          </template>
+          <!-- Column STATUS -->
           <template #cell(status)="data">
             <p
-              :style="data.item.status == 'DISAPPROVED' ? 'color: #FF0000' : ( data.item.status == 'SEND' ? 'color: rgb(255 177 0);' : ( data.item.status == 'APPROVED' ? 'color: blue;' : 'color: #00CC00' ) )"
-            >{{ data.item.status }}</p>
+              :style="statusColor(data.item.status)"
+            >
+              {{ data.item.status }}
+            </p>
           </template>
-          <template #cell(created_at)="data">
-            {{data.item.created_by}}
-            <br />
-            {{data.item.created_at | myGlobalDay}}
-          </template>
+          <!-- Column COMMENTARY -->
           <template #cell(commentary)="data">
-            <div style="white-space: normal;" v-html="data.item.commentary"></div>
+            <div
+              style="white-space: normal"
+              v-html="data.item.commentary"
+            ></div>
           </template>
         </b-table>
       </div>
@@ -50,58 +59,52 @@
 </template>
 
 <script>
+// Import Data
+import fields from "../data/fields.viewtracking.data";
 export default {
   props: {
     modalTrackingRequest: {
-      type: Boolean
+      type: Boolean,
     },
     requestId: {
-      type: [Number, String]
+      type: [Number, String],
     },
     global: {
-      type: Object
-    }
+      type: Object,
+    },
   },
-  components: {},
-  data() {
+  data: function () {
     return {
       mutableIfModalEquipment: this.modalTrackingRequest,
       id: "",
-      arrayColumns: [
-        {
-          key: "created_at",
-          label: "Created BY",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "status",
-          label: "Status",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "commentary",
-          label: "Commentary",
-          class: "text-left",
-          sortable: false
-        }
-      ]
+      arrayColumns: fields,
     };
   },
   methods: {
-    closeModal() {
+    statusColor: function (status) {
+      return status == "DISAPPROVED"
+        ? "color: #FF0000"
+        : status == "SEND"
+        ? "color: rgb(255 177 0);"
+        : status == "APPROVED"
+        ? "color: blue;"
+        : "color: #00CC00";
+    },
+    closeModal: function () {
       this.$emit("closeTrackingRequest", false);
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}`, {
-        requestId: this.requestId
-      });
-      return promise.then(data => {
+    myProvider: async function (ctx) {
+      try {
+        const data = await amgApi.post(`${ctx.apiUrl}`, {
+          requestId: this.requestId,
+        });
         const items = data.data;
         return items || [];
-      });
-    }
-  }
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+    },
+  },
 };
 </script>
