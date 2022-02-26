@@ -97,7 +97,6 @@ export default {
         if (response.status == 200) {
           this.items = response.data;
           this.getImages(response.data);
-          console.log(this.images);
         } else
           this.showToast(
             "warning",

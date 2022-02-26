@@ -43,14 +43,15 @@ export default {
       }
       this.userEmail = jsonData.email
       this.password = jsonData.password
-      await this.loginUser(jsonData.module)
+      await this.loginUser(jsonData.module, jsonData.module_id)
     }
   },
   methods: {
     ...mapActions({
       A_GET_USER_STATUS_SESSION: "UserStore/A_GET_USER_STATUS_SESSION"
     }),
-    async loginUser(module = '') {
+    async loginUser(module = '', module_id = '') {
+      
       this.addPreloader()
       try {
         const response = await useJwt.login2({
@@ -58,18 +59,17 @@ export default {
           password: this.password,
         })
         if (this.isResponseSuccess(response)) {
-          const userData = response.data.user
+          let userData = response.data.user
           const userToken = response.data.access_token
           useJwt.setToken(userToken)
-          // useJwt.setRefreshToken(response.data.refreshToken)
           localStorage.setItem('userData', JSON.stringify(userData))
           this.$ability.update(userData.ability)
+          this.$set(userData, 'modul_id', module_id)
+          this.$set(userData, 'module_name', module)
           await this.$store.dispatch('auth/updateCurrentUser', userData)
           await this.$store.dispatch('auth/updateToken', userToken)
           // ? This is just for demo purpose as well.
           // ? Because we are showing eCommerce app's cart items count in navbar
-          // this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
-
           // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
           if (module) userData.module = module
           this.$router

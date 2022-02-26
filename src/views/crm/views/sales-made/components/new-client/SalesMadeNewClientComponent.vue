@@ -1618,11 +1618,9 @@ export default {
       const keysOldRow = Object.keys(this.items[this.selectedIndex])
       keysNewRow.forEach((key) => {
         if (keysOldRow.includes(key)) {
-          console.log(key)
           Vue.set(this.items[this.selectedIndex], key, newRow[key])
         }
       })
-      console.log(this.items[this.selectedIndex])
     },
     async hideModalProgram(refresh) {
       if (refresh) {

@@ -420,7 +420,6 @@ export default {
               }
             });
         } catch (error) {
-          console.log();
           this.removePreloader();
           this.showErrorSwal(error);
         }

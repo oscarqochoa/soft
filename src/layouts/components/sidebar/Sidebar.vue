@@ -32,6 +32,9 @@ export default {
     ...mapState({
       navMenuItems: state => state.SidebarStore.S_SIDEBAR_ITEMS,
     }),
+    currentUser(){
+      return this.$store.getters['auth/currentUser']
+    }
   },
 }
 </script>

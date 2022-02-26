@@ -591,9 +591,7 @@ export default {
             mobile: this.userData.mobile
           });
           if (response.status == 200) {
-            console.log(response);
             if (response.data.error_code == "MOBILE_EXISTS") {
-              console.log("yaaaaa");
               this.showConfirmSwal("Are you sure?", response.data.message, {
                 confirmButtonText:
                   this.typeForm == "newLead"
