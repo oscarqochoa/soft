@@ -80,19 +80,13 @@
         <!-- Dob -->
         <validation-provider name="DOB">
           <b-form-group label="DOB" label-for="dob">
-            <flat-pickr
-                id="dob"
-                v-model="userData.dob"
-                class="form-control"
-                :config="configFlatPickr"
-                placeholder="From"
-            />
 
-            <!--<kendo-datepicker
+            <kendo-datepicker
                 :class="['w-100 rounded bg-transparent k-picker-custom', {'text-white':isDarkSkin}]"
                 :format="'MM/dd/yyyy'"
                 v-model="userData.dob"
-            /> -->
+                v-mask="'##/##/####'"
+            />
           </b-form-group>
         </validation-provider>
         <!-- Language -->
@@ -191,6 +185,8 @@ export default {
       alphaNum,
       email,
       disabledemail: false,
+      minDate: new Date(1000, 1, 1),
+      maxDate: new Date(3000, 1, 1),
       configFlatPickr: {
         dateFormat: "m/d/Y",
         locale: "en",

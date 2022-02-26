@@ -32,8 +32,10 @@
           <li :style="`color: ${skin === 'dark' ? 'white' : 'black'} !important;`">
             {{ task.lead_mobile }}
           </li>
-          <li :style="`color: ${skin === 'dark' ? 'white' : 'black'} !important;`">
-            {{ task.lead_name }}
+          <li>
+            <router-link :to="{path: `/crm/leads/${task.lead_id}`}" target="_blank">
+              {{ task.lead_name }}
+            </router-link>
           </li>
           <li :style="`color: ${skin === 'dark' ? 'white' : 'black'} !important;`">
             {{ (task.date + ' ' + task.from) | myHourTime }} {{ (task.date + ' ' + task.to) | myHourTime }}
