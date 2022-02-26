@@ -217,6 +217,7 @@
           <template v-slot:cell(seller)="data">
           <span>
             <span v-if="!data.item.editSeller">
+              {{ data.item.seller }}
             </span>
             <span v-else>
               <b-form-select
@@ -232,7 +233,6 @@
 
             <div>
               <p v-if="data.item.commission">
-                {{ data.item.commission[1].change }}
                 <small
                     v-if="(G_IS_CEO || G_IS_SUPERVISOR) || (data.item.user_id == currentUser.user_id && G_IS_SELLER)"
                     class="text-primary font-weight-bold"
