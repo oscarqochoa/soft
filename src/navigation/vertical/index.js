@@ -39,4 +39,14 @@ import formAndTable from './forms-and-table'
 import crm from '@/views/crm/navigation/index'
 import socialNetwork from '@/views/social-network/navigation'
 // Array of sections
-export default [...dashboard, ...socialNetwork, ...crm, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+
+let amgSections = [...dashboard, ...socialNetwork, ...crm];
+let sectionsToShow = []
+if(process.env.VUE_APP_ENVIROMENT != 'deploy'){
+    sectionsToShow = [...amgSections,...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+}else{
+    sectionsToShow = amgSections
+}
+
+
+export default sectionsToShow;
