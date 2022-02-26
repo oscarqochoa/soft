@@ -346,7 +346,6 @@ export default {
       }
     },
     setOptionsOnFilters() {
-      console.log(this.filter);
       this.filter[2].options = this.G_STATUS_LEADS;
       this.filter[3].options = this.G_OWNERS;
       this.filter[4].options = this.G_OWNERS;
@@ -355,7 +354,6 @@ export default {
       this.filter[7].options = this.G_STATES;
       this.filter[8].options = this.G_SOURCE_NAMES;
       this.filter[9].options = this.G_TYPE_DOCS;
-      console.log(this.filter);
     },
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;

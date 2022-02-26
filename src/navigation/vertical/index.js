@@ -40,13 +40,12 @@ import crm from '@/views/crm/navigation/index'
 import socialNetwork from '@/views/social-network/navigation'
 // Array of sections
 
-let amgSections = [...dashboard, ...socialNetwork, ...crm];
+let amgSections = [...socialNetwork, ...crm];
 let sectionsToShow = []
 if(process.env.VUE_APP_ENVIROMENT != 'deploy'){
-    sectionsToShow = [...amgSections,...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+    sectionsToShow = [...amgSections,...dashboard, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
 }else{
     sectionsToShow = amgSections
 }
-
 
 export default sectionsToShow;

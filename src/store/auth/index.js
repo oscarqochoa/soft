@@ -34,7 +34,7 @@ export default {
   mutations: {
     SET_CURRENT_USER(state, val) {
       state.currentUser = val
-      state.currentUser.modul_id = null
+      // state.currentUser.modul_id = null
     },
     SET_CURRENT_USER_INFORMATION(state, { data, avatar }) {
       state.currentUser.first_name = data.first_name
@@ -50,7 +50,6 @@ export default {
       localStorage.setItem("userData", JSON.stringify(state.currentUser))
     },
     SET_TOKEN(state, val) {
-      console.log(val)
       state.token = val
     },
     SET_CURRENT_USER_MODULE(state, module) {

@@ -31,7 +31,6 @@ export default {
     async A_GET_USER_STATUS_SESSION({ commit }, body) {
       try {
         const response = await UserService.getUserStatusSession(body);
-        console.log(response);
         commit("SET_USER_STATUS_SESSION", response.data);
         return response;
       } catch (error) {

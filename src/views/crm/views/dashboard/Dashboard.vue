@@ -631,7 +631,6 @@ export default {
         : "";
     },
     statusHeightByScreenColTwo: function () {
-      console.log(this.allSizeOfScreen)
       switch (this.allSizeOfScreen) {
         case "xxl":
           return "height: 800px !important;max-height: 900px !important;";
