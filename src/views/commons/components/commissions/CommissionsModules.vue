@@ -3,7 +3,7 @@
     <header-slot></header-slot>
 
     <b-tabs
-      v-if="isSupervisorCrm || isCoordinator"
+      v-if="isSupervisorCrm"
       lazy
       pills
       nav-class="mb-0"
@@ -16,7 +16,12 @@
           tabSupervisorCrm
         />
       </b-tab>
-      <b-tab lazy title="Departments" :title-link-class="[bgTabsNavs, 'px-3']" v-if="isSupervisorCrm && !isCoordinator">
+      <b-tab
+        lazy
+        title="Departments"
+        :title-link-class="[bgTabsNavs, 'px-3']"
+        v-if="isSupervisorCrm && !isCoordinator"
+      >
         <CommissionsComponent
           :module="$route.meta.module"
           tab="supervisorCrm"
