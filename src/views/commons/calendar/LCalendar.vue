@@ -285,7 +285,6 @@ export default {
           this.$set(this.calendarDates[index], 'numberOfEvents', eventsOfCurrentDay.length)
         }
       })
-      console.log(this.calendarDates)
     },
   },
 }
