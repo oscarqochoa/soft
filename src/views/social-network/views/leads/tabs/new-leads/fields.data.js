@@ -2,11 +2,8 @@ import { title } from '@core/utils/filter'
 
 export default [
     {
-        key: 'selected',
-    },
-    {
-        key: 'lead_name',
-        label: 'Name',
+        key: 'nickname',
+        label: 'Nickname',
         formatter: title,
         sortable: true,
     },
@@ -17,7 +14,7 @@ export default [
     },
     {
         key: 'source',
-        label: 'Source / SubSource',
+        label: 'Source',
         sortable: false,
     },
     {
@@ -31,12 +28,12 @@ export default [
         sortable: false,
     },
     {
-        key: 'program_name',
-        label: 'Program',
+        key: 'fanpage',
+        label: 'Fanpage',
         sortable: false,
     },
     {
-        key: 'recomendations',
+        key: 'programs',
         label: 'Recomendations',
         sortable: false,
     },
@@ -46,24 +43,19 @@ export default [
         sortable: false,
     },
     {
-        key: 'cr',
-        label: 'CR',
-        sortable: false,
-    },
-    {
-        key: 'sale',
-        label: 'Sale',
-        sortable: false,
-    },
-    {
         key: 'created_at',
         label: 'Created at',
         sortable: true,
     },
     {
-        key: 'catcher',
+        key: 'owner',
         label: 'Owner',
         sortable: true,
+    },
+    {
+        key: 'tracking',
+        label: 'Tracking',
+        sortable: false,
     },
     {
         key: 'actions',

@@ -4,7 +4,7 @@ class SNLeads {
 
     async getNewLeads(body) {
         try {
-            const { data } = await amgApi.post('/search-leads-sn', body)
+            const { data } = await amgApi.post('/lead/social-network/search-leads-sn', body)
             return data
         } catch (error) {
             console.log("Something went wrong on get new leads", error);
@@ -24,7 +24,7 @@ class SNLeads {
 
     async getTrackingNewLeads(body) {
         try {
-            const { data, status } = await amgApi.post('/get-tracking-lead-sn', body)
+            const { data, status } = await amgApi.post('/lead/get-tracking-lead-sn', body)
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on get tracking new leads", error);
@@ -34,7 +34,7 @@ class SNLeads {
 
     async getSmsSentToNewLeads(body) {
         try {
-            const { data, status } = await amgApi.post('/allsmshistorylead', body)
+            const { data, status } = await amgApi.post('/messages/get-tracking-sms-lead', body)
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on getSmsSentToNewLeads", error);
@@ -74,7 +74,7 @@ class SNLeads {
 
     async getOldLeads(body) {
         try {
-            const { data } = await amgApi.post('/old-search-leads-sn', body)
+            const { data } = await amgApi.post('/lead/social-network/old-search-leads-sn', body)
             return data
         } catch (error) {
             console.log("Something went wrong on get old leads", error);
@@ -88,7 +88,7 @@ class SNLeads {
 
     async getStatusLeads(params) {
         try {
-            const data = await amgApi.get('/leadstatus', { params })
+            const data = await amgApi.get('/lead/get-lead-status', { params })
             return data
         } catch (error) {
             console.log('Something went wrong on getStatusLeads:', error)

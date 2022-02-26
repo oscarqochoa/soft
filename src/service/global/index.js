@@ -14,7 +14,7 @@ class GlobalService {
 
     async getOwners({ modul, body }) {
         try {
-            const data = await amgApi.post(`/usermodule/${modul}`, body)
+            const data = await amgApi.post(`/commons/user-module/${modul}`, body)
             return data
         } catch (error) {
             console.log('Something went wrong on getOwners:', error)
@@ -24,7 +24,7 @@ class GlobalService {
 
     async getPrograms(params) {
         try {
-            const data = await amgApi.get('/programs', { params })
+            const data = await amgApi.get('/program/get-programs', { params })
             return data
         } catch (error) {
             console.log('Something went wrong on getPrograms:', error)
@@ -44,7 +44,7 @@ class GlobalService {
 
     async getSourceNames(params) {
         try {
-            const data = await amgApi.get('/sourcesnames', { params })
+            const data = await amgApi.get('/commons/get-sources-names', { params })
             return data
         } catch (error) {
             console.log('Something went wrong on getSourceNames:', error)
@@ -54,7 +54,7 @@ class GlobalService {
 
     async getStates(body) {
         try {
-            const data = await amgApi.post('/get-states', body)
+            const data = await amgApi.post('/lead/get-states', body)
             return data
         } catch (error) {
             console.log('Something went wrong on getStates:', error)

@@ -1,6 +1,48 @@
 <template>
   <div>
-    <header-slot> </header-slot>
+    <lead-list-add-new
+      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
+      :key="keyCreateList"
+      @saveLead="keyCreateList = Math.random()"
+    />
+    <header-slot>
+      <template #actions>
+        <div>
+          <b-button
+            v-if="!isOnlyLead"
+            variant="success"
+            class="mr-1"
+            @click="isAddNewUserSidebarActive = true"
+          >
+            <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
+          </b-button>
+            <!-- v-if="[1, 2].includes(currentUser.role_id) && isLeadsRoute" -->
+          <b-dropdown
+            v-if="false"
+            id="dropdown-6"
+            variant="info"
+            :disabled="isLoading"
+          >
+            <template #button-content>
+              <template v-if="isLoading">
+                <b-spinner small />
+              </template>
+              <template v-else>
+                <feather-icon icon="DownloadIcon" size="16" class="align-middle" />
+              </template>
+              <span class="ml-1">Export To Excel</span>
+            </template>
+
+            <b-dropdown-item @click="exportExcel(1, 1)">Export Current Page</b-dropdown-item>
+            <b-dropdown-item @click="exportExcel(1, 2)">Export All Page</b-dropdown-item>
+            <b-dropdown-item
+              :disabled="!S_SELECTED_LEADS.length"
+              @click="exportExcel(1, 3)"
+            >Export Selection</b-dropdown-item>
+          </b-dropdown>
+        </div>
+      </template>
+    </header-slot>
 
     <b-card>
       <b-nav pills>
@@ -29,11 +71,20 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
-
+import LeadListAddNew from "@/views/crm/views/Lead/lead-module/save/LeadListAddNew.vue";
 export default {
+  components: {
+    LeadListAddNew
+  },
   data() {
     return {
       preloading: true,
+      isOnlyLead: false,
+      isAddNewUserSidebarActive: false,
+      dato2: 10,
+      dato1: "desc",
+      isLoading: false,
+      keyCreateList: 0
     };
   },
   computed: {
@@ -41,7 +92,13 @@ export default {
       currentUser: "auth/currentUser",
       token: "auth/token",
     }),
-    ...mapState({}),
+    ...mapState({
+      S_SELECTED_LEADS: state => state.CrmLeadStore.S_SELECTED_LEADS,
+      S_FILTERS_LEADS: state => state.CrmLeadStore.S_FILTERS_LEADS
+    }),
+    isLeadsRoute() {
+      return this.$route.path === `/social-network/leads/new`;
+    }
   },
   methods: {
     ...mapActions({
@@ -124,6 +181,51 @@ export default {
         );
       }
     },
+    async exportExcel(Export, TypeExport) {
+      const id_leads = this.S_SELECTED_LEADS.map(el => el.id);
+      const name_text = this.S_FILTERS_LEADS.searchQuery
+        ? this.S_FILTERS_LEADS.searchQuery
+        : null;
+      this.dato2 = this.S_FILTERS_LEADS.perPage;
+
+      const date_from =
+        this.S_FILTERS_LEADS.from == "" ? null : this.S_FILTERS_LEADS.from;
+      const date_to =
+        this.S_FILTERS_LEADS.to == "" ? null : this.S_FILTERS_LEADS.to;
+      const orderby = this.dato2 == null ? 10 : this.dato2;
+      const order = this.dato1 == null ? "desc" : this.dato1;
+      const params = {
+        type_export: TypeExport,
+        current_page: this.S_FILTERS_LEADS.currentPage,
+        id_leads,
+        name_text,
+        lead_status: this.S_FILTERS_LEADS.statusLead,
+        cr: this.S_FILTERS_LEADS.cr,
+        program: this.S_FILTERS_LEADS.program,
+        date_from,
+        date_to,
+        orderby,
+        order,
+        per_page: this.dato2,
+        user_owner: this.S_FILTERS_LEADS.owner,
+        assign_to: this.S_FILTERS_LEADS.assignTo,
+        sourcename: this.S_FILTERS_LEADS.sourceName
+      };
+      try {
+        this.isLoading = true;
+        const response = await this.A_EXPORT_LEADS_TO_EXCEL(params);
+        await this.forceFileDownload(response, "leads.xlsx");
+        this.isLoading = false;
+      } catch (error) {
+        this.showErrorSwal(error);
+        this.isLoading = false;
+      }
+    }
+  },
+  watch: {
+    preloading(current, old) {
+      this.isPreloading(old);
+    }
   },
   async created() {
     await this.getStatusLeads();
