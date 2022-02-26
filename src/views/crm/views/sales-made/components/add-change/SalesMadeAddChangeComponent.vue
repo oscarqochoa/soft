@@ -286,7 +286,7 @@
               <b-button
                 v-if="
                   data.item.status == 1 &&
-                    (currentUser.user_id == data.item.user_id || G_IS_SUPERVISOR || G_IS_ADVISOR) &&
+                    (currentUser.user_id == data.item.user_id || G_IS_SUPERVISOR || G_IS_ADVISOR || isCoordinator) &&
                     data.item.contract_fee_status == 1 &&
                     data.item.notes_status_new == 0
                 "
@@ -296,7 +296,7 @@
               >Revission to CEO</b-button>
               <b-button
                 v-if="data.item.status == 6 &&
-                  (currentUser.user_id == data.item.user_id || G_IS_SUPERVISOR || G_IS_ADVISOR) &&
+                  (currentUser.user_id == data.item.user_id || G_IS_SUPERVISOR || G_IS_ADVISOR || isCoordinator) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2
@@ -316,7 +316,7 @@
               >Revission</b-button>
               <b-button
                 v-if=" data.item.status == 3 &&
-                  (currentUser.user_id == data.item.user_id || G_IS_CEO || G_IS_SUPERVISOR) &&
+                  (currentUser.user_id == data.item.user_id || G_IS_CEO || G_IS_SUPERVISOR || isCoordinator) &&
                   sdata.item.contract_fee_status == 1 && data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2
                 "
@@ -329,7 +329,7 @@
               <b-button
                 v-if="
                   data.item.status == 1 && (currentUser.user_id == data.item.user_id ||
-                    G_IS_SUPERVISOR ||G_IS_ADVISOR) &&
+                    G_IS_SUPERVISOR ||G_IS_ADVISOR || isCoordinator) &&
                     data.item.contract_fee_status == 1 &&
                     data.item.notes_status == 1
                 "
@@ -340,7 +340,7 @@
               <b-button
                 v-if="
                   data.item.status == 6 &&(currentUser.user_id == data.item.user_id ||
-                    G_IS_SUPERVISOR || G_IS_ADVISOR) &&
+                    G_IS_SUPERVISOR || G_IS_ADVISOR || isCoordinator) &&
                     data.item.contract_fee_status == 1 &&
                     data.item.notes_status == 1 &&
                     data.item.initial_payment_status == 2
@@ -363,7 +363,7 @@
                 v-if="
                   data.item.status == 3 &&
                     (currentUser.user_id == data.item.user_id ||
-                      G_IS_CEO || G_IS_SUPERVISOR) &&
+                      G_IS_CEO || G_IS_SUPERVISOR || isCoordinator) &&
                     data.item.contract_fee_status == 1 &&
                     data.item.notes_status == 1 &&
                     data.item.initial_payment_status == 2
@@ -869,7 +869,7 @@ export default {
       this.modalData.notes.notes_status = data.notes_status
       this.modalData.notes.notes_status_new = data.notes_status_new
       this.modalData.notes.editModal = this.G_IS_CEO
-        || this.G_IS_SUPERVISOR
+        || this.G_IS_SUPERVISOR || this.isCoordinator
         || this.G_USER_SESSION == data.user_id
       this.modalData.notes.notSeller = data.user_id != this.G_USER_SESSION && this.G_IS_SELLER
 

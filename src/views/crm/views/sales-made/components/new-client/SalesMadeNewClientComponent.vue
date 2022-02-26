@@ -166,7 +166,7 @@
             <div
                 v-if="
                 (data.item.status == 1 || data.item.status == 3) &&
-                  (G_IS_CEO || G_IS_SUPERVISOR)
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator)
               "
                 class="mt-07 text-right mr-1"
             >
@@ -243,7 +243,7 @@
             <div
                 v-if="
                 (data.item.status == 1 || data.item.status == 3) &&
-                  (G_IS_CEO || G_IS_SUPERVISOR)
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator)
               "
                 class="mt-07 text-right mr-1"
             >
@@ -308,7 +308,7 @@
             <div
                 v-if="
                 (data.item.status === 1 || data.item.status === 3) &&
-                  (G_IS_CEO || G_IS_SUPERVISOR)
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator)
               "
                 class="mt-07 text-right mr-1"
             >
@@ -363,14 +363,14 @@
                 :class="
               (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
                 G_IS_CEO ||
-                G_IS_SUPERVISOR
+                G_IS_SUPERVISOR || isCoordinator
                 ? 'cursor-pointer'
                 : ''
             "
                 @click="
               ((data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
                 G_IS_CEO ||
-                G_IS_SUPERVISOR) &&
+                G_IS_SUPERVISOR || isCoordinator) &&
                 openInitialPaymentModal(data.item, data.index)
             "
             >
@@ -501,14 +501,14 @@
                 :class="
               (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
                 G_IS_CEO ||
-                G_IS_SUPERVISOR
+                G_IS_SUPERVISOR || isCoordinator
                 ? 'cursor-pointer text-warning'
                 : ''
             "
                 :style="
               (data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
                 G_IS_CEO ||
-                G_IS_SUPERVISOR
+                G_IS_SUPERVISOR || isCoordinator
                 ? 'fill: #ff9f43'
                 : 'fill: #D8D8D6'
             "
@@ -517,7 +517,7 @@
                 @click="
               ((data.item.user_id == currentUser.user_id && G_IS_SELLER) ||
                 G_IS_CEO ||
-                G_IS_SUPERVISOR) &&
+                G_IS_SUPERVISOR || isCoordinator) &&
                 openFilesModal(
                   data.item.lead_id,
                   data.item.program,
@@ -545,7 +545,7 @@
                 class="d-flex align-items-center justify-content-center flex-column"
                 :class="{
               'not-pointer':
-                data.item.user_id != currentUser.user_id && G_IS_SELLER,
+                data.item.user_id != currentUser.user_id && (G_IS_SELLER && !isCoordinator),
             }"
             >
               <b-button
@@ -567,7 +567,7 @@
               <b-button
                   v-if="
                 (data.item.status == 1 || data.item.status == 6) &&
-                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2
@@ -589,7 +589,7 @@
               <b-button
                   v-if="
                 data.item.status == 5 &&
-                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2
@@ -602,7 +602,7 @@
               <b-button
                   v-if="
                 data.item.status == 5 &&
-                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2
@@ -617,7 +617,7 @@
                 data.item.status == 3 &&
                   (currentUser.user_id == data.item.user_id ||
                     G_IS_CEO ||
-                    G_IS_SUPERVISOR) &&
+                    G_IS_SUPERVISOR || isCoordinator) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2
@@ -630,7 +630,7 @@
               <b-button
                   v-if="
                 data.item.initial_payment_status == 1 &&
-                  (G_IS_CEO || G_IS_SUPERVISOR)
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator)
               "
                   variant="outline-danger"
                   class="m-10px"
@@ -643,7 +643,7 @@
                 v-else
                 :class="{
               'not-pointer':
-                data.item.user_id != currentUser.user_id && G_IS_SELLER,
+                data.item.user_id != currentUser.user_id && (G_IS_SELLER && !isCoordinator),
             }"
                 class="d-flex align-items-center justify-content-center flex-column"
             >
@@ -664,7 +664,7 @@
               <b-button
                   v-if="
                 (data.item.status == 1 || data.item.status == 6) &&
-                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
                   data.item.initial_payment_status == 2
@@ -684,7 +684,7 @@
               <b-button
                   v-if="
                 data.item.status == 5 &&
-                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
                   data.item.initial_payment_status == 2
@@ -697,7 +697,7 @@
               <b-button
                   v-if="
                 data.item.status == 5 &&
-                  (G_IS_CEO || G_IS_SUPERVISOR) &&
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status_new == 0 &&
                   data.item.initial_payment_status == 2
@@ -712,7 +712,7 @@
                 data.item.status == 3 &&
                   (currentUser.user_id == data.item.user_id ||
                     G_IS_CEO ||
-                    G_IS_SUPERVISOR) &&
+                    G_IS_SUPERVISOR || isCoordinator) &&
                   data.item.contract_fee_status == 1 &&
                   data.item.notes_status == 1 &&
                   data.item.initial_payment_status == 2
@@ -725,7 +725,7 @@
               <b-button
                   v-if="
                 data.item.initial_payment_status == 1 &&
-                  (G_IS_CEO || G_IS_SUPERVISOR)
+                  (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator)
               "
                   variant="outline-danger"
                   size="sm"
@@ -766,7 +766,7 @@
                 data.item.initial_payment_status === 1 &&
                   (data.item.user_id == currentUser.user_id ||
                     G_IS_CEO ||
-                    G_IS_SUPERVISOR)
+                    G_IS_SUPERVISOR || isCoordinator)
               "
                   @click="openUrlModal(data.item)"
               >
@@ -1504,7 +1504,7 @@ export default {
       if (
         data.user_id == this.currentUser.user_id
         || this.G_IS_CEO
-        || this.G_IS_SUPERVISOR
+        || this.G_IS_SUPERVISOR || this.isCoordinator
       ) {
         this.modalData.contractFee.editModal = true
       } else {
@@ -1539,7 +1539,7 @@ export default {
       this.modalData.notes.notes_status = data.notes_status
       this.modalData.notes.notes_status_new = data.notes_status_new
       this.modalData.notes.editModal = this.G_IS_CEO
-        || this.G_IS_SUPERVISOR
+        || this.G_IS_SUPERVISOR || this.isCoordinator
         || this.G_USER_SESSION == data.user_id
       this.modalData.notes.notSeller = data.user_id != this.G_USER_SESSION && this.G_IS_SELLER
 
