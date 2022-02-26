@@ -156,7 +156,7 @@
             <div>
               <p v-if="data.item.commission" class="m-0">
                 <small
-                    v-if="data.item.commission[0].change != 1 || (data.item.commission[0].change == 1  && (G_IS_CEO || G_IS_SUPERVISOR))"
+                    v-if="G_IS_CEO || G_IS_SUPERVISOR"
                     class="text-primary font-weight-bold"
                 >$ {{ data.item.commission[0].commission }}
                 </small>
@@ -217,7 +217,6 @@
           <template v-slot:cell(seller)="data">
           <span>
             <span v-if="!data.item.editSeller">
-              {{ data.item.seller }}
             </span>
             <span v-else>
               <b-form-select
@@ -233,8 +232,9 @@
 
             <div>
               <p v-if="data.item.commission">
+                {{ data.item.commission[1].change }}
                 <small
-                    v-if="data.item.commission[1].change != 1 || (data.item.commission[1].change == 1  && (G_IS_CEO || G_IS_SUPERVISOR))"
+                    v-if="(G_IS_CEO || G_IS_SUPERVISOR) || (data.item.user_id == currentUser.user_id && G_IS_SELLER)"
                     class="text-primary font-weight-bold"
                 >$ {{ data.item.commission[1].commission }}</small>
               </p>
