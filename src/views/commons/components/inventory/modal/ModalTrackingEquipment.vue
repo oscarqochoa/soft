@@ -12,6 +12,7 @@
       title-tag="h3"
     >
       <div class="table-responsive">
+        <!-- Table -->
         <b-table
           :api-url="'/logistics/inventory/get-tracking-equipment'"
           ref="refPaymentsGrid"
@@ -30,31 +31,26 @@
               <strong>Loading ...</strong>
             </div>
           </template>
-
+          <!-- Column STATUS -->
           <template #cell(status)="data">
             <p
-              :style="
-                data.item.status == 'RETURN'
-                  ? 'color: #FF0000'
-                  : data.item.status == 'REGISTERED'
-                  ? 'color: blue'
-                  : data.item.status == 'ASSIGNED'
-                  ? 'color: rgb(255 177 0);'
-                  : data.item.status == 'TO REPAIR'
-                  ? 'color: rgb(122 0 255);'
-                  : 'color: #00CC00'
-              "
-            >{{ data.item.status }}</p>
+              :style="statusColor(data.item.status)"
+            >
+              {{ data.item.status }}
+            </p>
           </template>
-
+          <!-- Column CREATED BY -->
           <template #cell(created_at)="data">
             {{ data.item.created_by }}
             <br />
             {{ data.item.created_at | myGlobalDay }}
           </template>
-
+          <!-- Column COMMENTARY -->
           <template #cell(description)="data">
-            <div style="white-space: normal" v-html="data.item.description"></div>
+            <div
+              style="white-space: normal"
+              v-html="data.item.description"
+            ></div>
           </template>
         </b-table>
       </div>
@@ -64,58 +60,53 @@
 
 
 <script>
+// Import Data
+import fields from "../data/viewequipment.data";
 export default {
   props: {
     modalTracking: {
-      type: Boolean
+      type: Boolean,
     },
     global: {
-      type: Object
+      type: Object,
     },
     equipmentId: {
-      type: [Number, String]
-    }
+      type: [Number, String],
+    },
   },
-  data() {
+  data: function () {
     return {
       mutableIfModalEquipment: this.modalTracking,
-
-      arrayColumns: [
-        {
-          key: "status",
-          label: "Status",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "created_at",
-          label: "Created BY",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "description",
-          label: "Commentary",
-          class: "text-left",
-          sortable: false
-        }
-      ]
+      arrayColumns: fields,
     };
   },
   methods: {
-    closeModal() {
+    statusColor: function (status) {
+      return status == "RETURN"
+        ? "color: #FF0000"
+        : status == "REGISTERED"
+        ? "color: blue"
+        : status == "ASSIGNED"
+        ? "color: rgb(255 177 0);"
+        : status == "TO REPAIR"
+        ? "color: rgb(122 0 255);"
+        : "color: #00CC00";
+    },
+    closeModal: function () {
       this.$emit("close", false);
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}`, {
-        equipmentId: this.equipmentId
-      });
-      return promise.then(data => {
+    myProvider: async function (ctx) {
+      try {
+        const data = await amgApi.post(`${ctx.apiUrl}`, {
+          equipmentId: this.equipmentId,
+        });
         const items = data.data;
         return items || [];
-      });
-    }
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+    },
   },
-  created() {}
 };
 </script>

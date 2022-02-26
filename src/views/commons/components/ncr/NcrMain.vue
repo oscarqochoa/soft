@@ -1,35 +1,48 @@
 <template>
   <div>
     <header-slot></header-slot>
-
-    <b-card no-body>
-      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
-        <b-nav card-header pills class="m-0">
-          <b-nav-item :to="{ name: 'ncr-pending' }" exact exact-active-class="active">Pending</b-nav-item>
-
-          <b-nav-item :to="{ name: 'ncr-returned' }" exact exact-active-class="active">
-            Returned
-            <span class="ml-2" v-if="countData > 0 && currentUser.role_id != 1">
-              <feather-icon icon :badge="countData" badge-classes="badge-important" />
-            </span>
-          </b-nav-item>
-
-          <b-nav-item :to="{ name: 'ncr-completed' }" exact exact-active-class="active">Completed</b-nav-item>
-        </b-nav>
-      </b-card-header>
-
-      <b-card-body class="border-primary rounded">
-        <router-view :key="$route.name"></router-view>
-      </b-card-body>
+    <!-- Navigation -->
+    <b-nav card-header pills class="m-0">
+      <!-- Pending -->
+      <b-nav-item
+        :to="{ name: 'ncr-pending' }"
+        exact
+        exact-active-class="active"
+        :link-classes="['px-3',bgTabsNavs]"
+      >Pending</b-nav-item>
+      <!-- Returned -->
+      <b-nav-item
+        :to="{ name: 'ncr-returned' }"
+        exact
+        exact-active-class="active"
+        :link-classes="['px-3',bgTabsNavs]"
+      >
+        Returned
+        <span class="ml-2" v-if="countData > 0 && currentUser.role_id != 1">
+          <feather-icon icon :badge="countData" badge-classes="badge-important" />
+        </span>
+      </b-nav-item>
+      <!-- Completed -->
+      <b-nav-item
+        :to="{ name: 'ncr-completed' }"
+        exact
+        exact-active-class="active"
+        :link-classes="['px-3',bgTabsNavs]"
+      >Completed</b-nav-item>
+    </b-nav>
+    <!-- Dynamic Route -->
+    <b-card no-body class="border-top-primary border-3 border-table-radius">
+      <router-view :key="$route.name"></router-view>
     </b-card>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+//Import Services
 import NrcService from "./service/ncr.service";
 export default {
-  data() {
+  data:function() {
     return {
       countData: null
     };
@@ -40,7 +53,7 @@ export default {
     })
   },
   methods: {
-    async countReturned() {
+    countReturned:async function() {
       if (this.currentUser.role_id != 1) {
         try {
           const response = await NrcService.ncrLeadsCountInProcess({
@@ -66,8 +79,11 @@ export default {
       }
     }
   },
-  created() {
+  created:function() {
     this.countReturned();
   }
 };
 </script>
+
+<style >
+</style>

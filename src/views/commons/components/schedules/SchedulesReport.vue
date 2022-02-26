@@ -1,16 +1,22 @@
 <template>
-  <div class="container">
+  <b-container>
     <b-row class="my-2">
       <b-col
         cols="12"
-        sm="6"
+        lg="6"
+        md="6"
+        sm="8"
         class="
           d-flex
           align-items-center
           justify-content-center justify-content-sm-start
         "
       >
-        <b-button variant="success" class="mr-1" @click="exportExcel()">
+        <b-button
+          variant="success"
+          class="mr-1 mb-lg-0 mb-md-0 mb-sm-1 mb-1"
+          @click="exportExcel()"
+        >
           <feather-icon
             icon="DownloadCloudIcon"
             class="mr-50 text-center cursor-pointer"
@@ -18,7 +24,7 @@
         </b-button>
         <b-button
           variant="primary"
-          class="mr-1"
+          class="mr-1 mb-lg-0 mb-md-0 mb-sm-1 mb-1"
           v-b-toggle.sidebar-backdrop
           @click="getMoreInfo()"
         >
@@ -30,7 +36,9 @@
       </b-col>
       <b-col
         cols="12"
-        sm="6"
+        lg="6"
+        md="6"
+        sm="12"
         class="d-flex align-items-center justify-content-end align-items-center"
       >
         <b-input-group class="mr-1">
@@ -56,23 +64,48 @@
         </b-button>
       </b-col>
     </b-row>
-    <b-table-simple hover small caption-top responsive ref="table_report_modul">
+    <b-table-simple
+      bordered
+      small
+      caption-top
+      responsive
+      ref="table_report_modul"
+      class="custom-table"
+      cellspacing="0"
+      cellpadding="0"
+    >
       <b-thead>
         <b-tr>
           <b-th
             v-for="(item, index) in fields"
             :key="index"
-            class="text-center"
-            >{{ item.label }}</b-th
+            :class="[
+              'text-center item-header',
+              item.date == today ? 'bg-th-today' : '',
+            ]"
           >
+            {{ item.label }}
+          </b-th>
         </b-tr>
       </b-thead>
       <b-tbody>
         <b-tr v-for="(item, index) in filterUser" :key="index">
-          <b-td class="text-center">{{ item.user_name }}</b-td>
+          <b-td class="text-center item-user">
+            <div class="container">
+              <p>
+                {{ item.user_name }}
+              </p>
+            </div>
+            <span></span>
+          </b-td>
           <b-td v-for="(schedule, i) in item.json_data" :key="i">
             <div
-              :class="bgSchedule(schedule)"
+              :class="[
+                bgSchedule(schedule),
+                'item-hour',
+                isDarkTheme ? 'item-hour-dark' : 'item-hour-light',
+                schedule.date == today ? 'bg-hour-today' : '',
+              ]"
               @click="openDetails(item, schedule, schedule.checking_m, 1)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 1)"
@@ -80,7 +113,11 @@
               {{ schedule.checking_m }}
             </div>
             <div
-              class="bg-default p-s"
+              :class="[
+                'bg-default item-hour',
+                isDarkTheme ? 'item-hour-dark' : 'item-hour-light',
+                schedule.date == today ? 'bg-hour-today' : '',
+              ]"
               @click="openDetails(item, schedule, schedule.m_begining_break, 2)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 2)"
@@ -88,7 +125,11 @@
               {{ schedule.m_begining_break }}
             </div>
             <div
-              class="bg-default p-s"
+              :class="[
+                'bg-default item-hour',
+                isDarkTheme ? 'item-hour-dark' : 'item-hour-light',
+                schedule.date == today ? 'bg-hour-today' : '',
+              ]"
               @click="openDetails(item, schedule, schedule.m_finish_break, 3)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 3)"
@@ -96,14 +137,26 @@
               {{ schedule.m_finish_break }}
             </div>
             <div
-              class="bg-default p-s"
+              :class="[
+                'bg-default item-hour',
+                isDarkTheme ? 'item-hour-dark' : 'item-hour-light',
+                schedule.date == today ? 'bg-hour-today ' : '',
+              ]"
               @click="openDetails(item, schedule, schedule.m_checkout, 4)"
               v-b-tooltip.hover
               :title="titleSchedule(schedule, 4)"
             >
               {{ schedule.m_checkout }}
             </div>
-            <div class="bg-hours p-s">HOURS: {{ schedule.total_hours }}</div>
+            <div
+              :class="[
+                'item-count-hours',
+                isDarkTheme ? 'text-light' : '',
+                schedule.date == today ? 'bg-count-hours-today' : 'bg-hours',
+              ]"
+            >
+              HOURS: {{ schedule.total_hours }}
+            </div>
           </b-td>
         </b-tr>
       </b-tbody>
@@ -147,10 +200,11 @@
       id="sidebar-backdrop"
       title="More info"
       bg-variant="white"
-      sidebar-class="sidebar-lg-schedule"
+      sidebar-class="sidebar-lg-schedule sidebar-schedules"
       header-class="pt-1"
       backdrop
       shadow
+      style="width: 700px !important"
     >
       <div class="px-3 py-2">
         <content-more-info-report :data="dataSchedule" :key="keyMoreInfo" />
@@ -172,7 +226,7 @@
             <h3 class="title-sidebar-schedule">Advanced Search</h3>
           </span>
           <span class="cursor-pointer" v-b-toggle.sidebar-advance>
-            <amg-icon icon="XIcon" size="15" />
+            <feather-icon icon="XIcon" size="15" />
           </span>
         </div>
       </template>
@@ -225,7 +279,7 @@
         </b-container>
       </template>
     </b-sidebar>
-  </div>
+  </b-container>
 </template>
 <script>
 import SchedulesServices from "./services/schedules.service";
@@ -252,6 +306,8 @@ export default {
       keyMoreInfo: 0,
       bgBtnAdres: "background-color: rgba(51, 59, 81, 0.2) !important",
       detailsSchedule: {},
+
+      today: moment().format("YYYY-MM-DD"),
     };
   },
   mounted() {
@@ -294,9 +350,11 @@ export default {
       });
       array.forEach((element) => {
         let letter = element.dayheader.toUpperCase();
+
         this.fields.push({
           key: "field",
           label: letter.toUpperCase(),
+          date: element.date,
         });
       });
     },
@@ -418,18 +476,21 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    isDarkTheme() {
+      return this.$store.state.appConfig.layout.skin == "dark";
+    },
   },
 };
 </script>
-  
-<style>
+
+<style lang="scss" scoped>
 .bg-default {
   background: rgba(0, 0, 0, 0.1);
   text-align: center;
   min-width: 150px !important;
 }
 .bg-late {
-  background: rgba(227, 52, 47, 0.1);
+  background: rgba(227, 52, 47, 0.1) !important;
   text-align: center;
   min-width: 150px !important;
 }
@@ -437,7 +498,7 @@ export default {
   margin-top: 3px;
 }
 .bg-hours {
-  background: rgba(51, 59, 81, 0.1);
+  background: rgba(143, 95, 232, 0.1) !important;
   text-align: center;
   border: 1px solid #6e6b7b;
   min-width: 150px !important;
@@ -475,5 +536,114 @@ export default {
 }
 .image-captured {
   width: 400px !important;
+}
+
+/* Table styles */
+
+.bg-th-today {
+  background-color: #8f5fe8 !important;
+  color: white;
+}
+
+.bg-hour-today {
+  background: rgba(188, 159, 241, 0.15) !important;
+  transition: background 0.3s ease-in-out;
+
+  &:hover {
+    background: #543e86 !important;
+    color: white;
+  }
+}
+
+.bg-count-hours-today {
+  background: rgba(143, 95, 232, 0.5) !important;
+  text-align: center;
+  color: white !important;
+}
+
+table {
+  border-collapse: collapse !important;
+
+  & td,
+  & &-sm td {
+    padding: 0rem !important;
+  }
+}
+
+.item-header {
+  background: #f3f2f7;
+  border: 1px solid #ebe9f1 !important;
+  box-sizing: border-box;
+  padding-top: 7px !important;
+  width: 160px;
+  height: 30px;
+}
+
+.item-user {
+  position: relative;
+
+  .container {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p {
+      margin-top: 5px;
+      color: #8e8c99;
+      font-weight: 500;
+    }
+  }
+
+  span {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 24.5px;
+    background: rgba(143, 95, 232, 0.1);
+  }
+}
+
+.item-hour {
+  background: transparent;
+  padding: 0px 0px 3px 0px;
+  font-size: 12.5px;
+
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+
+  &:nth-child(4) {
+    border-bottom: 1px white solid;
+    margin-bottom: 0px;
+  }
+
+  &-light {
+    border-bottom: 1px solid #ebe9f1 !important;
+
+    &:hover {
+      background: #f3f2f7;
+    }
+  }
+
+  &-dark {
+    border-bottom: 1px solid #31343e !important;
+
+    &:hover {
+      background: #252541;
+    }
+  }
+}
+
+.item-count-hours {
+  border: none;
+  color: #484848;
+  font-weight: 600 !important;
+  font-size: 13px;
+  padding: 4px 0px 2px 0px;
+  /* border: 2px solid white !important; */
+}
+
+.b-sidebar {
+  width: 40% !important;
 }
 </style>

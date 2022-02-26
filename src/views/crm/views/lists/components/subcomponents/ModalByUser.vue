@@ -2,7 +2,7 @@
   <div>
     <b-modal
       modal
-      centered
+      
       :title="`${nameUser}`"
       v-model="mutableIfModalCard"
       size="lg"
@@ -13,7 +13,8 @@
       :no-close-on-backdrop="true"
     >
       <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <!-- Column Filter By -->
+        <div class="col-lg-6 col-md-12 col-sm-12">
           <b-form-group label="Filter by:">
             <v-select
               v-model="filters[0].model"
@@ -25,22 +26,34 @@
             />
           </b-form-group>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-3">
+        <!-- Column MISSING-->
+        <div class="col-lg-3 col-md-6 col-sm-6">
           <b-form-group>
-            <b-input-group prepend="MISSING" size="md" class="pt-2" style="margin-top: 6px">
+            <b-input-group
+              prepend="MISSING"
+              size="md"
+              class="pt-2"
+              style="margin-top: 6px"
+            >
               <b-form-input disabled :value="`${totalMissing}`" />
             </b-input-group>
           </b-form-group>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-3">
+        <!-- Column DONE -->
+        <div class="col-lg-3 col-md-6 col-sm-6">
           <b-form-group>
-            <b-input-group prepend="DONE" size="md" class="pt-2" style="margin-top: 6px">
+            <b-input-group
+              prepend="DONE"
+              size="md"
+              class="pt-2"
+              style="margin-top: 6px"
+            >
               <b-form-input disabled :value="`${totalDone}`" />
             </b-input-group>
           </b-form-group>
         </div>
       </div>
-
+      <!-- Table -->
       <b-table
         :api-url="clientRoute"
         ref="refClientsList"
@@ -58,16 +71,24 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <!-- Column CR -->
         <template #cell(credit_report)="data">
-          <div class="d-flex flex-column justify-content-start align-items-start">
-            <span v-if="data.item.credit_report == '1'" class="text-danger">NO</span>
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <span v-if="data.item.credit_report == '1'" class="text-danger"
+              >NO</span
+            >
             <span v-else class="text-blue">YES</span>
           </div>
         </template>
+        <!-- Column CheckBox DONE -->
         <template #cell(done)="data">
-          <div class="d-flex flex-column justify-content-center align-items-center">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
             <b-form-checkbox
-              :disabled="rolByUser" 
+              :disabled="rolByUser"
               v-model="data.item.done"
               :value="1"
               @change="
@@ -88,119 +109,81 @@
 
 
 <script>
-import ListService from "../../service/lists.service";
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
-
+// Import Data
+import filters from "../../data/filter.user.data";
+import fields from "../../data/fields.user.data";
+// Import Services
+import ListService from "../../service/lists.service";
 export default {
   components: {
-    vSelect
+    vSelect,
   },
   props: {
     objectUser: {
-      type: Object
+      type: Object,
     },
     nameUser: {
-      type: String
+      type: String,
     },
     id: {
-      type: [Number, String]
+      type: [Number, String],
     },
     ifModalCard: {
-      type: Boolean
+      type: Boolean,
     },
     idByUser: {
-      type: [Number, String]
-    }
+      type: [Number, String],
+    },
   },
-  data() {
+  data: function () {
     return {
-      statusCheck: true,
       totalMissing: 0,
       totalDone: 0,
       mutableIfModalCard: this.ifModalCard,
-      filters: [
-        {
-          options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Missing" },
-            { value: 2, label: "Done" }
-          ],
-          model: "",
-          primaryKey: "value",
-          labelSelect: "label",
-          cols: 12,
-          md: 2,
-          visible: true
-        }
-      ],
-      arrayColumns: [
-        {
-          key: "lead_name",
-          label: "Names",
-          visible: true
-        },
-        {
-          key: "status_lead",
-          label: "Status",
-          visible: true
-        },
-        {
-          key: "credit_report",
-          label: "CR",
-          visible: true
-        },
-        {
-          key: "mobile",
-          label: "Mobile",
-          visible: true
-        },
-        {
-          key: "done",
-          label: "Done",
-          visible: true
-        }
-      ]
+      //data filter
+      filters: filters,
+      //data fields
+      arrayColumns: fields,
     };
   },
   computed: {
-    visibleFields() {
-      return this.arrayColumns.filter(column => column.visible);
+    visibleFields: function () {
+      return this.arrayColumns.filter((column) => column.visible);
     },
-    filterId() {
+    filterId: function () {
       return this.filters[0].model;
     },
-    clientRoute() {
+    clientRoute: function () {
       return "/commons/list-users/get-list-of-leads";
     },
-    rolByUser() {
-      return this.currentUser.role_id == 1 ||
-        this.currentUser.role_id == 2
+    //status disabled checkbox by type of user
+    rolByUser: function () {
+      return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
         ? true
         : false;
     },
     ...mapGetters({
-      currentUser: "auth/currentUser"
-    })
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
-    checkveri(state) {},
-    closeModal() {
+    closeModal: function () {
       this.$emit("close", false);
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}`, {
-        id: this.id,
-        listid: this.idByUser,
-        filter: this.filterId
-      });
-
-      return promise.then(data => {
+    myProvider: async function (ctx) {
+      try {
+        const data = await amgApi.post(`${ctx.apiUrl}`, {
+          id: this.id,
+          listid: this.idByUser,
+          filter: this.filterId,
+        });
         let items = data.data;
         if (items.length != 0) {
           this.totalMissing = items[0].quantity_pending;
           this.totalDone = items[0].quantity_done;
-          items.map(item => {
+          items.map((item) => {
             item.selected = false;
           });
         } else {
@@ -208,30 +191,55 @@ export default {
           this.totalDone = 0;
         }
         return items || [];
-      });
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
     },
-    async callead(state, idlead, idlist, iduser) {
+    callead: async function (state, idlead, idlist, iduser) {
       if (state == "1") {
-        try{
-          const data = await ListService.getLead({idlead: idlead,idlist: idlist,iduser: iduser,status: 1,filter: this.datafilter})
+        try {
+          const data = await ListService.getLead({
+            idlead: idlead,
+            idlist: idlist,
+            iduser: iduser,
+            status: 1,
+            filter: this.datafilter,
+          });
           this.$refs.refClientsList.refresh();
           this.$emit("updateList", false);
-        }catch(error){
-          console.error(error)
-          this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+        } catch (error) {
+          console.error(error);
+          this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
         }
       } else {
-        try{
-          const data = ListService.getLead({ idlead: idlead,idlist: idlist,iduser: iduser,status: 0})
+        try {
+          const data = ListService.getLead({
+            idlead: idlead,
+            idlist: idlist,
+            iduser: iduser,
+            status: 0,
+          });
           this.$refs.refClientsList.refresh();
           this.$emit("updateList", false);
-        }catch(error){
-          console.error(error)
-          this.showToast("danger","top-right","Error","XIcon","Something went wrong!");
+        } catch (error) {
+          console.error(error);
+          this.showToast(
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
+          );
         }
       }
-    }
+    },
   },
-  created() {}
 };
 </script>

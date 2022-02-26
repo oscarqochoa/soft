@@ -20,7 +20,7 @@
               @click="hideModal()"
               :block="!bigWindow"
             >
-              <amg-icon icon="ChevronLeftIcon"></amg-icon>Return
+              <feather-icon icon="ChevronLeftIcon"></feather-icon>Return
             </b-button>
           </b-col>
           <b-col lg="6" class="text-right">
@@ -50,7 +50,6 @@
             :busy="isBusy"
             :current-page="currentPage"
             :per-page="perPage"
-            v-scrollbar
           >
             <template #table-busy>
               <div class="text-center text-primary my-2">

@@ -1,18 +1,26 @@
 <template>
-  <div>
+  <div >
     <header-slot></header-slot>
-
-    <b-card no-body>
-      <b-card-header header-tag="nav" :class="['pb-0', bgLightDark  ]">
-        <b-nav card-header pills class="m-0">
-          <b-nav-item :to="{ name: 'lists-crm-mylist' }" exact exact-active-class="active">My List</b-nav-item>
-          <b-nav-item :to="{ name: 'lists-crm-list' }" exact exact-active-class="active">List</b-nav-item>
-        </b-nav>
-      </b-card-header>
-
-      <b-card-body class="border-primary rounded">
-        <router-view :key="$route.name"></router-view>
-      </b-card-body>
+    <!-- Navigation -->
+    <b-nav card-header pills class="m-0">
+      <!-- My List -->
+      <b-nav-item
+        :to="{ name: 'lists-crm-mylist' }"
+        exact
+        exact-active-class="active"
+        :link-classes="['px-3',bgTabsNavs]"
+      >My List</b-nav-item>
+      <!-- List -->
+      <b-nav-item
+        :to="{ name: 'lists-crm-list' }"
+        exact
+        exact-active-class="active"
+        :link-classes="['px-3',bgTabsNavs]"
+      >List</b-nav-item>
+    </b-nav>
+   <!-- Dinamic Route -->
+    <b-card no-body class="border-top-primary border-3 border-table-radius px-0">
+      <router-view :key="$route.name"></router-view>
     </b-card>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="border-top-info border-3 box-shadow-3 rounded-bottom">
     <filter-slot
       annulled
       :fields="fields"
@@ -15,7 +15,6 @@
         id="annull-table"
         slot="table"
         ref="annull-table"
-        v-scrollbar
         :has-provider="true"
         sticky-header="70vh"
         small
@@ -44,17 +43,12 @@
       title-class="title-assitence-schedule"
     >
       <div>
-        <content-justify
-          :item="item"
-          ref="content"
-          @closeModalJustify="closeModalJustify"
-        />
+        <content-justify :item="item" ref="content" @closeModalJustify="closeModalJustify" />
       </div>
       <template #modal-footer>
         <div class="footer-capture">
           <b-button variant="primary" @click="sendJustify()">
-            <feather-icon icon="SendIcon" class="mr-50" />
-            SEND
+            <feather-icon icon="SendIcon" class="mr-50" />SEND
           </b-button>
         </div>
       </template>
@@ -69,37 +63,37 @@ import { mapGetters } from "vuex";
 
 export default {
   components: {
-    ContentJustify,
+    ContentJustify
   },
   data() {
     return {
       fields: [
         {
           key: "module",
-          label: "module",
+          label: "module"
         },
         {
           key: "user_name",
-          label: "user",
+          label: "user"
         },
         {
           key: "date",
-          label: "date",
+          label: "date"
         },
         {
           key: "type",
-          label: "type",
+          label: "type"
         },
         {
           key: "action",
-          label: "action",
-        },
+          label: "action"
+        }
       ],
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "User...",
-        model: null,
+        model: null
       },
       items: [],
       filter: dataFilters,
@@ -108,19 +102,19 @@ export default {
         currentPage: 1,
         startPage: null,
         toPage: null,
-        totalRows: 0,
+        totalRows: 0
       },
       isBusy: false,
       modalJustify: false,
       titleModal: null,
-      item: {},
+      item: {}
     };
   },
   mounted() {},
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   methods: {
     async myProvider(ctx) {
@@ -133,7 +127,7 @@ export default {
           user_name: this.filterPrincipal.model,
 
           per_page: this.paginate.perPage,
-          page: ctx.currentPage,
+          page: ctx.currentPage
         };
         const data = await SchedulesServices.getPendingJustify(params);
         this.paginate.startPage = data.from;
@@ -142,7 +136,7 @@ export default {
           this.paginate.totalRows = data.total;
         let array = data.data;
         let items = [];
-        array.forEach((element) => {
+        array.forEach(element => {
           items.push({
             id: element.id,
             user_id: element.id_user,
@@ -151,7 +145,7 @@ export default {
             user_name: element.nameuser,
             date: element.date,
             type: element.type,
-            motive: element.motive,
+            motive: element.motive
           });
         });
         this.removePreloader();
@@ -173,7 +167,7 @@ export default {
     closeModalJustify() {
       this.modalJustify = false;
       this.$refs["annull-table"].refresh();
-    },
-  },
+    }
+  }
 };
 </script>

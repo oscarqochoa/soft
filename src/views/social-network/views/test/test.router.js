@@ -1,6 +1,6 @@
 export default [
   {
-    path: '/socialnetwork/test',
+    path: '/socialnetwork/calendar',
     name: 'test-social-network',
     component: () => import('@/views/social-network/views/test/Test.vue'),
     meta: {

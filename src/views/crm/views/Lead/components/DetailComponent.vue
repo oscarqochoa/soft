@@ -7,10 +7,8 @@
         </b-col>
         <template v-else-if="detail && !detail.length">
           <b-col sm="6" v-bind:key="key">
-            <b-form-group
-              :label="detail.label"
-            >
-              <span>{{ detail.value }}</span>
+            <b-form-group :label="detail.label">
+              <span v-html="detail.value"></span>
             </b-form-group>
           </b-col>
         </template>
@@ -20,51 +18,49 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapState } from "vuex";
 
-import { mapActions, mapGetters, mapState,  } from 'vuex'
+import Ripple from "vue-ripple-directive";
 
-import Ripple from 'vue-ripple-directive'
-
-import DetailComponent from '@/views/crm/views/Lead/components/DetailComponent.vue'
+import DetailComponent from "@/views/crm/views/Lead/components/DetailComponent.vue";
 
 export default {
-  name: 'DetailComponent',
+  name: "DetailComponent",
   components: {
-    DetailComponent,
+    DetailComponent
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token'
+      currentUser: "auth/currentUser",
+      token: "auth/token"
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
     })
   },
-  created () {
-    this.authUser = this.currentUser
+  created() {
+    this.authUser = this.currentUser;
   },
-  data () {
+  data() {
     return {
-      authUser: {},
-    }
+      authUser: {}
+    };
   },
   directives: { Ripple },
   methods: {
     ...mapActions({
       /* A_GET_TEMPLATES: 'CrmTemplateStore/A_GET_TEMPLATES' */
     }),
-    includeElements (detail) {
-      let result = 0
+    includeElements(detail) {
+      let result = 0;
       detail.forEach(element => {
-        if (element !== null)
-          result++
-      })
-      return result
+        if (element !== null) result++;
+      });
+      return result;
     }
   },
-  mounted () {},
+  mounted() {},
   props: {
     modul: {
       type: Number,
@@ -73,25 +69,25 @@ export default {
     details: {
       type: Array,
       required: true
-    },
+    }
   },
-  setup() {},
-}
+  setup() {}
+};
 </script>
 
 <style lang="scss">
-  .details {
-    .form-group {
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(80, 85, 99, 0.2);
-      height: calc(100% - 1rem);
-      > div {
-        min-height: 19.56px;
-      }
-    }
-    .col-form-label {
-      font-weight: 600;
-      font-size: 1rem;
+.details {
+  .form-group {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(80, 85, 99, 0.2);
+    height: calc(100% - 1rem);
+    > div {
+      min-height: 19.56px;
     }
   }
+  .col-form-label {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+}
 </style>

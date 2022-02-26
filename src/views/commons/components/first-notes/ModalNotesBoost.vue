@@ -6,6 +6,7 @@
       header-class="p-0"
       header-bg-variant="transparent"
       scrollable
+      modal-class="modal-primary"
       @hide="hideModal(false)"
     >
       <template #modal-header>
@@ -217,28 +218,22 @@
             </ValidationProvider>
           </b-col>
           <b-col lg="6">
-            <ValidationProvider
-              v-slot="{errors}"
-              name="OriginCountry"
-              rules="required"
+            <b-form-group
+              label-class="font-weight-bolder"
+              label="Origin Country"
+              label-for="OriginCountry"
             >
-              <b-form-group
-                label-class="font-weight-bolder"
-                label="Origin Country"
-                label-for="OriginCountry"
-              >
-                <v-select
-                  v-model="note.originCountry"
-                  :dir="'ltr'"
-                  transition="multiple"
-                  label="name"
-                  :options="countryOptions"
-                  :reduce="value => value.id"
-                  :class="{'border-danger rounded': errors[0]}"
-                  :disabled="disabledNote"
-                />
-              </b-form-group>
-            </ValidationProvider>
+              <v-select
+                v-model="note.originCountry"
+                :dir="'ltr'"
+                :clearable="false"
+                transition="multiple"
+                label="name"
+                :options="countryOptions"
+                :reduce="value => value.id"
+                :disabled="disabledNote"
+              />
+            </b-form-group>
           </b-col>
         </b-row>
 
@@ -543,14 +538,15 @@ export default {
     }
   },
 
-  created() {
-    this.getFirstNote()
-    this.getListTypeGoal()
-    this.getCountrys()
+  async created() {
+    this.addPreloader()
+    await this.getFirstNote()
+    await this.getListTypeGoal()
+    await this.getCountrys()
     this.getOriginCountry()
+    this.removePreloader()
   },
 
-  mounted() {},
 
   computed: {
     ...mapGetters({
@@ -671,7 +667,7 @@ export default {
         },
         {
           number: 1055,
-          value: (this.note.file = this.note.fileName ? `SM/${this.noteInfo.idLead}/${this.note.fileName}` : null),
+          value: (this.note.file = this.note.fileName ? `SM/${this.noteInfo.idLead}/${this.note.fileName}` : 0),
         },
       )
       return note
@@ -752,7 +748,7 @@ export default {
           if (answer.question_id == 1053) this.note.information = answer.answer
           if (answer.question_id == 1054) this.note.recommendations = answer.answer
           if (answer.question_id == 1055) {
-            if (answer.answer != 0) {
+            if (answer.url != 0) {
               this.note.fileAudio = answer.answer
               this.note.fileName = answer.url.split('/')[2]
             }
@@ -800,8 +796,8 @@ export default {
     },
 
     deleteAudio() {
-      this.note.fileAudio = null
-      this.note.fileName = null
+      this.note.fileAudio = ""
+      this.note.fileName = ""
     },
 
     // Hide Modal

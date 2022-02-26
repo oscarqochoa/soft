@@ -5,6 +5,7 @@
     header-class="p-0"
     header-bg-variant="transparent"
     scrollable
+    modal-class="modal-primary"
     @hide="hideModal(false)"
   >
     <template #modal-header>
@@ -58,25 +59,19 @@
           </validation-provider>
         </b-col>
         <b-col>
-          <validation-provider
-            v-slot="{ errors }"
-            name="originCountry"
-            rules="required"
+          <b-form-group
+            label="Origin Country"
+            label-class="font-weight-bolder"
           >
-            <b-form-group
-              label="Origin Country"
-              label-class="font-weight-bolder"
-            >
-              <v-select
-                v-model="note.country.value"
-                :class="{'border-danger rounded': errors[0]}"
-                :disabled="disabled"
-                label="name"
-                :reduce="value => value.id"
-                :options="note.country.options"
-              />
-            </b-form-group>
-          </validation-provider>
+            <v-select
+              v-model="note.country.value"
+              :clearable="false"
+              :disabled="disabled"
+              label="name"
+              :reduce="value => value.id"
+              :options="note.country.options"
+            />
+          </b-form-group>
         </b-col>
       </b-row>
       <b-row>
@@ -147,7 +142,7 @@
           >
             <b-row class="d-flex align-items-center justify-content-between">
               <b-col
-                class="d-flex"
+                class="d-flex align-items-center justify-content-between"
                 :class="{'aaa' : note.facebook.value !== 'Yes'}"
                 cols="4"
               >
@@ -266,14 +261,15 @@
           >
             <b-row class="d-flex align-items-center justify-content-between">
               <b-col
-                cols="6"
-                class="d-flex"
+                cols="4"
+                class="d-flex align-items-center justify-content-between"
                 :class="{'aaa' : note.website.value !== 'Yes'}"
               >
                 <b-form-group
                   label-class="font-weight-bolder"
                   label="Website Link"
                   class="mr-1"
+                  style="width: 50% !important;"
                 >
                   <b-form-input
                     v-model="note.website.link"
@@ -283,6 +279,7 @@
                 <b-form-group
                   label-class="font-weight-bolder"
                   label="Website Type"
+                  style="width: 50% !important;"
                 >
                   <b-form-select
                     v-model="note.website.type"
@@ -732,10 +729,12 @@ export default {
     },
   },
   async created() {
+    this.addPreloader()
     await this.getFirstNote()
     await this.listTypeBusiness()
     await this.getCountries()
     this.note.country.value = this.noteInfo.originCountry
+    this.removePreloader()
   },
   methods: {
     async saveNotesIncomplete() {

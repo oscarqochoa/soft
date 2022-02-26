@@ -1,68 +1,91 @@
 <template>
   <div class="w-100">
-    <b-button-close
-      style="transform: translate(-12px, 4px)"
-      @click="close"
-    />
+    <b-button-close style="transform: translate(-12px, 4px)" @click="close" />
     <b-container fluid>
       <b-row class="text-left bg-primary px-3 py-1">
-        <h3
-          class="font-weight-bolder text-white"
-        >
+        <h3 class="font-weight-bolder text-white">
           {{ titleModal }}
         </h3>
       </b-row>
       <b-row class="mt-1 px-2">
-        <b-col
-          v-if="!modalAddShow && !modalAddLead"
-          :cols="twoPerRow ? 6 : 3"
-        >
+        <b-col v-if="!modalAddShow && !modalAddLead" :cols="twoPerRow ? 6 : 3">
           <h5>Program</h5>
-          <p class="bg-info rounded text-white font-medium-1 text-center py10">
+          <p
+            class="
+              rounded
+              text-primary
+              border-primary
+              font-medium-1
+              text-center
+              py10
+            "
+          >
             {{ sales.program }}
           </p>
         </b-col>
         <b-col :cols="twoPerRow ? 6 : 3">
           <h5>Client</h5>
-          <p class="bg-info rounded text-white font-medium-1 text-center py10">
+          <p
+            class="
+              rounded
+              text-primary
+              border-primary
+              font-medium-1
+              text-center
+              py10
+            "
+          >
             {{ sales.client }}
           </p>
         </b-col>
-        <b-col
-          v-if="modalAddShow"
-          :cols="twoPerRow ? 6 : 3"
-        >
+        <b-col v-if="modalAddShow" :cols="twoPerRow ? 6 : 3">
           <h5>Type</h5>
-          <p class="bg-info rounded text-white font-medium-1 text-center py10">
+          <p
+            class="
+              rounded
+              text-primary
+              border-primary
+              font-medium-1
+              text-center
+              py10
+            "
+          >
             {{ typeAddChange }} SERVICES
           </p>
         </b-col>
-        <b-col
-          v-if="modalAddShow"
-          :cols="twoPerRow ? 6 : 3"
-        >
+        <b-col v-if="modalAddShow" :cols="twoPerRow ? 6 : 3">
           <h5>Origin</h5>
-          <p class="bg-info rounded text-white font-medium-1 text-center py10">
+          <p
+            class="
+              rounded
+              text-primary
+              border-primary
+              font-medium-1
+              text-center
+              py10
+            "
+          >
             {{ sales.program_first }}
           </p>
         </b-col>
-        <b-col
-          v-if="modalAddShow"
-          :cols="twoPerRow ? 6 : 3"
-        >
+        <b-col v-if="modalAddShow" :cols="twoPerRow ? 6 : 3">
           <h5>Destination</h5>
-          <p class="bg-info rounded text-white font-medium-1 text-center py10">
+          <p
+            class="
+              rounded
+              text-primary
+              border-primary
+              font-medium-1
+              text-center
+              py10
+            "
+          >
             {{ sales.program }}
           </p>
         </b-col>
 
-        <div
-          v-if="modalAddService || modalAddLead"
-        >
-          <div
-            class="form-group"
-            style="margin: 0px 10px;"
-          >
+        <div v-if="modalAddService || modalAddLead">
+          <div class="form-group" style="margin: 0px 10px">
             <label class="mb-0">Select Program</label>
             <select
               v-model="program"
@@ -74,34 +97,25 @@
                 v-for="(item, index) in programsAll"
                 :key="index"
                 :value="item.id"
-              >{{ item.value }}</option>
+              >
+                {{ item.value }}
+              </option>
             </select>
           </div>
-          <div
-            class="form-group"
-            style="margin: 0px 10px;"
-          >
+          <div class="form-group" style="margin: 0px 10px">
             <label class="mb-0">Catcher:</label>
-            <select
-              id
-              v-model="captured"
-              name
-              class="input-form"
-            >
-              <option value="1">
-                CEO
-              </option>
+            <select id v-model="captured" name class="input-form">
+              <option value="1">CEO</option>
               <option
                 v-for="(item, index) in usersServices"
                 :key="index"
                 :value="item.id"
-              >{{ item.user_name }}</option>
+              >
+                {{ item.user_name }}
+              </option>
             </select>
           </div>
-          <div
-            class="form-group"
-            style="margin: 0px 10px;"
-          >
+          <div class="form-group" style="margin: 0px 10px">
             <label class="mb-0">Seller:</label>
             <select
               id
@@ -110,14 +124,14 @@
               class="input-form"
               :disabled="rolAdvisor"
             >
-              <option value="1">
-                CEO
-              </option>
+              <option value="1">CEO</option>
               <option
                 v-for="(item, index) in usersServices"
                 :key="index"
                 :value="item.id"
-              >{{ item.user_name }}</option>
+              >
+                {{ item.user_name }}
+              </option>
             </select>
           </div>
         </div>
@@ -127,7 +141,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
   props: {
@@ -148,18 +162,18 @@ export default {
     headerS: {
       type: Object,
       default: () => ({
-        program: '',
-        seller: '',
-        captured: '',
+        program: "",
+        seller: "",
+        captured: "",
       }),
     },
     sales: {
       type: Object,
       default: () => ({
-        program: '',
-        client: '',
-        program_first: '',
-        typeAdd: '',
+        program: "",
+        client: "",
+        program_first: "",
+        typeAdd: "",
       }),
     },
     twoPerRow: {
@@ -171,82 +185,87 @@ export default {
   data() {
     return {
       programsall: [],
-      program: '',
+      program: "",
       sellers: [],
-      seller: '',
+      seller: "",
       captureds: [],
-      captured: '',
+      captured: "",
       capturedConfirm: true,
       sellerConfirm: true,
-    }
+    };
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
+      currentUser: "auth/currentUser",
     }),
     titleModal() {
       if (this.typeModal === 1) {
-        return 'Complete Rates'
-      } if (this.typeModal === 2 || this.typeModal === 5) {
-        return 'Detail Of Sale'
-      } if (this.typeModal === 3) {
-        return 'Add Service'
-      } if (this.typeModal === 4) {
-        return 'Change Services'
-      } if (this.typeModal === 6) {
-        return 'Add Sale'
+        return "Complete Rates";
       }
-      return ''
+      if (this.typeModal === 2 || this.typeModal === 5) {
+        return "Detail Of Sale";
+      }
+      if (this.typeModal === 3) {
+        return "Add Service";
+      }
+      if (this.typeModal === 4) {
+        return "Change Services";
+      }
+      if (this.typeModal === 6) {
+        return "Add Sale";
+      }
+      return "";
     },
     modalAddService() {
-      return this.typeModal === 3 || this.typeModal === 4
+      return this.typeModal === 3 || this.typeModal === 4;
     },
     modalAddLead() {
-      return this.typeModal === 6
+      return this.typeModal === 6;
     },
     modalAddShow() {
-      return this.typeModal === 5
+      return this.typeModal === 5;
     },
     modul() {
-      return this.currentUser.modul_id
+      return this.currentUser.modul_id;
     },
     rolAdvisor() {
-      return this.currentUser.role_id === 3
+      return this.currentUser.role_id === 3;
     },
     typeAddChange() {
       if (this.sales.typeAdd === 1) {
-        return 'ADD'
+        return "ADD";
       }
-      return 'CHANGE'
+      return "CHANGE";
     },
   },
   watch: {
     captured(newValue, oldValue) {
       if (!oldValue) {
-        this.changeProgram()
+        this.changeProgram();
       }
     },
     seller(newValue, oldValue) {
       if (!oldValue) {
-        this.changeProgram()
+        this.changeProgram();
       }
     },
   },
   created() {
-    if (!this.sales.program_first) this.sales.program_first = this.sales.first_program
+    if (!this.sales.program_first)
+      this.sales.program_first = this.sales.first_program;
   },
   mounted() {
     if (this.modalAddService || this.modalAddLead) {
-      this.program = this.headerS.program
-      this.seller = this.headerS.seller
-      this.captured = this.headerS.captured
+      this.program = this.headerS.program;
+      this.seller = this.headerS.seller;
+      this.captured = this.headerS.captured;
     }
 
-    if (this.rolAdvisor) this.seller = this.currentUser.user_id
+    if (this.rolAdvisor) this.seller = this.currentUser.user_id;
   },
   methods: {
     close() {
-      this.$emit('close')
+      this.$emit("close");
     },
     changeProgram() {
       if (this.program && this.seller && this.captured) {
@@ -254,16 +273,16 @@ export default {
           program: this.program,
           seller: this.seller,
           captured: this.captured,
-        }
-        this.$emit('changeProgram', headerS)
+        };
+        this.$emit("changeProgram", headerS);
       }
     },
   },
-}
+};
 </script>
 
 <style>
-.py10{
+.py10 {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
 }

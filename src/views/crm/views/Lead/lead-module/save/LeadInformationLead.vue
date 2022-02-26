@@ -22,7 +22,9 @@
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="label"
               :options="G_SELLERS"
+              :clearable="false"
               :reduce="(el) => el.id"
+              :disabled="isClient"
             />
           </b-form-group>
         </validation-provider>
@@ -44,6 +46,7 @@
                 label="label"
                 :options="G_STATUS_LEADS"
                 style="width: 1%; flex: 1 1 auto"
+                :clearable="false"
                 :reduce="(el) => el.id"
                 :disabled="userData.id && disabled.leadstatus_id"
               />
@@ -57,7 +60,7 @@
                     class="btn-sm"
                     @click="onSubmitFields"
                   >
-                    <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                    <feather-icon icon="SaveIcon" class="cursor-pointer" />
                   </b-button>
                 </b-input-group-append>
                 <b-input-group-append class="border-right">
@@ -66,10 +69,14 @@
                     class="btn-sm"
                     @click="toggleElement('leadstatus_id')"
                   >
+                    <feather-icon
+                      v-if="disabled.leadstatus_id"
+                      icon="Edit2Icon"
+                      class="cursor-pointer"
+                    />
                     <amg-icon
-                      :icon="
-                        disabled.leadstatus_id ? 'Edit2Icon' : 'Edit2SlashIcon'
-                      "
+                      v-else
+                      icon="Edit2SlashIcon"
                       class="cursor-pointer"
                     />
                   </b-button>
@@ -79,7 +86,7 @@
                   @click="onModalTrackingChangeOpen(9, 'STATUS(LEAD)')"
                 >
                   <b-input-group-text>
-                    <amg-icon icon="ListIcon" />
+                    <feather-icon icon="ListIcon" />
                   </b-input-group-text>
                 </b-input-group-append>
               </template>
@@ -105,6 +112,8 @@
               label="label"
               :options="G_SOURCE_LEADS"
               :reduce="(el) => el.id"
+              :clearable="false"
+              :disabled="isClient"
             />
           </b-form-group>
         </validation-provider>
@@ -125,6 +134,8 @@
               label="label"
               :options="G_SOURCE_NAMES"
               :reduce="(el) => el.id"
+              :clearable="false"
+              :disabled="isClient"
             />
           </b-form-group>
         </validation-provider>
@@ -134,7 +145,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import {
   BSidebar,
   BForm,
@@ -171,6 +182,10 @@ export default {
     userData: {
       required: true,
     },
+    typeEdit: {
+      type: String,
+      default: "lead",
+    },
   },
   data() {
     return {
@@ -193,7 +208,7 @@ export default {
       G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
     }),
     isClient() {
-      return this.typeEdit === 'client'
+      return this.typeEdit === "client";
     },
   },
   created() {
@@ -210,10 +225,15 @@ export default {
   methods: {
     ...mapActions({
       A_UPDATE_FIELDS_LEAD: "CrmLeadStore/A_UPDATE_FIELDS_LEAD",
+      A_GET_SELLERS: "CrmGlobalStore/A_GET_SELLERS",
+    }),
+    ...mapMutations({
+      M_STATUS_LEADS_CLIENT: "CrmLeadStore/M_STATUS_LEADS_CLIENT",
     }),
     setDataBlank(key) {
-      this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] =
-        Object.assign({}, this[key]);
+      this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] = {
+        ...this[key],
+      };
     },
     resetElement(key, subkey) {
       const object = this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`];
@@ -266,14 +286,15 @@ export default {
                 "CheckIcon",
                 "Successful operation"
               );
-            } else
+            } else {
               this.showToast(
                 "warning",
                 "top-right",
                 "Warning!",
                 "AlertTriangleIcon",
-                "Something went wrong." + response.message
+                `Something went wrong.${response.message}`
               );
+            }
           }
         })
         .catch((error) => {

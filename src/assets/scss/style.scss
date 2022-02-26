@@ -7,7 +7,11 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 $borderamg: #efb911;
 @import "components/card";
 @import "components/kendo";
+@import "components/vue-tree";
+@import "components/form-wizard";
+@import "components/messages";
 @import "variables/new-colors";
+@import "variables/variables";
 .client-status {
   // height: 10px;
   // width: 10px;
@@ -40,13 +44,13 @@ $borderamg: #efb911;
 }
 
 .footer-black {
-  background: #666666 !important;
+  background: #0e1d44 !important;
   color: #fff !important;
   padding: 17px !important;
 }
 
 .footer-span {
-  color: #666666;
+  color: #0e1d44;
   background: #fff;
   padding: 5px 10px;
   border-radius: 5px;
@@ -185,14 +189,8 @@ $borderamg: #efb911;
     }
   }
 }
-.dark-layout {
-  .modal-backdrop {
-    background-color: #0b1822 !important;
-  }
-}
-.modal-backdrop {
-  opacity: 0.85 !important;
-}
+
+
 
 //Modal XMD
 
@@ -217,7 +215,9 @@ $borderamg: #efb911;
   transform: translate(-12px, 4px) !important;
 }
 .hover-primary,
-.hover-important {
+.hover-important,
+.nav-dark-tabs,
+.nav-light-tabs {
   transition: 0.3s;
 }
 .hover-primary:hover {
@@ -239,30 +239,56 @@ $borderamg: #efb911;
 }
 
 .box-shadow-important {
-  box-shadow: 0 4px 8px 0 rgba($important, 0.12),
-    0 2px 4px 0 rgba($important, 0.08) !important;
+  box-shadow: 0 4px 8px 0 rgba($important, 0.12), 0 2px 4px 0 rgba($important, 0.08) !important;
 }
 
-.blue-scrollbar::-webkit-scrollbar {
-  width: 10px;
+:root{
+  --scroll-light: rgba(0, 0, 0, 0.30);
+  --scroll-dark: rgba(255, 255, 255, 0.15);
+  &.dark{
+    --scroll-light: var(--scroll-dark);
+  }
 }
 
-.blue-scrollbar::-webkit-scrollbar-track {
-  background-color: #e4e4e4;
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
   border-radius: 100px;
 }
 
-.blue-scrollbar::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   border-radius: 100px;
   border: 5px solid transparent;
-  background-color: #567cff;
+  background-color: var(--scroll-light);
 }
 
-.blue-scrollbar {
-  scrollbar-color: #d4aa70 #e4e4e4;
-  scrollbar-width: thin;
+:root {
+  scrollbar-color: var(--scroll-light) transparent;
+  scrollbar-width: auto;
 }
 
+// html.dark::-webkit-scrollbar {
+//   width: 8px;
+// }
+
+// html.dark::-webkit-scrollbar-track {
+//   background-color: rgba(255, 255, 255, 0.50);
+//   border-radius: 100px;
+// }
+
+// html.dark::-webkit-scrollbar-thumb {
+//   border-radius: 100px;
+//   border: 5px solid transparent;
+//   background-color: rgba(255, 255, 255, 0.212);
+// }
+
+// html.dark{
+// scrollbar-color: #d4aa70 #e4e4e4;
+//   scrollbar-width: thin;
+// }
 @media (max-width: 991.98px) {
   .messages-application {
     .sidebar-left {
@@ -290,7 +316,32 @@ $borderamg: #efb911;
 }
 
 .nav-pills .nav-link {
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 6px 6px 0px 0px;
+}
+.nav-pills .nav-link.active {
+  background-color: #0090e7 !important;
+}
+.nav-pills .nav-link.active.info {
+  background-color: #7032e2 !important;
+}
+
+//navs-tabs
+.nav-dark-tabs {
+  background: #2F2F31;
+}
+.nav-light-tabs {
+  background: #efefef;
+}
+
+.nav-dark-tabs:hover,
+.nav-light-tabs:hover {
+  background: rgba(0, 144, 231, 0.6);
+  color: white;
+}
+.nav-dark-tabs:hover.sub-tab,
+.nav-light-tabs:hover.sub-tab {
+  background: rgba(143, 95, 232, 0.6);
+  color: white;
 }
 
 .border-bottom-tab {
@@ -300,4 +351,79 @@ $borderamg: #efb911;
 .table td,
 .table th {
   vertical-align: top !important;
+}
+
+.nav-pills .nav-link.active {
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.border-table-radius {
+  border-radius: 0px 0px 6px 6px !important;
+}
+.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu:not(.expanded) .navigation li.active a {
+  background: linear-gradient(118deg, #0090e7, rgba(0, 144, 231, 0.7)) !important;
+  color: #fff !important;
+}
+
+// Only for schedules sidebar
+.b-sidebar.sidebar-schedules {
+  width: 40% !important;
+}
+//forms dark
+/* [dir] .dark-layout input.form-control:not(:focus) {
+  border-color: #ffffff !important;
+}
+[dir] .dark-layout .vs__dropdown-toggle {
+  border-color: #ffffff !important;
+}
+
+[dir] .dark-layout textarea.form-control:not(:focus) {
+  border-color: #ffffff;
+} */
+
+// Only for madals of sales made (Initial Payment)
+#crm-sm-modal-initial-payment,
+#crm-sm-modal-contract-fee {
+  .modal-body {
+    padding: 1rem 0rem !important;
+    overflow-x: hidden;
+
+    .margin-0 {
+      margin-right: 0rem !important;
+      margin-left: 0rem !important;
+    }
+  }
+}
+
+.modal-backdrop {
+  backdrop-filter: blur(11px) !important;
+  opacity: 0.80;
+}
+
+
+//header dark without box shadow
+
+
+
+
+.dark-layout{
+  .header-navbar {
+    box-shadow: none !important;
+  }
+  .card {
+    box-shadow: none !important;
+  }
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.80) !important;
+    backdrop-filter: blur(11px) !important;
+  }
+  .col-form-label{
+    color: rgba(255, 255, 255, 0.6) !important;
+  }
+  .input-group .input-group-text{
+    border-color: $theme-dark-input-border-color;
+  }
+  .border-hr{
+    border-color: $theme-dark-input-placeholder-color !important;
+  }
 }

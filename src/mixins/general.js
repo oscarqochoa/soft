@@ -1,20 +1,52 @@
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+import { useWindowSize } from "@vueuse/core";
 
 export default {
   data() {
     return { baseUrl: process.env.VUE_APP_BASE_URL_ASSETS };
   },
   computed: {
-    bgLightDark() {
+    screenWidth() {
+      const { width } = useWindowSize();
+      return width.value;
+    },
+
+    screenHeight() {
+      const { height } = useWindowSize();
+      return height;
+    },
+
+    bgTabsNavs() {
       //getters
       return this.$store.getters["appConfig/skin"] === "dark"
-        ? "bg-dark"
-        : "bg-light";
+        ? "nav-dark-tabs"
+        : "nav-light-tabs";
     },
     textLink() {
       return this.$store.getters["appConfig/skin"] === "dark"
         ? "text-warning font-weight-bolder"
         : "text-primary font-weight-bolder";
+    },
+    bgLightDark() {
+      return this.$store.getters["appConfig/skin"] === "dark"
+        ? "bg-dark text-white"
+        : "bg-white";
+    },
+    isDarkSkin() {
+      return this.$store.getters["appConfig/skin"] === "dark";
+    },
+    isLightSkin() {
+      return this.$store.getters["appConfig/skin"] === "light";
+    },
+    isBigWindow() {
+      return this.$store.getters["app/bigWindow"];
+    },
+
+    isSupervisor() {
+      return this.$store.getters["auth/isSupervisor"];
+    },
+    isCeo() {
+      return this.$store.getters["auth/isCeo"];
     },
   },
   methods: {
@@ -136,6 +168,30 @@ export default {
           return "quality";
       }
     },
+    /* GENERIC TOAST */
+    showGenericToast({
+      variant = "success",
+      position = "top-right",
+      title = "Congratulations",
+      icon = "CheckIcon",
+      text = "You've successfully done it!",
+    }) {
+      this.$toast(
+        {
+          component: ToastificationContent,
+          props: {
+            title,
+            icon,
+            text,
+            variant,
+          },
+        },
+        {
+          position,
+        }
+      );
+    },
+
     /* TOAST */
     showToast(
       variant = "success",
@@ -163,7 +219,8 @@ export default {
     /** *** SWALS **** */
     showConfirmSwal(
       title = "Are you sure?",
-      text = "You won't be able to revert this!"
+      text = "You won't be able to revert this!",
+      config = {},
     ) {
       return this.$swal({
         title,
@@ -177,19 +234,7 @@ export default {
           confirmButton: "btn btn-primary mr-1",
           cancelButton: "btn btn-outline-danger  ",
         },
-      });
-    },
-
-    showSwalSuccess(title, text, icon, html) {
-      this.$swal({
-        title,
-        text,
-        icon,
-        html,
-        customClass: {
-          confirmButton: "btn btn-primary",
-        },
-        buttonsStyling: false,
+        ...config,
       });
     },
     showSuccessSwal(
@@ -236,9 +281,12 @@ export default {
         buttonsStyling: false,
       });
     },
-    showErrorSwal(error) {
+    showErrorSwal(
+      error,
+      title = "Sorry, there was an error... try again or contact support !!!"
+    ) {
       this.$swal({
-        html: `<h4><b>Sorry, there was an error... try again or contact support !!!</b></h4> <br/> <span class="font-small-3 text-danger">${error}</span>`,
+        html: `<h4><b>${title}</b></h4> <br/> <span class="font-small-3 text-danger">${error}</span>`,
         imageUrl: "/assets/images/icons/swal/error.svg",
         imageWidth: 70,
         confirmButtonText: "Ok",
@@ -246,22 +294,6 @@ export default {
           confirmButton: "btn btn-danger",
         },
         buttonsStyling: false,
-      });
-    },
-
-    showSwalGeneric(title, text, icon, config = {}) {
-      return this.$swal({
-        icon,
-        title,
-        text,
-        showCancelButton: true,
-        buttonsStyling: false,
-        confirmButtonText: "Yes",
-        customClass: {
-          confirmButton: "btn btn-primary  mr-1 ",
-          cancelButton: "btn btn-outline-danger  ",
-        },
-        ...config,
       });
     },
 

@@ -6,17 +6,20 @@
           <template v-if="userData.id">
             <!-- SSN -->
             <validation-provider
-              v-if="hideSSN || userData.ssn || (!userData.ssn && !userData.itin)"
+              v-if="
+                hideSSN || userData.ssn || (!userData.ssn && !userData.itin)
+              "
               name="SSN"
             >
               <b-form-group label="SSN" label-for="ssn" label-cols-md="2">
                 <b-input-group>
+                  <span class="form-control bg-transparent" v-if="disabled.ssn">{{encryptedSSN}}</span>
                   <b-form-input
+                    v-else
                     id="ssn"
                     ref="ssn"
                     v-model="userData.ssn"
                     autofocus
-                    :disabled="disabled.ssn"
                     trim
                     maxlength="11"
                     v-mask="'###-##-####'"
@@ -29,16 +32,20 @@
                       :disabled="disabled.saveSSN"
                       @click="onSubmitFields('ssn', 4)"
                     >
-                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                      <feather-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
-                  <b-input-group-append class="border-right">
+                  <b-input-group-append
+                    v-if="isCeo || isSupervisor || !userData.ssn"
+                    class="border-right"
+                  >
                     <b-button
                       variant="outline-warning"
                       class="btn-sm"
                       @click="toggleElement('ssn')"
                     >
-                      <amg-icon :icon="disabled.ssn ? 'Edit2Icon' : 'Edit2SlashIcon'" />
+                      <feather-icon v-if="disabled.ssn" icon="Edit2Icon" class="cursor-pointer" />
+                      <amg-icon v-else icon="Edit2SlashIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append
@@ -46,7 +53,7 @@
                     @click="onModalTrackingChangeOpen(4, 'SSN')"
                   >
                     <b-input-group-text>
-                      <amg-icon icon="ListIcon" />
+                      <feather-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                   <b-input-group-append
@@ -54,7 +61,7 @@
                     class="border-left cursor-pointer"
                     @click="onAddSocial"
                   >
-                    <amg-icon :icon="addSocial ? 'MinusIcon' : 'PlusIcon'" />
+                    <feather-icon :icon="addSocial ? 'MinusIcon' : 'PlusIcon'" />
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
@@ -63,12 +70,13 @@
             <validation-provider v-if="hideITIN || userData.itin" name="ITIN">
               <b-form-group label="ITIN" label-for="itin" label-cols-md="2">
                 <b-input-group>
+                  <span class="form-control bg-transparent" v-if="disabled.itin">{{encryptedITIN}}</span>
                   <b-form-input
+                    v-else
                     id="itin"
                     ref="itin"
                     v-model="userData.itin"
                     autofocus
-                    :disabled="disabled.itin"
                     trim
                     maxlength="11"
                     v-mask="'###-##-####'"
@@ -81,19 +89,20 @@
                       :disabled="disabled.saveITIN"
                       @click="onSubmitFields('itin', 5)"
                     >
-                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                      <feather-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
-                  <b-input-group-append class="border-right">
+                  <b-input-group-append
+                    v-if="isCeo || isSupervisor || !userData.itin"
+                    class="border-right"
+                  >
                     <b-button
                       variant="outline-warning"
                       class="btn-sm"
                       @click="toggleElement('itin')"
                     >
-                      <amg-icon
-                        :icon="disabled.itin ? 'Edit2Icon' : 'Edit2SlashIcon'"
-                        class="cursor-pointer"
-                      />
+                      <feather-icon v-if="disabled.itin" icon="Edit2Icon" class="cursor-pointer" />
+                      <amg-icon v-else icon="Edit2SlashIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append
@@ -101,31 +110,36 @@
                     @click="onModalTrackingChangeOpen(5, 'ITIN')"
                   >
                     <b-input-group-text>
-                      <amg-icon icon="ListIcon" />
+                      <feather-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                   <b-input-group-append
                     v-if="!hideSSN && !userData.ssn"
                     is-text
-                    class="cursor-pointer"
+                    class="cursor-pointer border-left"
                     variant="warning"
                     @click="onAddSocial"
                   >
-                    <amg-icon :icon="addSocial ? 'MinusIcon' : 'PlusIcon'" />
+                    <feather-icon :icon="addSocial ? 'MinusIcon' : 'PlusIcon'" />
                   </b-input-group-append>
                 </b-input-group>
               </b-form-group>
             </validation-provider>
             <!-- CPN -->
-            <validation-provider v-if="hideSSN || (userData.ssn && userData.itin)" name="CPN">
+            <validation-provider
+              v-if="hideSSN || (userData.ssn && userData.itin) || (userData.other) || !disabled.other"
+              name="CPN"
+            >
               <b-form-group label="CPN" label-for="cpn" label-cols-md="2">
                 <b-input-group>
+                  <span class="form-control bg-transparent" v-if="disabled.other">{{encryptedCPN}}</span>
+
                   <b-form-input
+                    v-else
                     id="cpn"
                     ref="cpn"
                     v-model="userData.other"
                     autofocus
-                    :disabled="disabled.other"
                     trim
                     maxlength="11"
                     v-mask="'###-##-####'"
@@ -138,19 +152,20 @@
                       :disabled="disabled.saveCPN"
                       @click="onSubmitFields('cpn', 6, 'other')"
                     >
-                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                      <feather-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
-                  <b-input-group-append class="border-right">
+                  <b-input-group-append
+                    v-if="isCeo || isSupervisor || !userData.other"
+                    class="border-right"
+                  >
                     <b-button
                       variant="outline-warning"
                       class="btn-sm"
                       @click="toggleElement('other')"
                     >
-                      <amg-icon
-                        :icon="disabled.other ? 'Edit2Icon' : 'Edit2SlashIcon'"
-                        class="cursor-pointer"
-                      />
+                      <feather-icon v-if="disabled.other" icon="Edit2Icon" class="cursor-pointer" />
+                      <amg-icon v-else icon="Edit2SlashIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append
@@ -158,7 +173,7 @@
                     @click="onModalTrackingChangeOpen(6, 'CPN')"
                   >
                     <b-input-group-text>
-                      <amg-icon icon="ListIcon" />
+                      <feather-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                 </b-input-group>
@@ -184,7 +199,7 @@
                     @input="security"
                   />
                   <b-input-group-append is-text variant="warning">
-                    <amg-icon
+                    <feather-icon
                       :icon="addSocial ? 'MinusIcon' : 'PlusIcon'"
                       class="cursor-pointer"
                       @click="toggleSocial"
@@ -254,7 +269,7 @@
                       class="btn-sm"
                       @click="onSubmitFields('phoneh', 2, 'phone')"
                     >
-                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                      <feather-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -263,10 +278,8 @@
                       class="btn-sm"
                       @click="toggleElement('phone')"
                     >
-                      <amg-icon
-                        :icon="disabled.phone ? 'Edit2Icon' : 'Edit2SlashIcon'"
-                        class="cursor-pointer"
-                      />
+                      <feather-icon v-if="disabled.phone" icon="Edit2Icon" class="cursor-pointer" />
+                      <amg-icon v-else icon="Edit2SlashIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append
@@ -274,7 +287,7 @@
                     @click="onModalTrackingChangeOpen(2, 'PHONE (H)')"
                   >
                     <b-input-group-text>
-                      <amg-icon icon="ListIcon" />
+                      <feather-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                 </template>
@@ -282,7 +295,7 @@
             </b-form-group>
           </validation-provider>
           <!-- Mobile -->
-          <validation-provider v-slot="{errors}" name="Mobile" rules="required">
+          <validation-provider v-slot="{ errors }" name="Mobile" rules="required">
             <b-form-group label="Phone (M)" label-for="mobile">
               <b-input-group>
                 <b-form-input
@@ -301,7 +314,7 @@
                       class="btn-sm"
                       @click="onSubmitFields('phonem', 3, 'mobile')"
                     >
-                      <amg-icon icon="SaveIcon" class="cursor-pointer" />
+                      <feather-icon icon="SaveIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append class="border-right">
@@ -310,10 +323,8 @@
                       class="btn-sm"
                       @click="toggleElement('mobile')"
                     >
-                      <amg-icon
-                        :icon="disabled.mobile ? 'Edit2Icon' : 'Edit2SlashIcon'"
-                        class="cursor-pointer"
-                      />
+                      <feather-icon v-if="disabled.mobile" icon="Edit2Icon" class="cursor-pointer" />
+                      <amg-icon v-else icon="Edit2SlashIcon" class="cursor-pointer" />
                     </b-button>
                   </b-input-group-append>
                   <b-input-group-append
@@ -321,7 +332,7 @@
                     @click="onModalTrackingChangeOpen(3, 'PHONE (M)')"
                   >
                     <b-input-group-text>
-                      <amg-icon icon="ListIcon" />
+                      <feather-icon icon="ListIcon" />
                     </b-input-group-text>
                   </b-input-group-append>
                 </template>
@@ -356,7 +367,7 @@
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="label"
               :options="G_COUNTRIES"
-              :reduce="el => el.id"
+              :reduce="(el) => el.id"
               :clearable="false"
             />
           </b-form-group>
@@ -366,7 +377,9 @@
         v-if="hideWithOtherAddress"
         :address-data="userData.otherAddress"
         @onSubmitAddress="onSubmitAnotherAddress"
-        @onModalTrackingChangeOpen="onModalTrackingChangeOpen(8, 'OTHER ADDRESS')"
+        @onModalTrackingChangeOpen="
+          onModalTrackingChangeOpen(8, 'OTHER ADDRESS')
+        "
       />
     </b-col>
   </b-row>
@@ -454,6 +467,16 @@ export default {
     statusLabs() {
       return this.labssn ? "SSN" : "ITIN";
     },
+    encryptedSSN() {
+      return this.encryptDocument(this.userData.ssn);
+    },
+    encryptedITIN() {
+      return this.encryptDocument(this.userData.itin);
+    },
+    encryptedCPN() {
+      return this.encryptDocument(this.userData.other);
+    },
+
     ...mapGetters({
       G_COUNTRIES: "CrmGlobalStore/G_COUNTRIES"
     })
@@ -478,6 +501,9 @@ export default {
       A_VALID_UNIQUE_CPN: "CrmLeadStore/A_VALID_UNIQUE_CPN",
       A_UPDATE_FIELDS_LEAD: "CrmLeadStore/A_UPDATE_FIELDS_LEAD"
     }),
+    encryptDocument(document) {
+      return document ? `xxx-xx-${document.substr(7)}` : "";
+    },
     setDataBlank(key) {
       this[
         `blank${key.charAt(0).toUpperCase()}${key.slice(1)}`
@@ -561,23 +587,19 @@ export default {
           : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "");
         if (this.userData.mobile.length == 14) {
           this.isPreloading(true);
-          this.errorFormatMobile = false;
           const response = await this.A_UNIQUE_MOBILE({
             mobile: this.userData.mobile
           });
           if (response.status == 200) {
-            if (response.data.code == "mobile") {
-              this.showSwalGeneric(
-                "Are you sure?",
-                `The phone number already exists: ${response.data.message}`,
-                "warning",
-                {
-                  confirmButtonText:
-                    this.typeForm == "newLead"
-                      ? "REQUEST LEAD TO SOCIAL NETWORK"
-                      : "OK"
-                }
-              )
+            console.log(response);
+            if (response.data.error_code == "MOBILE_EXISTS") {
+              console.log("yaaaaa");
+              this.showConfirmSwal("Are you sure?", response.data.message, {
+                confirmButtonText:
+                  this.typeForm == "newLead"
+                    ? "REQUEST LEAD TO SOCIAL NETWORK"
+                    : "OK"
+              })
                 .then(async result => {
                   if (result.value && this.typeForm == "newLead") {
                     this.isPreloading(true);

@@ -13,16 +13,13 @@
             <b-media no-body>
               <b-media-aside class="mr-2">
                 <b-avatar
-                  :class="
-                    notification.status == 1
-                      ? ''
-                      : 'cursor-pointer'"
+                  :class="notification.status == 1 ? '' : 'cursor-pointer'"
                   size="30"
                   :variant="
                     notification.status == 1 ? 'light-primary' : 'primary'
                   "
                 >
-                  <amg-icon
+                  <feather-icon
                     size="15"
                     :icon="
                       notification.type == 0
@@ -42,13 +39,20 @@
                 <b-link
                   :class="[
                     'font-weight-bold mb-0 h5',
-                    notification.status == 0 ? (skin=='dark'?'text-light':'text-dark') : '',
+                    notification.status == 0
+                      ? skin == 'dark'
+                        ? 'text-light'
+                        : 'text-dark'
+                      : '',
                   ]"
                   class="d-flex"
                   :to="notification.link"
                 >
                   <p v-html="notification.notification"></p>
-                  <amg-icon style="margin-left: 4px;margin-top: 3px;" icon="ExternalLinkIcon"></amg-icon>
+                  <feather-icon
+                    style="margin-left: 4px; margin-top: 3px"
+                    icon="ExternalLinkIcon"
+                  ></feather-icon>
                 </b-link>
               </b-media-body>
             </b-media>
@@ -67,7 +71,7 @@
                 <b-skeleton type="avatar" size="30px"></b-skeleton>
               </b-media-aside>
               <b-media-body class="my-auto">
-                <b-skeleton style="margin-top: 9px;"></b-skeleton>
+                <b-skeleton style="margin-top: 9px"></b-skeleton>
               </b-media-body>
             </b-media>
             <small></small>
@@ -82,9 +86,10 @@
           sm="6"
           class="d-flex align-items-center justify-content-center justify-content-sm-start"
         >
-          <span
-            class="text-muted"
-          >Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries</span>
+          <span class="text-muted"
+            >Showing {{ startPage }} to {{ toPage }} of
+            {{ totalData }} entries</span
+          >
         </b-col>
         <!-- Pagination -->
         <b-col
@@ -128,35 +133,35 @@ export default {
       totalData: 0,
       startPage: 0,
       toPage: 0,
-      loading: false
+      loading: false,
     };
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      skin: "appConfig/skin"
+      skin: "appConfig/skin",
     }),
     ...mapState({
-      S_ALL_USER_NOTIFICATIONS: state =>
-        state.NotificationStore.S_ALL_USER_NOTIFICATIONS
-    })
+      S_ALL_USER_NOTIFICATIONS: (state) =>
+        state.NotificationStore.S_ALL_USER_NOTIFICATIONS,
+    }),
   },
   methods: {
     ...mapActions({
       A_GET_ALL_USER_NOTIFICATIONS:
         "NotificationStore/A_GET_ALL_USER_NOTIFICATIONS",
-      A_UPDATE_NOTIFICATION: "NotificationStore/A_UPDATE_NOTIFICATION"
+      A_UPDATE_NOTIFICATION: "NotificationStore/A_UPDATE_NOTIFICATION",
     }),
     ...mapMutations({
       DECREASE_NOTIFICATION_COUNTER:
-        "NotificationStore/DECREASE_NOTIFICATION_COUNTER"
+        "NotificationStore/DECREASE_NOTIFICATION_COUNTER",
     }),
     async getAllUserNotifications(page = 1) {
       this.loading = true;
       try {
         const data = await this.A_GET_ALL_USER_NOTIFICATIONS({
           id: this.currentUser.user_id,
-          page
+          page,
         });
         this.currentPage = data.current_page;
         this.perPage = data.per_page;
@@ -172,7 +177,7 @@ export default {
     async updateNotification(notification) {
       try {
         await this.A_UPDATE_NOTIFICATION({
-          id: notification.id
+          id: notification.id,
         });
         notification.status = 1;
         this.DECREASE_NOTIFICATION_COUNTER();
@@ -182,17 +187,17 @@ export default {
     },
     closeNotifications() {
       this.$emit("closeNotifications");
-    }
+    },
   },
   watch: {
     currentPage(newVal, oldVal) {
       this.getAllUserNotifications(newVal);
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style >
+<style>
 /* .list-group-item-selected {
   background-color: #82868b !important;
   border-color: white !important;

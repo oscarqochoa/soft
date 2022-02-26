@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="border-top-info border-3 box-shadow-3 rounded-bottom">
     <filter-slot
       annulled
       :fields="fields"
@@ -15,7 +15,6 @@
         id="annull-table"
         slot="table"
         ref="annull-table"
-        v-scrollbar
         :has-provider="true"
         sticky-header="70vh"
         small
@@ -50,8 +49,7 @@
       <template #modal-footer>
         <div class="footer-capture">
           <b-button variant="primary" @click="sendJustify()">
-            <feather-icon icon="SendIcon" class="mr-50" />
-            SEND
+            <feather-icon icon="SendIcon" class="mr-50" />SEND
           </b-button>
         </div>
       </template>
@@ -65,41 +63,41 @@ import ContentModal from "../modals/contentJustifyOvertime.vue";
 import { mapGetters } from "vuex";
 export default {
   components: {
-    ContentModal,
+    ContentModal
   },
   data() {
     return {
       fields: [
         {
           key: "user_name",
-          label: "user",
+          label: "user"
         },
         {
           key: "date",
-          label: "date",
+          label: "date"
         },
         {
           key: "hours_assigned",
-          label: "HOURS ASSIGNED",
+          label: "HOURS ASSIGNED"
         },
         {
           key: "hours_worked",
-          label: "HOURS WORKED",
+          label: "HOURS WORKED"
         },
         {
           key: "overtime",
-          label: "overtime",
+          label: "overtime"
         },
         {
           key: "action",
-          label: "action",
-        },
+          label: "action"
+        }
       ],
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "User...",
-        model: null,
+        model: null
       },
       items: [],
       filter: dataFilters,
@@ -108,19 +106,19 @@ export default {
         currentPage: 1,
         startPage: null,
         toPage: null,
-        totalRows: 0,
+        totalRows: 0
       },
       isBusy: false,
       titleModal: null,
       item: {},
-      modal: false,
+      modal: false
     };
   },
   mounted() {},
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
+      currentUser: "auth/currentUser"
+    })
   },
   methods: {
     async myProvider(ctx) {
@@ -132,7 +130,7 @@ export default {
           modul_id: this.currentUser.modul_id,
           user_name: this.filterPrincipal.model,
           per_page: this.paginate.perPage,
-          page: ctx.currentPage,
+          page: ctx.currentPage
         };
         const data = await SchedulesServices.getOvertime(params);
         this.paginate.startPage = data.from;
@@ -141,7 +139,7 @@ export default {
           this.paginate.totalRows = data.total;
         let array = data.data;
         let items = [];
-        array.forEach((element) => {
+        array.forEach(element => {
           items.push({
             id: element.id,
             user_id: element.iduser,
@@ -153,7 +151,7 @@ export default {
             hours_assigned: element.total_assigned,
             hours_worked: element.total_hours,
             overtime:
-              parseInt(element.total_hours) - parseInt(element.total_assigned),
+              parseInt(element.total_hours) - parseInt(element.total_assigned)
           });
         });
         this.removePreloader();
@@ -175,7 +173,7 @@ export default {
     closeModal() {
       this.$refs["annull-table"].refresh();
       this.modal = false;
-    },
-  },
+    }
+  }
 };
 </script>

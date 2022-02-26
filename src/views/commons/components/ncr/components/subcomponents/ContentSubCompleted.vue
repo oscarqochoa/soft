@@ -1,5 +1,5 @@
 <template>
-  <div class="border-info rounded">
+  <div class="border-top-info border-3 box-shadow-3 rounded-bottom">
     <filter-slot
       :filter="filter"
       :filter-principal="filterPrincipal"
@@ -31,14 +31,11 @@
             <strong>Loading ...</strong>
           </div>
         </template>
+        <!-- Column LEAD NAME -->
         <template #cell(lead_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
-            <!-- <a href="www.google.com" target="_blank" class="select-lead-name text-important">
-              {{ data.item.lead_name }}
-            </a>-->
-            <!-- <a href=http://www.example.com style="text-decoration-line: underline">Example</a>     -->
             <router-link
-              class=""
+              class
               :to="{
                 name: 'lead-show',
                 params: { id: data.item.lead_id },
@@ -48,127 +45,30 @@
             <div v-if="data.item.mobile">{{data.item.mobile}}</div>
           </div>
         </template>
-        
+        <!-- Column REQUEST BY -->
         <template #cell(seller_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span>{{ data.item.seller_name }}</span>
             <div>{{ data.item.date | myGlobalDay }}</div>
           </div>
         </template>
+        <!-- Column STATUS-->
         <template #cell(status)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <span
               class="ncr-leads-status-successful w-100"
-              v-if="data.item.status_id == 1"
               style="
-                background-color: #38c172;
                 color: white;
                 border-radius: 30px;
                 padding-left: 15px;
                 padding-right: 15px;
               "
+              :style="`background-color:${statusColor(data.item.status_id)}`"
             >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 2"
-              style="
-                background-color: #3490dc;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 3"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 4"
-              style="
-                background-color: #ffd46a;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 5"
-              style="
-                background-color: #ffd46a;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 6"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 7"
-              style="
-                background-color: #eabc73;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 8"
-              style="
-                background-color: #eabc73;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 9"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
-            <span
-              class="ncr-leads-status-successful w-100"
-              v-else-if="data.item.status_id == 10"
-              style="
-                background-color: #e13232;
-                color: white;
-                border-radius: 30px;
-                padding-left: 15px;
-                padding-right: 15px;
-              "
-            >{{ data.item.status }}</span>
+           
           </div>
         </template>
+        <!-- Column QU -->
         <template #cell(question_id)="data">
           <feather-icon
             icon="HelpCircleIcon"
@@ -199,6 +99,7 @@
             "
           ></feather-icon>
         </template>
+        <!-- Column TRACKING -->
         <template #cell(tracking)="data">
           <div class="d-flex flex-column justify-content-center align-items-center">
             <feather-icon
@@ -211,13 +112,11 @@
             ></feather-icon>
           </div>
         </template>
+        <!-- Column CR -->
         <template #cell(cr)="data">
           <div v-if="status == 1">
-            <!-- <b-button variant="transparent" target="_blanck"
-                  :to="{name:'report-lead',params:{modul:2,global:{idfile:data.item.score_id,idlead:data.item.lead_id}}}">
-                  <img :src="assetsImg + '/images/icons/report2.ico'" />
-            </b-button>-->
             <router-link
+              v-if="data.item.cr == 1"
               :to="{
                 name: 'report-lead',
                 params: {idfile:data.item.score_id,idlead:data.item.lead_id,
@@ -235,10 +134,11 @@
           </div>
           <div v-if="status == 2">
             <a :href="data.item.route_html" v-if="data.item.route_html" target="_blanck">
-              <amg-icon size="23" icon="CRInvalidIcon"></amg-icon>
+              <amg-icon size="23" style="color:blue" icon="CRInvalidIcon"></amg-icon> 
             </a>
           </div>
         </template>
+        <!-- Column PDF -->
         <template #cell(route_pdf)="data">
           <div class="d-flex flex-column justify-content-center align-items-center">
             <a :href="data.item.route_pdf" v-if="data.item.route_pdf" target="_blanck">
@@ -251,6 +151,7 @@
             </a>
           </div>
         </template>
+        <!-- Column PROVIDER -->
         <template #cell(attemps)="data">
           <div class="d-flex flex-column justify-content-center align-items-center">
             <ul style="padding-left: 0px; margin-bottom: 0px">
@@ -266,6 +167,7 @@
             </ul>
           </div>
         </template>
+        <!-- Column FILE -->
         <template #cell(marked_pdf)="data">
           <div class="d-flex flex-column justify-content-center align-items-center">
             <a
@@ -274,13 +176,13 @@
               target="_blanck"
             >
               <img :src="assetsImg + '/images/icons/pdf.png'" style="width: 20px" />
-              <!-- <p>{{ JSON.parse(data.item.attemps).slice()[0].file_cancel}}</p> -->
             </a>
             <div v-else style="height: 20px"></div>
           </div>
         </template>
       </b-table>
     </filter-slot>
+    <!-- Modal Tracking Status -->
     <modal-tracking-status
       v-if="modalTrackingStatus"
       :modalTrackingStatus="modalTrackingStatus"
@@ -288,6 +190,7 @@
       :lead_name="lead_name"
       @closeTrackingStatus="closeTrackingStatus"
     ></modal-tracking-status>
+    <!-- Modal Questionnaire -->
     <modal-questionnaire
       v-if="modalQuestionnaire"
       :modalQuestionnaire="modalQuestionnaire"
@@ -306,9 +209,15 @@
 <script>
 import { mapGetters } from "vuex";
 import vSelect from "vue-select";
+// Import Filter
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+// Import Modals
 import ModalQuestionnaire from "../../modal/ModalQuestionnaire.vue";
 import ModalTrackingStatus from "../../modal/ModalTrackingStatus.vue";
-import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+// Import Data
+import filters from '../../data/filter.content.general.data'
+import fields from '../../data/fields.content.subcompleted.data'
+// Import Mixin
 import ncrmixin from "../../mixin";
 export default {
   mixins: [ncrmixin],
@@ -323,7 +232,7 @@ export default {
       type: [Number, String]
     }
   },
-  data() {
+  data:function() {
     return {
       totalRows: 0,
       paginate: {
@@ -341,77 +250,7 @@ export default {
         placeholder: "Client...",
         model: ""
       },
-      arrayColumns: [
-        {
-          key: "lead_name",
-          label: "Lead Name",
-          class: "text-left",
-          sortable: false
-        },
-        {
-          key: "seller_name",
-          label: "Request By",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "admin_name",
-          label: "Administrador",
-          class: "text-left",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "status",
-          label: "Status",
-          class: "text-center",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "question_id",
-          label: "QU",
-          class: "text-left ",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "tracking",
-          label: "Tracking",
-          class: "text-center",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "cr",
-          label: "CR",
-          class: "text-center",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "route_pdf", //////
-          label: "PDF",
-          class: "text-center",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "attemps",
-          label: "Provider",
-          class: "text-center",
-          sortable: false,
-          visible: true
-        },
-        {
-          key: "marked_pdf",
-          label: "File",
-          class: "text-center",
-          sortable: false,
-          visible: true
-        }
-      ],
+      arrayColumns: fields,
       dato2: 4,
       dato1: "desc",
       sellers: [],
@@ -422,70 +261,27 @@ export default {
       status_id: "",
       score_id: "",
       lead_name: "",
-      filter: [
-        {
-          type: "select",
-          margin: true,
-          showLabel: true,
-          label: "Seller",
-          model: null,
-          options: [],
-          reduce: "id",
-          selectText: "user_name",
-          cols: 12
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "From",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        },
-        {
-          type: "datepicker",
-          margin: true,
-          showLabel: true,
-          label: "To",
-          placeholder: "Date",
-          class: "font-small-3",
-          model: null,
-          locale: "en",
-          dateFormatOptions: {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          },
-          cols: 6
-        }
-      ]
+      filter: filters,
     };
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser"
     }),
-    clientRoute() {
+    clientRoute:function() {
       return this.status == 1
         ? "/lead/ncr/search-completed-successfull"
         : "/lead/ncr/search-completed-invalid";
     }
   },
   methods: {
-    resetSearch() {
+    resetSearch:function() {
       this.$refs.refClientsList.refresh();
     },
-    myProvider(ctx) {
-      const promise = amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        perPage:ctx.perPage,
+    myProvider:async function(ctx) {
+      try{
+        let params = {
+        perPage: ctx.perPage,
         name_text: this.filterPrincipal.model,
         date_from: this.filter[1].model,
         date_to: this.filter[2].model,
@@ -495,9 +291,9 @@ export default {
         role_id: this.currentUser.role_id,
         seller: this.filter[0].model,
         modul: this.$route.meta.module
-      });
-      return promise.then(data => {
-        const items = data.data.data;
+      }
+      const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`,params );
+      const items = data.data.data;
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
         this.perPage = data.data.per_page;
@@ -513,21 +309,24 @@ export default {
           });
         }
         return items || [];
-      });
-    },
 
-    closeModalQuestionnaire() {
+      }catch(error){
+        console.error(error)
+        return [];
+      }
+    },
+    closeModalQuestionnaire:function() {
       this.modalQuestionnaire = false;
     },
-    updateGrid() {
+    updateGrid:function() {
       this.$refs.refClientsList.refresh();
     },
-    openTrackingStatus(id, lead_name) {
+    openTrackingStatus:function(id, lead_name) {
       this.lead_name = lead_name;
       this.score_id = id;
       this.modalTrackingStatus = true;
     },
-    closeTrackingStatus() {
+    closeTrackingStatus:function() {
       this.modalTrackingStatus = false;
     }
   }

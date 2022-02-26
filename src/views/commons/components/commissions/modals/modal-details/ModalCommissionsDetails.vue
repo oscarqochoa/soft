@@ -2,12 +2,12 @@
   <div>
     <b-modal
       v-model="modalUp"
-      title-class="h2"
+      title-class="h2 text-white"
       size="xl"
-      title="DETAIL OF COMMISSIONS"
       modal-class="modal-primary"
       ok-only
       @hidden="hideModal()"
+      title="DETAIL OF COMMISSIONS"
     >
       <b-card-text>
         <ModalHeader :info="info" />
@@ -32,21 +32,21 @@ export default {
     ModalHeader,
     DetailsCrm,
     DetailsAdm,
-    DetailsDepartments
+    DetailsDepartments,
   },
   props: {
     showModal: {
       type: Boolean,
-      default: false
+      default: false,
     },
     info: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
-      modalUp: false
+      modalUp: false,
     };
   },
   created() {},
@@ -68,14 +68,14 @@ export default {
     },
     isDepartment() {
       return this.info.module != 2 && this.info.module != 4;
-    }
+    },
   },
   methods: {
     hideModal(status) {
       this.modalUp = false;
       this.$emit("hide-modal");
-    }
+    },
   },
-  watch: {}
+  watch: {},
 };
 </script>

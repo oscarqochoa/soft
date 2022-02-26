@@ -21,6 +21,7 @@
           <b-form-textarea
             id="quick-note"
             rows="5"
+            v-model="quickNote.body"
             placeholder="Quick Note"
             :state="errors[0] ? false : valid ? true : null"
             v-html="quickNote.body"

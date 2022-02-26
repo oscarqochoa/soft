@@ -219,6 +219,7 @@ class CrmService {
         d.sellerNew = 0;
         d.capturedNew = d.captured_id;
         d.feeNew = d.fee;
+        if (d.commission) d.commission = JSON.parse(d.commission);
       });
       return data;
     } catch (error) {
@@ -330,7 +331,7 @@ class CrmService {
 
   async postDeleteQuickSms(body) {
     try {
-      const data = await amgApi.post("/api/messages/delete-quick", body);
+      const data = await amgApi.post("/messages/delete-quick", body);
       return data;
     } catch (error) {
       console.log("Something went wrong on postDeleteQuickSms:", error);

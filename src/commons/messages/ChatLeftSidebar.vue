@@ -27,9 +27,8 @@
                 size="42"
                 class="cursor-pointer badge-minimal avatar-border-2"
                 :src="profileUserMinimalData.avatar"
-                variant="transparent"
                 badge
-                badge-variant="success"
+                :badge-variant="statusSession"
               />
             </div>
             <!-- Search -->
@@ -50,7 +49,7 @@
           <!-- Chats Title -->
           <h4 class="chat-list-title">Chats</h4>
           <!-- Chats -->
-          <ul class="chat-users-list chat-list media-list">
+          <ul class="chat-users-list chat-list media-list" >
             <chat-contact
               v-for="contact in filteredChatsContacts"
               :key="contact.id"
@@ -59,6 +58,7 @@
               :class="{ active: activeChatContactId === contact.coworker_id }"
               is-chat-contact
               @click="setUserToMessage(contact)"
+              class="chat-contact-item"
             />
           </ul>
         </vue-perfect-scrollbar>
@@ -83,7 +83,7 @@ import { ref, computed } from "@vue/composition-api";
 import ChatContact from "./ChatContact.vue";
 import UserProfileSidebar from "./UserProfileSidebar.vue";
 import NewMessageCompose from './components/NewMessageCompose.vue';
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState, mapGetters } from "vuex";
 export default {
   components: {
     // BSV
@@ -134,7 +134,21 @@ export default {
   computed:{
     ...mapState({
       S_MESSAGES_COUNTER_NOTIFICATION: state => state.MessageStore.counterNotification,
-    })
+    }),
+    ...mapGetters({
+      skin: "appConfig/skin",
+      currentUser: "auth/currentUser",
+      G_USER_STATUS_SESSION: "UserStore/G_USER_STATUS_SESSION"
+    }),
+    statusSession() {
+      return this.G_USER_STATUS_SESSION === 1
+        ? "success"
+        : this.G_USER_STATUS_SESSION === 2
+        ? "warning"
+        : this.G_USER_STATUS_SESSION === 3
+        ? "danger"
+        : "secondary";
+    }
   },
   methods: {
     ...mapMutations({

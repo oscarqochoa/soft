@@ -8,7 +8,9 @@
           <b-col cols="12" md="6"></b-col>
           <!-- Search -->
           <b-col cols="12" md="6">
-            <div class="d-flex align-items-center justify-content-end align-items-center">
+            <div
+              class="d-flex align-items-center justify-content-end align-items-center"
+            >
               <b-button
                 variant="primary"
                 v-ripple.400="'rgba(255, 255, 255, 0.15)'"
@@ -41,7 +43,6 @@
           :current-page="currentPage"
           :per-page="perPage"
           :filter="searchInput"
-          v-scrollbar
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -52,14 +53,19 @@
           <template #cell(client_name)="data">
             <b-link
               class="text-important"
-              :to="data.item.account_id==null? `/${data.item.route}/leads/${data.item.lead_id}` : `/${data.item.route}/clients/account/'${data.item.account_id}`"
+              :to="
+                data.item.account_id == null
+                  ? `/${data.item.route}/leads/${data.item.lead_id}`
+                  : `/${data.item.route}/clients/account/'${data.item.account_id}`
+              "
               target="_blank"
-            >{{ data.item.client_name }}</b-link>
+              >{{ data.item.client_name }}</b-link
+            >
             <!-- 
             <b-link class="text-important">{{ data.item.client_name }}</b-link>-->
             <br />
             <span>
-              <amg-icon icon="SmartphoneIcon"></amg-icon>
+              <feather-icon icon="SmartphoneIcon"></feather-icon>
               {{ data.item.mobile }}
             </span>
           </template>
@@ -68,7 +74,7 @@
             <br />
             <span style="font-weight: bold">
               {{ data.item.real_time | myGlobalDay }} ({{
-              data.item.state_hour
+                data.item.state_hour
               }})
             </span>
           </template>
@@ -125,9 +131,10 @@
             sm="6"
             class="d-flex align-items-center justify-content-center justify-content-sm-start"
           >
-            <span
-              class="text-muted"
-            >Showing {{ startPage }} to {{ toPage }} of {{ totalData }} entries</span>
+            <span class="text-muted"
+              >Showing {{ startPage }} to {{ toPage }} of
+              {{ totalData }} entries</span
+            >
           </b-col>
           <!-- Pagination -->
           <b-col
@@ -156,8 +163,16 @@
         </b-row>
       </div>
     </b-card>
-    <ModalEditTask v-if="modalEdit" @hide="closeModalEditTask" :infoTask="infoTask" />
-    <ModalShowTask v-if="modalShow" @hide="closeModalShowTask" :infoTask="infoTask" />
+    <ModalEditTask
+      v-if="modalEdit"
+      @hide="closeModalEditTask"
+      :infoTask="infoTask"
+    />
+    <ModalShowTask
+      v-if="modalShow"
+      @hide="closeModalShowTask"
+      :infoTask="infoTask"
+    />
   </div>
 </template>
 <script>
@@ -171,20 +186,20 @@ export default {
   props: {
     type: {
       type: [Number, String],
-      default: 1
+      default: 1,
     },
     taskToday: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   directives: {
-    Ripple
+    Ripple,
   },
   components: {
     vSelect,
     ModalEditTask,
-    ModalShowTask
+    ModalShowTask,
   },
   data() {
     return {
@@ -195,20 +210,20 @@ export default {
           key: "client_name",
           label: "Client Name",
           sortable: true,
-          visible: true
+          visible: true,
         },
         {
           key: "subject",
           label: "Subject",
           sortable: true,
-          visible: true
+          visible: true,
         },
         {
           key: "due_date",
           label: "Date / Hour",
-          visible: true
+          visible: true,
         },
-        { key: "actions", label: "Actions" }
+        { key: "actions", label: "Actions" },
       ],
       searchInput: "",
       orderby: "",
@@ -225,22 +240,22 @@ export default {
       modalEdit: false,
       modalShow: false,
       infoTask: {},
-      exportExcelDisabled: false
+      exportExcelDisabled: false,
     };
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser"
+      currentUser: "auth/currentUser",
     }),
 
     routeModule() {
       return this.$route.meta.route;
-    }
+    },
   },
   methods: {
     ...mapActions({
       A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
-      A_EXPORT_TASKS_TO_EXCEL: "TaskStore/A_EXPORT_TASKS_TO_EXCEL"
+      A_EXPORT_TASKS_TO_EXCEL: "TaskStore/A_EXPORT_TASKS_TO_EXCEL",
     }),
     async myProvider(ctx) {
       let params = {
@@ -250,7 +265,7 @@ export default {
         order: ctx.sortDesc == 1 ? "desc" : "asc",
         orderby: 5,
         type: this.type,
-        id: this.currentUser.user_id
+        id: this.currentUser.user_id,
       };
       const data = await TaskService.getAllTask(params);
       const items = data.data;
@@ -306,7 +321,7 @@ export default {
         try {
           const params = {
             type: this.type,
-            user_id: this.currentUser.user_id
+            user_id: this.currentUser.user_id,
           };
           const response = await this.A_EXPORT_TASKS_TO_EXCEL(params);
           await this.forceFileDownload(response, "tasks.xlsx");
@@ -367,11 +382,10 @@ export default {
           throw error;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
-
 
 <style lang="scss">
 @import "@core/scss/vue/libs/vue-select.scss";

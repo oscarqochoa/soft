@@ -50,7 +50,7 @@ const acceptLeadFromSocialNetwork = () => {
         }
       } else if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
         data.no_accept.push(data.to_id)
-        await window.amgApi.post('/api/findsellerlead', data)
+        await window.amgApi.post('/lead/find-seller-lead', data)
       } else if (result.dismiss === 'timer') {
         Vue.swal.fire({
           title: 'Time out!',
@@ -59,7 +59,7 @@ const acceptLeadFromSocialNetwork = () => {
           showConfirmButton: false,
         })
         data.no_accept.push(data.to_id)
-        await window.amgApi.post('/api/findsellerlead', data)
+        await window.amgApi.post('/lead/find-seller-lead', data)
       }
     }
     store.commit('app/SET_LOADING', false)

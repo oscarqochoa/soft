@@ -1,6 +1,6 @@
 <template>
   <div
-    class="col-lg-12 cont-list"
+    class="cont-list"
     :style="images.length &lt; 3 ? '' : 'overflow-y: scroll; height: 238px;'"
   >
     <label

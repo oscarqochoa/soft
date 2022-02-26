@@ -1,40 +1,40 @@
-import CalendarAppointment from "@/views/crm/views/calendar/components/appointment/default.vue";
-import CalendarTask from "@/views/crm/views/calendar/components/task/default.vue";
+import CalendarAppointment from '@/views/crm/views/calendar/components/appointment/default.vue'
+import CalendarTask from '@/views/crm/views/calendar/components/task/default.vue'
 
 export default [
   {
-    path: "/crm/calendar",
-    name: "calendar-crm",
-    component: () => import("./default.vue"),
-    redirect: { name: "crm-calendar-appointment" },
+    path: '/crm/calendar',
+    name: 'calendar-crm',
+    component: () => import('./default.vue'),
+    redirect: { name: 'crm-calendar-appointment' },
     children: [
       {
-        path: "",
-        redirect: { name: "crm-calendar-appointment" },
+        path: '',
+        redirect: { name: 'crm-calendar-appointment' },
       },
       {
-        path: "appointment",
+        path: 'appointment',
         component: CalendarAppointment,
-        name: "crm-calendar-appointment",
+        name: 'crm-calendar-appointment',
         meta: {
-          pageTitle: "Calendar",
+          pageTitle: 'Calendar',
           breadcrumb: [
             {
-              text: "Appointments",
+              text: 'Appointments',
               active: true,
             },
           ],
         },
       },
       {
-        path: "task",
+        path: 'task',
         component: CalendarTask,
-        name: "crm-calendar-task",
+        name: 'crm-calendar-task',
         meta: {
-          pageTitle: "Calendar",
+          pageTitle: 'Calendar',
           breadcrumb: [
             {
-              text: "Tasks",
+              text: 'Tasks',
               active: true,
             },
           ],
@@ -42,12 +42,12 @@ export default [
       },
     ],
     meta: {
-      pageTitle: "Calendar",
+      pageTitle: 'Calendar',
       breadcrumb: [
         {
-          text: "Calendar",
+          text: 'Calendar',
         },
       ],
     },
   },
-];
+]

@@ -1,7 +1,7 @@
 <template>
   <b-modal
     v-model="ownShow"
-    modal-class="modal-primary"
+    modal-class=" modal-primary unaclase"
     modal
     header-class="p-0"
     header-bg-variant="transparent border-bottom border-bottom-2"
@@ -29,7 +29,6 @@
       :start-index="startIndex"
       :finish-button-text="(isModalShow)? 'Close' : 'Submit'"
       back-button-text="Previous"
-      class="mb-3"
       @on-complete="formSubmitted"
     >
       <!-- accoint details tab -->
@@ -80,6 +79,7 @@
           :header-s="headerS"
           :type-modal="typeModal"
           @hideModal="hideModal"
+          
         />
       </tab-content>
     </form-wizard>
@@ -169,9 +169,11 @@ export default {
     },
   },
   async created() {
+    this.addPreloader()
     if (!this.salesClient.account_id) this.salesClient.account_id = this.salesClient.client_account_id
     await this.leyendDebtsolution()
     this.ownShow = true
+    this.removePreloader()
   },
   methods: {
     isLastStep() {
@@ -188,12 +190,15 @@ export default {
       return new Promise((resolve, reject) => {
         if (this.isModalShow) resolve(true)
         else if (!this.passwordIsCorrect && this.isFirstStep) {
+          const creditorsLength = this.$refs.firstStep.getCreditorsLength()
+          const needsValidatePassword = this.$refs.firstStep.needsValidatePassword()
+          const message = `${creditorsLength > 0 ? '' : 'Please add creditor'} ${!needsValidatePassword && creditorsLength > 0 ? 'Please validate password' : ''}`
           this.showToast(
             'danger',
             'top-right',
             'Validate error',
             'XIcon',
-            'Please validate password',
+            message,
           )
           reject()
         } else {
@@ -279,8 +284,8 @@ export default {
 @import "@core/scss/vue/libs/vue-wizard.scss";
 @import "@core/scss/vue/libs/vue-select.scss";
 .wizard-tab-content {
-  overflow: auto;
-  height: 300px;
+  overflow: scroll;
+  max-height: 45vh !important;
 }
 .wizard-card-footer {
   padding-top: 15px !important;
@@ -290,4 +295,10 @@ export default {
 //  top: 0 !important;
 //  z-index: 99;
 //}
+@media(min-height: 800px) {
+  .wizard-tab-content {
+    overflow: scroll;
+    max-height: 60vh !important;
+  }
+}
 </style>

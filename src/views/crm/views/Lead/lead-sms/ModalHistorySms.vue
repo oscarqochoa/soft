@@ -33,7 +33,7 @@
       </template>
 
       <!-- Column: Action -->
-      <template #cell(action)="data">
+      <template #cell(image)="data">
         <div class="text-center" v-b-tooltip.hover :title="data.item.image? 'view image' :''">
           <b-icon
             icon="image-fill"
@@ -80,7 +80,7 @@ export default {
       userId: null,
       roleId: null,
       isBusy: false,
-      fieldsQuicks: [{ key: "send_by" }, { key: "content" }, { key: "action" }],
+      fieldsQuicks: [{ key: "send_by" }, { key: "content" }, { key: "image" }],
       items: [],
       images: [],
       indexImage: null

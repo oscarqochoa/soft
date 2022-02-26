@@ -1,24 +1,34 @@
 <template>
   <ValidationObserver ref="formThirdStep">
     <b-container id="item3" fluid>
-      <b-row>
+      <b-row class="mb-1">
         <b-col md="6">
           <b-card
-            header="Applicant personal data"
             header-text-variant="white"
             header-bg-variant="info"
-            header-class="py-1"
-            body-class="mt-1"
+            header-class="p-0"
+            body-class="pt-1 card-body-border"
           >
+            <template #header>
+              <div style="padding-top: 12px; padding-left: 20px">
+                <p class="font-weight-bolder">Applicant personal data</p>
+              </div>
+            </template>
             <b-row>
               <b-col>
                 <div>
                   <label for>First Name</label>
-                  <b-form-input v-model="applicantObject.firstName" :disabled="isModalShow" />
+                  <b-form-input
+                    v-model="applicantObject.firstName"
+                    :disabled="isModalShow"
+                  />
                 </div>
                 <div class="mt-1">
                   <label for>Last Name</label>
-                  <b-form-input v-model="applicantObject.lastName" :disabled="isModalShow" />
+                  <b-form-input
+                    v-model="applicantObject.lastName"
+                    :disabled="isModalShow"
+                  />
                 </div>
                 <div class="mt-1">
                   <label for>DOB</label>
@@ -26,7 +36,11 @@
                     id="date4"
                     v-model="applicantObject.dob"
                     locale="en"
-                    :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                    :date-format-options="{
+                      year: 'numeric',
+                      month: 'numeric',
+                      day: 'numeric',
+                    }"
                     name="date4"
                     :disabled="isModalShow"
                   />
@@ -35,7 +49,10 @@
               <b-col>
                 <div>
                   <label for>Middle Name</label>
-                  <b-form-input v-model="applicantObject.middleName" :disabled="isModalShow" />
+                  <b-form-input
+                    v-model="applicantObject.middleName"
+                    :disabled="isModalShow"
+                  />
                 </div>
                 <div class="mt-1">
                   <label for>Status</label>
@@ -44,7 +61,7 @@
                     :disabled="isModalShow"
                     :options="states_leads"
                     label="name"
-                    :reduce="value => value.id"
+                    :reduce="(value) => value.id"
                   />
                 </div>
                 <div class="mt-1">
@@ -64,12 +81,16 @@
         </b-col>
         <b-col md="6">
           <b-card
-            header="Contact Data"
             header-text-variant="white"
             header-bg-variant="info"
-            header-class="py-1"
-            body-class="mt-1"
+            header-class="p-0"
+            body-class="pt-1 card-body-border"
           >
+            <template #header>
+              <div style="padding-top: 12px; padding-left: 20px">
+                <p class="font-weight-bolder">Contact Data</p>
+              </div>
+            </template>
             <b-row>
               <b-col>
                 <div>
@@ -98,45 +119,59 @@
                     :disabled="isModalShow"
                     :options="states"
                     label="state"
-                    :reduce="value => value.slug"
+                    :reduce="(value) => value.slug"
                   />
                 </div>
               </b-col>
               <b-col>
                 <div>
                   <label for>Email</label>
-                  <b-form-input v-model="applicantObject.email" :disabled="isModalShow" />
+                  <b-form-input
+                    v-model="applicantObject.email"
+                    :disabled="isModalShow"
+                  />
                 </div>
                 <div class="mt-1">
                   <label for>City</label>
-                  <b-form-input v-model="applicantObject.city" :disabled="isModalShow" />
+                  <b-form-input
+                    v-model="applicantObject.city"
+                    :disabled="isModalShow"
+                  />
                 </div>
                 <div class="mt-1">
                   <label for>Zipcode</label>
-                  <b-form-input v-model="applicantObject.zipcode" :disabled="isModalShow" />
+                  <b-form-input
+                    v-model="applicantObject.zipcode"
+                    :disabled="isModalShow"
+                  />
                 </div>
               </b-col>
             </b-row>
           </b-card>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row class="mb-1">
         <b-form-checkbox
           id="goapplication"
           v-model="applicant"
           :disabled="isModalShow"
           class="ml-1"
-        >Co applicant</b-form-checkbox>
+          >Co applicant</b-form-checkbox
+        >
       </b-row>
       <b-row v-if="applicant === true" class="mt-1">
         <b-col class="cont-user-info">
           <b-card
-            header="Co-Applicant personal data"
             header-text-variant="white"
             header-bg-variant="info"
-            header-class="py-1"
-            body-class="mt-1"
+            header-class="p-0"
+            body-class="pt-1 card-body-border"
           >
+            <template #header>
+              <div style="padding-top: 12px; padding-left: 20px">
+                <p class="font-weight-bolder">Co-Applicant personal data</p>
+              </div>
+            </template>
             <b-row>
               <b-col>
                 <b-row>
@@ -150,18 +185,24 @@
                   </b-col>
                   <b-col lg="3">
                     <label for>Middle Name</label>
-                    <b-form-input v-model="coApplicantObject.middleName" :disabled="isModalShow" />
+                    <b-form-input
+                      v-model="coApplicantObject.middleName"
+                      :disabled="isModalShow"
+                    />
                   </b-col>
                   <b-col lg="3">
                     <label for>Last Name</label>
-                    <b-form-input v-model="coApplicantObject.lastName" :disabled="isModalShow" />
+                    <b-form-input
+                      v-model="coApplicantObject.lastName"
+                      :disabled="isModalShow"
+                    />
                   </b-col>
                   <b-col lg="3">
                     <label for>Status</label>
                     <v-select
                       v-model="coApplicantObject.status"
                       :options="states_leads"
-                      :reduce="value => value.id"
+                      :reduce="(value) => value.id"
                       :disabled="isModalShow"
                       label="name"
                     />
@@ -174,7 +215,11 @@
                       id="date5"
                       v-model="coApplicantObject.dob"
                       locale="en"
-                      :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                      :date-format-options="{
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                      }"
                       name="date5"
                       :disabled="isModalShow"
                     />
@@ -211,12 +256,16 @@
       <b-row class="mt-1">
         <b-col>
           <b-card
-            header="Aditional Information"
             header-text-variant="white"
             header-bg-variant="info"
-            header-class="py-1"
-            body-class="mt-1"
+            header-class="p-0"
+            body-class="pt-1 card-body-border"
           >
+            <template #header>
+              <div style="padding-top: 12px; padding-left: 20px">
+                <p class="font-weight-bolder">Aditional Information</p>
+              </div>
+            </template>
             <b-row>
               <b-col>
                 <b-row>
@@ -225,7 +274,13 @@
                     <v-select
                       v-model="applicantObject.civilStatus"
                       :disabled="isModalShow"
-                      :options="['Single', 'Engaged', 'Married', 'Divorced', 'Widow/er']"
+                      :options="[
+                        'Single',
+                        'Engaged',
+                        'Married',
+                        'Divorced',
+                        'Widow/er',
+                      ]"
                     />
                   </b-col>
                   <b-col md="3">
@@ -247,16 +302,26 @@
                 </b-row>
                 <b-row class="mt-1">
                   <b-col md="3">
-                    <label v-if="applicant == true" for>Co-applicant Civil Status</label>
+                    <label v-if="applicant == true" for
+                      >Co-applicant Civil Status</label
+                    >
                     <v-select
                       v-if="applicant == true"
                       v-model="coApplicantObject.civilStatus"
                       :disabled="isModalShow"
-                      :options="['Single', 'Engaged', 'Married', 'Divorced', 'Widow/er']"
+                      :options="[
+                        'Single',
+                        'Engaged',
+                        'Married',
+                        'Divorced',
+                        'Widow/er',
+                      ]"
                     />
                   </b-col>
                   <b-col md="3">
-                    <label v-if="applicant == true" for>Co-applicant employer</label>
+                    <label v-if="applicant == true" for
+                      >Co-applicant employer</label
+                    >
                     <b-form-input
                       v-if="applicant == true"
                       id="employer2"
@@ -265,7 +330,9 @@
                     />
                   </b-col>
                   <b-col md="3">
-                    <label v-if="applicant == true" for>Co-applicant Dependents</label>
+                    <label v-if="applicant == true" for
+                      >Co-applicant Dependents</label
+                    >
                     <b-form-input
                       v-if="applicant == true"
                       id="dependents2"
@@ -282,12 +349,17 @@
       <b-row>
         <b-col>
           <b-card
-            header="Incomes"
             header-text-variant="white"
             header-bg-variant="info"
-            header-class="py-1"
-            body-class="mt-1"
+            header-class="p-0"
+            body-class="pt-1 card-body-border"
+            style="height: 90%"
           >
+            <template #header>
+              <div style="padding-top: 12px; padding-left: 20px">
+                <p class="font-weight-bolder">Incomes</p>
+              </div>
+            </template>
             <b-row>
               <b-col md="4">
                 <label>Applicant's monthly net income</label>
@@ -322,8 +394,17 @@
               <b-col class="mt-2" md="5">
                 <b-input-group prepend="Monthly Net Income">
                   <div
-                    class="form-control d-flex align-items-center justify-content-center bg-transparent border"
-                  >$ {{ totalMonthlyNetIncome.toFixed(2) }}</div>
+                    class="
+                      form-control
+                      d-flex
+                      align-items-center
+                      justify-content-center
+                      bg-transparent
+                      border
+                    "
+                  >
+                    $ {{ totalMonthlyNetIncome.toFixed(2) }}
+                  </div>
                 </b-input-group>
               </b-col>
             </b-row>
@@ -334,13 +415,21 @@
             header="Housing expenses"
             header-text-variant="white"
             header-bg-variant="info"
-            header-class="py-1"
-            body-class="mt-1"
+            header-class="p-0"
+            body-class="pt-1 card-body-border"
+            style="height: 90%"
           >
+            <template #header>
+              <div style="padding-top: 12px; padding-left: 20px">
+                <p class="font-weight-bolder">Housing Expenses</p>
+              </div>
+            </template>
             <b-row>
               <b-col class="d-flex align-items-center justify-content-start">
                 <span>House Owner</span>
-                <div class="d-flex ml-1 align-items-center justify-content-center">
+                <div
+                  class="d-flex ml-1 align-items-center justify-content-center"
+                >
                   <b-form-checkbox
                     id="housing"
                     v-model="housingExpensesObject.housing"
@@ -383,12 +472,16 @@
       <b-row>
         <b-col>
           <b-card
-            header="Cost of living"
             header-text-variant="white"
             header-bg-variant="info"
-            header-class="py-1"
-            body-class="mt-1"
+            header-class="p-0"
+            body-class="pt-1 card-body-border"
           >
+            <template #header>
+              <div style="padding-top: 12px; padding-left: 20px">
+                <p class="font-weight-bolder">Cost of living</p>
+              </div>
+            </template>
             <b-row>
               <b-col md="8">
                 <v-select
@@ -403,7 +496,12 @@
               </b-col>
             </b-row>
             <b-row>
-              <b-col v-for="(select, index) in selected" :key="select.id" cols="2" class="mt-1">
+              <b-col
+                v-for="(select, index) in selected"
+                :key="select.id"
+                cols="2"
+                class="mt-1"
+              >
                 <div>
                   <label>{{ select.text }}</label>
                   <money
@@ -418,16 +516,22 @@
               <b-col class="mt-1" cols="2">
                 <label>Total Utilities</label>
                 <div
-                  class="form-control d-flex align-items-center justify-content-start bg-transparent border"
-                >$ {{ totalDato5 }}</div>
+                  class="
+                    form-control
+                    d-flex
+                    align-items-center
+                    justify-content-start
+                    bg-transparent
+                    border
+                  "
+                >
+                  $ {{ totalDato5 }}
+                </div>
               </b-col>
             </b-row>
             <b-row class="mt-1">
               <b-col md="4">
-                <label>
-                  Food(expenses in store or eating
-                  outside)
-                </label>
+                <label> Food(expenses in store or eating outside) </label>
                 <money
                   id="dato7"
                   v-model="dato7"
@@ -455,12 +559,20 @@
                   @click="addCar()"
                 >
                   CAR PAYMENTS
-                  <feather-icon v-if="cars.length < 5 && !isModalShow" icon="PlusIcon" />
+                  <feather-icon
+                    v-if="cars.length < 5 && !isModalShow"
+                    icon="PlusIcon"
+                  />
                 </b-button>
               </b-col>
             </b-row>
             <b-row>
-              <b-col v-for="(car, index) in cars" :key="car.id" class="mt-1" cols="2">
+              <b-col
+                v-for="(car, index) in cars"
+                :key="car.id"
+                class="mt-1"
+                cols="2"
+              >
                 <div class="d-flex align-items-center justify-content-between">
                   <label>{{ car.text }}</label>
                   <label v-if="index != 0 && index == cars.length - 1">
@@ -468,7 +580,7 @@
                       v-if="!isModalShow"
                       icon="XCircleIcon"
                       class="cursor-pointer text-danger font-medium-2"
-                      @click="cars.splice(index,1)"
+                      @click="cars.splice(index, 1)"
                     />
                   </label>
                 </div>
@@ -536,16 +648,34 @@
               <b-col class="mt-1" cols="2">
                 <label>Total Others</label>
                 <div
-                  class="form-control d-flex align-items-center justify-content-start bg-transparent border"
-                >$ {{ totalOthers.toFixed(2) }}</div>
+                  class="
+                    form-control
+                    d-flex
+                    align-items-center
+                    justify-content-start
+                    bg-transparent
+                    border
+                  "
+                >
+                  $ {{ totalOthers.toFixed(2) }}
+                </div>
               </b-col>
             </b-row>
             <b-row class="mt-1">
               <b-col cols="2">
                 <label>Total monthly living cost</label>
                 <div
-                  class="form-control d-flex align-items-center justify-content-start bg-transparent border"
-                >$ {{ totalDato7.toFixed(2) }}</div>
+                  class="
+                    form-control
+                    d-flex
+                    align-items-center
+                    justify-content-start
+                    bg-transparent
+                    border
+                  "
+                >
+                  $ {{ totalDato7.toFixed(2) }}
+                </div>
               </b-col>
             </b-row>
           </b-card>
@@ -554,12 +684,16 @@
       <b-row>
         <b-col>
           <b-card
-            header="Goals"
             header-text-variant="white"
             header-bg-variant="info"
-            header-class="py-1"
-            body-class="mt-1"
+            header-class="p-0"
+            body-class="pt-1 card-body-border"
           >
+            <template #header>
+              <div style="padding-top: 12px; padding-left: 20px">
+                <p class="font-weight-bolder">Goals</p>
+              </div>
+            </template>
             <b-row>
               <b-col>
                 <b-button
@@ -572,7 +706,12 @@
               </b-col>
             </b-row>
             <b-row>
-              <b-col v-for="(goal, index) in arrayGoals" :key="goal.id" md="3" class="mt-1">
+              <b-col
+                v-for="(goal, index) in arrayGoals"
+                :key="goal.id"
+                md="3"
+                class="mt-1"
+              >
                 <div class="d-flex justify-content-between align-items-center">
                   <label :for="`date-label-${index}`">{{ goal.text }}</label>
                   <label v-if="index != 0 && index == arrayGoals.length - 1">
@@ -580,27 +719,31 @@
                       v-if="!isModalShow"
                       icon="XCircleIcon"
                       class="font-medium-3 text-danger cursor-pointer"
-                      @click="arrayGoals.splice(index,1)"
+                      @click="arrayGoals.splice(index, 1)"
                     />
                   </label>
                 </div>
-                <ValidationProvider v-slot="{errors}" rules="required">
+                <ValidationProvider v-slot="{ errors }" rules="required">
                   <b-form-input
                     :id="`date-label-${index}`"
                     v-model="goal.goal"
                     :disabled="isModalShow"
-                    :class="{'border-danger' : errors[0]}"
+                    :class="{ 'border-danger': errors[0] }"
                   />
                 </ValidationProvider>
-                <ValidationProvider v-slot="{errors}" rules="required">
+                <ValidationProvider v-slot="{ errors }" rules="required">
                   <label class="mt-1" :for="`date-goal-${index}`">Date</label>
                   <b-form-datepicker
                     :id="`date-goal-${index}`"
                     v-model="goal.date"
                     locale="en"
-                    :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                    :date-format-options="{
+                      year: 'numeric',
+                      month: 'numeric',
+                      day: 'numeric',
+                    }"
                     :disabled="isModalShow"
-                    :class="{'border-danger' : errors[0]}"
+                    :class="{ 'border-danger': errors[0] }"
                   />
                 </ValidationProvider>
               </b-col>
@@ -624,15 +767,15 @@ export default {
     idleyend: String,
     headerS: {
       type: Object,
-      default: () => ({ program: "", seller: "", captured: "" })
+      default: () => ({ program: "", seller: "", captured: "" }),
     },
     typeModal: {
       type: Number,
-      default: 1
+      default: 1,
       // 1: create, 2: show
     },
     isModalShow: Boolean,
-    isModalAdd: Boolean
+    isModalAdd: Boolean,
   },
   data() {
     return {
@@ -648,7 +791,7 @@ export default {
         { id: 4, text: "Telephone", value: 0 },
         { id: 5, text: "Cable", value: 0 },
         { id: 6, text: "Internet", value: 0 },
-        { id: 7, text: "Trash", value: 0 }
+        { id: 7, text: "Trash", value: 0 },
       ],
       optionsOthers: [
         { id: 1, text: "Child Support", value: 0 },
@@ -661,7 +804,7 @@ export default {
         { id: 8, text: "Donations", value: 0 },
         { id: 9, text: "Family Support", value: 0 },
         { id: 10, text: "Recreation", value: 0 },
-        { id: 11, text: "Others", value: 0 }
+        { id: 11, text: "Others", value: 0 },
       ],
       percentajes: [
         { value: "0.0", label: "0%" },
@@ -674,7 +817,7 @@ export default {
         { value: "0.07", label: "7%" },
         { value: "0.08", label: "8%" },
         { value: "0.09", label: "9%" },
-        { value: "0.1", label: "10%" }
+        { value: "0.1", label: "10%" },
       ],
       arrayGoals: [{ text: "1st Goal", goal: null, date: null }],
       cars: [{ text: "Car 1", value: 0 }],
@@ -700,7 +843,7 @@ export default {
         applicantEmployer: "",
         dependents: "",
         monthlyNetIncome: 0,
-        additionalMonthlyNetincome: 0
+        additionalMonthlyNetincome: 0,
       },
       applicant: false,
       coApplicantObject: {
@@ -714,7 +857,7 @@ export default {
         civilStatus: "",
         coApplicantEmployer: "",
         dependents: "",
-        monthlyNetIncome: 0
+        monthlyNetIncome: 0,
       },
       dato4: 0,
       dato7: 0,
@@ -722,7 +865,7 @@ export default {
       gasoline: 0,
       housingExpensesObject: {
         housing: "",
-        monthlyPaymentHousingExpenses: 0
+        monthlyPaymentHousingExpenses: 0,
       },
       inputDisable: false,
       states_leads: [],
@@ -731,7 +874,7 @@ export default {
         thousands: ",",
         prefix: "$ ",
         precision: 2,
-        masked: false
+        masked: false,
       },
       direccion: null,
       address_principal: null,
@@ -747,12 +890,12 @@ export default {
       total_ce: null,
       monthly_payment: "",
       cost: "",
-      total_monthly: ""
+      total_monthly: "",
     };
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser"
+      currentUser: "auth/currentUser",
     }),
     totalMonthlyNetIncome() {
       return Number(
@@ -766,7 +909,7 @@ export default {
         (sum, select) => sum + Number(select.value),
         0
       );
-      return total;
+      return total.toFixed(2);
     },
     totalDato7() {
       const total = this.cars.reduce((sum, car) => sum + Number(car.value), 0);
@@ -789,7 +932,7 @@ export default {
         0
       );
       return totalOthers;
-    }
+    },
   },
   mounted() {
     this.statesleads();
@@ -824,10 +967,10 @@ export default {
             const arrayUtilities = [];
             const arrayObjUtilities = [];
             // eslint-disable-next-line array-callback-return
-            this.selected.map(select => {
+            this.selected.map((select) => {
               const obj = {
                 id: select.id,
-                mont: select.value
+                mont: select.value,
               };
               arrayUtilities.push(select.id);
               arrayObjUtilities.push(obj);
@@ -835,10 +978,10 @@ export default {
             const arrayOthersTemp = [];
             const arrayObjOthersTemp = [];
             // eslint-disable-next-line array-callback-return
-            this.selectedOther.map(select => {
+            this.selectedOther.map((select) => {
               const obj = {
                 id: select.id,
-                mont: select.value
+                mont: select.value,
               };
               arrayOthersTemp.push(select.id);
               arrayObjOthersTemp.push(obj);
@@ -932,7 +1075,7 @@ export default {
                 montoutlity: arrayObjUtilities,
                 valorothers: arrayOthersTemp,
                 montoothers: arrayObjOthersTemp,
-                housing: this.housingExpensesObject.housing == false ? 0 : 1
+                housing: this.housingExpensesObject.housing == false ? 0 : 1,
               }
             );
             if (response.status === 200) {
@@ -1040,7 +1183,7 @@ export default {
           seller: this.headerS.seller,
           type: typeADD,
           user_id: this.currentUser.id,
-          module: this.currentUser.modul_id
+          module: this.currentUser.modul_id,
         };
         const result = await this.showConfirmSwal(
           `Are you sure you want to ${message}`
@@ -1078,7 +1221,7 @@ export default {
           account:
             this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 5
               ? this.salesClient.account_id
-              : null
+              : null,
         });
         if (response.status === 200) {
           this.$emit("previousStep");
@@ -1104,7 +1247,7 @@ export default {
               this.typeModal === 4 ||
               this.typeModal === 5
                 ? this.salesClient.account_id
-                : null
+                : null,
           }
         );
         if (response.status === 200) {
@@ -1149,7 +1292,7 @@ export default {
       this.arrayGoals.push({
         text: `${this.ordinalSuffixOf(this.arrayGoals.length + 1)} Goal`,
         goal: null,
-        date: null
+        date: null,
       });
     },
     ordinalSuffixOf(i) {
@@ -1170,7 +1313,7 @@ export default {
       const index = this.cars.length;
       const car = {
         text: `Car ${index + 1}`,
-        value: 0
+        value: 0,
       };
       this.cars.push(car);
     },
@@ -1202,7 +1345,7 @@ export default {
               this.typeModal === 5
                 ? this.salesClient.account_id
                 : null,
-            id: this.id_analisis
+            id: this.id_analisis,
           }
         );
         if (response.status === 200) {
@@ -1250,7 +1393,7 @@ export default {
               if (response.data[0][`car_payment_${i}`]) {
                 const car = {
                   text: `Car ${i}`,
-                  value: Number(response.data[0][`car_payment_${i}`])
+                  value: Number(response.data[0][`car_payment_${i}`]),
                 };
                 this.cars.push(car);
               }
@@ -1264,7 +1407,7 @@ export default {
                 const goal = {
                   text: `${this.ordinalSuffixOf(i)} Goal`,
                   goal: response.data[0][`goal${i}`],
-                  date: response.data[0][`date_g${i}`]
+                  date: response.data[0][`date_g${i}`],
                 };
                 this.arrayGoals.push(goal);
               }
@@ -1285,16 +1428,16 @@ export default {
                 ? []
                 : JSON.parse(response.data[0].json_montothers);
 
-            utilitiesObjects.map(utility => {
-              this.options.map(option => {
+            utilitiesObjects.map((utility) => {
+              this.options.map((option) => {
                 if (Number(utility.id) == option.id) {
                   option.value = Number(utility.mont);
                   this.selected.push(option);
                 }
               });
             });
-            othersObject.map(other => {
-              this.optionsOthers.map(option => {
+            othersObject.map((other) => {
+              this.optionsOthers.map((option) => {
                 if (Number(other.id) == option.id) {
                   option.value = Number(other.mont);
                   this.selectedOther.push(option);
@@ -1322,8 +1465,8 @@ export default {
       } catch (error) {
         console.error(error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

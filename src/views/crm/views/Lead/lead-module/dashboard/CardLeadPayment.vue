@@ -4,7 +4,14 @@
       <b-card-title>Payments</b-card-title>
     </template>
     <b-row>
-      <b-col cols="12" sm="6" md="3">
+      <b-col
+        cols="12"
+        xl="3"
+        lg="6"
+        md="6"
+        sm="12"
+        :class="['border-right', { 'border-bottom': !isBigWindow }]"
+      >
         <card-lead-payment-section
           :modul="modul"
           title="Realtor"
@@ -16,7 +23,14 @@
           @onSubmit="onSubmit($event, 'realtor')"
         />
       </b-col>
-      <b-col cols="12" sm="6" md="3">
+      <b-col
+        cols="12"
+        xl="3"
+        lg="6"
+        md="6"
+        sm="12"
+        :class="['border-right', { 'border-bottom': !isBigWindow }]"
+      >
         <card-lead-payment-section
           :modul="modul"
           title="Lien"
@@ -28,7 +42,14 @@
           @onSubmit="onSubmit($event, 'lien')"
         />
       </b-col>
-      <b-col cols="12" sm="6" md="3">
+      <b-col
+        cols="12"
+        xl="3"
+        lg="6"
+        md="6"
+        sm="12"
+        :class="['border-right', { 'border-bottom': !isBigWindow }]"
+      >
         <card-lead-payment-section
           :modul="modul"
           title="Court"
@@ -37,10 +58,10 @@
           :method="42"
           :key="key.court"
           :is-loading="isLoading"
-          @onSubmit="onSubmit ($event, 'court')"
+          @onSubmit="onSubmit($event, 'court')"
         />
       </b-col>
-      <b-col cols="12" sm="6" md="3">
+      <b-col cols="12" xl="3" lg="6" md="6" sm="12">
         <card-lead-payment-section
           :modul="modul"
           title="Other"
@@ -49,7 +70,7 @@
           :method="12"
           :key="key.other"
           :is-loading="isLoading"
-          @onSubmit="onSubmit ($event, 'other')"
+          @onSubmit="onSubmit($event, 'other')"
         />
       </b-col>
     </b-row>
@@ -66,21 +87,21 @@ import CardLeadPaymentSection from "./CardLeadPaymentSection.vue";
 
 export default {
   components: {
-    CardLeadPaymentSection
+    CardLeadPaymentSection,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
-      updatedCards:"CrmCreditCardStore/LISTCARDS" 
+      updatedCards: "CrmCreditCardStore/LISTCARDS",
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
     }),
-    updateCards(){
-      this.lead.cards = this.updatedCards
-    }
+    updateCards() {
+      this.lead.cards = this.updatedCards;
+    },
   },
   created() {
     this.authUser = this.currentUser;
@@ -98,19 +119,18 @@ export default {
         court: 0,
         lien: 0,
         other: 0,
-        realtor: 0
-      }
+        realtor: 0,
+      },
     };
   },
   directives: { Ripple },
   methods: {
     ...mapActions({
       A_LEAD_PAYMENT: "CrmLeadStore/A_LEAD_PAYMENT",
-      
     }),
     async onSubmit(item, ref) {
       this.showConfirmSwal()
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             this.isLoading = true;
             item.lead_id = this.lead.id;
@@ -147,29 +167,29 @@ export default {
             this.removePreloader();
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Something went wrong onSubmit", error);
           this.showErrorSwal(error);
           this.isLoading = false;
           this.removePreloader();
         });
-    }
+    },
   },
   mounted() {},
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     onlyRead: {
       type: Boolean,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  setup() {}
+  setup() {},
 };
 </script>

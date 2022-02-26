@@ -5,7 +5,7 @@
       { 'expanded': !isVerticalMenuCollapsed || (isVerticalMenuCollapsed && isMouseHovered) },
       skin === 'semi-dark' ? 'menu-dark' : 'menu-light'
     ]"
-    @mouseenter="updateMouseHovered(true)"
+    @mouseenter="$route.name != 'amg-messages' ? updateMouseHovered(true) : null"
     @mouseleave="updateMouseHovered(false)"
   >
     <!-- main menu header-->
@@ -81,11 +81,11 @@
         @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
       >
       <slot name="items" :isMouseHovered="isMouseHovered" :isVerticalMenuCollapsed="isVerticalMenuCollapsed">
-        <vertical-nav-menu-items
+        <!-- <vertical-nav-menu-items
           :items="navMenuItems"
           class="navigation navigation-main"
           style="font-size: 14px;"
-        />
+        /> -->
         </slot>
       </vue-perfect-scrollbar>
       <!-- /main menu content-->

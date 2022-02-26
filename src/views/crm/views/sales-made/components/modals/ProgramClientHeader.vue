@@ -2,13 +2,13 @@
   <b-row>
     <b-col>
       <h5>Program</h5>
-      <p class="bg-info rounded text-white font-medium-1 text-center py-1s">
+      <p class="rounded text-primary border-primary font-medium-1 text-center py-1s">
         {{ program }}
       </p>
     </b-col>
     <b-col>
       <h5>Client</h5>
-      <p class="bg-info rounded text-white font-medium-1 text-center py-1s">
+      <p class="rounded text-primary border-primary font-medium-1 text-center py-1s">
         {{ client }}
       </p>
     </b-col>

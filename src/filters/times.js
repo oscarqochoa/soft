@@ -1,11 +1,6 @@
-import Vue from "vue";
-import moment from 'moment';
+import Vue from 'vue'
+import moment from 'moment'
 
+Vue.filter('myHourTime', created => moment(created).format('h:mm A'))
 
-Vue.filter('myHourTime', function (created) {
-    return moment(created).format('h:mm A');
-});
-
-Vue.filter('myHourTimeComplete', function (created) {
-    return moment(created).format('h:mm:ss A');
-});
+Vue.filter('myHourTimeComplete', created => moment(created).format('h:mm:ss A'))

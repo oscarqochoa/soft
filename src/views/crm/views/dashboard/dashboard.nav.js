@@ -1,5 +1,5 @@
 export default {
   title: "Dashboard",
-  icon: "DashboardIcon",
+  icon: "ChartLineIcon",
   route: "dashboard-crm",
 };
