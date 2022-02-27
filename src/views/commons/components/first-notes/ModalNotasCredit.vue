@@ -678,7 +678,6 @@ export default {
   async created() {
     this.addPreloader();
     await this.getFirstNote();
-    // await this.listTypeBusiness()
     await this.getNoCredit();
     await this.getCountries();
     this.note.country.value = this.noteInfo.originCountry;
@@ -776,8 +775,7 @@ export default {
         // eslint-disable-next-line no-param-reassign
         if (val.id === "reco-4") val.text = this.note.recomendations.value;
       });
-      answer23.value = JSON.stringify(answer23.value);
-      // eslint-disable-next-line no-return-assign
+      answer23.value = answer23.value;
       return [
         answer23,
         { number: 24, value: JSON.stringify(this.note.pending.value) },
