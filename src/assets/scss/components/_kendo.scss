@@ -17,27 +17,27 @@
         }
 
         &::-webkit-scrollbar-thumb {
-            background: #ff6358;
+            background: #0090e7 !important;
         }
     }
 }
 
 .dark-layout .k-animation-container {
-    background: #010032 !important;
+    background: #2F2F31 !important;
 
     .k-list-container {
-        background: #010032 !important;
+        background: #2F2F31 !important;
 
         &::-webkit-scrollbar {
             width: 13px;
         }
 
         &::-webkit-scrollbar-track {
-            background-color: #010032;
+            background-color: #2F2F31 !important;
         }
 
         &::-webkit-scrollbar-thumb {
-            background: #ff6358;
+            background: #0090e7 !important;
         }
 
         .k-list {
