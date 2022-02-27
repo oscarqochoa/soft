@@ -1559,8 +1559,6 @@ export default {
       if (this.isCoordinator) {
         this.modalData.notes.notSeller = false;
       }
-
-      console.log(this.modalData.notes.editModal, "siiii");
       this.openModalNotes(data.creates, data.program_id, index);
     },
     openModalNotes(created, program, index) {
