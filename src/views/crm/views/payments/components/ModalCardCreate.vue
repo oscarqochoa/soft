@@ -111,6 +111,7 @@
                   type="text"
                   id="card-expi-month"
                   ref="input-5"
+                  maxlength="2"
                   @input="activeFocus(5, 2)"
                   v-model="form.card_expi_month"
                   :class="{ 'border-danger': errors[0] }"
@@ -126,6 +127,7 @@
                 <b-form-input
                   class="border-hover-p"
                   type="text"
+                  maxlength="2"
                   id="card-expi-year"
                   ref="input-6"
                   @input="activeFocus(6, 2)"
@@ -148,9 +150,9 @@
                   v-model="form.cardsecuritycode"
                   ref="input-7"
                   id="card-cvv"
+                  maxlength="4"
                   max="4"
                   type="text"
-                  maxlength="16"
                   :class="{ 'border-danger': errors[0] }"
                 />
               </ValidationProvider>

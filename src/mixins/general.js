@@ -48,9 +48,9 @@ export default {
     isCeo() {
       return this.$store.getters["auth/isCeo"];
     },
-    isCoordinator(){
+    isCoordinator() {
       return this.$store.getters["auth/isCoordinator"];
-    }
+    },
   },
   methods: {
     convertProgramToModule(program) {
@@ -223,7 +223,7 @@ export default {
     showConfirmSwal(
       title = "Are you sure?",
       text = "You won't be able to revert this!",
-      config = {},
+      config = {}
     ) {
       return this.$swal({
         title,

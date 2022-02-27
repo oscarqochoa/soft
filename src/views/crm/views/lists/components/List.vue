@@ -20,8 +20,12 @@
             sm="6"
             class="d-flex align-items-end justify-content-end mb-1 mb-md-0"
           >
-            <b-button variant="info" v-if="add" @click="addlist">CREATE LIST</b-button>
-            <b-button variant="danger" v-if="cancelList" @click="closelist">CANCEL</b-button>
+            <b-button variant="info" v-if="add" @click="addlist"
+              >CREATE LIST</b-button
+            >
+            <b-button variant="danger" v-if="cancelList" @click="closelist"
+              >CANCEL</b-button
+            >
           </b-col>
         </b-row>
       </div>
@@ -35,25 +39,44 @@
         >
           <div class="m-2">
             <!-- Title Create List -->
-            <h3 style="color: #ff9f43 !important; display: inline-block">CREATE LIST</h3>
+            <h3 style="color: #ff9f43 !important; display: inline-block">
+              CREATE LIST
+            </h3>
             <!-- Form -->
             <ValidationObserver ref="form">
               <b-row>
-                 <!-- Input Users -->
+                <!-- Input Users -->
                 <b-col md="7">
                   <b-form-group label="Selec User">
-                    <ValidationProvider name="comment" rules="required" v-slot="{ errors }">
-                      <v-select v-model="value" multiple :options="options" label="user_name"></v-select>
-                      <small v-if="errors[0]" class="text-danger text-center">User {{ errors[0] }}</small>
+                    <ValidationProvider
+                      name="comment"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
+                      <v-select
+                        v-model="value"
+                        multiple
+                        :options="options"
+                        label="user_name"
+                      ></v-select>
+                      <small v-if="errors[0]" class="text-danger text-center"
+                        >User {{ errors[0] }}</small
+                      >
                     </ValidationProvider>
                   </b-form-group>
                 </b-col>
                 <!-- Input Number -->
                 <b-col md="5">
                   <b-form-group label="Number of leads by user">
-                    <ValidationProvider name="comment" rules="required" v-slot="{ errors }">
+                    <ValidationProvider
+                      name="comment"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
                       <b-form-input v-model="number" type="number" />
-                      <small v-if="errors[0]" class="text-danger text-center">Number {{ errors[0] }}</small>
+                      <small v-if="errors[0]" class="text-danger text-center"
+                        >Number {{ errors[0] }}</small
+                      >
                     </ValidationProvider>
                   </b-form-group>
                 </b-col>
@@ -107,14 +130,22 @@
           </template>
           <!-- Column CREATE DATE -->
           <template #cell(created_at)="data">
-            <div class="d-flex flex-column justify-content-start align-items-start">
-              <span v-if="data.item.created_at == 'Today'">{{ data.item.created_at }}</span>
-              <span v-else>{{ data.item.created_at | myDateGlobalWithHour }}</span>
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <span v-if="data.item.created_at == 'Today'">{{
+                data.item.created_at
+              }}</span>
+              <span v-else>{{
+                data.item.created_at | myDateGlobalWithHour
+              }}</span>
             </div>
           </template>
           <!-- Column USERS -->
           <template #cell(users)="data" v-if="getRoles">
-            <div class="d-flex flex-column justify-content-start align-items-start">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
               <b-button
                 variant="flat-primary"
                 style="
@@ -126,7 +157,8 @@
                 v-for="(user, index) in JSON.parse(data.item.users)"
                 :key="index"
                 @click="modalOpen(user.user_name, user.id, data.item.id)"
-              >{{ user.user_name }}</b-button>
+                >{{ user.user_name }}</b-button
+              >
             </div>
           </template>
           <!-- Column ACTIONS -->
@@ -167,7 +199,7 @@
               </b-button>
               <!-- Button Open Modal of Leads  (It's Today and CountAllTask is equal to 0) -->
               <b-button
-                v-if="data.item.created_at == 'Today' && count_alltask==0"
+                v-if="data.item.created_at == 'Today' && count_alltask == 0"
                 variant="warning"
                 disabled
                 class="ml-1 reset-radius btn-sm"
@@ -176,7 +208,7 @@
               </b-button>
               <!-- Button Open Modal of Leads  (It's Today  and CountAllTask is greater than 0) -->
               <b-button
-                v-if="data.item.created_at == 'Today' && count_alltask>0"
+                v-if="data.item.created_at == 'Today' && count_alltask > 0"
                 variant="warning"
                 class="ml-1 reset-radius btn-sm"
                 @click="openModalTaskToday()"
@@ -229,8 +261,8 @@ import ModalTaskToday from "./subcomponents/ModalTaskToday.vue";
 import ModalByUser from "./subcomponents/ModalByUser.vue";
 import Button from "@/views/components/button/Button.vue";
 // Import Data
-import fields from '../data/fields.list.data'
-import filtersList from '../data/filter.list.data'
+import fields from "../data/fields.list.data";
+import filtersList from "../data/filter.list.data";
 // Import Services
 import ListService from "../service/lists.service";
 export default {
@@ -241,19 +273,19 @@ export default {
     FilterSlot,
     Button,
   },
-  data:function() {
+  data: function () {
     return {
       modalTaskToday: false,
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: ""
+        model: "",
       },
       id: null,
       nameUser: "",
@@ -269,7 +301,7 @@ export default {
       arrayColumns: fields,
       fromToObject: {
         from: null,
-        to: null
+        to: null,
       },
       count_alltask: 0,
       count_donetask: 0,
@@ -279,95 +311,100 @@ export default {
       cancelList: false,
       add: null,
       newList: false,
-      filter:filtersList,
+      filter: filtersList,
     };
   },
   computed: {
     ...mapGetters({
-      skin: "appConfig/skin"
+      skin: "appConfig/skin",
     }),
     // Catching Mode Dark
-    classAdd:function() {
+    classAdd: function () {
       return this.skin == "dark"
         ? "background-color:#333B51"
         : "background-color: floralwhite;";
     },
-    getRoles:function() {
-      return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
+    getRoles: function () {
+      return this.isCeo || this.isSupervisor || this.isCoordinator
         ? true
         : false;
     },
 
-    clientRoute:function() {
+    clientRoute: function () {
       return "/commons/list-users/search-list-Of-user";
     },
     // Change Columns
-    visibleFields:function() {
-      if(this.currentUser.role_id == 1 || this.currentUser.role_id == 2){
-        return this.arrayColumns.filter(column => column.visible)
-      }else{
-        let newArrayColumn = [...this.arrayColumns]
-        newArrayColumn.splice(3,1)
-        return newArrayColumn.filter(column => column.visible);
-        
+    visibleFields: function () {
+      if (this.isCeo || this.isSupervisor || this.isCoordinator) {
+        return this.arrayColumns.filter((column) => column.visible);
+      } else {
+        let newArrayColumn = [...this.arrayColumns];
+        newArrayColumn.splice(3, 1);
+        return newArrayColumn.filter((column) => column.visible);
       }
     },
     ...mapGetters({
-      currentUser: "auth/currentUser"
+      currentUser: "auth/currentUser",
     }),
     // For Create Grupo List of Users
-    statusCreateList:function() {
-      return this.currentUser.role_id == 2 ? true : false;
-    }
+    statusCreateList: function () {
+      return this.isCeo || this.isSupervisor || this.isCoordinator
+        ? true
+        : false;
+    },
   },
   methods: {
-    updatingTasks:function() {
+    updatingTasks: function () {
       this.$refs.refClientsList.refresh();
     },
-    openModalTaskToday:function() {
+    openModalTaskToday: function () {
       this.modalTaskToday = true;
     },
-    closeModalTaskToday:function() {
+    closeModalTaskToday: function () {
       this.modalTaskToday = false;
     },
-    refresh:function() {
+    refresh: function () {
       this.$refs.refClientsList.refresh();
     },
-    statusRol:function() {
-      this.add = this.currentUser.role_id == 2 ? true : false;
+    statusRol: function () {
+      this.add =
+        this.isCeo || this.isSupervisor || this.isCoordinator ? true : false;
     },
 
-    addlist:function() {
+    addlist: function () {
       this.newList = true;
       this.add = false;
       this.cancelList = true;
     },
-    closelist:function() {
+    closelist: function () {
       this.newList = false;
       this.add = true;
       this.cancelList = false;
     },
-    updateList:function() {
+    updateList: function () {
       this.$refs.refClientsList.refresh();
     },
-    resetSearch:function() {
+    resetSearch: function () {
       this.searchInput = "";
       this.fromToObject.from = null;
       this.fromToObject.to = null;
       this.$refs.refClientsList.refresh();
     },
-    myProvider: async function(ctx) {
-      try{
-        const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`, {
-        perPage: ctx.perPage,
-        id:
-          this.currentUser.role_id == 1 || this.currentUser.role_id == 2
-            ? null
-            : this.currentUser.user_id,
-        from: this.filter[0].model,
-        to: this.filter[1].model
-      });
-      const items = data.data.data;
+    myProvider: async function (ctx) {
+      try {
+        const data = await amgApi.post(
+          `${ctx.apiUrl}?page=${ctx.currentPage}`,
+          {
+            perPage: ctx.perPage,
+            id:
+              this.isCeo || this.isSupervisor || this.isCoordinator
+                ? null
+                : this.currentUser.user_id,
+            from: this.filter[0].model,
+            to: this.filter[1].model,
+          }
+        );
+        const items = data.data.data;
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
         this.perPage = data.data.per_page;
@@ -382,27 +419,26 @@ export default {
           this.count_alltask = 0;
           this.count_donetask = 0;
         }
-        if (this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
+        if (this.isCeo || this.isSupervisor || this.isCoordinator) {
           return items || [];
         } else {
           let firstOption = {
             created_at: "Today",
             create_name: "System",
             cant: this.count_alltask,
-            done: this.count_donetask
+            done: this.count_donetask,
           };
           // let newData = data.data;
           items.unshift(firstOption);
         }
         return items || [];
-
-      }catch(error){
-        console.error(error)
-        return []
+      } catch (error) {
+        console.error(error);
+        return [];
       }
     },
 
-    deleteUser: async function(id) {
+    deleteUser: async function (id) {
       const confirm = await this.showConfirmSwal(
         "Are you sure?",
         "You won't be able to revert this!"
@@ -414,7 +450,7 @@ export default {
           this.removePreloader();
           this.$swal
             .fire("Deleted!", "Your file has been deleted.", "success")
-            .then(res => {
+            .then((res) => {
               if (res) {
                 this.resetSearch();
               }
@@ -425,7 +461,7 @@ export default {
         }
       }
     },
-    groupUsers: async function() {
+    groupUsers: async function () {
       try {
         const data = await ListService.groupUser({ roles: "[]", type: "1" });
         this.options = data;
@@ -440,8 +476,8 @@ export default {
         );
       }
     },
-    saveGroup:function() {
-      this.$refs.form.validate().then(async success => {
+    saveGroup: function () {
+      this.$refs.form.validate().then(async (success) => {
         if (!success) {
           return;
         } else {
@@ -452,11 +488,11 @@ export default {
           if (confirm.isConfirmed) {
             try {
               const params = {
-                users: this.value.map(user => {
+                users: this.value.map((user) => {
                   return user.id;
                 }),
                 number: this.number,
-                create_id: this.currentUser.user_id
+                create_id: this.currentUser.user_id,
               };
               this.addPreloader();
               const data = await ListService.saveGroup(params);
@@ -467,7 +503,7 @@ export default {
               // this.showSuccessSwal()
               this.$swal.fire({
                 icon: "success",
-                title: "List Created in successfully"
+                title: "List Created in successfully",
               });
             } catch (error) {
               console.error(error);
@@ -478,7 +514,7 @@ export default {
         }
       });
     },
-    modalOpen:function(name, id, idByUser) {
+    modalOpen: function (name, id, idByUser) {
       this.nameUser = name;
       this.id = id;
       this.idByUser = idByUser;
@@ -488,17 +524,16 @@ export default {
         this.modalChanging = false;
       }
     },
-    closeModal:function() {
+    closeModal: function () {
       this.modalChanging = false;
-    }
+    },
   },
-  created:function() {
+  created: function () {
     this.groupUsers();
     this.statusRol();
-  }
+  },
 };
 </script>
-
 
 <style lang="scss" scoped>
 .per-page-selector {
@@ -537,5 +572,3 @@ td.div {
 @import "@core/scss/vue/libs/vue-select.scss";
 @import "@core/scss/vue/libs/vue-sweetalert.scss";
 </style>
-
-
