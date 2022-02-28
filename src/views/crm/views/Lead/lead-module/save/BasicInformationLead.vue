@@ -80,12 +80,12 @@
         <!-- Dob -->
         <validation-provider name="DOB">
           <b-form-group label="DOB" label-for="dob">
-
             <kendo-datepicker
                 :class="['w-100 rounded bg-transparent k-picker-custom', {'text-white':isDarkSkin}]"
                 :format="'MM/dd/yyyy'"
                 v-model="userData.dob"
                 v-mask="'##/##/####'"
+                class="leads-datepicker"
             />
           </b-form-group>
         </validation-provider>
