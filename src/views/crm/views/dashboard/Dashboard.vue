@@ -367,7 +367,7 @@
                     <b-col cols="12" sm="12" md="12" lg="5" class="pb-1">
                       <v-select
                         id="v-user"
-                        v-if="[1, 2].includes(currentUser.role_id)"
+                        v-if="isCeo || isSupervisor || isCoordinator"
                         showIcons="false"
                         v-model="userfilter"
                         :style="
@@ -641,7 +641,6 @@ export default {
         : "";
     },
     statusHeightByScreenColTwo: function () {
-      console.log(this.allSizeOfScreen);
       switch (this.allSizeOfScreen) {
         case "xxl":
           return "height: 800px !important;max-height: 900px !important;";
@@ -814,7 +813,7 @@ export default {
       try {
         this.addPreloader();
         let { user_id } = this.currentUser;
-        if (this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
+        if (this.isCeo || this.isSupervisor || this.isCoordinator) {
           user_id = 0;
         }
         const response = await DashboardService.getDashboardData({

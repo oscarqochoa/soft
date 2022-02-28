@@ -9,13 +9,13 @@
         :link-classes="linkClasses"
       >New Clients</b-nav-item>
       <b-nav-item
-        v-if="(currentUser.role_id == 1 || currentUser.role_id == 2)"
+        v-if="(currentUser.role_id == 1 || currentUser.role_id == 2 || isCoordinator)"
         :to="{name: 'sales-made-crm-add-change'}"
         exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"
       >Add/Change Service</b-nav-item>
       <b-nav-item
-        v-if="(currentUser.role_id == 1 || currentUser.role_id == 2)"
+        v-if="(currentUser.role_id == 1 || currentUser.role_id == 2 || isCoordinator)"
         :to="{name: 'sales-made-crm-annulled'}"
         exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"

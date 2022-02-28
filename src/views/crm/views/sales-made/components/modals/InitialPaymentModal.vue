@@ -565,7 +565,6 @@ export default {
                 const res = await this.showSuccessSwal();
                 if (res.value) {
                   this.amount = response.data.data;
-                  console.log(this.$refs[refCard])
                   if(this.initial_payment.programid != 2) this.$refs[refCard].$el.value = "$ 0.00";
                   await this.getListCards();
                   this.reloadTable = true;
@@ -636,6 +635,6 @@ export default {
 }
 
 .bg-background-dark {
-  background-color: #2B2B4B !important;
+  background-color: #17171A !important;
 }
 </style>

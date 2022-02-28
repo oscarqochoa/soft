@@ -27,7 +27,10 @@
                   disabled
                   :value="cardOriginalNumber ? cardOriginalNumber : cardNumber"
                 />
-                <b-input-group-append v-if="isCeo || isSupervisor" is-text>
+                <b-input-group-append
+                  v-if="isCeo || isSupervisor || isCoordinator"
+                  is-text
+                >
                   <feather-icon
                     v-if="!isCreditCardLoading"
                     :icon="creditCardToggleIcon"
@@ -73,7 +76,10 @@
                       disabled
                       :value="cardCvv"
                     />
-                    <b-input-group-append v-if="isCeo || isSupervisor" is-text>
+                    <b-input-group-append
+                      v-if="isCeo || isSupervisor || isCoordinator"
+                      is-text
+                    >
                       <feather-icon
                         :icon="isShowCardCvv ? 'EyeOffIcon' : 'EyeIcon'"
                         class="cursor-pointer"

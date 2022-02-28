@@ -95,9 +95,6 @@ export default {
       avatarText
     };
   },
-  mounted() {
-    console.log(this.G_USER_STATUS_SESSION);
-  },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",

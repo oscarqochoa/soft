@@ -459,9 +459,9 @@ export default {
         }
         if (this.mode === 2) {
           this.item = await CrmService.getLeadsFilesAccount({
-            id: "ec41e66e-c94e-11e9-8837-1687e29b1cde",
-            programid: 2,
-            saleid: 11829,
+            id: this.files.client_account_id,
+            programid: this.files.program_id,
+            saleid: this.files.sale_id,
           });
           this.fields = [
             {

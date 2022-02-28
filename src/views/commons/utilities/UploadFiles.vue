@@ -66,7 +66,6 @@ export default {
       }
     },
     openFileInput(){
-      console.log(this.$refs[this.source], 'log')
       this.$refs[this.source].$refs.input.click();
     },
     addImage(file) {

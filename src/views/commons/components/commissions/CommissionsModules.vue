@@ -16,7 +16,12 @@
           tabSupervisorCrm
         />
       </b-tab>
-      <b-tab lazy title="Departments" :title-link-class="[bgTabsNavs, 'px-3']">
+      <b-tab
+        lazy
+        title="Departments"
+        :title-link-class="[bgTabsNavs, 'px-3']"
+        v-if="isSupervisorCrm && !isCoordinator"
+      >
         <CommissionsComponent
           :module="$route.meta.module"
           tab="supervisorCrm"
