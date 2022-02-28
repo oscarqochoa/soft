@@ -30,26 +30,29 @@
     </header-slot>
 
     <card-personal-information
+      class="card-group"
       :personalInfo="personalInfo"
       :personalAddress="personalAddress"
       :personalMobile="personalMobile"
       :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
     />
     <card-address
+      class="card-group"
       :personalAddress="personalAddress"
       :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
     />
 
     <b-row>
       <b-col md="6">
-        <card-credit-report />
+        <card-credit-report class="card-group" />
       </b-col>
       <b-col md="6">
-        <card-lead-cards />
+        <card-lead-cards class="card-group" />
+      </b-col>
+      <b-col cols="12">
+        <card-contact-information class="card-group" />
       </b-col>
     </b-row>
-
-    <card-contact-information />
   </div>
 </template>
 
@@ -106,7 +109,7 @@ export default {
         await this.A_GET_LEAD(idParam);
         this.removePreloader();
       } catch (error) {
-        console.log("Something went wrong on getLead", error);
+        this.removePreloader();
         throw error;
       }
     },
@@ -209,5 +212,14 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.card-group > .card {
+  > .card-header {
+    border-bottom: 1px solid rgb(80 85 99 / 50%);
+    margin-bottom: 1.5rem;
+    .card-title {
+      font-weight: bold;
+    }
+  }
+}
 </style>

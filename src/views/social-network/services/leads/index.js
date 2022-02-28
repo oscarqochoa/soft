@@ -14,7 +14,7 @@ class SNLeads {
 
     async getLead(id) {
         try {
-            const { data, status } = await amgApi.get('/get-lead/' + id)
+            const { data, status } = await amgApi.get('/lead/show/' + id)
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on get lead", error);
@@ -44,7 +44,7 @@ class SNLeads {
 
     async postUpdateLeadInformation(body) {
         try {
-            const { data, status } = await amgApi.post('/edit-show-lead-sn', body);
+            const { data, status } = await amgApi.post('/lead/social-network/edit-show-lead-sn', body);
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on postUpdateLeadInformation", error);
@@ -54,7 +54,7 @@ class SNLeads {
 
     async postUpdateLeadInformationFields(body) {
         try {
-            const { data, status } = await amgApi.post('/savefieldslead', body);
+            const { data, status } = await amgApi.post('/lead/update-fields-lead', body);
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on postUpdateLeadInformationFields", error);

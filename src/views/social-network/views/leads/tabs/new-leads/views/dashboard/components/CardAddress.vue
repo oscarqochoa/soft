@@ -141,7 +141,7 @@ export default {
         "SocialNetworkLeadsStore/A_POST_UPDATE_LEAD_INFORMATION_FIELDS",
     }),
     enableForm() {
-      this.showSwalGeneric(
+      this.showConfirmSwal(
         "Are you sure?",
         "Do you want to edit the information?",
         "question"
@@ -152,7 +152,7 @@ export default {
       });
     },
     disableForm() {
-      this.showSwalGeneric(
+      this.showConfirmSwal(
         "Are you sure?",
         "Changes will be lost!",
         "question"
@@ -182,7 +182,7 @@ export default {
     },
     updateInformation() {
       try {
-        this.showSwalGeneric(
+        this.showConfirmSwal(
           "Are you sure?",
           "The address will be save",
           "question"
@@ -218,6 +218,7 @@ export default {
           }
         });
       } catch (error) {
+        this.removePreloader();
         console.log("Something went wrong on updateInformation", error);
         throw error;
       }

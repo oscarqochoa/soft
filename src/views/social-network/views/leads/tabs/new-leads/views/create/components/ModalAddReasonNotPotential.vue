@@ -133,6 +133,7 @@ export default {
           }
         });
       } catch (error) {
+        this.removePreloader();
         console.log("Something went wrong with saveReason: ", error);
         throw error;
       }
