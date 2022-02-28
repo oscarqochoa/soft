@@ -425,4 +425,11 @@ $borderamg: #efb911;
   .border-hr{
     border-color: $theme-dark-input-placeholder-color !important;
   }
+
+  /* Audio-Notes */
+  .custom-file-label {
+    right: 0;
+    left: 0;
+    background-color: transparent !important;
+}
 }
