@@ -22,7 +22,8 @@
               <b-card
                 @click="changeTab(0)"
                 class="ecommerce-card col-lg-12 cursor-pointer"
-                :class="{classAdd,
+                :class="{
+                  classAdd,
                   'ecommerce-card-leads': !itemCards[0] && !isTouch,
                 }"
                 :style="
@@ -87,7 +88,8 @@
             <b-row class="b-row-card">
               <b-card
                 class="ecommerce-card col-lg-12 cursor-pointer"
-                :class="{classAdd,
+                :class="{
+                  classAdd,
                   'ecommerce-card-appointments': !itemCards[1] && !isTouch,
                 }"
                 @click="changeTab(1)"
@@ -152,8 +154,9 @@
             <!-- Card Tasks-->
             <b-row class="b-row-card">
               <b-card
-                class=" ecommerce-card col-lg-12 cursor-pointer"
-                :class="{classAdd,
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{
+                  classAdd,
                   'ecommerce-card-tasks': !itemCards[2] && !isTouch,
                 }"
                 @click="changeTab(2)"
@@ -218,8 +221,9 @@
             <!-- Card Sales-->
             <b-row class="b-row-card">
               <b-card
-                class=" ecommerce-card col-lg-12 cursor-pointer"
-                :class="{classAdd,
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{
+                  classAdd,
                   'ecommerce-card-sales': !itemCards[3] && !isTouch,
                 }"
                 @click="changeTab(3)"
@@ -285,7 +289,8 @@
             <b-row class="b-row-card">
               <b-card
                 class="ecommerce-card col-lg-12 cursor-pointer"
-                :class="{classAdd,
+                :class="{
+                  classAdd,
                   'ecommerce-card-capturated': !itemCards[4] && !isTouch,
                 }"
                 @click="changeTab(4)"
@@ -361,7 +366,7 @@
                     <b-col cols="12" sm="12" md="12" lg="5" class="pb-1">
                       <v-select
                         id="v-user"
-                        v-if="[1, 2].includes(currentUser.role_id)"
+                        v-if="isCeo || isSupervisor || isCoordinator"
                         showIcons="false"
                         v-model="userfilter"
                         :style="
@@ -501,7 +506,7 @@
 </template>
 
 <script>
-import isTouchDevice from 'is-touch-device'
+import isTouchDevice from "is-touch-device";
 
 import { dragscroll } from "vue-dragscroll";
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
@@ -577,15 +582,14 @@ export default {
       sizeScreenByPixels: "app/sizeScreenByPixels",
       allSizeOfScreen: "app/allSizeOfScreen",
     }),
-    isTouch(){
-      return isTouchDevice()
-
+    isTouch() {
+      return isTouchDevice();
     },
     classWrapper: function () {
       return "item-wrapper justify-content-start align-items-center";
     },
-    flexCenter:function(){
-      return "d-flex justify-content-center align-items-center"
+    flexCenter: function () {
+      return "d-flex justify-content-center align-items-center";
     },
     classAdd: function () {
       return this.skin == "dark" ? "dark" : "";
@@ -631,7 +635,6 @@ export default {
         : "";
     },
     statusHeightByScreenColTwo: function () {
-      console.log(this.allSizeOfScreen)
       switch (this.allSizeOfScreen) {
         case "xxl":
           return "height: 800px !important;max-height: 900px !important;";
@@ -804,7 +807,7 @@ export default {
       try {
         this.addPreloader();
         let { user_id } = this.currentUser;
-        if (this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
+        if (this.isCeo || this.isSupervisor || this.isCoordinator) {
           user_id = 0;
         }
         const response = await DashboardService.getDashboardData({

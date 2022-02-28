@@ -22,11 +22,11 @@
             <feather-icon icon="MessageCircleIcon" class="mr-50" />Send SMS
           </b-button>
           <b-button
-              v-if="[5].includes(currentUser.role_id)"
-              variant="success"
-              class="ml-1"
-              :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.assign_id).includes(currentUser.user_id))"
-              @click="addListSeller()"
+            v-if="[5].includes(currentUser.role_id)"
+            variant="success"
+            class="ml-1"
+            :disabled="!leadsSelecteds.length"
+            @click="addListSeller()"
           >
             <feather-icon icon="ListIcon" class="mr-50" />ADD LIST
           </b-button>
@@ -346,7 +346,6 @@ export default {
       }
     },
     setOptionsOnFilters() {
-      console.log(this.filter);
       this.filter[2].options = this.G_STATUS_LEADS;
       this.filter[3].options = this.G_OWNERS;
       this.filter[4].options = this.G_OWNERS;
@@ -355,7 +354,6 @@ export default {
       this.filter[7].options = this.G_STATES;
       this.filter[8].options = this.G_SOURCE_NAMES;
       this.filter[9].options = this.G_TYPE_DOCS;
-      console.log(this.filter);
     },
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;
@@ -486,9 +484,7 @@ export default {
       if (confirm.isConfirmed) {
         this.addPreloader();
         //filter just the owner of the lead
-        const leadList = this.leadsSelecteds
-            .filter(el => el.assign_id === this.currentUser.user_id)
-            .map(el => el.id);
+        const leadList = this.leadsSelecteds.map(el => el.id);
         try {
           const params = {
             user_id: this.currentUser.user_id,
