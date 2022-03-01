@@ -130,3 +130,52 @@
         }
     }
 }
+
+.dark-layout{
+    .k-calendar-container{
+        background: $theme-dark-body-bg !important;
+    }
+    .k-widget.k-calendar{
+        background: $theme-dark-body-bg !important;
+        .k-header{
+            background: $theme-dark-body-bg !important;
+            color: white;
+        }
+        .k-calendar-view{
+            background: $theme-dark-body-bg !important;
+            .k-content{
+                background: $theme-dark-body-bg !important;
+                thead{
+                    color: white !important;
+                    tr{
+                        background: $theme-dark-table-header-bg !important;
+                        th{
+                            background: $theme-dark-table-header-bg !important;
+                            color: white !important;
+                        }
+                    }
+                }
+                tbody{
+                    color: white !important;
+                    tr{
+                        background: $theme-dark-table-bg !important;
+                        td{
+                            background: $theme-dark-table-bg !important;
+                        }
+                        // .k-state-selected{
+                        //     .k-link{
+                        //         background-color: $primary!important;
+                        //         border-color: $primary!important;
+                        //         color: white !important;
+                        //     }
+                        // }
+                    }
+                }
+            }
+        }
+        .k-footer{
+            background: $theme-dark-body-bg !important;
+            color: white !important;
+        }
+    }
+}

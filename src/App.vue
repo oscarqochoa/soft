@@ -95,7 +95,6 @@ export default {
       id: this.currentUser.user_id
     });
   },
-  mounted() {},
   beforeCreate() {
     // Set colors in theme
     const colors = [
