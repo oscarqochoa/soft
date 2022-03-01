@@ -29,15 +29,15 @@
       </b-row>
     </header-slot>
 
-    <b-row>
+    <b-row class="card-group">
       <b-col md="6">
-        <card-client />
-      </b-col>
-      <b-col md="6">
-        <card-tasks />
+        <card-client :data="lead" />
       </b-col>
       <b-col md="6">
         <card-notes />
+      </b-col>
+      <b-col md="6">
+        <card-tasks />
       </b-col>
       <b-col md="6">
         <card-files />
@@ -52,6 +52,9 @@ import CardNotes from "./components/CardNotes.vue";
 import CardTasks from "./components/CardTasks.vue";
 import CardFiles from "./components/CardFiles.vue";
 
+// Services
+import SnLeadsService from "@/views/social-network/services/leads";
+
 export default {
   components: {
     "card-client": CardClient,
@@ -59,8 +62,46 @@ export default {
     "card-tasks": CardTasks,
     "card-files": CardFiles,
   },
+  data() {
+    return {
+      lead: {},
+    };
+  },
+  computed: {},
+  methods: {
+    async getLead() {
+      try {
+        this.addPreloader();
+        let idParam = this.$route.params.id;
+        const response = await SnLeadsService.getOldLead(idParam);
+
+        if (response.status == 200) {
+          this.lead = response.data[0];
+        }
+
+        this.removePreloader();
+      } catch (error) {
+        this.removePreloader();
+        throw error;
+      }
+    },
+  },
+  async created() {
+    await this.getLead();
+  },
 };
 </script>
 
-<style>
+<style lang="scss" >
+.card-group > div > .card {
+  height: calc(100% - 2rem);
+  min-height: 350px;
+  > .card-header {
+    border-bottom: 1px solid rgb(80 85 99 / 50%);
+    margin-bottom: 1.5rem;
+    .card-title {
+      font-weight: bold;
+    }
+  }
+}
 </style>

@@ -1,14 +1,15 @@
 <template>
-  <div>
-    <b-card class="card-tasks">
-      <b-container>
+    <b-card class="px-0">
+      <template #header>
         <b-card-title>
-          <h3 class="title-card">Tasks</h3>
+          Tasks &nbsp;
+          <span>
+            <a class="text-important"> </a>
+          </span>
         </b-card-title>
-        <hr />
-      </b-container>
+      </template>
+
       <b-container class="mt-1">
-        <br />
         <b-tabs pills>
           <b-tab title="CRM">
             <b-table-simple>
@@ -75,7 +76,6 @@
         </b-tabs>
       </b-container>
     </b-card>
-  </div>
 </template>
 
 <script>

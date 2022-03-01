@@ -82,6 +82,15 @@ class SNLeads {
         }
     }
 
+    async getOldLead(id) {
+        try {
+            const { data, status } = await amgApi.get('/lead/social-network/show-old-lead/' + id)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
     async postDeleteOldLead(async) {
 
     }

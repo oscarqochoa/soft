@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card>
+    <b-card class="px-0">
       <b-container>
         <b-row>
           <b-col lg="4" md="4" sm="4" cols="9">

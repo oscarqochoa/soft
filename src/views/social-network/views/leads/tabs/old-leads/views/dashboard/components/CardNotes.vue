@@ -1,15 +1,15 @@
 <template>
-  <div>
     <b-card>
-      <b-container>
+      <template #header>
         <b-card-title>
-          <h3 class="title-card">Notes</h3>
+          Notes &nbsp;
+          <span>
+            <a class="text-important"> </a>
+          </span>
         </b-card-title>
-        <hr />
-      </b-container>
-      <b-container class="mt-1">
-        <br />
+      </template>
 
+      <b-container class="mt-1">
         <b-form-textarea
           id="textarea"
           rows="3"
@@ -35,7 +35,6 @@
         </b-row>
       </b-container>
     </b-card>
-  </div>
 </template>
 
 <script>
