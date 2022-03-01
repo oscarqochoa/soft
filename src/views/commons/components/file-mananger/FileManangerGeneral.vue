@@ -273,13 +273,13 @@
       body-class="p-50"
       button-size="sm"
       ok-title="Ok"
-      hide-footer
+      :hide-footer="files.length === 0"
       centered
       @hidden="actionOnHideUploadFileModal"
     >
       <drag-and-drop v-model="files" :files-array="files" />
       <template #modal-footer>
-        <b-button v-show="files.length" variant="primary" @click="onUploadFile">
+        <b-button variant="primary" @click="onUploadFile">
           Upload
         </b-button>
       </template>
