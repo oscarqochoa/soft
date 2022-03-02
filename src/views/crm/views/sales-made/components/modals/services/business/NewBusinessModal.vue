@@ -1,52 +1,46 @@
 <template>
   <validation-observer ref="form">
     <b-modal
-        v-model="ownControl"
-        modal-class="modal-primary"
-        modal
-        size="lg"
-        scrollable
-        header-class="p-0"
-        header-bg-variant="transparent border-bottom border-bottom-2"
-        @hidden="hideModal(false, 0)"
+      v-model="ownControl"
+      modal-class="modal-primary"
+      modal
+      size="lg"
+      scrollable
+      header-class="p-0"
+      header-bg-variant="transparent border-bottom border-bottom-2"
+      @hidden="hideModal(false, 0)"
     >
       <!-- HEADER START -->
       <template v-slot:modal-header>
         <modal-service-header
-            :type-modal="typeModal"
-            :users-services="usersServices"
-            :programs-all="programsAll"
-            :header-s="headerS"
-            :sales="salesClient"
-            @changeProgram="changeProgram"
-            @close="hideModal(false, 0)"
+          :type-modal="typeModal"
+          :users-services="usersServices"
+          :programs-all="programsAll"
+          :header-s="headerS"
+          :sales="salesClient"
+          @changeProgram="changeProgram"
+          @close="hideModal(false, 0)"
         />
       </template>
       <!-- HEADER END -->
       <b-card
-          header="Single payment"
-          header-bg-variant="info"
-          header-class="font-weight-bolder text-white py-1"
+        header="Single payment"
+        header-bg-variant="info"
+        header-class="font-weight-bolder text-white py-1"
       >
         <b-row class="mt-2">
           <template v-for="(rate, index) in rates">
-            <b-col
-                v-if="rate.type === '5'"
-                :key="index"
-                lg="3"
-                md="6"
-                xs="12"
-            >
+            <b-col v-if="rate.type === '5'" :key="index" lg="3" md="6" xs="12">
               <b-card
-                  class="font-weight-bolder"
-                  :class="{
-                          'cursor-pointer hover-card': !isModalShow,
-                          'border border-2': true,
-                          'text-white': selectedRate === rate && isLightSkin,
-                          'bg-click': selectedRate === rate,
-                        }"
-                  bg-variant="transparent"
-                  @click="!isModalShow && changeSelectedRate(rate)"
+                class="font-weight-bolder"
+                :class="{
+                  'cursor-pointer hover-card': !isModalShow,
+                  'border border-2': true,
+                  'text-white': selectedRate === rate && isLightSkin,
+                  'bg-click': selectedRate === rate,
+                }"
+                bg-variant="transparent"
+                @click="!isModalShow && changeSelectedRate(rate)"
               >
                 <p class="text-center m-0">
                   {{ rate.description }}
@@ -63,26 +57,37 @@
         </b-row>
         <!-- Others Single Payments -->
         <transition name="fade">
-          <div v-if="['Silver', 'Gold', 'Platinium'].includes(selectedRate.description) && selectedRate.type === '5'">
+          <div
+            v-if="
+              ['Silver', 'Gold', 'Platinium'].includes(
+                selectedRate.description
+              ) && selectedRate.type === '5'
+            "
+          >
             <b-row class="py-1">
-              <b-col v-for="(website, index) in websiteTypes" cols="4" :key="index">
-                <b-form-radio
-                    :value="website"
-                    v-model="websiteType"
-                >
+              <b-col
+                v-for="(website, index) in websiteTypes"
+                cols="4"
+                :key="index"
+              >
+                <b-form-radio :value="website" v-model="websiteType">
                   <p class="mb-0">{{ website.description }}</p>
-                  <p class="mb-0"> $ {{ website.price.toFixed(2) }}</p>
+                  <p class="mb-0">$ {{ website.price.toFixed(2) }}</p>
                 </b-form-radio>
               </b-col>
             </b-row>
             <b-row class="py-1">
-              <b-col v-for="(socialNetwork, index) in socialNetworkTypes" cols="4" :key="index">
+              <b-col
+                v-for="(socialNetwork, index) in socialNetworkTypes"
+                cols="4"
+                :key="index"
+              >
                 <b-form-radio
-                    :value="socialNetwork"
-                    v-model="socialNetworkType"
+                  :value="socialNetwork"
+                  v-model="socialNetworkType"
                 >
                   <p class="mb-0">{{ socialNetwork.description }}</p>
-                  <p class="mb-0"> $ {{ socialNetwork.price.toFixed(2) }}</p>
+                  <p class="mb-0">$ {{ socialNetwork.price.toFixed(2) }}</p>
                 </b-form-radio>
               </b-col>
             </b-row>
@@ -91,29 +96,23 @@
       </b-card>
 
       <b-card
-          header="Monthly payment"
-          header-bg-variant="info"
-          header-class="font-weight-bolder text-white py-1"
+        header="Monthly payment"
+        header-bg-variant="info"
+        header-class="font-weight-bolder text-white py-1"
       >
         <b-row class="mt-2">
           <template v-for="(rate, index) in rates">
-            <b-col
-                v-if="rate.type === '6'"
-                :key="index"
-                lg="3"
-                md="6"
-                xs="12"
-            >
+            <b-col v-if="rate.type === '6'" :key="index" lg="3" md="6" xs="12">
               <b-card
-                  class="font-weight-bolder"
-                  :class="{
-                          'cursor-pointer hover-card': !isModalShow,
-                          'border border-2': true,
-                          'text-white': selectedRate === rate && isLightSkin,
-                          'bg-click': selectedRate === rate,
-                        }"
-                  bg-variant="transparent"
-                  @click="!isModalShow && changeSelectedRate(rate)"
+                class="font-weight-bolder"
+                :class="{
+                  'cursor-pointer hover-card': !isModalShow,
+                  'border border-2': true,
+                  'text-white': selectedRate === rate && isLightSkin,
+                  'bg-click': selectedRate === rate,
+                }"
+                bg-variant="transparent"
+                @click="!isModalShow && changeSelectedRate(rate)"
               >
                 <p class="text-center m-0">
                   {{ rate.description }}
@@ -130,29 +129,50 @@
         </b-row>
         <!-- Others Single Payments -->
         <transition name="fade">
-          <div v-if="['Silver', 'Gold', 'Platinium'].includes(selectedRate.description) && selectedRate.type === '6'">
+          <div
+            v-if="
+              ['Silver', 'Gold', 'Platinium'].includes(
+                selectedRate.description
+              ) && selectedRate.type === '6'
+            "
+          >
             <b-row class="py-1">
-              <b-col v-for="(website, index) in websiteTypes" cols="4" :key="index">
+              <b-col
+                v-for="(website, index) in websiteTypes"
+                cols="4"
+                :key="index"
+              >
                 <b-form-radio
-                    :value="website"
-                    v-model="websiteType"
-                    :disabled="isModalShow"
+                  :value="website"
+                  v-model="websiteType"
+                  :disabled="isModalShow"
                 >
                   <p class="mb-0">{{ website.description }}</p>
-                  <p class="mb-0" v-if="website.description !== 'Standard Website'"> $ {{ website.price.toFixed(2) }}</p>
-                  <p class="mb-0" v-else> $ {{ (website.price + 100).toFixed(2) }}</p>
+                  <p
+                    class="mb-0"
+                    v-if="website.description !== 'Standard Website'"
+                  >
+                    $ {{ website.price.toFixed(2) }}
+                  </p>
+                  <p class="mb-0" v-else>
+                    $ {{ (website.price + 100).toFixed(2) }}
+                  </p>
                 </b-form-radio>
               </b-col>
             </b-row>
             <b-row class="py-1">
-              <b-col v-for="(socialNetwork, index) in socialNetworkTypes" cols="4" :key="index">
+              <b-col
+                v-for="(socialNetwork, index) in socialNetworkTypes"
+                cols="4"
+                :key="index"
+              >
                 <b-form-radio
-                    :value="socialNetwork"
-                    v-model="socialNetworkType"
-                    :disabled="isModalShow"
+                  :value="socialNetwork"
+                  v-model="socialNetworkType"
+                  :disabled="isModalShow"
                 >
                   <p class="mb-0">{{ socialNetwork.description }}</p>
-                  <p class="mb-0"> $ {{ socialNetwork.price.toFixed(2) }}</p>
+                  <p class="mb-0">$ {{ socialNetwork.price.toFixed(2) }}</p>
                 </b-form-radio>
               </b-col>
             </b-row>
@@ -161,84 +181,107 @@
       </b-card>
       <template #modal-footer>
         <!-- total -->
-        <b-row
-            class="w-100 d-flex align-items-center justify-content-between"
-        >
-          <b-col cols="8">
-            <b-row>
-              <b-col>
-                <!-- Fee -->
+        <b-row class="w-100 d-flex align-items-center justify-content-between">
+          <b-col lg="4" md="12">
+            <ValidationProvider v-slot="{ errors }" rules="required|money-1">
+              <b-col class="px-0">
                 <b-row
-                    class="d-flex justify-content-start align-items-center"
+                  class="w-100 d-flex align-items-center justify-content-end"
                 >
-                  <ValidationProvider
-                      v-slot="{ errors }"
-                      rules="required|money-1"
+                  <b-col
+                    cols="4"
+                    class="text-right font-weight-bold font-medium-2"
                   >
-                    <b-col class="p-2 rounded">
-                      <b-row class="w-100 d-flex align-items-center">
-                        <b-col
-                            cols="4"
-                            class="text-right font-weight-bold font-medium-2"
-                        >
-                          <div>FEE $</div>
-                        </b-col>
-                        <b-col cols="8">
-                          <money
-                              v-model="fee"
-                              v-bind="{
-                                decimal: '.',
-                                thousands: ',',
-                                prefix: '',
-                                precision: 2,
-                              }"
-                              class="
-                                text-center
-                                font-weight-bolder
-                                form-control form-control-sm
-                              "
-                              :style="
-                                errors[0] && validateMoney
-                                  ? 'color:red !important'
-                                  : ''
-                              "
-                              :class="{
-                                'border border-danger':
-                                  errors[0] && validateMoney,
-                              }"
-                              :disabled="isModalShow"
-                          />
-                        </b-col>
-                      </b-row>
-                    </b-col>
-                    <b-col
-                        v-if="errors[0] && validateMoney"
-                        class="invalid-feedback ml-4"
-                    >Fee is {{ errors[0] }}</b-col
-                    >
-                  </ValidationProvider>
+                    <div>FEE $</div>
+                  </b-col>
+                  <b-col class="p-0" cols="8">
+                    <money
+                      v-model="fee"
+                      v-bind="{
+                        decimal: '.',
+                        thousands: ',',
+                        prefix: '',
+                        precision: 2,
+                      }"
+                      class="text-center font-weight-bolder form-control form-control-sm"
+                      :style="
+                        errors[0] && validateMoney ? 'color:red !important' : ''
+                      "
+                      :class="{
+                        'border border-danger': errors[0] && validateMoney,
+                      }"
+                      :disabled="isModalShow"
+                    />
+                  </b-col>
                 </b-row>
               </b-col>
-            </b-row>
+              <b-col
+                v-if="errors[0] && validateMoney"
+                class="invalid-feedback ml-4"
+                >Fee is {{ errors[0] }}</b-col
+              >
+            </ValidationProvider>
           </b-col>
-          <b-col v-if="!isModalShow" cols="4">
+          <b-col lg="4" md="12" v-if="needValidationPassword">
+            <div v-if="needSuppervisorCurrentModulePassword">
+              <b-input-group>
+                <b-input
+                  v-model="suppervisorPassword"
+                  placeholder="Supervisor password"
+                  size="sm"
+                />
+                <b-input-group-append>
+                  <b-button
+                    @click="approveSupervisorModule"
+                    variant="warning"
+                    size="sm"
+                  >
+                    <feather-icon icon="CheckIcon" />
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </div>
+            <div v-else-if="needSuppervisorBusinessPassword">
+              <b-input-group>
+                <b-input
+                  v-model="businessSupervisorPassword"
+                  placeholder="Business supervisor password"
+                  size="sm"
+                />
+                <b-input-group-append>
+                  <b-button
+                    @click="approveSupervisorBusiness"
+                    variant="warning"
+                    size="sm"
+                  >
+                    <feather-icon icon="CheckIcon" />
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </div>
+          </b-col>
+          <b-col lg="4" md="12" v-if="!isModalShow">
             <b-col>
               <b-row>
                 <b-col
-                    v-if="!isModalAdd"
-                    class="d-flex justify-content-end align-items-center"
+                  v-if="!isModalAdd"
+                  class="d-flex justify-content-end align-items-center"
                 >
-                  <button-save :disabled="!selectedRate.description" class="mr-1" @click="saveRates()" />
+                  <button-save
+                    :disabled="!selectedRate.description"
+                    class="mr-1"
+                    @click="saveRates()"
+                  />
                   <button-cancel @click="hideModal(false, 0)" />
                 </b-col>
                 <b-col
-                    v-else
-                    class="d-flex justify-content-center align-items-center"
+                  v-else
+                  class="d-flex justify-content-center align-items-center"
                 >
                   <b-button
-                      class="rounded ml-1"
-                      variant="success"
-                      @click="saveRates()"
+                    class="rounded ml-1"
+                    variant="success"
+                    @click="saveRates()"
                   >
                     Continue
                     <feather-icon icon="ChevronsRightIcon" />
@@ -254,7 +297,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import ButtonSave from "@/views/commons/utilities/ButtonSave";
 import ButtonCancel from "@/views/commons/utilities/ButtonCancel";
 import ModalServiceHeader from "@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader";
@@ -297,7 +340,7 @@ export default {
     },
     headerS: {
       type: Object,
-      default: () => ({program: "", seller: "", captured: ""}),
+      default: () => ({ program: "", seller: "", captured: "" }),
     },
   },
   data() {
@@ -308,38 +351,141 @@ export default {
       websiteTypes: [],
       socialNetworkTypes: [],
       rates: [],
-      selectedRate: {description: ''},
+      selectedRate: { description: "" },
       websiteType: null,
       socialNetworkType: null,
       fee: 0,
       validateMoney: false,
       othersPayments: [],
       scoreId: null,
-    }
+      suppervisorPassword: "",
+      isSuppervisorPasswordApproved: false,
+      businessSupervisorPassword: "",
+      isBusinessSuppervisorPasswordApproved: false,
+    };
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    needValidationPassword() {
+      return this.discount >= 300;
+    },
+
+    needSuppervisorCurrentModulePassword() {
+      return (
+        this.discount < 500 &&
+        this.discount >= 300 &&
+        !this.isSuppervisorPasswordApproved
+      );
+    },
+
+    needSuppervisorBusinessPassword() {
+      return (
+        this.discount >= 500 && !this.isBusinessSuppervisorPasswordApproved
+      );
+    },
+
+    discount() {
+      return this.suggestedAmount - this.fee;
+    },
+
     isModalShow() {
       return this.typeModal === 2 || this.typeModal === 5;
     },
     isModalAdd() {
       return (
-          this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
+        this.typeModal === 3 || this.typeModal === 4 || this.typeModal === 6
       );
     },
     suggestedAmount() {
-      const ratePrice = this.selectedRate ? this.selectedRate.price: 0;
+      const ratePrice = this.selectedRate ? this.selectedRate.price : 0;
       let websitePrice = this.websiteType ? this.websiteType.price : 0;
-      if (this.selectedRate.type === '6' && this.websiteType === this.websiteTypes[0]) {
+      if (
+        this.selectedRate.type === "6" &&
+        this.websiteType === this.websiteTypes[0]
+      ) {
         websitePrice += 100;
       }
-      const socialNetworkPrice = this.socialNetworkType ? this.socialNetworkType.price : 0;
+      const socialNetworkPrice = this.socialNetworkType
+        ? this.socialNetworkType.price
+        : 0;
       return ratePrice + websitePrice + socialNetworkPrice;
     },
   },
   methods: {
+    async approveSupervisorModule() {
+      try {
+        this.addPreloader();
+        const response = await amgApi.post("/commons/get-password-supervisor", {
+          module_id: this.currentUser.modul_id,
+          field_pass: this.suppervisorPassword,
+          type: 1,
+        });
+        if (this.isResponseSuccess(response)) {
+          const passwordValidate = response.data;
+          if (passwordValidate === "ok") {
+            this.isSuppervisorPasswordApproved = true;
+            this.showToast(
+              "success",
+              "top-right",
+              "Success",
+              "CheckIcon",
+              "Password correct"
+            );
+          } else {
+            this.showToast(
+              "danger",
+              "top-right",
+              "Danger",
+              "XIcon",
+              "Incorrect password"
+            );
+          }
+        }
+      } catch (e) {
+        this.showErrorSwal(e);
+      } finally {
+        this.removePreloader();
+      }
+    },
+
+    async approveSupervisorBusiness() {
+      try {
+        this.addPreloader();
+        const response = await amgApi.post("/commons/get-password-supervisor", {
+          module_id: 3,
+          field_pass: this.businessSupervisorPassword,
+          type: 1,
+        });
+        if (this.isResponseSuccess(response)) {
+          const passwordValidate = response.data;
+          if (passwordValidate === "ok") {
+            this.isBusinessSuppervisorPasswordApproved = true;
+            this.showToast(
+              "success",
+              "top-right",
+              "Success",
+              "CheckIcon",
+              "Password correct"
+            );
+          } else {
+            this.showToast(
+              "danger",
+              "top-right",
+              "Danger",
+              "XIcon",
+              "Incorrect password"
+            );
+          }
+        }
+      } catch (e) {
+        this.showErrorSwal(e);
+      } finally {
+        this.removePreloader();
+      }
+    },
+
     async getScore() {
       try {
         const response = await amgApi.post("/attend/get-score-attend", {
@@ -412,7 +558,7 @@ export default {
         };
 
         const result = await this.showConfirmSwal(
-            `Are you sure you want to ${message}`
+          `Are you sure you want to ${message}`
         );
         if (result.value) {
           this.addPreloader();
@@ -433,16 +579,22 @@ export default {
     async showRates() {
       try {
         const response = await amgApi.post(
-            "/sales-made/get-details-sales-made-new",
-            { id: this.salesClient.id }
+          "/sales-made/get-details-sales-made-new",
+          { id: this.salesClient.id }
         );
         if (response.status === 200) {
           this.fee = response.data[0].fee;
           const otherPrices = JSON.parse(response.data[0].others_prices);
-          this.websiteType = this.websiteTypes.filter(type => type.id === otherPrices[0])[0];
-          this.socialNetworkType = this.socialNetworkTypes.filter(type => type.id === otherPrices[1])[0];
+          this.websiteType = this.websiteTypes.filter(
+            (type) => type.id === otherPrices[0]
+          )[0];
+          this.socialNetworkType = this.socialNetworkTypes.filter(
+            (type) => type.id === otherPrices[1]
+          )[0];
           console.log(this.websiteType, this.socialNetworkType);
-          [this.selectedRate] = this.rates.filter(rate => rate.id === response.data[0].rate_selected[0].rate_id);
+          [this.selectedRate] = this.rates.filter(
+            (rate) => rate.id === response.data[0].rate_selected[0].rate_id
+          );
           this.removePreloader();
         }
       } catch (error) {
@@ -455,10 +607,16 @@ export default {
           id: this.program,
         });
         if (response.status === 200) {
-          const rates = response.data.filter(r => ['5', '6', '7'].includes(r.type));
-          this.rates = rates.filter(rate => ['5', '6'].includes(rate.type));
-          this.websiteTypes = rates.filter(rate => rate.description.includes("Website"))
-          this.socialNetworkTypes = rates.filter(rate => rate.description.includes("Social Network"))
+          const rates = response.data.filter((r) =>
+            ["5", "6", "7"].includes(r.type)
+          );
+          this.rates = rates.filter((rate) => ["5", "6"].includes(rate.type));
+          this.websiteTypes = rates.filter((rate) =>
+            rate.description.includes("Website")
+          );
+          this.socialNetworkTypes = rates.filter((rate) =>
+            rate.description.includes("Social Network")
+          );
           if (!this.isModalShow) {
             this.removePreloader();
           }
@@ -471,57 +629,54 @@ export default {
       }
     },
     changeSelectedRate(rate) {
-      if (this.selectedRate.description === 'Register') {
+      if (this.selectedRate.description === "Register") {
         this.websiteType = null;
         this.socialNetworkType = null;
-      }
-      else if (this.selectedRate.description === 'Silver' && this.selectedRate.type === '5') {
+      } else if (
+        this.selectedRate.description === "Silver" &&
+        this.selectedRate.type === "5"
+      ) {
         this.selectedRate.price += this.websiteTypes[0].price;
-      }
-      else if (this.selectedRate.description === 'Silver' && this.selectedRate.type === '6') {
-        this.selectedRate.price += (this.websiteTypes[0].price + 100);
-      }
-      else if (this.selectedRate.description === 'Gold') {
-        this.selectedRate.price += this.websiteTypes[1].price
+      } else if (
+        this.selectedRate.description === "Silver" &&
+        this.selectedRate.type === "6"
+      ) {
+        this.selectedRate.price += this.websiteTypes[0].price + 100;
+      } else if (this.selectedRate.description === "Gold") {
+        this.selectedRate.price += this.websiteTypes[1].price;
         this.selectedRate.price += this.socialNetworkTypes[1].price;
-      }
-      else if (this.selectedRate.description === 'Platinium') {
+      } else if (this.selectedRate.description === "Platinium") {
         this.selectedRate.price += this.websiteTypes[2].price;
         this.selectedRate.price += this.socialNetworkTypes[2].price;
       }
 
-
-      if (rate.description === 'Register') {
+      if (rate.description === "Register") {
         this.websiteType = null;
         this.socialNetworkType = null;
-      }
-      else if (rate.description === 'Silver' && rate.type === '5') {
+      } else if (rate.description === "Silver" && rate.type === "5") {
         this.socialNetworkType = null;
         this.websiteType = this.websiteTypes[0];
         rate.price -= this.websiteTypes[0].price;
-      }
-      else if (rate.description === 'Silver' && rate.type === '6') {
+      } else if (rate.description === "Silver" && rate.type === "6") {
         this.socialNetworkType = null;
         this.websiteType = this.websiteTypes[0];
-        rate.price -= (this.websiteTypes[0].price + 100);
-      }
-      else if (rate.description === 'Gold') {
+        rate.price -= this.websiteTypes[0].price + 100;
+      } else if (rate.description === "Gold") {
         this.websiteType = this.websiteTypes[1];
         this.socialNetworkType = this.socialNetworkTypes[1];
         rate.price -= this.websiteTypes[1].price;
         rate.price -= this.socialNetworkTypes[1].price;
-      }
-      else if (rate.description === 'Platinium') {
+      } else if (rate.description === "Platinium") {
         this.websiteType = this.websiteTypes[2];
         this.socialNetworkType = this.socialNetworkTypes[2];
         rate.price -= this.websiteTypes[2].price;
         rate.price -= this.socialNetworkTypes[2].price;
       }
       this.selectedRate = rate;
-    }
+    },
   },
   async mounted() {
-    this.addPreloader()
+    this.addPreloader();
     if (this.program) {
       await this.searchRate();
     }
@@ -530,14 +685,14 @@ export default {
       await this.getScore();
     }
     this.ownControl = true;
-    this.removePreloader()
+    this.removePreloader();
   },
   watch: {
     suggestedAmount(newSuggestedAmount) {
       this.fee = newSuggestedAmount;
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
