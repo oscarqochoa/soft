@@ -6,9 +6,9 @@
   >
     <template #button-content>
       <div class="d-sm-flex d-none user-nav">
-        <p class="user-name font-weight-bolder mb-0">
-          {{ currentUser.fullName || currentUser.username }}
-        </p>
+        <p
+          class="user-name font-weight-bolder mb-0"
+        >{{ currentUser.fullName || currentUser.username }}</p>
         <span class="user-status">{{ currentUser.roleName }}</span>
       </div>
       <b-avatar
@@ -17,23 +17,17 @@
         variant="light-primary"
         badge
         class="badge-minimal"
-        badge-variant="success"
+        :badge-variant="statusSession"
       >
         <feather-icon v-if="!currentUser.fullName" icon="UserIcon" size="19" />
       </b-avatar>
     </template>
 
-    <b-dropdown-item
-      :to="{ name: 'users-my-profile' }"
-      link-class="d-flex align-items-center"
-    >
+    <b-dropdown-item :to="{ name: 'users-my-profile' }" link-class="d-flex align-items-center">
       <feather-icon size="16" icon="UserIcon" class="mr-50" />
       <span>My Profile</span>
     </b-dropdown-item>
-    <b-dropdown-item
-      link-class="d-flex align-items-center"
-      :to="{ name: 'amg-messages' }"
-    >
+    <b-dropdown-item link-class="d-flex align-items-center" :to="{ name: 'amg-messages' }">
       <messages class="mr-50" />
       <span>Messages</span>
     </b-dropdown-item>
@@ -63,7 +57,7 @@
       @click="$refs.schedules.openModalReport()"
     >
       <schedules-report ref="schedules" class="mr-50" />
-      <span>Schedule Report</span>
+      <span>Schedule R.</span>
     </b-dropdown-item>
     <b-dropdown-item link-class="d-flex align-items-center" @click="logout">
       <feather-icon size="16" icon="LogOutIcon" class="mr-50" />
@@ -93,22 +87,33 @@ export default {
     Messages,
     Messenger,
     PayStub,
-    SchedulesReport,
+    SchedulesReport
   },
   data() {
     return {
       userData: JSON.parse(localStorage.getItem("userData")),
-      avatarText,
+      avatarText
     };
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
+      G_USER_STATUS_SESSION: "UserStore/G_USER_STATUS_SESSION"
     }),
+    statusSession() {
+      return this.G_USER_STATUS_SESSION === 1
+        ? "success"
+        : this.G_USER_STATUS_SESSION === 2
+        ? "warning"
+        : this.G_USER_STATUS_SESSION === 3
+        ? "danger"
+        : "secondary";
+    }
   },
+  mounted() {},
   methods: {
     ...mapMutations({
-      resetState: "resetState",
+      resetState: "resetState"
     }),
     logout() {
       // Remove userData from localStorage
@@ -123,7 +128,7 @@ export default {
       window.location.href = process.env.VUE_APP_ORIGINAL_SOFT;
       // Redirect to login page
       // this.$router.push({ name: "auth-login" });
-    },
-  },
+    }
+  }
 };
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-modal
+<<<<<<< HEAD
         modal
         :title="statusTitle"
         v-model="mutableIfModal"
@@ -11,6 +12,19 @@
         body-class="mb-2"
         @hidden="closeModal"
         :no-close-on-backdrop="true"
+=======
+      modal
+      :title="statusTitle"
+      v-model="mutableIfModal"
+      size="lg"
+      modal-class="modal-primary"
+      title-tag="h3"
+      hide-footer
+      body-class="mb-2"
+      @hidden="closeModal"
+      :no-close-on-backdrop="true"
+      centered
+>>>>>>> release/crm
     >
       <!-- Form -->
       <ValidationObserver ref="form">

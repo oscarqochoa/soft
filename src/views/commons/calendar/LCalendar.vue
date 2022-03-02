@@ -1,41 +1,44 @@
 <template>
   <b-container fluid>
     <b-row class="mb-2">
-      <b-col class="d-flex align-items-center justify-content-start">
+      <b-col cols="12" md="6" sm="8" class="d-flex align-items-center justify-content-start p-0">
         <div
-          class="mr-1 d-flex align-items-center"
+          class="d-flex align-items-center justify-content-sm-start justify-content-between w-100"
         >
-          <b-button
-            class="mr-05 btn-icon rounded-circle"
-            size="sm"
-            variant="transparent"
-            @click="beforeMonth"
-          >
-            <tabler-icon
-              size="20"
-              icon="ChevronLeftIcon"
-            />
-          </b-button>
-          <b-button
-            class="mr-05 btn-icon rounded-circle"
-            size="sm"
-            variant="transparent"
-            @click="afterMonth"
-          >
-            <tabler-icon
-              size="20"
-              icon="ChevronRightIcon"
-            />
-          </b-button>
-          <h2
-            class="d-flex align-items-center justify-content-center m-0"
+          <div>
+            <b-button
+                class="mr-05 btn-icon rounded-circle"
+                size="sm"
+                variant="flat-primary"
+                @click="beforeMonth"
+            >
+              <tabler-icon
+                  size="18"
+                  icon="ChevronLeftIcon"
+              />
+            </b-button>
+            <b-button
+                class="mr-05 btn-icon rounded-circle"
+                size="sm"
+                variant="flat-primary"
+                @click="afterMonth"
+            >
+              <tabler-icon
+                  size="18"
+                  icon="ChevronRightIcon"
+              />
+            </b-button>
+          </div>
+          <span
+            class="d-flex align-items-center justify-content-center m-0 font-medium-5"
           >
             {{ currentMonth }} {{ year }}
-          </h2>
+          </span>
         </div>
       </b-col>
-      <b-col class="d-flex align-items-center justify-content-end">
+      <b-col cols="12" md="6" sm="4" class="d-flex align-items-center justify-content-end p-0 mt-sm-0 mt-1">
         <b-form-radio-group
+          size="sm"
           v-model="selectedOption"
           :options="calendarOptions"
           buttons
@@ -44,14 +47,14 @@
       </b-col>
     </b-row>
     <b-row v-if="selectedOption === 'Month'">
-      <div class="w-100 seven-columns">
+      <div class="w-100 border border-color seven-columns">
         <b-container
           v-for="(date, index) in calendarDates"
           :key="index"
-          class="min-date-height border-top border-left border-color"
+          class="min-date-height border-color"
           :class="{
-            'border-right' : index%7 === 6,
-            'border-bottom': Math.trunc(index / 7) + 1 === (calendarDates.length / 7),
+            'border-right' : index% colsPerScreenWidth !== colsPerScreenWidth - 1,
+            'border-bottom': Math.trunc(index / colsPerScreenWidth) !== Math.trunc((calendarDates.length - 1) / colsPerScreenWidth),
           }"
         >
           <b-row
@@ -130,7 +133,10 @@
             v-for="(event, index) in day.events"
             :key="index"
             class="border-color"
-            :class="{'border-right': index % 7 !== 6, 'border-bottom': Math.trunc(index / 7) !== Math.trunc((day.events.length - 1) / 7)}"
+            :class="{
+              'border-right': (index % colsPerScreenWidth !== colsPerScreenWidth - 1) && colsPerScreenWidth !== 1,
+              'border-bottom': Math.trunc(index / colsPerScreenWidth) !== Math.trunc((day.events.length - 1) / colsPerScreenWidth)
+            }"
           >
             <slot
               name="date-list"
@@ -183,6 +189,14 @@ export default {
     }
   },
   computed: {
+    colsPerScreenWidth() {
+      if (this.screenWidth > 1120) return 7
+      if (this.screenWidth > 1024) return 6
+      if (this.screenWidth > 938) return 5
+      if (this.screenWidth > 690) return 3
+      if (this.screenWidth > 425) return 2
+      return 1
+    },
     listEvents() {
       return this.calendarDates.filter(val => val.haveEvents === true)
     },
@@ -271,7 +285,6 @@ export default {
           this.$set(this.calendarDates[index], 'numberOfEvents', eventsOfCurrentDay.length)
         }
       })
-      console.log(this.calendarDates)
     },
   },
 }
@@ -299,5 +312,35 @@ export default {
 }
 .border-color {
   border-color: #C4C4C4 !important;
+}
+@media(max-width: 1120px) {
+  .seven-columns{
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+  }
+}
+@media(max-width: 1024px) {
+  .seven-columns{
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+  }
+}
+@media(max-width: 938px) {
+  .seven-columns{
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+@media(max-width: 690px) {
+  .seven-columns{
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media(max-width: 425px) {
+  .seven-columns{
+    display: grid !important;
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
 }
 </style>

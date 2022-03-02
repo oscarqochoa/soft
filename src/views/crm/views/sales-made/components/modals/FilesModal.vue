@@ -1,13 +1,11 @@
 <template>
-  <validation-observer
-    ref="form"
-    class="w-100"
-  >
+  <validation-observer ref="form" class="w-100">
     <b-modal
+      body-class="px-0"
       v-model="ownControl"
       lazy
       title-class="h3 text-white font-weight-bolder"
-      size="xmd"
+      :size="modalSize"
       modal-class="modal-primary"
       title="Files"
       hide-footer
@@ -16,6 +14,7 @@
     >
       <b-container fluid>
         <program-client-header
+          class="mt-1"
           :client="files.client"
           :program="files.program"
         />
@@ -23,16 +22,12 @@
           v-if="files.valorEdit || itemTable.length > 0"
           class="mt-2 d-flex align-items-center justify-content-end mr-1"
         >
-          <b-btn
-            variant="primary"
-            size="sm"
-            @click="loadFile = !loadFile"
-          >
+          <b-btn variant="primary" size="sm" @click="loadFile = !loadFile">
             <feather-icon icon="PlusIcon" />Upload File
           </b-btn>
         </b-row>
         <b-row v-if="loadFile">
-          <b-container fluid>
+          <b-container class="pl-4 pr-4">
             <b-row class="my-2">
               <div style="width: 150px">
                 <validation-provider
@@ -47,15 +42,12 @@
                       :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                       :options="options"
                       :clearable="false"
-                      :class="{'border-danger rounded': errors[0]}"
+                      :class="{ 'border-danger rounded': errors[0] }"
                     />
                   </b-form-group>
                 </validation-provider>
               </div>
-              <div
-                v-if="selected !== 'Others'"
-                class="mx-4"
-              >
+              <div v-if="selected !== 'Others'" class="mx-4">
                 <validation-provider
                   v-slot="{ errors }"
                   rules="required"
@@ -67,8 +59,12 @@
                       id="from-date-picker"
                       v-model="doe"
                       locale="en"
-                      :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                      :class="{'border-danger rounded': errors[0]}"
+                      :date-format-options="{
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                      }"
+                      :class="{ 'border-danger rounded': errors[0] }"
                     />
                   </b-form-group>
                 </validation-provider>
@@ -86,27 +82,25 @@
                   drop-placeholder="Drop file here..."
                   placeholder="Choose a file or drop it here..."
                   size="lg"
-                  :class="{'border-danger rounded': errors[0]}"
+                  :class="{ 'border-danger rounded': errors[0] }"
                 />
               </validation-provider>
             </b-row>
             <b-row class="mt-2">
-              <b-button
-                variant="success"
-                @click="uploadFile"
-              >
+              <b-button variant="success" @click="uploadFile">
                 <feather-icon icon="UploadIcon" />Upload
               </b-button>
             </b-row>
           </b-container>
         </b-row>
         <b-row class="mt-2">
-          <b-col>
+          <b-col class="px-0">
             <b-table
               :items="itemTable"
               small
               class="font-small-3"
               sticky-header="50vh"
+              thead-class="text-center"
               :fields="fields"
               responsive
             >
@@ -122,7 +116,7 @@
               <template v-slot:cell(file_name)="data">
                 <div>
                   <feather-icon icon="FileTextIcon" />
-                  {{ data.item.file_name.replace('UNSIGNED', files.client) }}
+                  {{ data.item.file_name.replace("UNSIGNED", files.client) }}
                 </div>
               </template>
               <template v-slot:cell(size)="data">
@@ -137,21 +131,24 @@
                 {{ data.item.updated_at | myGlobalWithHour }}
               </template>
               <template v-slot:cell(actions)="data">
-                <b-container fluid>
+                <b-container class="text-center">
                   <b-row v-if="data.item.is_ag">
-                    <b-col
-                      cols="7"
-                      class="pr-0"
-                    >
+                    <b-col cols="7" class="pr-0">
                       <b-row
                         v-if="data.item.route"
                         class="pb-50"
-                        :class="{'hidden': !data.item.url}"
+                        :class="{ hidden: !data.item.url }"
                       >
                         <b-col
                           cols="1"
-                          class="text-info text-center d-flex align-items-center justify-content-center"
-                        >EN</b-col>
+                          class="
+                            text-info text-center
+                            d-flex
+                            align-items-center
+                            justify-content-center
+                          "
+                          >EN</b-col
+                        >
                         <b-col class="d-flex">
                           <b-btn
                             class="btn-icon rounded-circle"
@@ -174,14 +171,17 @@
                           </b-btn>
                         </b-col>
                       </b-row>
-                      <b-row
-                        v-if="data.item.route_es"
-                        class="pt-50 border-top"
-                      >
+                      <b-row v-if="data.item.route_es" class="pt-50 border-top">
                         <b-col
                           cols="1"
-                          class="text-info text-center d-flex align-items-center justify-content-center"
-                        >ES</b-col>
+                          class="
+                            text-info text-center
+                            d-flex
+                            align-items-center
+                            justify-content-center
+                          "
+                          >ES</b-col
+                        >
                         <b-col class="d-flex">
                           <b-btn
                             variant="info"
@@ -207,14 +207,26 @@
                     </b-col>
                     <b-col
                       cols="3"
-                      class="d-flex align-items-center justify-content-start pl-0"
+                      class="
+                        d-flex
+                        align-items-center
+                        justify-content-center
+                        pl-0
+                      "
                       style="margin-left: 20px"
                     >
                       <b-btn
                         variant="warning"
                         size="sm"
                         class="btn-icon rounded-circle"
-                        @click="generatePdf(files.id, files.program, files.sale_id, data.item.is_ag)"
+                        @click="
+                          generatePdf(
+                            files.id,
+                            files.program,
+                            files.sale_id,
+                            data.item.is_ag
+                          )
+                        "
                       >
                         <feather-icon icon="RefreshCcwIcon" />
                       </b-btn>
@@ -237,7 +249,12 @@
                         class="ml-1 btn-icon rounded-circle"
                         variant="danger"
                         size="sm"
-                        @click="deleteFile(data.item.id, data.item.route +'/'+data.item.file_name)"
+                        @click="
+                          deleteFile(
+                            data.item.id,
+                            data.item.route + '/' + data.item.file_name
+                          )
+                        "
                       >
                         <feather-icon icon="TrashIcon" />
                       </b-btn>
@@ -263,14 +280,14 @@
 </template>
 
 <script>
-import vSelect from 'vue-select'
-import { mapGetters } from 'vuex'
-import CrmService from '@/views/crm/services/crm.service'
-import ProgramClientHeader from '@/views/crm/views/sales-made/components/modals/ProgramClientHeader'
-import SmsUrlPdfModal from '@/views/crm/views/sales-made/components/modals/SmsUrlPdfModal'
+import vSelect from "vue-select";
+import { mapGetters } from "vuex";
+import CrmService from "@/views/crm/services/crm.service";
+import ProgramClientHeader from "@/views/crm/views/sales-made/components/modals/ProgramClientHeader";
+import SmsUrlPdfModal from "@/views/crm/views/sales-made/components/modals/SmsUrlPdfModal";
 
 export default {
-  name: 'FilesModal',
+  name: "FilesModal",
   components: { SmsUrlPdfModal, ProgramClientHeader, vSelect },
   props: {
     modal: {
@@ -289,105 +306,112 @@ export default {
   },
   data() {
     return {
-      urlpdf: '',
+      urlpdf: "",
       item: [],
       openModalSmsPdf: false,
       fields: [
         {
-          key: 'file_name',
+          key: "file_name",
           sortable: false,
-          label: 'Name',
+          label: "Name",
         },
         {
-          key: 'size',
+          key: "size",
           sortable: false,
-          label: 'Size',
+          label: "Size",
         },
         {
-          key: 'expiration',
+          key: "expiration",
           sortable: false,
-          label: 'DOE',
+          label: "DOE",
         },
         {
-          key: 'updated_at',
+          key: "updated_at",
           sortable: false,
-          label: 'Upload',
+          label: "Upload",
         },
         {
-          key: 'updater_name',
+          key: "updater_name",
           sortable: false,
-          label: 'Updated By',
+          label: "Updated By",
         },
         {
-          key: 'actions',
+          key: "actions",
           sortable: false,
-          label: 'Actions',
+          label: "Actions",
         },
       ],
       loadFile: false,
       file: null,
-      options: ['ID', 'UB', 'Others'],
-      selected: '',
-      doe: '',
+      options: ["ID", "UB", "Others"],
+      selected: "",
+      doe: "",
       base_url: process.env.VUE_APP_BASE_URL_ASSETS,
       ownControl: false,
-    }
+    };
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
+      currentUser: "auth/currentUser",
     }),
+    modalSize() {
+      if (this.screenWidth > 992) return "lg";
+      return "xlg";
+    },
     itemTable() {
-      const programid = this.files.programId
+      const programid = this.files.programId;
       if (this.mode === 1) {
         return this.item.filter(
-          item => item.is_ag == 0
-            || (item.is_ag == 1
-              && (programid == 1
-                || programid == 2
-                || programid == 3
-                || programid == 4
-                || programid == 7))
-            || (item.is_ag == 2 && (programid == 3 || programid == 4))
-            || (item.is_ag == 3 && (programid == 3 || programid == 4)),
-        )
+          (item) =>
+            item.is_ag == 0 ||
+            (item.is_ag == 1 &&
+              (programid == 1 ||
+                programid == 2 ||
+                programid == 3 ||
+                programid == 4 ||
+                programid == 7)) ||
+            (item.is_ag == 2 && (programid == 3 || programid == 4)) ||
+            (item.is_ag == 3 && (programid == 3 || programid == 4))
+        );
       }
-      return this.item
+      return this.item;
     },
   },
   async created() {
-    this.addPreloader()
-    await this.loadTable()
-    this.ownControl = true
-    this.removePreloader()
+    this.addPreloader();
+    await this.loadTable();
+    this.ownControl = true;
+    this.removePreloader();
   },
   methods: {
     async checkFile(id, status) {
       try {
-        this.addPreloader()
-        const response = await amgApi.post('/sales-made/payment/check-file', {
+        this.addPreloader();
+        const response = await amgApi.post("/sales-made/payment/check-file", {
           id,
           saleid: this.files.sale_id,
-        })
+        });
         if (response.status === 200) {
-          if (status == 1 || status == true) this.showSuccessSwal('Retired File')
-          else if (status == false) this.showSuccessSwal('File Added')
+          if (status == 1 || status == true)
+            this.showSuccessSwal("Retired File");
+          else if (status == false) this.showSuccessSwal("File Added");
         }
-        this.removePreloader()
+        this.removePreloader();
       } catch (error) {
-        this.removePreloader()
-        this.showErrorSwal(error)
+        this.removePreloader();
+        this.showErrorSwal(error);
       }
     },
     hideModal() {
-      this.$emit('close')
-      this.ownControl = false
+      this.$emit("close");
+      this.ownControl = false;
     },
     async uploadFile() {
-      const result = await this.$refs.form.validate()
+      const result = await this.$refs.form.validate();
+
       if (result) {
         const body = {
-          image: '',
+          image: "",
           namedoc: this.file.name,
           lead_id: this.files.id,
           size: this.file.size,
@@ -396,29 +420,34 @@ export default {
           program: this.files.program,
           date: this.files.event_date,
           datexp: this.doe,
-        }
-        const reader = new FileReader()
-        reader.readAsDataURL(this.file)
-        reader.onload = async file => {
-          body.image = file.target.result
+        };
+        const reader = new FileReader();
+        reader.readAsDataURL(this.file);
+        reader.onload = async (file) => {
+          body.image = file.target.result;
+
+          this.addPreloader();
           const response = await amgApi.post(
-            '/sales-made/save-document-file',
-            body,
-          )
+            "/sales-made/save-document-file",
+            body
+          );
           if (response.status === 200) {
-            this.showSuccessSwal()
-            this.doe = ''
-            this.file = ''
-            this.selected = ''
-            this.loadFile = false
-            await this.loadTable()
+            this.removePreloader();
+            this.showSuccessSwal();
+            this.doe = "";
+            this.file = "";
+            this.selected = "";
+            this.loadFile = false;
+            await this.loadTable();
           }
-        }
+        };
       }
+
+      this.removePreloader();
     },
     openSmsUrlPdfModal(urlPdf) {
-      this.urlpdf = urlPdf
-      this.openModalSmsPdf = true
+      this.urlpdf = urlPdf;
+      this.openModalSmsPdf = true;
     },
     async loadTable() {
       try {
@@ -426,110 +455,110 @@ export default {
           this.item = await CrmService.getLeadsFiles({
             program: this.files.program,
             id: this.files.id,
-          })
+          });
         }
         if (this.mode === 2) {
           this.item = await CrmService.getLeadsFilesAccount({
-            id: 'ec41e66e-c94e-11e9-8837-1687e29b1cde',
-            programid: 2,
-            saleid: 11829,
-          })
+            id: this.files.client_account_id,
+            programid: this.files.program_id,
+            saleid: this.files.sale_id,
+          });
           this.fields = [
             {
-              key: 'status',
+              key: "status",
               sortable: false,
-              label: '',
+              label: "",
             },
             {
-              key: 'file_name',
+              key: "file_name",
               sortable: false,
-              label: 'Name',
+              label: "Name",
             },
             {
-              key: 'size',
+              key: "size",
               sortable: false,
-              label: 'Size',
+              label: "Size",
             },
             {
-              key: 'expiration',
+              key: "expiration",
               sortable: false,
-              label: 'DOE',
+              label: "DOE",
             },
             {
-              key: 'updated_at',
+              key: "updated_at",
               sortable: false,
-              label: 'Upload',
+              label: "Upload",
             },
             {
-              key: 'actions',
+              key: "actions",
               sortable: false,
-              label: 'Actions',
+              label: "Actions",
             },
-          ]
+          ];
         }
       } catch (error) {
-        this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
+        this.showToast("danger", "top-right", "Error", "XIcon", error);
       }
     },
     // eslint-disable-next-line camelcase
     async generatePdf(lead_id, program, sale_id, typee) {
-      const result = await this.showConfirmSwal()
+      const result = await this.showConfirmSwal();
       try {
         if (result.isConfirmed) {
-          this.addPreloader()
+          this.addPreloader();
           const response = await CrmService.generatePdf({
             lead_id,
             program,
             sale_id,
             typee,
-          })
-          this.removePreloader()
-          if (response === 'ok') {
+          });
+          this.removePreloader();
+          if (response === "ok") {
             this.showToast(
-              'success',
-              'top-right',
-              'Success',
-              'CheckIcon',
-              'Tu archivo se genero correctamente',
-            )
+              "success",
+              "top-right",
+              "Success",
+              "CheckIcon",
+              "Tu archivo se genero correctamente"
+            );
           }
-          await this.loadTable()
+          await this.loadTable();
         }
       } catch (error) {
-        this.removePreloader()
-        this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
-        await this.loadTable()
+        this.removePreloader();
+        this.showToast("danger", "top-right", "Error", "XIcon", error);
+        await this.loadTable();
       }
     },
     async deleteFile(id, url) {
-      const result = await this.showConfirmSwal()
+      const result = await this.showConfirmSwal();
       try {
         if (result.isConfirmed) {
-          this.addPreloader()
+          this.addPreloader();
           const response = await CrmService.deleteFile({
             id,
             url,
-          })
-          this.removePreloader()
-          if (response === 'ok') {
+          });
+          this.removePreloader();
+          if (response === "ok") {
             this.showToast(
-              'success',
-              'top-right',
-              'Success',
-              'CheckIcon',
-              'Tu archivo se elimino correctamente',
-            )
+              "success",
+              "top-right",
+              "Success",
+              "CheckIcon",
+              "Tu archivo se elimino correctamente"
+            );
           }
-          await this.loadTable()
+          await this.loadTable();
         }
       } catch (error) {
-        this.removePreloader()
-        this.showToast('danger', 'top-right', 'Error', 'XIcon', error)
-        await this.loadTable()
+        this.removePreloader();
+        this.showToast("danger", "top-right", "Error", "XIcon", error);
+        await this.loadTable();
       }
     },
   },
-}
+};
 </script>
 
 <style>

@@ -1,5 +1,5 @@
 import { $themeBreakpoints } from "@themeConfig";
-
+import { useWindowSize } from "@vueuse/core";
 export default {
   namespaced: true,
   state: {
@@ -24,14 +24,11 @@ export default {
         getters.currentBreakPoint === "xxl"
       );
     },
-    bigheightScreen:(state,getters)=>{
-      return getters.currentBreakPoint === "xxl" || getters.currentBreakPoint === "lg" 
-    },
-    mediumheightScreen:(state,getters)=>{
-      return getters.currentBreakPoint === "xl"
-    },
     allSizeOfScreen:(state,getters)=>{
       return getters.currentBreakPoint
+    },
+    sizeScreenByPixels(){
+      return useWindowSize();
     },
     loading: (state) => {
       return state.loading;

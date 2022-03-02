@@ -33,8 +33,8 @@
       </template>
 
       <!-- Column: Action -->
-      <template #cell(action)="data">
-        <div class="text-center" v-b-tooltip.hover :title="data.item.image? 'view image' :''">
+      <template #cell(image)="data">
+        <div class="text-center">
           <b-icon
             icon="image-fill"
             font-scale="1.5"
@@ -80,7 +80,7 @@ export default {
       userId: null,
       roleId: null,
       isBusy: false,
-      fieldsQuicks: [{ key: "send_by" }, { key: "content" }, { key: "action" }],
+      fieldsQuicks: [{ key: "send_by" }, { key: "content" }, { key: "image" }],
       items: [],
       images: [],
       indexImage: null
@@ -97,7 +97,6 @@ export default {
         if (response.status == 200) {
           this.items = response.data;
           this.getImages(response.data);
-          console.log(this.images);
         } else
           this.showToast(
             "warning",

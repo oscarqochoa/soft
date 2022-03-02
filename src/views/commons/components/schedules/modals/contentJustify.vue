@@ -77,8 +77,7 @@ export default {
       return this.item.type == "abse" ? 2 : 1;
     },
   },
-  mounted() {
-  },
+  mounted() {},
   data() {
     return {
       justify: {

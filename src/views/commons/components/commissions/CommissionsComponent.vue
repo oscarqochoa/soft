@@ -703,42 +703,42 @@
             </template>
           </b-tr>
         </b-tbody>
-        <b-tfoot>
+        <b-tfoot v-if="isSupervisor || isCeo">
           <b-tr>
-            <b-th class="footer-black">Total Generated</b-th>
-            <b-th class="footer-black" v-if="isCrm || isDepartment"></b-th>
+            <b-th class="bgLightDark">Total Generated</b-th>
+            <b-th class="bgLightDark" v-if="isCrm || isDepartment"></b-th>
             <template v-if="halfYear">
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_jan != '0.00'" class="footer-span"
                   >$ {{ t_jan }}</span
                 >
                 <span v-if="t_jan == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_feb != '0.00'" class="footer-span"
                   >$ {{ t_feb }}</span
                 >
                 <span v-if="t_feb == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_mar != '0.00'" class="footer-span"
                   >$ {{ t_mar }}</span
                 >
                 <span v-if="t_mar == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_apr != '0.00'" class="footer-span"
                   >$ {{ t_apr }}</span
                 >
                 <span v-if="t_apr == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_may != '0.00'" class="footer-span"
                   >$ {{ t_may }}</span
                 >
                 <span v-if="t_may == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_jun != '0.00'" class="footer-span"
                   >$ {{ t_jun }}</span
                 >
@@ -746,37 +746,37 @@
               </b-th>
             </template>
             <template v-else>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_jul != '0.00'" class="footer-span"
                   >$ {{ t_jul }}</span
                 >
                 <span v-if="t_jul == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_aug != '0.00'" class="footer-span"
                   >$ {{ t_aug }}</span
                 >
                 <span v-if="t_aug == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_sep != '0.00'" class="footer-span"
                   >$ {{ t_sep }}</span
                 >
                 <span v-if="t_sep == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_oct != '0.00'" class="footer-span"
                   >$ {{ t_oct }}</span
                 >
                 <span v-if="t_oct == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_nov != '0.00'" class="footer-span"
                   >$ {{ t_nov }}</span
                 >
                 <span v-if="t_nov == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_dec != '0.00'" class="footer-span"
                   >$ {{ t_dec }}</span
                 >
@@ -785,40 +785,40 @@
             </template>
           </b-tr>
           <b-tr v-if="isCrm">
-            <b-th class="footer-black">Total To Pay</b-th>
-            <b-th v-if="isCrm || isDepartment" class="footer-black"></b-th>
+            <b-th class="bgLightDark">Total To Pay</b-th>
+            <b-th v-if="isCrm || isDepartment" class="bgLightDark"></b-th>
             <template v-if="halfYear">
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_feb != '0.00'" class="footer-span"
                   >$ {{ t_jan_pay }}</span
                 >
                 <span v-if="t_jan_pay == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_feb_pay != '0.00'" class="footer-span"
                   >$ {{ t_feb_pay }}</span
                 >
                 <span v-if="t_feb_pay == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_mar_pay != '0.00'" class="footer-span"
                   >$ {{ t_mar_pay }}</span
                 >
                 <span v-if="t_mar_pay == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_apr_pay != '0.00'" class="footer-span"
                   >$ {{ t_apr_pay }}</span
                 >
                 <span v-if="t_apr_pay == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_may_pay != '0.00'" class="footer-span"
                   >$ {{ t_may_pay }}</span
                 >
                 <span v-if="t_may_pay == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_jun_pay != '0.00'" class="footer-span"
                   >$ {{ t_jun_pay }}</span
                 >
@@ -826,37 +826,37 @@
               </b-th>
             </template>
             <template v-else>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_jul_pay != '0.00'" class="footer-span"
                   >$ {{ t_jul_pay }}</span
                 >
                 <span v-if="t_jul_pay == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_aug_pay != '0.00'" class="footer-span"
                   >$ {{ t_aug_pay }}</span
                 >
                 <span v-if="t_aug_pay == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_sep_pay != '0.00'" class="footer-span"
                   >$ {{ t_sep_pay }}</span
                 >
                 <span v-if="t_sep_pay == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_oct_pay != '0.00'" class="footer-span"
                   >$ {{ t_oct_pay }}</span
                 >
                 <span v-if="t_oct_pay == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_nov_pay != '0.00'" class="footer-span"
                   >$ {{ t_nov_pay }}</span
                 >
                 <span v-if="t_nov_pay == '0.00'" class="footer-span">-</span>
               </b-th>
-              <b-th class="footer-black">
+              <b-th class="bgLightDark">
                 <span v-if="t_dec_pay != '0.00'" class="footer-span"
                   >$ {{ t_dec_pay }}</span
                 >
@@ -893,7 +893,6 @@ import ModalCommissionsDetails from "@/views/commons/components/commissions/moda
 import ModalCommissionsPayment from "@/views/commons/components/commissions/modals/modal-payment/ModalCommissionsPayment";
 import moment from "moment";
 import commissionsService from "@/views/commons/components/commissions/services/commissions.service";
-import icons from "@/icons/icons.js";
 export default {
   name: "CommissionsComponent",
   components: {
@@ -1108,9 +1107,17 @@ export default {
       if (reload) this.commissions = null;
       this.module_id = this.convertModuleToProgramString(this.tab);
 
-      //Only when user is diferrent from CEO or SUPERVISOR
-      if (!(this.isSupervisor || this.isCeo || this.isManagement))
+      //Only when user is diferrent from CEO or SUPERVISOR or Coordinator
+      if (
+        !(
+          this.isSupervisor ||
+          this.isCeo ||
+          this.isManagement ||
+          this.isCoordinator
+        )
+      ) {
         this.user_id = this.currentUser.user_id;
+      }
 
       //Just for CRM Supervisor
       if (this.isSupervisorCrm) this.supervisorCrm = 1;
@@ -1127,7 +1134,16 @@ export default {
           ? await commissionsService.searchCommissionsDepartments(params)
           : await commissionsService.searchCommissions(params);
       this.commissions = response;
+      this.filterCommissionsCoordinator();
       this.departmentCommissions();
+    },
+    filterCommissionsCoordinator() {
+      //Dont Show commissions of Supervisor
+      if (this.isCoordinator) {
+        this.commissions = this.commissions.filter((commission) => {
+          return commission.role_id != 2;
+        });
+      }
     },
     departmentCommissions() {
       if (this.isDepartment) {
@@ -1149,26 +1165,26 @@ export default {
 
     //Update Percentage
     async updatePercentageDepartment() {
-      this.$store.commit("app/SET_LOADING", true);
+      this.addPreloader();
       const params = {
         type: 1, //Update all department
         percent: this.percentApartment,
         modul: this.module_id,
         id_user: this.currentUser.user_id,
       };
-      let response = await commissionsService.updatePercentage(params);
-      let result = await this.searchCommissions();
-      this.$store.commit("app/SET_LOADING", false);
+      await commissionsService.updatePercentage(params);
+      await this.searchCommissions();
+      this.removePreloader();
       this.showSuccessSwal(
         "Percentage updated",
         "The percentage to pay of the department was updated",
         "success"
       );
     },
-    editPercentageUser(index, edit, item) {
+    editPercentageUser(index, edit) {
       this.commissions[index][edit] = 1;
     },
-    cancelPercentageUser(index, edit, item) {
+    cancelPercentageUser(index, edit) {
       this.commissions[index][edit] = 0;
     },
     async updatePercentageUser(
@@ -1180,7 +1196,7 @@ export default {
       month,
       item
     ) {
-      this.$store.commit("app/SET_LOADING", true);
+      this.addPreloader();
       const params = {
         type: 2, //Update specific user
         percent: valuePercentage,
@@ -1194,7 +1210,7 @@ export default {
       this.commissions[index][to_pay] = response[0].to_pay;
       this.commissions[index][percentage_pay] = valuePercentage;
       this.commissions[index][edit] = 0;
-      this.$store.commit("app/SET_LOADING", false);
+      this.removePreloader();
       this.showSuccessSwal(
         "Percentage updated",
         "",
@@ -1277,7 +1293,7 @@ export default {
       if (status) {
         this.changeStatusPayment(payment, user_id, ps_month);
         //close preloader
-        this.$store.commit("app/SET_LOADING", false);
+        this.removePreloader();
       }
       this.modalPayment = false;
     },

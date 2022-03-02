@@ -1,10 +1,21 @@
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
-
+import { useWindowSize } from "@vueuse/core";
+import { swalErrorIcon, swalInfoIcon, swalSuccessIcon, swalWarningIcon } from "@/icons/statusIcons";
 export default {
   data() {
     return { baseUrl: process.env.VUE_APP_BASE_URL_ASSETS };
   },
   computed: {
+    screenWidth() {
+      const { width } = useWindowSize();
+      return width.value;
+    },
+
+    screenHeight() {
+      const { height } = useWindowSize();
+      return height;
+    },
+
     bgTabsNavs() {
       //getters
       return this.$store.getters["appConfig/skin"] === "dark"
@@ -18,7 +29,7 @@ export default {
     },
     bgLightDark() {
       return this.$store.getters["appConfig/skin"] === "dark"
-        ? "bg-dark"
+        ? "bg-dark text-white"
         : "bg-white";
     },
     isDarkSkin() {
@@ -26,6 +37,19 @@ export default {
     },
     isLightSkin() {
       return this.$store.getters["appConfig/skin"] === "light";
+    },
+    isBigWindow() {
+      return this.$store.getters["app/bigWindow"];
+    },
+
+    isSupervisor() {
+      return this.$store.getters["auth/isSupervisor"];
+    },
+    isCeo() {
+      return this.$store.getters["auth/isCeo"];
+    },
+    isCoordinator() {
+      return this.$store.getters["auth/isCoordinator"];
     },
   },
   methods: {
@@ -158,7 +182,7 @@ export default {
       position = "top-right",
       title = "Congratulations",
       icon = "CheckIcon",
-      text = "You've successfully done it!"
+      text = "You've successfully done it!",
     }) {
       this.$toast(
         {
@@ -209,7 +233,7 @@ export default {
       return this.$swal({
         title,
         text,
-        imageUrl: "/assets/images/icons/swal/warning.svg",
+        imageUrl: swalWarningIcon,
         imageWidth: 70,
         showCancelButton: true,
         buttonsStyling: false,
@@ -229,7 +253,7 @@ export default {
       return this.$swal({
         title,
         text,
-        imageUrl: "/assets/images/icons/swal/success.svg",
+        imageUrl: swalSuccessIcon,
         imageWidth: 70,
         html,
         confirmButtonText: "Ok",
@@ -243,7 +267,7 @@ export default {
       this.$swal({
         title,
         text,
-        imageUrl: "/assets/images/icons/swal/info.svg",
+        imageUrl: swalInfoIcon,
         imageWidth: 70,
         confirmButtonText: "Ok",
         customClass: {
@@ -256,7 +280,7 @@ export default {
       this.$swal({
         title,
         text,
-        imageUrl: "/assets/images/icons/swal/warning.svg",
+        imageUrl: swalWarningIcon,
         imageWidth: 70,
         confirmButtonText: "Ok",
         customClass: {
@@ -271,7 +295,7 @@ export default {
     ) {
       this.$swal({
         html: `<h4><b>${title}</b></h4> <br/> <span class="font-small-3 text-danger">${error}</span>`,
-        imageUrl: "/assets/images/icons/swal/error.svg",
+        imageUrl: swalErrorIcon,
         imageWidth: 70,
         confirmButtonText: "Ok",
         customClass: {

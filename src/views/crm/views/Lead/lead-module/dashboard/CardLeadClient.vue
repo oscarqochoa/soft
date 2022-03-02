@@ -10,7 +10,11 @@
             @click="$emit('onEditLead', false)"
           >{{ leadName.name }}</a>
           <span v-else-if="onlyRead">{{ leadName.name }}</span>
-          <a v-else class="text-primary" @click="$emit('onEditLead', false)">{{ leadName.name }}</a>
+          <a v-else class="text-primary" @click="$emit('onEditLead', false)">
+            {{
+            leadName.name
+            }}
+          </a>
         </span>
       </b-card-title>
       <b-button-group class="btn-group-sm">
@@ -45,7 +49,12 @@
           <amg-icon icon="PhoneSlashIcon" size="18" />
         </b-button>
         <b-button
-          v-if="lead.status_sn_id && modul === 2 && (lead.not_call && lead.not_call.length)"
+          v-if="
+            lead.status_sn_id &&
+            modul === 2 &&
+            lead.not_call &&
+            lead.not_call.length
+          "
           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
           v-b-tooltip.hover.bottom="'Tracking Not Call'"
           variant="default"
@@ -65,7 +74,7 @@
       modal-class="modal-primary"
       centered
       size="lg"
-      :title="`TRACKING NOT CALL - ${ lead.lead_name }`"
+      :title="`TRACKING NOT CALL - ${lead.lead_name}`"
       hide-footer
       no-close-on-backdrop
     >
@@ -133,7 +142,7 @@ export default {
     longAddress() {
       const names = [];
       if (this.lead.street) names.push(this.lead.street);
-      if (this.lead.city) names.push(this.lead.city);
+      if (this.lead.city) names.push(`<br>${this.lead.city}`);
       if (this.lead.states_eeuu_slug && this.lead.zipcode)
         names.push(`${this.lead.states_eeuu_slug} ${this.lead.zipcode}`);
       return names.join(", ");

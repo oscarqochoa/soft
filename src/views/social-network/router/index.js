@@ -1,5 +1,6 @@
 import answersGuideRouter from '@/views/social-network/views/answers-guide/answers-guide.router'
 import testRoute from '../views/test/test.router'
+import LeadsRouter from '../views/leads/leads.router';
 import bankOfFlyersRouter from '@/views/social-network/views/bank-of-flyers/bank-of-flyers.router'
 import ClientsRouter from '@/views/social-network/views/clients/client.router'
 import MigrationsRouter from '@/views/social-network/views/migrations/migrations.router'
@@ -11,6 +12,7 @@ import CommissionsRoute from '@/views/social-network/views/commissions/commissio
 const routes = [
   { path: '/socialnetwork', redirect: { name: 'dashboard-social-network' } },
   ...testRoute,
+  ...LeadsRouter,
   ...answersGuideRouter,
   ...bankOfFlyersRouter,
   ...ClientsRouter,

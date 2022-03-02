@@ -7,13 +7,13 @@
 //   Author URL: http://www.themeforest.net/user/pixinvent
 // ================================================================================================
 
-@import '../bootstrap-extended/include'; // Bootstrap includes
-@import '../components/include'; // Components includes
+@import "../bootstrap-extended/include"; // Bootstrap includes
+@import "../components/include"; // Components includes
 
-@import '../core/colors/palette-variables';
+@import "../core/colors/palette-variables";
 
-@import 'bootstrap/scss/mixins/_gradients';
-@import 'bootstrap/scss/mixins/gradients';
+@import "bootstrap/scss/mixins/_gradients";
+@import "bootstrap/scss/mixins/gradients";
 
 //Variables
 $chat-image-back-color: #f2f0f7;
@@ -141,7 +141,7 @@ $chat-profile-sidebar-head-height: 200px;
       // Specific alignment for avatar status
       .avatar {
         height: 42px;
-        [class*='avatar-status-'] {
+        [class*="avatar-status-"] {
           right: 1px;
           bottom: 1px;
         }
@@ -184,7 +184,7 @@ $chat-profile-sidebar-head-height: 200px;
           background: $body-bg;
         }
         &.active {
-          @include gradient-directional(map-get($primary-color, 'base'), map-get($primary-color, 'lighten-2'), 80deg);
+          @include gradient-directional(map-get($primary-color, "base"), map-get($primary-color, "lighten-2"), 80deg);
           h1,
           h2,
           h3,

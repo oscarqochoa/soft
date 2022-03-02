@@ -161,7 +161,7 @@
               Date of Birth
             </template>
 
-            <b-form-input v-model="userData.date_of_birth"></b-form-input>
+            <b-form-datepicker v-model="userData.date_of_birth"></b-form-datepicker>
           </b-form-group>
 
           <b-form-group

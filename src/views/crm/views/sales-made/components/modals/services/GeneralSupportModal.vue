@@ -174,6 +174,7 @@ export default {
     },
   },
   async mounted() {
+    this.addPreloader()
     this.client = this.salesClient
     if (this.program) {
       if (this.isModalShow) {
@@ -186,6 +187,7 @@ export default {
       await this.getScore()
     }
     this.ownControl = true
+    this.removePreloader()
   },
   methods: {
     /* PRELOADER */

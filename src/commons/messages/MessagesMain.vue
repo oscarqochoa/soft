@@ -2,14 +2,14 @@
   <!-- Need to add height inherit because Vue 2 don't support multiple root ele -->
   <div style="height: inherit">
     <div
-        class="body-content-overlay"
-        :class="{
+      class="body-content-overlay"
+      :class="{
         show:
           shallShowUserProfileSidebar ||
           shallShowActiveChatContactSidebar ||
           mqShallShowLeftSidebar,
       }"
-        @click="
+      @click="
         mqShallShowLeftSidebar =
           shallShowActiveChatContactSidebar =
           shallShowUserProfileSidebar =
@@ -24,7 +24,9 @@
         <div class="mb-1 start-chat-icon">
           <feather-icon icon="MessageSquareIcon" size="56" />
         </div>
-        <h4 class="sidebar-toggle start-chat-text" @click="startConversation">Start Conversation</h4>
+        <h4 class="sidebar-toggle start-chat-text" @click="startConversation">
+          Start Conversation
+        </h4>
       </div>
 
       <!-- Chat Content -->
@@ -37,42 +39,38 @@
               <!-- Toggle Icon -->
               <div class="sidebar-toggle d-block d-lg-none mr-1">
                 <feather-icon
-                    icon="MenuIcon"
-                    class="cursor-pointer"
-                    size="21"
-                    @click="mqShallShowLeftSidebar = true"
+                  icon="MenuIcon"
+                  class="cursor-pointer"
+                  size="21"
+                  @click="mqShallShowLeftSidebar = true"
                 />
               </div>
               <b-avatar
-                  size="36"
-                  :src="S_USER_TO_MESSAGE.avatar"
-                  :icon="
+                size="36"
+                :src="S_USER_TO_MESSAGE.avatar"
+                :icon="
                   S_USER_TO_MESSAGE.type == 1 ? 'person-fill' : 'people-fill'
                 "
-                  class="mr-1 cursor-pointer badge-minimal"
+                class="mr-1 cursor-pointer badge-minimal"
               />
               <!-- @click.native="shallShowActiveChatContactSidebar = true" -->
               <h6 class="mb-0">
                 <span v-if="S_USER_TO_MESSAGE.type == 1">
-                  {{
-                    S_USER_TO_MESSAGE.fullName
-                  }}
+                  {{ S_USER_TO_MESSAGE.fullName }}
                 </span>
                 <template v-else>
                   <template v-for="user in S_USER_TO_MESSAGE.listUsers">
                     <span
-                        :key="user.id"
-                        v-if="user.id_user != currentUser.user_id"
-                        class="d-inline-flex align-items-center mr-1"
+                      :key="user.id"
+                      v-if="user.id_user != currentUser.user_id"
+                      class="d-inline-flex align-items-center mr-1"
                     >
                       <span style="margin-right: 10px">
-                        {{
-                          user.user_name
-                        }}
+                        {{ user.user_name }}
                       </span>
-                      <amg-icon
-                          icon="CircleIcon"
-                          :style="{
+                      <feather-icon
+                        icon="CircleIcon"
+                        :style="{
                           color: user.user_status == 1 ? '#28C76F' : 'gray',
                           fill: user.user_status == 1 ? '#28C76F' : 'gray',
                         }"
@@ -84,49 +82,54 @@
             </div>
 
             <!-- Contact Actions -->
-            <div class="d-flex justify-content-end align-items-center" :style="{ width: '50%' }">
+            <div
+              class="d-flex justify-content-end align-items-center"
+              :style="{ width: '50%' }"
+            >
               <template v-if="searchedMessages.length > 0">
-                <span :style="{ marginRight: '10px' }">{{ from }} de {{ total }}</span>
-                <amg-icon
-                    icon="ChevronDownIcon"
-                    size="20"
-                    class="cursor-pointer"
-                    :style="{
+                <span :style="{ marginRight: '10px' }"
+                  >{{ from }} de {{ total }}</span
+                >
+                <feather-icon
+                  icon="ChevronDownIcon"
+                  size="20"
+                  class="cursor-pointer"
+                  :style="{
                     pointerEvents: from == 1 ? 'none' : 'auto',
                     opacity: from == 1 ? 0.5 : 1,
                   }"
-                    @click="searchMessageInChat(false, true)"
+                  @click="searchMessageInChat(false, true)"
                 />
-                <amg-icon
-                    icon="ChevronUpIcon"
-                    size="20"
-                    class="cursor-pointer"
-                    :style="{
+                <feather-icon
+                  icon="ChevronUpIcon"
+                  size="20"
+                  class="cursor-pointer"
+                  :style="{
                     pointerEvents: from == total ? 'none' : 'auto',
                     opacity: from == total ? 0.5 : 1,
                     marginRight: '10px',
                   }"
-                    @click="searchMessageInChat(true, false)"
+                  @click="searchMessageInChat(true, false)"
                 />
               </template>
               <b-input-group class="input-group-merge" style="width: 68%">
                 <b-form-input
-                    id="search-messages"
-                    placeholder="Search Messages"
-                    v-model="messageToSearch"
-                    @keyup.enter="searchMessageInChat(false, false)"
+                  id="search-messages"
+                  placeholder="Search Messages"
+                  v-model="messageToSearch"
+                  @keyup.enter="searchMessageInChat(false, false)"
                 />
                 <b-input-group-append is-text>
-                  <amg-icon
-                      v-if="searchedMessages.length > 0"
-                      icon="XIcon"
-                      class="cursor-pointer mr-1"
-                      @click="cleanSearchMessageInChat()"
+                  <feather-icon
+                    v-if="searchedMessages.length > 0"
+                    icon="XIcon"
+                    class="cursor-pointer mr-1"
+                    @click="cleanSearchMessageInChat()"
                   />
-                  <amg-icon
-                      icon="SearchIcon"
-                      class="cursor-pointer"
-                      @click="searchMessageInChat(false, false)"
+                  <feather-icon
+                    icon="SearchIcon"
+                    class="cursor-pointer"
+                    @click="searchMessageInChat(false, false)"
                   />
                 </b-input-group-append>
               </b-input-group>
@@ -151,97 +154,154 @@
         </div>
         <!-- User Chat Area -->
         <b-overlay
-            id="overlay-background"
-            :show="isLoadingChatLog"
-            :variant="skin == 'dark' ? 'dark' : 'light'"
-            :opacity="0.85"
-            :blur="'1px'"
-            rounded="sm"
-            style="height: calc(50% - 32.5px)"
+          id="overlay-background"
+          :show="isLoadingChatLog"
+          :variant="skin == 'dark' ? 'dark' : 'light'"
+          :opacity="0.85"
+          :blur="'1px'"
+          rounded="sm"
+          :style="{
+            height: S_CHAT_COMPOSE_IS_OPEN
+              ? 'calc(calc( 50% - 35px ) - 32.5px)'
+              : 'calc(100% - 65px)',
+          }"
         >
+          <!-- whithout chat log -->
+
+          <!-- style="height: calc(100% - 65px)"
+          :style="{ height: !subjectresp ? '100%' : '100%' }" -->
+
+          <!-- end wihout chat log -->
+
+          <!-- with chat-log  -->
           <!-- style="height: calc(50% - 32.5px)" -->
-          <!-- 46%; -->
+          <!-- :style="{ height: !subjectresp ? '100%' : 'calc(100% - 78px)' }" -->
+
+          <!--  end with chat-log  -->
           <vue-perfect-scrollbar
-              ref="refChatLogPS"
-              :settings="perfectScrollbarSettings"
-              class="user-chats scroll-area"
-              :style="{ height: !subjectresp ? '100%' : 'calc(100% - 78px)' }"
-              id="chat"
-              @scroll="scrollListener($event)"
+            ref="refChatLogPS"
+            :settings="perfectScrollbarSettings"
+            class="user-chats scroll-area"
+            :style="{
+              height: S_CHAT_COMPOSE_IS_OPEN
+                ? !subjectresp
+                  ? '100%'
+                  : 'calc(100% - 78px)'
+                : '100%',
+            }"
+            id="chat"
+            @scroll="scrollListener($event)"
           >
             <chat-log
-                :chat-data="S_USER_MESSAGES"
-                @scroll-to-bottom="scrollToBottom"
-                @reply-message="onReplyMessage"
-                :profile-user-avatar="currentUser.avatar"
-                :loading="loading"
-                ref="chatLog"
+              :chat-data="S_USER_MESSAGES"
+              @scroll-to-bottom="scrollToBottom"
+              @reply-message="onReplyMessage"
+              :profile-user-avatar="currentUser.avatar"
+              :loading="loading"
+              ref="chatLog"
             />
           </vue-perfect-scrollbar>
           <div
-              v-if="subjectresp"
-              class="chat-reply pl-1 pr-1 d-flex justify-content-between align-items-center"
-              :style="{ height: '78px', overflow: 'auto' }"
+            v-if="subjectresp"
+            class="
+              chat-reply
+              pl-1
+              pr-1
+              d-flex
+              justify-content-between
+              align-items-center
+              chat-compose-reply-field
+            "
+            :style="{ height: '78px', overflow: 'auto' }"
           >
-            <b-alert
-                variant="primary"
-                show
+            <div>
+              <h5>{{ subjectresp }}</h5>
+              <span
+                v-html="contentresp"
                 style="
+                  max-height: 2.5ch;
+                  max-width: 20ch;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: inline-block;
+                  white-space: nowrap;
+                "
+              ></span>
+            </div>
+
+            <!-- <b-alert
+              variant="primary"
+              show
+              style="
                 background: rgb(29 34 46 / %) !important;
                 border-left: 5px solid #28c76f !important;
                 margin-top: 10px;
                 width: 100%;
                 padding: 10px;
               "
-                class="mr-1"
+              class="mr-1"
             >
               <h4>{{ subjectresp }}</h4>
               <span v-html="contentresp"></span>
-            </b-alert>
+            </b-alert> -->
             <span>
-              <amg-icon
-                  icon="XCircleIcon"
-                  class="text-primary cursor-pointer"
-                  size="20"
-                  @click="closeReply()"
+              <feather-icon
+                icon="XCircleIcon"
+                class="cursor-pointer"
+                size="20"
+                @click="closeReply()"
               />
             </span>
           </div>
+          <b-button
+            variant="gradient-danger"
+            size="lg"
+            v-if="!S_CHAT_COMPOSE_IS_OPEN"
+            class="btn-icon rounded-circle"
+            style="position: absolute; bottom: 25px; right: 25px"
+            @click="TOGGLE_CHAT_COMPOSE(true)"
+          >
+            <tabler-icon icon="ArrowBackUpIcon" size="20" />
+          </b-button>
         </b-overlay>
         <!-- Chat Reply -->
 
         <!-- Message Input -->
-        <chat-compose
+        <transition name="fade">
+          <chat-compose
             style="height: calc(50% - 32.5px)"
             @scroll-to-bottom="scrollToBottom"
             :subjectresp="subjectresp"
             :contentresp="contentresp"
+            @close-reply="closeReply()"
             @on-send-message-reply="closeReply()"
-        ></chat-compose>
+            v-if="S_CHAT_COMPOSE_IS_OPEN"
+          ></chat-compose>
+        </transition>
       </div>
     </section>
 
     <!-- Active Chat Contact Details Sidebar -->
     <chat-active-chat-content-details-sidedbar
-        :shall-show-active-chat-contact-sidebar.sync="
+      :shall-show-active-chat-contact-sidebar.sync="
         shallShowActiveChatContactSidebar
       "
-        :contact="S_USER_MESSAGES.contact || {}"
+      :contact="S_USER_MESSAGES.contact || {}"
     />
 
     <!-- Sidebar -->
     <portal to="content-renderer-sidebar-left">
       <chat-left-sidebar
-          :chats-contacts="S_USER_CONTACTS"
-          :active-chat-contact-id="
+        :chats-contacts="S_USER_CONTACTS"
+        :active-chat-contact-id="
           S_USER_MESSAGES.contact ? S_USER_MESSAGES.contact.id : null
         "
-          :shall-show-user-profile-sidebar.sync="shallShowUserProfileSidebar"
-          :profile-user-data="profileUserData"
-          :profile-user-minimal-data="{ avatar: this.currentUser.avatar }"
-          :mq-shall-show-left-sidebar.sync="mqShallShowLeftSidebar"
-          @show-user-profile="showUserProfileSidebar"
-          @open-chat="openChat"
+        :shall-show-user-profile-sidebar.sync="shallShowUserProfileSidebar"
+        :profile-user-data="profileUserData"
+        :profile-user-minimal-data="{ avatar: this.currentUser.avatar }"
+        :mq-shall-show-left-sidebar.sync="mqShallShowLeftSidebar"
+        @show-user-profile="showUserProfileSidebar"
+        @open-chat="openChat"
       />
     </portal>
   </div>
@@ -260,12 +320,12 @@ import ChatActiveChatContentDetailsSidedbar from "./ChatActiveChatContentDetails
 import ChatLog from "./ChatLog.vue";
 import useChat from "./useChat";
 import ChatCompose from "./components/ChatCompose.vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
 
 export default {
   async mounted() {
     const response = await this.A_GET_USER_CONTACTS({
-      id: this.currentUser.user_id
+      id: this.currentUser.user_id,
     });
   },
   data() {
@@ -279,7 +339,7 @@ export default {
       total: 0,
       searchedMessages: [],
       subjectresp: null,
-      contentresp: null
+      contentresp: null,
     };
   },
   components: {
@@ -290,28 +350,34 @@ export default {
     ChatLeftSidebar,
     ChatActiveChatContentDetailsSidedbar,
     ChatLog,
-    ChatCompose
+    ChatCompose,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
       skin: "appConfig/skin",
-      currentBreakPoint: "app/currentBreakPoint"
+      currentBreakPoint: "app/currentBreakPoint",
     }),
     ...mapState({
-      S_USER_CONTACTS: state => state.MessageStore.S_USER_CONTACTS,
-      S_USER_TO_MESSAGE: state => state.MessageStore.S_USER_TO_MESSAGE,
-      S_USER_MESSAGES: state => state.MessageStore.S_USER_MESSAGES,
-      S_TOTAL_MESSAGES: state => state.MessageStore.S_TOTAL_MESSAGES
-    })
+      S_USER_CONTACTS: (state) => state.MessageStore.S_USER_CONTACTS,
+      S_USER_TO_MESSAGE: (state) => state.MessageStore.S_USER_TO_MESSAGE,
+      S_USER_MESSAGES: (state) => state.MessageStore.S_USER_MESSAGES,
+      S_TOTAL_MESSAGES: (state) => state.MessageStore.S_TOTAL_MESSAGES,
+      S_CHAT_COMPOSE_IS_OPEN: (state) =>
+        state.MessageStore.S_CHAT_COMPOSE_IS_OPEN,
+    }),
   },
   methods: {
     ...mapActions({
       A_GET_USER_CONTACTS: "MessageStore/A_GET_USER_CONTACTS",
       A_GET_USER_MESSAGES: "MessageStore/A_GET_USER_MESSAGES",
-      A_SEARCH_MESSAGES_IN_CHAT: "MessageStore/A_SEARCH_MESSAGES_IN_CHAT"
+      A_SEARCH_MESSAGES_IN_CHAT: "MessageStore/A_SEARCH_MESSAGES_IN_CHAT",
+    }),
+    ...mapMutations({
+      TOGGLE_CHAT_COMPOSE: "MessageStore/TOGGLE_CHAT_COMPOSE",
     }),
     onReplyMessage(msgData) {
+      this.TOGGLE_CHAT_COMPOSE(true);
       this.subjectresp = msgData.subjectresp;
       this.contentresp = msgData.contentresp;
     },
@@ -327,7 +393,7 @@ export default {
         image: this.S_USER_TO_MESSAGE.avatar,
         fullName: this.S_USER_TO_MESSAGE.fullName,
         type: this.S_USER_TO_MESSAGE.type,
-        page: this.page
+        page: this.page,
       });
       this.isLoadingChatLog = false;
     },
@@ -348,14 +414,14 @@ export default {
       this.mqShallShowLeftSidebar = false;
     },
     scrollToBottom() {
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         this.scrollToEnd();
       });
     },
     async scrollListener(e) {
       if (
-          e.target.scrollTop == 0 &&
-          this.S_USER_MESSAGES.chat.chat.length < this.S_TOTAL_MESSAGES
+        e.target.scrollTop == 0 &&
+        this.S_USER_MESSAGES.chat.chat.length < this.S_TOTAL_MESSAGES
       ) {
         this.isLoadingChatLog = true;
         this.page++;
@@ -386,7 +452,7 @@ export default {
           id_user_sending: this.currentUser.user_id,
           mmessage: this.messageToSearch,
           typee: this.S_USER_TO_MESSAGE.type,
-          page: this.searchPage
+          page: this.searchPage,
         });
         this.from = response.data.from;
         this.total = response.data.total;
@@ -403,29 +469,29 @@ export default {
       let element = this.$refs.chatLog.$refs[this.searchedMessages[0].id];
       if (element != undefined && element?.length > 0) {
         var container = this.$el.querySelector("#chat");
-        this.$nextTick(function() {
+        this.$nextTick(function () {
           container.scroll({
             behavior: "smooth",
             left: 0,
-            top: element[0].offsetTop
+            top: element[0].$el.offsetTop,
           });
         });
 
-        this.$refs.chatLog.$refs.refSubject.forEach(subject => {
+        this.$refs.chatLog.$refs.refSubject.forEach((subject) => {
           let subjectContent = subject.textContent;
           let result = subjectContent.match(RegExp(this.messageToSearch, "gi"));
           let span = subjectContent.replace(
-              result,
-              `<span class="text-searched"> ${result} </span>`
+            result,
+            `<span class="text-searched"> ${result} </span>`
           );
           subject.innerHTML = span;
         });
-        this.$refs.chatLog.$refs.refMessage.forEach(message => {
+        this.$refs.chatLog.$refs.refMessage.forEach((message) => {
           let messageContent = message.innerHTML;
           let result = messageContent.match(RegExp(this.messageToSearch, "gi"));
           let span = messageContent.replace(
-              result,
-              `<span class="text-searched"> ${result} </span>`
+            result,
+            `<span class="text-searched"> ${result} </span>`
           );
           message.innerHTML = span;
         });
@@ -443,11 +509,11 @@ export default {
         let subjects = targetSubjects[index].innerHTML;
         let messages = targetMessages[index].innerHTML;
         let nuevaCadena1 = subjects
-            .replace(RegExp(textsearch1, "gi"), "")
-            .replace(RegExp(textsearch2, "gi"), "");
+          .replace(RegExp(textsearch1, "gi"), "")
+          .replace(RegExp(textsearch2, "gi"), "");
         let nuevaCadena2 = messages
-            .replace(RegExp(textsearch1, "gi"), "")
-            .replace(RegExp(textsearch2, "gi"), "");
+          .replace(RegExp(textsearch1, "gi"), "")
+          .replace(RegExp(textsearch2, "gi"), "");
         subject.innerHTML = nuevaCadena1;
         targetMessages[index].innerHTML = nuevaCadena2;
       });
@@ -456,15 +522,16 @@ export default {
       this.subjectresp = null;
       this.contentresp = null;
       this.$refs.chatLog.closeReply();
-    }
+    },
   },
   created() {
-    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", true);
-    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", { type: "floating" });
+    // this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", true);
+    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", { type: "hidden" });
+    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", false);
   },
   destroyed() {
     this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", {
-      type: this.navbarConfig
+      type: 'sticky',
     });
     this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", this.menuHidden);
     this.$store.commit("appConfig/UPDATE_LAYOUT_TYPE", "vertical");
@@ -498,7 +565,7 @@ export default {
     const contacts = ref([]);
 
     const fetchChatAndContacts = () => {
-      store.dispatch("app-chat/fetchChatsAndContacts").then(response => {
+      store.dispatch("app-chat/fetchChatsAndContacts").then((response) => {
         chatsContacts.value = response.data.chatsContacts;
         contacts.value = response.data.contacts;
         // eslint-disable-next-line no-use-before-define
@@ -513,15 +580,15 @@ export default {
     // ------------------------------------------------
     const activeChat = ref({});
     const chatInputMessage = ref("");
-    const openChatOfContact = userId => {
+    const openChatOfContact = (userId) => {
       // Reset send message input value
       chatInputMessage.value = "";
 
-      store.dispatch("app-chat/getChat", { userId }).then(response => {
+      store.dispatch("app-chat/getChat", { userId }).then((response) => {
         activeChat.value = response.data;
 
         // Set unseenMsgs to 0
-        const contact = chatsContacts.value.find(c => c.id === userId);
+        const contact = chatsContacts.value.find((c) => c.id === userId);
         if (contact) contact.chat.unseenMsgs = 0;
 
         // Scroll to bottom
@@ -540,9 +607,9 @@ export default {
         contactId: activeChat.value.contact.id,
         // eslint-disable-next-line no-use-before-define
         senderId: profileUserDataMinimal.value.id,
-        message: chatInputMessage.value
+        message: chatInputMessage.value,
       };
-      store.dispatch("app-chat/sendMessage", payload).then(response => {
+      store.dispatch("app-chat/sendMessage", payload).then((response) => {
         const { newMessageData, chat } = response.data;
 
         // ? If it's not undefined => New chat is created (Contact is not in list of chats)
@@ -553,8 +620,8 @@ export default {
             chat: {
               id: chat.id,
               lastMessage: newMessageData,
-              unseenMsgs: 0
-            }
+              unseenMsgs: 0,
+            },
           });
         } else {
           // Add message to log
@@ -566,7 +633,7 @@ export default {
 
         // Set Last Message for active contact
         const contact = chatsContacts.value.find(
-            c => c.id === activeChat.value.contact.id
+          (c) => c.id === activeChat.value.contact.id
         );
         contact.chat.lastMessage = newMessageData;
 
@@ -578,7 +645,7 @@ export default {
     };
 
     const perfectScrollbarSettings = {
-      maxScrollbarLength: 150
+      maxScrollbarLength: 150,
     };
 
     // User Profile Sidebar
@@ -589,7 +656,7 @@ export default {
 
     const shallShowUserProfileSidebar = ref(false);
     const showUserProfileSidebar = () => {
-      store.dispatch("app-chat/getProfileUser").then(response => {
+      store.dispatch("app-chat/getProfileUser").then((response) => {
         profileUserData.value = response.data;
         shallShowUserProfileSidebar.value = true;
       });
@@ -641,9 +708,9 @@ export default {
 
       // UI + SM Devices
       startConversation,
-      mqShallShowLeftSidebar
+      mqShallShowLeftSidebar,
     };
-  }
+  },
 };
 </script>
 
@@ -651,4 +718,63 @@ export default {
 @import "~@core/scss/base/pages/app-chat.scss";
 @import "~@core/scss/base/pages/app-chat-list.scss";
 @import "~@core/scss/base/pages/app-email.scss";
+</style>
+
+<style scoped lang="scss">
+
+.fade-enter,
+.fade-leave-to {
+transition: 500ms ease-in-out;
+transition-property: opacity, transform;
+opacity: 0;
+transform: translateY(100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+transition: 500ms ease-in-out;
+transition-property: opacity, transform;
+}
+.fade-leave-active {
+transition: 500ms ease-in-out;
+transition-property: opacity, transform;
+opacity: 1;
+transform: translateY(0);
+}
+
+
+
+
+
+
+
+
+// .fade-enter{
+//   transform: translateY(-100%);
+//   &-to{
+//     transform: translateY(0);
+//   }
+// }
+// .fade-leave{
+//   transform: translateY(0);
+//   &-to{
+//     transform: translateY(-100%);
+//   }
+// }
+
+// .slide-fade-enter-active {
+//   transition: all 1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+// }
+// .slide-fade-leave-active {
+//   transition: all 1.5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+// }
+// .slide-fade-enter, .slide-fade-leave-to
+// /* .slide-fade-leave-active below version 2.1.8 */ {
+//   transform: translateY(0);
+//   opacity: 0;
+// }
+
+
+
+
 </style>

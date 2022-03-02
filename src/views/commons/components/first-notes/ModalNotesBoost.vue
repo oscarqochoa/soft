@@ -538,14 +538,15 @@ export default {
     }
   },
 
-  created() {
-    this.getFirstNote()
-    this.getListTypeGoal()
-    this.getCountrys()
+  async created() {
+    this.addPreloader()
+    await this.getFirstNote()
+    await this.getListTypeGoal()
+    await this.getCountrys()
     this.getOriginCountry()
+    this.removePreloader()
   },
 
-  mounted() {},
 
   computed: {
     ...mapGetters({
@@ -747,7 +748,7 @@ export default {
           if (answer.question_id == 1053) this.note.information = answer.answer
           if (answer.question_id == 1054) this.note.recommendations = answer.answer
           if (answer.question_id == 1055) {
-            if (answer.answer != 0) {
+            if (answer.url != 0) {
               this.note.fileAudio = answer.answer
               this.note.fileName = answer.url.split('/')[2]
             }
@@ -795,8 +796,8 @@ export default {
     },
 
     deleteAudio() {
-      this.note.fileAudio = null
-      this.note.fileName = null
+      this.note.fileAudio = ""
+      this.note.fileName = ""
     },
 
     // Hide Modal

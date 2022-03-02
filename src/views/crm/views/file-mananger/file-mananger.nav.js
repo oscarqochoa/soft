@@ -1,5 +1,5 @@
 export default {
-  title: "File Mananger",
+  title: "File Manager",
   icon: "ArchiveIcon",
   route: "file-mananger-crm",
 };

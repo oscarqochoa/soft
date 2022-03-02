@@ -47,7 +47,10 @@ extend('email', {
   message: 'This field must be a valid email',
 
 })
-
+extend('chat-compose-required', {
+    ...required,
+    message: '{_field_} is required'
+})
 extend('mobile', {
   validate: value => value.length == 14,
   message: 'This field must be a valid mobile number',

@@ -16,7 +16,7 @@
       <!-- Form -->
       <ValidationObserver ref="form">
         <b-row class="font-bureau-style mt-1">
-          <b-col cols="12" md="6">
+          <b-col cols="12" lg="6" md="12">
             <div class="form-group">
               <label for="card_holder">Card Holder Name</label>
               <ValidationProvider rules="required" v-slot="{ errors }">
@@ -33,7 +33,7 @@
             </div>
           </b-col>
           <!-- Card Number -->
-          <b-col cols="12" md="6">
+          <b-col cols="12" lg="6" md="12">
             <div class="form-group">
               <label for="card_number">Card Number</label>
               <b-row>
@@ -102,7 +102,7 @@
             </div>
           </b-col>
           <!-- Input MM -->
-          <b-col cols="4" md="2">
+          <b-col cols="4" lg="2" md="4">
             <div class="form-group">
               <label for="card-expi-month">MM</label>
               <ValidationProvider rules="required|length:2" v-slot="{ errors }">
@@ -111,6 +111,7 @@
                   type="text"
                   id="card-expi-month"
                   ref="input-5"
+                  maxlength="2"
                   @input="activeFocus(5, 2)"
                   v-model="form.card_expi_month"
                   :class="{ 'border-danger': errors[0] }"
@@ -119,13 +120,14 @@
             </div>
           </b-col>
           <!-- Input YY -->
-          <b-col cols="4" md="2">
+          <b-col cols="4" lg="2" md="4">
             <div class="form-group">
               <label for="card-expi-year">YY</label>
               <ValidationProvider rules="required|length:2" v-slot="{ errors }">
                 <b-form-input
                   class="border-hover-p"
                   type="text"
+                  maxlength="2"
                   id="card-expi-year"
                   ref="input-6"
                   @input="activeFocus(6, 2)"
@@ -136,7 +138,7 @@
             </div>
           </b-col>
           <!-- Input CVV -->
-          <b-col cols="4" md="2">
+          <b-col cols="4" lg="2" md="4">
             <div class="form-group">
               <label for="card-cvv">CVV</label>
               <ValidationProvider
@@ -148,16 +150,16 @@
                   v-model="form.cardsecuritycode"
                   ref="input-7"
                   id="card-cvv"
+                  maxlength="4"
                   max="4"
                   type="text"
-                  maxlength="16"
                   :class="{ 'border-danger': errors[0] }"
                 />
               </ValidationProvider>
             </div>
           </b-col>
           <!-- Option Billing Address -->
-          <b-col cols="12" md="6">
+          <b-col cols="12" lg="6" md="10">
             <div class="form-group">
               <input type="text" v-model="moreInfo" class="d-none" />
               <label for="billing"
@@ -299,18 +301,18 @@ import VueGoogleAutocomplete from "vue-google-autocomplete";
 import PaymentService from "../service/payments.service";
 export default {
   components: { VueGoogleAutocomplete },
-  props:{
-    idlead:{
-      type:[String,Number]
+  props: {
+    idlead: {
+      type: [String, Number],
     },
-    session:{
-      type:[String,Number]
+    session: {
+      type: [String, Number],
     },
-    ifModalCard:{
-      type:Boolean
-    }
+    ifModalCard: {
+      type: Boolean,
+    },
   },
-  data:function() {
+  data: function () {
     return {
       mutableIfModalCard: this.ifModalCard,
       address_create_card_modal: "",
@@ -354,14 +356,14 @@ export default {
     }
   },
   methods: {
-    activeFocus:function(index, max) {
+    activeFocus: function (index, max) {
       let inputValue = this.$refs?.[`input-${index}`];
       if (inputValue.value.length === max - 1) {
         const nextElement = this.$refs?.[`input-${index + 1}`];
         if (nextElement) nextElement.focus();
       }
     },
-    getAddressData:function(address_create_card_modal) {
+    getAddressData: function (address_create_card_modal) {
       this.direccion = address_create_card_modal;
       this.address_create_card_modal =
         this.direccion.street_number + " " + this.direccion.route;
@@ -418,7 +420,7 @@ export default {
         });
       });
     },
-    closeModal:function() {
+    closeModal: function () {
       this.$emit("click", false);
     },
   },

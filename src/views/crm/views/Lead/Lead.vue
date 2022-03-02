@@ -14,10 +14,14 @@
             class="mr-1"
             @click="isAddNewUserSidebarActive = true"
           >
-            <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
+            <feather-icon
+              icon="PlusIcon"
+              size="15"
+              class="mr-50 text-white"
+            />Create
           </b-button>
           <b-dropdown
-            v-if="[1, 2].includes(currentUser.role_id) && isLeadsRoute"
+            v-if="(isCeo || isSupervisor || isCoordinator) && isLeadsRoute"
             id="dropdown-6"
             variant="info"
             :disabled="isLoading"
@@ -27,17 +31,26 @@
                 <b-spinner small />
               </template>
               <template v-else>
-                <feather-icon icon="DownloadIcon" size="16" class="align-middle" />
+                <feather-icon
+                  icon="DownloadIcon"
+                  size="16"
+                  class="align-middle"
+                />
               </template>
               <span class="ml-1">Export To Excel</span>
             </template>
 
-            <b-dropdown-item @click="exportExcel(1, 1)">Export Current Page</b-dropdown-item>
-            <b-dropdown-item @click="exportExcel(1, 2)">Export All Page</b-dropdown-item>
+            <b-dropdown-item @click="exportExcel(1, 1)"
+              >Export Current Page</b-dropdown-item
+            >
+            <b-dropdown-item @click="exportExcel(1, 2)"
+              >Export All Page</b-dropdown-item
+            >
             <b-dropdown-item
               :disabled="!S_SELECTED_LEADS.length"
               @click="exportExcel(1, 3)"
-            >Export Selection</b-dropdown-item>
+              >Export Selection</b-dropdown-item
+            >
           </b-dropdown>
         </div>
       </template>
@@ -45,26 +58,32 @@
     <b-nav card-header pills class="m-0">
       <b-nav-item
         exact-active-class="active"
-        :link-classes="['px-3',bgTabsNavs]"
+        :link-classes="['px-3', bgTabsNavs]"
         exact
         :to="`/${routeModule}/leads/`"
-      >Leads</b-nav-item>
+        >Leads</b-nav-item
+      >
       <b-nav-item
         exact-active-class="active"
-        :link-classes="['px-3',bgTabsNavs]"
+        :link-classes="['px-3', bgTabsNavs]"
         exact
         :to="`/${routeModule}/leads/sn`"
-      >Leads Sn</b-nav-item>
+        >Leads Sn</b-nav-item
+      >
       <b-nav-item
-        v-if="[1, 2].includes(currentUser.role_id) || isOnlyLead"
+        v-if="isCeo || isSupervisor || isOnlyLead || isCoordinator"
         exact-active-class="active"
-        :link-classes="['px-3',bgTabsNavs]"
+        :link-classes="['px-3', bgTabsNavs]"
         exact
         :to="`/${routeModule}/leads/w-potential`"
-      >Leads W Potential</b-nav-item>
+        >Leads W Potential</b-nav-item
+      >
     </b-nav>
 
-    <b-card no-body class="border-top-primary border-3 border-table-radius px-0">
+    <b-card
+      no-body
+      class="border-top-primary border-3 border-table-radius px-0"
+    >
       <router-view />
     </b-card>
   </div>
@@ -77,25 +96,25 @@ import LeadListAddNew from "./lead-module/save/LeadListAddNew.vue";
 
 export default {
   components: {
-    LeadListAddNew
+    LeadListAddNew,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
       skin: "appConfig/skin",
-      G_STATE_LEADS: "CrmLeadStore/G_STATE_LEADS"
+      G_STATE_LEADS: "CrmLeadStore/G_STATE_LEADS",
     }),
     ...mapState({
-      S_SELECTED_LEADS: state => state.CrmLeadStore.S_SELECTED_LEADS,
-      S_FILTERS_LEADS: state => state.CrmLeadStore.S_FILTERS_LEADS
+      S_SELECTED_LEADS: (state) => state.CrmLeadStore.S_SELECTED_LEADS,
+      S_FILTERS_LEADS: (state) => state.CrmLeadStore.S_FILTERS_LEADS,
     }),
     routeModule() {
       return this.$route.meta.route;
     },
     isLeadsRoute() {
       return this.$route.path === `/${this.routeModule}/leads/`;
-    }
+    },
   },
   data() {
     return {
@@ -105,11 +124,10 @@ export default {
       dato1: "desc",
       dato2: 10,
       isLoading: false,
-      keyCreateList: 0
+      keyCreateList: 0,
     };
   },
   async created() {
-    //all Promises
     await Promise.all([
       this.getStateLeads(),
       this.getStatusLeads(),
@@ -120,7 +138,7 @@ export default {
       this.getStates(),
       this.getEeuuStates(),
       this.getCountries(),
-      this.getSellers()
+      this.getSellers(),
     ]);
   },
   methods: {
@@ -135,7 +153,7 @@ export default {
       A_GET_STATES: "CrmGlobalStore/A_GET_STATES",
       A_GET_EEUU_STATES: "CrmGlobalStore/A_GET_EEUU_STATES",
       A_GET_COUNTRIES: "CrmGlobalStore/A_GET_COUNTRIES",
-      A_GET_SELLERS: "CrmGlobalStore/A_GET_SELLERS"
+      A_GET_SELLERS: "CrmGlobalStore/A_GET_SELLERS",
     }),
     async getStateLeads() {
       try {
@@ -183,7 +201,7 @@ export default {
       try {
         await this.A_GET_OWNERS({
           modul: this.currentUser.modul_id,
-          body: { roles: "[1,2,5]", type: "1" }
+          body: { roles: "[1,2,5]", type: "1" },
         });
       } catch (error) {
         console.log("Something went wrong getOwners:", error);
@@ -270,7 +288,7 @@ export default {
       try {
         await this.A_GET_SELLERS({
           modul: this.currentUser.modul_id,
-          body: { roles: "[]", type: "1" }
+          body: { roles: "[]", type: "1" },
         });
       } catch (error) {
         console.log("Something went wrong getSellers:", error);
@@ -284,7 +302,7 @@ export default {
       }
     },
     async exportExcel(Export, TypeExport) {
-      const id_leads = this.S_SELECTED_LEADS.map(el => el.id);
+      const id_leads = this.S_SELECTED_LEADS.map((el) => el.id);
       const name_text = this.S_FILTERS_LEADS.searchQuery
         ? this.S_FILTERS_LEADS.searchQuery
         : null;
@@ -311,7 +329,7 @@ export default {
         per_page: this.dato2,
         user_owner: this.S_FILTERS_LEADS.owner,
         assign_to: this.S_FILTERS_LEADS.assignTo,
-        sourcename: this.S_FILTERS_LEADS.sourceName
+        sourcename: this.S_FILTERS_LEADS.sourceName,
       };
       try {
         this.isLoading = true;
@@ -322,7 +340,7 @@ export default {
         this.showErrorSwal(error);
         this.isLoading = false;
       }
-    }
+    },
   },
 };
 </script>

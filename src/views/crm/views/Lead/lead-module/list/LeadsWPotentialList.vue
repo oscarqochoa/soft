@@ -203,8 +203,8 @@ export default {
           state_h: this.filter[3].model,
           type: 3,
           user_owner: this.filter[2].model,
-          perPage: ctx.perPage,
-          page: ctx.currentPage
+          perPage: this.paginate.perPage,
+          page: this.paginate.currentPage
         });
         this.totalLeads = response.total;
         this.fromPage = response.from;

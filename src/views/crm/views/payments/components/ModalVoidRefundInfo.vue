@@ -11,6 +11,7 @@
       body-class="mb-2"
       @hidden="closeModal"
       :no-close-on-backdrop="true"
+      centered
     >
       <b-row style="margin: 0">
         <base-refund>

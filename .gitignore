@@ -28,3 +28,4 @@ yarn-error.log*
 
 # Docs
 /docs/.temp
+.eslintrc.js

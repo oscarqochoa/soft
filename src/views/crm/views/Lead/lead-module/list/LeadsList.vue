@@ -22,11 +22,11 @@
             <feather-icon icon="MessageCircleIcon" class="mr-50" />Send SMS
           </b-button>
           <b-button
-              v-if="[5].includes(currentUser.role_id)"
-              variant="success"
-              class="ml-1"
-              :disabled="!(leadsSelecteds.length && leadsSelecteds.map(el => el.assign_id).includes(currentUser.user_id))"
-              @click="addListSeller()"
+            v-if="[5].includes(currentUser.role_id)"
+            variant="success"
+            class="ml-1"
+            :disabled="!leadsSelecteds.length"
+            @click="addListSeller()"
           >
             <feather-icon icon="ListIcon" class="mr-50" />ADD LIST
           </b-button>
@@ -79,7 +79,7 @@
                   size="18"
                   class="mr-50 text-danger"
               />
-              <span class="align-text-top text-capitalize">{{ data.item.date_even }}</span>
+              <span class="align-text-top text-capitalize">{{ data.item.date_even | myGlobal }}</span>
             </b-badge>
           </template>
 
@@ -122,7 +122,10 @@
                     :src="baseUrl + program.logo"
                     style="width: 50px"
                 />
-                <span :key="key" v-else>{{ program.value }}</span>
+                 <b-img v-else-if="!program.logo && program.value == 'Paragon'" :src="baseImg+$options.filters.myPrograms(program.value)"
+                  :key="key" thumbnail
+                  fluid style="width: 50px"></b-img>
+                 <span :key="key" v-else>{{ program.value }}</span>
               </template>
             </div>
           </template>
@@ -211,6 +214,7 @@ export default {
       type: 0,
       actionsOptions: ["returnToSocialNetwork", "sendSMS", "historySMS"],
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
+      baseImg: process.env.VUE_APP_BASE_URL_FRONT,
       isBusy: false,
       fields: dataFields.leadFields,
       filter: dataFilters,
@@ -252,7 +256,8 @@ export default {
       G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
       G_STATES: "CrmGlobalStore/G_STATES",
       G_CRS: "CrmGlobalStore/G_CRS",
-      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS"
+      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS",
+      G_UPDATE_TABLE_LEAD:"CrmLeadStore/G_UPDATE_TABLE_LEAD" 
     }),
     ...mapState({
       S_LEADS: state => state.CrmLeadStore.S_LEADS
@@ -264,11 +269,12 @@ export default {
       return this.$route.meta.module;
     }
   },
-  created() {
+  async created() {
     this.addPaddingTd();
-    this.myProvider();
+    await this.myProvider();
     this.setOptionsOnFilters();
   },
+
   methods: {
     ...mapActions({
       A_GET_LEADS: "CrmLeadStore/A_GET_LEADS",
@@ -276,7 +282,8 @@ export default {
       A_SET_SELECTED_LEADS: "CrmLeadStore/A_SET_SELECTED_LEADS",
       A_DELETE_LEADS: "CrmLeadStore/A_DELETE_LEADS",
       A_PROCESS_LEADS: "CrmLeadStore/A_PROCESS_LEADS",
-      A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST"
+      A_ADD_SELLER_LIST: "CrmLeadStore/A_ADD_SELLER_LIST",
+      A_SET_UPDATE_TABLE_LEAD:"CrmLeadStore/A_SET_UPDATE_TABLE_LEAD",
     }),
     resolveUserStatusVariant(status) {
       if (status === "Pending") return "warning";
@@ -477,9 +484,7 @@ export default {
       if (confirm.isConfirmed) {
         this.addPreloader();
         //filter just the owner of the lead
-        const leadList = this.leadsSelecteds
-            .filter(el => el.assign_id === this.currentUser.user_id)
-            .map(el => el.id);
+        const leadList = this.leadsSelecteds.map(el => el.id);
         try {
           const params = {
             user_id: this.currentUser.user_id,
@@ -503,7 +508,13 @@ export default {
     },
     resetQuickData(item) {
       this.quickData = item;
-    }
+    },
+    updateTableLead:function() {
+      if (this.G_UPDATE_TABLE_LEAD) {
+        this.A_SET_UPDATE_TABLE_LEAD(false);
+      }
+    },
+
   },
   mounted() {
     if (![4].includes(this.currentUser.role_id) && !this.isOnlyLead) {
@@ -515,7 +526,20 @@ export default {
     }
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
       this.actionsOptions.push("delete");
-  }
+  },
+  watch:{
+    G_UPDATE_TABLE_LEAD(newVal){
+      if (newVal) {
+        if(this.$refs.refUserListTable === undefined){ 
+          this.myProvider();
+        }else{
+          this.$refs.refUserListTable.refresh();
+          this.myProvider();
+        }
+        
+      }
+    }
+  },
 };
 </script>
 

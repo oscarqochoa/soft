@@ -5,8 +5,15 @@
       <b-row>
         <b-col cols="12" sm="6">
           <validation-provider>
-            <b-form-group label="Card Holder Number" label-for="card-holder-name">
-              <b-form-input id="card-holder-name" disabled :value="card.cardholdername" />
+            <b-form-group
+              label="Card Holder Number"
+              label-for="card-holder-name"
+            >
+              <b-form-input
+                id="card-holder-name"
+                disabled
+                :value="card.cardholdername"
+              />
             </b-form-group>
           </validation-provider>
         </b-col>
@@ -20,7 +27,10 @@
                   disabled
                   :value="cardOriginalNumber ? cardOriginalNumber : cardNumber"
                 />
-                <b-input-group-append is-text>
+                <b-input-group-append
+                  v-if="isCeo || isSupervisor || isCoordinator"
+                  is-text
+                >
                   <feather-icon
                     v-if="!isCreditCardLoading"
                     :icon="creditCardToggleIcon"
@@ -38,14 +48,22 @@
             <b-col cols="3">
               <validation-provider>
                 <b-form-group label="MM" label-for="card-expi-month">
-                  <b-form-input id="card-expi-month" disabled :value="card.card_expi_month" />
+                  <b-form-input
+                    id="card-expi-month"
+                    disabled
+                    :value="card.card_expi_month"
+                  />
                 </b-form-group>
               </validation-provider>
             </b-col>
             <b-col cols="3">
               <validation-provider>
                 <b-form-group label="YY" label-for="card-expi-year">
-                  <b-form-input id="card-expi-year" disabled :value="card.card_expi_year" />
+                  <b-form-input
+                    id="card-expi-year"
+                    disabled
+                    :value="card.card_expi_year"
+                  />
                 </b-form-group>
               </validation-provider>
             </b-col>
@@ -53,8 +71,15 @@
               <validation-provider>
                 <b-form-group label="YY" label-for="card-expi-year">
                   <b-input-group>
-                    <b-form-input id="card-expi-year" disabled :value="cardCvv" />
-                    <b-input-group-append is-text>
+                    <b-form-input
+                      id="card-expi-year"
+                      disabled
+                      :value="cardCvv"
+                    />
+                    <b-input-group-append
+                      v-if="isCeo || isSupervisor || isCoordinator"
+                      is-text
+                    >
                       <feather-icon
                         :icon="isShowCardCvv ? 'EyeOffIcon' : 'EyeIcon'"
                         class="cursor-pointer"
@@ -69,18 +94,22 @@
         </b-col>
         <b-col cols="12" sm="6">
           <validation-provider>
-            <b-form-group label="Billing Address is the same the Mailling Address ?">
+            <b-form-group
+              label="Billing Address is the same the Mailling Address ?"
+            >
               <b-button-group class="w-100">
                 <b-button
                   v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                   :variant="moreInfo ? 'primary' : 'outline-primary'"
                   disabled
-                >YES</b-button>
+                  >YES</b-button
+                >
                 <b-button
                   v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                   :variant="!moreInfo ? 'primary' : 'outline-primary'"
                   disabled
-                >NO</b-button>
+                  >NO</b-button
+                >
               </b-button-group>
             </b-form-group>
           </validation-provider>
@@ -112,13 +141,15 @@ export default {
   components: {
     flatPickr,
     vSelect,
-    AddressComponent
+    AddressComponent,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
-      G_EEUU_STATES: "CrmGlobalStore/G_EEUU_STATES"
+      G_EEUU_STATES: "CrmGlobalStore/G_EEUU_STATES",
+      isCeo: "auth/isCeo",
+      isSupervisor: "auth/isSupervisor",
     }),
     creditCardToggleIcon() {
       return this.cardOriginalNumber ? "EyeOffIcon" : "EyeIcon";
@@ -129,7 +160,7 @@ export default {
         : this.card.cardsecuritycode.length === 3
         ? `XX${this.card.cardsecuritycode.substr(2)}`
         : `XXX${this.card.cardsecuritycode.substr(3)}`;
-    }
+    },
   },
   created() {
     this.authUser = this.currentUser;
@@ -139,21 +170,21 @@ export default {
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     type: {
       type: Number,
-      required: false
+      required: false,
     },
     card: {
       type: Object,
-      required: true
+      required: true,
     },
     isEditable: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
@@ -164,7 +195,7 @@ export default {
       eeuu_state: null,
       isCreditCardLoading: false,
       isShowCardCvv: false,
-      moreInfo: false
+      moreInfo: false,
     };
   },
   setup() {
@@ -172,26 +203,25 @@ export default {
       const event = { ...this.blankItem };
       this.$emit("update:card", event);
     };
-    const { refFormObserver, getValidationState } = formValidation(
-      resetuserData
-    );
+    const { refFormObserver, getValidationState } =
+      formValidation(resetuserData);
 
     return {
       refFormObserver,
       getValidationState,
-      resetuserData
+      resetuserData,
     };
   },
   methods: {
     ...mapActions({
-      A_GET_ORIGINAL_TARGET: "CrmCreditCardStore/A_GET_ORIGINAL_TARGET"
+      A_GET_ORIGINAL_TARGET: "CrmCreditCardStore/A_GET_ORIGINAL_TARGET",
     }),
     async onToggleCreditCard() {
       try {
         if (!this.cardOriginalNumber) {
           this.isCreditCardLoading = true;
           const response = await this.A_GET_ORIGINAL_TARGET({
-            id: this.card.id
+            id: this.card.id,
           });
           if (this.isResponseSuccess(response)) {
             this.cardOriginalNumber = response.data[0];
@@ -216,13 +246,13 @@ export default {
         );
         this.isCreditCardLoading = false;
       }
-    }
+    },
   },
   mounted() {
     this.moreInfo = !this.card.address;
     this.card.prename = "card";
     this.card.street = this.card.address;
-  }
+  },
 };
 </script>
 
