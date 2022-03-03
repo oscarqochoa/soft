@@ -1,37 +1,37 @@
 <template>
   <div>
     <old-business-modal
-        v-if="salesClient.creates < '2022-02-28'"
-        :sales-client="salesClient"
-        :header-s="headerS"
-        :modal-services="modalServices"
-        :programs-all="programsAll"
-        :type-modal="typeModal"
-        :users-services="usersServices"
-        @changeProgram="changeProgram"
-        @closeModal="hideModal"
+      v-if="salesClient.creates < '2022-02-28'"
+      :sales-client="salesClient"
+      :header-s="headerS"
+      :modal-services="modalServices"
+      :programs-all="programsAll"
+      :type-modal="typeModal"
+      :users-services="usersServices"
+      @changeProgram="changeProgram"
+      @closeModal="hideModal"
     />
     <new-business-modal
-        v-else
-        :sales-client="salesClient"
-        :header-s="headerS"
-        :modal-services="modalServices"
-        :programs-all="programsAll"
-        :type-modal="typeModal"
-        :users-services="usersServices"
-        @changeProgram="changeProgram"
-        @closeModal="hideModal"
+      v-else
+      :sales-client="salesClient"
+      :header-s="headerS"
+      :modal-services="modalServices"
+      :programs-all="programsAll"
+      :type-modal="typeModal"
+      :users-services="usersServices"
+      @changeProgram="changeProgram"
+      @closeModal="hideModal"
     />
   </div>
 </template>
 
 <script>
-import OldBusinessModal from "@/views/crm/views/sales-made/components/modals/services/business/OldBusinessModal";
-import NewBusinessModal from "@/views/crm/views/sales-made/components/modals/services/business/NewBusinessModal";
+import OldBusinessModal from "@/views/crm/views/sales-made/components/modals/services/business/OldBusinessModal.vue";
+import NewBusinessModal from "@/views/crm/views/sales-made/components/modals/services/business/NewBusinessModal.vue";
 export default {
   components: {
     OldBusinessModal,
-    NewBusinessModal
+    NewBusinessModal,
   },
   props: {
     modalServices: {
@@ -64,7 +64,7 @@ export default {
     },
     headerS: {
       type: Object,
-      default: () => ({program: "", seller: "", captured: ""}),
+      default: () => ({ program: "", seller: "", captured: "" }),
     },
   },
   methods: {
@@ -74,10 +74,8 @@ export default {
     hideModal(refresh, programSelect) {
       this.$emit("closeModal", refresh, programSelect);
     },
-  }
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

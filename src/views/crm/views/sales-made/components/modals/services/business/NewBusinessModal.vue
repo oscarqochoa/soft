@@ -70,7 +70,11 @@
                 cols="4"
                 :key="index"
               >
-                <b-form-radio :value="website" v-model="websiteType">
+                <b-form-radio
+                  :disabled="isModalShow"
+                  :value="website"
+                  v-model="websiteType"
+                >
                   <p class="mb-0">{{ website.description }}</p>
                   <p class="mb-0">$ {{ website.price.toFixed(2) }}</p>
                 </b-form-radio>
@@ -83,6 +87,7 @@
                 :key="index"
               >
                 <b-form-radio
+                  :disabled="isModalShow"
                   :value="socialNetwork"
                   v-model="socialNetworkType"
                 >
@@ -92,9 +97,26 @@
               </b-col>
             </b-row>
           </div>
+          <div
+            v-else-if="
+              ['Register'].includes(selectedRate.description) &&
+              selectedRate.type === '5'
+            "
+          >
+            <v-select
+              :disabled="isModalShow"
+              v-model="registerStateType"
+              :options="registerStatesTypes"
+              label="description"
+              :clearable="false"
+            >
+              <template #option="{ description, price }">
+                <p>{{ description }} - $ {{ (price - 100).toFixed(2) }}</p>
+              </template>
+            </v-select>
+          </div>
         </transition>
       </b-card>
-
       <b-card
         header="Monthly payment"
         header-bg-variant="info"
@@ -176,6 +198,24 @@
                 </b-form-radio>
               </b-col>
             </b-row>
+          </div>
+          <div
+            v-else-if="
+              ['Register'].includes(selectedRate.description) &&
+              selectedRate.type === '6'
+            "
+          >
+            <v-select
+              v-model="registerStateType"
+              :options="registerStatesTypes"
+              label="description"
+              :disabled="isModalShow"
+              :clearable="false"
+            >
+              <template #option="{ description, price }">
+                <p>{{ description }} - $ {{ price.toFixed(2) }}</p>
+              </template>
+            </v-select>
           </div>
         </transition>
       </b-card>
@@ -299,8 +339,10 @@
 <script>
 import { mapGetters } from "vuex";
 import ButtonSave from "@/views/commons/utilities/ButtonSave";
+import vSelect from "vue-select";
 import ButtonCancel from "@/views/commons/utilities/ButtonCancel";
 import ModalServiceHeader from "@/views/crm/views/sales-made/components/modals/services/ModalServiceHeader";
+import minIp from "./minIp";
 
 export default {
   name: "NewBusinessModal",
@@ -308,6 +350,7 @@ export default {
     ButtonSave,
     ButtonCancel,
     ModalServiceHeader,
+    vSelect,
   },
   props: {
     modalServices: {
@@ -350,10 +393,12 @@ export default {
       observation: "Services",
       websiteTypes: [],
       socialNetworkTypes: [],
+      registerStatesTypes: [],
       rates: [],
       selectedRate: { description: "" },
       websiteType: null,
       socialNetworkType: null,
+      registerStateType: null,
       fee: 0,
       validateMoney: false,
       othersPayments: [],
@@ -368,6 +413,15 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    min_ip() {
+      if (!this.selectedRate) return null;
+      if (this.selectedRate.description === "Register") {
+        return minIp.filter(
+          (item) => item.STATE === this.registerStateType.description
+        )[0].IP;
+      }
+      return null;
+    },
     needValidationPassword() {
       return this.discount >= 300;
     },
@@ -401,16 +455,25 @@ export default {
     suggestedAmount() {
       const ratePrice = this.selectedRate ? this.selectedRate.price : 0;
       let websitePrice = this.websiteType ? this.websiteType.price : 0;
+      let registerPrice = this.registerStateType
+        ? this.registerStateType.price
+        : 0;
       if (
         this.selectedRate.type === "6" &&
         this.websiteType === this.websiteTypes[0]
       ) {
         websitePrice += 100;
       }
-      const socialNetworkPrice = this.socialNetworkType
+      let socialNetworkPrice = this.socialNetworkType
         ? this.socialNetworkType.price
         : 0;
-      return ratePrice + websitePrice + socialNetworkPrice;
+      if (
+        this.selectedRate.type === "5" &&
+        this.selectedRate.description === "Register"
+      ) {
+        registerPrice -= 100;
+      }
+      return ratePrice + websitePrice + socialNetworkPrice + registerPrice;
     },
   },
   methods: {
@@ -511,6 +574,9 @@ export default {
 
         // For others or business credit
         this.othersPayments = [];
+        if (this.registerStateType) {
+          this.othersPayments.push(this.registerStateType.id);
+        }
         if (this.websiteType) {
           this.othersPayments.push(this.websiteType.id);
         }
@@ -551,7 +617,8 @@ export default {
           event: this.salesClient.event_id,
           json_noce: [],
           stateid: 0,
-
+          sale_id: this.salesClient.id,
+          min_ip: this.min_ip,
           // D
           id_score: this.scoreId,
           json_ce: null,
@@ -584,17 +651,42 @@ export default {
         );
         if (response.status === 200) {
           this.fee = response.data[0].fee;
-          const otherPrices = JSON.parse(response.data[0].others_prices);
-          this.websiteType = this.websiteTypes.filter(
-            (type) => type.id === otherPrices[0]
-          )[0];
-          this.socialNetworkType = this.socialNetworkTypes.filter(
-            (type) => type.id === otherPrices[1]
-          )[0];
-          console.log(this.websiteType, this.socialNetworkType);
           [this.selectedRate] = this.rates.filter(
             (rate) => rate.id === response.data[0].rate_selected[0].rate_id
           );
+          const otherPrices = JSON.parse(response.data[0].others_prices);
+          if (this.selectedRate.description === "Register") {
+            this.selectedRate.price = 0;
+            this.registerStateType = this.registerStatesTypes.filter(
+              (type) => type.id === otherPrices[0]
+            )[0];
+          } else {
+            if (
+              this.selectedRate.description === "Silver" &&
+              this.selectedRate.type === "5"
+            ) {
+              this.selectedRate.price -= this.websiteTypes[0].price;
+            } else if (
+              this.selectedRate.description === "Silver" &&
+              this.selectedRate.type === "6"
+            ) {
+              this.selectedRate.price -= this.websiteTypes[0].price + 100;
+            } else if (this.selectedRate.description === "Gold") {
+              this.selectedRate.price -= this.websiteTypes[1].price;
+              this.selectedRate.price -= this.socialNetworkTypes[1].price;
+            } else if (this.selectedRate.description === "Platinium") {
+              this.selectedRate.price -= this.websiteTypes[2].price;
+              this.selectedRate.price -= this.socialNetworkTypes[2].price;
+            }
+            this.websiteType = this.websiteTypes.filter(
+              (type) => type.id === otherPrices[0]
+            )[0];
+            if (otherPrices.length > 1) {
+              this.socialNetworkType = this.socialNetworkTypes.filter(
+                (type) => type.id === otherPrices[1]
+              )[0];
+            }
+          }
           this.removePreloader();
         }
       } catch (error) {
@@ -608,7 +700,7 @@ export default {
         });
         if (response.status === 200) {
           const rates = response.data.filter((r) =>
-            ["5", "6", "7"].includes(r.type)
+            ["5", "6", "7", "8"].includes(r.type)
           );
           this.rates = rates.filter((rate) => ["5", "6"].includes(rate.type));
           this.websiteTypes = rates.filter((rate) =>
@@ -617,6 +709,7 @@ export default {
           this.socialNetworkTypes = rates.filter((rate) =>
             rate.description.includes("Social Network")
           );
+          this.registerStatesTypes = rates.filter((rate) => rate.type === "8");
           if (!this.isModalShow) {
             this.removePreloader();
           }
@@ -629,9 +722,17 @@ export default {
       }
     },
     changeSelectedRate(rate) {
-      if (this.selectedRate.description === "Register") {
-        this.websiteType = null;
-        this.socialNetworkType = null;
+      if (
+        this.selectedRate.description === "Register" &&
+        this.selectedRate.type === "5"
+      ) {
+        this.selectedRate.price = 799;
+      }
+      if (
+        this.selectedRate.description === "Register" &&
+        this.selectedRate.type === "6"
+      ) {
+        this.selectedRate.price = 899;
       } else if (
         this.selectedRate.description === "Silver" &&
         this.selectedRate.type === "5"
@@ -653,20 +754,28 @@ export default {
       if (rate.description === "Register") {
         this.websiteType = null;
         this.socialNetworkType = null;
+        this.registerStateType = this.registerStatesTypes.filter(
+          (state) => state.description === "California"
+        )[0];
+        rate.price = 0;
       } else if (rate.description === "Silver" && rate.type === "5") {
         this.socialNetworkType = null;
+        this.registerStateType = null;
         this.websiteType = this.websiteTypes[0];
         rate.price -= this.websiteTypes[0].price;
       } else if (rate.description === "Silver" && rate.type === "6") {
         this.socialNetworkType = null;
+        this.registerStateType = null;
         this.websiteType = this.websiteTypes[0];
         rate.price -= this.websiteTypes[0].price + 100;
       } else if (rate.description === "Gold") {
+        this.registerStateType = null;
         this.websiteType = this.websiteTypes[1];
         this.socialNetworkType = this.socialNetworkTypes[1];
         rate.price -= this.websiteTypes[1].price;
         rate.price -= this.socialNetworkTypes[1].price;
       } else if (rate.description === "Platinium") {
+        this.registerStateType = null;
         this.websiteType = this.websiteTypes[2];
         this.socialNetworkType = this.socialNetworkTypes[2];
         rate.price -= this.websiteTypes[2].price;
