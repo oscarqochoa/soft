@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card>
+    <b-card class="px-0">
       <b-container>
         <b-row>
           <b-col lg="4" md="4" sm="4" cols="9">
@@ -331,7 +331,7 @@ export default {
         this.personalInfo.numberDocument == null ? true : false;
     },
     enableForm() {
-      this.showSwalGeneric(
+      this.showConfirmSwal(
         "Are you sure?",
         "Do you want to edit the information?",
         "question"
@@ -343,7 +343,7 @@ export default {
       });
     },
     disableForm() {
-      this.showSwalGeneric(
+      this.showConfirmSwal(
         "Are you sure?",
         "Changes will be lost!",
         "question"
@@ -355,7 +355,7 @@ export default {
       });
     },
     enableMobileFormField() {
-      this.showSwalGeneric(
+      this.showConfirmSwal(
         "Are you sure?",
         "Do you want to edit the mobile?",
         "question"
@@ -366,7 +366,7 @@ export default {
       });
     },
     disableMobileFormField() {
-      this.showSwalGeneric(
+      this.showConfirmSwal(
         "Are you sure?",
         "Changes will be lost!",
         "question"
@@ -406,7 +406,7 @@ export default {
       try {
         let message = type == 1 ? "information" : type == 3 ? "mobile" : "";
 
-        this.showSwalGeneric(
+        this.showConfirmSwal(
           "Are you sure?",
           `The ${message} will be save`,
           "question"
@@ -471,6 +471,7 @@ export default {
           }
         });
       } catch (error) {
+        this.removePreloader();
         console.log("Something went wrong on updateInformation: ", error);
         throw error;
       }
