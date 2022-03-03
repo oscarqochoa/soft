@@ -5,12 +5,12 @@
         Client &nbsp;
         <span>
           <a class="text-primary">
-            {{ data.lead_name }}
+            {{ lead.lead_name }}
           </a>
         </span>
       </b-card-title>
       <span class="font-weight-bolder">
-        {{ data.name_state }} ({{ data.state }})
+        {{ lead.name_state }} ({{ lead.state }})
       </span>
     </template>
 
@@ -18,12 +18,12 @@
       <b-row class="lead-details">
         <b-col md="6">
           <standar-form-group label="Nickname:" display="block" label-size="md">
-            <span>{{ data.nickname }}</span>
+            <span>{{ lead.nickname }}</span>
           </standar-form-group>
         </b-col>
         <b-col md="6">
           <standar-form-group label="Status:" display="block" label-size="md">
-            <span>{{ data.fanpage }}</span>
+            <span>{{ lead.fanpage }}</span>
           </standar-form-group>
         </b-col>
         <b-col md="6">
@@ -32,27 +32,27 @@
             display="block"
             label-size="md"
           >
-            <span>{{ data.user_owner }}</span>
+            <span>{{ lead.user_owner }}</span>
           </standar-form-group>
         </b-col>
         <b-col md="6">
           <standar-form-group label="Fan Page:" display="block" label-size="md">
-            <span>{{ data.fanpage }}</span>
+            <span>{{ lead.fanpage }}</span>
           </standar-form-group>
         </b-col>
         <b-col md="6">
           <standar-form-group label="Language:" display="block" label-size="md">
-            <span>{{ data.language == "es" ? "Spanish" : "English" }}</span>
+            <span>{{ lead.language == "es" ? "Spanish" : "English" }}</span>
           </standar-form-group>
         </b-col>
         <b-col md="6">
           <standar-form-group label="Program:" display="block" label-size="md">
-            <span>{{ data.name_programs }}</span>
+            <span>{{ lead.name_programs }}</span>
           </standar-form-group>
         </b-col>
         <b-col md="6">
           <standar-form-group label="Catcher:" display="block" label-size="md">
-            <span>{{ data.user_catcher }}</span>
+            <span>{{ lead.user_catcher }}</span>
           </standar-form-group>
         </b-col>
         <b-col md="6">
@@ -61,10 +61,10 @@
             display="block"
             label-size="md"
           >
-            <span>{{ data.created_at }}</span>
+            <span>{{ lead.created_at }}</span>
           </standar-form-group>
         </b-col>
-        <b-col md="6">
+        <!-- <b-col md="6">
           <standar-form-group label="Flyer:" display="block" label-size="md">
             <div class="flyer">
               <b-badge variant="primary" class="badge"> CA </b-badge>
@@ -74,7 +74,7 @@
               ></b-img>
             </div>
           </standar-form-group>
-        </b-col>
+        </b-col> -->
       </b-row>
     </b-container>
   </b-card>
@@ -86,7 +86,7 @@ import StandarFormGroup from "@/views/social-network/views/leads/components/Stan
 
 export default {
   props: {
-    data: {
+    lead: {
       type: Object,
     },
   },

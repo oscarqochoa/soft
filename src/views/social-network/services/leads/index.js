@@ -185,6 +185,15 @@ class SNLeads {
         }
     }
 
+    async getLeadTasks(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/get-lead-tasks', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
 }
 
 export default new SNLeads()

@@ -14,33 +14,21 @@
           ></feather-icon>
           CREATE
         </b-button>
-        <b-button
-          variant="success"
-          class="mr-1"
-          :to="{ name: 'sn-create-new-lead' }"
-        >
-          <feather-icon
-            icon="MessageCircleIcon"
-            size="15"
-            class="mr-50 text-white"
-          ></feather-icon>
-          SEND SMS
-        </b-button>
       </b-row>
     </header-slot>
 
     <b-row class="card-group">
       <b-col md="6">
-        <card-client :data="lead" />
+        <card-client :lead="lead" />
       </b-col>
       <b-col md="6">
-        <card-notes />
+        <card-notes :lead="lead" />
       </b-col>
       <b-col md="6">
-        <card-tasks />
+        <card-tasks :lead="lead" />
       </b-col>
       <b-col md="6">
-        <card-files />
+        <card-files :lead="lead" />
       </b-col>
     </b-row>
   </div>
@@ -48,8 +36,8 @@
 
 <script>
 import CardClient from "./components/CardClient.vue";
-import CardNotes from "./components/CardNotes.vue";
-import CardTasks from "./components/CardTasks.vue";
+import CardNotes from "./components/notes/CardNotes.vue";
+import CardTasks from "./components/tasks/CardTasks.vue";
 import CardFiles from "./components/CardFiles.vue";
 
 // Services

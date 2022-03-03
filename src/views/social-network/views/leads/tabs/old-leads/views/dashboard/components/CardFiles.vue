@@ -15,7 +15,7 @@
           variant="primary"
           class="mr-1"
           size="sm"
-          :to="{ name: 'sn-create-new-lead' }"
+          @click="openModalUploadFiles"
         >
           <feather-icon
             icon="FileTextIcon"
@@ -26,12 +26,47 @@
         </b-button>
       </div>
     </b-container>
+
+    <modal-upload-files
+      v-if="showModalUploadFiles"
+      :show="showModalUploadFiles"
+      :lead="lead"
+      @onClose="closeModalUploadFiles"
+    ></modal-upload-files>
   </b-card>
 </template>
 
 <script>
-export default {};
+// Components
+import ModalUploadFiles from "../../../../../components/ModalUploadFiles.vue";
+
+export default {
+  props: {
+    lead: {
+      type: Object,
+      required: true,
+    },
+  },
+  components: {
+    ModalUploadFiles,
+  },
+  data() {
+    return {
+      // Modals
+      showModalUploadFiles: false,
+    };
+  },
+  methods: {
+    openModalUploadFiles() {
+      this.showModalUploadFiles = true;
+    },
+    closeModalUploadFiles() {
+      this.showModalUploadFiles = false;
+    },
+  },
+};
 </script>
 
 <style>
 </style>
+
