@@ -2,6 +2,7 @@
 import Vue from 'vue'
 
 import SNLeadsService from '@/views/social-network/services/leads'
+import crmService from '@/views/crm/services/lead'
 import mixins from '@/mixins/general'
 
 const state = {
@@ -56,7 +57,15 @@ const mutations = {
             state[params.destination].items.splice(index, 1)
             state[params.destination].total--
         }
-    }
+    },
+    REMOVE_DATA(state, params) {
+        const index = state[params.destination]
+          .map((el) => el.id)
+          .indexOf(params.id);
+        if (index !== -1) {
+          state[params.destination].splice(index, 1);
+        }
+      },
 }
 const actions = {
     async A_GET_NEW_LEADS({ commit }, body) {
@@ -74,7 +83,7 @@ const actions = {
                 data
             })
 
-            return response.data
+            return response;
         } catch (error) {
             console.log("ERROR_GET_NEW_LEADS [ACTION]", error)
             throw error
@@ -174,7 +183,7 @@ const actions = {
             if (response.status == 200) {
                 commit('REMOVE_LEAD_DATA', {
                     destination: 'S_LEADS',
-                    id: body.id
+                    id: body.lead_id
                 })
             }
 
@@ -198,7 +207,7 @@ const actions = {
                     destination: 'S_LEADS',
                     data
                 })
-                return response.data
+                return response
             }
 
         } catch (error) {
@@ -316,7 +325,7 @@ const actions = {
             console.log("ERROR_GET_SELLERS_BY_DATE_AND_TYPE_TASK [ACTION]", error);
             throw error
         }
-    }
+    },
 }
 
 export default {

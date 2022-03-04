@@ -38,7 +38,7 @@ export default [
         sortable: false,
     },
     {
-        key: 'task',
+        key: 'attend',
         label: 'Task',
         sortable: false,
     },
@@ -53,9 +53,14 @@ export default [
         sortable: true,
     },
     {
+        key: 'tracking',
+        label: 'Tracking',
+        sortable: false,
+    },
+    {
         key: 'actions',
         label: 'Actions',
-        sortable: true,
+        sortable: false,
     },
 
 ]

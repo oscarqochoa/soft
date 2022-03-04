@@ -4,8 +4,8 @@ export default [
     {
         key: 'nickname',
         label: 'Nickname',
-        formatter: title,
         sortable: true,
+        formatter: title,
     },
     {
         key: 'state_hour',
@@ -38,7 +38,7 @@ export default [
         sortable: false,
     },
     {
-        key: 'task',
+        key: 'attend',
         label: 'Task',
         sortable: false,
     },

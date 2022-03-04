@@ -64,7 +64,7 @@ class SNLeads {
 
     async postDeleteLead(body) {
         try {
-            const data = await amgApi.post('delete-lead-sn', body);
+            const data = await amgApi.post('/lead/destroy-lead', body);
             return data
         } catch (error) {
             console.log("Something went wrong on postDeleteLead", error);
