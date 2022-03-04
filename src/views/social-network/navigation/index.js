@@ -1,4 +1,3 @@
-import TestNavigation from '../views/test/test.navigation'
 import LeadsNav from '../views/leads/leads.nav'
 import AnswersGuideNavigation from '@/views/social-network/views/answers-guide/answers-guide.navigation'
 import BankOfFlyersNavigation from '@/views/social-network/views/bank-of-flyers/bank-of-flyers.navigation'
@@ -12,9 +11,8 @@ const navigation = [
   {
     header: 'SOCIAL NETWORK',
   },
-  ...TestNavigation,
-  ...LeadsNav,
   ...DashboardNavigation,
+  ...LeadsNav,
   ...ClientNavigation,
   ...MigrationsNavigation,
   ...AnswersGuideNavigation,

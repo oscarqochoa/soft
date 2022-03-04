@@ -1,6 +1,6 @@
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { useWindowSize } from "@vueuse/core";
-
+import { swalErrorIcon, swalInfoIcon, swalSuccessIcon, swalWarningIcon } from "@/icons/statusIcons";
 export default {
   data() {
     return { baseUrl: process.env.VUE_APP_BASE_URL_ASSETS };
@@ -47,6 +47,9 @@ export default {
     },
     isCeo() {
       return this.$store.getters["auth/isCeo"];
+    },
+    isCoordinator() {
+      return this.$store.getters["auth/isCoordinator"];
     },
   },
   methods: {
@@ -220,12 +223,12 @@ export default {
     showConfirmSwal(
       title = "Are you sure?",
       text = "You won't be able to revert this!",
-      config = {},
+      config = {}
     ) {
       return this.$swal({
         title,
         text,
-        imageUrl: "/assets/images/icons/swal/warning.svg",
+        imageUrl: swalWarningIcon,
         imageWidth: 70,
         showCancelButton: true,
         buttonsStyling: false,
@@ -245,7 +248,7 @@ export default {
       return this.$swal({
         title,
         text,
-        imageUrl: "/assets/images/icons/swal/success.svg",
+        imageUrl: swalSuccessIcon,
         imageWidth: 70,
         html,
         confirmButtonText: "Ok",
@@ -259,7 +262,7 @@ export default {
       this.$swal({
         title,
         text,
-        imageUrl: "/assets/images/icons/swal/info.svg",
+        imageUrl: swalInfoIcon,
         imageWidth: 70,
         confirmButtonText: "Ok",
         customClass: {
@@ -272,7 +275,7 @@ export default {
       this.$swal({
         title,
         text,
-        imageUrl: "/assets/images/icons/swal/warning.svg",
+        imageUrl: swalWarningIcon,
         imageWidth: 70,
         confirmButtonText: "Ok",
         customClass: {
@@ -287,7 +290,7 @@ export default {
     ) {
       this.$swal({
         html: `<h4><b>${title}</b></h4> <br/> <span class="font-small-3 text-danger">${error}</span>`,
-        imageUrl: "/assets/images/icons/swal/error.svg",
+        imageUrl: swalErrorIcon,
         imageWidth: 70,
         confirmButtonText: "Ok",
         customClass: {

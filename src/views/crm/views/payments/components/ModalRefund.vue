@@ -1,18 +1,6 @@
 <template>
   <div>
     <b-modal
-<<<<<<< HEAD
-        modal
-        :title="statusTitle"
-        v-model="mutableIfModal"
-        size="lg"
-        modal-class="modal-primary"
-        title-tag="h3"
-        hide-footer
-        body-class="mb-2"
-        @hidden="closeModal"
-        :no-close-on-backdrop="true"
-=======
       modal
       :title="statusTitle"
       v-model="mutableIfModal"
@@ -24,7 +12,6 @@
       @hidden="closeModal"
       :no-close-on-backdrop="true"
       centered
->>>>>>> release/crm
     >
       <!-- Form -->
       <ValidationObserver ref="form">
@@ -50,17 +37,17 @@
           <!-- Input Text Tarea Comment -->
           <div class="col-lg-12 mt-1">
             <ValidationProvider
-                name="comment"
-                rules="required"
-                v-slot="{ errors }"
+              name="comment"
+              rules="required"
+              v-slot="{ errors }"
             >
               <div class="form-group row">
                 <span>Comment</span>
                 <b-textarea
-                    class="input-form"
-                    v-model="comment"
-                    style="height: 140px"
-                    :class="{ 'border-danger': errors[0] }"
+                  class="input-form"
+                  v-model="comment"
+                  style="height: 140px"
+                  :class="{ 'border-danger': errors[0] }"
                 ></b-textarea>
               </div>
             </ValidationProvider>
@@ -68,7 +55,7 @@
           <!-- Button Submit -->
           <div class="col-lg-12">
             <div
-                class="
+              class="
                 d-flex
                 flex-column
                 justify-content-center
@@ -76,9 +63,9 @@
               "
             >
               <b-button
-                  variant="success"
-                  v-if="isCeo == 1 || (isSupervisor == 2 && modul == 4)"
-                  @click="sendVoid"
+                variant="success"
+                v-if="isCeo == 1 || (isSupervisor == 2 && modul == 4)"
+                @click="sendVoid"
               >
                 Submit
               </b-button>
@@ -127,15 +114,15 @@ export default {
     },
     statusDate: function () {
       return this.dataVoid.settlement_date
-          ? moment(this.dataVoid.settlement_date).format("MM/DD/YYYY")
-          : "-";
+        ? moment(this.dataVoid.settlement_date).format("MM/DD/YYYY")
+        : "-";
     },
     statusTitle: function () {
       return this.dataVoid.type == 1
-          ? "VOID"
-          : this.dataVoid.type == 2
-              ? "REFUND"
-              : "";
+        ? "VOID"
+        : this.dataVoid.type == 2
+        ? "REFUND"
+        : "";
     },
     ...mapGetters({
       currentUser: "auth/currentUser",
@@ -159,8 +146,8 @@ export default {
           if (this.dataVoid.type == 1) {
             //Void
             const confirm = await this.showConfirmSwal(
-                "Are you sure?",
-                "You won't be able to revert this!"
+              "Are you sure?",
+              "You won't be able to revert this!"
             );
             if (confirm.isConfirmed) {
               try {
@@ -207,8 +194,8 @@ export default {
           } else {
             // Request Refund Transaction
             const confirm = await this.showConfirmSwal(
-                "Are you sure?",
-                "You won't be able to revert this!"
+              "Are you sure?",
+              "You won't be able to revert this!"
             );
             if (confirm.isConfirmed) {
               try {

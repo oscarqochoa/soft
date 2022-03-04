@@ -2,7 +2,6 @@
   <div>
     <b-modal
       modal
-      
       :title="`${nameUser}`"
       v-model="mutableIfModalCard"
       size="lg"
@@ -107,7 +106,6 @@
   </div>
 </template>
 
-
 <script>
 import vSelect from "vue-select";
 import { mapGetters } from "vuex";
@@ -160,7 +158,7 @@ export default {
     },
     //status disabled checkbox by type of user
     rolByUser: function () {
-      return this.currentUser.role_id == 1 || this.currentUser.role_id == 2
+      return this.isCeo || this.isSupervisor || this.isCoordinator
         ? true
         : false;
     },

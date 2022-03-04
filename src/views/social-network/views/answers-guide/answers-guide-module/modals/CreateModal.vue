@@ -1,6 +1,5 @@
 <template>
   <b-modal
-    v-if="dataLoaded"
     id="modal-closing"
     ref="modal"
     v-model="onControl"
@@ -16,44 +15,58 @@
           <b-form-row>
             <b-col>
               <validation-provider
-                v-slot="{ errors, valid }"
+                v-slot="{ errors }"
                 name="program"
                 rules="required"
               >
                 <b-row class="mt-2">
-                  <b-col sm="1">
-                    <label>Program:</label>
+                  <b-col sm="2" class="p-0">
+                    <div class="d-flex align-items-center pl-1 prepend"
+                         style="height: 80%;"
+                    ><span>PROGRAM:</span></div>
                   </b-col>
-                  <b-col v-for="program in programs" :key="program.id" sm="2">
-                    <b-form-radio
-                      v-model="selectedProgram"
-                      unchecked-value="not_accepted"
-                      name="checkbox-2"
-                      :value="program.id"
-                      :disabled="fromTree"
-                      ><b-img
-                        :src="baseUrl + program.logo"
-                        class="img-fan-page"
-                        thumbnail
-                        fluid
-                      />
-                    </b-form-radio>
-                  </b-col>
-                  <span v-if="errors[0]" class="text-danger">
+                  <template v-if="!dataLoaded">
+                    <b-col  v-for="cont in conts" :key="cont" sm="2" class="mobile">
+                      <b-form-radio>
+                        <b-skeleton-img rounded  animation="wave" no-aspect width="40px" height="40px"></b-skeleton-img>
+                      </b-form-radio>
+                    </b-col>
+                  </template>
+                  <template v-else>
+                    <b-col v-for="program in programs" :key="program.id" sm="2" class="mobile">
+                        <b-form-radio
+                            v-model="selectedProgram"
+                            unchecked-value="not_accepted"
+                            name="checkbox-2"
+                            :value="program.id"
+                            :disabled="fromTree"
+                        >
+                          <b-img
+                            :src="baseUrl + program.logo"
+                            class="img-fan-page"
+                            fluid
+                            thumbnail
+                        />
+                        </b-form-radio>
+                    </b-col>
+                  </template>
+                  <span v-if="errors[0] && secondTime" class="text-danger">
                     Program {{ errors[0] }}</span
                   >
                 </b-row>
               </validation-provider>
               <validation-provider
-                v-slot="{ errors, valid }"
+                v-slot="{ errors }"
                 name="title"
                 rules="required"
               >
                 <b-row class="mt-2">
-                  <b-col sm="1">
-                    <label>Type:</label>
+                  <b-col sm="2" class="p-0">
+                    <div class="d-flex align-items-center pl-1 prepend"
+                         style="height: 100%;"
+                    >TYPE:</div>
                   </b-col>
-                  <b-col sm="2">
+                  <b-col sm="2" style="height: 32px" class="d-flex align-items-center">
                     <b-form-radio
                       v-model="selectedType"
                       name="checkbox-1"
@@ -62,7 +75,7 @@
                       >Client
                     </b-form-radio>
                   </b-col>
-                  <b-col sm="2">
+                  <b-col sm="2" style="height: 32px" class="d-flex align-items-center">
                     <b-form-radio
                       v-model="selectedType"
                       name="checkbox-1"
@@ -77,15 +90,17 @@
                 </b-row>
               </validation-provider>
               <validation-provider
-                v-slot="{ errors, valid }"
+                v-slot="{ errors }"
                 name="option"
                 rules="required"
               >
                 <b-row class="mt-2">
-                  <b-col sm="1">
-                    <label>Option:</label>
+                  <b-col sm="2" class="p-0">
+                    <div class="d-flex align-items-center pl-1 prepend"
+                         style="height: 32px;"
+                    >OPTION: </div>
                   </b-col>
-                  <b-col sm="11">
+                  <b-col sm="10">
                     <b-form-textarea id="textarea-default" v-model="option" />
                   </b-col>
                   <span v-if="errors[0]" class="text-danger">
@@ -125,14 +140,14 @@
                             answer.type === 1 ? 0 : 10 * answer.type
                           }px;`"
                         >
-                          <label class="mx-2" :for="answer.id">{{
+                          <label :for="answer.id">{{
                             answer.content.length > 20
                               ? answer.content.substr(0, 20) + "..."
                               : answer.content
                           }}</label>
                           <feather-icon
                             v-if="answer.ans_open && answer.count_father"
-                            class="mr-1 pointer"
+                            class="pointer mar-icon"
                             icon="ChevronRightIcon"
                             @click="
                               getChildData(answer.program, answer.id, answer)
@@ -140,7 +155,7 @@
                           />
                           <feather-icon
                             v-if="!answer.ans_open && answer.count_father"
-                            class="mr-1 pointer"
+                            class="pointer mar-icon"
                             icon="ChevronDownIcon"
                             @click="
                               deleteChildData(
@@ -200,6 +215,8 @@ export default {
       showAnswersTree: false,
       fromTree: false,
       dataLoaded: false,
+      conts: 5,
+      secondTime: false
     };
   },
   async created() {
@@ -257,6 +274,7 @@ export default {
       this.answers[index_father].ans_open = true;
     },
     async saveUpdateAnswer() {
+      this.secondTime = true
       try {
         const result = await this.$refs.vform.validate();
         if (result) {
@@ -310,6 +328,7 @@ export default {
         if (this.type !== 4) {
           this.father = ""
         }
+        this.secondTime = true
       } else {
         if (this.type !== 4) {
           this.father = ""
@@ -335,6 +354,10 @@ export default {
         }
       }
     },
+    dataLoaded(newVal){
+      if(newVal){
+      }
+    },
   },
 };
 </script>
@@ -349,4 +372,41 @@ export default {
 .mar-top {
   margin-top: 0.5em;
 }
+.prepend{
+  background-color: #0090E7;
+  border-radius: 5px 0 0 5px;
+  color: white
+}
+.mar-icon{
+  margin-left: 0.4rem;
+}
+@media (max-width: 768px){
+  .prepend{
+    background-color: #0090E7;
+    border-radius: 5px 0 0 5px;
+    color: white;
+    font-size: 0.8em;
+    height: 25px !important;
+  }
+  .img-fan-page {
+    height: 40px;
+    width: 40px;
+  }
+  .mobile{
+    margin-top: 0.5rem;
+  }
+}
+/*@media (max-width: 768px){*/
+/*  .img-fan-page {*/
+/*    height: 50px;*/
+/*    width: 50px;*/
+/*  }*/
+/*  .mobile{*/
+/*    margin-left: 0.2rem !important;*/
+/*    padding-right: 0 !important;*/
+/*  }*/
+/*  .flex{*/
+/*    display: flex;*/
+/*  }*/
+/*}*/
 </style>

@@ -1,6 +1,5 @@
 <template>
   <b-modal
-    v-if="dataLoaded"
     id="modal-closing"
     ref="modal"
     v-model="onControl"
@@ -17,42 +16,79 @@
           <b-form-row>
             <b-col>
               <validation-provider
-                v-slot="{ errors, valid }"
+                v-slot="{ errors }"
                 name="program"
                 rules="required"
               >
                 <b-row class="mt-2">
-                  <b-col sm="1">
-                    <label>Program:</label>
+                  <b-col sm="2" class="p-0">
+                    <div
+                      class="d-flex align-items-center pl-1 prepend"
+                      style="height: 80%"
+                    >
+                      <span>PROGRAM:</span>
+                    </div>
                   </b-col>
-                  <b-col v-for="program in programs" :key="program.id" sm="2">
-                    <b-form-radio
-                      v-model="treeItem.program"
-                      unchecked-value="not_accepted"
-                      name="checkbox-2"
-                      :value="program.id"
-                      disabled
-                      ><img
-                        :src="baseUrl + program.logo"
-                        class="img-fan-page"
-                      />
-                    </b-form-radio>
-                  </b-col>
+
+                  <template v-if="!dataLoaded">
+                    <b-col
+                      v-for="cont in conts"
+                      :key="cont"
+                      sm="2"
+                      class="mobile"
+                    >
+                      <b-form-radio>
+                        <b-skeleton-img
+                          rounded
+                          animation="wave"
+                          no-aspect
+                          width="40px"
+                          height="40px"
+                        ></b-skeleton-img>
+                      </b-form-radio>
+                    </b-col>
+                  </template>
+                  <template v-else>
+                    <b-col v-for="program in programs" :key="program.id" sm="2">
+                      <b-form-radio
+                        v-model="treeItem.program"
+                        unchecked-value="not_accepted"
+                        name="checkbox-2"
+                        :value="program.id"
+                        disabled
+                        ><b-img
+                          :src="baseUrl + program.logo"
+                          class="img-fan-page"
+                          fluid
+                          thumbnail
+                        />
+                      </b-form-radio>
+                    </b-col>
+                  </template>
                   <span v-if="errors[0]" class="text-danger">
                     Program {{ errors[0] }}</span
                   >
                 </b-row>
               </validation-provider>
               <validation-provider
-                v-slot="{ errors, valid }"
+                v-slot="{ errors }"
                 name="title"
                 rules="required"
               >
                 <b-row class="mt-2">
-                  <b-col sm="1">
-                    <label>Type:</label>
+                  <b-col sm="2" class="p-0">
+                    <div
+                      class="d-flex align-items-center pl-1 prepend"
+                      style="height: 100%"
+                    >
+                      TYPE:
+                    </div>
                   </b-col>
-                  <b-col sm="2">
+                  <b-col
+                    sm="2"
+                    style="height: 32px"
+                    class="d-flex align-items-center"
+                  >
                     <b-form-radio
                       v-model="treeItem.type_answer"
                       :disabled="reading"
@@ -62,7 +98,11 @@
                       >Client
                     </b-form-radio>
                   </b-col>
-                  <b-col sm="2">
+                  <b-col
+                    sm="2"
+                    style="height: 32px"
+                    class="d-flex align-items-center"
+                  >
                     <b-form-radio
                       v-model="treeItem.type_answer"
                       :disabled="reading"
@@ -78,15 +118,20 @@
                 </b-row>
               </validation-provider>
               <validation-provider
-                v-slot="{ errors, valid }"
+                v-slot="{ errors }"
                 name="option"
                 rules="required"
               >
                 <b-row class="mt-2">
-                  <b-col sm="1">
-                    <label>Option:</label>
+                  <b-col sm="2" class="p-0">
+                    <div
+                      class="d-flex align-items-center pl-1 prepend"
+                      style="height: 32px"
+                    >
+                      OPTION:
+                    </div>
                   </b-col>
-                  <b-col sm="10">
+                  <b-col sm="9">
                     <b-form-textarea
                       id="textarea-default"
                       v-model="treeItem.content"
@@ -160,6 +205,8 @@ export default {
       answerTypeTeam: false,
       treeItem: null,
       dataLoaded: false,
+      secondTime: false,
+      conts: 5,
     };
   },
   async created() {
@@ -176,9 +223,9 @@ export default {
       this.title = "Edit Answer";
       this.reading = false;
     }
-    this.dataLoaded = false
+    this.dataLoaded = false;
     await this.getFanPages();
-    this.dataLoaded = true
+    this.dataLoaded = true;
   },
   // eslint-disable-next-line vue/order-in-components
   computed: {
@@ -252,7 +299,7 @@ export default {
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -269,5 +316,18 @@ export default {
 .bigger {
   width: 1.5em !important;
   height: 1.5em !important;
+}
+.prepend {
+  background-color: #0090e7;
+  border-radius: 5px 0 0 5px;
+  color: white;
+}
+@media (max-width: 768px) {
+  .prepend {
+    background-color: #0090e7;
+    border-radius: 5px 0 0 5px;
+    color: white;
+    font-size: 0.8em;
+  }
 }
 </style>

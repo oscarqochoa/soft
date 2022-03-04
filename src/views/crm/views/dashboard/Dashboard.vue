@@ -7,14 +7,14 @@
         <b-row>
           <!-- Column Cards -->
           <b-col
-              class="col-tab"
-              v-dragscroll="allSizeOfScreen === 'xs' ? false : true"
-              cols="12"
-              sm="4"
-              md="4"
-              lg="3"
-              xl="2"
-              :style="`${statusHeightByScreenColOne}
+            class="col-tab"
+            v-dragscroll="allSizeOfScreen === 'xs' ? false : true"
+            cols="12"
+            sm="4"
+            md="4"
+            lg="3"
+            xl="2"
+            :style="`${statusHeightByScreenColOne}
              ${statusHeightByDevicesColOne}`"
           >
             <!-- Card Leads-->
@@ -22,7 +22,8 @@
               <b-card
                 @click="changeTab(0)"
                 class="ecommerce-card col-lg-12 cursor-pointer"
-                :class="{classAdd,
+                :class="{
+                  classAdd,
                   'ecommerce-card-leads': !itemCards[0] && !isTouch,
                 }"
                 :style="
@@ -34,19 +35,20 @@
               >
                 <!-- Card Title -->
                 <b-card-title
-                    :style="itemCards[0] == true ? 'color: white' : ''"
-                >Leads</b-card-title
+                  :style="itemCards[0] == true ? 'color: white' : ''"
                 >
+                  Leads
+                </b-card-title>
                 <!-- Card Content -->
                 <b-card-text>
                   <!-- First Line -->
                   <b-row :class="classWrapper">
                     <!-- Box First-->
                     <div
-                        :style="
+                      :style="
                         itemCards[0] == true ? 'background-color: white' : ''
                       "
-                        class="mr-2 item-wrapper-font div-box1"
+                      class="mr-2 item-wrapper-font div-box1"
                     ></div>
                     <!-- Name Today -->
                     <div class="mr-1">
@@ -64,10 +66,10 @@
                   <b-row :class="classWrapper">
                     <!-- Box Second-->
                     <div
-                        :style="
+                      :style="
                         itemCards[0] == true ? 'background-color: white' : ''
                       "
-                        class="mr-1 div-box"
+                      class="mr-1 div-box"
                     ></div>
                     <!-- Name Month -->
                     <div class="mr-1">
@@ -87,7 +89,8 @@
             <b-row class="b-row-card">
               <b-card
                 class="ecommerce-card col-lg-12 cursor-pointer"
-                :class="{classAdd,
+                :class="{
+                  classAdd,
                   'ecommerce-card-appointments': !itemCards[1] && !isTouch,
                 }"
                 @click="changeTab(1)"
@@ -100,8 +103,8 @@
               >
                 <!-- Card Title -->
                 <b-card-title
-                    :style="itemCards[1] == true ? 'color: white' : ''"
-                >Appointments</b-card-title
+                  :style="itemCards[1] == true ? 'color: white' : ''"
+                  >Appointments</b-card-title
                 >
                 <!-- Card Content -->
                 <b-card-text>
@@ -109,10 +112,10 @@
                   <b-row :class="classWrapper">
                     <!-- Box First-->
                     <div
-                        :style="
+                      :style="
                         itemCards[1] == true ? 'background-color: white' : ''
                       "
-                        class="mr-2 item-wrapper-font div-box1"
+                      class="mr-2 item-wrapper-font div-box1"
                     ></div>
                     <!-- Name Today -->
                     <div class="mr-1">
@@ -130,10 +133,10 @@
                   <b-row :class="classWrapper">
                     <!-- Box Second-->
                     <div
-                        :style="
+                      :style="
                         itemCards[1] == true ? 'background-color: white' : ''
                       "
-                        class="mr-1 item-wrapper-font div-box"
+                      class="mr-1 item-wrapper-font div-box"
                     ></div>
                     <!-- Name Month -->
                     <div class="mr-1">
@@ -152,8 +155,9 @@
             <!-- Card Tasks-->
             <b-row class="b-row-card">
               <b-card
-                class=" ecommerce-card col-lg-12 cursor-pointer"
-                :class="{classAdd,
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{
+                  classAdd,
                   'ecommerce-card-tasks': !itemCards[2] && !isTouch,
                 }"
                 @click="changeTab(2)"
@@ -166,8 +170,8 @@
               >
                 <!-- Card Title -->
                 <b-card-title
-                    :style="itemCards[2] == true ? 'color: white' : ''"
-                >Tasks</b-card-title
+                  :style="itemCards[2] == true ? 'color: white' : ''"
+                  >Tasks</b-card-title
                 >
                 <!-- Card Content -->
                 <b-card-text>
@@ -175,10 +179,10 @@
                   <b-row :class="classWrapper">
                     <!-- Box First-->
                     <div
-                        :style="
+                      :style="
                         itemCards[2] == true ? 'background-color: white' : ''
                       "
-                        class="mr-2 item-wrapper-font div-box1"
+                      class="mr-2 item-wrapper-font div-box1"
                     ></div>
                     <!-- Name Today -->
                     <div class="mr-1">
@@ -196,10 +200,10 @@
                   <b-row :class="classWrapper">
                     <!-- Box Second-->
                     <div
-                        :style="
+                      :style="
                         itemCards[2] == true ? 'background-color: white' : ''
                       "
-                        class="mr-1 item-wrapper-font div-box"
+                      class="mr-1 item-wrapper-font div-box"
                     ></div>
                     <!-- Name Month -->
                     <div class="mr-1">
@@ -218,8 +222,9 @@
             <!-- Card Sales-->
             <b-row class="b-row-card">
               <b-card
-                class=" ecommerce-card col-lg-12 cursor-pointer"
-                :class="{classAdd,
+                class="ecommerce-card col-lg-12 cursor-pointer"
+                :class="{
+                  classAdd,
                   'ecommerce-card-sales': !itemCards[3] && !isTouch,
                 }"
                 @click="changeTab(3)"
@@ -232,8 +237,8 @@
               >
                 <!-- Card Title -->
                 <b-card-title
-                    :style="itemCards[3] == true ? 'color: white' : ''"
-                >Sales</b-card-title
+                  :style="itemCards[3] == true ? 'color: white' : ''"
+                  >Sales</b-card-title
                 >
                 <!-- Card Content -->
                 <b-card-text>
@@ -241,10 +246,10 @@
                   <b-row :class="classWrapper">
                     <!-- Box First -->
                     <div
-                        :style="
+                      :style="
                         itemCards[3] == true ? 'background-color: white' : ''
                       "
-                        class="mr-2 item-wrapper-font div-box1"
+                      class="mr-2 item-wrapper-font div-box1"
                     ></div>
                     <!-- Name Today -->
                     <div class="mr-1">
@@ -262,10 +267,10 @@
                   <b-row :class="classWrapper">
                     <!-- Box Second -->
                     <div
-                        :style="
+                      :style="
                         itemCards[3] == true ? 'background-color: white' : ''
                       "
-                        class="mr-1 item-wrapper-font div-box"
+                      class="mr-1 item-wrapper-font div-box"
                     ></div>
                     <!-- Name Month -->
                     <div class="mr-1">
@@ -285,7 +290,8 @@
             <b-row class="b-row-card">
               <b-card
                 class="ecommerce-card col-lg-12 cursor-pointer"
-                :class="{classAdd,
+                :class="{
+                  classAdd,
                   'ecommerce-card-capturated': !itemCards[4] && !isTouch,
                 }"
                 @click="changeTab(4)"
@@ -298,8 +304,8 @@
               >
                 <!-- Card Title -->
                 <b-card-title
-                    :style="itemCards[4] == true ? 'color: white' : ''"
-                >Capturated</b-card-title
+                  :style="itemCards[4] == true ? 'color: white' : ''"
+                  >Capturated</b-card-title
                 >
                 <!--Card Content  -->
                 <b-card-text>
@@ -307,10 +313,10 @@
                   <b-row :class="classWrapper">
                     <!-- Box First -->
                     <div
-                        :style="
+                      :style="
                         itemCards[4] == true ? 'background-color: white' : ''
                       "
-                        class="mr-2 item-wrapper-font div-box1"
+                      class="mr-2 item-wrapper-font div-box1"
                     ></div>
                     <!-- Name Today -->
                     <div class="mr-1">
@@ -328,10 +334,10 @@
                   <b-row :class="classWrapper">
                     <!-- Box Second -->
                     <div
-                        :style="
+                      :style="
                         itemCards[4] == true ? 'background-color: white' : ''
                       "
-                        class="mr-1 item-wrapper-font div-box"
+                      class="mr-1 item-wrapper-font div-box"
                     ></div>
                     <!-- Name Month -->
                     <div class="mr-1">
@@ -361,7 +367,7 @@
                     <b-col cols="12" sm="12" md="12" lg="5" class="pb-1">
                       <v-select
                         id="v-user"
-                        v-if="[1, 2].includes(currentUser.role_id)"
+                        v-if="isCeo || isSupervisor || isCoordinator"
                         showIcons="false"
                         v-model="userfilter"
                         :style="
@@ -371,23 +377,28 @@
                             ? 'width:200px'
                             : 'width:100%'
                         "
-                          placeholder="Select User"
-                          label="user_name"
-                          :options="users"
-                          :reduce="(val) => val.id"
-                          @input="filtroCont()"
+                        placeholder="Select User"
+                        label="user_name"
+                        :options="users"
+                        :reduce="(val) => val.id"
+                        @input="filtroCont()"
                       />
                     </b-col>
                     <!-- Year and Sub Title -->
                     <b-col
-                        cols="12"
-                        sm="12"
-                        md="12"
-                        lg="7"
-                        class="d-flex flex-wrap pb-1"
+                      cols="12"
+                      sm="12"
+                      md="12"
+                      lg="7"
+                      class="d-flex flex-wrap pb-1"
                     >
                       <div
-                          class="d-flex align-items-center justify-content-center pr-1"
+                        class="
+                          d-flex
+                          align-items-center
+                          justify-content-center
+                          pr-1
+                        "
                       >
                         <!-- Graphic Sub Title -->
                         <div>
@@ -398,16 +409,16 @@
                       </div>
                       <!-- Select Year -->
                       <v-select
-                          id="v-year"
-                          v-model="year"
-                          :style="
+                        id="v-year"
+                        v-model="year"
+                        :style="
                           allSizeOfScreen === 'xxl'
                             ? 'font-size: 15px; width: 120px'
                             : 'width: 120px'
                         "
-                          :clearable="false"
-                          :options="years"
-                          @input="filtroCont()"
+                        :clearable="false"
+                        :options="years"
+                        @input="filtroCont()"
                       />
                     </b-col>
                   </b-row>
@@ -441,7 +452,7 @@
                             ? 'font-size: 150%'
                             : 'font-size: 15px;color:#9F9DA8'
                         "
-                      >{{ data.name }}:</span
+                        >{{ data.name }}:</span
                       >
                     </div>
                     <!-- Quantity of Data -->
@@ -458,10 +469,10 @@
               <!-- If XXL Screen -->
               <b-row v-if="allSizeOfScreen === 'xxl'">
                 <b-col
-                    cols="2"
-                    v-for="data in totalYearByCard"
-                    :key="data.id"
-                    class="d-flex justify-content-between"
+                  cols="2"
+                  v-for="data in totalYearByCard"
+                  :key="data.id"
+                  class="d-flex justify-content-between"
                 >
                   <div class="ml-2" :class="flexCenter">
                     <span
@@ -471,7 +482,7 @@
                           ? 'font-size: 150%'
                           : 'font-size: 15px;color:#9F9DA8'
                       "
-                    >{{ data.name }}:</span
+                      >{{ data.name }}:</span
                     >
                   </div>
                   <div class="important" style="float: left">
@@ -486,10 +497,10 @@
               <!-- Graphics Line -->
               <b-card-body class="p-0 pb-2">
                 <app-echart-line-crm
-                    :key="idEchart"
-                    :option-data="rePaint"
-                    :screen="allSizeOfScreen"
-                    :style="allSizeOfScreen === 'xxl' ? 'height:550px' : ''"
+                  :key="idEchart"
+                  :option-data="rePaint"
+                  :screen="allSizeOfScreen"
+                  :style="allSizeOfScreen === 'xxl' ? 'height:550px' : ''"
                 />
               </b-card-body>
             </b-card>
@@ -501,7 +512,7 @@
 </template>
 
 <script>
-import isTouchDevice from 'is-touch-device'
+import isTouchDevice from "is-touch-device";
 
 import { dragscroll } from "vue-dragscroll";
 import { BCard, BButton, BCardBody, BBadge } from "bootstrap-vue";
@@ -577,15 +588,14 @@ export default {
       sizeScreenByPixels: "app/sizeScreenByPixels",
       allSizeOfScreen: "app/allSizeOfScreen",
     }),
-    isTouch(){
-      return isTouchDevice()
-
+    isTouch() {
+      return isTouchDevice();
     },
     classWrapper: function () {
       return "item-wrapper justify-content-start align-items-center";
     },
-    flexCenter:function(){
-      return "d-flex justify-content-center align-items-center"
+    flexCenter: function () {
+      return "d-flex justify-content-center align-items-center";
     },
     classAdd: function () {
       return this.skin == "dark" ? "dark" : "";
@@ -631,7 +641,6 @@ export default {
         : "";
     },
     statusHeightByScreenColTwo: function () {
-      console.log(this.allSizeOfScreen)
       switch (this.allSizeOfScreen) {
         case "xxl":
           return "height: 800px !important;max-height: 900px !important;";
@@ -664,10 +673,10 @@ export default {
       for (let i = 0; i < this.itemCards.length; i++) {
         if (index == i) {
           return this.itemCards[i] == true
-              ? `background: ${background};color: white`
-              : this.classAdd == "dark"
-                  ? ""
-                  : "background:linear-gradient(90deg, rgba(0, 144, 231, 0.1) 0%, rgba(143, 95, 232, 0.1) 100%);";
+            ? `background: ${background};color: white`
+            : this.classAdd == "dark"
+            ? ""
+            : "background:linear-gradient(90deg, rgba(0, 144, 231, 0.1) 0%, rgba(143, 95, 232, 0.1) 100%);";
         }
       }
     },
@@ -804,7 +813,7 @@ export default {
       try {
         this.addPreloader();
         let { user_id } = this.currentUser;
-        if (this.currentUser.role_id == 1 || this.currentUser.role_id == 2) {
+        if (this.isCeo || this.isSupervisor || this.isCoordinator) {
           user_id = 0;
         }
         const response = await DashboardService.getDashboardData({
@@ -830,11 +839,11 @@ export default {
         console.log(error);
         this.removePreloader();
         this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong!"
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong!"
         );
       }
     },
@@ -862,11 +871,11 @@ export default {
           console.error(error);
           this.removePreloader();
           this.showToast(
-              "danger",
-              "top-right",
-              "Error",
-              "XIcon",
-              "Something went wrong!"
+            "danger",
+            "top-right",
+            "Error",
+            "XIcon",
+            "Something went wrong!"
           );
         }
       } else {
@@ -884,11 +893,11 @@ export default {
       } catch (error) {
         console.log(error);
         this.showToast(
-            "danger",
-            "top-right",
-            "Error",
-            "XIcon",
-            "Something went wrong!"
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong!"
         );
       }
     },

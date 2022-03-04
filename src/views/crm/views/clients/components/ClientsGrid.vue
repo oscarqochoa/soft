@@ -40,15 +40,17 @@
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
-              <b-spinner class="align-middle mr-1" />
+              <b-spinner class="align-middle mr-1"/>
               <strong>Loading ...</strong>
             </div>
           </template>
           <template #cell(lead_name)="data">
-            <a
-                :class="textLink"
-                @click="openEditLeads(data.item.lead_id, data.index)"
-            >{{data.value}}</a>
+            <router-link
+                :class="[textLink]"
+                :to="`/crm/leads/${data.item.lead_id}`"
+                target="_blank">
+              {{ data.value }}
+            </router-link>
           </template>
           <template #cell(accounts2)="data">
             <div class="d-flex flex-column justify-content-start align-items-start">
@@ -139,6 +141,24 @@
               data.item.created_at | myGlobal
             }}
           </template>
+          <template #cell(actions)="data">
+            <b-dropdown
+                variant="link"
+                no-caret
+            >
+              <template #button-content>
+                <feather-icon
+                    icon="MoreVerticalIcon"
+                    size="16"
+                    class="align-middle text-body"
+                />
+              </template>
+              <b-dropdown-item @click="openEditLeads(data.item.lead_id, data.index)">
+                <feather-icon icon="Edit2Icon"/>
+                Edit
+              </b-dropdown-item>
+            </b-dropdown>
+          </template>
         </b-table>
       </template>
     </filter-slot>
@@ -151,7 +171,8 @@ import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
 import ClientService from "../service/clients.service";
 import LeadUpdate from "@/views/crm/views/Lead/lead-module/save/LeadUpdate.vue";
-import { mapActions, mapGetters, mapState, mapMutations } from "vuex";
+import {mapActions, mapGetters, mapState, mapMutations} from "vuex";
+
 export default {
   directives: {
     Ripple
@@ -212,7 +233,13 @@ export default {
           label: "Creation Date",
           sortable: true,
           visible: true
-        }
+        },
+        {
+          key: "actions",
+          label: "Actions",
+          sortable: false,
+          visible: true,
+        },
         // { key: "actions", label: "Acciones", class: "text-center " },
       ],
       searchInput: "",
@@ -307,13 +334,13 @@ export default {
           margin: true,
           showLabel: true,
           options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Active" },
-            { value: 4, label: "Canceled" },
-            { value: 6, label: "Closed" },
-            { value: 2, label: "Hold" },
-            { value: 5, label: "Loyal" },
-            { value: 3, label: "Transition" }
+            {value: 0, label: "All"},
+            {value: 1, label: "Active"},
+            {value: 4, label: "Canceled"},
+            {value: 6, label: "Closed"},
+            {value: 2, label: "Hold"},
+            {value: 5, label: "Loyal"},
+            {value: 3, label: "Transition"}
           ],
           model: "",
           reduce: "value",
@@ -328,10 +355,10 @@ export default {
           margin: true,
           showLabel: true,
           options: [
-            { value: 0, label: "All" },
-            { value: 1, label: "Automatic" },
-            { value: 2, label: "Manual" },
-            { value: 3, label: "Others" }
+            {value: 0, label: "All"},
+            {value: 1, label: "Automatic"},
+            {value: 2, label: "Manual"},
+            {value: 3, label: "Others"}
           ],
           model: "",
           reduce: "value",
@@ -346,13 +373,13 @@ export default {
           margin: true,
           showLabel: true,
           options: [
-            { value: 0, label: "All" },
-            { value: 5, label: "5" },
-            { value: 10, label: "10" },
-            { value: 15, label: "15" },
-            { value: 20, label: "20" },
-            { value: 25, label: "25" },
-            { value: 30, label: "30" }
+            {value: 0, label: "All"},
+            {value: 5, label: "5"},
+            {value: 10, label: "10"},
+            {value: 15, label: "15"},
+            {value: 20, label: "20"},
+            {value: 25, label: "25"},
+            {value: 30, label: "30"}
           ],
           model: "",
           reduce: "value",
@@ -449,7 +476,7 @@ export default {
             this.A_GET_PROGRAMS(),
             await this.A_GET_SELLERS({
               modul: this.modul,
-              body: { roles: "[]", type: "1" }
+              body: {roles: "[]", type: "1"}
             }),
             this.A_GET_STATE_LEADS(),
             await this.A_GET_STATUS_LEADS(),
@@ -459,7 +486,7 @@ export default {
             this.A_GET_COUNTRIES()
           ]);
         }
-        await this.A_GET_LEAD_EDIT({ id: leadId });
+        await this.A_GET_LEAD_EDIT({id: leadId});
         this.otherClient++; // Just reload data the first time
         this.isAddUpdateUserSidebarActive = true;
         this.removePreloader();
@@ -571,9 +598,11 @@ export default {
 .per-page-selector {
   width: 90px;
 }
+
 td.div {
   width: 100% !important;
 }
+
 @media (max-width: 960px) {
   .column-table {
     display: flex;

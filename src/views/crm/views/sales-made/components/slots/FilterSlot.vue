@@ -26,7 +26,7 @@
         <template #footer>
           <b-container>
             <b-row class="d-flex p-1 float-right">
-              <b-button v-b-toggle.sidebar-right variant="info" @click="resetFiltersButtons">Reset</b-button>
+              <b-button variant="info" @click="resetFiltersButtons">Reset</b-button>
               <b-button
                 v-b-toggle.sidebar-right
                 variant="primary"
@@ -204,6 +204,9 @@ export default {
   },
   methods: {
     resetFiltersButtons() {
+      this.filter.map(fil => {
+        fil.model = null;
+      });
       this.$emit("reset-all-filters");
     },
     resetFilter() {

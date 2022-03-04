@@ -18,6 +18,7 @@ export default {
     isCeo: state => state.currentUser.role_id === 1 || state.currentUser.role_id === null,
     isSeller: state => state.currentUser.role_id == 5,
     isAdvisor: state => state.currentUser.role_id == 3,
+    isCoordinator: state => state.currentUser.is_coordinator == 1,
     moduleId: state => state.currentUser.modul_id,
     roleId: state => state.currentUser.role_id,
     userRole: state => {
@@ -33,7 +34,7 @@ export default {
   mutations: {
     SET_CURRENT_USER(state, val) {
       state.currentUser = val
-      state.currentUser.modul_id = null
+      // state.currentUser.modul_id = null
     },
     SET_CURRENT_USER_INFORMATION(state, { data, avatar }) {
       state.currentUser.first_name = data.first_name
@@ -49,7 +50,6 @@ export default {
       localStorage.setItem("userData", JSON.stringify(state.currentUser))
     },
     SET_TOKEN(state, val) {
-      console.log(val)
       state.token = val
     },
     SET_CURRENT_USER_MODULE(state, module) {

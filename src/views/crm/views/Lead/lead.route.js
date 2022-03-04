@@ -15,6 +15,7 @@ export default [
         meta: {
           route: "crm",
         },
+        contentClass: 'leads-app'
       },
       {
         path: "",
@@ -30,6 +31,7 @@ export default [
               active: true,
             },
           ],
+          contentClass: 'leads-app'
         },
       },
       {
@@ -46,6 +48,7 @@ export default [
               active: true,
             },
           ],
+          contentClass: 'leads-app'
         },
       },
       {
@@ -63,6 +66,7 @@ export default [
               active: true,
             },
           ],
+          contentClass: 'leads-app'
         },
       },
     ],
@@ -81,6 +85,7 @@ export default [
     component: () => import("./lead-module/dashboard/default.vue"),
     meta: {
       route: "crm",
+      contentClass: 'leads-app'
     },
   },
 ];
