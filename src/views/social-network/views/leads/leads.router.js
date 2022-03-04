@@ -98,7 +98,7 @@ export default [
         },
     },
     {
-        path: '/social-network/leads/old/dashboard',
+        path: '/social-network/leads/old/dashboard/:id',
         component: DashboardOldLead,
         name: 'sn-dashboard-old-lead',
         meta: {

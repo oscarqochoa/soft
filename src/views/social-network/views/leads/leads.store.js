@@ -2,6 +2,7 @@
 import Vue from 'vue'
 
 import SNLeadsService from '@/views/social-network/services/leads'
+import crmService from '@/views/crm/services/lead'
 import mixins from '@/mixins/general'
 import crmService from "@/views/crm/services/crm.service";
 import crmGlobal from "@/views/crm/services/global";
@@ -69,7 +70,15 @@ const mutations = {
     },
     M_FAG_PAGE_PROGRAMS(state, states) {
         state.S_FAN_PAGE_PROGRAMS = states;
-    }
+    },
+    REMOVE_DATA(state, params) {
+        const index = state[params.destination]
+          .map((el) => el.id)
+          .indexOf(params.id);
+        if (index !== -1) {
+          state[params.destination].splice(index, 1);
+        }
+      },
 }
 const actions = {
     async A_GET_NEW_LEADS({ commit }, body) {
@@ -87,7 +96,7 @@ const actions = {
                 data
             })
 
-            return response.data
+            return response;
         } catch (error) {
             console.log("ERROR_GET_NEW_LEADS [ACTION]", error)
             throw error
@@ -187,7 +196,7 @@ const actions = {
             if (response.status == 200) {
                 commit('REMOVE_LEAD_DATA', {
                     destination: 'S_LEADS',
-                    id: body.id
+                    id: body.lead_id
                 })
             }
 
@@ -211,7 +220,7 @@ const actions = {
                     destination: 'S_LEADS',
                     data
                 })
-                return response.data
+                return response
             }
 
         } catch (error) {
