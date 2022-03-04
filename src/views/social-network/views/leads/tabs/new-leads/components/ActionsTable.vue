@@ -7,24 +7,6 @@
         class="align-middle text-body"
       />
     </template>
-
-    <!-- v-b-tooltip.hover.left="'Open tracking'" -->
-
-    <b-dropdown-item @click="showTracking">
-      <feather-icon icon="ListIcon"></feather-icon>
-      <span class="align-middle ml-50"> Tracking </span>
-    </b-dropdown-item>
-
-    <b-dropdown-item>
-      <feather-icon icon="CornerUpLeftIcon"></feather-icon>
-      <span class="align-middle ml-50"> Recovery </span>
-    </b-dropdown-item>
-
-    <b-dropdown-item>
-      <feather-icon icon="CornerUpLeftIcon"></feather-icon>
-      <span class="align-middle ml-50"> Closed </span>
-    </b-dropdown-item>
-
     <b-dropdown-item @click="sendSMS">
       <feather-icon icon="MessageCircleIcon"></feather-icon>
       <span class="align-middle ml-50"> Send SMS </span>
@@ -53,13 +35,12 @@ export default {
     },
   },
   methods: {
-    showTracking() {
-      this.$emit("onShowTracking", this.id, this.name);
-    },
     sendToRecovery() {
       this.$emit("onSendToRecovery", this.id);
     },
-    sendToClosed() {},
+    sendToClosed() {
+      this.$emit("onSendToClosed", this.id);
+    },
     sendSMS() {
       this.$emit("onSendSms", this.id);
     },
@@ -67,7 +48,7 @@ export default {
       this.$emit("onShowSmsList", this.id, this.name);
     },
     deleteLead() {
-      this.$emit("onDelete", this.id);
+      this.$emit("onDeleteLead", this.id);
     },
   },
 };

@@ -10,7 +10,7 @@ import DashboardRouter2 from '@/views/social-network/views/dashboard2/dashboard.
 import CommissionsRoute from '@/views/social-network/views/commissions/commissions.route'
 
 const routes = [
-  { path: '/socialnetwork', redirect: { name: 'dashboard-social-network' } },
+  { path: '/socialnetwork', redirect: { name: 'calendar-social-network' } },
   ...testRoute,
   ...LeadsRouter,
   ...answersGuideRouter,

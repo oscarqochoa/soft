@@ -14,7 +14,7 @@ class SNLeads {
 
     async getLead(id) {
         try {
-            const { data, status } = await amgApi.get('/get-lead/' + id)
+            const { data, status } = await amgApi.get('/lead/show/' + id)
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on get lead", error);
@@ -44,7 +44,7 @@ class SNLeads {
 
     async postUpdateLeadInformation(body) {
         try {
-            const { data, status } = await amgApi.post('/edit-show-lead-sn', body);
+            const { data, status } = await amgApi.post('/lead/social-network/edit-show-lead-sn', body);
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on postUpdateLeadInformation", error);
@@ -54,7 +54,7 @@ class SNLeads {
 
     async postUpdateLeadInformationFields(body) {
         try {
-            const { data, status } = await amgApi.post('/savefieldslead', body);
+            const { data, status } = await amgApi.post('/lead/update-fields-lead', body);
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on postUpdateLeadInformationFields", error);
@@ -64,7 +64,7 @@ class SNLeads {
 
     async postDeleteLead(body) {
         try {
-            const data = await amgApi.post('delete-lead-sn', body);
+            const data = await amgApi.post('/lead/destroy-lead', body);
             return data
         } catch (error) {
             console.log("Something went wrong on postDeleteLead", error);
@@ -78,6 +78,15 @@ class SNLeads {
             return data
         } catch (error) {
             console.log("Something went wrong on get old leads", error);
+            throw error
+        }
+    }
+
+    async getOldLead(id) {
+        try {
+            const { data, status } = await amgApi.get('/lead/social-network/show-old-lead/' + id)
+            return { data, status }
+        } catch (error) {
             throw error
         }
     }
@@ -172,6 +181,15 @@ class SNLeads {
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on getSellersByDateAndTypeTask", error)
+            throw error
+        }
+    }
+
+    async getLeadTasks(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/get-lead-tasks', params)
+            return { data, status }
+        } catch (error) {
             throw error
         }
     }

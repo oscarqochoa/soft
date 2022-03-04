@@ -4,7 +4,7 @@ class GlobalService {
 
     async getCountries() {
         try {
-            const data = await amgApi.post("/view-countrys", {})
+            const data = await amgApi.post("commons/get-world-countrys", {})
             return data
         } catch (error) {
             console.log("Something went wrong on getCountries", error)
@@ -64,7 +64,7 @@ class GlobalService {
 
     async getStatesEEuu(params) {
         try {
-            const data = await amgApi.get('/stateseeuu', { params })
+            const data = await amgApi.get('/commons/get-eeuu-states', { params })
             return data
         } catch (error) {
             console.log('Something went wrong on getStatesEeuu:', error)
@@ -84,7 +84,7 @@ class GlobalService {
 
     async getStatusLead() {
         try {
-            const data = await amgApi.get('/stateleads')
+            const data = await amgApi.get('/lead/get-state-leads')
             return data
         } catch (error) {
             console.log('Something went wrong on getStatusLead', error)
