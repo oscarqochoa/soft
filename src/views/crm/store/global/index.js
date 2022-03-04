@@ -104,7 +104,6 @@ const actions = {
   async A_GET_OWNERS({ commit }, { modul, body }) {
     try {
       const response = await crmGlobal.getOwners({ modul, body })
-      /* console.log('A_GET_OWNERS response', response) */
       commit('SET_DATA', {
         destination: 'S_OWNERS',
         data: response.data,

@@ -100,5 +100,6 @@ class SocialNetworkService {
       throw error
     }
   }
+
 }
 export default new SocialNetworkService()

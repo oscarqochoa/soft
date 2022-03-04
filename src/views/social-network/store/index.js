@@ -6,6 +6,7 @@ import AnswersGuide from './anwersGuide'
 import BankOfFlyers from '@/views/social-network/views/bank-of-flyers/bank-of-flyers.store'
 import Global from '@/views/social-network/store/global/index'
 import Activities from '@/views/social-network/views/activities/activities.store'
+import Commissions from '@/views/social-network/views/commissions/commissions.store'
 
 Vue.use(Vuex)
 
@@ -16,4 +17,5 @@ export default {
   SocialNetworkBankOfFlyersStore: BankOfFlyers,
   SocialNetworkGlobalStore: Global,
   SocialNetworkActivities: Activities,
+  SocialNetworkCommissions: Commissions
 }

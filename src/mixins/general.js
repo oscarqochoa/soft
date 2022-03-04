@@ -95,6 +95,7 @@ export default {
       return module;
     },
     convertModuleToProgramString(program) {
+      console.log('program', program)
       let module = 0;
       if (program == 0) {
         module = 0;
@@ -128,6 +129,9 @@ export default {
           case "9":
             module = 12;
             break;
+          case "sn":
+            module = 15;
+            break;
           case "crm":
             module = 2;
             break;
@@ -139,6 +143,7 @@ export default {
             break;
         }
       }
+      console.log('module:', module)
       return module;
     },
     getModuleName(module) {
