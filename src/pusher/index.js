@@ -1,6 +1,6 @@
 import Pusher from 'pusher-js'
 import refreshMessageQuantites from '@/commons/messages/messages.pusher'
-import reloadCounterLoanCrm from '@/views/crm/views/loans/reload-counter-loan-crm.pusher'
+import reloadCounterLoan from '@/views/commons/pusher/reload-counter-loan.pusher'
 import acceptLeadFromSocialNetwork from '@/views/crm/views/Lead/pusher/social-accept-yes-or-not.pusher'
 import sendJustifyFromSupervisor from '@/views/crm/views/schedules/pusher/send-justify-to-supervisor.pusher'
 import sendFromRrhhJustifyToManagment from '@/views/crm/views/schedules/pusher/send-from-rrhh-justify-to-management.pusher'
@@ -26,7 +26,7 @@ const subscribePusher = () => {
     pusher.subscribe('private-mail')
     closedAllSwal()
     refreshMessageQuantites()
-    reloadCounterLoanCrm()
+    reloadCounterLoan()
     acceptLeadFromSocialNetwork()
     sendJustifyFromSupervisor()
     sendFromRrhhJustifyToManagment()
