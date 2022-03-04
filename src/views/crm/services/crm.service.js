@@ -80,7 +80,7 @@ class CrmService {
 
   async getOwners({ modul, body }) {
     try {
-      const { data } = await amgApi.post("/commons/user-module/2", body);
+      const { data } = await amgApi.post(`/commons/user-module/${modul}`, body);
       return data;
     } catch (error) {
       console.log("Something went wrong on getOwners:", error);

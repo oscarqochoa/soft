@@ -2,7 +2,8 @@
 import Vue from 'vue'
 
 import SNLeadsService from '@/views/social-network/services/leads'
-import mixins from '@/mixins/general'
+import crmService from "@/views/crm/services/crm.service";
+import crmGlobal from "@/views/crm/services/global";
 
 const state = {
     S_LEADS: {
@@ -35,6 +36,8 @@ const state = {
         stAd: null,
         typeDoc: null,
     },
+    S_STATES_LEADS: [],
+    S_OWNERS_LEADS: [],
 }
 const getters = {
     G_STATUS_LEADS() {
@@ -56,7 +59,24 @@ const mutations = {
             state[params.destination].items.splice(index, 1)
             state[params.destination].total--
         }
-    }
+    },
+    M_GET_STATE_LEADS(state, params) {
+        state.S_STATES_LEADS = params;
+    },
+    M_GET_SOURCE_CN(state, states) {
+        state.S_SUB_SOURCES = states;
+    },
+    M_FAG_PAGE_PROGRAMS(state, states) {
+        state.S_FAN_PAGE_PROGRAMS = states;
+    },
+    REMOVE_DATA(state, params) {
+        const index = state[params.destination]
+          .map((el) => el.id)
+          .indexOf(params.id);
+        if (index !== -1) {
+          state[params.destination].splice(index, 1);
+        }
+      },
 }
 const actions = {
     async A_GET_NEW_LEADS({ commit }, body) {
@@ -74,7 +94,7 @@ const actions = {
                 data
             })
 
-            return response.data
+            return response;
         } catch (error) {
             console.log("ERROR_GET_NEW_LEADS [ACTION]", error)
             throw error
@@ -174,7 +194,7 @@ const actions = {
             if (response.status == 200) {
                 commit('REMOVE_LEAD_DATA', {
                     destination: 'S_LEADS',
-                    id: body.id
+                    id: body.lead_id
                 })
             }
 
@@ -198,7 +218,7 @@ const actions = {
                     destination: 'S_LEADS',
                     data
                 })
-                return response.data
+                return response
             }
 
         } catch (error) {
@@ -216,6 +236,7 @@ const actions = {
     async A_GET_SUB_SOURCES({ commit }) {
         try {
             const response = await SNLeadsService.getSubSources()
+            console.log('sd', response)
             if (response.status == 200) {
                 commit('SET_DATA', {
                     destination: 'S_SUB_SOURCES',
@@ -224,19 +245,24 @@ const actions = {
             }
 
         } catch (error) {
-            console.log("ERROR_GET_SUB_SOURCES [ACTION]", error);
+            console.log("ERROR_GET_SUB_SOURCES [ACTION]", error.response);
             throw error;
         }
     },
-    async A_GET_FAN_PAGE_PROGRAMS({ commit }) {
+    async A_GET_SUB_SOURCE_SN({ commit }) {
         try {
-            const response = await SNLeadsService.getFanPagePrograms()
-            if (response.status == 200) {
-                commit('SET_DATA', {
-                    destination: 'S_FAN_PAGE_PROGRAMS',
-                    data: response.data
-                })
-            }
+            const resp = await SNLeadsService.getSubSourceSn();
+            commit('M_GET_SOURCE_CN', resp)
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    async A_GET_FAN_PAGE_PROGRAMS({ commit }) {
+        console.log('asdasd')
+        try {
+            const { data } = await SNLeadsService.getFanPagePrograms()
+            commit('M_FAG_PAGE_PROGRAMS', data);
+
             return response
         } catch (error) {
             console.log("ERROR_GET_FAN_PAGE_PROGRAMS [ACTION]", error);
@@ -316,7 +342,34 @@ const actions = {
             console.log("ERROR_GET_SELLERS_BY_DATE_AND_TYPE_TASK [ACTION]", error);
             throw error
         }
-    }
+    },
+    async A_GET_STATE_LEAD({ commit }, body) {
+        try {
+            const resp = await SNLeadsService.getStateLeads({type: 1});
+            //commit('M_GET_STATE_LEADS', resp.data);
+            return resp.data
+        } catch (e) {
+            console.log(e);
+        }
+    },
+    async A_GET_OWNERS({ commit }, { modul, body }) {
+        try {
+            const response = await crmService.getOwners({ modul, body });
+            return response;
+        } catch (error) {
+            console.log("ERROR_GET_OWNERS [ACTION]", error);
+            throw error;
+        }
+    },
+    async A_GET_PROGRAMS({ commit }, params) {
+        try {
+            const response = await crmGlobal.getPrograms(params)
+            return response.data
+        } catch (error) {
+            console.log('ERROR_GET_PROGRAMS [ACTION]', error)
+            throw error
+        }
+    },
 }
 
 export default {

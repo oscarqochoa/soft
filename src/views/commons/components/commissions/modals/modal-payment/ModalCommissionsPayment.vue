@@ -28,14 +28,14 @@
         <!-- buttons -->
         <div>
           <b-button
-            v-if="showSave"
+            v-if="true"
             size="sm"
             variant="gradient-success"
             @click="approveCommissions()"
           >{{saveUpdate}}</b-button>
           <b-button v-if="showEdit" size="sm" variant="gradient-info" @click="editPayment()">EDIT</b-button>
           <b-button
-            v-if="showAnull"
+            v-if="true"
             size="sm"
             variant="gradient-danger ml-1"
             @click="anullPayment()"
