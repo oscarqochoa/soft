@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex flex-column">
     <div
       v-b-tooltip.hover.b.bottom="content.file_name"
       class="w-100 d-flex flex-column align-items-center justify-content-center mt-50"
