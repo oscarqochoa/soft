@@ -308,7 +308,7 @@
                   class="d-flex justify-content-end align-items-center"
                 >
                   <button-save
-                    :disabled="!selectedRate.description"
+                    :disabled="!selectedRate.description || needConfirmPassword"
                     class="mr-1"
                     @click="saveRates()"
                   />
@@ -319,6 +319,7 @@
                   class="d-flex justify-content-center align-items-center"
                 >
                   <b-button
+                    :disabled="needConfirmPassword"
                     class="rounded ml-1"
                     variant="success"
                     @click="saveRates()"
@@ -424,6 +425,13 @@ export default {
     },
     needValidationPassword() {
       return this.discount >= 300;
+    },
+
+    needConfirmPassword() {
+      if (this.discount < 300) return false;
+      else if (this.discount < 500)
+        return this.needSuppervisorCurrentModulePassword;
+      else return this.needSuppervisorBusinessPassword;
     },
 
     needSuppervisorCurrentModulePassword() {
