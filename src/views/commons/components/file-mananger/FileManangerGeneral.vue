@@ -145,7 +145,10 @@
                   class="text-primary cursor-pointer"
                   icon="EditIcon"
                   size="15"
-                  @click="selectedFile = data.item"
+                  @click="
+                    selectedFile = currentFiles[data.index];
+                    updateEditState(true);
+                  "
                 />
                 <feather-icon
                   class="text-danger cursor-pointer"
