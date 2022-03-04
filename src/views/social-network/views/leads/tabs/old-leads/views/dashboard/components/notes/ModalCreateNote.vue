@@ -53,9 +53,6 @@ import NotesService from "@/views/crm/services/notes";
 
 export default {
   props: {
-    show: {
-      type: Boolean,
-    },
     lead: {
       type: Object,
     },
@@ -66,6 +63,8 @@ export default {
   },
   data() {
     return {
+      show: false,
+
       // Validations
       required,
 
@@ -135,6 +134,10 @@ export default {
       this.form.content = "";
       this.form.important = "";
     },
+  },
+
+  created() {
+    this.show = true;
   },
 };
 </script>

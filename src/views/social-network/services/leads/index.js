@@ -194,6 +194,25 @@ class SNLeads {
         }
     }
 
+    async getCreditReports(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/credit-report/get-reports', params);
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getPendingCreditReport(params) {
+        try {
+            const { data, status } = await amgApi.post('/credit-report/search-credit-reports-pending')
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+
+    }
+
 }
 
 export default new SNLeads()

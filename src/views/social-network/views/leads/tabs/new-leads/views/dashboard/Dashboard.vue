@@ -62,7 +62,7 @@ import { mapState, mapGetters, mapActions } from "vuex";
 // Components
 import CardPersonalInformation from "./components/CardPersonalInformation.vue";
 import CardAddress from "./components/CardAddress.vue";
-import CardCreditReport from "./components/CardCreditReport.vue";
+import CardCreditReport from "./components/credit-report/CardCreditReport.vue";
 import CardLeadCards from "./components/CardLeadCards.vue";
 import CardContactInformation from "./components/CardContactInformation.vue";
 
