@@ -1,14 +1,34 @@
 <template>
   <div>
-    <CatchmentCreateSn/>
+    <validation-observer ref="refFormLeadObserver">
+      <CatchmentCreateSn :lead="this.lead"/>
+
+      <b-button
+          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+          variant="primary"
+          class="mr-2"
+          @click="onSubmit"
+      >
+        <span >Save</span>
+      </b-button>
+    </validation-observer>
   </div>
 </template>
 
 <script>
 import CatchmentCreateSn from '@/views/social-network/views/commissions/lead-create/CatchmentCreateSn'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import Ripple from "vue-ripple-directive";
 export default {
   name: 'LeadCreateSocial',
-  components: { CatchmentCreateSn },
+  components: {
+    CatchmentCreateSn,
+    ValidationProvider,
+    ValidationObserver,
+  },
+  directives: {
+    Ripple,
+  },
   data() {
     return {
       info: {},
@@ -27,100 +47,88 @@ export default {
         { name: "CPN", id: 3 }
       ],
       lead: {
-        id: "",
-        user_id: this.global.layout.id,
-        first_name: "",
-        last_name: "",
-        nickname: "",
-        fanpage_id: "",
-        source_id: 7,
-        sourcesname_id: 17,
-        program_id: null,
-        mobile: null,
+        // Catchment
+        state_h: "CA",
+        user_id: 182,
         program: [],
-        state: "CA",
-        state_h: null,
-        zipcode: "",
-        language: "ES",
-        super: this.global.layout.role_id,
-        created_by: this.global.layout.id,
-        usercreator: this.global.layout.id,
-        note: "",
-        last_action: 1,
-
-        attend: null,
-
-        seller: "",
-        title: "",
-        date: null,
-        from: null,
-        to: null,
-        description: "",
-
-        subject: "CALL",
-        assign: "",
-        due_date: moment().format("YYYY-MM-DD"),
-        hour: "",
-        created_date: moment().format("YYYY-MM-DD"),
-        created_hour: "",
-        recovery: 0,
-        catcher: this.global.layout.id,
-
-        addEvidence: false,
-        images: [],
-        files: [],
-
-        potential: 1,
-        sms_status: 1,
-        google_ads: null,
+        source_id: 7,
+        sub_source: 6,
+        google_ads: 2,
+        fanpage_id: 3,
         flyer: null,
 
-        //New information
-        email: "",
-        moreInfo: false,
-        dob: "",
-        state_lead: null,
-        ssn: "",
-        itin: "",
-        other: "",
-        phone: null,
-        street: "",
-        city: "",
-        card_expi_month: "",
-        card_expi_year: "",
+
+
+        addEvidence: true,
+        assign: "",
+        attend: 1,
+        card_expi_month: "11",
+        card_expi_year: "11",
         cardholdername: "",
-        cardnumber: "",
-        cardsecuritycode: "",
-        streetcard: "",
+        cardnumber: "---",
+        cardsecuritycode: "1111",
+        catcher: 1,
+        city: "Dallas",
         citycard: "",
-        zipcodecard: "",
-        statecard: "",
+        content: "",
         countrycard: "United States",
+        created_by: 1,
+        created_date: "2022-03-02",
+        created_hour: "",
+        date: "2022-03-02",
+        description: "",
+        dob: "2022-03-02",
+        document: "213-12-3123",
+        due_date: "2022-03-02",
+        email: "asd@gmail.com",
 
-        //reasons
-        reason_not_pontential: null,
+        files: [],
+        first_name: "sdfsd",
 
-        //NeW Fields
-        type_document: null,
-        document: "",
+        from: "01:15:00",
+
+        hour: "11:04:00",
+        id: "",
         idMethod: null,
-        sub_source: null
+        images: [],
+        itin: "",
+        language: "ES",
+        last_action: 1,
+        last_name: "Wqeqwe",
+        mobile: "(121) 112-2222",
+        moreInfo: true,
+        name: "Sdfsd",
+        nickname: "sdfsdf",
+        note: "qwe qwe qweqweqw ",
+        other: "",
+        phone: "(123) 123-1231",
+        potential: 1,
+        state_lead: 2,
+        program_id: null,
+        reason_not_pontential: null,
+        recovery: 0,
+        seller: 28,
+        sms_status: 1,
+
+        sourcesname_id: 32,
+        ssn: "213-12-3123",
+        state: "MO",
+
+
+        statecard: "",
+        street: "C F Hawn Freeway",
+        streetcard: "",
+
+        subject: "CALL",
+        super: 1,
+        title: "fsdf",
+        to: "01:45:00",
+        type_document: 1,
+
+        usercreator: 1,
+        zipcode: "",
+        zipcodecard: "",
       },
-      states: [],
-      social: "",
-      cardnumber1: "",
-      cardnumber2: "",
-      cardnumber3: "",
-      cardnumber4: "",
-      imgcard: "",
-      otherinfo: false,
-
-      dateNew: "",
-
-      //New Leads
-      id_parent_source: 1,
-      spinner: false,
-      errorsBack: {}
     };
   },
   mounted() {},
@@ -130,117 +138,24 @@ export default {
   },
   methods: {
 
-    validateLead() {
+    async onSubmit() {
+      try {
 
-    },
-    saveLead() {
-      console.log('save lead', this.lead)
-
-    },
-    cancel() {
-      window.location.href = "/socialnetwork/leads";
-    },
-    selectDocument() {
-      //Switch type of document
-      if (this.lead.type_document) {
-        switch (this.lead.type_document) {
-          case 1:
-            this.lead.itin = "";
-            this.lead.other = "";
-            this.lead.ssn = this.lead.document;
-            break;
-          case 2:
-            this.lead.other = "";
-            this.lead.ssn = "";
-            this.lead.itin = this.lead.document;
-            break;
-          case 3:
-            this.lead.ssn = "";
-            this.lead.itin = "";
-            this.lead.other = this.lead.document;
-            break;
+        if (await this.$refs.refFormLeadObserver.validate()) {
+          console.log('data lead: ')
+        } else {
+          console.log('asd')
         }
+      } catch (error) {
+
       }
     },
-    cleanCardNumber() {
-      this.lead.cardnumber =
-          this.cardnumber1 +
-          "-" +
-          this.cardnumber2 +
-          "-" +
-          this.cardnumber3 +
-          "-" +
-          this.cardnumber4;
-    },
-
-    capitalize(text) {
-      return text.substr(0, 1).toUpperCase() + text.substr(1);
-    },
-    getInfo() {
-      this.info = {
-        modul: this.modul,
-        catcher:
-            this.global.layout.first_name + " " + this.global.layout.last_name,
-        created_by: this.global.layout.id,
-        errors: this.errors
-      };
-    }
   },
   created() {
-    this.getInfo();
-    this.addPreloader();
+
   },
   watch: {
-    "lead.addEvidence"(newVal, oldVal) {
-      if (!newVal) {
-        this.lead.moreInfo = false;
-        this.lead.attend = null;
-        this.lead.email = "";
-        (this.lead.first_name = ""),
-            (this.lead.last_name = ""),
-            (this.lead.zipcode = ""),
-            (this.lead.mobile = null),
-            (this.lead.note = "");
-      }
-    },
 
-    "lead.moreInfo"(newVal, oldVal) {
-      if (!newVal) {
-        (this.lead.dob = ""),
-            (this.lead.state_lead = null),
-            (this.lead.ssn = ""),
-            (this.lead.itin = ""),
-            (this.lead.other = ""),
-            (this.lead.phone = null),
-            (this.lead.street = ""),
-            (this.lead.city = ""),
-            (this.lead.card_expi_month = ""),
-            (this.lead.card_expi_year = ""),
-            (this.lead.cardholdername = ""),
-            (this.lead.cardnumber = ""),
-            (this.lead.cardsecuritycode = ""),
-            (this.lead.streetcard = ""),
-            (this.lead.citycard = ""),
-            (this.lead.zipcodecard = ""),
-            (this.lead.statecard = ""),
-            (this.social = ""),
-            (this.hideSSN = false),
-            (this.hideITIN = false),
-            (this.hideCPN = false),
-            (this.cardnumber1 = ""),
-            (this.cardnumber2 = ""),
-            (this.cardnumber3 = ""),
-            (this.cardnumber4 = ""),
-            (this.imgcard = ""),
-            (this.otherinfo = false);
-      }
-    },
-    "lead.first_name"(newValue) {
-      this.lead.name = this.capitalize(newValue);
-    },
-    "lead.last_name"(newValue) {
-      this.lead.last_name = this.capitalize(newValue);
-    }
   }
 }
 </script>

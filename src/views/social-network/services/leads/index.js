@@ -1,4 +1,4 @@
-import { amgApi, amgApiFake } from '@/service/axios';
+import {amgApi} from '@/service/axios';
 
 class SNLeads {
 
@@ -96,6 +96,16 @@ class SNLeads {
         }
     }
 
+    async getStateLeads(params) {
+
+        try {
+            return await amgApi.post("/lead/get-states", params);
+        } catch (error) {
+            console.log('Something went wrong on getStatusLeads:', error)
+            throw error
+        }
+    }
+
     async getSubSources() {
         try {
             const { data, status } = await amgApi.post('/get-sub-sources-sn', {})
@@ -108,7 +118,7 @@ class SNLeads {
 
     async getFanPagePrograms() {
         try {
-            const { data, status } = await amgApi.post('/all-fangapes', {})
+            const { data, status } = await amgApi.get('/lead/all-fangapes', {})
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on getFanPagePrograms", error);
@@ -173,6 +183,15 @@ class SNLeads {
         } catch (error) {
             console.log("Something went wrong on getSellersByDateAndTypeTask", error)
             throw error
+        }
+    }
+
+    async getSubSourceSn() {
+        try {
+            const resp = await amgApi('/lead/get-sub-sources-sn');
+            return resp.data;
+        } catch (e) {
+            console.log(e)
         }
     }
 
