@@ -2,8 +2,6 @@
 import Vue from 'vue'
 
 import SNLeadsService from '@/views/social-network/services/leads'
-import crmService from '@/views/crm/services/lead'
-import mixins from '@/mixins/general'
 import crmService from "@/views/crm/services/crm.service";
 import crmGlobal from "@/views/crm/services/global";
 
