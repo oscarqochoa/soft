@@ -268,6 +268,7 @@
                 <b-input
                   v-model="suppervisorPassword"
                   placeholder="Supervisor password"
+                  type="password"
                   size="sm"
                 />
                 <b-input-group-append>
@@ -285,6 +286,7 @@
               <b-input-group>
                 <b-input
                   v-model="businessSupervisorPassword"
+                  type="password"
                   placeholder="Business supervisor password"
                   size="sm"
                 />
