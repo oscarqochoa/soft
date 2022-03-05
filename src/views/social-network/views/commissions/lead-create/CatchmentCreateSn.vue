@@ -1,16 +1,39 @@
 <template>
-  <b-card no-body class="p-2 mt-4">
-    <b-row>
-      <b-col md="6">
-        <h4 class="title-card">Catchment</h4>
-      </b-col>
-      <b-col md="6 text-right">
-        <h4 class="title-card">Catcher: {{ this.currentUser.fullName }}</h4>
-      </b-col>
-    </b-row>
-    <b-row class="mt-2">
-      <b-col md="4">
-        <ValidationProvider rules="required" v-slot="{errors}">
+  <div>
+    <b-card no-body class="p-2 mt-4">
+      <b-row>
+        <b-col md="6">
+          <h4 class="title-card">Catchment</h4>
+        </b-col>
+        <b-col md="6 text-right">
+          <h4 class="title-card">Catcher: {{ this.currentUser.fullName }}</h4>
+        </b-col>
+      </b-row>
+      <b-row class="mt-2">
+        <b-col md="4">
+          <ValidationProvider rules="required" v-slot="{errors}">
+            <b-col md="12">
+              <b-form-group
+                  id="fieldset-horizontal"
+                  label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+                  label-cols-sm="4"
+                  label-for="input-horizontal"
+                  label-cols-lg="4"
+                  content-cols-sm
+                  content-cols-lg="8"
+                  label="ST/AD"
+              >
+                <b-form-select
+                    v-model="lead.state_h"
+                    :options="optionsStatesAd"
+                    class="select-icon-none font-bureau-style border-hover bg-white-c"
+                    :class="{'border-error-sn' :errors[0]}"
+                    @change="lead.flyer = null"
+                ></b-form-select>
+                <div v-if="errors[0]" class="text-error-sn text-center">ST/AD {{errors[0]}}</div>
+              </b-form-group>
+            </b-col>
+          </ValidationProvider>
           <b-col md="12">
             <b-form-group
                 id="fieldset-horizontal"
@@ -20,214 +43,46 @@
                 label-cols-lg="4"
                 content-cols-sm
                 content-cols-lg="8"
-                label="ST/AD"
+                label="Lead Owner"
             >
               <b-form-select
-                  v-model="lead.state_h"
-                  :options="optionsStatesAd"
+                  v-model="lead.user_id"
+                  :options="this.optionsOwners"
                   class="select-icon-none font-bureau-style border-hover bg-white-c"
-                  :class="{'border-error-sn' :errors[0]}"
-                  @change="lead.flyer = null"
               ></b-form-select>
-              <div v-if="errors[0]" class="text-error-sn text-center">ST/AD {{errors[0]}}</div>
             </b-form-group>
           </b-col>
-        </ValidationProvider>
-        <b-col md="12">
-          <b-form-group
-              id="fieldset-horizontal"
-              label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-              label-cols-sm="4"
-              label-for="input-horizontal"
-              label-cols-lg="4"
-              content-cols-sm
-              content-cols-lg="8"
-              label="Lead Owner"
-          >
-            <b-form-select
-                v-model="lead.user_id"
-                :options="this.optionsOwners"
-                class="select-icon-none font-bureau-style border-hover bg-white-c"
-            ></b-form-select>
-          </b-form-group>
+          <b-col md="12">
+            <b-form-group
+                id="fieldset-horizontal"
+                label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+                label-cols-sm="4"
+                label-for="input-horizontal"
+                label-cols-lg="4"
+                content-cols-sm
+                content-cols-lg="8"
+                label="Suggestions"
+            >
+              <v-select
+                  v-model="lead.program"
+                  :options="optionPrograms"
+                  :multiple="true"
+                  :close-on-select="false"
+                  :clear-on-select="true"
+                  :preserve-search="true"
+                  placeholder="Pick some"
+                  class="border rounded border-hover"
+                  style=" background-color: #f8f9fa !important;"
+                  label="name"
+                  track-by="name"
+                  :preselect-first="true"
+              ></v-select>
+            </b-form-group>
+          </b-col>
         </b-col>
-        <b-col md="12">
-          <b-form-group
-              id="fieldset-horizontal"
-              label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-              label-cols-sm="4"
-              label-for="input-horizontal"
-              label-cols-lg="4"
-              content-cols-sm
-              content-cols-lg="8"
-              label="Suggestions"
-          >
-            <v-select
-                v-model="lead.program"
-                :options="optionPrograms"
-                :multiple="true"
-                :close-on-select="false"
-                :clear-on-select="true"
-                :preserve-search="true"
-                placeholder="Pick some"
-                class="border rounded border-hover"
-                style=" background-color: #f8f9fa !important;"
-                label="name"
-                track-by="name"
-                :preselect-first="true"
-            ></v-select>
-          </b-form-group>
-        </b-col>
-      </b-col>
-      <b-col md="8">
+        <b-col md="8">
 
 
-        <b-form-group
-            id="fieldset-horizontal"
-            label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-            label-cols-sm="4"
-            label-for="input-horizontal"
-            label-cols-lg="2"
-            content-cols-sm
-            content-cols-lg="10"
-            label="Source"
-        >
-          <b-row>
-            <b-col md="6" class="py-4">
-              <ValidationProvider rules="required" v-slot="{errors}">
-                <b-row>
-                  <b-col md="12" class=" text-center d-flex align-items-center justify-content-center">
-                    <button
-                        class="w-75 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-around"
-                        :class="{'btn-primary': isFacebook}"
-                        @click="selectSource(1)"
-                    >
-                      <feather-icon icon="FacebookIcon" size="15" :class="{'text-white': isFacebook}" class="text-dark mr-1"/>Facebook
-                    </button>
-                  </b-col>
-                  <div v-if="errors[0]" class="text-error-sn text-center">Source {{errors[0]}}</div>
-                  <input type="radio" class="d-none bg-green" v-model="lead.sourcesname_id" />
-                </b-row>
-              </ValidationProvider>
-
-              <!-- Sub Sources Facebook -->
-              <ValidationProvider rules="required" v-slot="{errors}">
-                <div class="mt-3 d-flex align-items-center justify-content-between">
-                  <template v-for="(subSource, index) in S_SUB_SOURCES">
-                    <div
-                        v-if="subSource.parent_id === 1"
-                        :key="index"
-                        :title="subSource.name"
-                        class=" text-center"
-                        @click="selectSubSource(subSource.id)"
-                    >
-                      <button
-                          class="rounded btn btn-light border-0 btn-source"
-                          :class="{'bg-primary text-white': lead.sub_source == subSource.id}"
-                          :disabled="!isFacebook"
-                      >{{subSource.name }}</button>
-                    </div>
-                  </template>
-                </div>
-                <div class="mt-2">
-                  <div
-                      v-if="errors[0] && isFacebook"
-                      class="text-error-sn text-center"
-                  >Sub-Source {{errors[0]}}</div>
-                  <input type="radio" class="d-none" v-model="lead.sub_source" />
-                </div>
-              </ValidationProvider>
-            </b-col>
-
-            <!-- GOOGLE -->
-            <b-col md="6 pt-0" class="py-4">
-              <ValidationProvider rules="required" v-slot="{errors}">
-                <b-row>
-                  <b-col md="12" class="text-center d-flex align-items-center justify-content-center">
-                    <button
-                        class="btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-around"
-                        :class="{'btn-danger': isGoogle}"
-                        @click="selectSource(2)"
-                    >
-                      <feather-icon icon="MailIcon" size="15" :class="{'text-white': isFacebook}" class="text-dark mr-1"/>
-                      Google
-                    </button>
-                  </b-col>
-                  <div v-if="errors[0]" class="text-error-sn text-center">Source {{errors[0]}}</div>
-                  <input type="radio" class="d-none" v-model="lead.sourcesname_id" />
-                </b-row>
-              </ValidationProvider>
-
-              <!-- Contact Method -->
-              <ValidationProvider :rules="`${ isGoogle? 'required' : ''}`" v-slot="{errors}">
-                <div class="mt-3 d-flex align-items-center justify-content-between">
-                  <button
-                      class="rounded btn btn-light border-0 btn-source font-small-2"
-                      :class="lead.google_ads === 1 ? 'btn-danger' : '' "
-                      @click="selectMethod(1)"
-                      :disabled="!isGoogle"
-                  >E-mail</button>
-                  <button
-                      class="rounded btn btn-light border-0 btn-source font-small-2"
-                      :class="lead.google_ads === 2 ? 'btn-danger' : '' "
-                      @click="selectMethod(2)"
-                      :disabled="!isGoogle"
-                  >Messenger</button>
-                  <button
-                      class="rounded btn btn-light border-0 btn-source font-small-2"
-                      :class="lead.google_ads === 3 ? 'btn-danger' : '' "
-                      @click="selectMethod(3)"
-                      :disabled="!isGoogle"
-                  >Whatsapp</button>
-                  <button
-                      class="rounded btn btn-light border-0 btn-source font-small-2"
-                      :class="lead.google_ads === 4 ? 'btn-danger' : '' "
-                      @click="selectMethod(4)"
-                      :disabled="!isGoogle"
-                  >Call</button>
-                </div>
-                <div>
-                  <input type="radio" class="d-none" v-model="lead.google_ads" />
-                  <div
-                      v-if="errors[0]"
-                      class="text-error-sn text-center"
-                  >Contact Method {{errors[0]}}</div>
-                </div>
-              </ValidationProvider>
-
-              <!-- Sub Sources Google -->
-              <ValidationProvider rules="required" v-slot="{errors}">
-                <div class="mt-2 d-flex align-items-center justify-content-between">
-                  <template v-for="(subSource, index) in S_SUB_SOURCES">
-                    <div
-                        v-if="subSource.parent_id === 2"
-                        :key="index"
-                        :title="subSource.name"
-                        class=" text-center"
-                        @click="selectSubSource(subSource.id)"
-                    >
-                      <button
-                          class="rounded btn btn-light border-0 btn-source"
-                          :class="{'btn-danger text-white': lead.sub_source == subSource.id}"
-                          :disabled="!isGoogle"
-                      >{{subSource.name }}</button>
-                    </div>
-                  </template>
-                </div>
-                <div>
-                  <div
-                      v-if="errors[0] && isGoogle"
-                      class="text-error-sn text-center"
-                  >Sub-Source {{errors[0]}}</div>
-                  <input type="radio" class="d-none" v-model="lead.sub_source" />
-                </div>
-              </ValidationProvider>
-            </b-col>
-          </b-row>
-        </b-form-group>
-
-        <!-- Programs -->
-        <div>
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -236,41 +91,240 @@
               label-cols-lg="2"
               content-cols-sm
               content-cols-lg="10"
-              label="Program"
+              label="Source"
           >
-            <ValidationProvider rules="required" v-slot="{errors}">
-              <b-row class="d-flex justify-content-between align-items-center px-0">
-                <template v-for="(program, index) in S_FAN_PAGE_PROGRAMS">
-                  <div class="" :key="index" :title="program.value">
-                    <button
-                        class="rounded sub-sources border-0 btn-block btn btn-light "
-                        :class="lead.fanpage_id === program.id ? `btn-fanpage btn-program-${program.id}` : ''"
-                        @click="selectProgram(program.id, program.value )"
-                    >{{program.value}}</button>
+            <b-row>
+              <b-col md="6" class="py-4">
+                <ValidationProvider rules="required" v-slot="{errors}">
+                  <b-row>
+                    <b-col md="12" class=" text-center d-flex align-items-center justify-content-center">
+                      <button
+                          class="w-75 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-around"
+                          :class="{'btn-primary': isFacebook}"
+                          @click="selectSource(1)"
+                      >
+                        <feather-icon icon="FacebookIcon" size="15" :class="{'text-white': isFacebook}" class="text-dark mr-1"/>Facebook
+                      </button>
+                    </b-col>
+                    <div v-if="errors[0]" class="text-error-sn text-center">Source {{errors[0]}}</div>
+                    <input type="radio" class="d-none bg-green" v-model="lead.sourcesname_id" />
+                  </b-row>
+                </ValidationProvider>
+
+                <!-- Sub Sources Facebook -->
+                <ValidationProvider rules="required" v-slot="{errors}">
+                  <div class="mt-3 d-flex align-items-center justify-content-between">
+                    <template v-for="(subSource, index) in S_SUB_SOURCES">
+                      <div
+                          v-if="subSource.parent_id === 1"
+                          :key="index"
+                          :title="subSource.name"
+                          class=" text-center"
+                          @click="selectSubSource(subSource.id)"
+                      >
+                        <button
+                            class="rounded btn btn-light border-0 btn-source"
+                            :class="{'bg-primary text-white': lead.sub_source == subSource.id}"
+                            :disabled="!isFacebook"
+                        >{{subSource.name }}</button>
+                      </div>
+                    </template>
                   </div>
-                </template>
-                <div v-if="errors[0]" class="text-error-sn text-center">Program {{errors[0]}}</div>
-                <input type="radio" class="d-none" v-model="lead.fanpage_id" />
-              </b-row>
-            </ValidationProvider>
+                  <div class="mt-2">
+                    <div
+                        v-if="errors[0] && isFacebook"
+                        class="text-error-sn text-center"
+                    >Sub-Source {{errors[0]}}</div>
+                    <input type="radio" class="d-none" v-model="lead.sub_source" />
+                  </div>
+                </ValidationProvider>
+              </b-col>
+
+              <!-- GOOGLE -->
+              <b-col md="6 pt-0" class="py-4">
+                <ValidationProvider rules="required" v-slot="{errors}">
+                  <b-row>
+                    <b-col md="12" class="text-center d-flex align-items-center justify-content-center">
+                      <button
+                          class="btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-around"
+                          :class="{'btn-danger': isGoogle}"
+                          @click="selectSource(2)"
+                      >
+                        <feather-icon icon="MailIcon" size="15" :class="{'text-white': isFacebook}" class="text-dark mr-1"/>
+                        Google
+                      </button>
+                    </b-col>
+                    <div v-if="errors[0]" class="text-error-sn text-center">Source {{errors[0]}}</div>
+                    <input type="radio" class="d-none" v-model="lead.sourcesname_id" />
+                  </b-row>
+                </ValidationProvider>
+
+                <!-- Contact Method -->
+                <ValidationProvider :rules="`${ isGoogle? 'required' : ''}`" v-slot="{errors}">
+                  <div class="mt-3 d-flex align-items-center justify-content-between">
+                    <button
+                        class="rounded btn btn-light border-0 btn-source font-small-2"
+                        :class="lead.google_ads === 1 ? 'btn-danger' : '' "
+                        @click="selectMethod(1)"
+                        :disabled="!isGoogle"
+                    >E-mail</button>
+                    <button
+                        class="rounded btn btn-light border-0 btn-source font-small-2"
+                        :class="lead.google_ads === 2 ? 'btn-danger' : '' "
+                        @click="selectMethod(2)"
+                        :disabled="!isGoogle"
+                    >Messenger</button>
+                    <button
+                        class="rounded btn btn-light border-0 btn-source font-small-2"
+                        :class="lead.google_ads === 3 ? 'btn-danger' : '' "
+                        @click="selectMethod(3)"
+                        :disabled="!isGoogle"
+                    >Whatsapp</button>
+                    <button
+                        class="rounded btn btn-light border-0 btn-source font-small-2"
+                        :class="lead.google_ads === 4 ? 'btn-danger' : '' "
+                        @click="selectMethod(4)"
+                        :disabled="!isGoogle"
+                    >Call</button>
+                  </div>
+                  <div>
+                    <input type="radio" class="d-none" v-model="lead.google_ads" />
+                    <div
+                        v-if="errors[0]"
+                        class="text-error-sn text-center"
+                    >Contact Method {{errors[0]}}</div>
+                  </div>
+                </ValidationProvider>
+
+                <!-- Sub Sources Google -->
+                <ValidationProvider rules="required" v-slot="{errors}">
+                  <div class="mt-2 d-flex align-items-center justify-content-between">
+                    <template v-for="(subSource, index) in S_SUB_SOURCES">
+                      <div
+                          v-if="subSource.parent_id === 2"
+                          :key="index"
+                          :title="subSource.name"
+                          class=" text-center"
+                          @click="selectSubSource(subSource.id)"
+                      >
+                        <button
+                            class="rounded btn btn-light border-0 btn-source"
+                            :class="{'btn-danger text-white': lead.sub_source == subSource.id}"
+                            :disabled="!isGoogle"
+                        >{{subSource.name }}</button>
+                      </div>
+                    </template>
+                  </div>
+                  <div>
+                    <div
+                        v-if="errors[0] && isGoogle"
+                        class="text-error-sn text-center"
+                    >Sub-Source {{errors[0]}}</div>
+                    <input type="radio" class="d-none" v-model="lead.sub_source" />
+                  </div>
+                </ValidationProvider>
+              </b-col>
+            </b-row>
           </b-form-group>
+
+          <!-- Programs -->
+          <div>
+            <b-form-group
+                id="fieldset-horizontal"
+                label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+                label-cols-sm="4"
+                label-for="input-horizontal"
+                label-cols-lg="2"
+                content-cols-sm
+                content-cols-lg="10"
+                label="Program"
+            >
+              <ValidationProvider rules="required" v-slot="{errors}">
+                <b-row class="d-flex justify-content-between align-items-center px-0">
+                  <template v-for="(program, index) in S_FAN_PAGE_PROGRAMS">
+                    <div class="" :key="index" :title="program.value">
+                      <button
+                          class="rounded sub-sources border-0 btn-block btn btn-light "
+                          :class="lead.fanpage_id === program.id ? `btn-fanpage btn-program-${program.id}` : ''"
+                          @click="selectProgram(program.id, program.value )"
+                      >{{program.value}}</button>
+                    </div>
+                  </template>
+                  <div v-if="errors[0]" class="text-error-sn text-center">Program {{errors[0]}}</div>
+                  <input type="radio" class="d-none" v-model="lead.fanpage_id" />
+                </b-row>
+              </ValidationProvider>
+            </b-form-group>
+          </div>
+
+          <!-- Flyers -->
+
+          <div v-if="lead.state_h && lead.fanpage_id && lead.source_id === 1">
+            <b-form-group
+                id="fieldset-horizontal"
+                label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+                label-cols-sm="4"
+                label-for="input-horizontal"
+                label-cols-lg="2"
+                content-cols-sm
+                content-cols-lg="10"
+                label="Flyers"
+            >
+              <ValidationProvider rules="required" v-slot="{errors}">
+                <div class="d-flex">
+                  <b-avatar square class="image-flyer" :src="imageFlyer" size="10rem" ></b-avatar>
+                  <div class="d-flex align-items-center">
+                    <button
+                        class="rounded sub-sources border-0 btn-block btn btn-light"
+                        @click="openModalSelectFlyer"
+                    >Select</button>
+                  </div>
+
+                  <div v-if="errors[0]" class="text-error-sn text-center">Program {{errors[0]}}</div>
+                  <input type="radio" class="d-none" v-model="lead.fanpage_id" />
+                </div>
+              </ValidationProvider>
+            </b-form-group>
+          </div>
+
+        </b-col>
+      </b-row>
+
+      <!-- Modal Flyer -->
+    </b-card>
+
+    <b-modal
+        modal
+        :title="titleFanPageProgram"
+
+        v-model="openModal"
+        size="lg"
+        modal-class="modal-primary"
+        hide-footer
+        body-class="mb-2"
+
+        title-tag="h3"
+    >
+      <b-container>
+        <div class="container-flyers">
+          <div v-for="flyer in S_FLYERS" class="d-flex align-items-center justify-content-center">
+
+            <div @click="selectFlyer(flyer.id, flyer.route_thumb)" class="image-flyer d-flex align-items-center justify-content-center" :class="lead.flyer == flyer.id ? 'select-flyer' : 'asd'">
+              <b-avatar :src="flyer.route_thumb" size="8rem" ></b-avatar>
+            </div>
+
+          </div>
         </div>
+      </b-container>
+    </b-modal>
 
-        <!-- Flyers -->
-
-      </b-col>
-    </b-row>
-
-    <!-- Modal Flyer -->
-
-
-
-  </b-card>
+  </div>
 </template>
 
 <script>
 import {mapActions, mapGetters, mapState} from 'vuex'
 import vSelect from "vue-select";
+
 
 export default {
   name: 'CatchmentCreateSn',
@@ -298,23 +352,11 @@ export default {
       unknown: false,
       sources: [],
       programs_fanpage: [],
+      openModal: false,
 
-      //lazy Img
-      mainProps: {
-        center: false,
-        fluidGrow: false,
-        blank: true,
-        blankColor: "#bbb",
-        height: 137,
-        block: false,
-        fluid: true,
-        rounded: true,
-        thumbnail: true,
-      },
-      blankImgProps: {
-        blank: true,
-        width: 137,
-      },
+      imageFlyer: null,
+      titleFanPageProgram: null,
+
     };
   },
   async created() {
@@ -334,20 +376,33 @@ export default {
       token: "auth/token",
       G_LANGUAGES: "CrmGlobalStore/G_LANGUAGES",
     }),
-    ...mapState('SocialNetworkLeadsStore', ['S_STATES_LEADS','S_SUB_SOURCES','S_FAN_PAGE_PROGRAMS']),
+    ...mapState('SocialNetworkLeadsStore', ['S_STATES_LEADS','S_SUB_SOURCES','S_FAN_PAGE_PROGRAMS','S_FLYERS']),
     isFacebook() {
-      return this.lead.source_id == 1;
+      return this.lead.source_id === 1;
     },
     isGoogle() {
-      return this.lead.source_id == 2;
+      return this.lead.source_id === 2;
     },
-    isFullFlyer() {
-      return this.lead.state_h && this.lead.fanpage_id;
+    isChangeState() {
+      return this.lead.state_h;
     },
+    isChangeFanPage() {
+      return this.lead.fanpage_id;
+    }
   },
   methods: {
-    ...mapActions('SocialNetworkLeadsStore', ['A_GET_SUB_SOURCES','A_GET_STATE_LEAD', 'A_GET_OWNERS','A_GET_PROGRAMS','A_GET_SUB_SOURCE_SN','A_GET_FAN_PAGE_PROGRAMS']),
-
+    ...mapActions(
+        'SocialNetworkLeadsStore',
+        [
+            'A_GET_SUB_SOURCES',
+            'A_GET_STATE_LEAD',
+            'A_GET_OWNERS',
+            'A_GET_PROGRAMS',
+            'A_GET_SUB_SOURCE_SN',
+            'A_GET_FAN_PAGE_PROGRAMS',
+            'A_GET_FLYERS'
+        ]
+    ),
     //Select Sources Programs
 
     //Get Options Selects
@@ -406,17 +461,31 @@ export default {
       this.lead.google_ads = id;
     },
     selectProgram(id, value ) {
-      console.log(id, value)
+      //console.log(id, value)
       this.lead.fanpage_id = id;
+      this.titleFanPageProgram = value;
+    },
+    openModalSelectFlyer() {
+      this.openModal = !this.openModal;
+    },
+    selectFlyer(id, urlImage) {
+      this.lead.flyer = id;
+      this.imageFlyer = urlImage;
+      this.openModalSelectFlyer();
     }
   },
   watch: {
-
+    async isChangeState() {
+      await this.A_GET_FLYERS({program_id: this.lead.fanpage_id, state: this.lead.state_h})
+    },
+    async isChangeFanPage() {
+      await this.A_GET_FLYERS({program_id: this.lead.fanpage_id, state: this.lead.state_h})
+    }
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .border-hover:hover {
   border: 2px solid #7000ff !important;
 }
@@ -447,4 +516,38 @@ export default {
 .btn-program-5{
   background: #00c5a2;
 }
+.image-flyer{
+  height: 168px;
+  width: 168px;
+  object-fit: cover;
+  margin-left: -12px;
+  margin-right: 20px;
+  border-radius: 5px;
+  span{
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: .3s all ease-in-out;
+  }
+}
+.container-flyers{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.select-flyer{
+  span{
+    cursor: pointer;
+    border-color: #0e1d44;
+  }
+}
+.dark-layout{
+  .select-flyer{
+    span{
+      cursor: pointer;
+      border-color: #fff;
+    }
+  }
+}
+
+
 </style>

@@ -3,6 +3,8 @@
     <validation-observer ref="refFormLeadObserver">
       <CatchmentCreateSn :lead="this.lead"/>
 
+      <BasicInformationCreateLeadSn :lead="this.lead"/>
+
       <b-button
           v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           variant="primary"
@@ -19,9 +21,12 @@
 import CatchmentCreateSn from '@/views/social-network/views/commissions/lead-create/CatchmentCreateSn'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import Ripple from "vue-ripple-directive";
+import BasicInformationCreateLeadSn
+  from "@/views/social-network/views/commissions/lead-create/BasicInformationCreateLeadSn";
 export default {
   name: 'LeadCreateSocial',
   components: {
+    BasicInformationCreateLeadSn,
     CatchmentCreateSn,
     ValidationProvider,
     ValidationObserver,
@@ -51,10 +56,10 @@ export default {
         state_h: "CA",
         user_id: 182,
         program: [],
-        source_id: 7,
+        source_id: 1,
         sub_source: 6,
         google_ads: 2,
-        fanpage_id: 3,
+        fanpage_id: null,
         flyer: null,
 
 

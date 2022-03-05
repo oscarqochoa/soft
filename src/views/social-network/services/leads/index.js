@@ -147,7 +147,7 @@ class SNLeads {
 
     async getFlyers(params) {
         try {
-            const { data, status } = await amgApi.post('/get-flyers', params)
+            const { data, status } = await amgApi.post('social-network/bank-of-flyers/get-flyers-by-state', params)
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on getFlyers", error)

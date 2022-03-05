@@ -2,7 +2,6 @@
 import Vue from 'vue'
 
 import SNLeadsService from '@/views/social-network/services/leads'
-import crmService from '@/views/crm/services/lead'
 import mixins from '@/mixins/general'
 import crmService from "@/views/crm/services/crm.service";
 import crmGlobal from "@/views/crm/services/global";
@@ -79,6 +78,9 @@ const mutations = {
           state[params.destination].splice(index, 1);
         }
       },
+    M_GET_FLYERS(state, states) {
+        state.S_FLYERS = states;
+    }
 }
 const actions = {
     async A_GET_NEW_LEADS({ commit }, body) {
@@ -282,15 +284,8 @@ const actions = {
     },
     async A_GET_FLYERS({ commit }, params) {
         try {
-            const response = await SNLeadsService.getFlyers(params)
-
-            if (response.status == 200) {
-                commit('SET_DATA', {
-                    destination: 'S_FLYERS',
-                    data: response.data,
-                })
-            }
-            return response
+            const { data } = await SNLeadsService.getFlyers(params)
+            commit('M_GET_FLYERS', data);
         } catch (error) {
             console.log("ERROR_GET_FLYERS [ACTION]", error)
             throw error
