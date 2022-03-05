@@ -284,7 +284,6 @@
       body-class="p-50"
       button-size="sm"
       ok-title="Ok"
-      hide-footer
       centered
       @hidden="actionOnHideUploadFileModal"
     >

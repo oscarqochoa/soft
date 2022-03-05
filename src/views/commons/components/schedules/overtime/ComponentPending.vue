@@ -138,6 +138,9 @@ export default {
         if (this.paginate.totalRows !== data.total)
           this.paginate.totalRows = data.total;
         let array = data.data;
+        if(!Array.isArray(array)){
+          array = Object.values(array);
+        }
         let items = [];
         array.forEach(element => {
           items.push({
@@ -154,6 +157,7 @@ export default {
               parseInt(element.total_hours) - parseInt(element.total_assigned)
           });
         });
+        console.log('no')
         this.removePreloader();
         return items;
       } catch (e) {

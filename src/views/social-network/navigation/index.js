@@ -6,7 +6,14 @@ import MigrationsNavigation from '@/views/social-network/views/migrations/migrat
 import ActivitiesNavigation from '@/views/social-network/views/activities/activities.navigation'
 import DashboardNavigation2 from '@/views/social-network/views/dashboard2/dashboard.navigation'
 import DashboardNavigation from '@/views/social-network/views/dashboard/dashboard.navigation'
+import NcrNavigation from '@/views/social-network/views/ncr/ncr-social.nav'
+import FileManagerNavigation from '@/views/social-network/views/file-manager/file-manager.nav'
+import LoansNavigation from '@/views/social-network/views/loans/loans.nav'
+import InventoryNavigation from '@/views/social-network/views/inventory/inventory.nav'
+import ScheduleNavigation from '@/views/social-network/views/schedules/schedules.nav'
 import CommissionsNavigation from '@/views/social-network/views/commissions/commissions.navigation'
+import RecoveryListNavigation from '@/views/social-network/views/recovery-list/recovery-list.navigation'
+
 
 const navigation = [
   {
@@ -15,11 +22,17 @@ const navigation = [
   ...DashboardNavigation,
   ...LeadsNav,
   ...ClientNavigation,
+  ...NcrNavigation,
   ...MigrationsNavigation,
   ...AnswersGuideNavigation,
   ...BankOfFlyersNavigation,
+  FileManagerNavigation,
+  LoansNavigation,
+  ...InventoryNavigation,
+  ScheduleNavigation,
   ...ActivitiesNavigation,
   ...DashboardNavigation2,
-  ...CommissionsNavigation
+  ...CommissionsNavigation,
+  ...RecoveryListNavigation,
 ]
 export default navigation

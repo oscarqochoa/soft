@@ -1,0 +1,233 @@
+<template>
+  <div>
+    <b-card no-body class="mb-1">
+      <filter-slot
+        :filter="filter"
+        :filter-principal="filterPrincipal"
+        :total-rows="totalRows"
+        :no-visible-principal-filter="true"
+        :paginate="paginate"
+        :start-page="startPage"
+        :to-page="toPage"
+        :send-multiple-sms="false"
+        @reload="$refs['refClientsList'].refresh()"
+      >
+        <template #recovery-list>
+          <b-row class="ml-2">
+            
+            <b-col
+              cols="3"
+            >
+              <b-form-group
+                label="Pending"
+                label-cols="4"
+                content-cols="8"
+                label-cols-sm="5"
+                content-cols-sm="6"
+                label-cols-md="3"
+                content-cols-md="6"
+                label-cols-lg="3"
+                content-cols-lg="6"
+                label-class=""
+              >
+                <div >
+                  <div
+                  class=" text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
+                  style="padding-top: 5px; padding-bottom: 5px"
+                >
+                  {{ countPendingTask }}
+                </div>
+                </div>
+              </b-form-group>
+            </b-col>
+
+            <b-col
+              cols="3"
+            
+            >
+              <b-form-group
+                label="Done"
+                label-cols="4"
+                content-cols="8"
+                label-cols-sm="5"
+                content-cols-sm="6"
+                label-cols-md="3"
+                content-cols-md="6"
+                label-cols-lg="3"
+                content-cols-lg="6"
+                label-class=""
+              >
+                <div >
+                  <div
+                  class=" text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
+                  style="padding-top: 5px; padding-bottom: 5px"
+                >
+                  {{ countDoneTask }}
+                </div>
+                </div>
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </template>
+        <b-table
+          slot="table"
+          no-provider-filtering
+          :api-url="clientRoute"
+          ref="refClientsList"
+          :items="myProvider"
+          :fields="arrayColumns"
+          primary-key="id"
+          table-class="text-nowrap"
+          responsive="sm"
+          show-empty
+          sticky-header="50vh"
+          :busy="isBusy"
+          :current-page="paginate.currentPage"
+          :per-page="paginate.perPage"
+        >
+          <template #table-busy>
+            <div class="text-center text-primary my-2">
+              <b-spinner class="align-middle mr-1"></b-spinner>
+              <strong>Loading ...</strong>
+            </div>
+          </template>
+          <template #cell(created_at)="data">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <span>{{ data.item.created_at | myGlobalDay }}</span>
+            </div>
+          </template>
+          <template #cell(leadCreated)="data">
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
+            >
+              <span>{{ data.item.leadCreated | myGlobalDay }}</span>
+            </div>
+          </template>
+          <template #cell(done)="data">
+            <div
+              class="d-flex flex-column justify-content-center align-items-center"
+            >
+              <b-form-checkbox
+                v-model="data.item.status"
+                :value="1"
+                @change="changeStatusLead(data.item)"
+              ></b-form-checkbox>
+            </div>
+          </template>
+        </b-table>
+      </filter-slot>
+    </b-card>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex"
+// Import Filter
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue"
+// Import Service
+import RecoveryListService from "../service/recovery.list.service"
+// Import Data
+import fields from "../data/fields.recovery.list.data"
+import filtersList from "../data/filters.recovery.list.data"
+export default {
+  components: {
+    FilterSlot,
+  },
+  props: {
+    status: {
+      type: [Number, String],
+    },
+  },
+  data() {
+    return {
+      filter: filtersList,
+      arrayColumns: fields,
+      totalRows: 0,
+      paginate: {
+        currentPage: 1,
+        perPage: 10,
+      },
+      startPage: null,
+      toPage: null,
+      isBusy: false,
+      sortBy: "created_at",
+      sortDesc: true,
+      searchInput: "",
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Client...",
+        model: "",
+      },
+      countPendingTask: 0,
+      countDoneTask: 0,
+    }
+  },
+  computed: {
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
+    clientRoute: function () {
+      return "/social-network/recovery-list/search-recovery-by-user"
+    },
+  },
+  methods: {
+    myProvider: async function (ctx) {
+      try {
+        const data = await amgApi.post(`${ctx.apiUrl}`, {
+          npage: this.paginate.currentPage,
+          perPage: this.paginate.perPage,
+          user_id: this.currentUser.user_id,
+          date_from: this.filter[0].model,
+          date_to: this.filter[1].model,
+          id_user: 59,
+          id_program: this.status,
+          status: this.filter[2].model,
+          update_id: "",
+        })
+        const items = data.data.data
+        this.startPage = data.data.from
+        this.currentPage = data.data.current_page
+        this.perPage = data.data.per_page
+        this.nextPage = this.startPage + 1
+        this.endPage = data.data.last_page
+        this.totalRows = data.data.total
+        this.toPage = data.data.to
+        if (data.data.data[0] != null) {
+          this.countPendingTask = data.data.data[0].quantity_pending
+          this.countDoneTask = data.data.data[0].quantity_done
+        }
+        return items || []
+      } catch (error) {
+        console.error(error)
+        return []
+      }
+    },
+
+    changeStatusLead: async function (Lead) {
+      try {
+        let params = {
+          date_from: null,
+          date_to: null,
+          id_user: 59,
+          id_program: this.status,
+          status: Lead.status == "1" ? 1 : 0,
+          update_id: Lead.id,
+        }
+        const data = await RecoveryListService.searchRecoveryList(params)
+        this.countPendingTask = data.data.data[0].quantity_pending
+        this.countDoneTask = data.data.data[0].quantity_done
+        let countDone = parseInt(data.data.data[0].count_done)
+        let countPending = parseInt(data.data.data[0].count_pending)
+        let taskCompleted = countDone - countPending == countDone ? true : false
+        this.$emit("TaskCompleted", taskCompleted)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+  },
+  created() {},
+}
+</script>
