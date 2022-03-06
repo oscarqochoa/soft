@@ -25,11 +25,12 @@ const navigation = [
   ...AnswersGuideNavigation,
   ...BankOfFlyersNavigation,
   FileManagerNavigation,
+  ...CommissionsNavigation,
   LoansNavigation,
   ...InventoryNavigation,
   ScheduleNavigation,
   ...ActivitiesNavigation,
   ...DashboardNavigation2,
-  ...CommissionsNavigation
+  
 ]
 export default navigation

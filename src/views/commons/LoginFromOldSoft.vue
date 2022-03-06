@@ -68,6 +68,7 @@ export default {
           this.$set(userData, 'module_name', module)
           await this.$store.dispatch('auth/updateCurrentUser', userData)
           await this.$store.dispatch('auth/updateToken', userToken)
+          this.$store.dispatch('auth/updateCurrentUserModuleRole', module_id)
           // ? This is just for demo purpose as well.
           // ? Because we are showing eCommerce app's cart items count in navbar
           // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
