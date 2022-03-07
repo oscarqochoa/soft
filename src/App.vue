@@ -1,12 +1,12 @@
 <template>
   <div id="app" v-loading.full="loading" class="h-100 blue-scrollbar" :class="[skinClasses] ">
     <component :is="layout">
-      <router-view />
+      <router-view/>
     </component>
 
-    <ModalsContainer :modul="currentModul" />
+    <ModalsContainer :modul="currentModul"/>
 
-    <scroll-to-top v-if="enableScrollToTop" />
+    <scroll-to-top v-if="enableScrollToTop"/>
   </div>
 </template>
 
@@ -14,28 +14,34 @@
 import ScrollToTop from "@core/components/scroll-to-top/ScrollToTop.vue";
 
 // This will be populated in `beforeCreate` hook
-import { $themeColors, $themeBreakpoints, $themeConfig } from "@themeConfig";
-import { provideToast } from "vue-toastification/composition";
-import { watch } from "@vue/composition-api";
+import {$themeColors, $themeBreakpoints, $themeConfig} from "@themeConfig";
+import {provideToast} from "vue-toastification/composition";
+import {watch} from "@vue/composition-api";
 import useAppConfig from "@core/app-config/useAppConfig";
 
-import { useWindowSize, useCssVar } from "@vueuse/core";
-
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import {useWindowSize, useCssVar} from "@vueuse/core";
+import modulesCounters from "@/views/modulesCounters";
+import {mapGetters, mapActions, mapMutations, mapState} from "vuex";
 import ModalsContainer from "@/views/commons/components/modals-container/ModalsContainer.vue";
 import store from "@/store";
 
 const LayoutVertical = () => import("@/layouts/vertical/LayoutVertical.vue");
 const LayoutHorizontal = () =>
-  import("@/layouts/horizontal/LayoutHorizontal.vue");
+    import("@/layouts/horizontal/LayoutHorizontal.vue");
 const LayoutFull = () => import("@/layouts/full/LayoutFull.vue");
 
 export default {
-  mounted(){
+  mounted() {
     if (this.skin === "dark") document.querySelector('html').classList.add("dark");
-      else if (document.querySelector('html').className.match("dark"))
-        document.querySelector('html').classList.remove("dark");
+    else if (document.querySelector('html').className.match("dark"))
+      document.querySelector('html').classList.remove("dark");
+
   },
+  ...mapState({
+    navMenuItems: state => state.SidebarStore.S_SIDEBAR_ITEMS,
+
+
+  }),
   components: {
     // Layouts
     LayoutHorizontal,
@@ -48,6 +54,9 @@ export default {
   // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
   // Currently, router.currentRoute is not reactive and doesn't trigger any change
   computed: {
+    modulId() {
+      return this.currentUser.modul_id
+    },
     layout() {
       if (this.$route.meta.layout === "full") return "layout-full";
       return `layout-${this.contentLayoutType}`;
@@ -73,7 +82,22 @@ export default {
         role: this.currentUser.role_id,
         userId: this.currentUser.user_id
       });
-    }
+    },
+    modulId(newVal) {
+      const keys = Object.keys(modulesCounters)
+
+
+      if (!(newVal === undefined)) {
+        if (keys.includes(newVal.toString())) {
+
+          const callback = modulesCounters[newVal]
+          callback()
+        }
+      }
+
+
+    },
+
   },
   methods: {
     ...mapActions({
@@ -111,8 +135,8 @@ export default {
     // eslint-disable-next-line no-plusplus
     for (let i = 0, len = colors.length; i < len; i++) {
       $themeColors[colors[i]] = useCssVar(
-        `--${colors[i]}`,
-        document.documentElement
+          `--${colors[i]}`,
+          document.documentElement
       ).value.trim();
     }
 
@@ -122,20 +146,20 @@ export default {
     // eslint-disable-next-line no-plusplus
     for (let i = 0, len = breakpoints.length; i < len; i++) {
       $themeBreakpoints[breakpoints[i]] = Number(
-        useCssVar(
-          `--breakpoint-${breakpoints[i]}`,
-          document.documentElement
-        ).value.slice(0, -2)
+          useCssVar(
+              `--breakpoint-${breakpoints[i]}`,
+              document.documentElement
+          ).value.slice(0, -2)
       );
     }
 
     // Set RTL
-    const { isRTL } = $themeConfig.layout;
+    const {isRTL} = $themeConfig.layout;
     document.documentElement.setAttribute("dir", isRTL ? "rtl" : "ltr");
   },
   setup() {
-    const { skin, skinClasses } = useAppConfig();
-    const { enableScrollToTop } = $themeConfig.layout;
+    const {skin, skinClasses} = useAppConfig();
+    const {enableScrollToTop} = $themeConfig.layout;
 
     // If skin is dark when initialized => Add class to body
     if (skin.value === "dark") document.body.classList.add("dark-layout");
@@ -154,7 +178,7 @@ export default {
 
     // Set Window Width in store
     store.commit("app/UPDATE_WINDOW_WIDTH", window.innerWidth);
-    const { width: windowWidth } = useWindowSize();
+    const {width: windowWidth} = useWindowSize();
     watch(windowWidth, val => {
       store.commit("app/UPDATE_WINDOW_WIDTH", val);
     });

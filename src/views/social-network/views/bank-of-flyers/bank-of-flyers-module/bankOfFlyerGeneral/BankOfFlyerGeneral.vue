@@ -78,7 +78,7 @@
                   @click="openImage(data.index)"
               >
                 <b-avatar
-                   
+
                     square
                     size="50"
                     v-bind="mainProps"
@@ -285,7 +285,7 @@
 </template>
 
 <script>
-import {mapGetters, mapState} from 'vuex'
+import {mapGetters, mapMutations, mapState} from 'vuex'
 import CoolLightBox from 'vue-cool-lightbox'
 import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
 import dataFields
@@ -302,6 +302,8 @@ import ModalInsertComments
   from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalInsertComments/ModalInsertComments.vue'
 import ModalListComments
   from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalListComments/ModalListComments.vue'
+import BankOfFlyersService from "@/views/social-network/views/bank-of-flyers/bank-of-flyers.service";
+import store from "@/store";
 
 export default {
   components: {
@@ -379,11 +381,12 @@ export default {
 
     }),
     ...mapState({
-
+      navMenuItems: state => state.SidebarStore.S_SIDEBAR_ITEMS,
       programs: state => state.SocialNetworkGlobalStore.S_PROGRAMS,
       states: state => state.SocialNetworkGlobalStore.S_STATES,
 
     }),
+
 
     filteredFields() {
       return this.fields
@@ -432,6 +435,7 @@ export default {
       if (flyer.status_view !== 1) {
         flyer.user_id = this.currentUser.user_id
         await this.changeView(flyer);
+        await this.countNotificati()
       }
       flyer.status_view = 1;
 
@@ -439,10 +443,21 @@ export default {
 
     async changeView(item) {
       const params = {id: item.fbid, user_id: this.currentUser.user_id,}
-      const data = await SocialNetworkService.updateChangeView(params)
+      const data = await BankOfFlyersService.updateChangeView(params)
 
     },
 
+    async countNotificati() {
+      const params = {user_id: this.currentUser.user_id,}
+      const data = await BankOfFlyersService.countNotification(params)
+
+
+      const payload = {
+        routeName: 'bank-of-flyers',
+        tag: data.data
+      }
+      this.$store.commit('SidebarStore/UPDATE_SIDEBAR_ITEM_PROPERTY', payload)
+    },
     closeWatchModal() {
       this.modalWatch = false
     },
@@ -514,7 +529,7 @@ export default {
           text: this.filterPrincipal.model,
           user_id: this.currentUser.user_id,
         }
-        const data = await SocialNetworkService.getBankOfFlyers(params, ctx.currentPage)
+        const data = await BankOfFlyersService.getBankOfFlyers(params, ctx.currentPage)
         this.items = data.data.data
         // Must return an array of items or an empty array if an error occurred
         this.pushImage()
@@ -533,7 +548,7 @@ export default {
         this.totalData = data.data.total
         this.totalRows = data.data.total
         this.toPage = data.data.to
-
+        await this.countNotificati()
         return this.items
       } catch (e) {
         this.showErrorSwal(e)
