@@ -12,9 +12,10 @@
         :send-multiple-sms="false"
         @reload="$refs['refClientsList'].refresh()"
       >
+        <!-- Slot Counters -->
         <template #recovery-list>
           <b-row class="ml-2">
-            
+            <!-- Count Pending -->
             <b-col
               cols="3"
             >
@@ -40,10 +41,9 @@
                 </div>
               </b-form-group>
             </b-col>
-
+            <!-- Count Done -->
             <b-col
               cols="3"
-            
             >
               <b-form-group
                 label="Done"
@@ -105,6 +105,7 @@
               <span>{{ data.item.leadCreated | myGlobalDay }}</span>
             </div>
           </template>
+          <!-- COLUMN DONE -->
           <template #cell(done)="data">
             <div
               class="d-flex flex-column justify-content-center align-items-center"
@@ -136,7 +137,7 @@ export default {
     FilterSlot,
   },
   props: {
-    status: {
+    programId: {
       type: [Number, String],
     },
   },
@@ -183,7 +184,7 @@ export default {
           date_from: this.filter[0].model,
           date_to: this.filter[1].model,
           id_user: 59,
-          id_program: this.status,
+          id_program: this.programId,
           status: this.filter[2].model,
           update_id: "",
         })
@@ -212,7 +213,7 @@ export default {
           date_from: null,
           date_to: null,
           id_user: 59,
-          id_program: this.status,
+          id_program: this.programId,
           status: Lead.status == "1" ? 1 : 0,
           update_id: Lead.id,
         }

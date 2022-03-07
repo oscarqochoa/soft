@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-modal
-      v-model="mutableShow"
+      v-model="show"
       :title="'History Notes (Lead: ' + lead.lead_name + ')'"
       title-tag="h3"
       id="modal-sn-view-notes"
@@ -9,7 +9,13 @@
       size="lg"
       @hidden="close"
     >
-      <b-table small :fields="fields" :items="notes" class="text-center">
+      <b-table
+        small
+        sticky-header="60vh"
+        :fields="fields"
+        :items="notes"
+        class="text-center"
+      >
         <template #cell(created_by_name)="data">
           {{ data.item.created_by_name }} |
           {{ data.item.created_at | myGlobalWithHour }}
@@ -30,16 +36,13 @@ import NotesService from "@/views/crm/services/notes";
 
 export default {
   props: {
-    show: {
-      type: Boolean,
-    },
     lead: {
       type: Object,
     },
   },
   data() {
     return {
-      mutableShow: false,
+      show: false,
 
       fields: [
         { key: "text", label: "Note" },
@@ -106,6 +109,8 @@ export default {
     this.mutableShow = true;
     await this.getNotes();
     this.getImportant();
+
+    this.show = true;
   },
 };
 </script>

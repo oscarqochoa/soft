@@ -32,12 +32,7 @@
         <template v-for="(route, index) in history">
           <div
             :key="index"
-            class="
-              d-flex
-              align-items-center
-              justify-content-between
-              cursor-pointer
-            "
+            class="d-flex align-items-center justify-content-between cursor-pointer"
             @click="historyClicked(index)"
           >
             <feather-icon
@@ -49,13 +44,7 @@
               }"
             />
             <span
-              class="
-                ml-50
-                d-flex
-                align-items-center
-                justify-content-center
-                font-medium-1
-              "
+              class="ml-50 d-flex align-items-center justify-content-center font-medium-1"
               >{{ route.label }}</span
             >
             <span class="font-large-1 ml-50">/</span>
@@ -161,7 +150,10 @@
                   class="text-primary cursor-pointer"
                   icon="EditIcon"
                   size="15"
-                  @click="selectedFile = data.item"
+                  @click="
+                    selectedFile = currentFiles[data.index];
+                    updateEditState(true);
+                  "
                 />
                 <feather-icon
                   class="text-danger cursor-pointer"
@@ -284,14 +276,13 @@
       body-class="p-50"
       button-size="sm"
       ok-title="Ok"
+      :hide-footer="files.length === 0"
       centered
       @hidden="actionOnHideUploadFileModal"
     >
       <drag-and-drop v-model="files" :files-array="files" />
       <template #modal-footer>
-        <b-button v-show="files.length" variant="primary" @click="onUploadFile">
-          Upload
-        </b-button>
+        <b-button variant="primary" @click="onUploadFile"> Upload </b-button>
       </template>
     </b-modal>
   </div>

@@ -2,7 +2,7 @@
   <div class="p-2">
     <header-slot>
       <template #actions>
-        <b-button :disabled="!getStatusButton" variant="primary">Done List</b-button>
+        <b-button :disabled="!getStatusButton" @click="sendForPusher" variant="primary">Done List</b-button>
       </template>
     </header-slot>
       <!-- Tabs -->
@@ -15,26 +15,26 @@
     >
       <!-- Tab Credit Experts -->
       <b-tab title="Credit Experts" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
-        <tab-by-program @TaskCompleted="TaskCompleted" active :status="3" />
+        <tab-by-program @TaskCompleted="TaskCompleted" active :programId="3" />
       </b-tab>
       <!-- Tab Business -->
       <b-tab title="Business" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
-        <tab-by-program @TaskCompleted="TaskCompleted" :status="1" />
+        <tab-by-program @TaskCompleted="TaskCompleted" :programId="1" />
       </b-tab>
 
       <!-- Tax Research -->
       <b-tab title="Tax Research" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
-        <tab-by-program @TaskCompleted="TaskCompleted" :status="5" />
+        <tab-by-program @TaskCompleted="TaskCompleted" :programId="5" />
       </b-tab>
 
       <!-- Debt Solution -->
       <b-tab title="Debt Solution" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
-        <tab-by-program @TaskCompleted="TaskCompleted" :status="4" />
+        <tab-by-program @TaskCompleted="TaskCompleted" :programId="4" />
       </b-tab>
 
       <!-- Boost Credit -->
       <b-tab title="Boost Credit" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
-        <tab-by-program @TaskCompleted="TaskCompleted"  :status="2" />
+        <tab-by-program @TaskCompleted="TaskCompleted"  :programId="2" />
       </b-tab>
     </b-tabs>
   </div>
@@ -79,8 +79,17 @@ export default {
         }catch(error){
 
         }
+      },
+      sendForPusher:async function(){
+        try{
+          let params = {
+              id_user: 59,
+          }
+           const data = await RecoveryListService.searchRecoveryList(params)
+        }catch(error){
+          console.log(error)
+        }
       }
-
     },
     created:function(){
       this.firstRequestStatusButton()
