@@ -14,7 +14,10 @@
         :client="initial_payment.nameClient"
         :program="initial_payment.nameProgram"
         class="sticky-top mt-1"
-        :class="{'bg-background-dark': skin === 'dark', 'bg-white': skin !== 'dark'}"
+        :class="{
+          'bg-background-dark': skin === 'dark',
+          'bg-white': skin !== 'dark',
+        }"
       />
       <b-row>
         <b-col sm="6" cols="12">
@@ -28,9 +31,7 @@
             />
           </b-input-group>
         </b-col>
-        <b-col
-            sm="6" cols="12"
-        >
+        <b-col sm="6" cols="12">
           <label class="mt-1">Method of Payment</label>
           <b-form-radio-group
             v-model="method"
@@ -60,7 +61,12 @@
       "
       class="mt-3 margin-0"
     >
-      <b-table small :fields="fieldsT1" :items="initial_payment.allcards" responsive>
+      <b-table
+        small
+        :fields="fieldsT1"
+        :items="initial_payment.allcards"
+        responsive
+      >
         <template v-slot:cell(select)="data">
           <b-form-radio
             :ref="'campo' + data.item.id"
@@ -96,9 +102,14 @@
       "
       class="mt-1 margin-0"
     >
-      <b-table small :fields="fieldsT2" :items="initial_payment.allcards" responsive>
+      <b-table
+        small
+        :fields="fieldsT2"
+        :items="initial_payment.allcards"
+        responsive
+      >
         <template v-slot:cell(amount)="data">
-          <b-input-group style="min-width: 130px !important;">
+          <b-input-group style="min-width: 130px !important">
             <money
               :ref="'campo' + data.item.id"
               v-model="data.item.model"
@@ -113,8 +124,8 @@
             />
             <b-input-group-append>
               <b-button
-                  class="btn-icon"
-                  variant="success"
+                class="btn-icon"
+                variant="success"
                 :disabled="initial_payment.cfeestatus == 0 ? false : true"
                 size="sm"
                 @click="savePayment(data.item.id, 'campo' + data.item.id)"
@@ -177,7 +188,7 @@
       v-if="method === 'credit-card' && listCards.length > 0"
       class="mt-3 margin-0"
     >
-      <b-table :fields="fieldsT3" :items="listCards" small responsive/>
+      <b-table :fields="fieldsT3" :items="listCards" small responsive />
     </div>
     <b-row
       v-if="
@@ -245,7 +256,7 @@ import CrmService from "@/views/crm/services/crm.service";
 import ModalCardCreate from "@/views/crm/views/payments/components/ModalCardCreate.vue";
 import DeleteCardModal from "@/views/crm/views/sales-made/components/modals/DeleteCardModal.vue";
 import ProgramClientHeader from "@/views/crm/views/sales-made/components/modals/ProgramClientHeader.vue";
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "InitialPaymentModal",
@@ -323,13 +334,13 @@ export default {
         {
           label: "Card Holder Name",
           key: "cardholdername",
-          thStyle: {minWidth: "140px !important"},
+          thStyle: { minWidth: "140px !important" },
         },
         {
           label: "Card Number",
           key: "cardnumber",
           formatter: (value) => `XXXX-XXXX-XXXX-${value}`,
-          thStyle: {minWidth: "160px !important"},
+          thStyle: { minWidth: "160px !important" },
         },
         {
           label: "Type",
@@ -365,13 +376,13 @@ export default {
         {
           label: "Card Holder Name",
           key: "cardholdername",
-          thStyle: {minWidth: "135px !important"},
+          thStyle: { minWidth: "135px !important" },
         },
         {
           label: "Card Number",
           key: "cardnumber",
           formatter: (value) => `XXXX-XXXX-XXXX-${value}`,
-          thStyle: {minWidth: "152px !important"},
+          thStyle: { minWidth: "152px !important" },
         },
         {
           label: "Type",
@@ -399,29 +410,29 @@ export default {
         {
           label: "Transaction ID",
           key: "transaction_id",
-          thStyle: {minWidth: "120px !important"},
+          thStyle: { minWidth: "120px !important" },
         },
         {
           label: "Amount",
           key: "amount",
           formatter: (value) => `$ ${value}`,
-          thStyle: {minWidth: "90px !important"},
+          thStyle: { minWidth: "90px !important" },
         },
         {
           label: "Credit Card",
           key: "card_number",
-          thStyle: {minWidth: "110px !important"},
+          thStyle: { minWidth: "110px !important" },
         },
         {
           label: "User",
           key: "user",
-          thStyle: {minWidth: "100px !important"},
+          thStyle: { minWidth: "100px !important" },
         },
         {
           label: "Date",
           key: "settlement_date",
           formatter: (value) => this.$options.filters.myGlobalDay(value),
-          thStyle: {minWidth: "160px !important"},
+          thStyle: { minWidth: "160px !important" },
         },
       ],
       notApiCards: false,
@@ -432,11 +443,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      skin: 'appConfig/skin'
+      skin: "appConfig/skin",
     }),
     modalSize() {
-      if (this.screenWidth > 992) return 'lg'
-      return 'xlg'
+      if (this.screenWidth > 992) return "lg";
+      return "xlg";
     },
     valorEdit() {
       return (
@@ -557,6 +568,7 @@ export default {
                 modul: this.initial_payment.modul,
                 charge: this.charge == true ? 0 : 1,
                 sendsms: sms === true ? 1 : 0,
+                min_ip: this.initial_payment.payments.min_ip,
               }
             );
             if (response.status === 200) {
@@ -565,7 +577,18 @@ export default {
                 const res = await this.showSuccessSwal();
                 if (res.value) {
                   this.amount = response.data.data;
-                  if(this.initial_payment.programid != 2) this.$refs[refCard].$el.value = "$ 0.00";
+                  if (response.data.alert_min_initial) {
+                    this.showToast(
+                      "warning",
+                      "top-right",
+                      "Warning",
+                      "XIcon",
+                      "The minimum amount for this program is $" +
+                        this.initial_payment.payments.min_ip
+                    );
+                  }
+                  if (this.initial_payment.programid != 2)
+                    this.$refs[refCard].$el.value = "$ 0.00";
                   await this.getListCards();
                   this.reloadTable = true;
                   if (this.initial_payment.programid == 2) {
@@ -635,6 +658,6 @@ export default {
 }
 
 .bg-background-dark {
-  background-color: #17171A !important;
+  background-color: #17171a !important;
 }
 </style>

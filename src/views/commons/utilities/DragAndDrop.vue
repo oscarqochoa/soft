@@ -3,18 +3,14 @@
     class="cont-list"
     :style="images.length &lt; 3 ? '' : 'overflow-y: scroll; height: 238px;'"
   >
-    <label
-      :for="source"
-      style="width: 100%"
-      @click="isSingle"
-    >
+    <label :for="source" style="width: 100%" @click="isSingle">
       <div
         class="uploader"
         style="
           padding: 15px 15px;
           border-radius: 5px;
           background: transparent;
-          border: 1.3px solid #D1CFD7;
+          border: 1.3px solid #d1cfd7;
           cursor: pointer;
         "
         :class="{ dragging: isDragging, 'border-danger': errorDrag }"
@@ -28,12 +24,14 @@
             src="/assets/images/drag-drop/folder-icon.png"
             class="mb-3 mt-5"
             alt
-          >
+          />
           <!-- <i class="fa fa-cloud-upload"></i> -->
           <p
-            style="font-size: 20px; font-weight: bold; margin-bottom: 10px;"
+            style="font-size: 20px; font-weight: bold; margin-bottom: 10px"
             class="roboto-class"
-          >Drag your files here</p>
+          >
+            Drag your files here
+          </p>
           <div class="file-input">
             <div
               class="file-input roboto-class"
@@ -48,7 +46,7 @@
               :accept="image ? 'image/png, image/jpeg' : '*'"
               :multiple="!single"
               @change="onInputChange"
-            >
+            />
           </div>
         </div>
 
@@ -70,16 +68,10 @@
             "
           >
             <!-- '/assets/images/drag-drop/UPLOADED-FILE.png' -->
-            <img :src="imageFile(files[index].name)">
+            <img :src="imageFile(files[index].name)" />
             <div class="details">
-              <span
-                class="name"
-                v-text="files[index].name.substr(0, 10)"
-              />
-              <span
-                class="size"
-                v-text="getFileSize(files[index].size)"
-              />
+              <span class="name" v-text="files[index].name.substr(0, 10)" />
+              <span class="size" v-text="getFileSize(files[index].size)" />
               <button
                 style="position: absolute; top: 5px; right: 7px"
                 @click="removeFile($event, index)"
@@ -87,7 +79,7 @@
                 <img
                   style="width: 85%"
                   :src="'/assets/images/drag-drop/trash.ico'"
-                >
+                />
               </button>
             </div>
           </div>
@@ -99,7 +91,7 @@
 
 <script>
 export default {
-  name: 'DragAndDrop',
+  name: "DragAndDrop",
   props: {
     filesArray: Array,
     single: Boolean,
@@ -110,7 +102,7 @@ export default {
     },
     source: {
       type: String,
-      default: 'file',
+      default: "file",
     },
   },
   data() {
@@ -124,91 +116,91 @@ export default {
       disable: {
         upload: false,
       },
-      folder_id: '',
-      sendto: '',
-      responsable: '',
-      result: '',
+      folder_id: "",
+      sendto: "",
+      responsable: "",
+      result: "",
       isDragging: false,
       dragCount: 0,
-    }
+    };
   },
   mounted() {
-    Array.from(this.filesArray).forEach(file => this.addImage(file))
+    Array.from(this.filesArray).forEach((file) => this.addImage(file));
   },
   methods: {
     imageFile(filename) {
-      const extension = filename.split('.').pop()
+      const extension = filename.split(".").pop();
       switch (extension) {
-        case 'jpg':
-        case 'png':
-        case 'gif':
-          return '/assets/images/drag-drop/ext_files/jpg.png'
-        case 'xls':
-        case 'xlsx':
-          return '/assets/images/drag-drop/ext_files/excel.png'
-        case 'html':
-          return 'html'
-        case 'pdf':
-          return '/assets/images/drag-drop/ext_files/pdf.png'
+        case "jpg":
+        case "png":
+        case "gif":
+          return "/assets/images/drag-drop/ext_files/jpg.png";
+        case "xls":
+        case "xlsx":
+          return "/assets/images/drag-drop/ext_files/excel.png";
+        case "html":
+          return "html";
+        case "pdf":
+          return "/assets/images/drag-drop/ext_files/pdf.png";
         default:
-          return '/assets/images/drag-drop/ext_files/archivodesc.png'
+          return "/assets/images/drag-drop/ext_files/archivodesc.png";
       }
     },
     addImage(file) {
-      this.files.push(file)
-      const img = new Image()
-      const reader = new FileReader()
-      reader.onload = e => this.images.push(e.target.result)
-      reader.readAsDataURL(file)
+      this.files.push(file);
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = (e) => this.images.push(e.target.result);
+      reader.readAsDataURL(file);
     },
     onInputChange(e) {
-      const { files } = e.target
-      Array.from(files).forEach(file => this.addImage(file))
-      this.$emit('input', this.files)
+      const { files } = e.target;
+      Array.from(files).forEach((file) => this.addImage(file));
+      this.$emit("input", this.files);
     },
     getFileSize(size) {
-      const fSExt = ['Bytes', 'KB', 'MB', 'GB']
-      let i = 0
+      const fSExt = ["Bytes", "KB", "MB", "GB"];
+      let i = 0;
 
       while (size > 900) {
-        size /= 1024
-        i++
+        size /= 1024;
+        i++;
       }
-      return `${Math.round(size * 100) / 100} ${fSExt[i]}`
+      return `${Math.round(size * 100) / 100} ${fSExt[i]}`;
     },
     removeFile(e, key) {
-      e.preventDefault()
-      this.files.splice(key, 1)
-      this.images.splice(key, 1)
-      this.$emit('input', this.files)
+      e.preventDefault();
+      this.files.splice(key, 1);
+      this.images.splice(key, 1);
+      this.$emit("input", this.files);
     },
     OnDragEnter(e) {
-      e.preventDefault()
+      e.preventDefault();
 
-      this.dragCount++
-      this.isDragging = true
-      return false
+      this.dragCount++;
+      this.isDragging = true;
+      return false;
     },
     OnDragLeave(e) {
-      e.preventDefault()
-      this.dragCount--
-      if (this.dragCount <= 0) this.isDragging = false
+      e.preventDefault();
+      this.dragCount--;
+      if (this.dragCount <= 0) this.isDragging = false;
     },
     onDrop(e) {
-      e.preventDefault()
-      e.stopPropagation()
-      this.isDragging = false
-      const { files } = e.dataTransfer
-      Array.from(files).forEach(file => this.addImage(file))
-      this.$emit('input', this.files)
+      e.preventDefault();
+      e.stopPropagation();
+      this.isDragging = false;
+      const { files } = e.dataTransfer;
+      Array.from(files).forEach((file) => this.addImage(file));
+      this.$emit("input", this.files);
     },
     isSingle(e) {
       if (this.images.length > 0 && this.single) {
-        e.preventDefault()
+        e.preventDefault();
       }
     },
   },
-}
+};
 </script>
 
 <style>
