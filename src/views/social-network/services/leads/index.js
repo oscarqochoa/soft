@@ -260,8 +260,21 @@ class SNLeads {
 
     async deleteFile(body) {
         try {
-            const { data, response } = await amgApi.post('/lead/social-network/delete-file-sn', body)
-            return { data, response }
+            const { data, status } = await amgApi.post('/lead/social-network/delete-file-sn', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async uploadFiles(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/upload-file-lead-sn', body, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            })
+            return { data, status }
         } catch (error) {
             throw error
         }
