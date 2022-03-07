@@ -362,82 +362,41 @@ export default {
     },
     async submit() {
       try {
-        if (await this.validateTaskFavorites()) {
-          const swal = await this.showConfirmSwal();
-          if (swal.isConfirmed) {
-            this.isLoading = true;
+        const swal = await this.showConfirmSwal();
+        if (swal.isConfirmed) {
+          this.isLoading = true;
 
-            const params = {
-              task_id: this.task.id,
-              attend_id: this.attend_type ? 1 : 2,
-              user_id: this.currentUser.user_id,
-              lead_id: this.lead.id,
-              state: this.lead.state,
-              modul_id: this.modul,
-              program_id:
-                this.currentUser.role_id === 7 &&
-                this.this.lead.lead_programs.length
-                  ? this.this.lead.lead_programs[0].program_id
-                  : null,
-              ...this.task,
-              sms: this.task.sms ? this.task.sms : "",
-              sms_status: this.task.sms_status ? this.task.sms_status : 0,
-              asigned: this.seller,
-              method: this.currentUser.role_id === 7 ? this.task.method : null,
-              withsms: this.task.withsms ? 1 : 0,
-              taskForSn: this.taskForSn,
-            };
+          const params = {
+            task_id: this.task.id,
+            attend_id: this.attend_type ? 1 : 2,
+            user_id: this.currentUser.user_id,
+            lead_id: this.lead.id,
+            state: this.lead.state,
+            modul_id: this.modul,
+            program_id:
+              this.currentUser.role_id === 7 &&
+              this.this.lead.lead_programs.length
+                ? this.this.lead.lead_programs[0].program_id
+                : null,
+            ...this.task,
+            sms: this.task.sms ? this.task.sms : "",
+            sms_status: this.task.sms_status ? this.task.sms_status : 0,
+            asigned: this.seller,
+            method: this.currentUser.role_id === 7 ? this.task.method : null,
+            withsms: this.task.withsms ? 1 : 0,
+            taskForSn: this.taskForSn,
+          };
 
-            const response = await TaskService.postCreateLeadTask(params);
+          const response = await TaskService.postCreateLeadTask(params);
 
-            params.task_id = "";
-            await this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
-            this.$emit("onReloadTasks", response.data);
+          params.task_id = "";
+          await this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
+          this.$emit("onReloadTasks", response.data);
 
-            this.close();
-          }
+          this.close();
         }
       } catch (error) {
         this.showErrorSwal();
-        this.isLoading = false;
-      }
-    },
-    async validateTaskFavorites() {
-      try {
-        if (!this.taskForSn) return true;
-        const response = await this.A_VALIDATE_TASK_FAVORITE({
-          seller: this.task.asignedObj.value,
-          hour_date: this.$moment(
-            `${this.task.date} ${this.task.hour}`,
-            "m/d/Y HH:mm:ss"
-          ).format("YYYY-MM-DD HH:mm:ss"),
-        });
-        if (this.isResponseSuccess(response)) {
-          if (response.data.length) {
-            this.showGenericToast({
-              variant: "warning",
-              title: "Repeated Tasks",
-              icon: "AlertTriangleIcon",
-              text: "This Seller has an important task close to this time, please select another time",
-            });
-          } else return true;
-        } else {
-          this.showGenericToast({
-            variant: "warning",
-            title: "Repeated Tasks",
-            icon: "AlertTriangleIcon",
-            text: `Something went wrong. ${response.message}`,
-          });
-        }
-      } catch (error) {
-        console.log("Something went wrong onGetTask", error);
-
-        this.showGenericToast({
-          variant: "danger",
-          title: "Oop!",
-          icon: "AlertOctagonIcon",
-          text: this.getInternalErrors(error),
-        });
         this.isLoading = false;
       }
     },

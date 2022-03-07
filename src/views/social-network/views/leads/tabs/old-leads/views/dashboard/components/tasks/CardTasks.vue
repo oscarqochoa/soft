@@ -42,6 +42,7 @@
           :fields="fields"
           :items="tasks"
           :lead="lead"
+          @onMarkAsDone="markTaskAsDone"
           @onView="openModalEditTask"
           @onDelete="deleteTask"
         ></table-tasks>
@@ -49,10 +50,17 @@
           <b-button
             variant="primary"
             class="mt-2 mr-1"
-            size="sm"
             @click="openModalCreateTask"
           >
             ADD
+          </b-button>
+          <b-button
+            v-if="lead.count_task !== 0"
+            variant="outline-secondary"
+            class="btn-icon mt-2 mr-1"
+            @click="openModalTaskHistory"
+          >
+            <feather-icon icon="ListIcon" size="18" />
           </b-button>
         </div>
       </b-tab>

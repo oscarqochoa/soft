@@ -79,6 +79,7 @@
             :style="isOverSize ? 'height: 170px; overflow: auto;' : ''"
           >
             <b-table
+              small
               v-if="tab == 1"
               :fields="tableObtained.fields"
               :items="reports"
@@ -131,6 +132,7 @@
             </b-table>
 
             <b-table
+              small
               v-if="tab == 2"
               :fields="tablePending.fields"
               :items="pendings"
@@ -368,38 +370,38 @@ export default {
       this.modalTrackingStatus = true;
     },
     countPendingTab() {
-      axios
-        .post("/api/get-cr-count-pending-tab", {
-          id: this.global.editleads[0].id,
-          modul: this.modul,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.countData =
-              response.data[0].countPending > 99
-                ? "+99"
-                : response.data[0].countPending;
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      //axios
+      //  .post("/api/get-cr-count-pending-tab", {
+      //    id: this.global.editleads[0].id,
+      //    modul: this.modul,
+      //  })
+      //  .then((response) => {
+      //    if (response.status == 200) {
+      //      this.countData =
+      //        response.data[0].countPending > 99
+      //          ? "+99"
+      //          : response.data[0].countPending;
+      //    }
+      //  })
+      //  .catch((err) => {
+      //    console.error(err);
+      //  });
     },
     getScore() {
-      axios
-        .post("/api/get-score-by-lead-sn", {
-          id: this.global.editleads[0].id,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.scoreEquifax = response.data.equifax;
-            this.scoreTransunion = response.data.transunion;
-            this.scoreExperian = response.data.experian;
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      //axios
+      //  .post("/api/get-score-by-lead-sn", {
+      //    id: this.global.editleads[0].id,
+      //  })
+      //  .then((response) => {
+      //    if (response.status == 200) {
+      //      this.scoreEquifax = response.data.equifax;
+      //      this.scoreTransunion = response.data.transunion;
+      //      this.scoreExperian = response.data.experian;
+      //    }
+      //  })
+      //  .catch((err) => {
+      //    console.error(err);
+      //  });
     },
     closeModalRequestCR() {
       this.tab = 2;
@@ -411,16 +413,6 @@ export default {
     },
     openRequestReport() {
       this.modalOpenRequestCR = true;
-    },
-    addPreloader() {
-      var x = document.getElementById("app");
-      x.classList.add("preloader");
-      x.classList.add("opacity-uno");
-    },
-    removePreloader() {
-      var x = document.getElementById("app");
-      x.classList.remove("preloader");
-      x.classList.remove("opacity-uno");
     },
   },
   created() {

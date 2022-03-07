@@ -48,6 +48,7 @@ import './filters/times'
 import './filters/number'
 import './filters/social-network/status'
 import './filters/social-network/program'
+import './filters/social-network/extension-file'
 import './filters/programs'
 
 // Validation rules (Vee validate)
