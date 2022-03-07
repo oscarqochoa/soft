@@ -1,7 +1,7 @@
 export default [
-  {
-    title: 'Bank of flyers',
-    icon: 'FileTextIcon',
-    route: 'list-social-network-active',
-  },
+    {
+        title: 'Bank of flyers',
+        icon: 'FileTextIcon',
+        route: 'bank-of-flyers',
+    },
 ]
