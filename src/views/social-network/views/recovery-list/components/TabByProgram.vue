@@ -17,7 +17,7 @@
           <b-row class="ml-2">
             <!-- Count Pending -->
             <b-col
-              cols="3"
+              cols="10" sm="6" md="5" lg="4" xl="3"
             >
               <b-form-group
                 label="Pending"
@@ -43,7 +43,7 @@
             </b-col>
             <!-- Count Done -->
             <b-col
-              cols="3"
+              cols="10" sm="6" md="5" lg="4" xl="3"
             >
               <b-form-group
                 label="Done"

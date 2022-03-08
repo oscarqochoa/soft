@@ -5,8 +5,6 @@ const recoveryListAlert = () => {
   window.pusher.bind("recovery-list-alert", async (data) => {
     let isInside = false
     const sessionId = store.state.auth.currentUser.user_id;
-    let variable = 218
-    console.log(sessionId)
     data.list_user_team_leader.map(element => {
       if(parseInt(element.id) == sessionId) isInside = true
     })
