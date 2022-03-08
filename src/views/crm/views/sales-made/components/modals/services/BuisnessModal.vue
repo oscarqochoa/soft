@@ -1,7 +1,7 @@
 <template>
   <div>
     <old-business-modal
-      v-if="salesClient.creates < '2022-03-07'"
+      v-if="createsDate < deployDate"
       :sales-client="salesClient"
       :header-s="headerS"
       :modal-services="modalServices"
@@ -73,6 +73,14 @@ export default {
     },
     hideModal(refresh, programSelect) {
       this.$emit("closeModal", refresh, programSelect);
+    },
+  },
+  computed: {
+    createsDate() {
+      return this.$moment(this.salesClient.creates);
+    },
+    deployDate() {
+      return this.$moment("2022-03-08");
     },
   },
 };

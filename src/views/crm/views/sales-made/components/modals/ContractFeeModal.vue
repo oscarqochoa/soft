@@ -1,7 +1,7 @@
 <template>
   <validation-observer ref="form">
     <b-modal
-        footer-class="px-50"
+      footer-class="px-50"
       id="crm-sm-modal-contract-fee"
       v-model="ownControl"
       title-class="h3 text-white font-weight-bolder"
@@ -264,7 +264,7 @@
             <b-row class="d-flex align-items-center justify-content-end mt-1">
               <b-col class="d-flex align-items-center justify-content-end">
                 <b-button
-                    class="mr-1"
+                  class="mr-1"
                   v-if="!valorEdit"
                   variant="success"
                   size="sm"
@@ -356,12 +356,12 @@ export default {
         {
           label: "Card Holder Name",
           key: "cardholdername",
-          thStyle: {minWidth: "174px !important"},
+          thStyle: { minWidth: "174px !important" },
         },
         {
           label: "Card Number",
           key: "cardnumber",
-          thStyle: {minWidth: "195px !important"},
+          thStyle: { minWidth: "195px !important" },
           formatter: (value) => `XXXX-XXXX-XXXX-${value}`,
         },
         {
@@ -397,8 +397,8 @@ export default {
       currentUser: "auth/currentUser",
     }),
     modalSize() {
-      if (this.screenWidth > 992) return 'lg'
-      return 'xlg'
+      if (this.screenWidth > 992) return "lg";
+      return "xlg";
     },
     valorEdit() {
       return (
