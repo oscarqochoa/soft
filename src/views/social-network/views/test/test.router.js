@@ -4,7 +4,7 @@ export default [
     name: 'calendar-social-network',
     component: () => import('@/views/social-network/views/test/Test.vue'),
     meta: {
-      permittedRoles: [1, 2],
+      // permittedRoles: [1, 2],
     },
   },
 ]

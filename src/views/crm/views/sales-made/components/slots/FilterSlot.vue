@@ -76,6 +76,7 @@
           </b-col>
         </b-row>
       </div>
+      <slot name="recovery-list" />
       <div class="m-2">
         <!-- Table Top -->
         <b-row>
