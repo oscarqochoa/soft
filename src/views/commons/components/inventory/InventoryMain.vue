@@ -14,14 +14,14 @@
     <b-nav card-header pills class="m-0">
       <!-- Button Equipment -->
       <b-nav-item
-        :to="{ name: 'inventory-crm-equipment' }"
+        :to="{ name: $route.meta.inventoryEquipmentRoute }"
         exact
         exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"
       >Equipment</b-nav-item>
       <!-- Button Equipment Request -->
       <b-nav-item
-        :to="{ name: 'inventory-crm-equipment-request' }"
+        :to="{ name: $route.meta.inventoryEquipmentRequestRoute }"
         exact
         exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"
@@ -38,7 +38,7 @@
       <!-- Button To Assigned -->
       <b-nav-item
         v-if="[12, 19].includes($route.meta.module)"
-        :to="{ name: 'inventory-crm-assign' }"
+        :to="{ name: $route.meta.inventoryEquipmentAssignRoute }"
         exact
         exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"

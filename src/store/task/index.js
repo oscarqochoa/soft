@@ -122,14 +122,6 @@ const actions = {
   async A_SET_LEAD_TASK({ commit }, body) {
     try {
       const response = await TaskService.postCreateLeadTask(body);
-      /* console.log('A_SET_LEAD_TASK response', response) */
-      /* if (mixins.methods.isResponseSuccess(response)) {
-        body.id = response.data.id
-        commit('PUSH_DATA', {
-          destination: 'S_TASKS',
-          data: response.data
-        })
-      } */
       return response;
     } catch (error) {
       console.log("ERROR_SET_LEAD_TASK [ACTION]", error);

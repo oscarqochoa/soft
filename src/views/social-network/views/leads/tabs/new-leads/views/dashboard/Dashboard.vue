@@ -36,6 +36,7 @@
       :personalMobile="personalMobile"
       :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
     />
+
     <card-address
       class="card-group"
       :personalAddress="personalAddress"
@@ -47,12 +48,18 @@
         <card-credit-report class="card-group" />
       </b-col>
       <b-col md="6">
-        <card-lead-cards class="card-group" />
-      </b-col>
-      <b-col cols="12">
-        <card-contact-information class="card-group" />
+        <card-lead-cards class="card-group" :cardsLead="cardsLead" />
       </b-col>
     </b-row>
+
+    <card-contact-information
+      class="card-group"
+      :catcher="user.user_id"
+      :lead_id="lead.id"
+      :personalInfo="personalInfo"
+      :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
+      :modul="15"
+    />
   </div>
 </template>
 
@@ -62,9 +69,9 @@ import { mapState, mapGetters, mapActions } from "vuex";
 // Components
 import CardPersonalInformation from "./components/CardPersonalInformation.vue";
 import CardAddress from "./components/CardAddress.vue";
-import CardCreditReport from "./components/CardCreditReport.vue";
-import CardLeadCards from "./components/CardLeadCards.vue";
-import CardContactInformation from "./components/CardContactInformation.vue";
+import CardCreditReport from "./components/credit-report/CardCreditReport.vue";
+import CardLeadCards from "./components/cards/CardLeadCards.vue";
+import CardContactInformation from "./components/contact-information/CardContactInformation.vue";
 
 export default {
   components: {

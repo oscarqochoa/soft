@@ -1,4 +1,4 @@
-import {amgApi} from '@/service/axios';
+import { amgApi } from '@/service/axios';
 
 class SNLeads {
 
@@ -202,11 +202,66 @@ class SNLeads {
         } catch (e) {
             console.log(e)
         }
-    }    
+    }
     async getLeadTasks(params) {
         try {
             const { data, status } = await amgApi.post('/lead/social-network/get-lead-tasks', params)
             return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getCreditReports(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/credit-report/get-reports', params);
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getPendingCreditReport(params) {
+        try {
+            const { data, status } = await amgApi.post('/credit-report/search-credit-reports-pending')
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+
+    }
+
+    async getClientCards(params) {
+        try {
+            const { data, status } = await amgApi.post('/clients/search-cards-clients', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getLeadFiles(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/search-file-lead-sn', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async updateFileName(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/update-file-name', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async deleteFile(body) {
+        try {
+            const { data, response } = await amgApi.post('/lead/social-network/delete-file-sn', body)
+            return { data, response }
         } catch (error) {
             throw error
         }

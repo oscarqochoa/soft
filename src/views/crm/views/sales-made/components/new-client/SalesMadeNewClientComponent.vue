@@ -1251,96 +1251,13 @@ export default {
       };
     },
     subtotal() {
-      if (this.items.length > 0) {
+      if (this.items[0]) {
         return {
-          tcmc: this.items
-            .reduce((previous, current) => {
-              const currentComissionCapturedAmount = current.commission
-                ? parseFloat(current.commission[0].commission)
-                : 0.0;
-              if (typeof previous === "object") {
-                const previousComissionCapturedAmount = previous.commission
-                  ? parseFloat(previous.commission[0].commission)
-                  : 0.0;
-                return (
-                  currentComissionCapturedAmount +
-                  previousComissionCapturedAmount
-                );
-              }
-              return currentComissionCapturedAmount + previous;
-            })
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-          tcms: this.items
-            .reduce((previous, current) => {
-              const currentComissionSellerAmount = current.commission
-                ? parseFloat(current.commission[1].commission)
-                : 0.0;
-              if (typeof previous === "object") {
-                const previousComissionSellerAmount = previous.commission
-                  ? parseFloat(previous.commission[1].commission)
-                  : 0.0;
-                return (
-                  currentComissionSellerAmount + previousComissionSellerAmount
-                );
-              }
-              return currentComissionSellerAmount + previous;
-            })
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-          tfee: this.items
-            .reduce((previous, current) => {
-              const currentFeeAmount =
-                current.fee && typeof current.fee === "string"
-                  ? parseFloat(current.fee.replaceAll(",", ""))
-                  : typeof current.fee === "number"
-                  ? current.fee
-                  : 0.0;
-              if (typeof previous === "object") {
-                const previousFeeAmount =
-                  previous.fee && typeof previous.fee === "string"
-                    ? parseFloat(previous.fee.replaceAll(",", ""))
-                    : typeof previous.fee === "number"
-                    ? previous.fee
-                    : 0.0;
-                return currentFeeAmount + previousFeeAmount;
-              }
-              return currentFeeAmount + previous;
-            })
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-          tip: this.items
-            .reduce((previous, current) => {
-              const currentInitialAmount =
-                current.initial_amount !== "0.00"
-                  ? parseFloat(current.initial_amount.replaceAll(",", ""))
-                  : 0.0;
-              if (typeof previous === "object") {
-                const previousInitialAmount =
-                  previous.initial_amount !== "0.00"
-                    ? parseFloat(previous.initial_amount.replaceAll(",", ""))
-                    : 0.0;
-                return currentInitialAmount + previousInitialAmount;
-              }
-              return currentInitialAmount + previous;
-            })
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-          tma: this.items
-            .reduce((previous, current) => {
-              const currentMonthlyAmount = current.monthly_amount
-                ? parseFloat(current.monthly_amount.replaceAll(",", ""))
-                : 0.0;
-              if (typeof previous === "object") {
-                const previousMonthlyAmount = previous.monthly_amount
-                  ? parseFloat(previous.monthly_amount.replaceAll(",", ""))
-                  : 0.0;
-                return currentMonthlyAmount + previousMonthlyAmount;
-              }
-              return currentMonthlyAmount + previous;
-            })
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+          tcmc: this.items[0].stcmc,
+          tcms: this.items[0].stcms,
+          tfee: this.items[0].stfee,
+          tip: this.items[0].stip,
+          tma: this.items[0].stma,
         };
       }
       return {
