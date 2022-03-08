@@ -111,6 +111,7 @@
               class="d-flex flex-column justify-content-center align-items-center"
             >
               <b-form-checkbox
+                :disabled="statusUserRedirected"
                 v-model="data.item.status"
                 :value="1"
                 @change="changeStatusLead(data.item)"
@@ -140,6 +141,9 @@ export default {
     programId: {
       type: [Number, String],
     },
+    userId:{
+      type:[Number,String]
+    }
   },
   data() {
     return {
@@ -167,6 +171,9 @@ export default {
     }
   },
   computed: {
+    statusUserRedirected(){
+      return this.userId !=null ? true:false
+    },
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
@@ -180,10 +187,9 @@ export default {
         const data = await amgApi.post(`${ctx.apiUrl}`, {
           npage: this.paginate.currentPage,
           perPage: this.paginate.perPage,
-          user_id: this.currentUser.user_id,
           date_from: this.filter[0].model,
           date_to: this.filter[1].model,
-          id_user: 59,
+          id_user: this.userId != null? parseInt(this.userId) : this.currentUser.user_id,
           id_program: this.programId,
           status: this.filter[2].model,
           update_id: "",
