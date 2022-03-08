@@ -9,7 +9,8 @@
           variant="primary"
           >Done List</b-button
         >
-        <div  v-if="statusFullName"
+        <div
+          v-if="statusFullName"
           class="text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
           style="padding-top: 5px; padding-bottom: 5px"
         >
@@ -112,7 +113,7 @@ export default {
     statusUserRedirected() {
       return this.userId != null ? true : false
     },
-    statusFullName(){
+    statusFullName() {
       return this.fullname != null ? true : false
     },
     getStatusButton() {
@@ -144,14 +145,34 @@ export default {
       } catch (error) {}
     },
     sendForPusher: async function () {
-      try {
-        let params = {
-          id_user: this.currentUser.user_id,
-          fullname: `${this.currentUser.first_name} ${this.currentUser.last_name}`,
+      const confirm = await this.showConfirmSwal(
+        "Send to Team Leader",
+        "You won't be able to revert this!"
+      )
+      if (confirm.isConfirmed) {
+        try {
+          let params = {
+            id_user: this.currentUser.user_id,
+            fullname: `${this.currentUser.first_name} ${this.currentUser.last_name}`,
+          }
+          const data = await RecoveryListService.sendForPusher(params)
+          this.showToast(
+          "success",
+          "top-right",
+          "Success",
+          "CheckIcon",
+          "Message sent successfully to Team Leader "
+        );
+        } catch (error) {
+          console.log(error)
+          this.showToast(
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong with your message!"
+        );
         }
-        const data = await RecoveryListService.sendForPusher(params)
-      } catch (error) {
-        console.log(error)
       }
     },
   },

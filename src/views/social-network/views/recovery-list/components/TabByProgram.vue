@@ -91,6 +91,22 @@
               <strong>Loading ...</strong>
             </div>
           </template>
+          <template #cell(fullNameLead)="data">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
+            <!-- Route To Lead Show -->
+            <router-link
+              :class="textLink"
+              :to="{
+                name: 'lead-show',
+                params: { id: data.item.lead_id },
+              }"
+              target="_blank"
+              >{{ data.item.fullNameLead }}</router-link
+            >
+          </div>
+        </template>
           <template #cell(created_at)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
@@ -218,7 +234,7 @@ export default {
         let params = {
           date_from: null,
           date_to: null,
-          id_user: 59,
+          id_user: this.currentUser.user_id,
           id_program: this.programId,
           status: Lead.status == "1" ? 1 : 0,
           update_id: Lead.id,
@@ -232,6 +248,13 @@ export default {
         this.$emit("TaskCompleted", taskCompleted)
       } catch (error) {
         console.log(error)
+        this.showToast(
+          "danger",
+          "top-right",
+          "Error",
+          "XIcon",
+          "Something went wrong with data!"
+        );
       }
     },
   },
