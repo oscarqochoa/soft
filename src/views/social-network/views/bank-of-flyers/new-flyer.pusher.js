@@ -12,7 +12,7 @@ export const newFlyerNotification = () => {
         // eslint-disable-next-line array-callback-return
 
         if (data.to_id === store.state.auth.currentUser.user_id) {
-            console.log("ga")
+
             NotificationMixin.methods.showWindowNotification(
                 data.title,
                 data.body,

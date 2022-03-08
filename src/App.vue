@@ -54,9 +54,7 @@ export default {
   // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
   // Currently, router.currentRoute is not reactive and doesn't trigger any change
   computed: {
-    modulId() {
-      return this.currentUser.modul_id
-    },
+
     layout() {
       if (this.$route.meta.layout === "full") return "layout-full";
       return `layout-${this.contentLayoutType}`;
@@ -71,7 +69,10 @@ export default {
       loading: "app/loading",
       currentUser: "auth/currentUser",
       G_GET_USER_SESSIONS: "UserStore/G_GET_USER_SESSIONS"
-    })
+    }),
+    modulId() {
+      return this.currentUser.modul_id
+    },
   },
   watch: {
     $route() {
@@ -84,6 +85,7 @@ export default {
       });
     },
     modulId(newVal) {
+    
       const keys = Object.keys(modulesCounters)
 
 
