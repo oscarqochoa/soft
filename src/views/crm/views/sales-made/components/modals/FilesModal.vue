@@ -141,12 +141,7 @@
                       >
                         <b-col
                           cols="1"
-                          class="
-                            text-info text-center
-                            d-flex
-                            align-items-center
-                            justify-content-center
-                          "
+                          class="text-info text-center d-flex align-items-center justify-content-center"
                           >EN</b-col
                         >
                         <b-col class="d-flex">
@@ -174,12 +169,7 @@
                       <b-row v-if="data.item.route_es" class="pt-50 border-top">
                         <b-col
                           cols="1"
-                          class="
-                            text-info text-center
-                            d-flex
-                            align-items-center
-                            justify-content-center
-                          "
+                          class="text-info text-center d-flex align-items-center justify-content-center"
                           >ES</b-col
                         >
                         <b-col class="d-flex">
@@ -207,12 +197,7 @@
                     </b-col>
                     <b-col
                       cols="3"
-                      class="
-                        d-flex
-                        align-items-center
-                        justify-content-center
-                        pl-0
-                      "
+                      class="d-flex align-items-center justify-content-center pl-0"
                       style="margin-left: 20px"
                     >
                       <b-btn
@@ -519,7 +504,7 @@ export default {
               "top-right",
               "Success",
               "CheckIcon",
-              "Tu archivo se genero correctamente"
+              "Your file was generated successfully"
             );
           }
           await this.loadTable();
@@ -561,5 +546,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
