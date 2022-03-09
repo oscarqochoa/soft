@@ -11,6 +11,7 @@ import { paragonNewCommentNotification } from '@/views/social-network/views/bank
 import infoAdmToCrm from "@/views/crm/views/Lead/pusher/info-adm-to-crm.pusher";
 import changeUserStatusSession from "@/views/commons/pusher/change-user-status-session.pusher";
 import salesMadePusher from "@/views/crm/views/sales-made/sales-made.pusher";
+import recoveryListAlert from "@/views/social-network/views/recovery-list/pusher/recovery-list.pusher"
 const subscribePusher = () => {
   const pusher = new Pusher(process.env.VUE_APP_PUSHER_APP_KEY, {
     cluster: process.env.VUE_APP_PUSHER_APP_CLUSTER,
@@ -36,6 +37,7 @@ const subscribePusher = () => {
     infoAdmToCrm();
     changeUserStatusSession();
     salesMadePusher();
+    recoveryListAlert()
   } catch (error) {
     console.error(error, "error");
   }

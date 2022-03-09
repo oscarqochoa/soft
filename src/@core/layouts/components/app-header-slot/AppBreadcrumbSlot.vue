@@ -35,7 +35,7 @@
 
     <!-- Content Right -->
     <b-col
-      class="content-header-right text-md-right d-md-block d-none mb-2"
+      class="content-header-right text-md-right d-md-block  mb-2"
       md="3"
       cols="12"
     >
