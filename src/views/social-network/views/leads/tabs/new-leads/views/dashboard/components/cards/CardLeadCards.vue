@@ -1,71 +1,99 @@
 <template>
-  <div>
-    <b-card body-class="px-0">
-      <b-container>
-        <b-row>
-          <b-col cols="6">
-            <h3 class="title-card">Cards</h3>
-          </b-col>
-          <b-col cols="6" class="text-right"> </b-col>
-        </b-row>
-      </b-container>
+  <b-card body-class="px-0">
+    <b-container>
+      <b-row>
+        <b-col cols="6">
+          <h3 class="title-card">Cards</h3>
+        </b-col>
+        <b-col cols="6" class="text-right"> </b-col>
+      </b-row>
+    </b-container>
 
-      <br />
+    <br />
 
-      <b-table small :fields="table.fields" :items="cards">
-        <template #cell(card_number)="data">
-          {{ "XXXX-XXXX-XXXX-" + data.item.cardnumber }}
-        </template>
+    <b-table small :fields="table.fields" :items="cards">
+      <template #cell(card_number)="data">
+        {{ "XXXX-XXXX-XXXX-" + data.item.cardnumber }}
+      </template>
 
-        <template #cell(cvc)="data">
-          {{
-            data.item.cardsecuritycode.length == 3
-              ? "XX" + data.item.cardsecuritycode.substr(2)
-              : "XXX" + data.item.cardsecuritycode.substr(3)
-          }}
-        </template>
+      <template #cell(cvc)="data">
+        {{
+          data.item.cardsecuritycode.length == 3
+            ? "XX" + data.item.cardsecuritycode.substr(2)
+            : "XXX" + data.item.cardsecuritycode.substr(3)
+        }}
+      </template>
 
-        <template #cell(actions)="data">
-          <b-button
-            variant="flat-info"
-            class="button-little-size rounded-circle mr-1"
-            @click="openModalCard(data.item.id)"
-          >
-            <feather-icon icon="EyeIcon"></feather-icon>
-          </b-button>
-
-          <b-button
-            variant="flat-danger"
-            class="button-little-size rounded-circle"
-            @click="openModalDeleteCard(data.item.id)"
-          >
-            <feather-icon icon="TrashIcon"></feather-icon>
-          </b-button>
-        </template>
-      </b-table>
-
-      <div class="text-right mr-1 mt-3">
-        <b-button variant="primary" @click="openModalCreateCard">
-          <feather-icon icon="PlusIcon" size="15"></feather-icon>
-          ADD
+      <template #cell(actions)="data">
+        <b-button
+          variant="flat-info"
+          class="button-little-size rounded-circle mr-1"
+          @click="openModalViewCard(data.item.id)"
+        >
+          <feather-icon icon="EyeIcon"></feather-icon>
         </b-button>
-      </div>
-    </b-card>
-  </div>
+
+        <b-button
+          variant="flat-danger"
+          class="button-little-size rounded-circle"
+          @click="openModalDeleteCard(data.item.id)"
+        >
+          <feather-icon icon="TrashIcon"></feather-icon>
+        </b-button>
+      </template>
+    </b-table>
+
+    <div class="text-right mr-1 mt-3">
+      <b-button variant="primary" @click="openModalCreateCard()">
+        <feather-icon icon="PlusIcon" size="15"></feather-icon>
+        ADD
+      </b-button>
+    </div>
+
+    <modal-create-card
+      v-if="showModalCreateCard"
+      :lead="lead"
+      @onClose="closeModalCreateCard"
+    >
+    </modal-create-card>
+
+    <modal-show-card
+      v-if="showModalViewCard"
+      :modul="15"
+      :lead="lead"
+      :card="card"
+      @onClose="closeModalViewCard"
+    ></modal-show-card>
+  </b-card>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 // Services
 import SNLeadsService from "@/views/social-network/services/leads";
 
+// Components
+import ModalCreateCard from "@/views/commons/components/credit-cards/ModalCreateCard.vue";
+import ModalShowCard from "@/views/commons/components/credit-cards/ModalShowCard.vue";
+
 export default {
   props: {
+    lead: {
+      type: Object,
+    },
     cardsLead: {
       type: Object,
     },
   },
+  components: {
+    ModalCreateCard,
+    ModalShowCard,
+  },
   data() {
     return {
+      key: Math.random(),
+
       table: {
         fields: [
           { key: "cardholdername", label: "Card Holder Name" },
@@ -83,13 +111,14 @@ export default {
       dragCount: 0,
 
       cards: [],
+      card: null,
       modalCreateCard: false,
       modalCard: false,
       deletecardmodal: false,
       card_id: "",
 
       // Modals
-      showModalAddCard: false,
+      showModalCreateCard: false,
       showModalViewCard: false,
       showModalDeleteCard: false,
     };
@@ -100,12 +129,42 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      A_GET_CREDIT_CARD: "CrmCreditCardStore/A_GET_CREDIT_CARD",
+      A_DELETE_CREDIT_CARD: "CrmCreditCardStore/A_DELETE_CREDIT_CARD",
+    }),
     openModalCreateCard() {
-      this.showModalAddCard = true;
+      this.showModalCreateCard = false;
     },
     closeModalCreateCard() {
-      this.showModalAddCard = false;
+      this.showModalCreateCard = false;
     },
+    async openModalViewCard(id) {
+      try {
+        this.addPreloader();
+        const response = await this.A_GET_CREDIT_CARD({ id });
+
+        if (this.isResponseSuccess(response)) {
+          this.card = response.data[0];
+          this.showModalViewCard = true;
+        } else {
+          this.showToast(
+            "warning",
+            "top-right",
+            "Warning!",
+            "AlertTriangleIcon",
+            `Something went wrong. ${response.message}`
+          );
+        }
+
+        this.removePreloader();
+      } catch (error) {
+        this.removePreloader();
+
+        throw error;
+      }
+    },
+    closeModalViewCard() {},
     openModalDeleteCard(id) {
       this.card_id = id;
       this.showModalDeleteCard = true;

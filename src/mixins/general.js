@@ -245,6 +245,7 @@ export default {
         ...config,
       });
     },
+
     showSuccessSwal(
       title = "Success!",
       text = "Successful Process",

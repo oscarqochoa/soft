@@ -55,6 +55,7 @@ const getters = {
     },
     G_TYPE_DOCS_FORM() {
         return [
+            { label: 'Document', value: "" },
             { label: 'SSN', value: 1 },
             { label: 'ITIN', value: 2 },
             { label: 'CPN', value: 3 },

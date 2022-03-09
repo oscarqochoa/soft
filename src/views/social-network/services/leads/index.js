@@ -14,7 +14,7 @@ class SNLeads {
 
     async getLead(id) {
         try {
-            const { data, status } = await amgApi.get('/lead/show/' + id)
+            const { data, status } = await amgApi.get('/lead/social-network/show/' + id)
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on get lead", error);
@@ -180,7 +180,24 @@ class SNLeads {
             const { data, status } = await amgApi.post('/unique-mobile-sn', body)
             return { data, status }
         } catch (error) {
-            console.log("Something went wrong on getValidateUniqueMobile", error)
+            throw error
+        }
+    }
+
+    async verifyMobile(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/verify-mobile', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async validateNickname(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/validate-nickname', body)
+            return { data, status }
+        } catch (error) {
             throw error
         }
     }
@@ -214,7 +231,7 @@ class SNLeads {
 
     async getCreditReports(params) {
         try {
-            const { data, status } = await amgApi.post('/lead/credit-report/get-reports', params);
+            const { data, status } = await amgApi.post('/lead/credit-report/get-files-report', params);
             return { data, status }
         } catch (error) {
             throw error
@@ -223,12 +240,11 @@ class SNLeads {
 
     async getPendingCreditReport(params) {
         try {
-            const { data, status } = await amgApi.post('/credit-report/search-credit-reports-pending')
+            const { data, status } = await amgApi.post('/credit-report/search-credit-reports-pending', params)
             return { data, status }
         } catch (error) {
             throw error
         }
-
     }
 
     async getClientCards(params) {
