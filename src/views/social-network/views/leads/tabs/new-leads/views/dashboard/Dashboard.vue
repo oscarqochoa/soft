@@ -185,6 +185,7 @@ export default {
         phonem: this.lead.mobile,
         id_user: this.user.user_id,
         typee: 3,
+        module_id: this.currentUser.modul_id
       };
 
       // Required field for create task in CRM
