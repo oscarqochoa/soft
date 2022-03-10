@@ -14,6 +14,8 @@ import InventoryRouter from '@/views/social-network/views/inventory/inventory.ro
 import SchedulesRouter from '@/views/social-network/views/schedules/schedules.router'
 import CommissionsRoute from '@/views/social-network/views/commissions/commissions.route'
 import RecoveryListRoute from '@/views/social-network/views/recovery-list/recovery-list.router'
+import RecoveryRoute from '@/views/social-network/views/recovery/recovery.router'
+
 const routes = [
   { path: '/socialnetwork', redirect: { name: 'calendar-social-network' } },
   ...testRoute,
@@ -32,6 +34,8 @@ const routes = [
   ...SchedulesRouter,
   ...CommissionsRoute,
   ...RecoveryListRoute,
+  ...CommissionsRoute,
+  ...RecoveryRoute
 ]
 
 // eslint-disable-next-line array-callback-return
