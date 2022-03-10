@@ -16,9 +16,7 @@
         <template #recovery-list>
           <b-row class="ml-2">
             <!-- Count Pending -->
-            <b-col
-              cols="10" sm="6" md="5" lg="4" xl="3"
-            >
+            <b-col cols="10" sm="6" md="5" lg="4" xl="3">
               <b-form-group
                 label="Pending"
                 label-cols="4"
@@ -31,20 +29,18 @@
                 content-cols-lg="6"
                 label-class=""
               >
-                <div >
+                <div>
                   <div
-                  class=" text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
-                  style="padding-top: 5px; padding-bottom: 5px"
-                >
-                  {{ countPendingTask }}
-                </div>
+                    class="text-center class-coco-campo-text rounded text-white font-medium-1 px-1"
+                    style="padding-top: 5px; padding-bottom: 5px; background: linear-gradient(90deg, #FAC632 0%, #F37432 100%);"
+                  >
+                    {{ countPendingTask }}
+                  </div>
                 </div>
               </b-form-group>
             </b-col>
             <!-- Count Done -->
-            <b-col
-              cols="10" sm="6" md="5" lg="4" xl="3"
-            >
+            <b-col cols="10" sm="6" md="5" lg="4" xl="3">
               <b-form-group
                 label="Done"
                 label-cols="4"
@@ -57,13 +53,14 @@
                 content-cols-lg="6"
                 label-class=""
               >
-                <div >
+                <div>
                   <div
-                  class=" text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
-                  style="padding-top: 5px; padding-bottom: 5px"
-                >
-                  {{ countDoneTask }}
-                </div>
+                    class="text-center class-coco-campo-text  rounded text-white font-medium-1 px-1"
+                    style="padding-top: 5px; padding-bottom: 5px;background: linear-gradient(90deg, #ADD210 0%, #5F873E 100%);"
+                    
+                  >
+                    {{ countDoneTask }}
+                  </div>
                 </div>
               </b-form-group>
             </b-col>
@@ -91,22 +88,24 @@
               <strong>Loading ...</strong>
             </div>
           </template>
+          <!-- COLUMN NAME LEAD -->
           <template #cell(fullNameLead)="data">
-          <div
-            class="d-flex flex-column justify-content-start align-items-start"
-          >
-            <!-- Route To Lead Show -->
-            <router-link
-              :class="textLink"
-              :to="{
-                name: 'lead-show',
-                params: { id: data.item.lead_id },
-              }"
-              target="_blank"
-              >{{ data.item.fullNameLead }}</router-link
+            <div
+              class="d-flex flex-column justify-content-start align-items-start"
             >
-          </div>
-        </template>
+              <!-- Route To Lead Show -->
+              <router-link
+                :class="textLink"
+                :to="{
+                  name: 'lead-show',
+                  params: { id: data.item.lead_id },
+                }"
+                target="_blank"
+                >{{ data.item.fullNameLead }}</router-link
+              >
+            </div>
+          </template>
+          <!-- COLUMN CREATE DATE -->
           <template #cell(created_at)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
@@ -114,6 +113,7 @@
               <span>{{ data.item.created_at | myGlobalDay }}</span>
             </div>
           </template>
+          <!-- COLUMN LEAD CREATED AT -->
           <template #cell(leadCreated)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
@@ -157,9 +157,9 @@ export default {
     programId: {
       type: [Number, String],
     },
-    userId:{
-      type:[Number,String]
-    }
+    userId: {
+      type: [Number, String],
+    },
   },
   data() {
     return {
@@ -187,13 +187,13 @@ export default {
     }
   },
   computed: {
-    statusUserRedirected(){
-      return this.userId !=null ? true:false
+    statusUserRedirected() {
+      return this.userId != null ? true : false
     },
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
-    clientRoute: function () {
+    clientRoute(){
       return "/social-network/recovery-list/search-recovery-by-user"
     },
   },
@@ -205,7 +205,10 @@ export default {
           perPage: this.paginate.perPage,
           date_from: this.filter[0].model,
           date_to: this.filter[1].model,
-          id_user: this.userId != null? parseInt(this.userId) : this.currentUser.user_id,
+          id_user:
+            this.userId != null
+              ? parseInt(this.userId)
+              : this.currentUser.user_id,
           id_program: this.programId,
           status: this.filter[2].model,
           update_id: "",
@@ -221,6 +224,11 @@ export default {
         if (data.data.data[0] != null) {
           this.countPendingTask = data.data.data[0].quantity_pending
           this.countDoneTask = data.data.data[0].quantity_done
+          if(this.currentUser.role_id == 11){
+            let taskCompleted = this.countDoneTask - this.countPendingTask == this.countDoneTask ? true : false
+          // this.statusButton = taskCompleted
+            this.$emit("statusCompletedTask",taskCompleted)
+          }
         }
         return items || []
       } catch (error) {
@@ -246,6 +254,7 @@ export default {
         let countPending = parseInt(data.data.data[0].count_pending)
         let taskCompleted = countDone - countPending == countDone ? true : false
         this.$emit("TaskCompleted", taskCompleted)
+         this.$emit("statusCompletedTask",taskCompleted)
       } catch (error) {
         console.log(error)
         this.showToast(
@@ -254,10 +263,9 @@ export default {
           "Error",
           "XIcon",
           "Something went wrong with data!"
-        );
+        )
       }
     },
   },
-  created() {},
 }
 </script>

@@ -14,6 +14,7 @@ import ScheduleNavigation from '@/views/social-network/views/schedules/schedules
 import CommissionsNavigation from '@/views/social-network/views/commissions/commissions.navigation'
 import RecoveryListNavigation from '@/views/social-network/views/recovery-list/recovery-list.navigation'
 
+import RecoveryNavigation from '@/views/social-network/views/recovery/recovery.nav'
 
 const navigation = [
   {
@@ -34,5 +35,6 @@ const navigation = [
   ...ActivitiesNavigation,
   ...DashboardNavigation2,
   ...RecoveryListNavigation,
+  ...RecoveryNavigation
 ]
 export default navigation

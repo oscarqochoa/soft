@@ -10,5 +10,9 @@ class RecoveryListService {
         const data = await amgApi.post("/social-network/recovery-list/pusher-recovery-list-done",params)
         return data
     }
+    async getUserOfRecoveryList(params){
+        const data = await amgApi.post("/social-network/recovery-list/get-user-of-recovery-list",params)
+        return data
+    }
 }
 export default new RecoveryListService()
