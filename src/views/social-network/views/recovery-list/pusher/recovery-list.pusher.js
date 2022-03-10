@@ -11,7 +11,7 @@ const recoveryListAlert = () => {
     if (isInside) {
       const baseUrl = process.env.VUE_APP_BASE_URL_FRONT;
       Vue.swal
-        .fire({
+        .fire({ 
           html:
             '<img src="' +
             baseUrl +
@@ -28,13 +28,11 @@ const recoveryListAlert = () => {
         })
         .then((res) => {
           if (res) {
-            window.location = `/socialnetwork/recovery-list/${data.user_id}/${data.fullname}`
+            window.open(`${process.env.VUE_APP_BASE_URL_FRONT}/socialnetwork/recovery-list`, '_blank');
 
           }
         });
      
-    }else{
-      console.log("oh")
     }
   });
 };

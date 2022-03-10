@@ -7,13 +7,11 @@ export default [
   {
     key: "created_at",
     label: "Create Date",
-    sortable: true,
     visible: true,
   },
   {
     key: "leadCreated",
     label: "Lead Created at",
-    sortable: true,
     visible: true,
   },
   // {
@@ -30,6 +28,7 @@ export default [
   {
     key: "done",
     label: "Done",
+    class: "text-center",
     visible: true,
   },
 ]
