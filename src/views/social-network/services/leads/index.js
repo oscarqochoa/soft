@@ -212,6 +212,36 @@ class SNLeads {
         }
     }
 
+    async getRecoveryLeads(body) {
+        try {
+            const { data } = await amgApi.post('/lead/social-network/search-leads-sn', body)
+            return data
+        } catch (error) {
+            console.log("Something went wrong on get new leads", error);
+            throw error
+        }
+    }
+
+    async insertEvidenceSn(body) {
+        try {
+          const data = await amgApi.post('/lead/insert-evidence-sn', body)
+          return data
+        } catch (error) {
+          console.log('Something went wrong on insert evidence sn:', error)
+          throw error
+        }
+    }
+
+    async getRecoveryLeadsSnByProgram(body) {
+        try {
+            const { data } = await amgApi.post('/lead/social-network/search-leads-sn-recovery-by-program', body)
+            return data
+        } catch (error) {
+            console.log("Something went wrong on get new leads", error);
+            throw error
+        }
+    }
+
 }
 
 export default new SNLeads()

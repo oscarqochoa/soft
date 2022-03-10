@@ -78,6 +78,11 @@ const mutations = {
           state[params.destination].splice(index, 1);
         }
       },
+      M_SET_EVIDENCE_URL(state, params){
+        state.S_LEADS.items.find(
+            (lead) => lead.id == params.lead_id
+            ).file_evidence = params.url_file
+      }
 }
 const actions = {
     async A_GET_NEW_LEADS({ commit }, body) {
@@ -371,6 +376,63 @@ const actions = {
             throw error
         }
     },
+
+    async A_GET_RECOVERY_LEADS({ commit }, body) {
+        try {
+            const response = await SNLeadsService.getRecoveryLeads(body)
+
+            const data = {
+                items: response.data,
+                total: response.total,
+                fromPage: response.from,
+                toPage: response.to,
+            }
+            commit('SET_DATA', {
+                destination: 'S_LEADS',
+                data
+            })
+
+            return response;
+        } catch (error) {
+            console.log("ERROR_GET_NEW_LEADS [ACTION]", error)
+            throw error
+        }
+    },
+
+    
+    async A_POST_EVIDENCE_SN_LEADS({ commit }, body) {
+        try {
+            const response = await SNLeadsService.insertEvidenceSn(body)
+
+            return response;
+        } catch (error) {
+            console.log("ERROR_POST_EVIDENCE_SN_LEADS [ACTION]", error)
+            throw error
+        }
+    },
+
+    async A_GET_RECOVERY_LEADS_SN_BY_PROGRAM({ commit }, body) {
+        try {
+            const response = await SNLeadsService.getRecoveryLeadsSnByProgram(body)
+
+            const data = {
+                items: response.data,
+                total: response.total,
+                fromPage: response.from,
+                toPage: response.to,
+            }
+            commit('SET_DATA', {
+                destination: 'S_LEADS',
+                data
+            })
+
+            return response;
+        } catch (error) {
+            console.log("ERROR_GET_NEW_LEADS [ACTION]", error)
+            throw error
+        }
+    },
+
 }
 
 export default {

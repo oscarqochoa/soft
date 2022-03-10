@@ -7,6 +7,7 @@ import ActivitiesNavigation from '@/views/social-network/views/activities/activi
 import DashboardNavigation2 from '@/views/social-network/views/dashboard2/dashboard.navigation'
 import DashboardNavigation from '@/views/social-network/views/dashboard/dashboard.navigation'
 import CommissionsNavigation from '@/views/social-network/views/commissions/commissions.navigation'
+import RecoveryNavigation from '@/views/social-network/views/recovery/recovery.nav'
 
 const navigation = [
   {
@@ -20,6 +21,7 @@ const navigation = [
   ...BankOfFlyersNavigation,
   ...ActivitiesNavigation,
   ...DashboardNavigation2,
-  ...CommissionsNavigation
+  ...CommissionsNavigation,
+  ...RecoveryNavigation
 ]
 export default navigation
