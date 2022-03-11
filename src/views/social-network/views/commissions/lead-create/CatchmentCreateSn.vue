@@ -11,7 +11,67 @@
       </b-row>
       <b-row class="mt-2">
         <b-col md="4">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider v-slot="{errors}" rules="required" name="ST/AD">
+            <b-col md="12">
+              <b-form-group
+                  label="ST/AD"
+                  label-for="st-ad"
+                  :state="errors[0] ? false : null"
+                  id="fieldset-horizontal"
+                  label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+                  label-cols-sm="4"
+                  label-cols-lg="4"
+                  content-cols-sm
+                  content-cols-lg="8"
+              >
+
+                <v-select
+                    id="userId"
+                    v-model="lead.state_h"
+                    selected=""
+                    :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                    label="label"
+                    :options="optionsStatesAd"
+                    :clearable="false"
+                    :reduce="el => el.value"
+                />
+                <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+              </b-form-group>
+              <input type="radio" class="d-none bg-green" v-model="lead.state_h" />
+
+            </b-col>
+          </ValidationProvider>
+          <ValidationProvider v-slot="{errors}" rules="required" name="lead-owner">
+            <b-col md="12">
+
+              <b-form-group
+                  label="Lead Owner"
+                  label-for="lead-owner"
+                  :state="errors[0] ? false : null"
+
+                  id="fieldset-horizontal"
+                  label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+                  label-cols-sm="4"
+                  label-cols-lg="4"
+                  content-cols-sm
+                  content-cols-lg="8"
+              >
+                <v-select
+                    id="lead-owner"
+                    :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                    label="label"
+                    :clearable="false"
+                    v-model="lead.user_id"
+                    :options="optionsOwners"
+                    :reduce="el => el.value"
+                />
+                <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+              </b-form-group>
+              <input type="radio" class="d-none bg-green" v-model="lead.user_id" />
+
+            </b-col>
+          </ValidationProvider>
+          <ValidationProvider v-slot="{errors}" rules="required" name="suggestions">
             <b-col md="12">
               <b-form-group
                   id="fieldset-horizontal"
@@ -21,64 +81,26 @@
                   label-cols-lg="4"
                   content-cols-sm
                   content-cols-lg="8"
-                  label="ST/AD"
+                  label="Suggestions"
+                  :state="errors[0] ? false : null"
               >
-                <b-form-select
-                    v-model="lead.state_h"
-                    :options="optionsStatesAd"
-                    class="select-icon-none font-bureau-style border-hover bg-white-c"
-                    :class="{'border-error-sn' :errors[0]}"
-                    @change="lead.flyer = null"
-                ></b-form-select>
-                <div v-if="errors[0]" class="text-error-sn text-center">ST/AD {{errors[0]}}</div>
+                <v-select
+                    v-model="lead.program"
+                    :options="optionPrograms"
+                    :multiple="true"
+                    :close-on-select="false"
+                    :clear-on-select="true"
+                    :preserve-search="true"
+                    placeholder="Pick some"
+                    class="border rounded"
+                    label="name"
+                    track-by="name"
+                    :preselect-first="true"
+                ></v-select>
+                <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
               </b-form-group>
             </b-col>
           </ValidationProvider>
-          <b-col md="12">
-            <b-form-group
-                id="fieldset-horizontal"
-                label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                label-cols-sm="4"
-                label-for="input-horizontal"
-                label-cols-lg="4"
-                content-cols-sm
-                content-cols-lg="8"
-                label="Lead Owner"
-            >
-              <b-form-select
-                  v-model="lead.user_id"
-                  :options="this.optionsOwners"
-                  class="select-icon-none font-bureau-style border-hover bg-white-c"
-              ></b-form-select>
-            </b-form-group>
-          </b-col>
-          <b-col md="12">
-            <b-form-group
-                id="fieldset-horizontal"
-                label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                label-cols-sm="4"
-                label-for="input-horizontal"
-                label-cols-lg="4"
-                content-cols-sm
-                content-cols-lg="8"
-                label="Suggestions"
-            >
-              <v-select
-                  v-model="lead.program"
-                  :options="optionPrograms"
-                  :multiple="true"
-                  :close-on-select="false"
-                  :clear-on-select="true"
-                  :preserve-search="true"
-                  placeholder="Pick some"
-                  class="border rounded border-hover"
-                  style=" background-color: #f8f9fa !important;"
-                  label="name"
-                  track-by="name"
-                  :preselect-first="true"
-              ></v-select>
-            </b-form-group>
-          </b-col>
         </b-col>
         <b-col md="8">
 
@@ -94,7 +116,7 @@
               label="Source"
           >
             <b-row>
-              <b-col md="6" class="py-4">
+              <b-col md="6" class="">
                 <ValidationProvider rules="required" v-slot="{errors}">
                   <b-row>
                     <b-col md="12" class=" text-center d-flex align-items-center justify-content-center">
@@ -103,10 +125,14 @@
                           :class="{'btn-primary': isFacebook}"
                           @click="selectSource(1)"
                       >
-                        <feather-icon icon="FacebookIcon" size="15" :class="{'text-white': isFacebook}" class="text-dark mr-1"/>Facebook
+                        <feather-icon icon="FacebookIcon" size="15" class="t-dark mr-1" :class="{'t-white': isFacebook}" />Facebook
                       </button>
+
                     </b-col>
-                    <div v-if="errors[0]" class="text-error-sn text-center">Source {{errors[0]}}</div>
+                    <div class=" w-100">
+                      <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                    </div>
+
                     <input type="radio" class="d-none bg-green" v-model="lead.sourcesname_id" />
                   </b-row>
                 </ValidationProvider>
@@ -141,20 +167,22 @@
               </b-col>
 
               <!-- GOOGLE -->
-              <b-col md="6 pt-0" class="py-4">
+              <b-col md="6 pt-0" class="">
                 <ValidationProvider rules="required" v-slot="{errors}">
                   <b-row>
                     <b-col md="12" class="text-center d-flex align-items-center justify-content-center">
                       <button
-                          class="btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-around"
+                          class="w-75 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-around"
                           :class="{'btn-danger': isGoogle}"
                           @click="selectSource(2)"
                       >
-                        <feather-icon icon="MailIcon" size="15" :class="{'text-white': isFacebook}" class="text-dark mr-1"/>
+                        <feather-icon icon="MailIcon" size="15" :class="{'t-white': isGoogle}" class="t-dark mr-1"/>
                         Google
                       </button>
                     </b-col>
-                    <div v-if="errors[0]" class="text-error-sn text-center">Source {{errors[0]}}</div>
+                    <div class=" w-100">
+                      <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                    </div>
                     <input type="radio" class="d-none" v-model="lead.sourcesname_id" />
                   </b-row>
                 </ValidationProvider>
@@ -228,7 +256,7 @@
           </b-form-group>
 
           <!-- Programs -->
-          <div>
+          <div class="mt-4">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -250,7 +278,9 @@
                       >{{program.value}}</button>
                     </div>
                   </template>
-                  <div v-if="errors[0]" class="text-error-sn text-center">Program {{errors[0]}}</div>
+                  <div class=" w-100">
+                    <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                  </div>
                   <input type="radio" class="d-none" v-model="lead.fanpage_id" />
                 </b-row>
               </ValidationProvider>
@@ -296,13 +326,11 @@
     <b-modal
         modal
         :title="titleFanPageProgram"
-
         v-model="openModal"
         size="lg"
         modal-class="modal-primary"
         hide-footer
         body-class="mb-2"
-
         title-tag="h3"
     >
       <b-container>
@@ -343,8 +371,14 @@ export default {
   },
   data() {
     return {
-      optionsStatesAd: [],
-      optionsOwners: [],
+      optionsStatesAd: [{
+        label: "Select a State",
+        value: null,
+      }],
+      optionsOwners: [{
+        label: 'Select Owner',
+        value: null,
+      }],
       optionPrograms: [],
       optionsFlyers: [],
       titleModalChoose: "",
@@ -360,12 +394,17 @@ export default {
     };
   },
   async created() {
-    await this.statesAD();
-    await this.ownersLeads();
-    await this.programsAll();
-    await this.sub_sources();
-    await this.A_GET_FAN_PAGE_PROGRAMS();
-
+    this.addPreloader()
+    await Promise.all(
+        [
+          await this.statesAD(),
+          await this.ownersLeads(),
+          await this.programsAll(),
+          await this.sub_sources(),
+          await this.A_GET_FAN_PAGE_PROGRAMS()
+        ]
+    )
+    this.removePreloader()
   },
   async mounted() {
 
@@ -377,6 +416,7 @@ export default {
       G_LANGUAGES: "CrmGlobalStore/G_LANGUAGES",
     }),
     ...mapState('SocialNetworkLeadsStore', ['S_STATES_LEADS','S_SUB_SOURCES','S_FAN_PAGE_PROGRAMS','S_FLYERS']),
+
     isFacebook() {
       return this.lead.source_id === 1;
     },
@@ -400,41 +440,28 @@ export default {
             'A_GET_PROGRAMS',
             'A_GET_SUB_SOURCE_SN',
             'A_GET_FAN_PAGE_PROGRAMS',
-            'A_GET_FLYERS'
+            'A_GET_FLYERS',
+            'A_FORMAT_DATE'
         ]
     ),
-    //Select Sources Programs
-
     //Get Options Selects
-
     async statesAD() {
-      const statesLead = (await this.A_GET_STATE_LEAD()).map(state => {
+      let statesLead = (await this.A_GET_STATE_LEAD()).map(state => {
         return {
-          text: state.state,
+          label: state.state,
           value: state.slug
         }
       });
-      this.optionsStatesAd = [
-        {
-          disabled: true,
-          text: "Select a State",
-          value: null
-        }
-      ].concat(statesLead);
+      this.optionsStatesAd = [...this.optionsStatesAd, ...statesLead]
     },
     async ownersLeads() {
       const owners = (await this.A_GET_OWNERS({ modul: 15, body: { roles: "[]", type: "1" }})).map(owner => {
         return {
-          text: owner.user_name,
+          label: owner.user_name,
           value: owner.id
         }
       })
-      this.optionsOwners.push({
-        text: 'Select Owner',
-        value: null,
-        disable: true
-      })
-      this.optionsOwners = [...this.optionsOwners, ...owners]
+      this.optionsOwners = [...this.optionsOwners, ...owners];
     },
     async programsAll() {
       const data = await this.A_GET_PROGRAMS();
@@ -445,6 +472,11 @@ export default {
     },
 
     selectSource(id) {
+      if(id === 7) {
+        this.lead.sourcesname_id = 17
+      } else if (id === 1){
+        this.lead.sourcesname_id = 17
+      }
 
       if(this.lead.source_id !== id) {
         this.lead.sub_source = null;
@@ -476,6 +508,7 @@ export default {
   },
   watch: {
     async isChangeState() {
+      console.log('state', this.lead.state_h, this.lead.fanpage_id)
       await this.A_GET_FLYERS({program_id: this.lead.fanpage_id, state: this.lead.state_h})
     },
     async isChangeFanPage() {
@@ -547,6 +580,12 @@ export default {
       border-color: #fff;
     }
   }
+}
+.t-white{
+  color: #fff !important;
+}
+.t-dark{
+  color: #1b2337;
 }
 
 

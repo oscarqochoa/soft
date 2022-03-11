@@ -5,6 +5,7 @@ import SNLeadsService from '@/views/social-network/services/leads'
 import mixins from '@/mixins/general'
 import crmService from "@/views/crm/services/crm.service";
 import crmGlobal from "@/views/crm/services/global";
+import GlobalService from "../../../../service/global/index";
 
 const state = {
     S_LEADS: {
@@ -23,7 +24,11 @@ const state = {
     S_PROGRAMS: [],
     S_FLYERS: [],
     S_REASONS_NOT_POTENTIAL: [],
-    S_SELLERS: [],
+    S_SELLERS: [{
+        user_name: "Select a Seller",
+        value: null,
+        status_session: 0
+    }],
     S_FILTERS_LEADS: {
         searchQuery: '',
         from: null,
@@ -39,6 +44,10 @@ const state = {
     },
     S_STATES_LEADS: [],
     S_OWNERS_LEADS: [],
+    S_STATES_EEUU: [{
+        label: "Select a State",
+        value: null,
+    }]
 }
 const getters = {
     G_STATUS_LEADS() {
@@ -80,6 +89,25 @@ const mutations = {
       },
     M_GET_FLYERS(state, states) {
         state.S_FLYERS = states;
+    },
+    M_GET_STATE_EEUU(state, states) {
+        state.S_STATES_EEUU = [...state.S_STATES_EEUU, ...states]
+    },
+    M_GET_SELLERS(state, states) {
+        state.S_SELLERS = [...state.S_SELLERS, ...states];
+    },
+    M_RESET_SELLERS(state, states) {
+        state.S_SELLERS = [{
+            user_name: "Select a Seller",
+            value: null,
+            status_session: 0
+        }];
+    },
+    M_RESET_STATES_EEUU(state, states) {
+        state.S_STATES_EEUU = [{
+            label: "Select a State",
+            value: null,
+        }];
     }
 }
 const actions = {
@@ -267,7 +295,7 @@ const actions = {
             const { data } = await SNLeadsService.getFanPagePrograms()
             commit('M_FAG_PAGE_PROGRAMS', data);
 
-            return response
+            return data;
         } catch (error) {
             console.log("ERROR_GET_FAN_PAGE_PROGRAMS [ACTION]", error);
             throw error
@@ -293,14 +321,21 @@ const actions = {
     },
     async A_GET_REASONS_NOT_POTENTIAL({ commit }) {
         try {
-            const response = await SNLeadsService.getReasonsNotPotential()
+            const {status, data} = await SNLeadsService.getReasonsNotPotential()
 
-            if (response.status == 200) {
+            const selectData = data.map(reason => {
+                return {
+                    label: reason.reason,
+                    value: reason.id
+                }
+            })
+            if (status === 200) {
                 commit('SET_DATA', {
                     destination: 'S_REASONS_NOT_POTENTIAL',
-                    data: response.data
+                    data: selectData
                 })
             }
+            return selectData;
         } catch (error) {
             console.log("ERROR_GET_REASONS_NOT_POTENTIAL [ACTION]", error);
             throw error
@@ -367,6 +402,76 @@ const actions = {
             throw error
         }
     },
+    async A_VALIDATE_NICKNAME({ commit }, params) {
+        try {
+            const resp = await SNLeadsService.validateExistsNickname(params);
+            return resp;
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    async A_UNIQUE_MOBILE_SN({ commit }, params) {
+        try {
+            const resp = await SNLeadsService.uniqueMobileSn(params);
+            console.log(resp);
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    async A_STATUS_LEADS({ commit }) {
+        try {
+            const {data, status} = await SNLeadsService.statusLeads();
+            return data;
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    async A_GET_STATE_EEUU({ commit }) {
+        commit('M_RESET_STATES_EEUU');
+        try {
+            const {data, status} = await GlobalService.getStatesEEuu();
+            const stateLeads = data.map(state => {
+                return {
+                    label: state.state,
+                    value: state.slug
+                }
+            });
+            commit('M_GET_STATE_EEUU',stateLeads);
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    async A_GET_HOUR_SYSTEM() {
+        try {
+            const resp = await GlobalService.getHourSystem()
+            return resp.data;
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    async A_GET_SELLER_TASK_FAVORITE ( { commit }, params) {
+        const resp = (await SNLeadsService.getSellerTaskFavoriteSn(params)).map(sell => {
+            return {
+                user_name: sell.user_name,
+                value: sell.id,
+                status_session: sell.status_session
+            }
+        });
+        commit('M_GET_SELLERS', resp);
+    },
+
+    async A_RESERT_S_SELLERS({ commit }) {
+        commit('M_RESET_SELLERS');
+    },
+    A_FORMAT_DATE({ commit }, date) {
+        const dat = date.getFullYear() + "-" + `${(date.getMonth() + 1) < 10 ? `0${(date.getMonth() + 1)}` : (date.getMonth() + 1)}` + "-" + `${(date.getDate()) < 10 ? `0${(date.getDate())}` : (date.getDate())}`;
+
+        return dat;
+        },
+    async A_CREATE_LEAD_SN ({ commit }, params) {
+        const resp = SNLeadsService.createLeadSN(params);
+
+    }
 }
 
 export default {
