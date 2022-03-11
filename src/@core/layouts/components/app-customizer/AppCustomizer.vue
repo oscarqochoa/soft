@@ -11,12 +11,7 @@
 
     <!-- Header -->
     <div
-      class="
-        customizer-section
-        d-flex
-        justify-content-between
-        align-items-center
-      "
+      class="customizer-section d-flex justify-content-between align-items-center"
     >
       <div>
         <h4 class="text-uppercase mb-0">Theme Customizer</h4>
@@ -119,6 +114,16 @@
             inline
           />
         </div>
+      </div>
+      <!-- SECTION: Menu -->
+      <div class="customizer-section">
+        <b-form-group label="Rows default" label-cols="6">
+          <v-select
+            v-model="rowsPerPage"
+            :clearable="false"
+            :options="rowsPerPageOptions"
+          />
+        </b-form-group>
       </div>
 
       <!-- SECTION: Navbar -->
@@ -228,6 +233,9 @@ export default {
       // Footer
       footerTypes,
       footerType,
+
+      rowsPerPage,
+      rowsPerPageOptions,
     } = useAppCustomizer();
 
     if (layoutType.value === "horizontal") {
@@ -291,6 +299,9 @@ export default {
 
       // Perfect Scrollbar
       perfectScrollbarSettings,
+
+      rowsPerPage,
+      rowsPerPageOptions,
     };
   },
 };
