@@ -162,7 +162,7 @@ import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot
 // Components
 import ModalTracking from "../../components/ModalTracking.vue";
 import ActionsTable from "./components/ActionsTable.vue";
-import ModalSmsList from "./components/ModalSmsList.vue";
+import ModalSmsList from "../../components/ModalSmsList.vue";
 import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
 
 export default {

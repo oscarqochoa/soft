@@ -7,7 +7,14 @@ import MigrationsRouter from '@/views/social-network/views/migrations/migrations
 import ActivitiesRouter from '@/views/social-network/views/activities/activities.router'
 import DashboardRouter from '@/views/social-network/views/dashboard/dashboard.router'
 import DashboardRouter2 from '@/views/social-network/views/dashboard2/dashboard.router'
+import NcrRouter from '@/views/social-network/views/ncr/ncr-social.router'
+import FileManagerRouter from '@/views/social-network/views/file-manager/file-manager.router'
+import LoansRouter from '@/views/social-network/views/loans/loans.router'
+import InventoryRouter from '@/views/social-network/views/inventory/inventory.router'
+import SchedulesRouter from '@/views/social-network/views/schedules/schedules.router'
 import CommissionsRoute from '@/views/social-network/views/commissions/commissions.route'
+import RecoveryListRoute from '@/views/social-network/views/recovery-list/recovery-list.router'
+import RecoveryRoute from '@/views/social-network/views/recovery/recovery.router'
 
 const routes = [
   { path: '/socialnetwork', redirect: { name: 'calendar-social-network' } },
@@ -20,7 +27,15 @@ const routes = [
   ...ActivitiesRouter,
   ...DashboardRouter,
   ...DashboardRouter2,
-  ...CommissionsRoute
+  ...NcrRouter,
+  FileManagerRouter,
+  ...LoansRouter,
+  ...InventoryRouter,
+  ...SchedulesRouter,
+  ...CommissionsRoute,
+  ...RecoveryListRoute,
+  ...CommissionsRoute,
+  ...RecoveryRoute
 ]
 
 // eslint-disable-next-line array-callback-return

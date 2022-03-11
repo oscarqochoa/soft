@@ -37,7 +37,7 @@
             <router-link
               :class="textLink"
               :to="{
-                name: 'lead-show',
+                name: $route.meta.leadRoute,
                 params: { id: data.item.lead_id },
               }"
               target="_blank"

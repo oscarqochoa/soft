@@ -37,7 +37,7 @@
                 size="sm"
                 variant="info"
                 class="btn-icon rounded-circle p-0"
-                style="padding: 3px !important"
+                style="padding: 5px !important"
                 v-if="!editImportantNote"
                 @click="enableForm"
               >
@@ -73,22 +73,11 @@
           <b-button
             variant="flat-dark"
             class="btn-icon"
-            size="sm"
             @click="openModalViewNotes"
           >
             <feather-icon icon="ListIcon" size="18" />
           </b-button>
-          <b-button
-            variant="primary"
-            class="ml-1"
-            size="sm"
-            @click="openModalCreateNote"
-          >
-            <feather-icon
-              icon="PlusIcon"
-              size="15"
-              class="mr-50 text-white"
-            ></feather-icon>
+          <b-button variant="primary" class="ml-1" @click="openModalCreateNote">
             ADD
           </b-button>
         </b-col>
@@ -96,7 +85,7 @@
     </b-container>
 
     <modal-create-note
-      :show="showModalCreateNote"
+      v-if="showModalCreateNote"
       :lead="lead"
       @newImportant="setNewImportantNote"
       @onClose="closeModalCreateNote"

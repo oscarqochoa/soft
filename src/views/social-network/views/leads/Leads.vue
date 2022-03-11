@@ -44,27 +44,27 @@
       </template>
     </header-slot>
 
-    <b-card>
-      <b-nav pills>
-        <b-nav-item
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-          exact
-          class="w-250"
-          :to="{ name: 'sn-list-new-leads' }"
-          >NEW LEADS
-        </b-nav-item>
-        <b-nav-item
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-          exact
-          class="w-250"
-          :to="{ name: 'sn-list-old-leads' }"
-          >OLD LEADS
-        </b-nav-item>
-      </b-nav>
-      <hr>
-      <router-view v-if="preloading" />
+    <b-nav card-header pills class="m-0">
+      <b-nav-item
+        exact-active-class="active"
+        :link-classes="['px-3', bgTabsNavs]"
+        exact
+        :to="{ name: 'sn-list-new-leads' }"
+        >NEW LEADS
+      </b-nav-item>
+      <b-nav-item
+        exact-active-class="active"
+        :link-classes="['px-3', bgTabsNavs]"
+        exact
+        :to="{ name: 'sn-list-old-leads' }"
+        >OLD LEADS
+      </b-nav-item>
+    </b-nav>
+    <b-card
+      no-body
+      class="border-top-primary border-3 border-table-radius px-0"
+    >
+      <router-view />
     </b-card>
   </div>
 </template>
@@ -78,7 +78,6 @@ export default {
   },
   data() {
     return {
-      preloading: true,
       isOnlyLead: false,
       isAddNewUserSidebarActive: false,
       dato2: 10,
@@ -223,9 +222,7 @@ export default {
     }
   },
   watch: {
-    preloading(current, old) {
-      this.isPreloading(old);
-    }
+    //
   },
   async created() {
     await this.getStatusLeads();
@@ -236,9 +233,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.w-250 {
-  width: 250px !important;
-}
-</style>

@@ -5,14 +5,14 @@
     <b-nav card-header pills class="m-0">
       <!-- Pending -->
       <b-nav-item
-        :to="{ name: 'ncr-pending' }"
+        :to="{ name: $route.meta.pendingRoute }"
         exact
         exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"
       >Pending</b-nav-item>
       <!-- Returned -->
       <b-nav-item
-        :to="{ name: 'ncr-returned' }"
+        :to="{ name: $route.meta.returnedRoute }"
         exact
         exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"
@@ -24,7 +24,7 @@
       </b-nav-item>
       <!-- Completed -->
       <b-nav-item
-        :to="{ name: 'ncr-completed' }"
+        :to="{ name: $route.meta.completedRoute }"
         exact
         exact-active-class="active"
         :link-classes="['px-3',bgTabsNavs]"

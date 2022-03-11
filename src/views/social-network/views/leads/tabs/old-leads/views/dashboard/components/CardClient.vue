@@ -64,8 +64,13 @@
             <span>{{ lead.created_at }}</span>
           </standar-form-group>
         </b-col>
-        <!-- <b-col md="6">
-          <standar-form-group label="Flyer:" display="block" label-size="md">
+        <b-col md="6">
+          <standar-form-group
+            label="Flyer:"
+            display="block"
+            label-size="md"
+            style="border-bottom: none !important"
+          >
             <div class="flyer">
               <b-badge variant="primary" class="badge"> CA </b-badge>
               <b-img
@@ -74,7 +79,7 @@
               ></b-img>
             </div>
           </standar-form-group>
-        </b-col> -->
+        </b-col>
       </b-row>
     </b-container>
   </b-card>

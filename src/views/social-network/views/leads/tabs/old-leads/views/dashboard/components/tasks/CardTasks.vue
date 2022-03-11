@@ -10,48 +10,105 @@
       active-nav-item-class="bg-primary box-shadow-info"
     >
       <b-tab title="CRM" @click="searchTasks(0)">
-        <table-tasks :fields="fields" :items="tasks" :lead="lead"></table-tasks>
+        <table-tasks
+          :fields="fields"
+          :items="tasks"
+          :lead="lead"
+          @onMarkAsDone="markTaskAsDone"
+          @onView="openModalEditTask"
+          @onDelete="deleteTask"
+        ></table-tasks>
+
         <div class="text-right">
           <b-button
             variant="primary"
             class="mt-2 mr-1"
-            size="sm"
-            @click="openModalAddTask"
+            @click="openModalCreateTask"
           >
             ADD
+          </b-button>
+          <b-button
+            v-if="lead.count_task !== 0"
+            variant="outline-secondary"
+            class="btn-icon mt-2 mr-1"
+            @click="openModalTaskHistory"
+          >
+            <feather-icon icon="ListIcon" size="18" />
           </b-button>
         </div>
       </b-tab>
       <b-tab title="SN" @click="searchTasks(1)">
-        <table-tasks :fields="fields" :items="tasks" :lead="lead"></table-tasks>
+        <table-tasks
+          :fields="fields"
+          :items="tasks"
+          :lead="lead"
+          @onMarkAsDone="markTaskAsDone"
+          @onView="openModalEditTask"
+          @onDelete="deleteTask"
+        ></table-tasks>
         <div class="text-right">
-          <b-button variant="primary" class="mt-2 mr-1" size="sm">
+          <b-button
+            variant="primary"
+            class="mt-2 mr-1"
+            @click="openModalCreateTask"
+          >
             ADD
+          </b-button>
+          <b-button
+            v-if="lead.count_task !== 0"
+            variant="outline-secondary"
+            class="btn-icon mt-2 mr-1"
+            @click="openModalTaskHistory"
+          >
+            <feather-icon icon="ListIcon" size="18" />
           </b-button>
         </div>
       </b-tab>
     </b-tabs>
 
-    <modal-add-task
-      :show="showModalAddTask"
-      @onClose="closeModalAddTask"
-    ></modal-add-task>
+    <modal-create-task
+      v-if="showModalCreateTask"
+      :lead="lead"
+      :modul="15"
+      :taskForSn="isCrm ? 0 : 1"
+      @onClose="closeModalCreateTask"
+      @onReloadTasks="onReloadTasks"
+    ></modal-create-task>
 
-    <modal-view-task
-      :show="showModalViewTask"
-      @onClose="closeModalViewTask"
-    ></modal-view-task>
+    <modal-edit-task
+      v-if="showModalEditTask"
+      :modul="15"
+      :lead="lead"
+      :task="task"
+      :taskForSn="isCrm ? 0 : 1"
+      :isDisabled="isDisabledModal"
+      @onClose="closeModalEditTask"
+      @onReloadTasks="onReloadTasks"
+    >
+    </modal-edit-task>
+
+    <modal-task-history
+      v-if="showModalTaskHistory"
+      :modul="15"
+      :lead="lead"
+      :taskForSn="isCrm ? 0 : 1"
+      @onClose="closeModalTaskHistory"
+    ></modal-task-history>
   </b-card>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 // Components
 import TableTasks from "./TableTasks.vue";
-import ModalAddTask from "./ModalAddTask.vue";
-import ModalViewTask from "./ModalViewTask.vue";
+import ModalCreateTask from "@/views/social-network/views/leads/components/ModalCreateTask.vue";
+import ModalEditTask from "@/views/social-network/views/leads/components/ModalEditTask.vue";
+import ModalTaskHistory from "@/views/social-network/views/leads/components/ModalTaskHistory.vue";
 
 // Services
 import SnLeadsService from "@/views/social-network/services/leads";
+import TasksService from "@/service/task";
 
 export default {
   props: {
@@ -61,18 +118,22 @@ export default {
   },
   components: {
     TableTasks,
-    ModalAddTask,
-    ModalViewTask,
+    ModalCreateTask,
+    ModalEditTask,
+    ModalTaskHistory,
   },
   data() {
     return {
       // Modals
-      showModalAddTask: false,
-      showModalViewTask: false,
+      showModalCreateTask: false,
+      showModalEditTask: false,
+      showModalTaskHistory: false,
 
       isCrm: true,
+      isDisabledModal: false,
 
       tasks: [],
+      task: null,
     };
   },
   computed: {
@@ -85,19 +146,54 @@ export default {
         { key: "actions", label: "Actions" },
       ];
     },
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
-    openModalAddTask() {
-      this.showModalAddTask = true;
+    ...mapActions({
+      A_DELETE_LEAD_TASK: "TaskStore/A_DELETE_LEAD_TASK",
+      A_GET_TASK: "TaskStore/A_GET_TASK",
+    }),
+    openModalCreateTask() {
+      this.showModalCreateTask = true;
     },
-    closeModalAddTask() {
-      this.showModalAddTask = false;
+    closeModalCreateTask() {
+      this.showModalCreateTask = false;
     },
-    openModalViewTask() {
-      this.showModalViewTask = true;
+    async openModalEditTask(id, isDisabled) {
+      this.addPreloader();
+
+      const response = await this.A_GET_TASK({ id });
+
+      if (response.status == 200) {
+        this.isDisabledModal = isDisabled;
+        this.task = response.data[0];
+
+        console.log(this.task);
+        this.showModalEditTask = true;
+      } else {
+        this.showToast(
+          "warning",
+          "top-right",
+          "Warning!",
+          "AlertTriangleIcon",
+          `Something went wrong. ${response.message}`
+        );
+      }
     },
-    closeModalViewTask() {
-      this.showModalViewTask = false;
+    closeModalEditTask() {
+      this.task = {};
+      this.showModalEditTask = false;
+    },
+    openModalTaskHistory() {
+      this.showModalTaskHistory = true;
+    },
+    closeModalTaskHistory() {
+      this.showModalTaskHistory = false;
+    },
+    onReloadTasks(tasks) {
+      this.tasks = tasks;
     },
     async searchTasks(type) {
       try {
@@ -117,6 +213,64 @@ export default {
         }
       } catch (error) {
         throw error;
+      }
+    },
+    async markTaskAsDone(id) {
+      try {
+        const confirm = await this.showConfirmSwal();
+
+        if (confirm.value) {
+          const response = await TasksService.postDoneLeadTask({
+            id: id,
+            user_id: this.currentUser.user_id,
+            lead_id: this.lead.id,
+            taskForSn: this.isCrm ? 0 : 1,
+          });
+
+          if (response.status == 200) {
+            this.showGenericToast({
+              text: "Operation successfully",
+            });
+
+            this.tasks = response.data;
+          } else {
+            this.showGenericToast({
+              variant: "warning",
+              title: "Warning!",
+              icon: "AlertTriangleIcon",
+              text: `Something went wrong. ${response.message}`,
+            });
+          }
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
+    async deleteTask(id) {
+      const confirm = await this.showConfirmSwal();
+
+      if (confirm.value) {
+        const response = await this.A_DELETE_LEAD_TASK({
+          id,
+          user_id: this.currentUser.user_id,
+          lead_id: this.lead.id,
+          taskForSn: 0,
+        });
+
+        if (response.status == 200) {
+          const index = this.tasks.map((el) => el.id).indexOf(id);
+          if (index !== -1) this.tasks.splice(index, 1);
+          this.showGenericToast({
+            text: "Deleted successful",
+          });
+        } else {
+          this.showGenericToast({
+            variant: "warning",
+            title: "Warning!",
+            icon: "AlertTriangleIcon",
+            text: `Something went wrong. ${response.message}`,
+          });
+        }
       }
     },
   },

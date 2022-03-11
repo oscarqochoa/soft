@@ -16,6 +16,10 @@ export default [
           active: true,
         },
       ],
+      inventoryRoute: "inventory-crm",
+      inventoryEquipmentRoute: "inventory-crm-equipment",
+      inventoryEquipmentRequestRoute: "inventory-crm-equipment-request",
+      inventoryEquipmentAssignRoute: "inventory-crm-equipment-assign",
     },
     children: [
       {
@@ -36,6 +40,10 @@ export default [
               active: true,
             },
           ],
+          inventoryRoute: "inventory-crm",
+          inventoryEquipmentRoute: "inventory-crm-equipment",
+          inventoryEquipmentRequestRoute: "inventory-crm-equipment-request",
+          inventoryEquipmentAssignRoute: "inventory-crm-equipment-assign",
         },
       },
       {
@@ -56,6 +64,10 @@ export default [
               active: true,
             },
           ],
+          inventoryRoute: "inventory-crm",
+          inventoryEquipmentRoute: "inventory-crm-equipment",
+          inventoryEquipmentRequestRoute: "inventory-crm-equipment-request",
+          inventoryEquipmentAssignRoute: "inventory-crm-equipment-assign",
         },
       },
       {
@@ -74,6 +86,10 @@ export default [
               active: true,
             },
           ],
+          inventoryRoute: "inventory-crm",
+          inventoryEquipmentRoute: "inventory-crm-equipment",
+          inventoryEquipmentRequestRoute: "inventory-crm-equipment-request",
+          inventoryEquipmentAssignRoute: "inventory-crm-equipment-assign",
         },
       },
     ],
