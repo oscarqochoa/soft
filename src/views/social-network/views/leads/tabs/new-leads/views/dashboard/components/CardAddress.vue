@@ -1,103 +1,101 @@
 <template>
-  <div>
-    <b-card>
-      <b-container>
-        <b-row>
-          <b-col cols="6">
-            <h3 class="title-card">Address</h3>
-          </b-col>
-          <b-col cols="6" class="text-right">
-            <b-button
-              v-if="!editInformation"
-              variant="warning"
-              class="btn-icon"
-              size="sm"
-              @click="enableForm"
-            >
-              <feather-icon icon="SettingsIcon"></feather-icon>
+  <b-card>
+    <b-container>
+      <b-row>
+        <b-col cols="6">
+          <h3 class="title-card">Address</h3>
+        </b-col>
+        <b-col cols="6" class="text-right">
+          <b-button
+            v-if="!editInformation"
+            variant="warning"
+            class="btn-icon"
+            size="sm"
+            @click="enableForm"
+          >
+            <feather-icon icon="SettingsIcon"></feather-icon>
+          </b-button>
+          <b-row v-if="editInformation" class="justify-content-end">
+            <b-button variant="danger" size="sm" @click="disableForm">
+              <feather-icon icon="Trash2Icon"></feather-icon>
+              Cancel
             </b-button>
-            <b-row v-if="editInformation" class="justify-content-end">
-              <b-button variant="danger" size="sm" @click="disableForm">
-                <feather-icon icon="Trash2Icon"></feather-icon>
-                Cancel
-              </b-button>
-              <b-button
-                variant="success"
-                size="sm"
-                @click="updateInformation"
-                class="ml-1"
-              >
-                <feather-icon icon="CheckIcon"></feather-icon>
-                Update
-              </b-button>
-            </b-row>
-          </b-col>
-        </b-row>
-      </b-container>
-      <b-container class="mt-1">
-        <br />
+            <b-button
+              variant="success"
+              size="sm"
+              @click="updateInformation"
+              class="ml-1"
+            >
+              <feather-icon icon="CheckIcon"></feather-icon>
+              Update
+            </b-button>
+          </b-row>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-container class="mt-1">
+      <br />
 
-        <b-row>
-          <b-col md="12">
-            <standar-form-group
-              label="Address"
-              cols="12"
+      <b-row>
+        <b-col md="12">
+          <standar-form-group
+            label="Address"
+            cols="12"
+            :disabled="!editInformation"
+          >
+            <vue-google-autocomplete
+              v-model="personalAddress.street"
+              id="street_address"
+              class="form-control form-group-col-12"
+              :placeholder="editInformation ? 'Pleace type your address' : ''"
+              country="us"
+              v-on:placechanged="getAddressData"
               :disabled="!editInformation"
             >
-              <vue-google-autocomplete
-                v-model="personalAddress.street"
-                id="street_address"
-                class="form-control form-group-col-12"
-                :placeholder="editInformation ? 'Pleace type your address' : ''"
-                country="us"
-                v-on:placechanged="getAddressData"
-                :disabled="!editInformation"
-              >
-              </vue-google-autocomplete>
-            </standar-form-group>
-          </b-col>
-          <b-col md="6">
-            <standar-form-group label="City" :disabled="!editInformation">
-              <b-form-input
-                v-model="personalAddress.city"
-                type="text"
-                :disabled="!editInformation"
-              ></b-form-input>
-            </standar-form-group>
-          </b-col>
-          <b-col md="6">
-            <standar-form-group label="Zip Code" :disabled="!editInformation">
-              <b-form-input
-                v-model="personalAddress.zipcode"
-                type="text"
-                :disabled="!editInformation"
-              ></b-form-input>
-            </standar-form-group>
-          </b-col>
-          <b-col md="6">
-            <standar-form-group label="State" :disabled="!editInformation">
-              <v-select
-                v-model="personalAddress.state"
-                :options="G_STATES_EEUU"
-                :reduce="(el) => el.id"
-                :clearable="false"
-                :disabled="!editInformation"
-              ></v-select>
-            </standar-form-group>
-          </b-col>
-          <b-col md="6">
-            <standar-form-group label="Country" :disabled="!editInformation">
-              <b-form-input
-                v-model="personalAddress.country"
-                type="text"
-                :disabled="!editInformation"
-              ></b-form-input>
-            </standar-form-group>
-          </b-col>
-        </b-row>
-      </b-container>
-    </b-card>
-  </div>
+            </vue-google-autocomplete>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="City" :disabled="!editInformation">
+            <b-form-input
+              v-model="personalAddress.city"
+              type="text"
+              :disabled="!editInformation"
+            ></b-form-input>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="Zip Code" :disabled="!editInformation">
+            <b-form-input
+              v-model="personalAddress.zipcode"
+              type="text"
+              :disabled="!editInformation"
+            ></b-form-input>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="State" :disabled="!editInformation">
+            <v-select
+              v-model="personalAddress.state"
+              :options="G_STATES_EEUU"
+              :reduce="(el) => el.id"
+              :clearable="false"
+              :disabled="!editInformation"
+            ></v-select>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="Country" :disabled="!editInformation">
+            <b-form-input
+              v-model="personalAddress.country"
+              type="text"
+              :disabled="!editInformation"
+            ></b-form-input>
+          </standar-form-group>
+        </b-col>
+      </b-row>
+    </b-container>
+  </b-card>
 </template>
 
 <script>

@@ -36,6 +36,7 @@
       :personalMobile="personalMobile"
       :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
     />
+
     <card-address
       class="card-group"
       :personalAddress="personalAddress"
@@ -44,15 +45,25 @@
 
     <b-row>
       <b-col md="6">
-        <card-credit-report class="card-group" />
+        <card-credit-report class="card-group" :lead="lead" />
       </b-col>
       <b-col md="6">
-        <card-lead-cards class="card-group" />
-      </b-col>
-      <b-col cols="12">
-        <card-contact-information class="card-group" />
+        <card-lead-cards
+          class="card-group"
+          :lead="lead"
+          :cardsLead="cardsLead"
+        />
       </b-col>
     </b-row>
+
+    <!--<card-contact-information
+      class="card-group"
+      :catcher="currentUser.user_id"
+      :lead_id="lead.id"
+      :personalInfo="personalInfo"
+      :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
+      :modul="15"
+    />-->
   </div>
 </template>
 
@@ -62,9 +73,12 @@ import { mapState, mapGetters, mapActions } from "vuex";
 // Components
 import CardPersonalInformation from "./components/CardPersonalInformation.vue";
 import CardAddress from "./components/CardAddress.vue";
-import CardCreditReport from "./components/CardCreditReport.vue";
-import CardLeadCards from "./components/CardLeadCards.vue";
-import CardContactInformation from "./components/CardContactInformation.vue";
+import CardCreditReport from "./components/credit-report/CardCreditReport.vue";
+import CardLeadCards from "./components/cards/CardLeadCards.vue";
+import CardContactInformation from "./components/contact-information/CardContactInformation.vue";
+
+// Services
+import SNLeadsService from "@/views/social-network/services/leads";
 
 export default {
   components: {
@@ -91,30 +105,28 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      S_LEAD: (state) => state.SocialNetworkLeadsStore.S_LEAD,
-    }),
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
   },
   methods: {
-    ...mapActions({
-      A_GET_LEAD: "SocialNetworkLeadsStore/A_GET_LEAD",
-    }),
     async getLead() {
       try {
         this.addPreloader();
         let idParam = this.$route.params.id;
-        await this.A_GET_LEAD(idParam);
+        const response = await SNLeadsService.getLead(idParam);
+
+        if (response.status == 200) {
+          this.lead = response.data[0];
+        }
+
         this.removePreloader();
       } catch (error) {
         this.removePreloader();
         throw error;
       }
     },
-    getPersonalInformation() {
-      this.lead = this.S_LEAD;
+    async getPersonalInformation() {
       this.user = this.currentUser;
 
       let document = this.lead.type_document_sn
@@ -140,9 +152,9 @@ export default {
         document == 1
           ? this.lead.ssn_enc
           : document == 2
-          ? this.lead.itin
+          ? this.lead.itin_enc
           : document == 3
-          ? this.lead.other
+          ? this.lead.other_enc
           : null;
 
       // Personal information
@@ -173,6 +185,7 @@ export default {
         phonem: this.lead.mobile,
         id_user: this.user.user_id,
         typee: 3,
+        module_id: this.currentUser.modul_id
       };
 
       // Required field for create task in CRM
@@ -205,9 +218,6 @@ export default {
     await this.getLead();
     this.getPersonalInformation();
     this.getCardsLead();
-  },
-  mounted() {
-    console.log(this.$route.params.id);
   },
 };
 </script>

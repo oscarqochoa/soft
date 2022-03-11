@@ -5,6 +5,7 @@
       v-if="$route.meta.module == undefined && $route.name != 'amg-menu'"
       :class="skin == 'dark'?'text-light':'text-dark'"
       :to="{name: 'amg-menu'}"
+      class="mr-2"
     >
       <amg-icon icon="AmgIcon" size="35" />
     </b-link>

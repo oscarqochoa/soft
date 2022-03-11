@@ -1,4 +1,4 @@
-import {amgApi} from '@/service/axios';
+import { amgApi } from '@/service/axios';
 
 class SNLeads {
 
@@ -14,7 +14,7 @@ class SNLeads {
 
     async getLead(id) {
         try {
-            const { data, status } = await amgApi.get('/lead/show/' + id)
+            const { data, status } = await amgApi.get('/lead/social-network/show/' + id)
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on get lead", error);
@@ -180,7 +180,24 @@ class SNLeads {
             const { data, status } = await amgApi.post('/unique-mobile-sn', body)
             return { data, status }
         } catch (error) {
-            console.log("Something went wrong on getValidateUniqueMobile", error)
+            throw error
+        }
+    }
+
+    async verifyMobile(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/verify-mobile', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async validateNickname(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/validate-nickname', body)
+            return { data, status }
+        } catch (error) {
             throw error
         }
     }
@@ -202,12 +219,107 @@ class SNLeads {
         } catch (e) {
             console.log(e)
         }
-    }    
+    }
     async getLeadTasks(params) {
         try {
             const { data, status } = await amgApi.post('/lead/social-network/get-lead-tasks', params)
             return { data, status }
         } catch (error) {
+            throw error
+        }
+    }
+
+    async getCreditReports(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/credit-report/get-files-report', params);
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+    async getRecoveryLeads(body) {
+        try {
+            const { data } = await amgApi.post('/lead/social-network/search-leads-sn', body)
+            return data
+        } catch (error) {
+            console.log("Something went wrong on get new leads", error);
+            throw error
+        }
+    }
+
+    async getPendingCreditReport(params) {
+        try {
+            const { data, status } = await amgApi.post('/credit-report/search-credit-reports-pending', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getClientCards(params) {
+        try {
+            const { data, status } = await amgApi.post('/clients/search-cards-clients', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getLeadFiles(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/search-file-lead-sn', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async updateFileName(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/update-file-name', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async deleteFile(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/delete-file-sn', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async uploadFiles(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/upload-file-lead-sn', body, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            })
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+    async insertEvidenceSn(body) {
+        try {
+          const data = await amgApi.post('/lead/insert-evidence-sn', body)
+          return data
+        } catch (error) {
+          console.log('Something went wrong on insert evidence sn:', error)
+          throw error
+        }
+    }
+
+    async getRecoveryLeadsSnByProgram(body) {
+        try {
+            const { data } = await amgApi.post('/lead/social-network/search-leads-sn-recovery-by-program', body)
+            return data
+        } catch (error) {
+            console.log("Something went wrong on get new leads", error);
             throw error
         }
     }

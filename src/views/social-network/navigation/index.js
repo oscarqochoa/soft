@@ -12,6 +12,9 @@ import LoansNavigation from '@/views/social-network/views/loans/loans.nav'
 import InventoryNavigation from '@/views/social-network/views/inventory/inventory.nav'
 import ScheduleNavigation from '@/views/social-network/views/schedules/schedules.nav'
 import CommissionsNavigation from '@/views/social-network/views/commissions/commissions.navigation'
+import RecoveryListNavigation from '@/views/social-network/views/recovery-list/recovery-list.navigation'
+
+import RecoveryNavigation from '@/views/social-network/views/recovery/recovery.nav'
 
 const navigation = [
   {
@@ -25,11 +28,13 @@ const navigation = [
   ...AnswersGuideNavigation,
   ...BankOfFlyersNavigation,
   FileManagerNavigation,
+  ...CommissionsNavigation,
   LoansNavigation,
   ...InventoryNavigation,
   ScheduleNavigation,
   ...ActivitiesNavigation,
   ...DashboardNavigation2,
-  ...CommissionsNavigation
+  ...RecoveryListNavigation,
+  ...RecoveryNavigation
 ]
 export default navigation
