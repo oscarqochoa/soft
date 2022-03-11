@@ -14,7 +14,7 @@
       class="customizer-section d-flex justify-content-between align-items-center"
     >
       <div>
-        <h4 class="text-uppercase mb-0">Theme Customizer</h4>
+        <h4 class="text-uppercase mb-0">Soft Customizer</h4>
         <small>Customize &amp; Preview in Real Time</small>
       </div>
       <feather-icon
