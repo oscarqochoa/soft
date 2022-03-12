@@ -35,7 +35,7 @@
                     :clearable="false"
                     :reduce="el => el.value"
                 />
-                <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                <p v-if="errors[0]" class="text-error-sn text-center m-0">ST/AD {{errors[0]}}</p>
               </b-form-group>
               <input type="radio" class="d-none bg-green" v-model="lead.state_h" />
 
@@ -65,7 +65,7 @@
                     :options="optionsOwners"
                     :reduce="el => el.value"
                 />
-                <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                <p v-if="errors[0]" class="text-error-sn text-center m-0">Lead owner {{errors[0]}}</p>
               </b-form-group>
               <input type="radio" class="d-none bg-green" v-model="lead.user_id" />
 
@@ -97,7 +97,7 @@
                     track-by="name"
                     :preselect-first="true"
                 ></v-select>
-                <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                <p v-if="errors[0]" class="text-error-sn text-center m-0">Suggestions {{errors[0]}}</p>
               </b-form-group>
             </b-col>
           </ValidationProvider>
@@ -280,7 +280,7 @@
                     </div>
                   </template>
                   <div class=" w-100">
-                    <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                    <p v-if="errors[0]" class="text-error-sn text-center m-0">Program {{errors[0]}}</p>
                   </div>
                   <input type="radio" class="d-none" v-model="lead.fanpage_id" />
                 </b-row>
@@ -302,7 +302,7 @@
                 label="Flyers"
             >
               <ValidationProvider rules="required" v-slot="{errors}">
-                <div class="d-flex">
+                <div class="d-flex margin-flyer">
                   <b-avatar square class="image-flyer" :src="imageFlyer" size="10rem" ></b-avatar>
                   <div class="d-flex align-items-center">
                     <button
@@ -591,6 +591,8 @@ export default {
 .content-program{
   margin-top: .25rem;
 }
-
+.margin-flyer{
+  margin-left: 9px;
+}
 
 </style>

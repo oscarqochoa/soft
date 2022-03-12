@@ -9,7 +9,7 @@
       <b-row class="mt-2">
         <b-col mb="6">
 
-          <ValidationProvider rules="required|unique" v-slot="{errors}" name="nickname">
+          <ValidationProvider rules="required|unique-nickname" v-slot="{errors}" name="nickname">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -164,16 +164,13 @@ export default {
         const resp = await this.A_VALIDATE_NICKNAME({
           nickname: this.nickname, lead_id: null
         })
-
         if(resp.data.code){
 
-          console.log('ZXC: ', resp)
-          //this.lead.nickname = null;
           this.$bvToast.toast(`The Nickname already exists: ${resp.data.message}`, {
             title: `Information`,
             autoHideDelay: 4000,
             appendToast: true,
-            variant: 'danger'
+            variant: 'info'
           });
 
 

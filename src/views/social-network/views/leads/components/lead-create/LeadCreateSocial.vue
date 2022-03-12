@@ -17,7 +17,6 @@
         right
         title="Create Lead"
         header-class="text-primary"
-        @change="(val) => $emit('update:is-add-new-user-sidebar-active', val)"
         lazy
         @hidden="onCloseSidebar"
     >
@@ -285,7 +284,7 @@ export default {
       try {
         if (await this.$refs.refFormLeadObserver.validate()) {
           console.log('data: ', this.$refs.refFormLeadObserver)
-          //await this.A_CREATE_LEAD_SN(this.lead);
+          await this.A_CREATE_LEAD_SN(this.lead);
 
           const resp = await this.showConfirmSwal(
               "Are you sure?",
@@ -365,8 +364,10 @@ export default {
     async sub_sources() {
       await this.A_GET_SUB_SOURCE_SN();
     },
-    async onCloseSidebar(){
+    onCloseSidebar(){
       //this.$emit('closeSidebar')
+
+      this.resetForm();
       this.loading = true;
     },
     async onOpenSidebar() {
@@ -383,7 +384,7 @@ export default {
       this.removePreloader()
       this.loading = false;
     },
-    async resetForm() {
+    resetForm() {
       this.lead.state_h = null
       this.lead.user_id = null
       this.lead.program = []
@@ -469,7 +470,7 @@ export default {
       this.lead.idMethod= null
       this.lead.images= []
       this.lead.other= ""
-      await this.$refs.refFormLeadObserver.reset();
+      this.$refs.refFormLeadObserver.reset();
     }
   },
   watch: {

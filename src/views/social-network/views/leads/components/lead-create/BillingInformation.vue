@@ -40,7 +40,7 @@
               label-cols-lg="4"
               content-cols-sm
               content-cols-lg="8"
-              label="Card Holder Name"
+              label="Card"
           >
             <b-row class="mx-0 " style="gap: .25rem;">
               <b-col xs="6" md="2" class="px-0">
@@ -62,9 +62,9 @@
                       placeholder="####"
                   />
                   <div class="d-flex align-items-center justify-content-center position-relative">
-                    <p v-if="errors[0]" class="text-error-sn text-center text-transparent m-0">Card Number</p>
+                    <p v-if="errors[0]" class="text-error-sn text-center text-transparent m-0">Card</p>
                     <div class="position-absolute d-flex align-items-center justify-content-center card-error">
-                      <p v-if="errors[0]" class="text-error-sn text-center m-0">Card Number {{errors[0]}}</p>
+                      <p v-if="errors[0]" class="text-error-sn text-center m-0">Card {{errors[0]}}</p>
                     </div>
                   </div>
                 </validation-provider>
@@ -168,7 +168,7 @@
                       :state="errors[0] ? false : null"
                       v-mask="'##'"
                   />
-                  <div v-if="errors[0]" class="text-error-sn text-center">Card month {{errors[0]}}</div>
+                  <div v-if="errors[0]" class="text-error-sn text-center">Month {{errors[0]}} {{errors[1]}}</div>
                 </validation-provider>
               </b-col>
               <b-col sm="4">
@@ -188,7 +188,7 @@
                       :state="errors[0] ? false : null"
                       v-mask="'##'"
                   />
-                  <div v-if="errors[0]" class="text-error-sn text-center">Card year {{errors[0]}}</div>
+                  <div v-if="errors[0]" class="text-error-sn text-center">Year {{errors[0]}}</div>
                 </validation-provider>
               </b-col>
               <b-col sm="4">
@@ -207,7 +207,7 @@
                       :state="errors[0] ? false : null"
                       v-mask="'###'"
                   />
-                  <div v-if="errors[0]" class="text-error-sn text-center">Card code {{errors[0]}}</div>
+                  <div v-if="errors[0]" class="text-error-sn text-center">Code {{errors[0]}}</div>
                 </validation-provider>
               </b-col>
             </b-row>
@@ -431,6 +431,25 @@ export default {
     },
     cardNumber4 () {
       this.lead.cardnumber = `${this.cardNumber1}-${this.cardNumber2}-${this.cardNumber3}-${this.cardNumber4}`
+    },
+    "lead.card_expi_month"(){
+      if(this.lead.card_expi_month > 12) {
+        this.lead.card_expi_month = 12
+        const nextElement = this.$refs?.[`input-6`]
+        nextElement.focus()
+      }
+      if(this.lead.card_expi_month === '00') {
+        console.log('ASD', this.lead.card_expi_month, typeof this.lead.card_expi_month)
+        this.lead.card_expi_month = '01'
+      }
+
+    },
+    "lead.card_expi_year"() {
+      console.log('month: ', this.lead.card_expi_month)
+      if(this.lead.card_expi_month < 10 && this.lead.card_expi_month.length == 1) {
+        console.log('YEAR: ', this.lead.card_expi_month)
+        this.lead.card_expi_month = `0${this.lead.card_expi_month}`
+      }
     }
   }
 

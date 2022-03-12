@@ -56,7 +56,7 @@
       </b-row>
       <b-row class="mt-2">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="phone-m-personal-onformation">
+          <ValidationProvider rules="required|unique-mobile" v-slot="{errors}" name="phone-m-personal-information">
             <b-form-group
                           label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                           label-cols-sm="4"
@@ -73,7 +73,7 @@
                   maxlength="14"
                   @keyup.native="phone()"
                   placeholder="Please type phone(M)"
-                  v-mask="'###-##-####'"
+                  v-mask="'(###) ###-####'"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
 

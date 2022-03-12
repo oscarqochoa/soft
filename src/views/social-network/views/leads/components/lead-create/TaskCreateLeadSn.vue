@@ -167,15 +167,15 @@
 
                         <template #option="{ user_name, status_session }">
                           <div class="d-flex align-items-center justify-content-start">
-                            <div class="point-seller mr-1" :class="status_session ? 'bg-green' : ''"> </div>
-                            <p class="m-0 font-small-2">{{ user_name }}</p>
+                            <div class="point-seller" :class="status_session ? 'bg-green' : ''"> </div>
+                            <p class="m-0 font-small-2 truncate truncate-options">{{ user_name }}</p>
                           </div>
                         </template>
 
                         <template #selected-option="{ user_name, status_session }">
                           <div class="d-flex align-items-center justify-content-start">
-                            <div class="point-seller mr-1" :class="status_session ? 'bg-green' : ''"> </div>
-                            <p class="m-0 font-small-2">{{ user_name }}</p>
+                            <div class="point-seller" :class="status_session ? 'bg-green' : ''"> </div>
+                            <p class="m-0 font-small-2 truncate">{{ user_name }}</p>
                           </div>
                         </template>
 
@@ -444,6 +444,13 @@ export default {
     async findSellers() {
       if(this.lead.date && this.lead.from) {
         await this.A_GET_SELLER_TASK_FAVORITE({date_hour: `${this.lead.date} ${this.lead.from}`})
+      } else{
+        this.$bvToast.toast(`You must select a date and time`, {
+          title: `Information`,
+          autoHideDelay: 3000,
+          appendToast: true,
+          variant: 'info'
+        });
       }
     },
   },
@@ -471,8 +478,18 @@ export default {
   border-radius: 50%;
   border: 1px solid #fff;
   background: #f1f1f1;
+  margin-right: 5px;
 }
 .bg-green{
   background: green !important;
+}
+.truncate {
+  width: 67px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.truncate-options {
+  width: 85px;
 }
 </style>

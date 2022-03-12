@@ -55,7 +55,7 @@
                   :reduce="el => el.value"
                   :class="{'border-error-sn' :errors[0]}"
               />
-              <div v-if="errors[0]" class="text-error-sn text-center">DOB {{errors[0]}}</div>
+              <div v-if="errors[0]" class="text-error-sn text-center">Status {{errors[0]}}</div>
             </b-form-group>
             <input type="radio" class="d-none bg-green" v-model="lead.state_lead" />
 
@@ -86,7 +86,7 @@
                   :clearable="false"
                   :reduce="el => el.value"
               />
-              <div v-if="errors[0]" class="text-error-sn text-center">DOB {{errors[0]}}</div>
+              <div v-if="errors[0]" class="text-error-sn text-center">Type doc. {{errors[0]}}</div>
             </b-form-group>
             <input type="radio" class="d-none bg-green" v-model="lead.type_document" />
           </ValidationProvider>
@@ -138,7 +138,7 @@
                   :state="errors[0] ? false : null"
 
               ></b-form-input>
-              <div v-if="errors[0]" class="text-error-sn text-center">Mobile {{errors[0]}}</div>
+              <div v-if="errors[0]" class="text-error-sn text-center">Phone(H) {{errors[0]}}</div>
             </b-form-group>
           </ValidationProvider>
         </b-col>
