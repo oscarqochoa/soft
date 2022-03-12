@@ -1,12 +1,6 @@
-import { extend } from 'vee-validate'
-import {
-  required,
-  email,
-  length,
-  max,
-  min,
-  min_value,
-} from 'vee-validate/dist/rules'
+import {extend} from 'vee-validate'
+import {email, length, max, min, min_value, required,} from 'vee-validate/dist/rules'
+import {amgApi} from "@/service/axios";
 
 extend('secret', {
   validate: value => value === 'example',
@@ -99,3 +93,24 @@ extend('specialpassword', {
   },
   message: 'The Format must have a minimum. A capital letter, a lowercase, a number, a special character, and a minimum of 8 characters. Example: Abcd1234@',
 })
+
+const isUnique = async (value) => {
+  const resp = await amgApi.post('/lead/social-network/validate-exists-nickname', value);
+  console.log('ASD', resp)
+  let valid = false;
+  if ( resp.data.code ) {
+    valid = true;
+  }
+  console.log('VALID: ', valid)
+  return valid;
+
+};
+extend('unique', {
+  async validate(value) {
+    const resp = await amgApi.post('/lead/social-network/validate-exists-nickname', {
+      nickname: value, lead_id: null
+    });
+    return !resp.data.code;
+  },
+  message: 'is not unique'
+});

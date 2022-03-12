@@ -1,21 +1,11 @@
 <template>
   <div>
-    <lead-list-add-new
-      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
-      :key="keyCreateList"
-      @saveLead="keyCreateList = Math.random()"
-    />
+
+
     <header-slot>
       <template #actions>
         <div>
-          <b-button
-            v-if="!isOnlyLead"
-            variant="success"
-            class="mr-1"
-            @click="isAddNewUserSidebarActive = true"
-          >
-            <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
-          </b-button>
+          <lead-create-social/>
             <!-- v-if="[1, 2].includes(currentUser.role_id) && isLeadsRoute" -->
           <b-dropdown
             v-if="false"
@@ -72,14 +62,16 @@
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
 import LeadListAddNew from "@/views/crm/views/Lead/lead-module/save/LeadListAddNew.vue";
+import LeadCreateSocial from "@/views/social-network/views/leads/components/lead-create/LeadCreateSocial";
 export default {
   components: {
+    LeadCreateSocial,
     LeadListAddNew
   },
   data() {
     return {
       isOnlyLead: false,
-      isAddNewUserSidebarActive: false,
+      isOpenSidebar: false,
       dato2: 10,
       dato1: "desc",
       isLoading: false,
@@ -219,17 +211,13 @@ export default {
         this.showErrorSwal(error);
         this.isLoading = false;
       }
-    }
+    },
   },
   watch: {
     //
   },
   async created() {
-    await this.getStatusLeads();
-    await this.getOwners();
-    await this.getPrograms();
-    await this.getSourceNames();
-    await this.getStates();
+
   },
 };
 </script>
