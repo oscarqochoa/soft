@@ -3,7 +3,7 @@
     <b-card no-body class="p-2 mt-4">
       <b-row>
         <b-col md="6">
-          <h4 class="title-card">Catchment</h4>
+          <h4 class="title-card text-left">Catchment</h4>
         </b-col>
         <b-col md="6 text-right">
           <h4 class="title-card">Catcher: {{ this.currentUser.fullName }}</h4>
@@ -35,7 +35,7 @@
                     :clearable="false"
                     :reduce="el => el.value"
                 />
-                <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                <p v-if="errors[0]" class="text-error-sn text-center m-0">ST/AD {{errors[0]}}</p>
               </b-form-group>
               <input type="radio" class="d-none bg-green" v-model="lead.state_h" />
 
@@ -65,7 +65,7 @@
                     :options="optionsOwners"
                     :reduce="el => el.value"
                 />
-                <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                <p v-if="errors[0]" class="text-error-sn text-center m-0">Lead owner {{errors[0]}}</p>
               </b-form-group>
               <input type="radio" class="d-none bg-green" v-model="lead.user_id" />
 
@@ -97,7 +97,7 @@
                     track-by="name"
                     :preselect-first="true"
                 ></v-select>
-                <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                <p v-if="errors[0]" class="text-error-sn text-center m-0">Suggestions {{errors[0]}}</p>
               </b-form-group>
             </b-col>
           </ValidationProvider>
@@ -266,9 +266,10 @@
                 content-cols-sm
                 content-cols-lg="10"
                 label="Program"
+
             >
               <ValidationProvider rules="required" v-slot="{errors}">
-                <b-row class="d-flex justify-content-between align-items-center px-0">
+                <b-row class="d-flex justify-content-around align-items-center px-0 content-program">
                   <template v-for="(program, index) in S_FAN_PAGE_PROGRAMS">
                     <div class="" :key="index" :title="program.value">
                       <button
@@ -279,7 +280,7 @@
                     </div>
                   </template>
                   <div class=" w-100">
-                    <p v-if="errors[0]" class="text-error-sn text-center m-0">Source {{errors[0]}}</p>
+                    <p v-if="errors[0]" class="text-error-sn text-center m-0">Program {{errors[0]}}</p>
                   </div>
                   <input type="radio" class="d-none" v-model="lead.fanpage_id" />
                 </b-row>
@@ -301,7 +302,7 @@
                 label="Flyers"
             >
               <ValidationProvider rules="required" v-slot="{errors}">
-                <div class="d-flex">
+                <div class="d-flex margin-flyer">
                   <b-avatar square class="image-flyer" :src="imageFlyer" size="10rem" ></b-avatar>
                   <div class="d-flex align-items-center">
                     <button
@@ -394,7 +395,7 @@ export default {
     };
   },
   async created() {
-    this.addPreloader()
+    //this.addPreloader()
     await Promise.all(
         [
           await this.statesAD(),
@@ -404,7 +405,7 @@ export default {
           await this.A_GET_FAN_PAGE_PROGRAMS()
         ]
     )
-    this.removePreloader()
+    //this.removePreloader()
   },
   async mounted() {
 
@@ -527,8 +528,8 @@ export default {
   font-size: 13px ;
 }
 .sub-sources{
-  padding: 6px 18px;
-  font-size: 15px;
+  padding: 6px 10px;
+  font-size: 14px;
 }
 .btn-fanpage{
   color: #fff;
@@ -587,6 +588,11 @@ export default {
 .t-dark{
   color: #1b2337;
 }
-
+.content-program{
+  margin-top: .25rem;
+}
+.margin-flyer{
+  margin-left: 9px;
+}
 
 </style>

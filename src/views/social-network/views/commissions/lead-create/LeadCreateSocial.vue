@@ -3,14 +3,45 @@
     <validation-observer ref="refFormLeadObserver">
       <CatchmentCreateSn :lead="this.lead"/>
 
-      <b-button
-          v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-          variant="primary"
-          class="mr-2"
-          @click="onSubmit"
-      >
-        <span >Save</span>
-      </b-button>
+      <BasicInformationCreateLeadSn :lead="this.lead"/>
+
+      <template v-if="lead.addEvidence">
+        <PersonalInformationCreateLeadSn :lead="this.lead"/>
+      </template>
+
+      <template v-if="lead.moreInfo">
+        <MoreInformation :lead="this.lead"/>
+        <BillingInformation :lead="this.lead"/>
+      </template>
+
+      <template v-if="lead.addEvidence">
+        <TaskCreateLeadSn :lead="this.lead"/>
+      </template>
+
+      <div class="d-flex align-items-center justify-content-end">
+        <b-button
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="danger"
+            class="mr-2"
+            @click=""
+        >
+          <div class="d-flex align-items-center justify-content-center px-2">
+            <feather-icon icon="TrashIcon" size="16" class="text-white"/>
+            <span class="btn-create-lead">Cancel</span>
+          </div>
+        </b-button>
+        <b-button
+            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+            variant="success"
+            class=""
+            @click="onSubmit"
+        >
+          <div class="d-flex align-items-center justify-content-center px-2">
+            <feather-icon icon="CheckIcon" size="16" class="text-white"/>
+            <span class="btn-create-lead">Create</span>
+          </div>
+        </b-button>
+      </div>
     </validation-observer>
   </div>
 </template>
@@ -19,9 +50,24 @@
 import CatchmentCreateSn from '@/views/social-network/views/commissions/lead-create/CatchmentCreateSn'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import Ripple from "vue-ripple-directive";
+import BasicInformationCreateLeadSn
+  from "@/views/social-network/views/commissions/lead-create/BasicInformationCreateLeadSn";
+import PersonalInformation from "@/views/social-network/views/commissions/lead-create/PersonalInformationCreateLeadSn";
+import PersonalInformationCreateLeadSn
+  from "@/views/social-network/views/commissions/lead-create/PersonalInformationCreateLeadSn";
+import TaskCreateLeadSn from "@/views/social-network/views/commissions/lead-create/TaskCreateLeadSn";
+import MoreInformation from "@/views/social-network/views/commissions/lead-create/MoreInformation";
+import BillingInformation from "@/views/social-network/views/commissions/lead-create/BillingInformation";
+import {mapActions, mapGetters} from "vuex";
 export default {
   name: 'LeadCreateSocial',
   components: {
+    BillingInformation,
+    MoreInformation,
+    TaskCreateLeadSn,
+    PersonalInformationCreateLeadSn,
+    PersonalInformation,
+    BasicInformationCreateLeadSn,
     CatchmentCreateSn,
     ValidationProvider,
     ValidationObserver,
@@ -31,131 +77,146 @@ export default {
   },
   data() {
     return {
-      info: {},
-      leadsourcename: [],
-      value: "00:00 AM",
-      min: new Date(1950, 0, 1, 0, 0, 0),
-      max: new Date(2049, 11, 31, 24, 0, 0),
-      minDate: new Date(1000, 1, 1),
-      minDateI: new Date(),
-      maxDate: new Date(2050, 9, 1),
-      currentDate: new Date(),
-      documents: [
-        { name: "Document", id: null, disabled: true },
-        { name: "SSN", id: 1 },
-        { name: "ITIN", id: 2 },
-        { name: "CPN", id: 3 }
-      ],
+
       lead: {
         // Catchment
-        state_h: "CA",
-        user_id: 182,
+        state_h: null,
+        user_id: null,
         program: [],
-        source_id: 7,
-        sub_source: 6,
-        google_ads: 2,
-        fanpage_id: 3,
+        source_id: null,
+        sub_source: null,
+        google_ads: null,
+        fanpage_id: null,
         flyer: null,
+        sourcesname_id: null,
+
+        // Basic information
+        nickname: "",
+        language: null,
+        addEvidence: false,
+
+        // Personal information
+        first_name: "",
+        last_name: "",
+        mobile: "",
+        zipcode: "",
+        email: "",
+        note: "",
+        moreInfo: false,
+        potential: true,
+        reason_not_pontential: null,
+        name: "",
+
+        // More information
+        dob: "",
+        state_lead: null,
+        type_document: null,
+        document: "",
+        phone: "",
+        street: "",
+        city: "",
+        // TODO se envia el valor correcto pero no se muestra el correcto
+        state: null,
+        // TODO agregar numero de itin, ssn dependiendo del tipo del documento
+        itin: "",
+        ssn: "",
 
 
-
-        addEvidence: true,
-        assign: "",
-        attend: 1,
-        card_expi_month: "11",
-        card_expi_year: "11",
+        // Billing information
         cardholdername: "",
-        cardnumber: "---",
-        cardsecuritycode: "1111",
-        catcher: 1,
-        city: "Dallas",
-        citycard: "",
-        content: "",
+        card_expi_month: "",
+        card_expi_year: "",
+        cardsecuritycode: "",
+        cardnumber: "",
         countrycard: "United States",
-        created_by: 1,
-        created_date: "2022-03-02",
+        zipcodecard: "",
+        citycard: "",
+        statecard: null,
+        streetcard: "",
+
+        // Task
+        title: "",
+        seller: 1,
+        subject: "CALL",
+        hour: "",
+        from: "",
+        to: "",
+        date: "",
+        sms_status: 0,
+        due_date: "",
+        assign: 1,
+        attend: null,
+
+
+        recovery: 0,
+        last_action: 1,
+        program_id: null,
+        super: null,
+        usercreator: null,
+        catcher: null,
+        created_by: null,
+        created_date: null,
+
+
+        content: "",
         created_hour: "",
-        date: "2022-03-02",
         description: "",
-        dob: "2022-03-02",
-        document: "213-12-3123",
-        due_date: "2022-03-02",
-        email: "asd@gmail.com",
-
         files: [],
-        first_name: "sdfsd",
-
-        from: "01:15:00",
-
-        hour: "11:04:00",
         id: "",
         idMethod: null,
         images: [],
-        itin: "",
-        language: "ES",
-        last_action: 1,
-        last_name: "Wqeqwe",
-        mobile: "(121) 112-2222",
-        moreInfo: true,
-        name: "Sdfsd",
-        nickname: "sdfsdf",
-        note: "qwe qwe qweqweqw ",
         other: "",
-        phone: "(123) 123-1231",
-        potential: 1,
-        state_lead: 2,
-        program_id: null,
-        reason_not_pontential: null,
-        recovery: 0,
-        seller: 28,
-        sms_status: 1,
-
-        sourcesname_id: 32,
-        ssn: "213-12-3123",
-        state: "MO",
 
 
-        statecard: "",
-        street: "C F Hawn Freeway",
-        streetcard: "",
-
-        subject: "CALL",
-        super: 1,
-        title: "fsdf",
-        to: "01:45:00",
-        type_document: 1,
-
-        usercreator: 1,
-        zipcode: "",
-        zipcodecard: "",
       },
     };
   },
-  mounted() {},
+  async mounted() {
+    console.log('current: ', this.currentUser.user_id)
+    this.lead.super = this.currentUser.user_id;
+    this.lead.usercreator = this.currentUser.user_id;
+    this.lead.catcher = this.currentUser.user_id;
+    this.lead.created_by = this.currentUser.user_id;
+    this.lead.created_date = this.$options.filters.formatDate(new Date());
+  },
 
   computed: {
-
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+    }),
   },
   methods: {
-
+    ...mapActions(
+        'SocialNetworkLeadsStore',
+        [
+          'A_FORMAT_DATE',
+          'A_CREATE_LEAD_SN'
+        ]
+    ),
     async onSubmit() {
       try {
-
         if (await this.$refs.refFormLeadObserver.validate()) {
-          console.log('data lead: ')
+          console.log('data: ', this.lead)
+          await this.A_CREATE_LEAD_SN(this.lead);
+          //console.log('data: ', this.lead)
+
         } else {
-          console.log('asd')
+          console.log('Sin validacion')
         }
+
       } catch (error) {
 
       }
     },
   },
-  created() {
-
-  },
-  watch: {
-
-  }
 }
 </script>
+
+<style>
+.btn-create-lead{
+  padding-top: .15rem !important;
+  margin-left: .3rem;
+  font-size: 16px;
+}
+</style>
