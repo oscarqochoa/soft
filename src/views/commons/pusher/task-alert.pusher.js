@@ -20,7 +20,6 @@ const taskAlert = () => {
           confirmButtonText: 'LEAD',
           cancelButtonText: 'OK',
         })
-        // await window.amgApi.post('/commons/close-all-swal', data)
         if (result.value) {
           window.open(`${process.env.VUE_APP_BASE_URL_FRONT}/crm/leads/${data.lead_id}`)
           NotificationMixin.methods.showWindowNotification(
@@ -32,6 +31,9 @@ const taskAlert = () => {
               window.focus()
             },
           )
+          await window.amgApi.post('/commons/close-all-swal', data)
+        } else {
+          await window.amgApi.post('/commons/close-all-swal', data)
         }
       }
     }
