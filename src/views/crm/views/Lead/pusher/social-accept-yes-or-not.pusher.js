@@ -9,7 +9,6 @@ const acceptLeadFromSocialNetwork = () => {
     let timerInterval
     const includeSessionIdOnNoAcceptArray = data.no_accept.includes(sessionId)
     if (sessionId == data.to_id && sessionId != data.from_id && !includeSessionIdOnNoAcceptArray) {
-      // await window.amgApi.post('/commons/close-all-swal', data)
       const result = await Vue.swal.fire({
         html: `Do you accept a new lead?<br><h2 style="font-weight: 600;">${data.lead_name}</h2><h3><br><b>Date:</b> ${data.hour_created}</h3><br>I will close in <strong>30</strong> seconds.`,
         imageUrl: `${process.env.VUE_APP_BASE_URL_FRONT}/assets/images/icons/swal/warning.svg`,
@@ -48,9 +47,11 @@ const acceptLeadFromSocialNetwork = () => {
             '_blank',
           )
         }
+        await window.amgApi.post('/commons/close-all-swal', data)
       } else if (result.dismiss === 'cancel' || result.dismiss === 'backdrop') {
         data.no_accept.push(data.to_id)
         await window.amgApi.post('/lead/find-seller-lead', data)
+        await window.amgApi.post('/commons/close-all-swal', data)
       } else if (result.dismiss === 'timer') {
         Vue.swal.fire({
           title: 'Time out!',
@@ -60,6 +61,7 @@ const acceptLeadFromSocialNetwork = () => {
         })
         data.no_accept.push(data.to_id)
         await window.amgApi.post('/lead/find-seller-lead', data)
+        await window.amgApi.post('/commons/close-all-swal', data)
       }
     }
     store.commit('app/SET_LOADING', false)

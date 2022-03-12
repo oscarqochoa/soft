@@ -10,7 +10,6 @@ const sendFromRrhhJustifyToManagment = () => {
       if (res.isConfirmed) {
         // eslint-disable-next-line no-param-reassign
         data.to_id = sessionId
-        // await window.amgApi.post('/commons/close-all-swal', data)
         NotificationMixin.methods.showWindowNotification(
           `${data.title}`,
           `${data.message}`,
@@ -20,9 +19,11 @@ const sendFromRrhhJustifyToManagment = () => {
             window.open(data.route)
           },
         )
+        await window.amgApi.post('/commons/close-all-swal', data)
+      } else {
+        await window.amgApi.post('/commons/close-all-swal', data)
       }
     }
-    // await window.amgApi.post('/commons/close-all-swal', data)
   })
 }
 export default sendFromRrhhJustifyToManagment
