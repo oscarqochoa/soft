@@ -283,7 +283,7 @@ export default {
         this.isBusy = true;
         this.setFilters();
         const response = await this.A_GET_RECOVERY_LEADS_SN_BY_PROGRAM({
-          name_text: null,
+          name_text: this.filterPrincipal.model,
           lead_status: null,
           cr: null,
           evidence: 0,

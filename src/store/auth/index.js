@@ -1,6 +1,6 @@
 import { getUserData, getUserToken } from '@/auth/utils'
 import store from '@/views/crm/store'
-
+import Vue from 'vue';
 const user = getUserData()
 const token = getUserToken()
 
@@ -60,8 +60,11 @@ export default {
         rol => rol.module_id === state.currentUser.modul_id,
       )
       if (roleId) {
-        state.currentUser.role_id = roleId.role_id
-        state.currentUser.module_name = roleId.module_name
+        Vue.set(state.currentUser, "role_id", roleId.role_id)
+        Vue.set(state.currentUser, "module_name", roleId.module_name)
+        Vue.set(state.currentUser, "role_name", roleId.role_name)
+        Vue.set(state.currentUser, "level_id", roleId.typesenior)
+        Vue.set(state.currentUser, "level_name", roleId.level_name)
       }
     },
   },

@@ -7,10 +7,12 @@ export default [
         name: 'recovery-social-network',
         component: () => import('@/views/social-network/views/recovery/RecoveryMain.vue'),
         redirect: { name: 'sn-list-business' },
+        permittedRoles: [10, 11, 2, 1],
         children: [
             {
                 path: '',
-                redirect: { name: 'sn-list-business' }
+                redirect: { name: 'sn-list-business' },
+                permittedRoles: [10, 11, 2, 1],
             },
             {
                 path: 'business',
@@ -24,10 +26,11 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'business',
+                            text: 'Business',
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
             {
@@ -42,10 +45,11 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'credit-experts',
+                            text: 'Credit Experts',
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
             {
@@ -60,10 +64,11 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'tax-research',
+                            text: 'Tax Research',
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
             {
@@ -78,10 +83,11 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'boost-credit',
+                            text: 'Boost Credit',
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
             {
@@ -96,10 +102,11 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'debt-solution',
+                            text: 'Debt Solution',
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
             {
@@ -114,10 +121,11 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'not-call',
+                            text: 'Not Call',
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
 

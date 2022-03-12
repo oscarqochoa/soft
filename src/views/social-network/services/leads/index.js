@@ -370,6 +370,16 @@ class SNLeads {
         }
     }
 
+    async searchGlobalLeadsSn(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/search-global-leads-sn', body)
+            return {data, status}
+        } catch (error) {
+            console.log("Something went wrong on search global leads sn", error);
+            throw error
+        }
+    }
+
 }
 
 export default new SNLeads()

@@ -332,7 +332,7 @@ export default {
                     title: `Welcome ${userData.fullName}`,
                     icon: 'CoffeeIcon',
                     variant: 'success',
-                    text: `You have successfully logged in as ${userData.roleName}. Now you can start to explore!`,
+                    text: `You have successfully logged in as ${this.currentUser.role_name ? this.currentUser.role_name : this.currentUser.roleName}. Now you can start to explore!`,
                   },
                 })
               })
