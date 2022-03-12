@@ -808,7 +808,7 @@ export default {
   },
   watch: {
     suggestedAmount(newSuggestedAmount) {
-      this.fee = newSuggestedAmount;
+      if(!this.isModalShow) this.fee = newSuggestedAmount;
     },
   },
 };

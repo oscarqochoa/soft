@@ -147,9 +147,11 @@
               name="howDidTheClientRegistered"
               rules="required"
             >
-              <b-form-input
-                v-model="note.howDidTheClientRegistered.value"
+              <v-select
+                :options="note.howDidTheClientRegistered.options"
                 :disabled="disabled"
+                :clearable="false"
+                v-model="note.howDidTheClientRegistered.value"
                 :class="{ 'border-danger rounded': errors.length > 0 }"
               />
             </validation-provider>
@@ -367,6 +369,7 @@ export default {
         },
         howDidTheClientRegistered: {
           value: "",
+          options: ["FBN", "LLC", "INCORPORATION", "SOLE PROPIETOR"],
         },
         companyName: {
           value: "",
