@@ -63,6 +63,8 @@ export default {
         Vue.set(state.currentUser, "role_id", roleId.role_id)
         Vue.set(state.currentUser, "module_name", roleId.module_name)
         Vue.set(state.currentUser, "role_name", roleId.role_name)
+        Vue.set(state.currentUser, "level_id", roleId.typesenior)
+        Vue.set(state.currentUser, "level_name", roleId.level_name)
       }
     },
   },

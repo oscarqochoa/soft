@@ -7,10 +7,12 @@ export default [
         name: 'recovery-social-network',
         component: () => import('@/views/social-network/views/recovery/RecoveryMain.vue'),
         redirect: { name: 'sn-list-business' },
+        permittedRoles: [10, 11, 2, 1],
         children: [
             {
                 path: '',
-                redirect: { name: 'sn-list-business' }
+                redirect: { name: 'sn-list-business' },
+                permittedRoles: [10, 11, 2, 1],
             },
             {
                 path: 'business',
@@ -28,6 +30,7 @@ export default [
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
             {
@@ -46,6 +49,7 @@ export default [
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
             {
@@ -64,6 +68,7 @@ export default [
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
             {
@@ -82,6 +87,7 @@ export default [
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
             {
@@ -100,6 +106,7 @@ export default [
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
             {
@@ -118,6 +125,7 @@ export default [
                             active: true
                         },
                     ],
+                    permittedRoles: [10, 11, 2, 1],
                 },
             },
 

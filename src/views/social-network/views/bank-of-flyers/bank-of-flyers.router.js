@@ -20,7 +20,7 @@ export default [
           breadcrumb: [{
             text: 'Active',
             active: true,
-          }],
+          }]
         },
       },
       {
@@ -32,7 +32,7 @@ export default [
           breadcrumb: [{
             text: 'Inactive',
             active: true,
-          }],
+          }]
         },
       },
       {
@@ -44,7 +44,7 @@ export default [
           breadcrumb: [{
             text: 'Preactive',
             active: true,
-          }],
+          }]
         },
       },
 
@@ -54,7 +54,7 @@ export default [
       breadcrumb: [{
         text: 'Bank of flyers',
         active: true,
-      }],
+      }]
     },
   },
 ]

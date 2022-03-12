@@ -54,7 +54,7 @@ export default {
       const { route } = this.$router.resolve({ name: item.route })
       if (route.meta === {}) return true
       if (!route.meta.permittedRoles) return true
-      return route.meta.permittedRoles.includes(this.currentUser.role_id)
+      return (route.meta.hasLevelValidation ? (route.meta.permittedRoles.some(permittedRole => (permittedRole.role_id == this.currentUser.role_id && (permittedRole.hasLevelValidation ? permittedRole.level_id == this.currentUser.level_id : true)))) : route.meta.permittedRoles.includes(this.currentUser.role_id))
     },
   },
   props: {

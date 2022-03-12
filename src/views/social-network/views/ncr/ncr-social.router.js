@@ -11,7 +11,8 @@ export default [
             returnedRoute: "ncr-returned-social-network",
             completedRoute: "ncr-completed-social-network",
             reportLeadRoute: "report-lead-social-network",
-            leadRoute: "lead-show-social-network"
+            leadRoute: "lead-show-social-network",
+            permittedRoles: [9, 10, 11, 2, 1]
         },
         children: [
             {
@@ -35,7 +36,8 @@ export default [
                     returnedRoute: "ncr-returned-social-network",
                     completedRoute: "ncr-completed-social-network",
                     reportLeadRoute: "report-lead-social-network",
-                    leadRoute: "lead-show-social-network"
+                    leadRoute: "lead-show-social-network",
+                    permittedRoles: [9, 10, 11, 2, 1]
                 },
             },
             {
@@ -59,7 +61,8 @@ export default [
                     returnedRoute: "ncr-returned-social-network",
                     completedRoute: "ncr-completed-social-network",
                     reportLeadRoute: "report-lead-social-network",
-                    leadRoute: "lead-show-social-network"
+                    leadRoute: "lead-show-social-network",
+                    permittedRoles: [9, 10, 11, 2, 1]
                 },
             },
             {
@@ -84,7 +87,8 @@ export default [
                     returnedRoute: "ncr-returned-social-network",
                     completedRoute: "ncr-completed-social-network",
                     reportLeadRoute: "report-lead-social-network",
-                    leadRoute: "lead-show-social-network"
+                    leadRoute: "lead-show-social-network",
+                    permittedRoles: [9, 10, 11, 2, 1]
                 },
             },
         ],
@@ -102,7 +106,8 @@ export default [
             returnedRoute: "ncr-returned-social-network",
             completedRoute: "ncr-completed-social-network",
             reportLeadRoute: "report-lead-social-network",
-            leadRoute: "lead-show-social-network"
+            leadRoute: "lead-show-social-network",
+            permittedRoles: [9, 10, 11, 2, 1]
         },
     },
 ];
