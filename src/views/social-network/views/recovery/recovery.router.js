@@ -26,7 +26,7 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'business',
+                            text: 'Business',
                             active: true
                         },
                     ],
@@ -45,7 +45,7 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'credit-experts',
+                            text: 'Credit Experts',
                             active: true
                         },
                     ],
@@ -64,7 +64,7 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'tax-research',
+                            text: 'Tax Research',
                             active: true
                         },
                     ],
@@ -83,7 +83,7 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'boost-credit',
+                            text: 'Boost Credit',
                             active: true
                         },
                     ],
@@ -102,7 +102,7 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'debt-solution',
+                            text: 'Debt Solution',
                             active: true
                         },
                     ],
@@ -121,7 +121,7 @@ export default [
                             text: 'Recovery'
                         },
                         {
-                            text: 'not-call',
+                            text: 'Not Call',
                             active: true
                         },
                     ],
