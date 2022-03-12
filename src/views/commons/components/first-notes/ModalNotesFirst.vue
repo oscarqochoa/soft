@@ -57,7 +57,7 @@ export default {
       return this.$moment(this.creates);
     },
     deployMoment() {
-      return this.$moment("2022-03-08");//TODO cambiar fecha al 14
+      return this.$moment("2022-03-14");
     },
     createsMomentIsBefore() {
       return this.createsMoment.isBefore(this.deployMoment);
