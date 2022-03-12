@@ -81,7 +81,7 @@ export default {
     },
     deployDate() {
       //deploy date
-      return this.$moment("2022-03-08");
+      return this.$moment("2022-03-08"); //TODO cambiar fecha al 14
     },
   },
 };
