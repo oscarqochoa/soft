@@ -256,6 +256,14 @@ const actions = {
                     data
                 })
                 return response
+            }else{
+                const data = {
+                    items: response.data,
+                    total: response.total,
+                    fromPage: response.from,
+                    toPage: response.to
+                }
+                return data
             }
 
         } catch (error) {
