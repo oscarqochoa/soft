@@ -1,8 +1,8 @@
 <template>
   <div>
-    <header-slot />
+    <header-slot/>
     <div class="d-flex justify-content-end mb-1">
-      <b-button variant="primary" @click="openInsertTaskModal(false)">
+      <b-button v-if="isCeo || isSupervisor || isTeamLeader" variant="primary" @click="openInsertTaskModal(false)">
         CREATE TASK
       </b-button>
     </div>
@@ -88,30 +88,30 @@
       <b-container fluid>
         <div class="row">
           <b-table-simple
-            ref="activities"
-            :busy.sync="isBusy"
-            small
-            caption-top
-            responsive
+              ref="activities"
+              :busy.sync="isBusy"
+              small
+              caption-top
+              responsive
           >
             <b-thead>
               <b-tr>
-                <b-th class="text-center"> USER </b-th>
-                <b-th class="text-center"> MON </b-th>
-                <b-th class="text-center"> BREAK </b-th>
-                <b-th class="text-center"> TUE </b-th>
-                <b-th class="text-center"> BREAK </b-th>
-                <b-th class="text-center"> WED </b-th>
-                <b-th class="text-center"> BREAK </b-th>
-                <b-th class="text-center"> THU </b-th>
-                <b-th class="text-center"> BREAK </b-th>
-                <b-th class="text-center"> FRI </b-th>
-                <b-th class="text-center"> BREAK </b-th>
-                <b-th class="text-center"> SAT </b-th>
-                <b-th class="text-center"> BREAK </b-th>
-                <b-th class="text-center"> SUN </b-th>
-                <b-th class="text-center"> BREAK </b-th>
-                <b-th class="text-center"> ACTION </b-th>
+                <b-th class="text-center"> USER</b-th>
+                <b-th class="text-center"> MON</b-th>
+                <b-th class="text-center"> BREAK</b-th>
+                <b-th class="text-center"> TUE</b-th>
+                <b-th class="text-center"> BREAK</b-th>
+                <b-th class="text-center"> WED</b-th>
+                <b-th class="text-center"> BREAK</b-th>
+                <b-th class="text-center"> THU</b-th>
+                <b-th class="text-center"> BREAK</b-th>
+                <b-th class="text-center"> FRI</b-th>
+                <b-th class="text-center"> BREAK</b-th>
+                <b-th class="text-center"> SAT</b-th>
+                <b-th class="text-center"> BREAK</b-th>
+                <b-th class="text-center"> SUN</b-th>
+                <b-th class="text-center"> BREAK</b-th>
+                <b-th class="text-center"> ACTION</b-th>
               </b-tr>
             </b-thead>
             <b-tbody>
@@ -121,24 +121,24 @@
                 <td v-for="(schedule, i) in item.json_data" :key="i">
                   <div v-if="schedule.isBreak === 0">
                     <div
-                      v-if="schedule.id_tasks != null"
-                      v-b-tooltip.hover
-                      :title="schedule.title_task"
-                      class="text-white cursor-pointer schedule"
-                      :style="'background:' + schedule.color + '!important'"
-                      @click="openSchedulesModal(schedule, item, true)"
+                        v-if="schedule.id_tasks != null"
+                        v-b-tooltip.hover
+                        :title="schedule.title_task"
+                        class="text-white cursor-pointer schedule"
+                        :style="'background:' + schedule.color + '!important'"
+                        @click="openSchedulesModal(schedule, item, true)"
                     >
                       {{ schedule.clock_in }} to {{ schedule.clock_out }}
                     </div>
                     <div
-                      v-else
-                      :style="
+                        v-else
+                        :style="
                         skin === 'dark'
                           ? 'background: black'
                           : 'background: #f1f1f1;'
                       "
-                      class="cursor-pointer off"
-                      @click="openSchedulesModal(schedule, item, false)"
+                        class="cursor-pointer off"
+                        @click="openSchedulesModal(schedule, item, false)"
                     >
                       OFF
                     </div>
@@ -149,12 +149,12 @@
                 </td>
                 <td>
                   <b-icon
-                    icon="list-check"
-                    class="rounded cursor-pointer"
-                    size="50px"
-                    style="font-size: 10px"
-                    title="SEE TRACKING"
-                    @click="openTrackingModal(schedule, item)"
+                      icon="list-check"
+                      class="rounded cursor-pointer"
+                      size="50px"
+                      style="font-size: 10px"
+                      title="SEE TRACKING"
+                      @click="openTrackingModal(schedule, item)"
                   >
                     TRACKING
                   </b-icon>
@@ -162,51 +162,51 @@
               </b-tr>
             </b-tbody>
             <b-tfoot>
-              <b-tr />
+              <b-tr/>
             </b-tfoot>
           </b-table-simple>
         </div>
       </b-container>
       <modal-create-task
-        v-if="modalInsertTaskModal"
-        :edit-task="editTask"
-        :task-out="taskOut"
-        @close="closeInsertTaskModal"
+          v-if="modalInsertTaskModal"
+          :edit-task="editTask"
+          :task-out="taskOut"
+          @close="closeInsertTaskModal"
       />
 
       <modal-tracking
-        v-if="modalTrackingModal"
-        :item="item"
-        :from="date.from"
-        :to="date.to"
-        :user="user"
-        @close="closeTrackingModal"
+          v-if="modalTrackingModal"
+          :item="item"
+          :from="date.from"
+          :to="date.to"
+          :user="user"
+          @close="closeTrackingModal"
       />
       <modal-schedule
-        v-if="modalSchedulesModal"
-        :user="user"
-        :schedule="schedule"
-        :schedules="schedules"
-        :edit="edit"
-        @getSchedules="getSchedulesIn"
-        @close="closeSchedulesModal"
+          v-if="modalSchedulesModal"
+          :user="user"
+          :schedule="schedule"
+          :schedules="schedules"
+          :edit="edit"
+          @getSchedules="getSchedulesIn"
+          @close="closeSchedulesModal"
       />
 
       <div class="row" style="margin: 1px !important">
         <div
-          v-for="(i, index) in tasks"
-          :key="index"
-          class="col-sm-2"
-          style="margin: 0 !important; padding: 1px !important"
+            v-for="(i, index) in tasks"
+            :key="index"
+            class="col-sm-2"
+            style="margin: 0 !important; padding: 1px !important"
         >
           <div
-            :style="'background:' + i.color + '!important'"
-            class="border-task"
-            @click="openInsertTaskModal(true, i)"
+              :style="'background:' + i.color + '!important'"
+              class="border-task"
+              @click="openInsertTaskModal(true, i)"
           >
             <p
-              v-if="i.title.length < 24"
-              class="card-text text-white text-center cursor-pointer"
+                v-if="i.title.length < 24"
+                class="card-text text-white text-center cursor-pointer"
             >
               {{ i.title }}
             </p>
@@ -221,14 +221,17 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import ActivitiesService from "@/views/social-network/views/activities/activities.service";
 
-import ModalCreateTask from "@/views/social-network/views/activities/activities-module/modals/create-task-modal/CreateTaskModal.vue";
+import ModalCreateTask
+  from "@/views/social-network/views/activities/activities-module/modals/create-task-modal/CreateTaskModal.vue";
 
-import ModalSchedule from "@/views/social-network/views/activities/activities-module/modals/schedules-modal/SchedulesModal.vue";
+import ModalSchedule
+  from "@/views/social-network/views/activities/activities-module/modals/schedules-modal/SchedulesModal.vue";
 
-import ModalTracking from "@/views/social-network/views/activities/activities-module/modals/tracking-modal/TrackingModal.vue";
+import ModalTracking
+  from "@/views/social-network/views/activities/activities-module/modals/tracking-modal/TrackingModal.vue";
 
 import FilterData from "@/views/social-network/views/activities/activities-module/filters.data";
 
@@ -337,9 +340,11 @@ export default {
       return this.schedules;
     },
     openInsertTaskModal(editTask, task) {
-      this.editTask = editTask;
-      this.modalInsertTaskModal = true;
-      this.taskOut = task;
+      if (this.isCeo || this.isSupervisor || this.isTeamLeader) {
+        this.editTask = editTask;
+        this.modalInsertTaskModal = true;
+        this.taskOut = task;
+      }
     },
 
     closeInsertTaskModal() {
@@ -348,11 +353,13 @@ export default {
     },
 
     openSchedulesModal(schedule, item, edit) {
-      this.modalSchedulesModal = true;
-      this.user = item;
+      if (this.isCeo || this.isSupervisor || this.isTeamLeader) {
+        this.modalSchedulesModal = true;
+        this.user = item;
 
-      this.schedule = schedule;
-      this.edit = edit;
+        this.schedule = schedule;
+        this.edit = edit;
+      }
     },
 
     closeSchedulesModal() {
@@ -389,11 +396,13 @@ export default {
 tbody tr td {
   text-align: center !important;
 }
+
 .schedule {
   padding-top: 1px;
   padding-bottom: 1px;
   border-radius: 7px;
 }
+
 .off {
   background: #f1f1f1;
   color: #b1b1b1;

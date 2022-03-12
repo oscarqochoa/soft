@@ -2,40 +2,42 @@
 
   <div>
     <b-modal
-      v-model="ownInsertControl"
-      title-class="h3 text-white font-weight-bolder"
+        v-model="ownInsertControl"
+        title-class="h3 text-white font-weight-bolder"
 
-      size="sm"
+        size="sm"
 
-      @hidden="closeInsertModal"
+        @hidden="closeInsertModal"
     >
       <template #modal-header>
-        <p class="font-medium-3 font-weight-bolder text-white d-flex align-items-center justify-content-center w-100 "> NEW CAMPAIGN
+        <p class="font-medium-3 font-weight-bolder text-white d-flex align-items-center justify-content-center w-100 ">
+          NEW CAMPAIGN
           <b-img
-            class="ml-1"
-            :src="`${baseImg}/assets${flyer_name}`"
-            style="height: 45px"
-          /></p>
+              class="ml-1"
+              :src="`${baseImg}/assets${flyer_name}`"
+              style="height: 45px"
+          />
+        </p>
 
       </template>
       <b-form-group
-        id="input-group-1"
-        label="Campaign"
-        label-for="input-1"
+          id="input-group-1"
+          label="Campaign"
+          label-for="input-1"
       >
         <b-form-input
-          id="input-1"
-          v-model="new_item.campaign"
-          type="text"
-          placeholder="Enter campaign"
-          required
+            id="input-1"
+            v-model="new_item.campaign"
+            type="text"
+            placeholder="Enter campaign"
+            required
         />
       </b-form-group>
 
       <template #modal-footer>
         <b-button
-          variant="primary"
-          @click="insertCampaignFlyers"
+            variant="primary"
+            @click="insertCampaignFlyers"
         >
           SAVE
         </b-button>
@@ -44,35 +46,35 @@
     </b-modal>
 
     <b-modal
-      v-model="ownControl"
-      title-class="h3 text-white font-weight-bolder"
-      hide-footer
-      size="xmd"
-      title="FLYER"
-      @hidden="closeModal"
+        v-model="ownControl"
+        title-class="h3 text-white font-weight-bolder"
+        hide-footer
+        size="xmd"
+        title="FLYER"
+        @hidden="closeModal"
     >
-      <div class="ml-2 " >
-        <ValidationObserver ref="form" />
+      <div class="ml-2 ">
+        <ValidationObserver ref="form"/>
         <b-container>
           <b-row>
             <b-col
-              class="p-2  d-flex align-content-center align-items-center justify-content-center position_img "
-              xl="4"
+                class="p-2  d-flex align-content-center align-items-center justify-content-center position_img "
+                xl="4"
 
-              xs="7"
+                xs="7"
             >
               <div>
                 <b-img-lazy
-                  class="img"
-                  v-bind="mainProps"
-                  :src="item.route_thumb"
+                    class="img"
+                    v-bind="mainProps"
+                    :src="item.route_thumb"
                 />
               </div>
             </b-col>
             <b-col
-              lg="8"
-              xs="7"
-              class="pt-2 fa"
+                lg="8"
+                xs="7"
+                class="pt-2 fa"
             >
               <b-row>
                 <b-col lg="12">
@@ -80,33 +82,34 @@
                     <b-input-group>
                       <b-input-group-prepend>
                         <b-input-group-text
-                          class="bg-primary text-white"
-                          style="padding-right: 5.25em"
+                            class="bg-primary text-white"
+                            style="padding-right: 5.25em"
                         >
                           <span>PROGRAM</span>
                         </b-input-group-text>
                       </b-input-group-prepend>
                       <div class="d-flex align-items-center justify-content-around w-75">
                         <div
-                          v-for="program in programs"
-                          :key="program.id"
-                          class="ml-1 "
+                            v-for="program in programs"
+                            :key="program.id"
+                            class="ml-1 "
                         >
                           <b-form-radio
-                            v-model="item.program"
-                            plain
-                            class="mr-1 "
-                            :value="program.value"
-                            name="program"
-                            :disabled="disabled"
+                              v-model="item.program"
+                              plain
+                              class="mr-1 "
+                              :value="program.value"
+                              name="program"
+                              :disabled="disabled"
                           >
 
                             <b-img
-                              :src="`${baseImg}/assets${program.logo}`"
-                              style="height: 30px"
+                                :src="`${baseImg}/assets${program.logo}`"
+                                style="height: 30px"
                             />
 
-                          </b-form-radio></div>
+                          </b-form-radio>
+                        </div>
                       </div>
                     </b-input-group>
                   </b-form-group>
@@ -118,22 +121,22 @@
                     <b-input-group>
                       <b-input-group-prepend>
                         <b-input-group-text
-                          class="bg-primary text-white "
-                          style="padding-right: 7.15em"
+                            class="bg-primary text-white "
+                            style="padding-right: 7.15em"
                         >
                           <span>STATE</span>
                         </b-input-group-text>
                       </b-input-group-prepend>
                       <div
-                        class="ml-1 w-75"
+                          class="ml-1 w-75"
                       >
                         <v-select
-                          v-model="item.state"
-                          :options="states"
-                          label="state"
-                          :reduce="val=>val.slug"
-                          :placeholder="item.state"
-                          :disabled="disabled"
+                            v-model="item.state"
+                            :options="states"
+                            label="state"
+                            :reduce="val=>val.slug"
+                            :placeholder="item.state"
+                            :disabled="disabled"
                         />
                       </div>
                     </b-input-group>
@@ -146,23 +149,23 @@
                     <b-input-group>
                       <b-input-group-prepend>
                         <b-input-group-text
-                          class="bg-primary text-white"
-                          style="padding-right: 5em"
+                            class="bg-primary text-white"
+                            style="padding-right: 5em"
                         >
                           <span>CAMPAIGN</span>
                         </b-input-group-text>
                       </b-input-group-prepend>
                       <div
-                        class="ml-1 w-75"
+                          class="ml-1 w-75"
                       >
 
                         <v-select
-                          v-model="item.campaign"
-                          :options="items"
-                          label="campaign"
-                          :reduce="val=>val.campaign"
-                          :placeholder="item.campaign"
-                          :disabled="disabled"
+                            v-model="item.campaign"
+                            :options="items"
+                            label="campaign"
+                            :reduce="val=>val.campaign"
+                            :placeholder="item.campaign"
+                            :disabled="disabled"
                         />
                       </div>
                     </b-input-group>
@@ -175,18 +178,18 @@
                     <b-input-group>
                       <b-input-group-prepend>
                         <b-input-group-text
-                          class="bg-primary text-white"
-                          style="padding-right: 4em"
+                            class="bg-primary text-white"
+                            style="padding-right: 4em"
                         >
                           <span>FLYER NAME</span>
                         </b-input-group-text>
                       </b-input-group-prepend>
                       <div class="ml-1 w-75">
                         <b-input
-                          v-model="item.flyer_name"
-                          style="padding-right: 8em"
-                          type="text"
-                          :disabled="disabled"
+                            v-model="item.flyer_name"
+                            style="padding-right: 8em"
+                            type="text"
+                            :disabled="disabled"
                         />
                       </div>
                     </b-input-group>
@@ -201,19 +204,19 @@
                     <b-input-group>
                       <b-input-group-prepend>
                         <b-input-group-text
-                          class="bg-primary text-white"
-                          style="padding-right: 6.35em"
+                            class="bg-primary text-white"
+                            style="padding-right: 6.35em"
                         >
                           <span>STATUS</span>
                         </b-input-group-text>
                       </b-input-group-prepend>
                       <div class="ml-1 w-75 ">
                         <v-select
-                          v-model="optionsStatus"
-                          :options="['PREACTIVE','ACTIVE', 'INACTIVE']"
-                          label="active"
-                          :disabled="disabled"
-                          @click="convert(item)"
+                            v-model="optionsStatus"
+                            :options="['PREACTIVE','ACTIVE', 'INACTIVE']"
+                            label="active"
+                            :disabled="disabled"
+                            @click="convert(item)"
                         />
 
                       </div>
@@ -227,7 +230,7 @@
 
                       <b-input-group-prepend>
                         <b-input-group-text
-                          class="bg-primary text-white "
+                            class="bg-primary text-white "
                         >
                           <span>PUBLICATION DATE</span>
 
@@ -235,11 +238,11 @@
                       </b-input-group-prepend>
                       <div class="w-75">
                         <b-form-datepicker
-                          v-model="item.publication_date"
-                          :disabled="disabled"
-                          class="ml-1"
-                          locale="en"
-                          :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                            v-model="item.publication_date"
+                            :disabled="disabled"
+                            class="ml-1"
+                            locale="en"
+                            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                         />
 
                       </div>
@@ -256,25 +259,25 @@
         </b-container>
         <b-row class="pt-1  ">
           <b-col
-            class="pr-5 fa_obs"
-            lg="12"
-            xs="12"
+              class="pr-5 fa_obs"
+              lg="12"
+              xs="12"
           >
             <b-form-group class="observation">
               <b-input-group>
                 <b-input-group-prepend>
                   <b-input-group-text
-                    class="bg-primary text-white pr-5 observation-prepend"
+                      class="bg-primary text-white pr-5 observation-prepend"
                   >
                     <span>OBSERVATION</span>
                   </b-input-group-text>
                 </b-input-group-prepend>
-                <div  class="observation-form" style="width: 85%; ">
+                <div class="observation-form" style="width: 85%; ">
                   <b-form-textarea
-                    v-model="item.observation"
+                      v-model="item.observation"
 
-                    class="input-form ml-1 observer "
-                    :disabled="disabled"
+                      class="input-form ml-1 observer "
+                      :disabled="disabled"
                   />
                 </div>
               </b-input-group>
@@ -285,26 +288,28 @@
       </div>
 
       <template
-        v-if="status===4"
-        #modal-footer
+          v-if="status===4"
+          #modal-footer
       >
         <b-button
-          variant="primary"
-          @click="insertFlyer"
+            variant="primary"
+            @click="insertFlyer"
         >
           SAVE
         </b-button>
-      </template></b-modal>
+      </template>
+    </b-modal>
   </div>
 
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 import vSelect from 'vue-select'
 import VueToggles from 'vue-toggles'
 import DragAndDrop from '@/views/commons/utilities/DragAndDrop.vue'
 import SocialNetworkService from '@/views/social-network/services/social-network.service'
+import BankOfFlyersService from "@/views/social-network/views/bank-of-flyers/bank-of-flyers.service";
 
 export default {
   components: {
@@ -374,7 +379,7 @@ export default {
           state: this.new_item.state,
 
         }
-        const data = await SocialNetworkService.getCampaignFlyers(params)
+        const data = await BankOfFlyersService.getCampaignFlyers(params)
         this.campaigns = data.data
       } catch (e) {
         this.showErrorSwal(e)
@@ -390,7 +395,7 @@ export default {
             id: this.new_item.campaign,
 
           }
-          const data = await SocialNetworkService.deleteCampaignFlyers(params)
+          const data = await BankOfFlyersService.deleteCampaignFlyers(params)
           if (data.status === 200) {
             await this.getCampaigns()
             this.new_item.campaign = null
@@ -485,7 +490,7 @@ export default {
           state: this.new_item.state,
           user: this.currentUser.user_id,
         }
-        const data = await SocialNetworkService.insertCampaignFlyers(params)
+        const data = await BankOfFlyersService.insertCampaignFlyers(params)
         if (data.status === 200) {
           await this.getCampaigns()
           this.showSuccessSwal()
@@ -539,38 +544,45 @@ export default {
 }
 
 @media (max-width: 1380px) {
-  .position_img{
+  .position_img {
     flex: 0 0 100.3333333333%;
     max-width: 100.3333333333%;
 
   }
- .observation{
-   padding-left: 13px;
 
- }
-  .img{
+  .observation {
+    padding-left: 13px;
+
+  }
+
+  .img {
     width: 55%;
   }
-  .fa{
+
+  .fa {
     flex: 0 0 100%;
     max-width: 100%;
 
   }
-  .fa_obs{
+
+  .fa_obs {
     flex: 0 0 100%;
     max-width: 100%;
   }
-  .observation-prepend{
+
+  .observation-prepend {
     max-width: 95%;
   }
-  .observation-form{
+
+  .observation-form {
 
     max-width: 77.5%;
 
 
   }
-  .observer{
-    margin-left: 6px!important;
+
+  .observer {
+    margin-left: 6px !important;
   }
 }
 </style>

@@ -1,31 +1,31 @@
 <template>
   <b-modal
-    v-model="ownControl"
-    scrollable
-    title-class="h3 text-white font-weight-bolder"
-    hide-footer
-    size="xmd"
-    :title="item.campaign"
-    @hidden="closeModal"
+      v-model="ownControl"
+      scrollable
+      title-class="h3 text-white font-weight-bolder"
+      hide-footer
+      size="xmd"
+      :title="item.campaign"
+      @hidden="closeModal"
   >
     <div>
       <b-card
-        no-body
-        class="mb-0"
+          no-body
+          class="mb-0"
       >
 
         <b-table
 
-          small
+            small
 
-          :fields="fields"
-          :items="search"
-          class="font-small-3 text-center"
+            :fields="fields"
+            :items="search"
+            class="font-small-3 text-center"
         >
 
           <template #table-busy>
             <div class="text-center text-primary my-2">
-              <b-spinner class="align-middle mr-1" />
+              <b-spinner class="align-middle mr-1"/>
               <strong>Loading ...</strong>
             </div>
           </template>
@@ -36,10 +36,11 @@
               <div class="mb-0 font-weight-bold text-important">
 
                 <router-link
-                  :class="[textLink]"
-                  :to="`/crm/leads/${data.item.id}`"
-                  target="_blank"
-                >      {{ data.item.nickname }}</router-link>
+                    :class="[textLink]"
+                    :to="`/crm/leads/${data.item.id}`"
+                    target="_blank"
+                > {{ data.item.nickname }}
+                </router-link>
 
               </div>
             </div>
@@ -47,7 +48,7 @@
 
           <template v-slot:cell(st_ad)="data">
             <p
-              class="mb-0 font-weight-bold "
+                class="mb-0 font-weight-bold "
             >
               {{ data.item.state_hour }}
             </p>
@@ -56,18 +57,18 @@
 
           <template v-slot:cell(source)="data">
             <p
-              class="mb-0 font-weight-bold "
+                class="mb-0 font-weight-bold "
             >
               <b-img
-                v-if="data.item.sourcesname_id === 17"
-                :src="`${baseImg}/assets/images/social-network/facebook.png`"
-                style="height: 30px"
+                  v-if="data.item.sourcesname_id === 17"
+                  :src="`${baseImg}/assets/images/social-network/facebook.png`"
+                  style="height: 30px"
               />
 
               <b-img
-                v-if="data.item.sourcesname_id === 32"
-                :src="`${baseImg}/assets/images/social-network/facebook.png`"
-                style="height: 30px"
+                  v-if="data.item.sourcesname_id === 32"
+                  :src="`${baseImg}/assets/images/social-network/facebook.png`"
+                  style="height: 30px"
               />
 
             </p>
@@ -76,7 +77,7 @@
 
           <template v-slot:cell(mobile)="data">
             <p
-              class="mb-0 font-weight-bold "
+                class="mb-0 font-weight-bold "
             >
               {{ data.item.mobile }}
             </p>
@@ -85,16 +86,17 @@
 
           <template v-slot:cell(status)="data">
             <b-badge
-              pill
-              :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
-              class="text-capitalize"
-            >{{ data.item.status }}</b-badge>
+                pill
+                :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
+                class="text-capitalize"
+            >{{ data.item.status }}
+            </b-badge>
 
           </template>
 
           <template v-slot:cell(created_date)="data">
             <p
-              class="mb-0 font-weight-bold "
+                class="mb-0 font-weight-bold "
             >
               {{ data.item.created_at }}
             </p>
@@ -111,8 +113,9 @@
 <script>
 
 import
-dataFields from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalReplies/fields.data'
+  dataFields from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalReplies/fields.data'
 import SocialNetworkService from '@/views/social-network/services/social-network.service'
+import BankOfFlyersService from "@/views/social-network/views/bank-of-flyers/bank-of-flyers.service";
 
 export default {
   props: {
@@ -131,9 +134,7 @@ export default {
     }
   },
 
-  computed: {
-
-  },
+  computed: {},
   created() {
     this.ownControl = true
   },
@@ -153,7 +154,7 @@ export default {
 
           flyer_id: this.item.id,
         }
-        const data = await SocialNetworkService.getLeadsFlyer(params)
+        const data = await BankOfFlyersService.getLeadsFlyer(params)
 
         this.flyer = data.data
         // Must return an array of items or an empty array if an error occurred
