@@ -39,6 +39,7 @@ const state = {
     },
     S_STATES_LEADS: [],
     S_OWNERS_LEADS: [],
+    S_SEARCH_GLOBAL_LEADS_SN: [],
 }
 const getters = {
     G_STATUS_LEADS() {
@@ -429,6 +430,22 @@ const actions = {
             return response;
         } catch (error) {
             console.log("ERROR_GET_NEW_LEADS [ACTION]", error)
+            throw error
+        }
+    },
+
+    async A_SEARCH_GLOBAL_LEADS_SN({ commit }, body) {
+        try {
+            const response = await SNLeadsService.searchGlobalLeadsSn(body)
+            if (response.status == 200) {
+                const data = response.data
+                commit('SET_DATA', {
+                    destination: 'S_SEARCH_GLOBAL_LEADS_SN',
+                    data
+                })
+            }
+        } catch (error) {
+            console.log("ERROR_SEARCH_GLOBAL_LEADS_SN [ACTION]", error)
             throw error
         }
     },
