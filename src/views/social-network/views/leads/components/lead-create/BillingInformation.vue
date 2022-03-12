@@ -7,7 +7,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col md="8">
+        <b-col md="8" class="text-left">
           <!-- Card Holder Name -->
           <ValidationProvider rules="required" v-slot="{errors}">
             <b-form-group
@@ -215,7 +215,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <b-row class="mt-2 mb-1">
+      <b-row class="mt-2 mb-1 text-left">
         <b-col md="3">
           <div  class="d-flex align-items-center justify-content-center">
             <span>
@@ -258,8 +258,8 @@
             @street-changed="streetChangedBilling"
         />
 
-        <b-row class="mt-2">
-          <b-col mb="6">
+        <b-row class="mt-2 text-left">
+          <b-col mb="6" >
             <ValidationProvider rules="required" v-slot="{errors}">
               <b-form-group
                   id="fieldset-horizontal"

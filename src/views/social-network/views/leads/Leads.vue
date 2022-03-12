@@ -5,7 +5,7 @@
     <header-slot>
       <template #actions>
         <div>
-          <lead-create-social/>
+
             <!-- v-if="[1, 2].includes(currentUser.role_id) && isLeadsRoute" -->
           <b-dropdown
             v-if="false"
@@ -46,14 +46,7 @@
               </b-input-group>
             </b-col>
             <b-col md="3">
-              <b-button
-                v-if="!isOnlyLead"
-                variant="success"
-                class="mr-1"
-                @click="isAddNewUserSidebarActive = true"
-              >
-                <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
-              </b-button>
+              <lead-create-social/>
             </b-col>
           </b-row>
         </div>
@@ -113,7 +106,6 @@ export default {
     LeadListAddNew,
     "modal-search-global-leads-sn": ModalSearchGlobalLeadsSn,
     LeadCreateSocial,
-    LeadListAddNew
   },
   data() {
     return {

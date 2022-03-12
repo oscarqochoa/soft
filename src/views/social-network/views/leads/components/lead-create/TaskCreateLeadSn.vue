@@ -52,7 +52,7 @@
 
             <div class="container-task-later">
 
-              <div class="mr-1">
+              <div class="mr-1 text-left">
                 <ValidationProvider rules="required" v-slot="{errors}">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -74,7 +74,7 @@
                 </ValidationProvider>
               </div>
 
-              <div class="mr-1">
+              <div class="mr-1 text-left">
                 <ValidationProvider rules="required" v-slot="{errors}">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -93,7 +93,7 @@
                   </b-form-group>
                 </ValidationProvider>
               </div>
-              <div class="">
+              <div class="text-left">
                 <ValidationProvider rules="required" v-slot="{errors}">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -124,14 +124,14 @@
                 <b-button
                     v-ripple.400="'rgba(255, 255, 255, 0.15)'"
                     variant="danger"
-                    class=""
+                    class="btn-find-seller-later"
                     @click="findSellers"
                 >
                   <span >Find Seller</span>
                 </b-button>
               </div>
 
-              <div class="mr-1">
+              <div class="mr-1 text-left">
                 <ValidationProvider rules="required" v-slot="{errors}">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -151,7 +151,7 @@
               </div>
 
               <div class="">
-                <b-col md="12">
+                <b-col md="12 text-left">
                   <ValidationProvider v-slot="{errors}" rules="required" name="Seller">
                     <b-form-group
                         :state="errors[0] ? false : null"
@@ -206,7 +206,7 @@
 
             <div class="container-task-later task-now-seller">
 
-              <div class="mr-1">
+              <div class="mr-1 text-left">
 
                 <b-col md="12">
                   <ValidationProvider v-slot="{errors}" rules="required" name="Subject">
@@ -231,7 +231,7 @@
                 </b-col>
               </div>
 
-              <div class="mr-1">
+              <div class="mr-1 text-left">
                 <b-col md="12">
                   <ValidationProvider v-slot="{errors}" rules="required" name="Assign to">
                     <b-form-group
@@ -271,7 +271,7 @@
                 </b-col>
 
               </div>
-              <div class="mr-1">
+              <div class="mr-1 text-left">
                 <ValidationProvider rules="required" v-slot="{errors}">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -290,7 +290,7 @@
                   </b-form-group>
                 </ValidationProvider>
               </div>
-              <div class="mr-1">
+              <div class="mr-1 text-left">
                 <ValidationProvider rules="required" v-slot="{errors}">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -491,5 +491,8 @@ export default {
 }
 .truncate-options {
   width: 85px;
+}
+.btn-find-seller-later{
+  margin-top: 9px;
 }
 </style>

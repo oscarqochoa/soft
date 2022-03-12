@@ -2,7 +2,7 @@
   <div >
     <b-button
         variant="success"
-        class="mr-1"
+        class="mr-1 d-flex align-items-center"
         @click="onOpenSidebar"
     >
       <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
@@ -41,18 +41,6 @@
             <template v-if="lead.addEvidence">
               <TaskCreateLeadSn :lead="lead"/>
             </template>
-
-            <b-button
-                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-                variant="success"
-                class=""
-                @click="onSubmit"
-            >
-              <div class="d-flex align-items-center justify-content-center px-2">
-                <feather-icon icon="CheckIcon" size="16" class="text-white"/>
-                <span class="btn-create-lead">Create</span>
-              </div>
-            </b-button>
 
           </validation-observer>
 
@@ -283,9 +271,6 @@ export default {
     async onSubmit() {
       try {
         if (await this.$refs.refFormLeadObserver.validate()) {
-          console.log('data: ', this.$refs.refFormLeadObserver)
-          await this.A_CREATE_LEAD_SN(this.lead);
-
           const resp = await this.showConfirmSwal(
               "Are you sure?",
               "You won't be able to revert this!",
@@ -293,16 +278,18 @@ export default {
           )
           if(resp.value){
             this.addPreloader()
+            await this.A_CREATE_LEAD_SN(this.lead);
 
             setTimeout(async () => {
               await this.resetForm()
               await this.onCloseSidebar();
-              await this.removePreloader()
-              await this.showSuccessSwal(
+              await this.removePreloader();
+
+              this.showSuccessSwal(
                   "Success!",
                   "Successful Process",
                   ""
-              )
+              );
               await this.A_GET_NEW_LEADS({
                 cr: null,
                 date_from: null,
@@ -317,16 +304,18 @@ export default {
                 state_h: null,
                 type: 1,
                 user_owner: null,
-              })
+              });
 
             },1000)
-
-
           }
-
         } else {
           console.log('Sin validacion')
-          await this.removePreloader()
+          this.$bvToast.toast(`Unvalidated fields found`, {
+            title: `Information`,
+            autoHideDelay: 4000,
+            appendToast: true,
+            variant: 'info'
+          });
 
         }
 

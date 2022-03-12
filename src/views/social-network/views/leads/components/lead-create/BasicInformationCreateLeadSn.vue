@@ -7,7 +7,7 @@
         </b-col>
       </b-row>
       <b-row class="mt-2">
-        <b-col mb="6">
+        <b-col mb="6" class="text-left">
 
           <ValidationProvider rules="required|unique-nickname" v-slot="{errors}" name="nickname">
             <b-form-group
@@ -32,7 +32,7 @@
           </ValidationProvider>
 
         </b-col>
-        <b-col mb="6">
+        <b-col mb="6" class="text-left">
           <ValidationProvider rules="required" v-slot="{errors}">
 
             <b-form-group
@@ -64,7 +64,7 @@
         </b-col>
       </b-row>
       <b-row class="mt-2">
-        <b-col mb="6">
+        <b-col mb="6" class="text-left">
           <ValidationProvider rules="required" v-slot="{errors}">
             <b-form-group
                 id="fieldset-horizontal"
@@ -77,7 +77,7 @@
                 label="Did you start dialogue?"
             >
               <VueToggles
-                  class="mt-1"
+                  class="vue-toggle"
                   height="31"
                   width="90"
                   checkedText="YES"
@@ -181,3 +181,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.vue-toggle{
+  margin-top: 0px !important;
+}
+</style>

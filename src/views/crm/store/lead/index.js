@@ -31,7 +31,6 @@ const state = {
     to: null,
     statusLead: null,
     owner: null,
-    assignTo: null,
     cr: null,
     program: null,
     sourceName: null,

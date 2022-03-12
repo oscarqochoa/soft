@@ -1,91 +1,91 @@
 <template>
   <div>
-    <b-row class="mt-2">
-    <b-col mb="12">
-      <ValidationProvider rules="required" v-slot="{errors}">
-        <b-form-group
-            id="fieldset-horizontal"
-            label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-            label-cols-sm="2"
-            label-for="input-horizontal"
-            label-cols-lg="2"
-            content-cols-sm
-            content-cols-lg="10"
-            label="Address"
-        >
-          <vue-google-autocomplete
-              :id="`${component}-${street}-street`"
-              :ref="`${component}-${street}-street`"
-              v-model="street"
-              class="form-control input-form fond-white border-hover pl-1"
-              placeholder="Please type your address"
-              country="us"
-              :readonly="false"
-              @placechanged="getAddressData"
-              @keyup="(e) => onChangeAddress(e, street)"
-              :state="errors[0] ? false : null"
-              :class="{'border-error-sn style-chooser' :errors[0]}"
-          />
-          <div v-if="errors[0]" class="text-error-sn text-center">Address {{errors[0]}}</div>
-        </b-form-group>
-      </ValidationProvider>
-    </b-col>
-  </b-row>
-    <b-row class="mt-2">
-    <b-col mb="6">
-      <ValidationProvider rules="required" v-slot="{errors}">
-        <b-form-group
-            id="fieldset-horizontal"
-            label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-            label-cols-sm="4"
-            label-for="input-horizontal"
-            label-cols-lg="4"
-            content-cols-sm
-            content-cols-lg="8"
-            label="City"
-        >
-          <b-form-input
-              v-model="city"
-              class="select-icon-none font-bureau-style border-hover bg-white-c"
-              :class="{'border-error-sn' :errors[0]}"
-              placeholder="Please type city"
-              :state="errors[0] ? false : null"
+    <b-row class="mt-2 text-left">
+      <b-col mb="12">
+        <ValidationProvider rules="required" v-slot="{errors}">
+          <b-form-group
+              id="fieldset-horizontal"
+              label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+              label-cols-sm="2"
+              label-for="input-horizontal"
+              label-cols-lg="2"
+              content-cols-sm
+              content-cols-lg="10"
+              label="Address"
+          >
+            <vue-google-autocomplete
+                :id="`${component}-${street}-street`"
+                :ref="`${component}-${street}-street`"
+                v-model="street"
+                class="form-control input-form fond-white border-hover pl-1"
+                placeholder="Please type your address"
+                country="us"
+                :readonly="false"
+                @placechanged="getAddressData"
+                @keyup="(e) => onChangeAddress(e, street)"
+                :state="errors[0] ? false : null"
+                :class="{'border-error-sn style-chooser' :errors[0]}"
+            />
+            <div v-if="errors[0]" class="text-error-sn text-center">Address {{errors[0]}}</div>
+          </b-form-group>
+        </ValidationProvider>
+      </b-col>
+    </b-row>
+    <b-row class="mt-2 text-left">
+      <b-col mb="6">
+        <ValidationProvider rules="required" v-slot="{errors}">
+          <b-form-group
+              id="fieldset-horizontal"
+              label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+              label-cols-sm="4"
+              label-for="input-horizontal"
+              label-cols-lg="4"
+              content-cols-sm
+              content-cols-lg="8"
+              label="City"
+          >
+            <b-form-input
+                v-model="city"
+                class="select-icon-none font-bureau-style border-hover bg-white-c"
+                :class="{'border-error-sn' :errors[0]}"
+                placeholder="Please type city"
+                :state="errors[0] ? false : null"
 
-          ></b-form-input>
-          <div v-if="errors[0]" class="text-error-sn text-center">City {{errors[0]}}</div>
-        </b-form-group>
-      </ValidationProvider>
-    </b-col>
-    <b-col mb="6">
-      <ValidationProvider rules="required" v-slot="{errors}">
-        <b-form-group
-            id="fieldset-horizontal"
-            label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-            label-cols-sm="4"
-            label-for="input-horizontal"
-            label-cols-lg="4"
-            content-cols-sm
-            content-cols-lg="8"
-            label="State"
-            :state="errors[0] ? false : null"
-        >
-          <v-select
-              id="state_more_information"
-              v-model="state"
-              :selected="null"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              label="label"
-              :options="S_STATES_EEUU"
-              :clearable="false"
-              :reduce="el => el.value"
-          />
-          <input type="radio" class="d-none bg-green" v-model="state" />
-          <div v-if="errors[0]" class="text-error-sn text-center">State {{errors[0]}}</div>
-        </b-form-group>
+            ></b-form-input>
+            <div v-if="errors[0]" class="text-error-sn text-center">City {{errors[0]}}</div>
+          </b-form-group>
+        </ValidationProvider>
+      </b-col>
+      <b-col mb="6">
+        <ValidationProvider rules="required" v-slot="{errors}">
+          <b-form-group
+              id="fieldset-horizontal"
+              label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+              label-cols-sm="4"
+              label-for="input-horizontal"
+              label-cols-lg="4"
+              content-cols-sm
+              content-cols-lg="8"
+              label="State"
+              :state="errors[0] ? false : null"
+          >
+            <v-select
+                id="state_more_information"
+                v-model="state"
+                :selected="null"
+                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                label="label"
+                :options="S_STATES_EEUU"
+                :clearable="false"
+                :reduce="el => el.value"
+            />
+            <input type="radio" class="d-none bg-green" v-model="state" />
+            <div v-if="errors[0]" class="text-error-sn text-center">State {{errors[0]}}</div>
+          </b-form-group>
 
-      </ValidationProvider>
-    </b-col>
-  </b-row>
+        </ValidationProvider>
+      </b-col>
+    </b-row>
   </div>
 </template>
 

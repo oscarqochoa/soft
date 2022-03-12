@@ -6,8 +6,8 @@
           <h4 class="title-card text-left">Personal Information</h4>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
-        <b-col mb="6">
+      <b-row class="mt-2 text-left" >
+        <b-col mb="6" >
           <ValidationProvider rules="required" v-slot="{errors}" name="first-name-personal-information">
             <b-form-group
                 id="fieldset-horizontal"
@@ -54,7 +54,7 @@
           </ValidationProvider>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
+      <b-row class="mt-2 text-left">
         <b-col mb="6">
           <ValidationProvider rules="required|unique-mobile" v-slot="{errors}" name="phone-m-personal-information">
             <b-form-group
@@ -107,7 +107,7 @@
           </ValidationProvider>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
+      <b-row class="mt-2 text-left">
         <b-col mb="6">
           <ValidationProvider
               v-slot="{errors}"
@@ -301,7 +301,7 @@ import VueToggles from "vue-toggles";
 import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 import FormReaseonNotPotential
-  from "@/views/social-network/views/commissions/lead-create/reason-not-potential/FormReasonNotPotential";
+  from "@/views/social-network/views/leads/components/lead-create/reason-not-potential/FormReasonNotPotential";
 
 
 export default {

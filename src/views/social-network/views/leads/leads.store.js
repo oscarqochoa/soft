@@ -48,6 +48,10 @@ const state = {
         value: null,
     }],
     S_SEARCH_GLOBAL_LEADS_SN: [],
+    S_BUSY_NEW_LEADS: false,
+    S_TOTAL_NEW_LEADS: 0,
+    S_FROM_PAGE_NEW_LEADS: 0,
+    S_TO_PAGE_NEW_LEADS: 0
 }
 const getters = {
     G_STATUS_LEADS() {
@@ -113,10 +117,15 @@ const mutations = {
         state.S_LEADS.items.find(
             (lead) => lead.id == params.lead_id
             ).file_evidence = params.url_file
-      }
+      },
+    M_SET_BUSY_NEW_LEADS(state, states) {
+        state.S_BUSY_NEW_LEADS = states;
+        console.log('busy m: ', states)
+    }
 }
 const actions = {
     async A_GET_NEW_LEADS({ commit }, body) {
+        commit('M_SET_BUSY_NEW_LEADS', true)
         try {
             const response = await SNLeadsService.getNewLeads(body)
 
@@ -126,6 +135,8 @@ const actions = {
                 fromPage: response.from,
                 toPage: response.to,
             }
+            console.log('data: ', data)
+            commit('M_SET_BUSY_NEW_LEADS', false)
             commit('SET_DATA', {
                 destination: 'S_LEADS',
                 data
@@ -474,8 +485,7 @@ const actions = {
         return dat;
         },
     async A_CREATE_LEAD_SN ({ commit }, params) {
-        const resp = SNLeadsService.createLeadSN(params);
-
+        const resp = await SNLeadsService.createLeadSN(params);
     },
 
     async A_GET_RECOVERY_LEADS({ commit }, body) {

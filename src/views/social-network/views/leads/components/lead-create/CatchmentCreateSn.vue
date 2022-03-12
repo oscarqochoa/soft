@@ -10,9 +10,9 @@
         </b-col>
       </b-row>
       <b-row class="mt-2">
-        <b-col md="4">
+        <b-col md="4" class="text-left">
           <ValidationProvider v-slot="{errors}" rules="required" name="ST/AD">
-            <b-col md="12">
+            <b-col md="12" >
               <b-form-group
                   label="ST/AD"
                   label-for="st-ad"
@@ -102,7 +102,7 @@
             </b-col>
           </ValidationProvider>
         </b-col>
-        <b-col md="8">
+        <b-col md="8" class="text-left">
 
 
           <b-form-group
@@ -302,17 +302,27 @@
                 label="Flyers"
             >
               <ValidationProvider rules="required" v-slot="{errors}">
-                <div class="d-flex margin-flyer">
-                  <b-avatar square class="image-flyer" :src="imageFlyer" size="10rem" ></b-avatar>
-                  <div class="d-flex align-items-center">
-                    <button
-                        class="rounded sub-sources border-0 btn-block btn btn-light"
-                        @click="openModalSelectFlyer"
-                    >Select</button>
-                  </div>
+                <div class="content-flyer">
+                  <div class="d-flex margin-flyer">
+                    <b-avatar
+                        square
+                        class="image-flyer"
+                        :src="imageFlyer"
+                        size="10rem"
+                        icon="card-image"
+                        :class="errors[0] ? 'border-error-flyer' : ''"
+                    />
+                    <div class="d-flex align-items-center">
+                      <button
+                          class="rounded sub-sources border-0 btn-block btn btn-light"
+                          @click="openModalSelectFlyer"
+                      >Select</button>
+                    </div>
 
-                  <div v-if="errors[0]" class="text-error-sn text-center">Program {{errors[0]}}</div>
-                  <input type="radio" class="d-none" v-model="lead.fanpage_id" />
+
+                    <input type="radio" class="d-none" v-model="lead.flyer" />
+                  </div>
+                  <p v-if="errors[0]" class="text-error-sn text-left">Flyer {{errors[0]}}</p>
                 </div>
               </ValidationProvider>
             </b-form-group>
@@ -339,7 +349,9 @@
           <div v-for="flyer in S_FLYERS" class="d-flex align-items-center justify-content-center">
 
             <div @click="selectFlyer(flyer.id, flyer.route_thumb)" class="image-flyer d-flex align-items-center justify-content-center" :class="lead.flyer == flyer.id ? 'select-flyer' : 'asd'">
-              <b-avatar :src="flyer.route_thumb" size="8rem" ></b-avatar>
+              <b-avatar
+                  :src="flyer.route_thumb"
+                  size="8rem" icon="card-image"/>
             </div>
 
           </div>
@@ -556,7 +568,6 @@ export default {
   object-fit: cover;
   margin-left: -12px;
   margin-right: 20px;
-  border-radius: 5px;
   span{
     cursor: pointer;
     border: 3px solid transparent;
@@ -593,6 +604,19 @@ export default {
 }
 .margin-flyer{
   margin-left: 9px;
+}
+.content-flyer{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  .text-left{
+    margin-top: .5rem;
+    margin-left: 1.1rem;
+  }
+}
+.border-error-flyer{
+  border: 2px solid #fc424a;
+  overflow: hidden;
 }
 
 </style>

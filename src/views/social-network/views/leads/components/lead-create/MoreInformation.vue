@@ -6,7 +6,7 @@
           <h4 class="title-card text-left">More information</h4>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
+      <b-row class="mt-2 text-left">
         <b-col mb="6">
           <ValidationProvider rules="required" v-slot="{errors}">
             <b-form-group
@@ -62,7 +62,7 @@
           </ValidationProvider>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
+      <b-row class="mt-2 text-left">
         <b-col mb="6">
           <ValidationProvider rules="required" v-slot="{errors}">
             <b-form-group
@@ -116,8 +116,8 @@
           </ValidationProvider>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
-        <b-col mb="6">
+      <b-row class="mt-2 text-left">
+        <b-col mb="6 text-left">
           <ValidationProvider rules="required" v-slot="{errors}">
             <b-form-group
                 id="fieldset-horizontal"
