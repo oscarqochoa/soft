@@ -1,6 +1,6 @@
 <template>
   <div>
-    <tabler-icon icon="CurrencyDollarIcon" size="21" />
+    <tabler-icon icon="CurrencyDollarIcon" size="21" :badge="payStubCounter" badge-classes="bg-danger" />
     <b-tooltip
       triggers="hover"
       :target="`bookmark-pay-stub`"
@@ -16,25 +16,40 @@
       modal-class="modal-primary"
       id="modalPayStup"
     >
-      <pay-stub-grid></pay-stub-grid>
+      <pay-stub-grid @updatePayStubCounter="getPayStubCounter()"></pay-stub-grid>
     </b-modal>
   </div>
 </template>
 
 <script>
 import PayStubGrid from "./PayStubGrid.vue";
+import PayStubService from "./service/paystub.service";
 export default {
+  mounted() {
+    this.getPayStubCounter();
+  },
   data() {
     return {
       payStubModalController: false,
+      payStubCounter: 0
     };
   },
   components: {
     PayStubGrid,
   },
+  computed:{
+    currentUser(){
+      return this.$store.getters['auth/currentUser']
+    }
+  },
   methods: {
     openPayStubModal() {
       this.payStubModalController = true;
+    },
+    async getPayStubCounter() {
+      console.log('ejecuta')
+      const counter = await PayStubService.getPayStubCounter(this.currentUser.user_id);
+      this.payStubCounter = counter[0].cant;
     },
   },
 };
