@@ -262,7 +262,7 @@
               >
             </ValidationProvider>
           </b-col>
-          <b-col lg="4" md="12" v-if="needValidationPassword">
+          <b-col lg="4" md="12" v-if="needValidationPassword && !isModalShow">
             <div v-if="needSuppervisorCurrentModulePassword">
               <b-input-group>
                 <b-input
@@ -808,7 +808,7 @@ export default {
   },
   watch: {
     suggestedAmount(newSuggestedAmount) {
-      this.fee = newSuggestedAmount;
+      if(!this.isModalShow) this.fee = newSuggestedAmount;
     },
   },
 };

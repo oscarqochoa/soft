@@ -1,0 +1,384 @@
+<template>
+  <div>
+    <!-- Table Container Card -->
+    <b-card no-body class="mb-0">
+      <filter-slot
+        v-scrollbar
+        :filter="filter"
+        :filter-principal="filterPrincipal"
+        :total-rows="totalLeads"
+        :paginate="paginate"
+        :start-page="fromPage"
+        :to-page="toPage"
+        :send-multiple-sms="false"
+        @reload="getSocialNetworkLeads"
+        @onChangeCurrentPage="onChangeCurrentPage"
+      >
+        <b-table
+          slot="table"
+          ref="refUserListTable"
+          class="position-relative font-small-3"
+          primary-key="id"
+          empty-text="No matching records found"
+          select-mode="multi"
+          responsive="sm"
+          table-class="text-nowrap"
+          sticky-header="73vh"
+          small
+          show-empty
+          :sort-by.sync="sortBy"
+          :fields="fields"
+          :items="S_LEADS.items"
+          :sort-desc.sync="isSortDirDesc"
+          :busy.sync="isBusy"
+        >
+          <template #table-busy>
+            <div class="text-center text-primary my-2">
+              <b-spinner class="align-middle mr-1" />
+              <strong>Loading ...</strong>
+            </div>
+          </template>
+
+
+          <!-- Column: Name -->
+          <template #cell(nickname)="data">
+            <div style="white-space: pre-wrap;">
+              <router-link
+                :class="textLink"
+                :to="`/social-network/leads/new/dashboard/${data.item.id}`"
+                target="_blank"
+              >{{ data.item.nickname }}</router-link>
+              <br>
+              <span>{{data.item.lead_name}}</span>
+            </div>
+          </template>
+
+          <!-- Column: Status -->
+          <template #cell(status)="data">
+            <b-badge
+              pill
+              :variant="`light-${resolveLeadSnStatusVariant(data.item.status)}`"
+              class="text-capitalize"
+              >{{ data.item.status }}</b-badge
+            >
+          </template>
+
+          <!-- Column: Fanpage -->
+          <template #cell(fanpage)="data">
+            <b-img thumbnail fluid :src="baseUrl + data.item.logo" style="width: 50px" />
+          </template>
+
+          <!-- Column: Recomendations -->
+          <template #cell(programs)="data">
+            <template v-for="(program, key) in JSON.parse(data.item.programs)">
+              <span :key="key">{{ program }}</span>
+              <br :key="JSON.parse(data.item.programs).length + key" />
+            </template>
+          </template>
+
+          <!-- Column: Task -->
+          <template #cell(attend)="data">
+            <div>
+              <span class="text-capitalize text-success" v-if="data.item.attend == 2"> YES 
+                <feather-icon
+                  icon="CheckCircleIcon"
+                  size="15"
+                  class="mr-50 text-success"
+                />
+              </span>
+              <span class="text-capitalize text-success" v-else-if="data.item.attend == 1"> YES </span>
+              <span class="text-capitalize text-danger" v-else-if="data.item.attend == null"> NO </span>
+              <div v-if="data.item.seller_name != null"> {{ data.item.seller_name }} </div>
+              <div v-if="data.item.attend_date != null"> {{ data.item.attend_date | myGlobalDay }} </div>
+              <div v-if="data.item.real_time != null && data.item.state_hour != 'CA'"> {{ data.item.real_time | myGlobalDay }} {{ data.item.state_hour }}</div>
+            </div>
+          </template>
+
+          <!-- Column: Created Date -->
+          <template #cell(created_at)="data">
+            <small>{{ data.item.created_at | myGlobalDay }}</small>
+          </template>
+
+          <!-- Column: Tracking -->
+          <template #cell(tracking)="data">
+            <div class="text-center">
+                <feather-icon
+                  icon="ListIcon"
+                  size="15"
+                  class="text-primary cursor-pointer"
+                  @click="openModalTracking(data.item.id, data.item.nickname)"
+                />
+            </div>
+          </template>
+
+          <template #cell(actions)="data">
+            <actions-table
+              :id="data.item.id"
+              :name="data.item.nickname"
+              @onDeleteLead="deleteLead"
+              @onShowSmsList="openModalSmsList"
+              @onSendSms="openModalSendSMS(data.item)"
+            ></actions-table>
+          </template>
+
+        </b-table>
+      </filter-slot>
+    </b-card>
+
+    <modal-tracking
+      v-if="showModalTracking"
+      :show="showModalTracking"
+      :name="nameLeadSelected"
+      @onClose="closeModalTracking"
+    ></modal-tracking>
+
+    <modal-sms-list
+      v-if="showModalSmsList"
+      :show="showModalSmsList"
+      :name="nameLeadSelected"
+      @onClose="closeModalSmsList"
+    ></modal-sms-list>
+
+    <modal-send-sms
+      v-if="sendModalSms"
+      :smss="leads_sms"
+      :modul="currentUser.modul_id"
+      :show="sendModalSms"
+      :typesms="typesms"
+      :sms="leads_sms_o"
+      :name-leads="name_leads_arr"
+      @hide="closeModalSendSms">
+    </modal-send-sms>
+  </div>
+</template>
+
+<script>
+import { mapActions, mapGetters, mapState } from "vuex";
+
+import dataFields from "./fields.data";
+import dataFilters from "./filters.data";
+import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
+
+// Components
+import ModalTracking from "../../components/ModalTracking.vue";
+import ActionsTable from "./components/ActionsTable.vue";
+import ModalSmsList from "./components/ModalSmsList.vue";
+import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
+
+export default {
+  components: {
+    "filter-slot": FilterSlot,
+    "modal-tracking": ModalTracking,
+    "actions-table": ActionsTable,
+    "modal-sms-list": ModalSmsList,
+    "modal-send-sms": ModalSendSms,
+  },
+  data() {
+    return {
+      advanceSearch: false,
+      baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
+
+      isBusy: false,
+      fields: dataFields,
+      filter: dataFilters,
+      filterPrincipal: {
+        type: "input",
+        inputType: "text",
+        placeholder: "Search...",
+        model: ""
+      },
+      totalLeads: 0,
+      fromPage: 0,
+      toPage: 0,
+      paginate: {
+        currentPage: 1,
+        perPage: 10
+      },
+      perPageOptions: [10, 25, 50, 100],
+      sortBy: "id",
+      isSortDirDesc: true,
+      showModalTracking: false,
+      nameLeadSelected: "",
+      showModalSmsList: false,
+      sendModalSms: false,
+      rowData: [],
+      typesms: null,
+      leads_sms_o: null,
+      name_leads_arr: [],
+    };
+  },
+  computed: {
+    ...mapGetters('CrmGlobalStore', ['G_PROGRAMS']),
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      G_STATUS_LEADS: "CrmLeadStore/G_STATUS_LEADS",
+      G_OWNERS: "CrmGlobalStore/G_OWNERS",
+      // G_PROGRAMS: "CrmGlobalStore/G_PROGRAMS",
+      G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
+      G_STATES: "CrmGlobalStore/G_STATES",
+      G_CRS: "CrmGlobalStore/G_CRS",
+      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS"
+    }),
+    ...mapState({
+      S_LEADS: state => state.SocialNetworkLeadsStore.S_LEADS,
+      
+    }),
+    routeModule() {
+      return this.$route.meta.route;
+    },
+    moduleId() {
+      return this.$route.meta.module;
+    }
+  },
+  created() {
+    this.getSocialNetworkLeads();
+    this.setOptionsOnFilters();
+  },
+  methods: {
+    ...mapActions('SocialNetworkLeadsStore', ['A_DELETE_LEAD', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_GET_SMS_SENT_TO_NEW_LEADS']),
+    ...mapActions('CrmLeadStore', ['A_SET_FILTERS_LEADS']),
+    async openModalTracking(id, name) {
+      await this.A_GET_TRACKING_NEW_LEADS({
+        lead_id: id,
+      });
+      this.nameLeadSelected = name;
+      this.showModalTracking = true;
+    },
+    closeModalTracking() {
+      this.showModalTracking = false;
+    },
+    async openModalSendSMS(item) {
+      this.rowData = item;
+      this.leads_sms = [];
+      this.typesms = 1;
+      this.leads_sms_o = [];
+      this.name_leads_arr = [{ name: item.lead_name, id: item.id }];
+      this.sendModalSms = true;
+    },
+    closeModalSendSms(value) {
+      this.sendModalSms = value;
+    },
+    async deleteLead(id) {
+      const result = await this.showConfirmSwal(
+        "Are you sure?",
+        "You won't be able to revert this!",
+        "question"
+      )
+      if (result.value) {
+          const { user_id } = this.currentUser;
+          const response = await this.A_DELETE_LEAD({
+            lead_id: id,
+            user_id: user_id,
+          });
+
+          if (this.isResponseSuccess(response)) {
+            this.showToast(
+              "success",
+              "top-right",
+              "Deleted!",
+              "CheckIcon",
+              "Your file has been deleted."
+            );
+          } else {
+            this.showToast(
+              "warning",
+              "top-right",
+              "Warning!",
+              "AlertTriangleIcon",
+              `Something went wrong.${response.message}`
+            );
+          }
+        }
+    },
+    async openModalSmsList(id, name) {
+      await this.A_GET_SMS_SENT_TO_NEW_LEADS({
+        id: id,
+      });
+
+      this.nameLeadSelected = name;
+      this.showModalSmsList = true;
+    },
+    closeModalSmsList() {
+      this.showModalSmsList = false;
+    },
+    resolveLeadSnStatusVariant(status) {
+      if (status === 2) return "success";
+      if ([3, 4].includes(status)) return "primary";
+      if (status === 5) return "secondary";
+      if (status === 6) return "warning";
+      if (status === 7) return "danger";
+      return "primary";
+    },
+    async getSocialNetworkLeads() {
+      try {
+        this.isBusy = true;
+        this.setFilters();
+        const response = await this.A_GET_NEW_LEADS({
+          cr: null,
+          date_from: this.filter[0].model,
+          date_to: this.filter[1].model,
+          lead_status: null,
+          name_text: this.filterPrincipal.model,
+          order: "desc",
+          orderby: 10,
+          program: null,
+          state_h: this.filter[3].model,
+          type: 1,
+          user_owner: this.filter[2].model,
+          perpage: this.paginate.perPage,
+          page: this.paginate.currentPage
+        });
+        this.totalLeads = response.total;
+        this.fromPage = response.from;
+        this.toPage = response.to;
+        this.isBusy = false;
+      } catch (error) {
+        console.log("Somtehing went wrong getSocialNetworkLeads", error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
+      }
+    },
+
+    setOptionsOnFilters() {
+      this.filter[2].options = this.G_STATUS_LEADS;
+      this.filter[3].options = this.G_OWNERS;
+      this.filter[4].options = this.G_OWNERS;
+      this.filter[5].options = this.G_CRS;
+      this.filter[6].options = this.G_PROGRAMS;
+      this.filter[7].options = this.G_STATES;
+      this.filter[8].options = this.G_SOURCE_NAMES;
+      this.filter[9].options = this.G_TYPE_DOCS;
+    },
+    onChangeCurrentPage(e) {
+      this.paginate.currentPage = e;
+      this.getSocialNetworkLeads();
+    },
+    setFilters() {
+      this.A_SET_FILTERS_LEADS({
+        from: this.filter[0].model,
+        to: this.filter[1].model,
+        statusLead: this.filter[2].model,
+        owner: this.filter[3].model,
+        assignTo: this.filter[4].model,
+        cr: this.filter[5].model,
+        program: this.filter[6].model,
+        stAd: this.filter[7].model,
+        sourceName: this.filter[8].model,
+        typeDoc: this.filter[9].model,
+        perPage: this.paginate.perPage,
+        currentPage: this.paginate.currentPage
+      });
+    },
+  },
+  mounted() {
+    if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
+      this.actionsOptions.push("delete");
+  }
+};
+</script>

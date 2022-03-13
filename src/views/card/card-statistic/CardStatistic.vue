@@ -161,6 +161,8 @@
           statistic-title="Subscribers Gained"
           :chart-data="subscribersGained.series"
         />
+
+        {{ subscribersGained }}
       </b-col>
       <b-col
         lg="3"
@@ -284,7 +286,9 @@ export default {
   created() {
     // Subscribers gained
     this.$http.get('/card/card-statistics/subscribers')
-      .then(response => { this.subscribersGained = response.data })
+      .then(response => {
+        this.subscribersGained = response.data
+      })
 
     // Revenue Generated
     this.$http.get('/card/card-statistics/revenue')
@@ -309,9 +313,16 @@ export default {
     // Newsletter
     this.$http.get('/card/card-statistics/newsletter')
       .then(response => { this.newsletter = response.data })
+
+    this.prueba()
   },
+
   methods: {
     kFormatter,
+
+    prueba() {
+      console.log(this.subscribersGained.analyticsData)
+    },
   },
 }
 </script>

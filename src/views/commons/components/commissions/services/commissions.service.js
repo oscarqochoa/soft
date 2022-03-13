@@ -7,6 +7,7 @@ class CommissionsService {
         "/commissions/get-report-commissions",
         params
       );
+      console.log('data', data, params)
       return data;
     } catch (error) {
       throw error;
@@ -18,6 +19,7 @@ class CommissionsService {
         "/commissions/get-report-commissions-department",
         params
       );
+      console.log('commissions by departments', data, params)
       return data;
     } catch (error) {
       throw error;

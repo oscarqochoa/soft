@@ -36,8 +36,9 @@
                 <!-- Card Title -->
                 <b-card-title
                   :style="itemCards[0] == true ? 'color: white' : ''"
-                  >Leads</b-card-title
                 >
+                  Leads
+                </b-card-title>
                 <!-- Card Content -->
                 <b-card-text>
                   <!-- First Line -->
@@ -392,7 +393,12 @@
                       class="d-flex flex-wrap pb-1"
                     >
                       <div
-                        class="d-flex align-items-center justify-content-center pr-1"
+                        class="
+                          d-flex
+                          align-items-center
+                          justify-content-center
+                          pr-1
+                        "
                       >
                         <!-- Graphic Sub Title -->
                         <div>

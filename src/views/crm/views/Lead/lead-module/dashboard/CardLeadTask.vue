@@ -16,23 +16,23 @@
       <template #cell(title)="data">{{ data.item.title }}</template>
 
       <template #cell(date)="data">
-        <div style="white-space: nowrap;">
+        <div style="white-space: nowrap">
           {{ data.item.due_date | myGlobalDay }}
           <template
             v-if="lead.state && lead.state !== 'UNK' && data.item.real_time"
           >
             <br />
-            <span
-              class="font-weight-bolder"
-            >{{ data.item.real_time | myGlobalDay }} ({{ lead.state }})</span>
+            <span class="font-weight-bolder"
+              >{{ data.item.real_time | myGlobalDay }} ({{ lead.state }})</span
+            >
           </template>
         </div>
       </template>
 
       <template #cell(sms)="data">
-        <b-badge
-          :variant="data.item.sms_status == 1 ? 'success' : 'danger'"
-        >{{ data.item.sms_status == 1 ? 'YES' : 'NO' }}</b-badge>
+        <b-badge :variant="data.item.sms_status == 1 ? 'success' : 'danger'">{{
+          data.item.sms_status == 1 ? "YES" : "NO"
+        }}</b-badge>
       </template>
 
       <template #cell(actions)="data">
@@ -159,7 +159,7 @@
       modal-class="modal-primary"
       centered
       size="lg"
-      :title="`All Tasks - ${ nameModule }`"
+      :title="`All Tasks - ${nameModule}`"
       hide-footer
     >
       <modal-task-history :modul="modul" :lead="lead" />
@@ -180,12 +180,12 @@ export default {
   components: {
     ModalTaskCreate,
     ModalTaskEdit,
-    ModalTaskHistory
+    ModalTaskHistory,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token"
+      token: "auth/token",
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     nameModule() {
@@ -193,13 +193,13 @@ export default {
         return "SOCIAL NETWORK";
       }
       return "CRM";
-    }
+    },
   },
   created() {
     this.getUserAppointments();
   },
   directives: {
-    Ripple
+    Ripple,
   },
   data() {
     return {
@@ -207,13 +207,13 @@ export default {
         { key: "subject", tdClass: "py-1" },
         { key: "date", label: "Date/Hour", tdClass: "py-1" },
         { key: "sms", tdClass: "py-1" },
-        { key: "Actions", tdClass: "py-1" }
+        { key: "Actions", tdClass: "py-1" },
       ],
       isLoading: false,
       isTaskDisabled: false,
       task: {},
       taskForSn: 0,
-      type: 0
+      type: 0,
     };
   },
   methods: {
@@ -224,7 +224,7 @@ export default {
       A_GET_TASK: "TaskStore/A_GET_TASK",
       A_DELETE_LEAD_TASK: "TaskStore/A_DELETE_LEAD_TASK",
       A_MAKE_FAVORITE_LEAD_TASK: "TaskStore/A_MAKE_FAVORITE_LEAD_TASK",
-      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER"
+      A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
     }),
     async getUserAppointments() {
       try {
@@ -232,7 +232,7 @@ export default {
           date: "date_task",
           from: "from_task",
           to: "to_task",
-          taskForSn: this.taskForSn
+          taskForSn: this.taskForSn,
         });
       } catch (error) {
         console.log("Something went wrong getUserAppointments", error);
@@ -256,13 +256,13 @@ export default {
     onDoneTask(id) {
       this.isLoading = true;
       this.showConfirmSwal()
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             const response = await this.A_DONE_LEAD_TASK({
               id,
               user_id: this.currentUser.user_id,
               lead_id: this.lead.id,
-              taskForSn: 0
+              taskForSn: 0,
             });
             if (this.isResponseSuccess(response)) {
               this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
@@ -280,7 +280,7 @@ export default {
           }
           this.isLoading = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Something went wrong onDoneTask", error);
           this.showErrorSwal(error);
           this.isLoading = false;
@@ -321,18 +321,18 @@ export default {
     onDeleteTask(id) {
       this.isLoading = true;
       this.showConfirmSwal()
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             const response = await this.A_DELETE_LEAD_TASK({
               id,
               user_id: this.currentUser.user_id,
               lead_id: this.lead.id,
-              taskForSn: 0
+              taskForSn: 0,
             });
             if (this.isResponseSuccess(response)) {
               this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
               await this.A_GET_TASKS({ id: this.currentUser.user_id });
-              const index = this.lead.lead_tasks.map(el => el.id).indexOf(id);
+              const index = this.lead.lead_tasks.map((el) => el.id).indexOf(id);
               if (index !== -1) this.lead.lead_tasks.splice(index, 1);
               this.showToast(
                 "success",
@@ -353,7 +353,7 @@ export default {
           }
           this.isLoading = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Something went wrong onDeleteTask", error);
           this.showErrorSwal();
           this.isLoading = false;
@@ -362,14 +362,14 @@ export default {
     onMakeFavoriteTask(id, favorite) {
       this.isLoading = true;
       this.showConfirmSwal("Are you sure?", "Favorite Task")
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             const response = await this.A_MAKE_FAVORITE_LEAD_TASK({
               id,
               favorite,
               user_id: this.currentUser.user_id,
               lead_id: this.lead.id,
-              taskForSn: 0
+              taskForSn: 0,
             });
             if (this.isResponseSuccess(response)) {
               this.lead.lead_tasks = response.data;
@@ -392,28 +392,28 @@ export default {
           }
           this.isLoading = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Something went wrong onMakeFavoriteTask", error);
           this.showErrorSwal();
           this.isLoading = false;
         });
-    }
+    },
   },
   mounted() {},
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     onlyRead: {
       type: Boolean,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  setup() {}
+  setup() {},
 };
 </script>

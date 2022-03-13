@@ -394,14 +394,7 @@
               <b-col class="mt-2" md="5">
                 <b-input-group prepend="Monthly Net Income">
                   <div
-                    class="
-                      form-control
-                      d-flex
-                      align-items-center
-                      justify-content-center
-                      bg-transparent
-                      border
-                    "
+                    class="form-control d-flex align-items-center justify-content-center bg-transparent border"
                   >
                     $ {{ totalMonthlyNetIncome.toFixed(2) }}
                   </div>
@@ -516,16 +509,9 @@
               <b-col class="mt-1" cols="2">
                 <label>Total Utilities</label>
                 <div
-                  class="
-                    form-control
-                    d-flex
-                    align-items-center
-                    justify-content-start
-                    bg-transparent
-                    border
-                  "
+                  class="form-control d-flex align-items-center justify-content-start bg-transparent border"
                 >
-                  $ {{ totalDato5 }}
+                  $ {{ totalDato5.toFixed(2) }}
                 </div>
               </b-col>
             </b-row>
@@ -648,14 +634,7 @@
               <b-col class="mt-1" cols="2">
                 <label>Total Others</label>
                 <div
-                  class="
-                    form-control
-                    d-flex
-                    align-items-center
-                    justify-content-start
-                    bg-transparent
-                    border
-                  "
+                  class="form-control d-flex align-items-center justify-content-start bg-transparent border"
                 >
                   $ {{ totalOthers.toFixed(2) }}
                 </div>
@@ -665,14 +644,7 @@
               <b-col cols="2">
                 <label>Total monthly living cost</label>
                 <div
-                  class="
-                    form-control
-                    d-flex
-                    align-items-center
-                    justify-content-start
-                    bg-transparent
-                    border
-                  "
+                  class="form-control d-flex align-items-center justify-content-start bg-transparent border"
                 >
                   $ {{ totalDato7.toFixed(2) }}
                 </div>
@@ -909,7 +881,7 @@ export default {
         (sum, select) => sum + Number(select.value),
         0
       );
-      return total.toFixed(2);
+      return total;
     },
     totalDato7() {
       const total = this.cars.reduce((sum, car) => sum + Number(car.value), 0);
@@ -1027,7 +999,7 @@ export default {
                 dato2: this.coApplicantObject.monthlyNetIncome,
                 dato3: this.applicantObject.additionalMonthlyNetincome,
                 dato4: this.housingExpensesObject.monthlyPaymentHousingExpenses,
-                dato5: this.totalDato5,
+                dato5: this.totalDato5.toFixed(2),
                 dato6: this.dato6,
                 dato7: this.dato7,
                 dato8: this.dato8,
@@ -1470,5 +1442,4 @@ export default {
 };
 </script>
 
-<style >
-</style>
+<style></style>

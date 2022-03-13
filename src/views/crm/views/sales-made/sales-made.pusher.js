@@ -22,10 +22,10 @@ const salesMadeAlert = () => {
           showConfirmButton: true,
           confirmButtonText: "Ok",
         })
-        .then((res) => {
+        .then(async (res) => {
           if (res) {
-            //data.to_id = session_id;
-            //axios.post("/api/closeswal", data).then((response) => {});
+            data.to_id = sessionId;
+            await window.amgApi.post('/commons/close-all-swal', data)
           }
         });
     }

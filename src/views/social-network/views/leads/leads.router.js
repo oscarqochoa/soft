@@ -1,0 +1,143 @@
+import NewLeads from './tabs/new-leads/NewLeads.vue'
+import CreateNewLead from './tabs/new-leads/views/create/Create.vue'
+import DashboardNewLead from './tabs/new-leads/views/dashboard/Dashboard.vue'
+
+import OldLeads from './tabs/old-leads/OldLeads.vue'
+import DashboardOldLead from './tabs/old-leads/views/dashboard/Dashboard.vue'
+import EditOldLead from './tabs/old-leads/views/edit/Edit.vue'
+
+export default [
+    {
+        path: '/social-network/leads',
+        name: 'leads-social-network',
+        component: () => import('@/views/social-network/views/leads/Leads.vue'),
+        redirect: { name: 'sn-list-new-leads' },
+        children: [
+            {
+                path: '',
+                redirect: { name: 'sn-list-new-leads' }
+            },
+            {
+                path: 'new',
+                component: NewLeads,
+                name: 'sn-list-new-leads',
+                meta: {
+                    pageTitle: 'Leads',
+                    breadcrumb: [
+                        {
+                            text: 'Leads'
+                        },
+                        {
+                            text: 'New',
+                            active: true
+                        },
+                    ],
+                },
+            },
+
+            {
+                path: 'old',
+                component: OldLeads,
+                name: 'sn-list-old-leads',
+                meta: {
+                    pageTitle: 'Leads',
+                    breadcrumb: [
+                        {
+                            text: 'Leads'
+                        },
+                        {
+                            text: 'Old',
+                            active: true
+                        },
+                    ],
+                },
+            },
+        ],
+    },
+    {
+        path: '/social-network/leads/new/create',
+        component: CreateNewLead,
+        name: 'sn-create-new-lead',
+        meta: {
+            pageTitle: 'Create',
+            breadcrumb: [
+                {
+                    text: 'Leads'
+                },
+                {
+                    text: 'New',
+                    to: { name: 'sn-list-new-leads' }
+                },
+                {
+                    text: 'Create',
+                    active: true,
+                }
+            ],
+        }
+
+    },
+    {
+        path: '/social-network/leads/new/dashboard/:id',
+        component: DashboardNewLead,
+        name: 'sn-dashboard-new-lead',
+        meta: {
+            pageTitle: 'Dashboard',
+            breadcrumb: [
+                {
+                    text: 'Leads',
+                },
+                {
+                    text: 'New',
+                    to: { name: 'sn-list-new-leads' }
+                },
+                {
+                    text: 'Dashboard',
+                    active: true,
+                },
+            ],
+        },
+    },
+    {
+        path: '/social-network/leads/old/dashboard/:id',
+        component: DashboardOldLead,
+        name: 'sn-dashboard-old-lead',
+        meta: {
+            pageTitle: 'Dashboard',
+            breadcrumb: [
+                {
+                    text: 'Leads'
+                },
+                {
+                    text: 'Old',
+                    to: { name: 'sn-list-old-leads' }
+                },
+                {
+                    text: 'Dashboard',
+                    active: true
+                }
+            ]
+        }
+    },
+    {
+        path: '/social-network/leads/old/edit',
+        component: EditOldLead,
+        name: 'sn-edit-old-lead',
+        meta: {
+            pageTitle: 'Edit Lead',
+            breadcrumb: [
+                {
+                    text: 'Leads'
+                },
+                {
+                    text: 'Old',
+                    to: { name: 'sn-list-old-leads' }
+                },
+                {
+                    text: 'Edit Lead',
+                    active: true,
+                }
+            ]
+        }
+    }
+
+]

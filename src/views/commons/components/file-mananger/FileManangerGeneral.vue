@@ -96,7 +96,12 @@
           <template #cell(file_name)="data">
             <span
               v-if="selectedFile !== data.item || !editState"
-              class="cursor-pointer d-flex align-items-center justify-content-start"
+              class="
+                cursor-pointer
+                d-flex
+                align-items-center
+                justify-content-start
+              "
               @click="contentClicked(data.item)"
             >
               <amg-icon

@@ -150,6 +150,9 @@ export default {
         if (this.paginate.totalRows !== data.total)
           this.paginate.totalRows = data.total;
         let array = data.data;
+        if(!Array.isArray(array)){
+          array = Object.values(array);
+        }
         let items = [];
         array.forEach(element => {
           items.push({

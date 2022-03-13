@@ -46,6 +46,9 @@ import '@/@fake-db/db'
 import './filters/dates'
 import './filters/times'
 import './filters/number'
+import './filters/social-network/status'
+import './filters/social-network/program'
+import './filters/social-network/extension-file'
 import './filters/programs'
 
 // Validation rules (Vee validate)
@@ -94,6 +97,7 @@ require('@core/scss/core.scss')
 require('@/assets/scss/style.scss')
 
 // Global Mixins general.js
+
 
 Vue.mixin(generalMixins)
 

@@ -7,6 +7,7 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 $borderamg: #efb911;
 @import "components/card";
 @import "components/kendo";
+@import "components/vue-tree";
 @import "components/form-wizard";
 @import "components/messages";
 @import "variables/new-colors";
@@ -53,6 +54,7 @@ $borderamg: #efb911;
   background: #fff;
   padding: 5px 10px;
   border-radius: 5px;
+  text-align: center;
 }
 
 .w-50 {
