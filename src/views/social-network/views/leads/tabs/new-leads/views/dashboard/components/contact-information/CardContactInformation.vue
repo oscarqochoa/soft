@@ -6,78 +6,78 @@
           <b-col cols="6">
             <h3 class="title-card">Contact Information</h3>
           </b-col>
-          <b-col cols="6" class="text-right"> </b-col>
+          <b-col cols="6" class="text-right"></b-col>
         </b-row>
       </b-container>
 
       <div class="mt-5 p-relative">
         <b-tabs
-          pills
-          active-nav-item-class="bg-purple-tab"
-          content-class="mt-2"
-          lazy
-          nav-wrapper-class="card nav-wrapper-class-card"
-          v-model="sourceIndex"
+            pills
+            active-nav-item-class="bg-purple-tab"
+            content-class="mt-2"
+            lazy
+            nav-wrapper-class="card nav-wrapper-class-card"
+            v-model="sourceIndex"
         >
           <span
-            v-if="doneReload"
-            style="position: absolute; z-index: 10; left: 29px; bottom: 984px"
-            class="title-card"
+              v-if="doneReload"
+              style="position: absolute; z-index: 10; left: 29px; bottom: 984px"
+              class="title-card"
           >
             Contact information
           </span>
           <b-tab
-            v-for="(source, index) in allInfo"
-            :key="index"
-            title-item-class="text-center w-15"
-            title-link-class="bg-default-purple-tab"
-            lazy
+              v-for="(source, index) in allInfo"
+              :key="index"
+              title-item-class="text-center w-15"
+              title-link-class="bg-default-purple-tab"
+              lazy
           >
             <template #title>{{ source.source }}</template>
             <b-card no-body>
               <!-- nav-class="border-primary" -->
               <div class="mt-2 ml-2">
                 <b-tabs
-                  pills
-                  active-nav-item-class="bg-orange-tab"
-                  content-class="padding-vertical-tab"
-                  nav-class="border-bottom-vertical-tab p-4"
-                  lazy
-                  v-model="subSourceIndex"
+                    pills
+                    active-nav-item-class="bg-orange-tab"
+                    content-class="padding-vertical-tab"
+                    nav-class="border-bottom-vertical-tab p-4"
+                    lazy
+                    v-model="subSourceIndex"
                 >
                   <b-tab
-                    v-for="subSource in source.sub_source"
-                    :key="subSource.name"
-                    title-item-class="text-center w-15"
-                    title-link-class="bg-default-tab"
+                      v-for="subSource in source.sub_source"
+                      :key="subSource.name"
+                      title-item-class="text-center w-15"
+                      title-link-class="bg-default-tab"
                   >
                     <template #title>
                       <span>{{ subSource.name }}</span>
                     </template>
                     <div class="mt-2 ml-3">
                       <b-tabs
-                        active-nav-item-class="font-weight-bold text-uppercase nav-link-sn-active"
-                        nav-class="border-right-vertical-tab border-bottom-0 h-100"
-                        lazy
-                        vertical
-                        v-model="replyIndex"
+                          active-nav-item-class="font-weight-bold text-uppercase nav-link-sn-active"
+                          nav-class="border-right-vertical-tab border-bottom-0 h-100"
+                          lazy
+                          vertical
+                          v-model="replyIndex"
                       >
                         <b-tab
-                          title-item-class="w-vertical-tab"
-                          title-link-class="nav-link-vertical nav-link-sn mx-0 border-light"
-                          v-for="(reply, index) in subSource.replies"
-                          :key="index"
-                          @click="setActiveColor(index)"
+                            title-item-class="w-vertical-tab"
+                            title-link-class="nav-link-vertical nav-link-sn mx-0 border-light"
+                            v-for="(reply, index) in subSource.replies"
+                            :key="index"
+                            @click="setActiveColor(index)"
                         >
                           <template #title>
                             <span
-                              class="reply-active-tab-number roboto-class"
-                              :style="
+                                class="reply-active-tab-number roboto-class"
+                                :style="
                                 activeReply == index
                                   ? 'background: #FF6045 !important; color: white !important; font-size: 15px !important;'
                                   : 'font-size: 15px !important;'
                               "
-                              >{{ reply.count_reply }}</span
+                            >{{ reply.count_reply }}</span
                             >
                             <span>{{ reply.type_reply }}</span>
                           </template>
@@ -86,7 +86,7 @@
                               <b-row style="padding-top: 37px">
                                 <b-col cols="12" md="4">
                                   <contact-information
-                                    :contactInfo="{
+                                      :contactInfo="{
                                       catcher: reply.name_catcher,
                                       potential: reply.potencial,
                                       program: reply.fanpage,
@@ -96,21 +96,21 @@
                                       contact_method: reply.contact_method,
                                       reason: reply.reason,
                                     }"
-                                    :reply="reply"
-                                    :parent_source="source.id"
+                                      :reply="reply"
+                                      :parent_source="source.id"
                                   ></contact-information>
                                 </b-col>
                                 <b-col cols="12" md="8">
                                   <contact-notes
-                                    :reply="reply"
-                                    :personalInfo="personalInfo"
+                                      :reply="reply"
+                                      :personalInfo="personalInfo"
                                   ></contact-notes>
                                 </b-col>
                               </b-row>
                             </b-col>
                             <b-col md="3" v-show="source.id == 1">
                               <contact-flyer
-                                :fyerReply="{
+                                  :fyerReply="{
                                   flyer_id: reply.flyer_id,
                                   reply_id: reply.reply_id,
                                   route: reply.flyer_route,
@@ -119,21 +119,21 @@
                                   fanpage_name: reply.fanpage,
                                   flyer_state: reply.flyer_state,
                                 }"
-                                :reply="reply"
+                                  :reply="reply"
                               ></contact-flyer>
                             </b-col>
                             <b-col md="6" class="pr-0">
                               <contact-tasks
-                                :replyId="reply.reply_id"
-                                :requiredFieldsForCreateCrmTask="
+                                  :replyId="reply.reply_id"
+                                  :requiredFieldsForCreateCrmTask="
                                   requiredFieldsForCreateCrmTask
                                 "
-                                :modul="modul"
+                                  :modul="modul"
                               ></contact-tasks>
                             </b-col>
                             <b-col md="6" class="pl-0">
                               <contact-files
-                                :replyId="reply.reply_id"
+                                  :replyId="reply.reply_id"
                               ></contact-files>
                             </b-col>
                           </b-row>
@@ -147,10 +147,10 @@
           </b-tab>
           <template #tabs-end>
             <b-button
-              size="sm"
-              class="rounded btn-orange ml-2 position-plus"
-              title="Add new Reply"
-              @click="addReply()"
+                size="sm"
+                class="rounded btn-orange ml-2 position-plus"
+                title="Add new Reply"
+                @click="addReply()"
             >
               <i class="fas fa-plus"></i>
             </b-button>
@@ -234,9 +234,10 @@ export default {
 
   created() {
     this.getInfoReplies();
-    console.log(this.lead_id);
+
   },
-  mounted() {},
+  mounted() {
+  },
 
   computed: {},
   methods: {

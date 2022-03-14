@@ -1,29 +1,29 @@
 <template>
   <b-modal
-    v-model="ownControl"
-    scrollable
-    title-class="h3 text-white font-weight-bolder"
-    title="NEW COMMENT"
-    size="lg"
-    @hidden="closeModal"
+      v-model="ownControl"
+      scrollable
+      title-class="h3 text-white font-weight-bolder"
+      title="NEW COMMENT"
+      size="lg"
+      @hidden="closeModal"
   >
 
     <validation-observer ref="form">
       <label>Comment</label>
       <validation-provider
-        v-slot="{ errors }"
-        name="comment"
-        rules="required"
+          v-slot="{ errors }"
+          name="comment"
+          rules="required"
       >
         <b-form-textarea
-          id="textarea"
-          v-model="comments"
-          required
-          placeholder="Enter something..."
+            id="textarea"
+            v-model="comments"
+            required
+            placeholder="Enter something..."
         />
         <label
-          v-if="errors[0]"
-          class="text-danger"
+            v-if="errors[0]"
+            class="text-danger"
         >
           Comment {{ errors[0] }}
         </label>
@@ -32,12 +32,12 @@
 
     <template #modal-footer>
       <b-button
-        variant="primary"
-        @click="insertFlyerComments"
+          variant="primary"
+          @click="insertFlyerComments"
       >
         <b-spinner
-          v-if="spinnerOn"
-          small
+            v-if="spinnerOn"
+            small
         />
         SAVE
       </b-button>
@@ -49,8 +49,9 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
 import SocialNetworkService from '@/views/social-network/services/social-network.service'
+import BankOfFlyersService from "@/views/social-network/views/bank-of-flyers/bank-of-flyers.service";
 
 export default {
   props: {
@@ -94,7 +95,7 @@ export default {
             user_id: this.currentUser.user_id,
           }
 
-          const data = await SocialNetworkService.insertFlyerComments(params)
+          const data = await BankOfFlyersService.insertFlyerComments(params)
           if (data.status === 200) {
             this.showSuccessSwal()
             this.closeModal()
