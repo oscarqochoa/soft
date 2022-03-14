@@ -58,6 +58,7 @@
                         disabled
                         ><b-img
                           :src="baseUrl + program.logo"
+                          :alt="'Logo of the program '+program.value"
                           class="img-fan-page"
                           fluid
                           thumbnail

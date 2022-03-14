@@ -44,6 +44,7 @@
                           <b-img
                             :src="baseUrl + program.logo"
                             class="img-fan-page"
+                            :alt="'Logo of the program '+program.value"
                             fluid
                             thumbnail
                         />
