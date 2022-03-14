@@ -77,24 +77,16 @@ export default {
     updateToken({ commit }, token) {
       commit('SET_TOKEN', token)
     },
-    actions: {
-        updateCurrentUser({commit}, user) {
-            commit('SET_CURRENT_USER', user)
-        },
-        updateToken({commit}, token) {
-            commit('SET_TOKEN', token)
-        },
-        updateCurrentUserModuleRole({commit, state}, module) {
-            commit('SET_CURRENT_USER_MODULE', module)
-            commit('SET_CURRENT_USER_ROLE_ID')
-            localStorage.setItem('userData', JSON.stringify(state.currentUser))
-        },
-        updateCurrentUserInformation({commit}, {data, avatar}) {
-            commit('SET_CURRENT_USER_INFORMATION', {
-                data: data,
-                avatar: avatar
-            })
-        }
+    updateCurrentUserModuleRole({commit, state}, module) {
+        commit('SET_CURRENT_USER_MODULE', module)
+        commit('SET_CURRENT_USER_ROLE_ID')
+        localStorage.setItem('userData', JSON.stringify(state.currentUser))
     },
+    updateCurrentUserInformation({commit}, {data, avatar}) {
+        commit('SET_CURRENT_USER_INFORMATION', {
+            data: data,
+            avatar: avatar
+        })
+    }
   }
 }
