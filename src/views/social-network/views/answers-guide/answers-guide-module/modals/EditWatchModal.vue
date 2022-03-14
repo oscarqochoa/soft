@@ -146,7 +146,7 @@
                       @click="copyAnswerName(treeItem.content)"
                     />
                     <feather-icon
-                      v-if="reading"
+                      v-if="reading &&(isCeo || isSupervisor || isTeamLeader)"
                       class="mr-1 pointer bigger text-warning"
                       style="color: #007bff"
                       icon="EditIcon"

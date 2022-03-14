@@ -26,7 +26,6 @@ const state = {
   S_LEAD_EDIT: new Object(),
   S_FILTERS_LEADS: {
     searchQuery: '',
-    assignTo: null,
     from: null,
     to: null,
     statusLead: null,
@@ -367,7 +366,7 @@ const actions = {
         }
       }
 
-      
+
       body.programs = JSON.stringify(body.program)
       console.log(body)
       if (mixins.methods.isResponseSuccess(response)) {
@@ -384,7 +383,7 @@ const actions = {
       throw error
     }
   },
-  
+
   async A_SET_REQUEST_LEADS({ commit }, body) {
     try {
       const response = await crmLead.postRequestLead(body)

@@ -12,6 +12,10 @@ export default [
         name: 'answers-guide-boost-credit',
         meta: {
           program: 2,
+          pageTitle: 'Answers Guide',
+          breadcrumb: [{
+            text: 'Answers Guide',
+          }],
           permittedRoles: [
             {
               role_id: 2,
@@ -58,6 +62,10 @@ export default [
         name: 'answers-guide-business',
         meta: {
           program: 1,
+          pageTitle: 'Answers Guide',
+          breadcrumb: [{
+            text: 'Answers Guide',
+          }],
           permittedRoles: [
             {
               role_id: 2,
@@ -104,6 +112,10 @@ export default [
         name: 'answers-guide-credit-experts',
         meta: {
           program: 3,
+          pageTitle: 'Answers Guide',
+          breadcrumb: [{
+            text: 'Answers Guide',
+          }],
           permittedRoles: [
             {
               role_id: 2,
@@ -150,6 +162,10 @@ export default [
         name: 'answers-guide-tax-research',
         meta: {
           program: 5,
+          pageTitle: 'Answers Guide',
+          breadcrumb: [{
+            text: 'Answers Guide',
+          }],
           permittedRoles: [
             {
               role_id: 2,
@@ -196,6 +212,10 @@ export default [
         name: 'answers-guide-debt-solution',
         meta: {
           program: 4,
+          pageTitle: 'Answers Guide',
+          breadcrumb: [{
+            text: 'Answers Guide',
+          }],
           permittedRoles: [
             {
               role_id: 2,
