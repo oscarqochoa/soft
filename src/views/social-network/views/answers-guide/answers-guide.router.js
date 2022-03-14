@@ -5,6 +5,7 @@ export default [
     path: '/socialnetwork/answers-guide',
     name: 'answers-guide',
     component: () => import('@/views/social-network/views/answers-guide/AnswersGuide.vue'),
+    redirect: { name: 'answers-guide-boost-credit' },
     children: [
       {
         path: 'boost-credit',
