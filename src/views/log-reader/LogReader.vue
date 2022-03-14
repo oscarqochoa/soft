@@ -12,8 +12,9 @@
     <b-card>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <span v-if="items.length !== 0" class="k-font-weight-bold font-medium-1" >Showing Logs: {{dateFilter}}</span>
-          <span v-else class="k-font-weight-bold font-medium-1" >There are no logs</span>
+          <span v-if="dateFilter==='' && finishedLoading" class="k-font-weight-bold font-medium-1" >Showing All Logs</span>
+          <span v-if="items.length !== 0 && finishedLoading && dateFilter!==''" class="k-font-weight-bold font-medium-1" >Showing Logs: {{dateFilter}}</span>
+          <span v-if="items.length === 0 && finishedLoading" class="k-font-weight-bold font-medium-1" >There are no logs</span>
           <div class="d-inline mx-2">
             <b-badge href="#" :class="statusBadges[0] === 1 ? 'info-bg':''" @click="filterByType(0, 'INFO')">
               Info
@@ -27,16 +28,16 @@
             <b-badge href="#" :class="statusBadges[3] === 1 ? 'alert-bg':''"  class="ml-1" @click="filterByType(3, 'ALERT')" >
               Alert
             </b-badge>
-            <b-badge href="#" :class="statusBadges[4] === 1 ? 'error-bg':''"  class="ml-1" @click="filterByType(4, 'ERROR')" >
+            <b-badge href="#" :variant="statusBadges[4] === 1 ? 'danger':''"  class="ml-1" @click="filterByType(4, 'ERROR')" >
               Error
             </b-badge>
             <b-badge href="#" :class="statusBadges[5] === 1 ? 'warning-bg':''"  class="ml-1" @click="filterByType(5, 'WARNING')" >
               Warning
             </b-badge>
-            <b-badge href="#" :class="statusBadges[6] === 1 ? 'notice-bg':''"  class="ml-1" @click="filterByType(6, 'NOTICE')" >
+            <b-badge href="#" :variant="statusBadges[6] === 1 ? 'info':''"  class="ml-1" @click="filterByType(6, 'NOTICE')" >
               Notice
             </b-badge>
-            <b-badge  href="#" :class="statusBadges[7] === 1 ? 'debug-bg':''"  class="ml-1" @click="filterByType(7, 'DEBUG')" >
+            <b-badge  href="#" :variant="statusBadges[7] === 1 ? 'dark':''"  class="ml-1" @click="filterByType(7, 'DEBUG')" >
               Debug
             </b-badge>
             <b-badge v-if="statusBadges.includes(1)" href="#" variant="primary"  class="ml-1" @click="clearFilters" >
@@ -99,6 +100,7 @@ export default {
       items: [],
       filteredItems: [],
       datesOptions: [],
+      finishedLoading: false,
       fields: [
         {
           key: 'timestamp',
@@ -150,24 +152,34 @@ export default {
     async getLogs(date=null){
       try{
         this.isBusy=true
+        this.finishedLoading = false
         const data = await LogReaderService.getLogList({date: date})
         console.log(data)
         if (data.status===200){
           this.isBusy=false
           if (data.data.success){
             this.items = data.data.data.logs
+            this.finishedLoading = true
             this.filteredItems = this.items
             this.datesOptions = data.data.data.available_log_dates
             this.filename = data.data.data.filename
-            if(!date) this.dateFilter = this.datesOptions[0]
+            // if(!date) this.dateFilter = this.datesOptions[0]
+          } else {
+            this.finishedLoading = true
+            this.items = []
+            this.filteredItems = []
+            this.datesOptions = []
+            this.filename = []
           }
         }
       }catch (e) {
         this.isBusy=false
+        this.finishedLoading = true
         this.showErrorSwal(e)
       }
     },
     async onChangeDate(){
+      console.log('on changee')
       await this.getLogs(this.dateFilter)
     },
     async clearByDate(){
@@ -178,7 +190,8 @@ export default {
           if (data.status === 200) {
             this.showSuccessSwal()
             await this.getLogs()
-          }        }
+          }
+        }
       } catch (e){
         this.showErrorSwal(e)
       }
@@ -203,27 +216,27 @@ export default {
 
 <style scoped>
 .info-bg{
-  background-color: #6BB5B5;
+  background-color: #6BB5B5 !important;
 }
 .emergency-bg{
-  background-color: #FF6060;
+  background-color: #FF6060 !important;
 }
 .critical-bg{
-  background-color: #DE4F4F;
+  background-color: #DE4F4F !important;
 }
 .alert-bg{
-  background-color: blue;
+  background-color: blue !important;
 }
 .error-bg{
-  background-color: red;
+  background-color: red !important;
 }
 .warning-bg{
-  background-color: #F7BE57;
+  background-color: #F7BE57 !important;
 }
 .notice-bg{
-  background-color: #8F5FE8;
+  background-color: #8F5FE8 !important;
 }
 .debug-bg{
-  background-color: #343a40 ;
+  background-color: #343a40 !important;
 }
 </style>
