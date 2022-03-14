@@ -15,7 +15,7 @@ export default [
           program: 2,
           pageTitle: 'Answers Guide',
           breadcrumb: [{
-            text: 'Answers Guide',
+            text: 'Boost Credit',
           }],
           permittedRoles: [
             {
@@ -65,7 +65,7 @@ export default [
           program: 1,
           pageTitle: 'Answers Guide',
           breadcrumb: [{
-            text: 'Answers Guide',
+            text: 'Business',
           }],
           permittedRoles: [
             {
@@ -115,7 +115,7 @@ export default [
           program: 3,
           pageTitle: 'Answers Guide',
           breadcrumb: [{
-            text: 'Answers Guide',
+            text: 'Credit Experts',
           }],
           permittedRoles: [
             {
@@ -165,7 +165,7 @@ export default [
           program: 5,
           pageTitle: 'Answers Guide',
           breadcrumb: [{
-            text: 'Answers Guide',
+            text: 'Tax Research',
           }],
           permittedRoles: [
             {
@@ -215,7 +215,7 @@ export default [
           program: 4,
           pageTitle: 'Answers Guide',
           breadcrumb: [{
-            text: 'Answers Guide',
+            text: 'Debt Solution',
           }],
           permittedRoles: [
             {
