@@ -48,34 +48,27 @@ export default {
             state.currentUser.fullName = data.first_name + " " + data.last_name
             state.currentUser.avatar = avatar
 
-      // Update stored data
-      localStorage.setItem("userData", JSON.stringify(state.currentUser))
-    },
-    SET_TOKEN(state, val) {
-      state.token = val
-    },
-    SET_CURRENT_USER_MODULE(state, module) {
-      state.currentUser.modul_id = module
-    },
-    SET_CURRENT_USER_ROLE_ID(state) {
-      const roleId = state.currentUser.arrRoles.find(
-        rol => rol.module_id === state.currentUser.modul_id,
-      )
-      if (roleId) {
-        Vue.set(state.currentUser, "role_id", roleId.role_id)
-        Vue.set(state.currentUser, "module_name", roleId.module_name)
-        Vue.set(state.currentUser, "role_name", roleId.role_name)
-        Vue.set(state.currentUser, "level_id", roleId.typesenior)
-        Vue.set(state.currentUser, "level_name", roleId.level_name)
-      }
-    },
-  },
-  actions: {
-    updateCurrentUser({ commit }, user) {
-      commit('SET_CURRENT_USER', user)
-    },
-    updateToken({ commit }, token) {
-      commit('SET_TOKEN', token)
+            // Update stored data
+            localStorage.setItem("userData", JSON.stringify(state.currentUser))
+        },
+        SET_TOKEN(state, val) {
+            state.token = val
+        },
+        SET_CURRENT_USER_MODULE(state, module) {
+            state.currentUser.modul_id = module
+        },
+        SET_CURRENT_USER_ROLE_ID(state) {
+            const roleId = state.currentUser.arrRoles.find(
+                rol => rol.module_id === state.currentUser.modul_id,
+            )
+            if (roleId) {
+                Vue.set(state.currentUser, "role_id", roleId.role_id)
+                Vue.set(state.currentUser, "module_name", roleId.module_name)
+                Vue.set(state.currentUser, "role_name", roleId.role_name)
+                Vue.set(state.currentUser, "level_id", roleId.typesenior)
+                Vue.set(state.currentUser, "level_name", roleId.level_name)
+            }
+        },
     },
     actions: {
         updateCurrentUser({commit}, user) {
@@ -96,5 +89,5 @@ export default {
             })
         }
     },
-  }
+
 }
