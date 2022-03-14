@@ -67,14 +67,14 @@
           <template v-slot:cell(cr)="data">
 
             <span
-                v-if="data.item.credit_report == '1'"
+                v-if="data.item.credit_report === '1'"
                 class="text-danger"
             >
               NO
             </span>
 
             <span
-                v-if="data.item.credit_report == '2'"
+                v-if="data.item.credit_report === '2'"
                 class="text-primary"
             >
               YES
@@ -83,14 +83,14 @@
           <template v-slot:cell(sale)="data">
 
             <span
-                v-if="data.item.sale == '1'"
+                v-if="data.item.sale === '1'"
                 class="text-danger"
             >
               NO
             </span>
 
             <span
-                v-if="data.item.sale == '2'"
+                v-if="data.item.sale === '2'"
                 class="text-primary"
             >
               YES
@@ -290,7 +290,7 @@ export default {
 
           this.$refs.migrationList.refresh()
 
-          this.showSuccessSwal('File has been deleted successfully')
+          this.showSuccessSwal()
         }
       } catch (e) {
         this.showErrorSwal(e)
