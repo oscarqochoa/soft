@@ -9,7 +9,7 @@
       <b-row>
         <b-col md="8" class="text-left">
           <!-- Card Holder Name -->
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Card Holder Name">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -153,7 +153,7 @@
               <b-col sm="4">
                 <validation-provider
                     v-slot="{errors}"
-                    name="card-expi-month"
+                    name="Card month"
                     rules="required"
                 >
                   <b-form-input
@@ -174,7 +174,7 @@
               <b-col sm="4">
                 <validation-provider
                     v-slot="{errors}"
-                    name="card-expi-year"
+                    name="Carc year"
                     rules="required"
                 >
                   <b-form-input
@@ -194,7 +194,7 @@
               <b-col sm="4">
                 <validation-provider
                     v-slot="{errors}"
-                    name="card-security-code"
+                    name="Card code"
                     rules="required"
                 >
                   <b-form-input
@@ -251,7 +251,7 @@
       <template v-if="addAddress">
 
         <StreetCreateSN
-            component="MoreInfo2"
+            title="Billing street"
             :street="lead.streetcard"
             :city="lead.citycard"
             :state="lead.statecard"
@@ -260,7 +260,7 @@
 
         <b-row class="mt-2 text-left">
           <b-col mb="6" >
-            <ValidationProvider rules="required" v-slot="{errors}">
+            <ValidationProvider rules="required" v-slot="{errors}" name="Card zip code">
               <b-form-group
                   id="fieldset-horizontal"
                   label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -283,7 +283,7 @@
             </ValidationProvider>
           </b-col>
           <b-col mb="6">
-            <ValidationProvider rules="required" v-slot="{errors}">
+            <ValidationProvider rules="required" v-slot="{errors}" name="Card Country">
               <b-form-group
                   id="fieldset-horizontal"
                   label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -315,7 +315,7 @@
 import Ripple from "vue-ripple-directive";
 import vSelect from "vue-select";
 import {mapState} from "vuex";
-import StreetCreateSN from "@/views/social-network/views/commissions/lead-create/StreetCreateSN";
+import StreetCreateSN from "./StreetCreateSN";
 import imageVisa from "@/assets/images/cards/visa2.png";
 import imageAmerican from "@/assets/images/cards/american.png";
 import imageDiscover from "@/assets/images/cards/Discover.jpg";

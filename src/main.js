@@ -57,6 +57,8 @@ import './validation/rules'
 
 import './pusher/index'
 
+// ScrollTo
+
 Vue.prototype.$log = console.log
 
 window.amgApi = amgApi
@@ -85,6 +87,10 @@ Vue.use(vueLoader, 'loading')
 Vue.use(money, { precision: 4 })
 // register directive v-mask and component <the-mask>
 Vue.use(VueTheMask)
+
+var VueScrollTo = require('vue-scrollto');
+Vue.use(VueScrollTo)
+
 
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard

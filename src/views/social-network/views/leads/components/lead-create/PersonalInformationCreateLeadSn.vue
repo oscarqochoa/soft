@@ -8,7 +8,7 @@
       </b-row>
       <b-row class="mt-2 text-left" >
         <b-col mb="6" >
-          <ValidationProvider rules="required" v-slot="{errors}" name="first-name-personal-information">
+          <ValidationProvider rules="required" v-slot="{errors}" name="First Name">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -31,7 +31,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="last-name-personal-information">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Last Name">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -56,7 +56,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required|unique-mobile" v-slot="{errors}" name="phone-m-personal-information">
+          <ValidationProvider rules="required|unique-mobile" v-slot="{errors}" name="Phone(M)">
             <b-form-group
                           label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                           label-cols-sm="4"
@@ -83,7 +83,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="zip-code-personal-information">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Zip Code">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -112,7 +112,7 @@
           <ValidationProvider
               v-slot="{errors}"
               rules="required|email"
-              name="email-personal-information"
+              name="Email"
           >
             <b-form-group
                 id="fieldset-horizontal"
@@ -136,7 +136,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="note-personal-information">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Note">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -202,7 +202,7 @@
         <b-col md="6">
           <template v-if="!lead.potential">
 
-            <ValidationProvider rules="required" v-slot="{errors}" name="not-potential">
+            <ValidationProvider rules="required" v-slot="{errors}" name="Not Potential?">
 
               <div class="d-flex align-items-center justify-content-between">
                 <div class="w-100" :class="{'' :errors[0]}">

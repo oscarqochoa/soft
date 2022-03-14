@@ -53,7 +53,7 @@
             <div class="container-task-later">
 
               <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Day event">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -75,7 +75,7 @@
               </div>
 
               <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider rules="required" v-slot="{errors}" name="From">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -94,7 +94,7 @@
                 </ValidationProvider>
               </div>
               <div class="text-left">
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider rules="required" v-slot="{errors}" name="To">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -132,7 +132,7 @@
               </div>
 
               <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Title seller">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -272,7 +272,7 @@
 
               </div>
               <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Due date">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -291,7 +291,7 @@
                 </ValidationProvider>
               </div>
               <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Due hour">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -495,4 +495,5 @@ export default {
 .btn-find-seller-later{
   margin-top: 9px;
 }
+
 </style>

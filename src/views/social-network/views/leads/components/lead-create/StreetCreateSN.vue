@@ -2,7 +2,7 @@
   <div>
     <b-row class="mt-2 text-left">
       <b-col mb="12">
-        <ValidationProvider rules="required" v-slot="{errors}">
+        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.title} address`">
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -14,8 +14,8 @@
               label="Address"
           >
             <vue-google-autocomplete
-                :id="`${component}-${street}-street`"
-                :ref="`${component}-${street}-street`"
+                :id="`${title}-${street}-street`"
+                :ref="`${title}-${street}-street`"
                 v-model="street"
                 class="form-control input-form fond-white border-hover pl-1"
                 placeholder="Please type your address"
@@ -33,7 +33,7 @@
     </b-row>
     <b-row class="mt-2 text-left">
       <b-col mb="6">
-        <ValidationProvider rules="required" v-slot="{errors}">
+        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.title} city`">
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -57,7 +57,7 @@
         </ValidationProvider>
       </b-col>
       <b-col mb="6">
-        <ValidationProvider rules="required" v-slot="{errors}">
+        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.title} state`">
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -106,8 +106,9 @@ export default {
     state: {
       type: String,
     },
-    component: {
-      type: String
+    title: {
+      type: String,
+      default: 'asdasd'
     }
   },
   components: {
@@ -121,6 +122,9 @@ export default {
   },
   async created() {
     await this.A_GET_STATE_EEUU()
+  },
+  mounted() {
+
   },
   methods: {
     ...mapActions(

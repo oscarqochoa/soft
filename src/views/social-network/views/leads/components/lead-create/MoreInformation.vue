@@ -8,7 +8,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="DOB">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -20,7 +20,7 @@
                 label="DOB"
             >
               <b-form-datepicker
-                  autofocus
+
                   :format="'MM/dd/yyyy'"
                   v-model="lead.dob"
                   :class="{'border-error-sn' :errors[0]}"
@@ -31,7 +31,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Status">
 
             <b-form-group
                 label="Status"
@@ -64,7 +64,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Type doc.">
             <b-form-group
                 label="Type doc."
                 label-for="st-ad"
@@ -92,7 +92,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Document">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -118,7 +118,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6 text-left">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Phone(H)">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -147,7 +147,7 @@
       </b-row>
 
       <StreetCreateSN
-          component="MoreInfo"
+          title="More information"
           :street="lead.street"
           :city="lead.city"
           :state="lead.state"
@@ -164,7 +164,7 @@ import {mapActions, mapState} from "vuex";
 import vSelect from "vue-select";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
-import StreetCreateSN from "@/views/social-network/views/commissions/lead-create/StreetCreateSN";
+import StreetCreateSN from "./StreetCreateSN";
 
 export default {
   data() {

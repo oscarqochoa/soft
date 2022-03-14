@@ -23,7 +23,7 @@
 
       <template #default>
         <!-- BODY -->
-        <div class="mx-4">
+        <div class="mx-4" id="container-create-lead-sn">
           <validation-observer ref="refFormLeadObserver">
             <CatchmentCreateSn :lead="lead"/>
 
@@ -90,6 +90,29 @@
         </div>
       </template>
     </b-sidebar>
+
+    <b-toast
+        id="toast-validation-create-lead"
+    >
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-center mr-1">
+          <b-img
+              :src="require('@/assets/images/logo/logo.png')"
+              class="mr-1"
+              height="18"
+              width="25"
+              alt="Toast image"
+          />
+          <strong class="mr-auto">Warning validation</strong>
+        </div>
+      </template>
+
+      <div>
+        <p class="m-0" v-for="(value, index) in toastData" :key="index">{{index +1 }}. {{ value.label }} {{ value.error }}</p>
+      </div>
+
+    </b-toast>
+
   </div>
 
 </template>
@@ -107,6 +130,8 @@ import TaskCreateLeadSn from "@/views/social-network/views/leads/components/lead
 import MoreInformation from "@/views/social-network/views/leads/components/lead-create/MoreInformation";
 import BillingInformation from "@/views/social-network/views/leads/components/lead-create/BillingInformation";
 import {mapActions, mapGetters, mapState} from "vuex";
+import VueScrollTo from 'vue-scrollto'
+
 export default {
   name: 'LeadCreateSocial',
   components: {
@@ -228,6 +253,7 @@ export default {
         value: null,
       }],
       optionPrograms: [],
+      toastData: []
     };
   },
   async created() {
@@ -269,8 +295,35 @@ export default {
     ),
 
     async onSubmit() {
+
+      //add-new-lead-social-network-sidebar
+      const options = {
+        container: 'container-create-lead-sn',
+        easing: 'ease-in',
+        offset: -60,
+        force: true,
+        cancelable: true,
+        onStart: function(element) {
+          // scrolling started
+        },
+        onDone: function(element) {
+          // scrolling is done
+        },
+        onCancel: function() {
+          // scrolling has been interrupted
+        },
+        x: false,
+        y: true
+      }
+      VueScrollTo.scrollTo(`#input-create-lead-1`, 500, {
+        container: 'body',
+
+      })
+
       try {
-        if (await this.$refs.refFormLeadObserver.validate()) {
+        const validate = await this.$refs.refFormLeadObserver
+        console.log(validate)
+        if (await validate.validate()) {
           const resp = await this.showConfirmSwal(
               "Are you sure?",
               "You won't be able to revert this!",
@@ -309,18 +362,27 @@ export default {
             },1000)
           }
         } else {
-          console.log('Sin validacion')
-          this.$bvToast.toast(`Unvalidated fields found`, {
-            title: `Information`,
-            autoHideDelay: 4000,
-            appendToast: true,
-            variant: 'info'
-          });
+          console.log(Object.values(validate.refs)[0].$el.scrollTop,)
+
+          const fields = Object.values(validate.fields).map(field => field.name);
+          const errors = Object.values(validate.errors)
+          let errorToast = [];
+          errors.forEach((error, index) => {
+            if(error.length > 0) {
+              errorToast.push({
+                index,
+                error: error[0],
+                label: fields[index]
+              })
+            }
+          })
+          this.toastData = errorToast.filter(error => !error.label.includes('card-number-'));
+          this.$bvToast.show('toast-validation-create-lead')
 
         }
 
       } catch (error) {
-        console.log('error')
+        console.log('error', error)
         setTimeout(async () => {
           await this.removePreloader()
         },1000)

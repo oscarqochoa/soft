@@ -9,7 +9,7 @@
       <b-row class="mt-2">
         <b-col mb="6" class="text-left">
 
-          <ValidationProvider rules="required|unique-nickname" v-slot="{errors}" name="nickname">
+          <ValidationProvider rules="required|unique-nickname" v-slot="{errors}" name="Nickname">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -33,7 +33,7 @@
 
         </b-col>
         <b-col mb="6" class="text-left">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Language">
 
             <b-form-group
                 label="Language"
@@ -185,5 +185,9 @@ export default {
 <style>
 .vue-toggle{
   margin-top: 0px !important;
+}
+.dark-layout .card {
+  box-shadow: 0 1px 3px 0 rgb(255 255 255 / 0.1), 0 1px 2px -1px rgb(255 255 255 / 0.1) !important;
+  background: #1e1e1e;
 }
 </style>

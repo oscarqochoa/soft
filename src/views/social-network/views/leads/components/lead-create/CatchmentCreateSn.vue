@@ -13,6 +13,7 @@
         <b-col md="4" class="text-left">
           <ValidationProvider v-slot="{errors}" rules="required" name="ST/AD">
             <b-col md="12" >
+              <div id="input-create-lead-1">
               <b-form-group
                   label="ST/AD"
                   label-for="st-ad"
@@ -38,7 +39,7 @@
                 <p v-if="errors[0]" class="text-error-sn text-center m-0">ST/AD {{errors[0]}}</p>
               </b-form-group>
               <input type="radio" class="d-none bg-green" v-model="lead.state_h" />
-
+              </div>
             </b-col>
           </ValidationProvider>
           <ValidationProvider v-slot="{errors}" rules="required" name="lead-owner">
@@ -117,11 +118,11 @@
           >
             <b-row>
               <b-col md="6" class="">
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Source Facebook">
                   <b-row>
                     <b-col md="12" class=" text-center d-flex align-items-center justify-content-center">
                       <button
-                          class="w-75 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-around"
+                          class="w-100 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-center"
                           :class="{'btn-primary': isFacebook}"
                           @click="selectSource(1)"
                       >
@@ -138,7 +139,7 @@
                 </ValidationProvider>
 
                 <!-- Sub Sources Facebook -->
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Sub Source Facebook">
                   <div class="mt-3 d-flex align-items-center justify-content-between">
                     <template v-for="(subSource, index) in S_SUB_SOURCES">
                       <div
@@ -167,12 +168,14 @@
               </b-col>
 
               <!-- GOOGLE -->
+
               <b-col md="6 pt-0" class="">
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <p>Source: {{ lead.sourcesname_id }}</p>
+                <ValidationProvider rules="required" v-slot="{errors}" name="Source Google">
                   <b-row>
                     <b-col md="12" class="text-center d-flex align-items-center justify-content-center">
                       <button
-                          class="w-75 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-around"
+                          class="w-100 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-center"
                           :class="{'btn-danger': isGoogle}"
                           @click="selectSource(2)"
                       >
@@ -188,7 +191,7 @@
                 </ValidationProvider>
 
                 <!-- Contact Method -->
-                <ValidationProvider :rules="`${ isGoogle? 'required' : ''}`" v-slot="{errors}">
+                <ValidationProvider :rules="`${ isGoogle? 'required' : ''}`" v-slot="{errors}" name="Google Ads">
                   <div class="mt-3 d-flex align-items-center justify-content-between">
                     <button
                         class="rounded btn btn-light border-0 btn-source font-small-2"
@@ -225,7 +228,7 @@
                 </ValidationProvider>
 
                 <!-- Sub Sources Google -->
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Sub Source Google">
                   <div class="mt-2 d-flex align-items-center justify-content-between">
                     <template v-for="(subSource, index) in S_SUB_SOURCES">
                       <div
@@ -268,7 +271,7 @@
                 label="Program"
 
             >
-              <ValidationProvider rules="required" v-slot="{errors}">
+              <ValidationProvider rules="required" v-slot="{errors}" name="Program">
                 <b-row class="d-flex justify-content-around align-items-center px-0 content-program">
                   <template v-for="(program, index) in S_FAN_PAGE_PROGRAMS">
                     <div class="" :key="index" :title="program.value">
@@ -301,7 +304,7 @@
                 content-cols-lg="10"
                 label="Flyers"
             >
-              <ValidationProvider rules="required" v-slot="{errors}">
+              <ValidationProvider rules="required" v-slot="{errors}" name="Flyer">
                 <div class="content-flyer">
                   <div class="d-flex margin-flyer">
                     <b-avatar
@@ -485,6 +488,7 @@ export default {
     },
 
     selectSource(id) {
+      console.log('ID', id)
       if(id === 7) {
         this.lead.sourcesname_id = 17
       } else if (id === 1){
@@ -496,7 +500,6 @@ export default {
         this.lead.google_ads = null;
       }
       this.lead.source_id = id;
-      console.log('source', id)
     },
     selectSubSource(id) {
       this.lead.sub_source = id;
@@ -618,5 +621,8 @@ export default {
   border: 2px solid #fc424a;
   overflow: hidden;
 }
-
+.dark-layout .card {
+  box-shadow: 0 1px 3px 0 rgb(255 255 255 / 0.1), 0 1px 2px -1px rgb(255 255 255 / 0.1) !important;
+  background: #222222;
+}
 </style>
