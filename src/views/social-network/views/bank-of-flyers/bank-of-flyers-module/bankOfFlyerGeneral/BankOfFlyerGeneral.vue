@@ -1,66 +1,66 @@
 <template>
   <div>
     <CoolLightBox
-      class="align-items-center"
-      :items="itemImage"
-      :index="showImage"
-      @close="showImage = null"
+        class="align-items-center"
+        :items="itemImage"
+        :index="showImage"
+        @close="showImage = null"
     />
     <div>
       <b-card
-        no-body
-        class="mb-0"
+          no-body
+          class="mb-0"
       >
         <filter-slot
 
-          :filter="filter"
-          :filter-principal="filterPrincipal"
-          :total-rows="totalRows"
-          :paginate="paginate"
-          :start-page="startPage"
-          :to-page="toPage"
-          @reload="$refs['bank-of-flyer-general'].refresh()"
+            :filter="filter"
+            :filter-principal="filterPrincipal"
+            :total-rows="totalRows"
+            :paginate="paginate"
+            :start-page="startPage"
+            :to-page="toPage"
+            @reload="$refs['bank-of-flyer-general'].refresh()"
         >
           <template #buttons>
             <b-button
-              v-if="status===4"
-              variant="primary"
-              class="ml-1"
-              @click="openWatchModal(1,1)"
+                v-if="status===4"
+                variant="primary"
+                class="ml-1"
+                @click="openWatchModal(1,1)"
             >
               <feather-icon
-                icon="FilePlusIcon"
-                class="mr-50"
-              />UPLOUD FLYERS
+                  icon="FilePlusIcon"
+                  class="mr-50"
+              />
+              UPLOUD FLYERS
 
             </b-button>
           </template>
           <b-table
-            id="bank-of-flyer-general"
-            slot="table"
+              id="bank-of-flyer-general"
+              slot="table"
 
-            ref="bank-of-flyer-general"
-            sticky-header="50vh"
+              ref="bank-of-flyer-general"
+              sticky-header="70vh"
 
-            no-provider-filtering
-            :busy.sync="isBusy"
-            :items="search"
-            :fields="filteredFields"
-            :per-page="paginate.perPage"
-            :current-page="paginate.currentPage"
-            :filter="filter"
+              no-provider-filtering
+              :busy.sync="isBusy"
+              :items="search"
+              :fields="filteredFields"
+              :per-page="paginate.perPage"
+              :current-page="paginate.currentPage"
+              :filter="filter"
 
-            responsive="sm"
 
           >
             <template #table-busy>
               <div class="text-center text-primary my-2">
-                <b-spinner class="align-middle mr-1" />
+                <b-spinner class="align-middle mr-1"/>
                 <strong>Loading ...</strong>
               </div>
             </template>
             <template
-              v-slot:cell(name)="data"
+                v-slot:cell(name)="data"
             >
               <div class="d-flex flex-column  justify-content-center align-items-start "
 
@@ -73,18 +73,20 @@
 
               <div
                   class="d-flex flex-column  justify-content-center align-items-start clickable "
-                v-b-tooltip.hover.left="'Click to view flyer'"
+                  v-b-tooltip.hover.left="'Click to view flyer'"
 
-                @click="openImage(data.index)"
+                  @click="openImage(data.index)"
               >
                 <b-avatar
+
                     square
-                    size="4.5rem"
+                    size="50"
                     v-bind="mainProps"
                     :src="data.item.route_thumb"
                     rounded="lg"
-                     >
+                    icon="file-earmark-image-fill"
 
+                >
                 </b-avatar>
 
 
@@ -97,11 +99,10 @@
 
 
                 <b-img
-                  :src="`${baseImg}/assets${data.item.logo}`"
-                  style="width: 4.5rem;  height: 4.5rem"
+                    :src="`${baseImg}/assets${data.item.logo}`"
+                    thumbnail
+                    fluid style="width: 50px"
 
-                  thumbnail
-                  fluid
                 />
 
               </div>
@@ -109,17 +110,17 @@
 
             <template v-slot:cell(replies)="data">
               <p
-                v-if="data.item.count>0"
-                v-b-tooltip.hover="'Click to view history of replies'"
-                class="mb-0 font-weight-bolder cursor-pointer text-primary fon"
-                @click="openRepliesModal(data.index)"
+                  v-if="data.item.count>0"
+                  v-b-tooltip.hover="'Click to view history of replies'"
+                  class="mb-0 font-weight-bolder cursor-pointer text-primary fon"
+                  @click="openRepliesModal(data.index)"
               >
                 {{ data.item.count }}
               </p>
 
               <p
-                v-else
-                class="mb-0 font-weight-bold"
+                  v-else
+                  class="mb-0 font-weight-bold"
               >
                 {{ data.item.count }}
               </p>
@@ -127,14 +128,15 @@
 
             <template v-slot:cell(new_replies)="data">
               <p
-                class="mb-0 font-weight-bold "
+                  class="mb-0 font-weight-bold "
               >
                 {{ data.item.new_count }}
               </p>
             </template>
 
             <template v-slot:cell(created_by)="data">
-              <p class="mb-0 font-weight-bold" /><p>{{ data.item.user_upload }}</p>
+              <p class="mb-0 font-weight-bold"/>
+              <p>{{ data.item.user_upload }}</p>
               <p>{{ data.item.created_at | myGlobalDay }}</p>
 
             </template>
@@ -142,48 +144,50 @@
             <template v-slot:cell(actions)="data">
 
               <feather-icon
-                icon="InfoIcon"
-                title="WATCH"
-                size="20"
-                class="cursor-pointer m-1"
+                  icon="InfoIcon"
+                  title="WATCH"
+                  size="20"
+                  class="cursor-pointer m-1"
 
-                @click="openWatchModal(data.index,2, data.item)"
+                  @click="openWatchModal(data.index,2, data.item)"
               />
 
             </template>
 
             <template v-slot:cell(publication_date)="data">
 
-              <span>{{data.item.publication_date | myGlobal }} </span>
+              <span>{{ data.item.publication_date | myGlobal }} </span>
 
             </template>
 
             <template v-slot:cell(comments)="data">
               <b-dropdown
-                variant="link"
-                no-caret
+                  variant="link"
+                  no-caret
               >
                 <template #button-content>
                   <feather-icon
-                    icon="MoreVerticalIcon"
-                    size="16"
-                    class="align-middle text-body"
+                      icon="MoreVerticalIcon"
+                      size="16"
+                      class="align-middle text-body"
                   />
                 </template>
                 <b-dropdown-item
-                  v-b-tooltip.hover.left="'Add new comment'"
+                    v-b-tooltip.hover.left="'Add new comment'"
 
-                  @click="openInsertCommentsModal(data.item.id)"
+                    @click="openInsertCommentsModal(data.item.id)"
                 >
                   <feather-icon
-                    icon="PlusIcon"
-                  />Add
+                      icon="PlusIcon"
+                  />
+                  Add
                 </b-dropdown-item>
                 <b-dropdown-item
-                  v-b-tooltip.hover.left="'View history of comments'"
-                  @click="openListCommentsModal(data.item.id)"
+                    v-b-tooltip.hover.left="'View history of comments'"
+                    @click="openListCommentsModal(data.item.id)"
                 >
-                  <feather-icon icon="RotateCcwIcon" />History
+                  <feather-icon icon="RotateCcwIcon"/>
+                  History
                 </b-dropdown-item>
               </b-dropdown>
             </template>
@@ -210,55 +214,69 @@
 
 
             </template>
+            <template #custom-foot>
+              <b-tr class="bg-dark">
+                <b-th class="title">TOTAL REPLIES</b-th>
+                <b-th></b-th>
+                <b-th></b-th>
+                <b-th></b-th>
+                <b-th class="footer-dark">
+                  <div class="footer-span w-100">
+                    <span class="font-small-3 ">{{
+                        totalReplies == 0 ? +totalReplies : totalReplies
+                      }} </span>
+                  </div>
+                </b-th>
+                <b-th class="footer-dark">
+                  <div class="footer-span w-100">
+                    <span class=" font-small-3 ">{{
+                        totalNewReplies == 0 ? +totalNewReplies : totalNewReplies
+                      }} </span>
+                  </div>
+                </b-th>
+
+                <b-th></b-th>
+                <b-th></b-th>
+                <b-th></b-th>
+                <b-th></b-th>
+                <b-th></b-th>
+                <b-th></b-th>
+
+              </b-tr>
+
+            </template>
           </b-table>
-          <template #footer>
-            <div class="text-center">
-              <b-button
 
-                variant="primary"
-              >
-                Total replies <b-badge variant="secondary">
-
-                  {{ totalReplies == 0 ? + totalReplies : totalReplies }}
-                </b-badge>
-                <span> - </span>
-                <b-badge variant="secondary">
-
-                  {{ totalNewReplies == 0 ? + totalNewReplies : totalNewReplies }}
-                </b-badge>
-              </b-button>
-            </div>
-          </template>
         </filter-slot>
         <modal-watch-active
 
-          v-if="modalWatch"
-          :item="items[showWatch]"
-          :items="items"
-          :status="status"
-          :info="info"
+            v-if="modalWatch"
+            :item="items[showWatch]"
+            :items="items"
+            :status="status"
+            :info="info"
 
-          no-close-on-esc="false"
-          no-close-on-backdrop="false"
-          @close="closeWatchModal"
+            no-close-on-esc="false"
+            no-close-on-backdrop="false"
+            @close="closeWatchModal"
         />
 
         <modal-replies
 
-          v-if="modalReplies"
-          :item="items[showReplies]"
-          @close="closeRepliesModal"
+            v-if="modalReplies"
+            :item="items[showReplies]"
+            @close="closeRepliesModal"
         />
         <modal-insert-comments
-          v-if="modalInsertCommentsModal"
-          :index="showComments"
-          @close="closeInsertCommentsModal"
+            v-if="modalInsertCommentsModal"
+            :index="showComments"
+            @close="closeInsertCommentsModal"
         />
 
         <modal-list-comments
-          v-if="modalListCommentsModal"
-          :index="showListComments"
-          @close="closeListCommentsModal"
+            v-if="modalListCommentsModal"
+            :index="showListComments"
+            @close="closeListCommentsModal"
         />
       </b-card>
     </div>
@@ -267,21 +285,25 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import {mapGetters, mapMutations, mapState} from 'vuex'
 import CoolLightBox from 'vue-cool-lightbox'
 import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
-import dataFields from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bankOfFlyerGeneral/fields.data'
-import dataFilters from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bankOfFlyerGeneral/filters.data'
+import dataFields
+  from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bankOfFlyerGeneral/fields.data'
+import dataFilters
+  from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/bankOfFlyerGeneral/filters.data'
 import SocialNetworkService from '@/views/social-network/services/social-network.service'
 import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css'
 import ModalWatchActive
-from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalWatch/ModalWatchActive.vue'
+  from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalWatch/ModalWatchActive.vue'
 import ModalReplies
-from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalReplies/ModalReplies.vue'
+  from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalReplies/ModalReplies.vue'
 import ModalInsertComments
-from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalInsertComments/ModalInsertComments.vue'
+  from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalInsertComments/ModalInsertComments.vue'
 import ModalListComments
-from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalListComments/ModalListComments.vue'
+  from '@/views/social-network/views/bank-of-flyers/bank-of-flyers-module/modals/modalListComments/ModalListComments.vue'
+import BankOfFlyersService from "@/views/social-network/views/bank-of-flyers/bank-of-flyers.service";
+import store from "@/store";
 
 export default {
   components: {
@@ -359,11 +381,12 @@ export default {
 
     }),
     ...mapState({
-
+      navMenuItems: state => state.SidebarStore.S_SIDEBAR_ITEMS,
       programs: state => state.SocialNetworkGlobalStore.S_PROGRAMS,
       states: state => state.SocialNetworkGlobalStore.S_STATES,
 
     }),
+
 
     filteredFields() {
       return this.fields
@@ -404,25 +427,37 @@ export default {
       this.showImage = index
     },
 
-    async openWatchModal(index, info, flyer={}) {
+    async openWatchModal(index, info, flyer = {}) {
       this.modalWatch = true
       this.showWatch = index
       this.info = info
       this.flyerViewed = flyer
-      if ( flyer.status_view !== 1) {
+      if (flyer.status_view !== 1) {
         flyer.user_id = this.currentUser.user_id
-       await this.changeView(flyer);
+        await this.changeView(flyer);
+        await this.countNotificati()
       }
       flyer.status_view = 1;
 
     },
 
-    async changeView(item){
-      const params = { id: item.fbid, user_id: this.currentUser.user_id, }
-      const data = await SocialNetworkService.updateChangeView(params)
+    async changeView(item) {
+      const params = {id: item.fbid, user_id: this.currentUser.user_id,}
+      const data = await BankOfFlyersService.updateChangeView(params)
 
     },
 
+    async countNotificati() {
+      const params = {user_id: this.currentUser.user_id,}
+      const data = await BankOfFlyersService.countNotification(params)
+
+
+      const payload = {
+        routeName: 'bank-of-flyers',
+        tag: data.data
+      }
+      this.$store.commit('SidebarStore/UPDATE_SIDEBAR_ITEM_PROPERTY', payload)
+    },
     closeWatchModal() {
       this.modalWatch = false
     },
@@ -494,7 +529,7 @@ export default {
           text: this.filterPrincipal.model,
           user_id: this.currentUser.user_id,
         }
-        const data = await SocialNetworkService.getBankOfFlyers(params, ctx.currentPage)
+        const data = await BankOfFlyersService.getBankOfFlyers(params, ctx.currentPage)
         this.items = data.data.data
         // Must return an array of items or an empty array if an error occurred
         this.pushImage()
@@ -513,7 +548,7 @@ export default {
         this.totalData = data.data.total
         this.totalRows = data.data.total
         this.toPage = data.data.to
-
+        await this.countNotificati()
         return this.items
       } catch (e) {
         this.showErrorSwal(e)
@@ -529,6 +564,15 @@ export default {
 .img-content-table-ti {
   height: 60px;
 }
+
+.title {
+  font-weight: 700;
+}
+
+.text {
+  font-size: medium;
+}
+
 .clickable {
   cursor: pointer;
   align-content: center;

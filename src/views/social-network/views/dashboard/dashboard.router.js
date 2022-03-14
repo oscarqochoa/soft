@@ -7,7 +7,7 @@ export default [
       pageTitle: 'Dashboard',
       breadcrumb: [{
         text: 'Dashboard',
-      }],
+      }]
     },
   },
 ]

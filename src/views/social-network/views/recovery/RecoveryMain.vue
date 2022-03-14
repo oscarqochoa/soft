@@ -1,6 +1,31 @@
 <template>
   <div>
-    <header-slot></header-slot>
+    <header-slot>
+
+      <template #actions>
+        <div>
+          <b-row style="justify-content: right;">
+            <b-col md="9">
+              <b-input-group prepend="GLOBAL SEARCH">
+                <b-form-input placeholder="By Nickname, Name, Last Name or Mobile" v-model="searchGlobal"></b-form-input>
+                <b-input-group-append>
+                  <b-button variant="info" @click="search()">
+                    <feather-icon
+                      icon="SearchIcon"
+                      size="15"
+                    >
+                    </feather-icon>
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </b-col>
+          </b-row>
+
+          <!-- span.advice-not-found(v-if="search_not_found") Search not found -->
+
+        </div>
+      </template>
+    </header-slot>
     <b-nav card-header pills class="m-0">
       <b-nav-item
         exact-active-class="active"
@@ -64,8 +89,35 @@ export default {
   },
   data() {
     return {
-      //
+      searchGlobal: "",
+      leadsGlobal: [],
+      modalGlobalSearch: false,
+      searchGlobal_error: false,
     };
+  },
+  methods: {
+    //Global Search
+    search() {
+      if (!this.searchGlobal.trim()) {
+        this.searchGlobal_error = true;
+      } else {
+        axios
+          .post("/api/search-global-leads-sn", {
+            name_text: this.searchGlobal
+          })
+          .then(response => {
+            if (response.status == 200) {
+              if (response.data.length > 0) {
+                this.leadsGlobal = response.data;
+                this.modalGlobalSearch = true;
+              } else {
+                this.search_not_found = true;
+                this.searchGlobal_error = true;
+              }
+            }
+          });
+      }
+    }
   },
 
   watch: {

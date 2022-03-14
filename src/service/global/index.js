@@ -91,6 +91,15 @@ class GlobalService {
             throw error
         }
     }
+    async getHourSystem() {
+        try {
+            const data = await amgApi.post('/commons/get-hour-system')
+            return data
+        } catch (error) {
+            console.log('Something went wrong on getStatusLead', error)
+            throw error
+        }
+    }
 
 }
 
