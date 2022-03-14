@@ -1,21 +1,11 @@
 <template>
   <div>
-    <lead-list-add-new
-      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
-      :key="keyCreateList"
-      @saveLead="keyCreateList = Math.random()"
-    />
+
+
     <header-slot>
       <template #actions>
         <div>
-          <b-button
-            v-if="!isOnlyLead"
-            variant="success"
-            class="mr-1"
-            @click="isAddNewUserSidebarActive = true"
-          >
-            <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
-          </b-button>
+          <lead-create-social/>
             <!-- v-if="[1, 2].includes(currentUser.role_id) && isLeadsRoute" -->
           <b-dropdown
             v-if="false"
@@ -40,51 +30,104 @@
               @click="exportExcel(1, 3)"
             >Export Selection</b-dropdown-item>
           </b-dropdown>
+          <b-row style="justify-content: right;">
+            <b-col md="9">
+              <b-input-group prepend="GLOBAL SEARCH">
+                <b-form-input placeholder="By Nickname, Name, Last Name or Mobile" v-model="searchGlobal"></b-form-input>
+                <b-input-group-append>
+                  <b-button variant="info" @click="search()">
+                    <feather-icon
+                      icon="SearchIcon"
+                      size="15"
+                    >
+                    </feather-icon>
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </b-col>
+            <b-col md="3">
+              <b-button
+                v-if="!isOnlyLead"
+                variant="success"
+                class="mr-1"
+                @click="isAddNewUserSidebarActive = true"
+              >
+                <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
+              </b-button>
+            </b-col>
+          </b-row>
         </div>
       </template>
     </header-slot>
 
-    <b-card>
-      <b-nav pills>
-        <b-nav-item
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-          exact
-          class="w-250"
-          :to="{ name: 'sn-list-new-leads' }"
-          >NEW LEADS
-        </b-nav-item>
-        <b-nav-item
-          exact-active-class="active"
-          link-classes="border-secondary hover-primary"
-          exact
-          class="w-250"
-          :to="{ name: 'sn-list-old-leads' }"
-          >OLD LEADS
-        </b-nav-item>
-      </b-nav>
-      <hr>
-      <router-view v-if="preloading" />
+    <b-nav card-header pills class="m-0">
+      <b-nav-item
+        exact-active-class="active"
+        :link-classes="['px-3', bgTabsNavs]"
+        exact
+        :to="{ name: 'sn-list-new-leads' }"
+        >NEW LEADS
+      </b-nav-item>
+      <b-nav-item
+        exact-active-class="active"
+        :link-classes="['px-3', bgTabsNavs]"
+        exact
+        :to="{ name: 'sn-list-old-leads' }"
+        >OLD LEADS
+      </b-nav-item>
+    </b-nav>
+    <b-card
+      no-body
+      class="border-top-primary border-3 border-table-radius px-0"
+    >
+      <router-view />
     </b-card>
+
+    <modal-search-global-leads-sn
+      v-if="modalGlobalSearch"
+      :show="modalGlobalSearch"
+      @onClose="closeModalGlobalSearch">
+    </modal-search-global-leads-sn>
+
+
+    <!-- b-modal#modalCreateAnswer(v-model='modalGlobalSearch' header-class='b-vue-modal-header' hide-footer   scrollable body-class="search-global-modal" modal-class="search-modal" size="xl")
+        template(#modal-header='{ close }')
+            span
+            h3 GLOBAL SEARCH
+            i.fas.fa-times-circle.text-white(style='color: #d0cdc5; font-size: 20px; cursor: pointer' @click='close')
+        modal-global-leads(:global="global" :data="leadsGlobal"  ) -->
+
+
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
 import LeadListAddNew from "@/views/crm/views/Lead/lead-module/save/LeadListAddNew.vue";
+import LeadCreateSocial from "@/views/social-network/views/leads/components/lead-create/LeadCreateSocial";
+import ModalSearchGlobalLeadsSn from "./components/ModalSearchGlobalLeadsSn.vue";
+
+// components
 export default {
   components: {
+    LeadListAddNew,
+    "modal-search-global-leads-sn": ModalSearchGlobalLeadsSn,
+    LeadCreateSocial,
     LeadListAddNew
   },
   data() {
     return {
-      preloading: true,
       isOnlyLead: false,
-      isAddNewUserSidebarActive: false,
+      isOpenSidebar: false,
       dato2: 10,
       dato1: "desc",
       isLoading: false,
-      keyCreateList: 0
+      keyCreateList: 0,
+
+      searchGlobal: "",
+      leadsGlobal: [],
+      modalGlobalSearch: false,
+      searchGlobal_error: false,
     };
   },
   computed: {
@@ -102,12 +145,13 @@ export default {
   },
   methods: {
     ...mapActions({
-      A_GET_STATUS_LEADS: "SocialNetworkLeadsStore/A_GET_STATUS_LEADS",
+      A_GET_STATUS_LEADS: " /A_GET_STATUS_LEADS",
       A_GET_OWNERS: "StandarStore/A_GET_OWNERS",
       A_GET_PROGRAMS: "StandarStore/A_GET_PROGRAMS",
       A_GET_SOURCE_NAMES: "StandarStore/A_GET_SOURCE_NAMES",
       A_GET_STATES: "StandarStore/A_GET_STATES",
     }),
+    ...mapActions('SocialNetworkLeadsStore', ['A_SEARCH_GLOBAL_LEADS_SN']),
     async getStatusLeads() {
       try {
         await this.A_GET_STATUS_LEADS();
@@ -220,25 +264,34 @@ export default {
         this.showErrorSwal(error);
         this.isLoading = false;
       }
+    },
+    //Global Search
+    async search() {
+      if (!this.searchGlobal.trim()) {
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          "Please enter a valid text."
+        );
+      } else {
+          await this.A_SEARCH_GLOBAL_LEADS_SN({
+            name_text: this.searchGlobal,
+          });
+          this.modalGlobalSearch = true;
+        
+      }
+    },
+    async closeModalGlobalSearch(){
+      this.modalGlobalSearch = false;
     }
   },
   watch: {
-    preloading(current, old) {
-      this.isPreloading(old);
-    }
+    //
   },
   async created() {
-    await this.getStatusLeads();
-    await this.getOwners();
-    await this.getPrograms();
-    await this.getSourceNames();
-    await this.getStates();
+
   },
 };
 </script>
-
-<style scoped>
-.w-250 {
-  width: 250px !important;
-}
-</style>

@@ -5,20 +5,7 @@ export default [
       name: 'recovery-list',
       component: () => import('@/views/social-network/views/recovery-list/RecoveryList.vue'),
       meta: {
-        pageTitle: 'RecoveryList',
-        breadcrumb: [{
-          text: 'RecoveryList',
-        }],
-        tab: "rl",
-      },
-    },
-    {
-      path: "/socialnetwork/recovery-list/:userId/:fullname",
-      name: "recovery-list-user",
-      component: () =>
-        import("@/views/social-network/views/recovery-list/RecoveryList.vue"),
-      props: true,
-      meta: {
+        permittedRoles :[10,11],
         pageTitle: 'RecoveryList',
         breadcrumb: [{
           text: 'RecoveryList',

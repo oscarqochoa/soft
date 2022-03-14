@@ -166,7 +166,7 @@ class SNLeads {
 
     async getReasonsNotPotential() {
         try {
-            const { data, status } = await amgApi.get('/get-reasons-not-potential')
+            const { data, status } = await amgApi.get('/lead/social-network/get-reasons-not-potential')
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on getReasonsNotPotential", error)
@@ -176,7 +176,7 @@ class SNLeads {
 
     async postSaveReasonNotPotential(body) {
         try {
-            const { data, status } = await amgApi.post('/insert-reason-not-potential', body)
+            const { data, status } = await amgApi.post('/lead/social-network/insert-reason-not-potential', body)
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on postSaveReasonNotPotential", error)
@@ -238,11 +238,66 @@ class SNLeads {
         }
     }
 
+    async validateExistsNickname(params) {
+        try {
+            const resp = await amgApi.post('/lead/social-network/validate-exists-nickname', params);
+            return resp;
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async uniqueMobileSn(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/unique-mobile-sn', params);
+            return data;
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async statusLeads(params) {
+        try {
+            const resp = await amgApi.get('/lead/social-network/status-leads');
+            return resp;
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async getSellerTaskFavoriteSn(params) {
+        try {
+            const resp = await amgApi.post('/lead/social-network/get-seller-task-favorite-sn', params)
+            return resp.data;
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async createLeadSN (params) {
+        try {
+            const resp = await amgApi.post('/lead/social-network/lead-create-socialnetwork', params)
+            console.log(resp)
+        } catch (e) {
+            console.log('ERROR: ',e.response)
+        }
+    }
+
+
     async getCreditReports(params) {
         try {
             const { data, status } = await amgApi.post('/lead/credit-report/get-files-report', params);
             return { data, status }
         } catch (error) {
+            throw error
+        }
+    }
+    async getRecoveryLeads(body) {
+        try {
+            const { data } = await amgApi.post('/lead/social-network/search-leads-sn', body)
+            return data
+        } catch (error) {
+            console.log("Something went wrong on get new leads", error);
             throw error
         }
     }
@@ -310,6 +365,35 @@ class SNLeads {
             })
             return { data, status }
         } catch (error) {
+            throw error
+        }
+    }
+    async insertEvidenceSn(body) {
+        try {
+          const data = await amgApi.post('/lead/insert-evidence-sn', body)
+          return data
+        } catch (error) {
+          console.log('Something went wrong on insert evidence sn:', error)
+          throw error
+        }
+    }
+
+    async getRecoveryLeadsSnByProgram(body) {
+        try {
+            const { data } = await amgApi.post('/lead/social-network/search-leads-sn-recovery-by-program', body)
+            return data
+        } catch (error) {
+            console.log("Something went wrong on get new leads", error);
+            throw error
+        }
+    }
+
+    async searchGlobalLeadsSn(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/search-global-leads-sn', body)
+            return {data, status}
+        } catch (error) {
+            console.log("Something went wrong on search global leads sn", error);
             throw error
         }
     }

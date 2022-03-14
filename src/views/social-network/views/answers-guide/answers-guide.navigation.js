@@ -1,7 +1,7 @@
-export default[
-  {
-    title: 'Answers guide',
-    icon: 'BookIcon',
-    route: 'answers-guide-boost-credit',
-  },
+export default [
+    {
+        title: 'Answers guide',
+        icon: 'BookIcon',
+        route: 'answers-guide',
+    },
 ]
