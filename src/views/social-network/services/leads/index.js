@@ -22,6 +22,15 @@ class SNLeads {
         }
     }
 
+    async getLeadDocument(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/get-lead-document', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
     async getTrackingNewLeads(body) {
         try {
             const { data, status } = await amgApi.post('/lead/get-tracking-lead-sn', body)
@@ -147,7 +156,7 @@ class SNLeads {
 
     async getFlyers(params) {
         try {
-            const { data, status } = await amgApi.post('/get-flyers', params)
+            const { data, status } = await amgApi.post('/social-network/bank-of-flyers/get-flyers-by-state', params)
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on getFlyers", error)
@@ -247,6 +256,15 @@ class SNLeads {
         }
     }
 
+    async getCountPendingReports(params) {
+        try {
+            const { data, status } = await amgApi.post('/credit-report/get-cr-count-pending-tab', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
     async getClientCards(params) {
         try {
             const { data, status } = await amgApi.post('/clients/search-cards-clients', params)
@@ -290,6 +308,87 @@ class SNLeads {
                     "Content-Type": "multipart/form-data",
                 }
             })
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async sendCreditReportRequest(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/ncr/send-leads-request', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getTrakingStatusLeads(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/ncr/get-lead-tracking-status-by-id', body);
+            return { data, status };
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async changeCreditReportStatus(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/ncr/change-status', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getCreditReportScore(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/ncr/get-score', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getReplies(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/get-lead-replies', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async updateFlyerReply(body) {
+        try {
+            const { data, status } = await amgApi.post('lead/social-network/update-flyer-reply-by-id', body);
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getFanpages() {
+        try {
+            const { data, status } = await amgApi.get('/lead/all-fangapes')
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getSubSources() {
+        try {
+            const { data, status } = await amgApi.get('/lead/get-sub-sources-sn');
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async saveLeadReply(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/save-lead-replies-sn', body)
             return { data, status }
         } catch (error) {
             throw error

@@ -71,12 +71,12 @@ const mutations = {
     },
     REMOVE_DATA(state, params) {
         const index = state[params.destination]
-          .map((el) => el.id)
-          .indexOf(params.id);
+            .map((el) => el.id)
+            .indexOf(params.id);
         if (index !== -1) {
-          state[params.destination].splice(index, 1);
+            state[params.destination].splice(index, 1);
         }
-      },
+    },
 }
 const actions = {
     async A_GET_NEW_LEADS({ commit }, body) {
@@ -345,7 +345,7 @@ const actions = {
     },
     async A_GET_STATE_LEAD({ commit }, body) {
         try {
-            const resp = await SNLeadsService.getStateLeads({type: 1});
+            const resp = await SNLeadsService.getStateLeads({ type: 1 });
             //commit('M_GET_STATE_LEADS', resp.data);
             return resp.data
         } catch (e) {
@@ -370,6 +370,15 @@ const actions = {
             throw error
         }
     },
+    async A_UPDATE_FLYER_REPLY({ commit }, body) {
+        try {
+            const response = await SNLeadsService.updateFlyerReply(body)
+            return response
+        } catch (error) {
+            console.log('ERROR_UPDATE_FLYER_REPLY [ACTION]', error)
+            throw error
+        }
+    }
 }
 
 export default {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-modal
-      v-model="mutableShow"
+      v-model="show"
       :title="'Upload File (Lead: ' + ')'"
       title-tag="h3"
       title-class="text-white"
@@ -33,11 +33,12 @@ import SNLeadService from "@/views/social-network/services/leads";
 
 export default {
   props: {
-    show: {
-      type: Boolean,
-    },
     lead: {
       type: Object,
+    },
+    replyId: {
+      type: Number,
+      default: 1,
     },
   },
   components: {
@@ -45,7 +46,7 @@ export default {
   },
   data() {
     return {
-      mutableShow: this.show,
+      show: false,
 
       files: [],
     };
@@ -54,6 +55,9 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    module() {
+      return this.$route.meta.module;
+    },
   },
   methods: {
     async uploadFiles() {
@@ -69,7 +73,7 @@ export default {
         formData.append("user_id", this.currentUser.user_id);
         formData.append("id_lead", this.lead.id);
         formData.append("module_id", 15);
-        formData.append("reply_id", 1);
+        formData.append("reply_id", this.replyId);
 
         const response = await SNLeadService.uploadFiles(formData);
 
@@ -92,7 +96,9 @@ export default {
       this.$emit("onClose");
     },
   },
-  created() {},
+  created() {
+    this.show = true;
+  },
 };
 </script>
 

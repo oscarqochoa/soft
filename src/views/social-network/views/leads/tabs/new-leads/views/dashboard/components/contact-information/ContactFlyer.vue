@@ -43,9 +43,9 @@
           <div class="p-relative" v-if="!fyerReply.flyer_id">
             <b-avatar rounded size="22rem">
               <template #default>
-                <span class="b-avatar-text" style="font-size: calc(2.4rem)"
-                  >UNKNOWN</span
-                >
+                <span class="b-avatar-text" style="font-size: calc(2.4rem)">
+                  UNKNOWN
+                </span>
               </template>
             </b-avatar>
           </div>
@@ -54,84 +54,65 @@
 
       <div class="col-lg-8 mt-2">
         <div class="text-right">
-          <button
+          <b-button
+            variant="warning"
+            size="sm"
             @click="openModalChooseFlyer(false)"
-            class="btn btn-orange btn-sm rounded"
             v-if="editFlyer"
           >
             Select
-          </button>
+          </b-button>
         </div>
       </div>
       <div class="col-lg-4 text-center mt-2">
-        <button
+        <b-button
           v-if="!editFlyer"
-          class="btn-sm btn-orange clickable"
+          size="sm"
+          variant="warning"
+          class="btn-icon"
           title="Edit Flyer"
-          @click="edit()"
+          @click="activateEditFlyer()"
         >
-          <i class="fas fa-pen text-white"></i>
-        </button>
+          <feather-icon icon="Edit2Icon"></feather-icon>
+        </b-button>
         <template v-else>
-          <button
-            class="btn-sm btn-update-sn padding-little-icons"
+          <b-button
+            variant="success"
+            size="sm"
+            class="btn-icon"
+            style="margin-right: 5px"
             title="Update Flyer"
-            @click="update()"
+            @click="updateFlyer()"
           >
-            <img src="/images/new-icons/check-w.png" class alt="Update" />
-          </button>
-          <button
-            class="btn-sm btn-cancel-sn padding-little-icons-cancel"
+            <feather-icon icon="CheckIcon"></feather-icon>
+          </b-button>
+          <b-button
+            variant="danger"
+            size="sm"
+            class="btn-icon"
             title="Cancel Edit"
-            @click="cancel()"
+            @click="cancelFlyerEdition()"
           >
-            <img src="/images/new-icons/trash-w.png" class alt="Cancel" />
-          </button>
+            <feather-icon icon="TrashIcon"></feather-icon>
+          </b-button>
         </template>
       </div>
     </div>
 
-    <b-modal
-      id="modalChooseFlyer"
-      v-model="modalChooseFlyer"
-      header-class="bg-white p-4 flex-between"
-      hide-footer="hide-footer"
-      size="xl"
-      scrollable="scrollable"
-      body-class="search-global-modal"
-      modal-class="flyer-choose-modal"
-    >
-      <template #modal-header="{ close }">
-        <span>
-          <h3 class="roboto-class" style="color: #706989">
-            <img class="mr-2" :src="imgFanpage" style="height: 55px" />
-            <span>{{ titleModalChoose }}</span>
-          </h3>
-        </span>
-        <span>
-          <i
-            class="fas fa-times"
-            style="
-              color: #706989;
-              font-size: 20px;
-              cursor: pointer;
-              background: transparent;
-            "
-            @click="close"
-          ></i>
-        </span>
-      </template>
-      <modal-choose-flyers
-        :flyersList="flyers"
-        @click="closeModalChooseFlyer"
-        :flyer_id="this.fyerReply.flyer_id"
-        :unknown="unknown"
-      ></modal-choose-flyers>
-    </b-modal>
+    <modal-choose-flyer
+      v-if="modalChooseFlyer"
+      :title="titleModalChoose"
+      @onSelect="closeModalChooseFlyer"
+    ></modal-choose-flyer>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
+// Components
+import ModalChooseFlyer from "@/views/social-network/views/leads/components/ModalChooseFlyer.vue";
+
 export default {
   props: {
     fyerReply: {
@@ -142,6 +123,9 @@ export default {
       type: Object,
       default: () => ({}),
     },
+  },
+  components: {
+    ModalChooseFlyer,
   },
   data() {
     return {
@@ -173,7 +157,6 @@ export default {
       },
     };
   },
-  created() {},
   computed: {
     flyerState() {
       if (this.fyerReply.flyer_state == "CA") {
@@ -195,133 +178,87 @@ export default {
     },
   },
   methods: {
-    addPreloader() {
-      var x = document.getElementById("app");
-      x.classList.add("preloader");
-      x.classList.add("opacity-uno");
-    },
-    removePreloader() {
-      var x = document.getElementById("app");
-      x.classList.remove("preloader");
-      x.classList.remove("opacity-uno");
-    },
-    edit() {
-      swal
-        .fire({
-          imageUrl: "/images/new-icons/warning-icon.png",
-          title: "Are you sure?",
-          text: "Do you want to edit the flyer?",
-          showCancelButton: true,
-          reverseButtons: true,
-          buttonsStyling: false,
-          confirmButtonText: "Yes",
-          customClass: {
-            confirmButton: "btn-update-sn btn-sm mb-4 w-165",
-            cancelButton: "btn-cancel-sn btn-sm mr-3 mb-4 w-165",
-          },
-        })
-        .then((result) => {
-          if (result.value) {
-            this.returnFlyer = JSON.parse(
-              JSON.stringify(this.fyerReply.flyer_id)
-            );
-            this.editFlyer = true;
-          }
-        });
-    },
-    cancel() {
-      swal
-        .fire({
-          imageUrl: "/images/new-icons/warning-icon.png",
-          title: "Are you sure?",
-          text: "Changes will be lost!",
-          showCancelButton: true,
-          reverseButtons: true,
-          buttonsStyling: false,
-          confirmButtonText: "Yes",
-          customClass: {
-            confirmButton: "btn-update-sn btn-sm mb-4 w-165",
-            cancelButton: "btn-cancel-sn btn-sm mr-3 mb-4 w-165",
-          },
-        })
-        .then((result) => {
-          if (result.value) {
-            this.fyerReply.flyer_id = this.returnFlyer;
-            this.editFlyer = false;
-          }
-        });
-    },
-    update() {
-      swal
-        .fire({
-          title: "Are you Sure ? ",
-          text: `The flyer will be save!`,
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#ab9220",
-          cancelButtonColor: "#8f9194",
-          confirmButtonText: "Yes",
-        })
-        .then((r) => {
-          if (r.value) {
-            this.addPreloader();
-            this.updateFunction();
-          }
-        });
-    },
-    async updateFunction() {
-      this.removePreloader();
-      try {
-        let params = {
-          id_reply: this.fyerReply.reply_id,
-          id_flyer: this.fyerReply.flyer_id,
-        };
-        let update = await axios.post("/api/update-flyer-reply-by-id", params);
+    ...mapActions({
+      A_GET_FLYERS: "SocialNetworkLeadsStore/A_GET_FLYERS",
+      A_UPDATE_FLYER_REPLY: "SocialNetworkLeadsStore/A_UPDATE_FLYER_REPLY",
+    }),
+    async openModalChooseFlyer(unknown) {
+      this.addPreloader();
 
-        //Show in the front the new flyer
-        this.reply.flyer_id = this.fyerReply.flyer_id;
-        this.flyers.forEach((flyer) => {
-          if (flyer.id == this.fyerReply.flyer_id) {
-            this.reply.flyer_route = flyer.route_thumb;
-          }
-        });
-        this.removePreloader();
-        swal.fire("Updated!", "Information was saved", "success");
-        this.editFlyer = false;
-      } catch (error) {
-        console.log(error);
-        this.removePreloader();
-        swal.fire(
-          "Error!",
-          "The information could not be saved, contact support or try again",
-          "error"
-        );
-      }
-    },
-    //flyers
-    async getFlyers() {
-      let response = await axios.post("/api/get-flyers", {
+      await this.A_GET_FLYERS({
         program_id: this.fyerReply.fanpage_id,
         state: this.fyerReply.stAD,
       });
-      this.flyers = response.data;
-    },
 
-    async openModalChooseFlyer(unknown) {
-      this.addPreloader();
-      await this.getFlyers();
       this.titleModalChoose = this.fyerReply.fanpage_name;
       this.modalChooseFlyer = true;
       this.unknown = unknown;
+
       this.removePreloader();
     },
-
-    closeModalChooseFlyer(flyer_id) {
+    closeModalChooseFlyer(flyer) {
       this.modalChooseFlyer = false;
-      this.fyerReply.flyer_id = flyer_id;
       this.initialFlyer = false;
+
+      this.fyerReply.flyer_id = flyer.id;
+    },
+    async activateEditFlyer() {
+      const confirm = await this.showGenericConfirmSwal({
+        text: "Do you want to edit the flyer?",
+      });
+
+      if (confirm.value) {
+        this.returnFlyer = JSON.parse(JSON.stringify(this.fyerReply.flyer_id));
+        this.editFlyer = true;
+      }
+    },
+    async cancelFlyerEdition() {
+      const confirm = await this.showGenericConfirmSwal({
+        text: "Changes will be lost!",
+      });
+
+      if (confirm.value) {
+        this.fyerReply.flyer_id = this.returnFlyer;
+        this.editFlyer = false;
+      }
+    },
+    async updateFlyer() {
+      try {
+        const confirm = await this.showGenericConfirmSwal({
+          text: "The flyer will be save!",
+        });
+
+        if(confirm.value) {
+          let params = {
+            id_reply: this.fyerReply.reply_id,
+            id_flyer: this.fyerReply.flyer_id,
+          };
+
+          const response = await this.A_UPDATE_FLYER_REPLY(params);
+
+          if (response.status == 200) {
+            this.showGenericToast({
+              text: "Information was saved",
+            });
+
+            //Show in the front the new flyer
+            this.reply.flyer_id = this.fyerReply.flyer_id;
+            this.flyers.forEach((flyer) => {
+              if (flyer.id == this.fyerReply.flyer_id) {
+                this.reply.flyer_route = flyer.route_thumb;
+              }
+            });
+          }
+
+          this.removePreloader();
+          this.editFlyer = false;
+        }
+      } catch (error) {
+        throw error;
+      }
     },
   },
+  created() {},
 };
 </script>
 

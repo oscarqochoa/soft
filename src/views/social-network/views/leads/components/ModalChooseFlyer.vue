@@ -1,15 +1,12 @@
 <template>
   <div>
     <b-modal
-      modal
+      v-model="show"
       :title="title"
-      v-model="mutableShow"
-      size="lg"
-      modal-class="modal-primary"
-      hide-footer
-      body-class="mb-2"
-      @hidden="close"
       title-tag="h3"
+      hide-footer
+      size="lg"
+      @hidden="close"
     >
       <b-container>
         <b-row class="mt-1">
@@ -41,16 +38,13 @@ import { mapState } from "vuex";
 
 export default {
   props: {
-    show: {
-      type: Boolean,
-    },
     title: {
       type: String,
     },
   },
   data() {
     return {
-      mutableShow: this.show,
+      show: false,
     };
   },
   computed: {
@@ -59,12 +53,16 @@ export default {
     }),
   },
   methods: {
+    selectFlyer(id, flyer) {
+      this.$emit("onSelect", id, flyer);
+      this.close();
+    },
     close() {
       this.$emit("onClose");
     },
-    selectFlyer(id, flyer) {
-      this.$emit("onSelect", id, flyer);
-    },
+  },
+  created() {
+    this.show = true;
   },
 };
 </script>

@@ -1,186 +1,142 @@
 <template>
-  <div style="margin-bottom: 15px">
-    <div class="row" style="margin: 0">
-      <div class="col-md-12">
-        <b-card body-class="px-3 pt-3" class="h-card-sn">
-          <span class="title-card">Files</span>
-          <div class="col-lg-12" style="padding: 0px">
-            <div
-              class="table-side"
-              v-if="files.length > 0"
-              :style="files.length >= 3 ? 'height: 186px;overflow: auto;' : ''"
-            >
-              <table class="table" v-if="files != null">
-                <thead class="font-bureau-style">
-                  <tr class="bg-light-gray text-table-gray">
-                    <th>
-                      <span @click="search('asc', 3)">File Name</span>
-                    </th>
-                    <th>
-                      <span @click="search('desc', 2)">Created By</span>
-                    </th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody class="font-bureau-style">
-                  <tr v-for="(item, index) in files" :key="index">
-                    <td v-if="!editname[index].view">
-                      <div v-if="item.extension != null">
-                        <img
-                          v-if="item.extension == 'pdf'"
-                          src="/images/icons/pdf.png"
-                          style="width: 20px; margin-right: 5px"
-                        />
-                        <img
-                          v-else-if="item.extension == 'pptx'"
-                          src="/images/icons/ext_files/ppt.jpg"
-                          style="width: 20px; margin-right: 5px"
-                        />
-                        <img
-                          v-else-if="
-                            item.extension == 'xlsx' || item.extension == 'csv'
-                          "
-                          src="/images/icons/excel.png"
-                          style="width: 20px; margin-right: 5px"
-                        />
-                        <img
-                          v-else-if="item.extension == 'docx'"
-                          src="/images/icons/doc.png"
-                          style="width: 20px; margin-right: 5px"
-                        />
-                        <img
-                          v-else-if="
-                            item.extension == 'png' ||
-                            item.extension == 'jpg' ||
-                            item.extension == 'jpeg' ||
-                            item.extension == 'ico'
-                          "
-                          src="/images/icons/img.png"
-                          style="width: 20px; margin-right: 5px"
-                        />
-                        <img
-                          style="width: 20px"
-                          v-else
-                          src="'/images/icons/nn.png"
-                        />
-                        <a
-                          :href="item.route"
-                          target="_blank"
-                          style="cursor: pointer"
-                          >{{ item.file_name }}.{{ item.extension }}</a
-                        >
-                      </div>
-                    </td>
-                    <td v-if="editname[index].view">
-                      <div>
-                        <input
-                          class="input-form"
-                          type="text"
-                          style="width: 80%; margin-right: 5px"
-                          :style="
-                            errornamefile
-                              ? 'border:1px solid red !important;'
-                              : ''
-                          "
-                          v-model="item.custom_file_name"
-                          @keyup.enter="updateFileName(item)"
-                          @keyup.esc="cancelnamefile(index, item.file_name)"
-                        />
-                        <img
-                          @click="updateFileName(item)"
-                          src="/images/icons/save_lead.png"
-                          style="cursor: pointer"
-                        />
-                        <span style="margin: 0px 5px">|</span>
-                        <img
-                          @click="cancelnamefile(index, item.file_name)"
-                          src="/images/icons/cancel_lead.png"
-                          style="cursor: pointer"
-                        />
-                      </div>
-                    </td>
-                    <td>
-                      <span>{{ item.user_upload }}</span>
-                      <br />
-                      <span>{{ item.created_at | myGlobalDay }}</span>
-                    </td>
-                    <td class="union-icons">
-                      <div
-                        title="Rename File"
-                        class="circle-icon-div"
-                        style="background: #ffc41c; cursor: pointer"
-                        @click="editnamefile(index, item)"
-                      >
-                        <i class="fas fa-pen"></i>
-                      </div>
-                      <div
-                        title="Delete File"
-                        class="circle-icon-div"
-                        style="background: #ff6a6a; cursor: pointer"
-                        @click="deleteFile(item.id)"
-                      >
-                        <i class="fas fa-trash"></i>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+  <div
+    class="ml-1"
+    style="box-shadow: 0 0 6px #c8ccd3; height: 360px !important"
+  >
+    <b-card body-class="px-0 ">
+      <template #header>
+        <b-card-title class="font-weight-bolder"> Files </b-card-title>
+      </template>
 
-            <div style="padding-top: 18px">
-              <div class="row">
-                <div class="col-lg-8" style="padding-left: 0px"></div>
-                <div class="col-lg-4 text-right" style="padding-right: 0px">
-                  <button
-                    class="btn rounded float-right btn-orange"
-                    style="margin: 0px 20px 8px 0px"
-                    @click="openModalCreateFile()"
+      <div class="table-side" v-if="files.length > 0">
+        <b-table
+          small
+          :fields="table.fields"
+          :items="files"
+          sticky-header="220px"
+        >
+          <template #cell(file_name)="data">
+            <div v-if="!editName[data.index].view">
+              <div v-if="data.item.extension != null">
+                <b-img
+                  :src="$options.filters.extFile(data.item.extension)"
+                  style="width: 15px; margin-right: 5px"
+                ></b-img>
+                <a
+                  :href="data.item.route"
+                  target="_blank"
+                  style="cursor: pointer"
+                >
+                  {{ data.item.file_name }}.{{ data.item.extension }}
+                </a>
+              </div>
+            </div>
+            <div v-if="editName[data.index].view">
+              <div class="custom-form-group">
+                <div class="input">
+                  <validation-observer ref="formUpdateFileName">
+                    <validation-provider
+                      #default="{ errors }"
+                      name="File Name"
+                      rules="required"
+                    >
+                      <b-form-input
+                        type="text"
+                        :style="
+                          errornamefile
+                            ? 'border:1px solid red !important;'
+                            : ''
+                        "
+                        v-model="data.item.custom_file_name"
+                        @keyup.enter="updateFileName(data.item)"
+                        @keyup.esc="
+                          cancelEditFileName(data.index, data.item.file_name)
+                        "
+                        :state="errors.length > 0 ? false : null"
+                      />
+                    </validation-provider>
+                  </validation-observer>
+                </div>
+
+                <div class="content-buttons">
+                  <b-button
+                    variant="flat-success"
+                    class="btn-icon rounded-circle"
+                    style="padding: 3px"
+                    @click="updateFileName(data.item)"
                   >
-                    <i class="far fa-file" style="margin-right: 5px"></i>
-                    UPLOAD FILES
-                  </button>
+                    <feather-icon icon="CheckIcon" />
+                  </b-button>
+                  <b-button
+                    variant="flat-danger"
+                    class="btn-icon rounded-circle"
+                    style="padding: 3px"
+                    @click="cancelEditFileName(data.index, data.item.file_name)"
+                  >
+                    <feather-icon icon="XIcon" />
+                  </b-button>
                 </div>
               </div>
             </div>
-          </div>
-        </b-card>
+          </template>
+
+          <template #cell(created_by)="data">
+            <span>{{ data.item.user_upload }}</span>
+            <br />
+            <span>{{ data.item.created_at | myGlobalDay }}</span>
+          </template>
+
+          <template #cell(actions)="data">
+            <b-button
+              size="sm"
+              variant="flat-warning"
+              class="btn-icon rounded-circle"
+              style="padding: 4px"
+              title="Rename File"
+              @click="editFileName(data.index, data.item)"
+            >
+              <feather-icon icon="Edit2Icon"></feather-icon>
+            </b-button>
+            <b-button
+              size="sm"
+              variant="flat-danger"
+              class="btn-icon rounded-circle"
+              style="padding: 4px"
+              title="Delete File"
+              @click="deleteFile(data.item.id)"
+            >
+              <feather-icon icon="TrashIcon"></feather-icon>
+            </b-button>
+          </template>
+        </b-table>
       </div>
-    </div>
-    <b-modal
-      id="modalCreateFile"
-      v-model="modalCreateFile"
-      header-class="bg-white p-4 flex-between"
-      hide-footer="hide-footer"
-      size="lg"
-      scrollable="scrollable"
-    >
-      <template #modal-header="{ close }">
-        <span>
-          <h3 class="roboto-class" style="color: #706989">New Files</h3>
-        </span>
-        <span>
-          <i
-            class="fas fa-times"
-            style="
-              color: #706989;
-              font-size: 20px;
-              cursor: pointer;
-              background: transparent;
-            "
-            @click="close"
-          ></i>
-        </span>
-      </template>
-      <modal-file-sn
-        @click="closeModalCreateFile"
-        :replyId="replyId"
-      ></modal-file-sn>
-    </b-modal>
+
+      <div class="text-right mr-2">
+        <b-button variant="primary" @click="openModalUploadFiles()">
+          <feather-icon icon="FileIcon"></feather-icon>
+          UPLOAD FILES
+        </b-button>
+      </div>
+    </b-card>
+
+    <modal-upload-files
+      v-if="showModalUploadFiles"
+      :lead="lead"
+      :replyId="replyId"
+      @onSaved="filesSaved"
+      @onClose="closeModalUploadFiles"
+    ></modal-upload-files>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+
+// Components
+import ModalUploadFiles from "@/views/social-network/views/leads/components/ModalUploadFiles.vue";
+
+// Services
+import SNLeadService from "@/views/social-network/services/leads";
 
 export default {
   props: {
@@ -189,17 +145,30 @@ export default {
       type: Object,
     },
   },
+  components: {
+    ModalUploadFiles,
+  },
   data() {
     return {
+      table: {
+        fields: [
+          { key: "file_name", label: "File Name", sortable: true },
+          { key: "created_by", label: "Created By", sortable: true },
+          { key: "actions", label: "Actions" },
+        ],
+      },
+
       //files
       files: [],
       sort: null,
       dato2: null,
       modalCreateFile: false,
       name_file: "",
-      editname: [],
+      editName: [],
       errornamefile: false,
-      spinner: false,
+
+      // Modals
+      showModalUploadFiles: false,
     };
   },
   computed: {
@@ -211,162 +180,125 @@ export default {
     },
   },
   methods: {
-    addPreloader() {
-      var x = document.getElementById("app");
-      x.classList.add("preloader");
-      x.classList.add("opacity-uno");
+    openModalUploadFiles() {
+      this.showModalUploadFiles = true;
     },
-    removePreloader() {
-      var x = document.getElementById("app");
-      x.classList.remove("preloader");
-      x.classList.remove("opacity-uno");
+    closeModalUploadFiles() {
+      this.showModalUploadFiles = false;
     },
-    //files
-    editnamefile(index, item) {
-      this.editname[index].view = true;
-      item.custom_file_name = item.file_name;
-    },
-    updateFileName(item) {
-      this.name_file = item.custom_file_name;
-      if (this.name_file.trim() == "") {
-        this.errornamefile = true;
-      } else {
-        this.errornamefile = false;
-        swal
-          .fire({
-            imageUrl: "/images/new-icons/warning-icon.png",
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            showCancelButton: true,
-            reverseButtons: true,
-            buttonsStyling: false,
-            confirmButtonText: "Yes",
-            customClass: {
-              confirmButton: "btn-update-sn btn-sm mb-4 w-165",
-              cancelButton: "btn-cancel-sn btn-sm mr-3 mb-4 w-165",
-            },
-          })
-          .then((result) => {
-            if (result.value) {
-              var boton = document.getElementById("app");
-              boton.classList.add("preloader");
-              axios
-                .post("/api/update-file-name", {
-                  file_id: item.id,
-                  name_file: this.name_file,
-                  user_id: this.currentUser.user_id,
-                })
-                .then((response) => {
-                  if (response.status == 200) {
-                    this.search(null, null, null);
-                    var boton = document.getElementById("app");
-                    boton.classList.remove("preloader");
-                  }
-                });
-            }
+    async getFiles() {
+      try {
+        const response = await SNLeadService.getLeadFiles({
+          id_lead: this.idParam,
+          orderby: 1,
+          order: "asc",
+          reply_id: this.replyId,
+        });
+
+        if (response.status == 200) {
+          this.files = response.data;
+          this.editName = [];
+
+          this.files.forEach((value, index) => {
+            this.editName.push({ id: index, view: false });
+            this.$set(value, "custom_file_name", null);
           });
+        }
+      } catch (error) {
+        throw error;
       }
     },
-    deleteFile(id) {
-      swal
-        .fire({
-          imageUrl: "/images/new-icons/warning-icon.png",
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          showCancelButton: true,
-          reverseButtons: true,
-          buttonsStyling: false,
-          confirmButtonText: "Yes",
-          customClass: {
-            confirmButton: "btn-update-sn btn-sm mb-4 w-165",
-            cancelButton: "btn-cancel-sn btn-sm mr-3 mb-4 w-165",
-          },
-        })
-        .then((result) => {
-          if (result.value) {
-            var boton = document.getElementById("app");
-            boton.classList.add("preloader");
-            axios
-              .post("/api/delete-file-sn", {
-                file_id: id,
-                user_id: this.currentUser.user_id,
-              })
-              .then((response) => {
-                if (response.status == 200) {
-                  this.search(null, null, null);
-                  var boton = document.getElementById("app");
-                  boton.classList.remove("preloader");
-                }
-              });
-          }
-        });
+    editFileName(index, item) {
+      this.editName[index].view = true;
+      item.custom_file_name = item.file_name;
     },
-    cancelnamefile(index, name) {
+    cancelEditFileName(index, name) {
       this.name_file = name;
-      this.editname[index].view = false;
+      this.editName[index].view = false;
       this.errornamefile = false;
     },
-
-    openModalCreateFile() {
-      this.modalCreateFile = true;
+    async filesSaved() {
+      this.closeModalUploadFiles();
+      await this.getFiles();
     },
-    closeModalCreateFile() {
-      this.modalCreateFile = false;
-      this.search(null, null, null);
+    async updateFileName(item) {
+      try {
+        this.name_file = item.custom_file_name;
+
+        if (this.name_file.trim() == "") {
+          this.errornamefile = true;
+        } else {
+          this.errornamefile = false;
+
+          const confirm = await this.showGenericConfirmSwal({});
+
+          if (confirm.value) {
+            this.addPreloader();
+
+            const response = await SNLeadService.updateFileName({
+              file_id: item.id,
+              name_file: this.name_file,
+              user_id: this.currentUser.user_id,
+            });
+
+            if (response.status == 200) {
+              this.getFiles();
+            }
+
+            this.removePreloader();
+          }
+        }
+      } catch (error) {
+        this.removePreloader();
+        throw error;
+      }
     },
+    async deleteFile(id) {
+      try {
+        const confirm = await this.showGenericConfirmSwal({});
 
-    search(sort, dato2) {
-      this.spinner = true;
-      this.files = [];
-      this.sort = sort;
-      this.dato2 = dato2;
+        if (confirm.value) {
+          this.addPreloader();
 
-      axios
-        .post("/api/search-file-lead-sn", {
-          id_lead: this.idParam,
-          orderby: this.dato2 == null ? 2 : this.dato2,
-          order: this.sort == null ? "asc" : this.sort,
-          reply_id: this.replyId,
-        })
-        .then((response) => {
+          const response = await SNLeadService.deleteFile({
+            file_id: id,
+            user_id: this.currentUser.user_id,
+          });
+
           if (response.status == 200) {
-            this.spinner = false;
-            this.files = response.data;
-            var boton = document.getElementById("app");
-            boton.classList.remove("preloader");
-            this.editname = [];
-            this.files.forEach((value, index) => {
-              this.editname.push({ id: index, view: false });
-              this.$set(value, "custom_file_name", null);
+            this.getFiles();
+
+            this.showGenericToast({
+              text: "Successful operation",
             });
           }
-        });
+
+          this.removePreloader();
+        }
+      } catch (error) {
+        throw error;
+      }
     },
   },
-  created() {
-    this.search(null, null);
+  async created() {
+    await this.getFiles();
   },
 };
 </script>
 
-<style scoped>
-.position-img {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-}
+<style lang="scss" >
+.custom-form-group {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 
-.tabs-change {
-  text-align: center;
-  color: white;
-  margin: 0px 3px;
-  border-radius: 5px 5px 0px 0px;
-  width: 160px !important;
-  height: 27px !important;
-}
+  .input {
+    width: 70%;
+  }
 
-.postion-tab {
-  position: relative;
-  top: -6px;
+  .content-buttons {
+    margin-left: 10px;
+    width: 30%;
+  }
 }
 </style>

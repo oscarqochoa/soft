@@ -83,7 +83,7 @@ export default {
 <style lang="scss" >
 .card-group > div > .card {
   height: calc(100% - 2rem);
-  min-height: 350px;
+  min-height: 250px;
   > .card-header {
     border-bottom: 1px solid rgb(80 85 99 / 50%);
     margin-bottom: 1.5rem;
