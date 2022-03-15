@@ -5,7 +5,7 @@
     <header-slot>
       <template #actions>
         <div>
-          <lead-create-social/>
+
             <!-- v-if="[1, 2].includes(currentUser.role_id) && isLeadsRoute" -->
           <b-dropdown
             v-if="false"
@@ -32,35 +32,17 @@
           </b-dropdown>
           <b-row style="justify-content: right;">
             <b-col md="9">
-              <b-input-group prepend="GLOBAL SEARCH">
-                <b-form-input placeholder="By Nickname, Name, Last Name or Mobile" v-model="searchGlobal"></b-form-input>
-                <b-input-group-append>
-                  <b-button variant="info" @click="search()">
-                    <feather-icon
-                      icon="SearchIcon"
-                      size="15"
-                    >
-                    </feather-icon>
-                  </b-button>
-                </b-input-group-append>
-              </b-input-group>
+              <global-search-component></global-search-component>
             </b-col>
             <b-col md="3">
-              <b-button
-                v-if="!isOnlyLead"
-                variant="success"
-                class="mr-1"
-                @click="isAddNewUserSidebarActive = true"
-              >
-                <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
-              </b-button>
+              <lead-create-social/>
             </b-col>
           </b-row>
         </div>
       </template>
     </header-slot>
 
-    <b-nav card-header pills class="m-0">
+    <!-- <b-nav card-header pills class="m-0">
       <b-nav-item
         exact-active-class="active"
         :link-classes="['px-3', bgTabsNavs]"
@@ -75,21 +57,17 @@
         :to="{ name: 'sn-list-old-leads' }"
         >OLD LEADS
       </b-nav-item>
-    </b-nav>
+    </b-nav> -->
     <b-card
-      no-body
-      class="border-top-primary border-3 border-table-radius px-0"
     >
-      <router-view />
+      <new-leads></new-leads>
     </b-card>
 
-    <modal-search-global-leads-sn
+    <!-- <modal-search-global-leads-sn
       v-if="modalGlobalSearch"
       :show="modalGlobalSearch"
       @onClose="closeModalGlobalSearch">
-    </modal-search-global-leads-sn>
-
-
+    </modal-search-global-leads-sn> -->
     <!-- b-modal#modalCreateAnswer(v-model='modalGlobalSearch' header-class='b-vue-modal-header' hide-footer   scrollable body-class="search-global-modal" modal-class="search-modal" size="xl")
         template(#modal-header='{ close }')
             span
@@ -105,15 +83,16 @@
 import { mapState, mapGetters, mapActions } from "vuex";
 import LeadListAddNew from "@/views/crm/views/Lead/lead-module/save/LeadListAddNew.vue";
 import LeadCreateSocial from "@/views/social-network/views/leads/components/lead-create/LeadCreateSocial";
-import ModalSearchGlobalLeadsSn from "./components/ModalSearchGlobalLeadsSn.vue";
-
+import NewLeads from './tabs/new-leads/NewLeads.vue'
+import GlobalSearchComponent from '../../commons/GlobalSearchComponent.vue'
 // components
 export default {
   components: {
     LeadListAddNew,
-    "modal-search-global-leads-sn": ModalSearchGlobalLeadsSn,
+    // "modal-search-global-leads-sn": ModalSearchGlobalLeadsSn,
     LeadCreateSocial,
-    LeadListAddNew
+    NewLeads,
+    GlobalSearchComponent
   },
   data() {
     return {

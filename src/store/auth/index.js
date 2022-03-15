@@ -1,7 +1,6 @@
 import { getUserData, getUserToken } from '@/auth/utils'
 import store from '@/views/crm/store'
 import Vue from 'vue';
-
 const user = getUserData()
 const token = getUserToken()
 

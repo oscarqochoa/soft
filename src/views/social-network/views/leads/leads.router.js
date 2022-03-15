@@ -41,25 +41,6 @@ export default [
                     permittedRoles: [12, 9, 11, 2, 1]
                 },
             },
-
-            {
-                path: 'old',
-                component: OldLeads,
-                name: 'sn-list-old-leads',
-                meta: {
-                    pageTitle: 'Leads',
-                    breadcrumb: [
-                        {
-                            text: 'Leads'
-                        },
-                        {
-                            text: 'Old',
-                            active: true
-                        },
-                    ],
-                    permittedRoles: [12, 9, 11, 2, 1]
-                },
-            },
         ],
     },
     {
