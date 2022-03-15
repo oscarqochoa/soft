@@ -30,13 +30,16 @@
               @click="exportExcel(1, 3)"
             >Export Selection</b-dropdown-item>
           </b-dropdown>
-          <b-row style="justify-content: right;">
-            <b-col md="9">
-              <global-search-component></global-search-component>
+          <b-row>
+            <b-col md="12">
+              <div class="d-flex justify-content-end align-items-center">
+                 <global-search-component class="w-100 mr-2"></global-search-component>
+                 <lead-create-social/>
+              </div>
             </b-col>
-            <b-col md="3">
-              <lead-create-social/>
-            </b-col>
+            <!-- <b-col md="3">
+              
+            </b-col> -->
           </b-row>
         </div>
       </template>

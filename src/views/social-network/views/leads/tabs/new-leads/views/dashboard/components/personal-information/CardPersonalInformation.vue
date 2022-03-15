@@ -227,15 +227,16 @@
               "
               v-if="showDocument || emptyDocument"
             />
-            <div
+            <input
               :placeholder="startTypingP"
               type="text"
               class="form-control border-document"
               style="padding-top: 7px"
               v-else
-            >
-              {{ personalInfo.numberDocumentEnc }}
-            </div>
+              disabled
+              :value="personalInfo.numberDocumentEnc"
+            />
+
             <b-input-group-append>
               <b-button
                 :disabled="!isCeoOrSupervisor || editPersonal"
