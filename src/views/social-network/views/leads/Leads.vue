@@ -58,10 +58,7 @@
         >OLD LEADS
       </b-nav-item>
     </b-nav> -->
-    <b-card
-    >
-      <new-leads></new-leads>
-    </b-card>
+    <new-leads></new-leads>
 
     <!-- <modal-search-global-leads-sn
       v-if="modalGlobalSearch"
