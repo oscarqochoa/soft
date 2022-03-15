@@ -1,6 +1,11 @@
 <template>
   <div>
-    <cool-light-box :items="itemImage" :index="showImage" :effect="'fade'" @close="showImage = null" ></cool-light-box>
+    <cool-light-box
+      :items="itemImage"
+      :index="showImage"
+      :effect="'fade'"
+      @close="showImage = null"
+    ></cool-light-box>
     <!-- Table Container Card -->
     <b-card no-body class="mb-0">
       <filter-slot
@@ -33,7 +38,6 @@
           :sort-desc.sync="isSortDirDesc"
           :busy.sync="isBusy"
         >
-
           <template #table-busy>
             <div class="text-center text-primary my-2">
               <b-spinner class="align-middle mr-1" />
@@ -43,10 +47,15 @@
 
           <!-- Column: Nickname -->
           <template #cell(nickname)="data">
-            <div style="white-space: pre-wrap;">
-              <!-- <router-link :to="{ name: 'sn-dashboard-old-lead' }"> -->
+            <div style="white-space: pre-wrap">
+              <router-link
+                :class="textLink"
+                style="font-size: 9pt; margin-left: -3px"
+                :to="`/social-network/leads/new/dashboard/${data.item.id}`"
+                target="_blank"
+              >
                 {{ data.item.nickname }}
-              <!-- </router-link> -->
+              </router-link>
               <br />
               <small>{{ data.item.lead_name }}</small>
             </div>
@@ -55,14 +64,24 @@
           <template #cell(parent)="data">
             <div>
               <div v-if="data.item.parent == 1" class="text-center">
-                <b-img thumbnail fluid :src="baseUrl + '/images/social-network/facebook.png'" style="width: 50px" />
-                <br>
-                <span>{{data.item.child}}</span>
+                <b-img
+                  fluid
+                  :src="baseUrl + '/images/social-network/facebook.png'"
+                  style="width: 35px; margin-bottom: 3px"
+                />
+                <br />
+                <span style="font-size: 9pt">{{ data.item.child }}</span>
               </div>
               <div v-if="data.item.parent == 2" class="text-center">
-                <b-img thumbnail fluid :src="baseUrl + '/images/social-network/google.png'" style="width: 50px" />
-                <br>
-                <span>{{data.item.contact_method}}</span>
+                <b-img
+                  fluid
+                  :src="baseUrl + '/images/social-network/google.png'"
+                  style="width: 35px; margin-bottom: 3px"
+                />
+                <br />
+                <span style="font-size: 9pt">
+                  {{ data.item.contact_method }}
+                </span>
               </div>
             </div>
           </template>
@@ -71,7 +90,6 @@
           <template #cell(status)="data">
             <div>
               <b-badge
-                pill
                 :variant="data.item.status | variant"
                 class="text-capitalize"
               >
@@ -80,9 +98,19 @@
             </div>
           </template>
 
+          <!-- Type -->
+          <template #cell(status_recovery)="data">
+            <span style="font-size: 9pt">{{ data.item.status_recovery }}</span>
+          </template>
+
           <!-- Column: Fanpage -->
           <template #cell(fanpage)="data">
-            <b-img thumbnail fluid :src="baseUrl + data.item.logo" style="width: 50px" />
+            <b-img
+              thumbnail
+              fluid
+              :src="baseUrl + data.item.logo"
+              style="width: 50px"
+            />
           </template>
 
           <!-- Column: Recomendations -->
@@ -100,18 +128,43 @@
           <!-- Column: Task -->
           <template #cell(attend)="data">
             <div>
-              <span class="text-capitalize text-success" v-if="data.item.attend == 2"> YES 
+              <span
+                class="text-capitalize text-success"
+                v-if="data.item.attend == 2"
+              >
+                YES
                 <feather-icon
                   icon="CheckCircleIcon"
                   size="15"
                   class="mr-50 text-success"
                 />
               </span>
-              <span class="text-capitalize text-success" v-else-if="data.item.attend == 1"> YES </span>
-              <span class="text-capitalize text-danger" v-else-if="data.item.attend == null"> NO </span>
-              <div v-if="data.item.seller_name != null"> {{ data.item.seller_name }} </div>
-              <div v-if="data.item.attend_date != null"> {{ data.item.attend_date | myGlobalDay }} </div>
-              <div v-if="data.item.real_time != null && data.item.state_hour != 'CA'"> {{ data.item.real_time | myGlobalDay }} {{ data.item.state_hour }}</div>
+              <span
+                class="text-capitalize text-success"
+                v-else-if="data.item.attend == 1"
+              >
+                YES
+              </span>
+              <span
+                class="text-capitalize text-danger"
+                v-else-if="data.item.attend == null"
+              >
+                NO
+              </span>
+              <div v-if="data.item.seller_name != null">
+                {{ data.item.seller_name }}
+              </div>
+              <div v-if="data.item.attend_date != null">
+                {{ data.item.attend_date | myGlobalDay }}
+              </div>
+              <div
+                v-if="
+                  data.item.real_time != null && data.item.state_hour != 'CA'
+                "
+              >
+                {{ data.item.real_time | myGlobalDay }}
+                {{ data.item.state_hour }}
+              </div>
             </div>
           </template>
 
@@ -143,12 +196,12 @@
           <!-- Column: Tracking -->
           <template #cell(tracking)="data">
             <div class="text-center">
-                <feather-icon
-                  icon="ListIcon"
-                  size="15"
-                  class="text-primary cursor-pointer"
-                  @click="openModalTracking(data.item.id, data.item.nickname)"
-                />
+              <feather-icon
+                icon="ListIcon"
+                size="15"
+                class="text-primary cursor-pointer"
+                @click="openModalTracking(data.item.id, data.item.nickname)"
+              />
             </div>
           </template>
 
@@ -161,7 +214,6 @@
               @onSendSms="openModalSendSMS(data.item)"
             ></actions-table>
           </template>
-
         </b-table>
       </filter-slot>
     </b-card>
@@ -188,7 +240,8 @@
       :typesms="typesms"
       :sms="leads_sms_o"
       :name-leads="name_leads_arr"
-      @hide="closeModalSendSms">
+      @hide="closeModalSendSms"
+    >
     </modal-send-sms>
 
     <modal-evidence-sn
@@ -196,9 +249,9 @@
       :show="modalEvidence"
       :lead_id="lead_id"
       :lead_name="lead_name"
-      @onClose="closeModalEvidence">
+      @onClose="closeModalEvidence"
+    >
     </modal-evidence-sn>
-
   </div>
 </template>
 
@@ -209,7 +262,7 @@ import "vue-cool-lightbox/dist/vue-cool-lightbox.min.css";
 
 import dataFilters from "./filters.data";
 import Fields from "./fields.data";
-import FeatherIcon from '@/@core/components/feather-icon/FeatherIcon.vue';
+import FeatherIcon from "@/@core/components/feather-icon/FeatherIcon.vue";
 
 // Components
 import ModalTracking from "../../leads/components/ModalTracking.vue";
@@ -229,19 +282,19 @@ export default {
     "modal-evidence-sn": ModalEvidenceSn,
   },
   data() {
-    return{
+    return {
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
       filters: dataFilters,
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Search...",
-        model: ""
+        model: "",
       },
       totalLeads: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       fromPage: 0,
       toPage: 0,
@@ -264,20 +317,26 @@ export default {
       modalEvidence: false,
       lead_id: "",
       lead_name: "",
-    }
+    };
   },
   computed: {
     ...mapState({
       S_LEADS: (state) => state.SocialNetworkLeadsStore.S_LEADS,
     }),
-    ...mapState('auth',['currentUser']),
+    ...mapState("auth", ["currentUser"]),
   },
   async created() {
-   await this.getSNRecoveryLeads();
+    await this.getSNRecoveryLeads();
   },
   methods: {
-    ...mapActions('SocialNetworkLeadsStore', ['A_GET_RECOVERY_LEADS_SN_BY_PROGRAM', 'A_SET_FILTERS', 'A_GET_TRACKING_NEW_LEADS', 'A_DELETE_LEAD', 'A_GET_SMS_SENT_TO_NEW_LEADS']),
-    ...mapMutations('SocialNetworkLeadsStore', ['M_SET_EVIDENCE_URL']),
+    ...mapActions("SocialNetworkLeadsStore", [
+      "A_GET_RECOVERY_LEADS_SN_BY_PROGRAM",
+      "A_SET_FILTERS",
+      "A_GET_TRACKING_NEW_LEADS",
+      "A_DELETE_LEAD",
+      "A_GET_SMS_SENT_TO_NEW_LEADS",
+    ]),
+    ...mapMutations("SocialNetworkLeadsStore", ["M_SET_EVIDENCE_URL"]),
     async getSNRecoveryLeads() {
       try {
         this.isBusy = true;
@@ -344,32 +403,32 @@ export default {
         "Are you sure?",
         "You won't be able to revert this!",
         "question"
-      )
+      );
       if (result.value) {
-          const { user_id } = this.currentUser;
-          const response = await this.A_DELETE_LEAD({
-            lead_id: id,
-            user_id: user_id,
-          });
+        const { user_id } = this.currentUser;
+        const response = await this.A_DELETE_LEAD({
+          lead_id: id,
+          user_id: user_id,
+        });
 
-          if (this.isResponseSuccess(response)) {
-            this.showToast(
-              "success",
-              "top-right",
-              "Deleted!",
-              "CheckIcon",
-              "Your file has been deleted."
-            );
-          } else {
-            this.showToast(
-              "warning",
-              "top-right",
-              "Warning!",
-              "AlertTriangleIcon",
-              `Something went wrong.${response.message}`
-            );
-          }
+        if (this.isResponseSuccess(response)) {
+          this.showToast(
+            "success",
+            "top-right",
+            "Deleted!",
+            "CheckIcon",
+            "Your file has been deleted."
+          );
+        } else {
+          this.showToast(
+            "warning",
+            "top-right",
+            "Warning!",
+            "AlertTriangleIcon",
+            `Something went wrong.${response.message}`
+          );
         }
+      }
     },
     async openModalSendSMS(item) {
       this.rowData = item;
@@ -403,15 +462,15 @@ export default {
       this.modalEvidence = true;
     },
     closeModalEvidence(payload) {
-      if(payload){
-          this.M_SET_EVIDENCE_URL(payload)
+      if (payload) {
+        this.M_SET_EVIDENCE_URL(payload);
       }
       this.modalEvidence = false;
-    }
+    },
   },
   mounted() {
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
       this.actionsOptions.push("delete");
-  }
-}
+  },
+};
 </script>
