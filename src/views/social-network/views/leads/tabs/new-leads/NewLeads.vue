@@ -52,11 +52,33 @@
               <span>{{data.item.lead_name}}</span>
             </div>
           </template>
-
+          <template #cell(source)="data">
+            <div>
+              <div v-if="data.item.parent == 1" class="text-center d-flex flex-column align-items-center">
+                <b-img
+                  fluid
+                  :src="baseUrl + '/images/social-network/facebook.png'"
+                  style="width: 30px"
+                />
+                <span class="mt-1">
+                  {{data.item.child}}
+                </span>
+              </div>
+              <div v-if="data.item.parent == 2" class="text-center d-flex flex-column align-items-center">
+                <b-img
+                  fluid
+                  :src="baseUrl + '/images/social-network/google.png'"
+                  style="width: 30px"
+                />
+                <span class="mt-1">
+                  {{String(data.item.contact_method).toUpperCase()}}
+                </span>
+              </div>
+            </div>
+          </template>
           <!-- Column: Status -->
           <template #cell(status)="data">
             <b-badge
-              pill
               :variant="`light-${resolveLeadSnStatusVariant(data.item.status)}`"
               class="text-capitalize"
               >{{ data.item.status }}</b-badge
@@ -93,8 +115,16 @@
               <div v-if="data.item.real_time != null && data.item.state_hour != 'CA'"> {{ data.item.real_time | myGlobalDay }} {{ data.item.state_hour }}</div>
             </div>
           </template>
-
-          <!-- Column: Created Date -->
+          <template #cell(credit_report)="data">
+            <span :class="data.item.credit_report == '1'?'text-danger':'text-success'">
+              {{ data.item.credit_report == "1" ? 'NO' : 'YES' }}
+            </span>
+          </template>
+          <template #cell(sale_lead_status)="data">
+            <b-badge :variant="data.item.sale_status == 1 ? 'info' : 'success'" class="w-100" v-if="data.item.sale_lead_status">
+                {{data.item.sale_lead_status}}
+            </b-badge>
+          </template><!-- Column: Created Date -->
           <template #cell(created_at)="data">
             <small>{{ data.item.created_at | myGlobalDay }}</small>
           </template>
@@ -164,7 +194,6 @@ import ModalTracking from "../../components/ModalTracking.vue";
 import ActionsTable from "./components/ActionsTable.vue";
 import ModalSmsList from "../../components/ModalSmsList.vue";
 import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
-
 export default {
   components: {
     "filter-slot": FilterSlot,
@@ -218,12 +247,19 @@ export default {
       G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
       G_STATES: "CrmGlobalStore/G_STATES",
       G_CRS: "CrmGlobalStore/G_CRS",
-      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS"
+      G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS",
     }),
     ...mapState('SocialNetworkLeadsStore',['S_BUSY_NEW_LEADS','S_LEADS']),
     ...mapState({
       S_LEADS: state => state.SocialNetworkLeadsStore.S_LEADS,
-      
+      S_STATES_LEADS : state => state.SocialNetworkLeadsStore.S_STATES_LEADS,
+      S_LEAD_STATUS_SN: state => state.SocialNetworkLeadsStore.S_LEAD_STATUS_SN,
+      S_FAN_PAGE_PROGRAMS_FILTERS: state => state.SocialNetworkLeadsStore.S_FAN_PAGE_PROGRAMS_FILTERS,
+      S_SELLERS_FILTERS: state => state.SocialNetworkLeadsStore.S_SELLERS_FILTERS,
+      S_SUB_SOURCES_FILTERS : state => state.SocialNetworkLeadsStore.S_SUB_SOURCES_FILTERS,
+      sourceFilter(){
+        return this.filter[5].model
+      }
     }),
     routeModule() {
       return this.$route.meta.route;
@@ -238,7 +274,7 @@ export default {
     console.log('busy: ', this.S_BUSY_NEW_LEADS)
   },
   methods: {
-    ...mapActions('SocialNetworkLeadsStore', ['A_DELETE_LEAD', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_GET_SMS_SENT_TO_NEW_LEADS']),
+    ...mapActions('SocialNetworkLeadsStore', ['A_DELETE_LEAD', 'A_GET_STATE_LEAD', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_GET_SMS_SENT_TO_NEW_LEADS', 'A_GET_STATUS_LEAD', 'A_GET_FAN_PAGE_PROGRAMS_FILTERS', 'A_GET_FILTER_SELLERS', 'A_GET_SUB_SOURCES_FILTERS']),
     ...mapActions('CrmLeadStore', ['A_SET_FILTERS_LEADS']),
     async openModalTracking(id, name) {
       await this.A_GET_TRACKING_NEW_LEADS({
@@ -316,17 +352,20 @@ export default {
       try {
         this.setFilters();
         const response = await this.A_GET_NEW_LEADS({
-          cr: null,
+          cr: this.filter[2].model,
           date_from: this.filter[0].model,
           date_to: this.filter[1].model,
-          lead_status: null,
+          lead_status: this.filter[3].model,
           name_text: this.filterPrincipal.model,
+          sourcename: this.filter[5].model,
+          task: this.filter[9].model, 
+          type_document: this.filter[11].model,
           order: "desc",
           orderby: 10,
-          program: null,
-          state_h: this.filter[3].model,
+          fanpage: this.filter[4].model,
+          state_h: this.filter[10].model,
           type: 1,
-          user_owner: this.filter[2].model,
+          user_owner: this.filter[8].model,
           perpage: this.paginate.perPage,
           page: this.paginate.currentPage
         });
@@ -345,15 +384,22 @@ export default {
       }
     },
 
-    setOptionsOnFilters() {
-      this.filter[2].options = this.G_STATUS_LEADS;
-      this.filter[3].options = this.G_OWNERS;
-      this.filter[4].options = this.G_OWNERS;
-      this.filter[5].options = this.G_CRS;
-      this.filter[6].options = this.G_PROGRAMS;
-      this.filter[7].options = this.G_STATES;
-      this.filter[8].options = this.G_SOURCE_NAMES;
-      this.filter[9].options = this.G_TYPE_DOCS;
+    async setOptionsOnFilters() {
+      await Promise.all([
+        this.A_GET_STATE_LEAD(),
+        this.A_GET_STATUS_LEAD(),
+        this.A_GET_FAN_PAGE_PROGRAMS_FILTERS(),
+        this.A_GET_FILTER_SELLERS({moduleId: 15, roles: "[]"}),
+      ])
+      // this.filter[2].options = this.G_STATUS_LEADS;
+      this.filter[3].options = this.S_LEAD_STATUS_SN;
+      this.filter[4].options = this.S_FAN_PAGE_PROGRAMS_FILTERS;
+
+      // this.filter[5].options = this.G_CRS;
+      this.filter[8].options = this.S_SELLERS_FILTERS;
+      // this.filter[7].options = this.G_STATES;
+      this.filter[10].options = this.S_STATES_LEADS;
+      // this.filter[9].options = this.G_TYPE_DOCS;
     },
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;
@@ -379,6 +425,35 @@ export default {
   mounted() {
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
       this.actionsOptions.push("delete");
+  },
+  watch:{
+    async sourceFilter(newValue){
+      console.log(newValue, "newValue")
+      if(newValue == 1 || newValue == 2){
+        if(newValue == 1){
+          await this.A_GET_SUB_SOURCES_FILTERS(newValue)
+          this.$set(this.filter[6], 'options', this.S_SUB_SOURCES_FILTERS)
+          this.filter[6].visible = true
+          this.filter[7].options = []
+          this.filter[7].visible = false
+          this.filter[7].model = null
+        }else if(newValue == 2){
+          await this.A_GET_SUB_SOURCES_FILTERS(newValue)
+          this.$set(this.filter[7], 'options', this.S_SUB_SOURCES_FILTERS)
+          this.filter[7].visible = true
+          this.filter[6].options = []
+          this.filter[6].visible = false
+          this.filter[6].model = null
+        }
+      }else{
+        this.filter[6].visible = false
+        this.filter[6].options = []
+        this.filter[6].model = null
+        this.filter[7].options = []
+        this.filter[7].visible = false
+        this.filter[7].model = null
+      }
+    }
   }
 };
 </script>
