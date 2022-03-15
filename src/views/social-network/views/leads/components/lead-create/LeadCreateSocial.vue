@@ -2,7 +2,7 @@
   <div >
     <b-button
         variant="success"
-        class="mr-1"
+        class="mr-1 d-flex align-items-center"
         @click="onOpenSidebar"
     >
       <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
@@ -23,7 +23,7 @@
 
       <template #default>
         <!-- BODY -->
-        <div class="mx-4">
+        <div class="mx-4 container-create" id="container-create-lead-sn">
           <validation-observer ref="refFormLeadObserver">
             <CatchmentCreateSn :lead="lead"/>
 
@@ -41,18 +41,6 @@
             <template v-if="lead.addEvidence">
               <TaskCreateLeadSn :lead="lead"/>
             </template>
-
-            <b-button
-                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-                variant="success"
-                class=""
-                @click="onSubmit"
-            >
-              <div class="d-flex align-items-center justify-content-center px-2">
-                <feather-icon icon="CheckIcon" size="16" class="text-white"/>
-                <span class="btn-create-lead">Create</span>
-              </div>
-            </b-button>
 
           </validation-observer>
 
@@ -102,6 +90,29 @@
         </div>
       </template>
     </b-sidebar>
+
+    <b-toast
+        id="toast-validation-create-lead"
+    >
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-center mr-1">
+          <b-img
+              :src="require('@/assets/images/logo/logo.png')"
+              class="mr-1"
+              height="18"
+              width="25"
+              alt="Toast image"
+          />
+          <strong class="mr-auto">Warning validation</strong>
+        </div>
+      </template>
+
+      <div>
+        <p class="m-0" v-for="(value, index) in toastData" :key="index">{{index +1 }}. {{ value.label }} {{ value.error }}</p>
+      </div>
+
+    </b-toast>
+
   </div>
 
 </template>
@@ -119,6 +130,8 @@ import TaskCreateLeadSn from "@/views/social-network/views/leads/components/lead
 import MoreInformation from "@/views/social-network/views/leads/components/lead-create/MoreInformation";
 import BillingInformation from "@/views/social-network/views/leads/components/lead-create/BillingInformation";
 import {mapActions, mapGetters, mapState} from "vuex";
+import VueScrollTo from 'vue-scrollto'
+
 export default {
   name: 'LeadCreateSocial',
   components: {
@@ -240,6 +253,7 @@ export default {
         value: null,
       }],
       optionPrograms: [],
+      toastData: []
     };
   },
   async created() {
@@ -252,7 +266,7 @@ export default {
     this.lead.catcher = this.currentUser.user_id;
     this.lead.created_by = this.currentUser.user_id;
     this.lead.created_date = this.$options.filters.formatDate(new Date());
-
+    window.addEventListener('scroll', this.handleScroll)
   },
 
   computed: {
@@ -281,11 +295,30 @@ export default {
     ),
 
     async onSubmit() {
-      try {
-        if (await this.$refs.refFormLeadObserver.validate()) {
-          console.log('data: ', this.$refs.refFormLeadObserver)
-          await this.A_CREATE_LEAD_SN(this.lead);
 
+      const options = {
+        container: '#container-create-lead-sn',
+        easing: 'ease-in',
+        offset: -60,
+        force: true,
+        cancelable: true,
+        onStart: function(element) {
+          // scrolling started
+        },
+        onDone: function(element) {
+          // scrolling is done
+        },
+        onCancel: function() {
+          // scrolling has been interrupted
+        },
+        x: false,
+        y: true
+      }
+
+
+      try {
+        const validate = await this.$refs.refFormLeadObserver;
+        if (await validate.validate()) {
           const resp = await this.showConfirmSwal(
               "Are you sure?",
               "You won't be able to revert this!",
@@ -293,16 +326,18 @@ export default {
           )
           if(resp.value){
             this.addPreloader()
+            await this.A_CREATE_LEAD_SN(this.lead);
 
             setTimeout(async () => {
               await this.resetForm()
               await this.onCloseSidebar();
-              await this.removePreloader()
-              await this.showSuccessSwal(
+              await this.removePreloader();
+
+              this.showSuccessSwal(
                   "Success!",
                   "Successful Process",
                   ""
-              )
+              );
               await this.A_GET_NEW_LEADS({
                 cr: null,
                 date_from: null,
@@ -317,21 +352,45 @@ export default {
                 state_h: null,
                 type: 1,
                 user_owner: null,
-              })
+              });
 
             },1000)
-
-
           }
-
         } else {
-          console.log('Sin validacion')
-          await this.removePreloader()
+
+          //Object.values(validate.refs)[0].$el.scrollTop
+
+          const fields = Object.values(validate.fields).map(field => field.name);
+          const errors = Object.values(validate.errors)
+          let errorToast = [];
+          errors.forEach((error, index) => {
+            console.log('RT', error)
+            if(error.length > 0) {
+              errorToast.push({
+                index,
+                error: error[0],
+                label: fields[index],
+                id: `input-create-lead-${index + 1}`
+              })
+            }
+          })
+          this.toastData = errorToast.filter(error => !error.label.includes('card-number-'));
+          //this.$bvToast.show('toast-validation-create-lead')
+          console.log('INPUT',this.toastData[0].id, document.getElementById(`${this.toastData[0].id}`));
+          const input = document.getElementById(`${this.toastData[0].id}`);
+          input.scrollIntoView({behavior: "smooth"});
+          //const myEl = this.$refs.refLeadCreate1
+          //await this.$router.push({ hash: '#toHash'})
+          //userId
+          //validate.refs.Email
+          //console.log('EF', validate.refs.Email)
+
+
 
         }
 
       } catch (error) {
-        console.log('error')
+        console.log('error', error)
         setTimeout(async () => {
           await this.removePreloader()
         },1000)
@@ -471,7 +530,11 @@ export default {
       this.lead.images= []
       this.lead.other= ""
       this.$refs.refFormLeadObserver.reset();
-    }
+    },
+    handleScroll () {
+      var sortMenu = this.$refs.containerSidebarSreateLead.scrollLeft;
+      console.log(sortMenu);
+    },
   },
   watch: {
 
@@ -484,5 +547,13 @@ export default {
   padding-top: .15rem !important;
   margin-left: .3rem;
   font-size: 16px;
+}
+.b-sidebar-body{
+  //background: red !important;
+  scroll-behavior: smooth !important;
+}
+.container-create{
+  overflow-y: scroll !important;
+  scroll-behavior: smooth !important;
 }
 </style>

@@ -6,9 +6,9 @@
           <h4 class="title-card text-left">More information</h4>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
+      <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="DOB">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -20,18 +20,19 @@
                 label="DOB"
             >
               <b-form-datepicker
-                  autofocus
+
                   :format="'MM/dd/yyyy'"
                   v-model="lead.dob"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
+                  id="input-create-lead-21"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">DOB {{errors[0]}}</div>
             </b-form-group>
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Status">
 
             <b-form-group
                 label="Status"
@@ -45,7 +46,6 @@
                 content-cols-lg="8"
             >
               <v-select
-                  id="userId"
                   v-model="lead.state_lead"
                   selected=""
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -54,6 +54,7 @@
                   :clearable="false"
                   :reduce="el => el.value"
                   :class="{'border-error-sn' :errors[0]}"
+                  id="input-create-lead-22"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Status {{errors[0]}}</div>
             </b-form-group>
@@ -62,9 +63,9 @@
           </ValidationProvider>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
+      <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Type doc.">
             <b-form-group
                 label="Type doc."
                 label-for="st-ad"
@@ -77,7 +78,6 @@
                 content-cols-lg="8"
             >
               <v-select
-                  id="type_document"
                   v-model="lead.type_document"
                   selected=""
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -85,6 +85,7 @@
                   :options="documents"
                   :clearable="false"
                   :reduce="el => el.value"
+                  id="input-create-lead-23"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Type doc. {{errors[0]}}</div>
             </b-form-group>
@@ -92,7 +93,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Document">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -110,17 +111,17 @@
                   placeholder="Please type document"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
+                  id="input-create-lead-24"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">document {{errors[0]}}</div>
             </b-form-group>
           </ValidationProvider>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
-        <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}">
+      <b-row class="mt-2 text-left">
+        <b-col mb="6 text-left">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Phone(H)">
             <b-form-group
-                id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                 label-cols-sm="4"
                 label-for="input-horizontal"
@@ -128,6 +129,7 @@
                 content-cols-sm
                 content-cols-lg="8"
                 label="Phone(H)"
+                id="input-create-lead-25"
             >
               <b-form-input
                   v-model="lead.phone"
@@ -147,7 +149,7 @@
       </b-row>
 
       <StreetCreateSN
-          component="MoreInfo"
+          title="More information"
           :street="lead.street"
           :city="lead.city"
           :state="lead.state"
@@ -164,7 +166,7 @@ import {mapActions, mapState} from "vuex";
 import vSelect from "vue-select";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
-import StreetCreateSN from "@/views/social-network/views/commissions/lead-create/StreetCreateSN";
+import StreetCreateSN from "./StreetCreateSN";
 
 export default {
   data() {

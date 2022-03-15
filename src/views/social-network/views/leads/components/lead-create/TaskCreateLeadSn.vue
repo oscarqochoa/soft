@@ -52,8 +52,8 @@
 
             <div class="container-task-later">
 
-              <div class="mr-1">
-                <ValidationProvider rules="required" v-slot="{errors}">
+              <div class="mr-1 text-left">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Day event">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -74,8 +74,8 @@
                 </ValidationProvider>
               </div>
 
-              <div class="mr-1">
-                <ValidationProvider rules="required" v-slot="{errors}">
+              <div class="mr-1 text-left">
+                <ValidationProvider rules="required" v-slot="{errors}" name="From">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -93,8 +93,8 @@
                   </b-form-group>
                 </ValidationProvider>
               </div>
-              <div class="">
-                <ValidationProvider rules="required" v-slot="{errors}">
+              <div class="text-left">
+                <ValidationProvider rules="required" v-slot="{errors}" name="To">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -124,15 +124,15 @@
                 <b-button
                     v-ripple.400="'rgba(255, 255, 255, 0.15)'"
                     variant="danger"
-                    class=""
+                    class="btn-find-seller-later"
                     @click="findSellers"
                 >
                   <span >Find Seller</span>
                 </b-button>
               </div>
 
-              <div class="mr-1">
-                <ValidationProvider rules="required" v-slot="{errors}">
+              <div class="mr-1 text-left">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Title seller">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -151,7 +151,7 @@
               </div>
 
               <div class="">
-                <b-col md="12">
+                <b-col md="12 text-left">
                   <ValidationProvider v-slot="{errors}" rules="required" name="Seller">
                     <b-form-group
                         :state="errors[0] ? false : null"
@@ -206,7 +206,7 @@
 
             <div class="container-task-later task-now-seller">
 
-              <div class="mr-1">
+              <div class="mr-1 text-left">
 
                 <b-col md="12">
                   <ValidationProvider v-slot="{errors}" rules="required" name="Subject">
@@ -231,7 +231,7 @@
                 </b-col>
               </div>
 
-              <div class="mr-1">
+              <div class="mr-1 text-left">
                 <b-col md="12">
                   <ValidationProvider v-slot="{errors}" rules="required" name="Assign to">
                     <b-form-group
@@ -271,8 +271,8 @@
                 </b-col>
 
               </div>
-              <div class="mr-1">
-                <ValidationProvider rules="required" v-slot="{errors}">
+              <div class="mr-1 text-left">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Due date">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -290,8 +290,8 @@
                   </b-form-group>
                 </ValidationProvider>
               </div>
-              <div class="mr-1">
-                <ValidationProvider rules="required" v-slot="{errors}">
+              <div class="mr-1 text-left">
+                <ValidationProvider rules="required" v-slot="{errors}" name="Due hour">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -492,4 +492,8 @@ export default {
 .truncate-options {
   width: 85px;
 }
+.btn-find-seller-later{
+  margin-top: 9px;
+}
+
 </style>

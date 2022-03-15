@@ -6,10 +6,10 @@
         v-scrollbar
         :filter="filter"
         :filter-principal="filterPrincipal"
-        :total-rows="totalLeads"
+        :total-rows="S_LEADS.total"
         :paginate="paginate"
-        :start-page="fromPage"
-        :to-page="toPage"
+        :start-page="S_LEADS.fromPage"
+        :to-page="S_LEADS.toPage"
         :send-multiple-sms="false"
         @reload="getSocialNetworkLeads"
         @onChangeCurrentPage="onChangeCurrentPage"
@@ -30,7 +30,7 @@
           :fields="fields"
           :items="S_LEADS.items"
           :sort-desc.sync="isSortDirDesc"
-          :busy.sync="isBusy"
+          :busy.sync="S_BUSY_NEW_LEADS"
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -220,6 +220,7 @@ export default {
       G_CRS: "CrmGlobalStore/G_CRS",
       G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS"
     }),
+    ...mapState('SocialNetworkLeadsStore',['S_BUSY_NEW_LEADS','S_LEADS']),
     ...mapState({
       S_LEADS: state => state.SocialNetworkLeadsStore.S_LEADS,
       
@@ -234,6 +235,7 @@ export default {
   created() {
     this.getSocialNetworkLeads();
     this.setOptionsOnFilters();
+    console.log('busy: ', this.S_BUSY_NEW_LEADS)
   },
   methods: {
     ...mapActions('SocialNetworkLeadsStore', ['A_DELETE_LEAD', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_GET_SMS_SENT_TO_NEW_LEADS']),
@@ -312,7 +314,6 @@ export default {
     },
     async getSocialNetworkLeads() {
       try {
-        this.isBusy = true;
         this.setFilters();
         const response = await this.A_GET_NEW_LEADS({
           cr: null,
@@ -332,7 +333,6 @@ export default {
         this.totalLeads = response.total;
         this.fromPage = response.from;
         this.toPage = response.to;
-        this.isBusy = false;
       } catch (error) {
         console.log("Somtehing went wrong getSocialNetworkLeads", error);
         this.showToast(
