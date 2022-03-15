@@ -49,7 +49,7 @@
 
                 <router-link
                     :class="[textLink]"
-                    :to="`/crm/leads/${data.item.id}`"
+                    :to="`/social-network/leads/new/dashboard/${data.item.id}`"
                     target="_blank"
                 > {{ data.item.nickname }}
                 </router-link>
