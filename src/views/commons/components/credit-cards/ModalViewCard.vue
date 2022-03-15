@@ -9,8 +9,6 @@
     @hidden="close"
   >
     <validation-observer #default="{ handleSubmit }" ref="refFormObserver">
-      <!-- Form -->
-
       <b-form
         @submit.prevent="handleSubmit(onSubmit)"
         @reset.prevent="resetForm"
@@ -130,6 +128,7 @@
             </validation-provider>
           </b-col>
           <b-col v-if="!moreInfo && type !== 1" cols="12">
+            sssss
             <address-component
               :address-data="card"
               :state-options="G_EEUU_STATES"

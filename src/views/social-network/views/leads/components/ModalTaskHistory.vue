@@ -62,6 +62,10 @@ export default {
       required: false,
       default: 0,
     },
+    replyId: {
+      type: Number,
+      default: 0,
+    },
   },
   components: {
     PaginateTable,
@@ -99,6 +103,7 @@ export default {
         const response = await this.A_GET_LEAD_HISTORY_TASKS({
           id: this.lead.id,
           taskForSn: this.taskForSn,
+          reply_id: this.replyId,
         });
         if (this.isResponseSuccess(response)) {
           this.paginate.totalRows = response.data.total;

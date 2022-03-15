@@ -7,9 +7,9 @@
         </b-col>
       </b-row>
       <b-row class="mt-2">
-        <b-col mb="6">
+        <b-col mb="6" class="text-left">
 
-          <ValidationProvider rules="required|unique-nickname" v-slot="{errors}" name="nickname">
+          <ValidationProvider rules="required|unique-nickname" v-slot="{errors}" name="Nickname">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -26,14 +26,15 @@
                   class="select-icon-none font-bureau-style border-hover bg-white-c"
                   :class="errors[0] ? 'border-error-sn' : ''"
                   :state="errors[0] ? false : null"
+                  id="input-create-lead-10"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">Nickname {{errors[0]}}</div>
             </b-form-group>
           </ValidationProvider>
 
         </b-col>
-        <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}">
+        <b-col mb="6" class="text-left">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Language">
 
             <b-form-group
                 label="Language"
@@ -48,13 +49,13 @@
                 class="m-0"
             >
               <v-select
-                  id="leadLanguage"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   label="label"
                   v-model="lead.language"
                   :options="languagesOptions"
                   :clearable="false"
                   :reduce="el => el.value"
+                  id="input-create-lead-11"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Language {{errors[0]}}</div>
             </b-form-group>
@@ -64,7 +65,7 @@
         </b-col>
       </b-row>
       <b-row class="mt-2">
-        <b-col mb="6">
+        <b-col mb="6" class="text-left">
           <ValidationProvider rules="required" v-slot="{errors}">
             <b-form-group
                 id="fieldset-horizontal"
@@ -77,7 +78,7 @@
                 label="Did you start dialogue?"
             >
               <VueToggles
-                  class="mt-1"
+                  class="vue-toggle"
                   height="31"
                   width="90"
                   checkedText="YES"
@@ -181,3 +182,13 @@ export default {
   }
 }
 </script>
+
+<style>
+.vue-toggle{
+  margin-top: 0px !important;
+}
+.dark-layout .card {
+  box-shadow: 0 1px 3px 0 rgb(255 255 255 / 0.1), 0 1px 2px -1px rgb(255 255 255 / 0.1) !important;
+  background: #1e1e1e;
+}
+</style>

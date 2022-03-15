@@ -174,22 +174,188 @@
                 :state="errors[0] ? false : null"
               >
                 <v-select
-                  id="asigned"
                   v-model="task.seller"
-                  placeholder="Select a Seller"
-                  label="user_name"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   :options="sellers"
-                  :reduce="(val) => val.id"
                   :clearable="false"
+                  label="user_name"
+                  v-if="taskForSn == 0"
+                  class="w-100 select-icon-none"
+                  transition
+                  :reduce="(option) => option.id"
+                  :selectable="
+                    (option) =>
+                      !attend_type
+                        ? option.status_session == 1 && option.disabled == 0
+                        : option.disabled == 0
+                  "
                 >
-                  <template #option="data">
-                    <span
-                      :class="
-                        data.state_advisors == 1 ? 'text-success' : 'text-muted'
-                      "
-                      >{{ data.user_name }}</span
-                    >
+                  <template #list-header>
+                    <li>
+                      <b-row class="mr-0">
+                        <b-col cols="6" class="text-center">
+                          <strong>Seller</strong>
+                        </b-col>
+                        <b-col cols="2" class="text-center">
+                          <strong>Now</strong>
+                        </b-col>
+                        <b-col cols="2" class="text-center">
+                          <strong>Later today</strong>
+                        </b-col>
+                        <b-col cols="2" class="text-center">
+                          <strong>Later other</strong>
+                        </b-col>
+                      </b-row>
+                    </li>
+                  </template>
+                  <template
+                    #selected-option="{
+                      status_session,
+                      user_name,
+                      count_task,
+                      instantly_sum,
+                      later_today,
+                      later_others,
+                    }"
+                  >
+                    <b-row class="w-100 ml-0 mr-0">
+                      <b-col cols="6">
+                        <div
+                          style="
+                            display: flex;
+                            justify-content: start;
+                            align-items: center;
+                          "
+                        >
+                          <span class="ml-1 mr-2">
+                            <feather-icon
+                              icon="CircleIcon"
+                              :style="
+                                status_session == 1
+                                  ? 'color: #1ab91a;'
+                                  : 'color: gray;'
+                              "
+                            ></feather-icon>
+                          </span>
+                          <span>{{ user_name }}({{ count_task }})</span>
+                        </div>
+                      </b-col>
+                      <b-col cols="2" class="text-center">{{
+                        Number(instantly_sum)
+                      }}</b-col>
+                      <b-col cols="2" class="text-center">{{
+                        Number(later_today)
+                      }}</b-col>
+                      <b-col cols="2" class="text-center">{{
+                        Number(later_others)
+                      }}</b-col>
+                    </b-row>
+                  </template>
+                  <template v-slot:option="option">
+                    <b-row>
+                      <b-col cols="6">
+                        <div
+                          style="
+                            display: flex;
+                            justify-content: start;
+                            align-items: center;
+                          "
+                        >
+                          <span class="mr-2">
+                            <feather-icon
+                              icon="CircleIcon"
+                              :style="
+                                option.status_session == 1
+                                  ? 'color: #1ab91a;'
+                                  : 'color: gray;'
+                              "
+                            ></feather-icon>
+                          </span>
+                          <span
+                            >{{ option.user_name }}({{ option.count_task }})
+                            {{
+                              (
+                                !attend_type
+                                  ? option.status_session == 1 &&
+                                    option.disabled == 0
+                                  : option.disabled == 0
+                              )
+                                ? ""
+                                : "(Not available)"
+                            }}</span
+                          >
+                        </div>
+                      </b-col>
+                      <b-col cols="2" class="text-center">{{
+                        Number(option.instantly_sum)
+                      }}</b-col>
+                      <b-col cols="2" class="text-center">{{
+                        Number(option.later_today)
+                      }}</b-col>
+                      <b-col cols="2" class="text-center">{{
+                        Number(option.later_others)
+                      }}</b-col>
+                    </b-row>
+                  </template>
+                </v-select>
+                <v-select
+                  v-model="task.seller"
+                  :options="sellers"
+                  :clearable="false"
+                  label="user_name"
+                  v-if="taskForSn == 1"
+                  class="w-100 select-icon-none"
+                  transition
+                  :reduce="(option) => option.id"
+                >
+                  <template #selected-option="{ state_advisors, user_name }">
+                    <b-row class="w-100 ml-0 mr-0">
+                      <b-col cols="6">
+                        <div
+                          style="
+                            display: flex;
+                            justify-content: start;
+                            align-items: center;
+                          "
+                        >
+                          <span class="ml-1 mr-2">
+                            <feather-icon
+                              icon="CircleIcon"
+                              :style="
+                                state_advisors == 1
+                                  ? 'color: #1ab91a;'
+                                  : 'color: gray;'
+                              "
+                            ></feather-icon>
+                          </span>
+                          <span>{{ user_name }}</span>
+                        </div>
+                      </b-col>
+                    </b-row>
+                  </template>
+                  <template v-slot:option="option">
+                    <b-row>
+                      <b-col cols="6">
+                        <div
+                          style="
+                            display: flex;
+                            justify-content: start;
+                            align-items: center;
+                          "
+                        >
+                          <span class="mr-2">
+                            <feather-icon
+                              icon="CircleIcon"
+                              :style="
+                                option.state_advisors == 1
+                                  ? 'color: #1ab91a;'
+                                  : 'color: gray;'
+                              "
+                            ></feather-icon>
+                          </span>
+                          <span>{{ option.user_name }}</span>
+                        </div>
+                      </b-col>
+                    </b-row>
                   </template>
                 </v-select>
               </b-form-group>
@@ -269,6 +435,9 @@ import moment from "moment";
 import formValidation from "@core/comp-functions/forms/form-validation";
 import GlobalService from "@/views/services/global.service";
 
+// Services
+import SNLeadsService from "@/views/social-network/services/leads";
+
 export default {
   props: {
     modul: {
@@ -282,6 +451,10 @@ export default {
     taskForSn: {
       type: Number,
       required: false,
+      default: 0,
+    },
+    replyId: {
+      type: Number,
       default: 0,
     },
   },
@@ -377,9 +550,12 @@ export default {
     },
     async getSellers() {
       try {
-        const response = await this.A_GET_USERS_BY_MODULE(this.moduleId);
-        this.sellers = response;
-        this.task.seller = this.authUser.user_id;
+        const response = await SNLeadsService.getTaskSellers(this.moduleId);
+
+        if (response.status == 200) {
+          this.sellers = response.data;
+          this.task.seller = this.authUser.user_id;
+        }
       } catch (error) {}
     },
     onChangeSms() {
@@ -440,6 +616,7 @@ export default {
               method: this.authUser.role_id === 7 ? this.task.method : null,
               withsms: this.task.withsms ? 1 : 0,
               taskForSn: this.taskForSn,
+              reply_id: this.replyId,
             };
 
             const response = await this.A_SET_LEAD_TASK(params);
@@ -499,11 +676,12 @@ export default {
     },
   },
   async created() {
+    await this.getHourSystem();
+    await this.getSellers();
+
     this.authUser = this.currentUser;
     this.blankTask = { ...this.task };
     this.task.date = moment().format("MM/DD/YYYY");
-    await this.getHourSystem();
-    await this.getSellers();
 
     this.show = true;
   },

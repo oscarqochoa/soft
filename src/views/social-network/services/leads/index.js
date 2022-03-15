@@ -22,6 +22,15 @@ class SNLeads {
         }
     }
 
+    async getLeadDocument(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/get-lead-document', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
     async getTrackingNewLeads(body) {
         try {
             const { data, status } = await amgApi.post('/lead/get-tracking-lead-sn', body)
@@ -147,7 +156,7 @@ class SNLeads {
 
     async getFlyers(params) {
         try {
-            const { data, status } = await amgApi.post('social-network/bank-of-flyers/get-flyers-by-state', params)
+            const { data, status } = await amgApi.post('/social-network/bank-of-flyers/get-flyers-by-state', params)
             return { data, status }
         } catch (error) {
             console.log("Something went wrong on getFlyers", error)
@@ -265,12 +274,12 @@ class SNLeads {
         }
     }
 
-    async createLeadSN (params) {
+    async createLeadSN(params) {
         try {
             const resp = await amgApi.post('/lead/social-network/lead-create-socialnetwork', params)
             console.log(resp)
         } catch (e) {
-            console.log('ERROR: ',e.response)
+            console.log('ERROR: ', e.response)
         }
     }
 
@@ -296,6 +305,15 @@ class SNLeads {
     async getPendingCreditReport(params) {
         try {
             const { data, status } = await amgApi.post('/credit-report/search-credit-reports-pending', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getCountPendingReports(params) {
+        try {
+            const { data, status } = await amgApi.post('/credit-report/get-cr-count-pending-tab', params)
             return { data, status }
         } catch (error) {
             throw error
@@ -352,11 +370,11 @@ class SNLeads {
     }
     async insertEvidenceSn(body) {
         try {
-          const data = await amgApi.post('/lead/insert-evidence-sn', body)
-          return data
+            const data = await amgApi.post('/lead/insert-evidence-sn', body)
+            return data
         } catch (error) {
-          console.log('Something went wrong on insert evidence sn:', error)
-          throw error
+            console.log('Something went wrong on insert evidence sn:', error)
+            throw error
         }
     }
 
@@ -373,9 +391,117 @@ class SNLeads {
     async searchGlobalLeadsSn(body) {
         try {
             const { data, status } = await amgApi.post('/lead/social-network/search-global-leads-sn', body)
-            return {data, status}
+            return { data, status }
         } catch (error) {
             console.log("Something went wrong on search global leads sn", error);
+            throw error
+        }
+    }
+
+    async sendCreditReportRequest(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/ncr/send-leads-request', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getTrakingStatusLeads(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/ncr/get-lead-tracking-status-by-id', body);
+            return { data, status };
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async changeCreditReportStatus(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/ncr/change-status', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getCreditReportScore(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/ncr/get-score', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getReplies(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/get-lead-replies', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async updateFlyerReply(body) {
+        try {
+            const { data, status } = await amgApi.post('lead/social-network/update-flyer-reply-by-id', body);
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getFanpages() {
+        try {
+            const { data, status } = await amgApi.get('/lead/all-fangapes')
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getSubSources() {
+        try {
+            const { data, status } = await amgApi.get('/lead/get-sub-sources-sn');
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async saveLeadReply(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/save-lead-replies-sn', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getTaskSellers(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/get-seller-task-favorite-sn', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getReasonsNotPotential() {
+        try {
+            const { data, status } = await amgApi.get('/lead/social-network/get-reasons-not-potential');
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async updatePotentialDialogById(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/update-potential-dialogue-by-id-reply', body)
+            return { data, status }
+        } catch (error) {
             throw error
         }
     }

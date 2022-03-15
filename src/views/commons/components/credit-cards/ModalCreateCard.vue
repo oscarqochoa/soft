@@ -5,7 +5,6 @@
     title-tag="h3"
     hide-footer
     size="lg"
-    no-close-on-backdrop
     @hidden="close"
   >
     <ValidationObserver ref="form">
@@ -159,16 +158,18 @@
                   @click="moreInfo = 1"
                   class="btn rounded w-100 btn-gray-selector"
                   :variant="`${moreInfo == 1 ? 'primary' : ''}`"
-                  >Yes</b-button
                 >
+                  Yes
+                </b-button>
               </b-col>
               <b-col cols="6" class="px-1">
                 <b-button
                   @click="moreInfo = 0"
                   class="btn rounded w-100 btn-gray-selector"
                   :variant="`${moreInfo == 0 ? 'primary' : ''}`"
-                  >No</b-button
                 >
+                  No
+                </b-button>
               </b-col>
             </b-row>
           </div>
@@ -211,21 +212,13 @@
           <div class="form-group">
             <label for="state">State</label>
             <ValidationProvider rules="required" v-slot="{ errors }">
-              <select
-                name="state"
-                id="state"
+              <v-select
                 v-model="form.state"
-                class="form-control"
+                :reduce="(el) => el.value"
+                :options="states"
+                :clearable="false"
                 :class="{ 'border border-danger': errors[0] }"
-              >
-                <option
-                  :value="state.slug"
-                  v-for="state in states"
-                  :key="state.id"
-                >
-                  {{ state.state }}
-                </option>
-              </select>
+              ></v-select>
             </ValidationProvider>
           </div>
         </b-col>
@@ -277,14 +270,23 @@
 </template>
 
 <script>
-import VueGoogleAutocomplete from "vue-google-autocomplete";
-import { extend } from "vee-validate";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 
+// Components
+import VueGoogleAutocomplete from "vue-google-autocomplete";
+import vSelect from "vue-select";
+
+// Services
 import { amgApi } from "@/service/axios";
+import crmGlobal from "@/views/crm/services/global";
+
 export default {
-  components: { VueGoogleAutocomplete },
-  props: ["lead", "session", "ifModalCard"],
+  components: { VueGoogleAutocomplete, vSelect },
+  props: {
+    lead: {
+      type: Object,
+    },
+  },
   data() {
     return {
       show: false,
@@ -318,10 +320,22 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
-      G_EEUU_STATES: "CrmGlobalStore/G_EEUU_STATES",
     }),
   },
   methods: {
+    async getEeuuStates() {
+      try {
+        const response = await crmGlobal.getStatesEeuu({});
+
+        if (response.status == 200) {
+          response.data.map((item) =>
+            this.states.push({ value: item.slug, label: item.state })
+          );
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
     activeFocus(index, max) {
       let inputValue = this.$refs?.[`input-${index}`];
       if (inputValue.value.length === max - 1) {
@@ -329,17 +343,22 @@ export default {
         if (nextElement) nextElement.focus();
       }
     },
-    getAddressData(address_create_card_modal) {
-      this.direccion = address_create_card_modal;
+    getAddressData(mainAddress) {
+      let address = mainAddress.street_number
+        ? mainAddress.street_number + " " + mainAddress.route
+        : mainAddress.route;
+
+      this.direccion = mainAddress;
       this.address_create_card_modal =
         this.direccion.street_number + " " + this.direccion.route;
       var x = document.getElementById("address_create_card_modal");
       x.value = this.address_create_card_modal;
-      this.form.street = this.address_create_card_modal;
+
+      this.form.street = address;
       this.form.address = this.address_create_card_modal;
-      this.form.state = this.direccion.administrative_area_level_1;
-      this.form.city = this.direccion.locality;
-      this.form.zipcode = this.direccion.postal_code;
+      this.form.city = mainAddress.locality;
+      this.form.state = mainAddress.administrative_area_level_1;
+      this.form.zipcode = mainAddress.postal_code;
     },
     createCard() {
       this.$refs.form.validate().then((success) => {
@@ -368,9 +387,8 @@ export default {
               .post("/cards/create-cards", this.form)
               .then((response) => {
                 this.cards = response.data;
-                this.$emit("closeModalCard", false);
-                this.$emit("onReloadCards", response.data);
-                this.$emit("reloadLeadEmit");
+                this.close();
+                this.$emit("onSavedCard", response.data);
                 this.$store.commit("app/SET_LOADING", false);
                 this.showSuccessSwal("Credit Card created successfully");
               })
@@ -389,11 +407,12 @@ export default {
         });
       });
     },
-    closeModal() {
-      this.$emit("click", false);
+    close() {
+      this.$emit("onClose", false);
     },
   },
-  created() {
+  async created() {
+    await this.getEeuuStates();
     this.show = true;
   },
 };

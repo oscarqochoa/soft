@@ -7,15 +7,21 @@
       nav-class="mb-0"
       active-nav-item-class="bg-info box-shadow-info border-info info"
     >
-      <b-tab lazy title="Pending" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
+      <b-tab
+        lazy
+        title="Pending"
+        :title-link-class="[bgTabsNavs, 'sub-tab px-3']"
+      >
         <LoansTable :tab="tab" :status="1" />
       </b-tab>
       <b-tab lazy :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
         <template #title>
           Completed
-          <span class="ml-1" v-if="counterTab.counter_comp>0 && isManagement">
+          <span class="ml-1" v-if="counterTab.counter_comp > 0 && isManagement">
             <feather-icon
-              :badge="counterTab.counter_comp > 99 ? '99+' : counterTab.counter_comp"
+              :badge="
+                counterTab.counter_comp > 99 ? '99+' : counterTab.counter_comp
+              "
               badge-classes="badge-danger badge-glow"
             />
           </span>
@@ -57,12 +63,12 @@ import { mapGetters } from "vuex";
 export default {
   name: "LoansGeneral",
   components: {
-    LoansTable
+    LoansTable,
   },
   props: {},
   data() {
     return {
-      tab: this.$route.meta.tab
+      tab: this.$route.meta.tab,
     };
   },
   mounted() {},
@@ -73,9 +79,9 @@ export default {
     isManagement() {
       return this.$route.meta.module == 16;
     },
-    ...mapGetters({ counterTab: "loans-store/counterTab" })
+    ...mapGetters({ counterTab: "loans-store/counterTab" }),
   },
-  watch: {}
+  watch: {},
 };
 </script>
 

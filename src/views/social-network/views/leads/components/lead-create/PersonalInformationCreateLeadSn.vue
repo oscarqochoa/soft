@@ -6,9 +6,9 @@
           <h4 class="title-card text-left">Personal Information</h4>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
-        <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="first-name-personal-information">
+      <b-row class="mt-2 text-left" >
+        <b-col mb="6" >
+          <ValidationProvider rules="required" v-slot="{errors}" name="First Name">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -25,13 +25,14 @@
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
                   placeholder="Please type first name"
+                  id="input-create-lead-13"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">First Name {{errors[0]}}</div>
             </b-form-group>
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="last-name-personal-information">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Last Name">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -48,15 +49,16 @@
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
                   placeholder="Please type last name"
+                  id="input-create-lead-14"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">Last Name {{errors[0]}}</div>
             </b-form-group>
           </ValidationProvider>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
+      <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required|unique-mobile" v-slot="{errors}" name="phone-m-personal-information">
+          <ValidationProvider rules="required|unique-mobile" v-slot="{errors}" name="Phone(M)">
             <b-form-group
                           label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                           label-cols-sm="4"
@@ -67,7 +69,6 @@
                           label="Phone (M)"
             >
               <b-form-input
-                  id="phone"
                   v-model="lead.mobile"
                   trim
                   maxlength="14"
@@ -76,6 +77,7 @@
                   v-mask="'(###) ###-####'"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
+                  id="input-create-lead-15"
 
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Phone (M) {{errors[0]}}</div>
@@ -83,7 +85,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="zip-code-personal-information">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Zip Code">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -101,18 +103,19 @@
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
                   placeholder="Please type zipcode"
+                  id="input-create-lead-16"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">Zip Code {{errors[0]}}</div>
             </b-form-group>
           </ValidationProvider>
         </b-col>
       </b-row>
-      <b-row class="mt-2">
+      <b-row class="mt-2 text-left">
         <b-col mb="6">
           <ValidationProvider
               v-slot="{errors}"
               rules="required|email"
-              name="email-personal-information"
+              name="Email"
           >
             <b-form-group
                 id="fieldset-horizontal"
@@ -130,13 +133,14 @@
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
                   placeholder="Please type email"
+                  id="input-create-lead-17"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">E-mail {{errors[0]}}</div>
             </b-form-group>
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="note-personal-information">
+          <ValidationProvider rules="required" v-slot="{errors}" name="Note">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -148,7 +152,6 @@
                 label="Note"
             >
               <b-form-textarea
-                  id="textarea"
                   placeholder="Enter something..."
                   rows="3"
                   max-rows="6"
@@ -156,6 +159,7 @@
                   class="select-icon-none font-bureau-style border-hover bg-white-c"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
+                  id="input-create-lead-18"
               ></b-form-textarea>
               <div v-if="errors[0]" class="text-error-sn text-center">Note {{errors[0]}}</div>
             </b-form-group>
@@ -202,7 +206,7 @@
         <b-col md="6">
           <template v-if="!lead.potential">
 
-            <ValidationProvider rules="required" v-slot="{errors}" name="not-potential">
+            <ValidationProvider rules="required" v-slot="{errors}" name="Not Potential?">
 
               <div class="d-flex align-items-center justify-content-between">
                 <div class="w-100" :class="{'' :errors[0]}">
@@ -301,7 +305,7 @@ import VueToggles from "vue-toggles";
 import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 import FormReaseonNotPotential
-  from "@/views/social-network/views/commissions/lead-create/reason-not-potential/FormReasonNotPotential";
+  from "@/views/social-network/views/leads/components/lead-create/reason-not-potential/FormReasonNotPotential";
 
 
 export default {
