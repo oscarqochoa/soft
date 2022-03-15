@@ -6,6 +6,7 @@
     hide-footer
     size="lg"
     @hidden="close"
+    id="modalSNEditTask"
   >
     <validation-observer #default="{ handleSubmit }" ref="refFormObserver">
       <b-form @submit.prevent="handleSubmit(submit)" @reset.prevent="resetForm">
@@ -618,10 +619,12 @@ export default {
 
 
 <style lang="scss">
-.vs__selected {
-  width: 90%;
-}
-.toggle-checkbox-new:checked {
-  background: #ff6045 !important;
+#modalSNEditTask {
+  .vs__selected {
+    width: 90%;
+  }
+  .toggle-checkbox-new:checked {
+    background: #ff6045 !important;
+  }
 }
 </style>
