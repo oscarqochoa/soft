@@ -2,9 +2,11 @@
 import Vue from 'vue'
 
 import SNLeadsService from '@/views/social-network/services/leads'
+import MigrationsService from '@/views/social-network/views/migrations/migrations.service'
 import crmService from "@/views/crm/services/crm.service";
 import crmGlobal from "@/views/crm/services/global";
 import GlobalService from "../../../../service/global/index";
+import GlobalServiceMain from "@/views/services/global.service";
 
 const state = {
     S_LEADS: {
@@ -48,6 +50,10 @@ const state = {
         value: null,
     }],
     S_SEARCH_GLOBAL_LEADS_SN: [],
+    S_LEAD_STATUS_SN: [],
+    S_FAN_PAGE_PROGRAMS_FILTERS: [],
+    S_SELLERS_FILTERS: [],
+    S_SUB_SOURCES_FILTERS: [],
 }
 const getters = {
     G_STATUS_LEADS() {
@@ -70,8 +76,11 @@ const mutations = {
             state[params.destination].total--
         }
     },
-    M_GET_STATE_LEADS(state, params) {
+    M_SET_STATE_LEADS(state, params) {
         state.S_STATES_LEADS = params;
+        state.S_STATES_LEADS.unshift(
+            { slug: 'ALL' },
+        )
     },
     M_GET_SOURCE_CN(state, states) {
         state.S_SUB_SOURCES = states;
@@ -79,14 +88,24 @@ const mutations = {
     M_FAG_PAGE_PROGRAMS(state, states) {
         state.S_FAN_PAGE_PROGRAMS = states;
     },
+    M_SET_FANPAGES_PROGRAMS_FILTER(state, states) {
+        state.S_FAN_PAGE_PROGRAMS_FILTERS = states;
+        state.S_FAN_PAGE_PROGRAMS_FILTERS.unshift(
+            { id: 0, value: "ALL" },
+        )
+        state.S_FAN_PAGE_PROGRAMS_FILTERS.push(
+            { id: 6, value: "CRM" }
+        )
+
+    },
     REMOVE_DATA(state, params) {
         const index = state[params.destination]
-          .map((el) => el.id)
-          .indexOf(params.id);
+            .map((el) => el.id)
+            .indexOf(params.id);
         if (index !== -1) {
-          state[params.destination].splice(index, 1);
+            state[params.destination].splice(index, 1);
         }
-      },
+    },
     M_GET_FLYERS(state, states) {
         state.S_FLYERS = states;
     },
@@ -109,11 +128,18 @@ const mutations = {
             value: null,
         }];
     },
-      M_SET_EVIDENCE_URL(state, params){
+    M_SET_EVIDENCE_URL(state, params) {
         state.S_LEADS.items.find(
             (lead) => lead.id == params.lead_id
-            ).file_evidence = params.url_file
-      }
+        ).file_evidence = params.url_file
+    },
+    M_SET_LEAD_STATUS_SN(state, params) {
+        state.S_LEAD_STATUS_SN = params;
+
+        state.S_LEAD_STATUS_SN.unshift(
+            { id: 0, name: "ALL" }
+        )
+    }
 }
 const actions = {
     async A_GET_NEW_LEADS({ commit }, body) {
@@ -256,7 +282,7 @@ const actions = {
                     data
                 })
                 return response
-            }else{
+            } else {
                 const data = {
                     items: response.data,
                     total: response.total,
@@ -281,7 +307,6 @@ const actions = {
     async A_GET_SUB_SOURCES({ commit }) {
         try {
             const response = await SNLeadsService.getSubSources()
-            console.log('sd', response)
             if (response.status == 200) {
                 commit('SET_DATA', {
                     destination: 'S_SUB_SOURCES',
@@ -294,6 +319,38 @@ const actions = {
             throw error;
         }
     },
+    async A_GET_SUB_SOURCES_FILTERS({ commit }, sourceId) {
+        try {
+            const response = await SNLeadsService.getSubSourceSn()
+            console.log(sourceId);
+            let responseData = []
+
+            if (sourceId == 1) {
+                responseData = response.filter((data) => {
+                    return data.parent_id == 1;
+                });
+                responseData.unshift({
+                    id: "0",
+                    name: "ALL"
+                })
+            } else {
+                responseData = [
+                    { id: 1, name: "Email" },
+                    { id: 2, name: "Messenger" },
+                    { id: 3, name: "Call" },
+                    { id: 4, name: "Whatsapp" },
+                ]
+            }
+            commit('SET_DATA', {
+                destination: 'S_SUB_SOURCES_FILTERS',
+                data: responseData
+            })
+
+        } catch (error) {
+            console.log("ERROR_GET_SUB_SOURCES_FILTERS [ACTION]", error.response);
+            throw error;
+        }
+    },
     async A_GET_SUB_SOURCE_SN({ commit }) {
         try {
             const resp = await SNLeadsService.getSubSourceSn();
@@ -303,11 +360,20 @@ const actions = {
         }
     },
     async A_GET_FAN_PAGE_PROGRAMS({ commit }) {
-        console.log('asdasd')
         try {
             const { data } = await SNLeadsService.getFanPagePrograms()
             commit('M_FAG_PAGE_PROGRAMS', data);
 
+            return data;
+        } catch (error) {
+            console.log("ERROR_GET_FAN_PAGE_PROGRAMS [ACTION]", error);
+            throw error
+        }
+    },
+    async A_GET_FAN_PAGE_PROGRAMS_FILTERS({ commit }) {
+        try {
+            const { data } = await SNLeadsService.getFanPagePrograms()
+            commit('M_SET_FANPAGES_PROGRAMS_FILTER', data);
             return data;
         } catch (error) {
             console.log("ERROR_GET_FAN_PAGE_PROGRAMS [ACTION]", error);
@@ -334,7 +400,7 @@ const actions = {
     },
     async A_GET_REASONS_NOT_POTENTIAL({ commit }) {
         try {
-            const {status, data} = await SNLeadsService.getReasonsNotPotential()
+            const { status, data } = await SNLeadsService.getReasonsNotPotential()
 
             const selectData = data.map(reason => {
                 return {
@@ -390,8 +456,8 @@ const actions = {
     },
     async A_GET_STATE_LEAD({ commit }, body) {
         try {
-            const resp = await SNLeadsService.getStateLeads({type: 1});
-            //commit('M_GET_STATE_LEADS', resp.data);
+            const resp = await SNLeadsService.getStateLeads({ type: 1 });
+            commit('M_SET_STATE_LEADS', resp.data);
             return resp.data
         } catch (e) {
             console.log(e);
@@ -433,7 +499,7 @@ const actions = {
     },
     async A_STATUS_LEADS({ commit }) {
         try {
-            const {data, status} = await SNLeadsService.statusLeads();
+            const { data, status } = await SNLeadsService.statusLeads();
             return data;
         } catch (e) {
             console.log(e)
@@ -442,14 +508,14 @@ const actions = {
     async A_GET_STATE_EEUU({ commit }) {
         commit('M_RESET_STATES_EEUU');
         try {
-            const {data, status} = await GlobalService.getStatesEEuu();
+            const { data, status } = await GlobalService.getStatesEEuu();
             const stateLeads = data.map(state => {
                 return {
                     label: state.state,
                     value: state.slug
                 }
             });
-            commit('M_GET_STATE_EEUU',stateLeads);
+            commit('M_GET_STATE_EEUU', stateLeads);
         } catch (e) {
             console.log(e)
         }
@@ -462,7 +528,7 @@ const actions = {
             console.log(e)
         }
     },
-    async A_GET_SELLER_TASK_FAVORITE ( { commit }, params) {
+    async A_GET_SELLER_TASK_FAVORITE({ commit }, params) {
         const resp = (await SNLeadsService.getSellerTaskFavoriteSn(params)).map(sell => {
             return {
                 user_name: sell.user_name,
@@ -480,8 +546,8 @@ const actions = {
         const dat = date.getFullYear() + "-" + `${(date.getMonth() + 1) < 10 ? `0${(date.getMonth() + 1)}` : (date.getMonth() + 1)}` + "-" + `${(date.getDate()) < 10 ? `0${(date.getDate())}` : (date.getDate())}`;
 
         return dat;
-        },
-    async A_CREATE_LEAD_SN ({ commit }, params) {
+    },
+    async A_CREATE_LEAD_SN({ commit }, params) {
         const resp = SNLeadsService.createLeadSN(params);
 
     },
@@ -508,7 +574,7 @@ const actions = {
         }
     },
 
-    
+
     async A_POST_EVIDENCE_SN_LEADS({ commit }, body) {
         try {
             const response = await SNLeadsService.insertEvidenceSn(body)
@@ -557,7 +623,40 @@ const actions = {
             throw error
         }
     },
+    async A_GET_STATUS_LEAD({ commit }, body) {
+        try {
+            const response = await MigrationsService.getStatusLead()
+            if (response.status == 200) {
+                let data = response.data
+                let dataFiltered = data.filter(status => {
+                    return (status.id != 4 && status.id != 5)
+                })
+                commit('M_SET_LEAD_STATUS_SN', dataFiltered)
+            }
+        } catch (error) {
+            console.log("ERROR_A_GET_STATUS_LEAD [ACTION]", error)
+            throw error
+        }
+    },
+    async A_GET_FILTER_SELLERS({ commit }, payload) {
+        try {
+            const response = await GlobalServiceMain.getUsersByModuleAndRoles(payload)
+            let data = response
+            data.unshift({
+                id: 0,
+                user_name: "ALL"
+            })
+            commit('SET_DATA', {
+                destination: 'S_SELLERS_FILTERS',
+                data
+            })
 
+            return response;
+        } catch (error) {
+            console.log("ERROR_A_GET_FILTER_SELLERS [ACTION]", error)
+            throw error
+        }
+    },
 }
 
 export default {

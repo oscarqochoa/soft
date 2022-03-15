@@ -6,18 +6,7 @@
         <div>
           <b-row style="justify-content: right;">
             <b-col md="9">
-              <b-input-group prepend="GLOBAL SEARCH">
-                <b-form-input placeholder="By Nickname, Name, Last Name or Mobile" v-model="searchGlobal"></b-form-input>
-                <b-input-group-append>
-                  <b-button variant="info" @click="search()">
-                    <feather-icon
-                      icon="SearchIcon"
-                      size="15"
-                    >
-                    </feather-icon>
-                  </b-button>
-                </b-input-group-append>
-              </b-input-group>
+              <global-search-component></global-search-component>
             </b-col>
           </b-row>
 
@@ -83,9 +72,10 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
+import GlobalSearchComponent from '../../commons/GlobalSearchComponent.vue'
 export default {
   components: {
-    //
+    GlobalSearchComponent,
   },
   data() {
     return {
