@@ -91,6 +91,9 @@ Vue.use(VueTheMask)
 var VueScrollTo = require('vue-scrollto');
 Vue.use(VueScrollTo)
 
+import VueSmoothScroll from 'vue2-smooth-scroll'
+Vue.use(VueSmoothScroll)
+
 
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard

@@ -26,6 +26,7 @@
                   class="select-icon-none font-bureau-style border-hover bg-white-c"
                   :class="errors[0] ? 'border-error-sn' : ''"
                   :state="errors[0] ? false : null"
+                  id="input-create-lead-10"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">Nickname {{errors[0]}}</div>
             </b-form-group>
@@ -48,13 +49,13 @@
                 class="m-0"
             >
               <v-select
-                  id="leadLanguage"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   label="label"
                   v-model="lead.language"
                   :options="languagesOptions"
                   :clearable="false"
                   :reduce="el => el.value"
+                  id="input-create-lead-11"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Language {{errors[0]}}</div>
             </b-form-group>

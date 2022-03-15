@@ -25,6 +25,7 @@
                   v-model="lead.dob"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
+                  id="input-create-lead-21"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">DOB {{errors[0]}}</div>
             </b-form-group>
@@ -45,7 +46,6 @@
                 content-cols-lg="8"
             >
               <v-select
-                  id="userId"
                   v-model="lead.state_lead"
                   selected=""
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -54,6 +54,7 @@
                   :clearable="false"
                   :reduce="el => el.value"
                   :class="{'border-error-sn' :errors[0]}"
+                  id="input-create-lead-22"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Status {{errors[0]}}</div>
             </b-form-group>
@@ -77,7 +78,6 @@
                 content-cols-lg="8"
             >
               <v-select
-                  id="type_document"
                   v-model="lead.type_document"
                   selected=""
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -85,6 +85,7 @@
                   :options="documents"
                   :clearable="false"
                   :reduce="el => el.value"
+                  id="input-create-lead-23"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Type doc. {{errors[0]}}</div>
             </b-form-group>
@@ -110,6 +111,7 @@
                   placeholder="Please type document"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
+                  id="input-create-lead-24"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">document {{errors[0]}}</div>
             </b-form-group>
@@ -120,7 +122,6 @@
         <b-col mb="6 text-left">
           <ValidationProvider rules="required" v-slot="{errors}" name="Phone(H)">
             <b-form-group
-                id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                 label-cols-sm="4"
                 label-for="input-horizontal"
@@ -128,6 +129,7 @@
                 content-cols-sm
                 content-cols-lg="8"
                 label="Phone(H)"
+                id="input-create-lead-25"
             >
               <b-form-input
                   v-model="lead.phone"

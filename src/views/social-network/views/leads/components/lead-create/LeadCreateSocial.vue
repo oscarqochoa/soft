@@ -23,7 +23,7 @@
 
       <template #default>
         <!-- BODY -->
-        <div class="mx-4" id="container-create-lead-sn">
+        <div class="mx-4 container-create" id="container-create-lead-sn">
           <validation-observer ref="refFormLeadObserver">
             <CatchmentCreateSn :lead="lead"/>
 
@@ -266,7 +266,7 @@ export default {
     this.lead.catcher = this.currentUser.user_id;
     this.lead.created_by = this.currentUser.user_id;
     this.lead.created_date = this.$options.filters.formatDate(new Date());
-
+    window.addEventListener('scroll', this.handleScroll)
   },
 
   computed: {
@@ -296,9 +296,8 @@ export default {
 
     async onSubmit() {
 
-      //add-new-lead-social-network-sidebar
       const options = {
-        container: 'container-create-lead-sn',
+        container: '#container-create-lead-sn',
         easing: 'ease-in',
         offset: -60,
         force: true,
@@ -315,14 +314,10 @@ export default {
         x: false,
         y: true
       }
-      VueScrollTo.scrollTo(`#input-create-lead-1`, 500, {
-        container: 'body',
 
-      })
 
       try {
-        const validate = await this.$refs.refFormLeadObserver
-        console.log(validate)
+        const validate = await this.$refs.refFormLeadObserver;
         if (await validate.validate()) {
           const resp = await this.showConfirmSwal(
               "Are you sure?",
@@ -362,22 +357,35 @@ export default {
             },1000)
           }
         } else {
-          console.log(Object.values(validate.refs)[0].$el.scrollTop,)
+
+          //Object.values(validate.refs)[0].$el.scrollTop
 
           const fields = Object.values(validate.fields).map(field => field.name);
           const errors = Object.values(validate.errors)
           let errorToast = [];
           errors.forEach((error, index) => {
+            console.log('RT', error)
             if(error.length > 0) {
               errorToast.push({
                 index,
                 error: error[0],
-                label: fields[index]
+                label: fields[index],
+                id: `input-create-lead-${index + 1}`
               })
             }
           })
           this.toastData = errorToast.filter(error => !error.label.includes('card-number-'));
-          this.$bvToast.show('toast-validation-create-lead')
+          //this.$bvToast.show('toast-validation-create-lead')
+          console.log('INPUT',this.toastData[0].id, document.getElementById(`${this.toastData[0].id}`));
+          const input = document.getElementById(`${this.toastData[0].id}`);
+          input.scrollIntoView({behavior: "smooth"});
+          //const myEl = this.$refs.refLeadCreate1
+          //await this.$router.push({ hash: '#toHash'})
+          //userId
+          //validate.refs.Email
+          //console.log('EF', validate.refs.Email)
+
+
 
         }
 
@@ -522,7 +530,11 @@ export default {
       this.lead.images= []
       this.lead.other= ""
       this.$refs.refFormLeadObserver.reset();
-    }
+    },
+    handleScroll () {
+      var sortMenu = this.$refs.containerSidebarSreateLead.scrollLeft;
+      console.log(sortMenu);
+    },
   },
   watch: {
 
@@ -535,5 +547,13 @@ export default {
   padding-top: .15rem !important;
   margin-left: .3rem;
   font-size: 16px;
+}
+.b-sidebar-body{
+  //background: red !important;
+  scroll-behavior: smooth !important;
+}
+.container-create{
+  overflow-y: scroll !important;
+  scroll-behavior: smooth !important;
 }
 </style>

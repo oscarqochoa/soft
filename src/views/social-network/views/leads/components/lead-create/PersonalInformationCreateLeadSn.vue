@@ -25,6 +25,7 @@
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
                   placeholder="Please type first name"
+                  id="input-create-lead-13"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">First Name {{errors[0]}}</div>
             </b-form-group>
@@ -48,6 +49,7 @@
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
                   placeholder="Please type last name"
+                  id="input-create-lead-14"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">Last Name {{errors[0]}}</div>
             </b-form-group>
@@ -67,7 +69,6 @@
                           label="Phone (M)"
             >
               <b-form-input
-                  id="phone"
                   v-model="lead.mobile"
                   trim
                   maxlength="14"
@@ -76,6 +77,7 @@
                   v-mask="'(###) ###-####'"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
+                  id="input-create-lead-15"
 
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Phone (M) {{errors[0]}}</div>
@@ -101,6 +103,7 @@
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
                   placeholder="Please type zipcode"
+                  id="input-create-lead-16"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">Zip Code {{errors[0]}}</div>
             </b-form-group>
@@ -130,6 +133,7 @@
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
                   placeholder="Please type email"
+                  id="input-create-lead-17"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">E-mail {{errors[0]}}</div>
             </b-form-group>
@@ -148,7 +152,6 @@
                 label="Note"
             >
               <b-form-textarea
-                  id="textarea"
                   placeholder="Enter something..."
                   rows="3"
                   max-rows="6"
@@ -156,6 +159,7 @@
                   class="select-icon-none font-bureau-style border-hover bg-white-c"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
+                  id="input-create-lead-18"
               ></b-form-textarea>
               <div v-if="errors[0]" class="text-error-sn text-center">Note {{errors[0]}}</div>
             </b-form-group>
