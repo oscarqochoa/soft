@@ -57,15 +57,18 @@
           label-cols="5"
           content-cols="7"
         >
-          <b-form-checkbox
-            switch
-            inline
-            v-model="potencial"
+          <VueToggles
+            class="mt-1 ml-2"
+            height="27"
+            width="70"
+            checkedText="YES"
+            uncheckedText="NO"
+            checkedBg="#FF6045"
+            uncheckedBg="lightgrey"
             :value="potential"
-            @click.native="editReply(1)"
-          >
-            {{ reply.potencial ? "YES" : "NO" }}
-          </b-form-checkbox>
+            @click="editReply(1)"
+            fontWeight="bold"
+          ></VueToggles>
         </b-form-group>
         <b-form-group
           label="Start Dialogue"
@@ -73,15 +76,18 @@
           label-cols="5"
           content-cols="7"
         >
-          <b-form-checkbox
-            switch
-            inline
-            v-model="dialogue"
+          <VueToggles
+            class="mt-1 ml-2"
+            height="27"
+            width="70"
+            checkedText="YES"
+            uncheckedText="NO"
+            checkedBg="#FF6045"
+            uncheckedBg="lightgrey"
             :value="dialogue"
-            @click.native="editReply(2)"
-          >
-            {{ reply.dialogue ? "YES" : "NO" }}
-          </b-form-checkbox>
+            @click="editReply(2)"
+            fontWeight="bold"
+          ></VueToggles>
         </b-form-group>
       </b-col>
 
@@ -93,12 +99,12 @@
         centered
         @ok.prevent="confirmPotential"
         no-close-on-backdrop
-        @hidden="close"
+        @hidden="closeModalReasonNotPotential"
       >
         <ValidationProvider rules="required" v-slot="{ errors }">
-          <modal-reasons-no-potential
+          <modal-reason-no-potential
             v-model="reasonId"
-          ></modal-reasons-no-potential>
+          ></modal-reason-no-potential>
           <div class="invalid-feedback" v-if="errors[0]">
             Reason is {{ errors[0] }}
           </div>
@@ -107,6 +113,7 @@
           <div style="display: flex; justify-content: end; align-items: center">
             <b-button
               variant="outline-danger"
+              class="mr-1"
               @click="cancel(), (potential = !potential)"
             >
               Cancel
@@ -126,7 +133,12 @@
 </template>
 
 <script>
+// Components
+import VueToggles from "vue-toggles";
 import ModalReasonNoPotential from "./ModalReasonNotPotential.vue";
+
+// Services
+import SNLeadsService from "@/views/social-network/services/leads";
 
 export default {
   props: {
@@ -152,6 +164,7 @@ export default {
     },
   },
   components: {
+    VueToggles,
     ModalReasonNoPotential,
   },
   data() {
@@ -174,13 +187,13 @@ export default {
           if (!this.potential) {
             this.modalReasonNoPotential = true;
           } else {
-            this.updateChanges(type, this.contactInfo.potential);
+            await this.updateChanges(type, this.contactInfo.potential);
             this.reply.potencial = this.potential ? "YES" : "NO";
           }
         } else {
           this.dialogue = !this.dialogue;
           this.contactInfo.dialogue = this.dialogue ? 1 : 2;
-          this.updateChanges(type, this.contactInfo.dialogue);
+          await this.updateChanges(type, this.contactInfo.dialogue);
           this.reply.dialogue = this.dialogue ? "YES" : "NO";
         }
       }
@@ -198,16 +211,25 @@ export default {
       });
     },
     async updateChanges(type, value) {
-      let params = {
-        type: type,
-        value: value,
-        id_reply: this.contactInfo.reply_id,
-        reason_id: this.reasonId,
-      };
-      //let response = await axios.post(
-      //  "/api/update-potential-dialogue-by-id-reply",
-      //  params
-      //);
+      try {
+        let params = {
+          type: type,
+          value: value,
+          id_reply: this.contactInfo.reply_id,
+          reason_id: this.reasonId,
+        };
+
+        const response = await SNLeadsService.updatePotentialDialogById(params);
+
+        if (response.status == 200) {
+          this.showToast();
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
+    closeModalReasonNotPotential() {
+      this.modalReasonNoPotential = false;
     },
   },
   mounted() {

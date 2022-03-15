@@ -358,31 +358,21 @@ export default {
       }
     },
     async deleteTask(id) {
-      const confirm = await this.showGenericConfirmSwal();
+      const confirm = await this.showGenericConfirmSwal({});
 
       if (confirm.value) {
-        //axios
-        //  .post("/api/deleteleadtask", {
-        //    id: id,
-        //    user_id: this.currentUser.user_id,
-        //    lead_id: this.lead.id,
-        //    taskForSn: this.taskForSn,
-        //  })
-        //  .then((response) => {
-        //    if (response.status == 200) {
-        //      swal
-        //        .fire({
-        //          type: "success",
-        //          title: "OPERATION SUCCESSFULLY",
-        //        })
-        //        .then((res) => {
-        //          if (res) {
-        //            this.getTaskShow(this.taskForSn);
-        //            eventBus.$emit("updatingTasks", null);
-        //          }
-        //        });
-        //    }
-        //  });
+        const response = await this.A_DELETE_LEAD_TASK({
+          id: id,
+          user_id: this.currentUser.user_id,
+          lead_id: this.lead.id,
+          taskForSn: this.taskForSn,
+        });
+
+        if (response.status == 200) {
+          this.getTaskShow(this.taskForSn);
+
+          this.showToast();
+        }
       }
     },
     addTask() {

@@ -227,14 +227,14 @@
                           "
                         >
                           <span class="ml-1 mr-2">
-                            <i
-                              class="fas fa-circle"
+                            <feather-icon
+                              icon="CircleIcon"
                               :style="
                                 status_session == 1
                                   ? 'color: #1ab91a;'
                                   : 'color: gray;'
                               "
-                            ></i>
+                            ></feather-icon>
                           </span>
                           <span>{{ user_name }}({{ count_task }})</span>
                         </div>
@@ -261,14 +261,14 @@
                           "
                         >
                           <span class="mr-2">
-                            <i
-                              class="fas fa-circle"
+                            <feather-icon
+                              icon="CircleIcon"
                               :style="
                                 option.status_session == 1
                                   ? 'color: #1ab91a;'
                                   : 'color: gray;'
                               "
-                            ></i>
+                            ></feather-icon>
                           </span>
                           <span
                             >{{ option.user_name }}({{ option.count_task }})
@@ -318,14 +318,14 @@
                           "
                         >
                           <span class="ml-1 mr-2">
-                            <i
-                              class="fas fa-circle"
+                            <feather-icon
+                              icon="CircleIcon"
                               :style="
                                 state_advisors == 1
                                   ? 'color: #1ab91a;'
                                   : 'color: gray;'
                               "
-                            ></i>
+                            ></feather-icon>
                           </span>
                           <span>{{ user_name }}</span>
                         </div>
@@ -343,14 +343,14 @@
                           "
                         >
                           <span class="mr-2">
-                            <i
-                              class="fas fa-circle"
+                            <feather-icon
+                              icon="CircleIcon"
                               :style="
                                 option.state_advisors == 1
                                   ? 'color: #1ab91a;'
                                   : 'color: gray;'
                               "
-                            ></i>
+                            ></feather-icon>
                           </span>
                           <span>{{ option.user_name }}</span>
                         </div>
@@ -434,6 +434,9 @@ import vSelect from "vue-select";
 import moment from "moment";
 import formValidation from "@core/comp-functions/forms/form-validation";
 import GlobalService from "@/views/services/global.service";
+
+// Services
+import SNLeadsService from "@/views/social-network/services/leads";
 
 export default {
   props: {
@@ -547,9 +550,12 @@ export default {
     },
     async getSellers() {
       try {
-        const response = await this.A_GET_USERS_BY_MODULE(this.moduleId);
-        this.sellers = response;
-        this.task.seller = this.authUser.user_id;
+        const response = await SNLeadsService.getTaskSellers(this.moduleId);
+
+        if (response.status == 200) {
+          this.sellers = response.data;
+          this.task.seller = this.authUser.user_id;
+        }
       } catch (error) {}
     },
     onChangeSms() {
@@ -670,11 +676,12 @@ export default {
     },
   },
   async created() {
+    await this.getHourSystem();
+    await this.getSellers();
+
     this.authUser = this.currentUser;
     this.blankTask = { ...this.task };
     this.task.date = moment().format("MM/DD/YYYY");
-    await this.getHourSystem();
-    await this.getSellers();
 
     this.show = true;
   },

@@ -13,9 +13,17 @@
 </template>
 
 <script>
+import vSelect from "vue-select";
+
+// Services
+import SNLeadsService from "@/views/social-network/services/leads";
+
 export default {
   mounted() {
     this.getReasonsNoPotential();
+  },
+  components: {
+    vSelect,
   },
   data() {
     return {
@@ -24,11 +32,16 @@ export default {
     };
   },
   methods: {
-    getReasonsNoPotential() {
-      axios.get("/api/get-reasons-not-potential").then((response) => {
-        this.arrayReasons = response.data;
-        // console.log(this.arrayReasons, "reas");
-      });
+    async getReasonsNoPotential() {
+      try {
+        const response = await SNLeadsService.getReasonsNotPotential();
+
+        if (response.status == 200) {
+          this.arrayReasons = response.data;
+        }
+      } catch (error) {
+        throw error;
+      }
     },
   },
   watch: {

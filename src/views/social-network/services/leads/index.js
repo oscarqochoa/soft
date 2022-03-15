@@ -274,12 +274,12 @@ class SNLeads {
         }
     }
 
-    async createLeadSN (params) {
+    async createLeadSN(params) {
         try {
             const resp = await amgApi.post('/lead/social-network/lead-create-socialnetwork', params)
             console.log(resp)
         } catch (e) {
-            console.log('ERROR: ',e.response)
+            console.log('ERROR: ', e.response)
         }
     }
 
@@ -370,11 +370,11 @@ class SNLeads {
     }
     async insertEvidenceSn(body) {
         try {
-          const data = await amgApi.post('/lead/insert-evidence-sn', body)
-          return data
+            const data = await amgApi.post('/lead/insert-evidence-sn', body)
+            return data
         } catch (error) {
-          console.log('Something went wrong on insert evidence sn:', error)
-          throw error
+            console.log('Something went wrong on insert evidence sn:', error)
+            throw error
         }
     }
 
@@ -391,7 +391,7 @@ class SNLeads {
     async searchGlobalLeadsSn(body) {
         try {
             const { data, status } = await amgApi.post('/lead/social-network/search-global-leads-sn', body)
-            return {data, status}
+            return { data, status }
         } catch (error) {
             console.log("Something went wrong on search global leads sn", error);
             throw error
@@ -473,6 +473,33 @@ class SNLeads {
     async saveLeadReply(body) {
         try {
             const { data, status } = await amgApi.post('/lead/social-network/save-lead-replies-sn', body)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getTaskSellers(params) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/get-seller-task-favorite-sn', params)
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getReasonsNotPotential() {
+        try {
+            const { data, status } = await amgApi.get('/lead/social-network/get-reasons-not-potential');
+            return { data, status }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async updatePotentialDialogById(body) {
+        try {
+            const { data, status } = await amgApi.post('/lead/social-network/update-potential-dialogue-by-id-reply', body)
             return { data, status }
         } catch (error) {
             throw error
