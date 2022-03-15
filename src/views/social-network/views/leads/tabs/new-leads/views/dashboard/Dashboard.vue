@@ -17,7 +17,7 @@
         <b-button
           variant="success"
           class="mr-1"
-          :to="{ name: 'sn-create-new-lead' }"
+          @click="openModalSendSms(lead)"
         >
           <feather-icon
             icon="MessageCircleIcon"
@@ -25,6 +25,13 @@
             class="mr-50 text-white"
           ></feather-icon>
           SEND SMS
+        </b-button>
+        <b-button
+          variant="outline-secondary"
+          class="btn-icon mr-1"
+          @click="openModalHistorySms"
+        >
+          <feather-icon icon="ListIcon" size="18"></feather-icon>
         </b-button>
       </b-row>
     </header-slot>
@@ -62,6 +69,33 @@
         />
       </b-col>
     </b-row>
+
+    <modal-send-sms
+      v-if="showModalSendSms"
+      :smss="leads_sms"
+      :modul="currentUser.modul_id"
+      :typesms="typesms"
+      :sms="leads_sms_o"
+      :name-leads="name_leads_arr"
+      @hide="closeModalSendSms"
+    />
+
+    <b-modal
+      id="modal-history-sms"
+      ok-only
+      modal-class="modal-primary"
+      title-class="text-white h4"
+      centered
+      size="lg"
+      title="History of Sms"
+      hide-footer
+    >
+      <modal-history-sms
+        :id="historySms.id"
+        :modul="currentUser.modul_id"
+        :lead-name="historySms.leadName"
+      />
+    </b-modal>
   </div>
 </template>
 
@@ -74,17 +108,21 @@ import CardAddress from "./components/address/CardAddress.vue";
 import CardCreditReport from "./components/credit-report/CardCreditReport.vue";
 import CardLeadCards from "./components/cards/CardLeadCards.vue";
 import CardContactInformation from "./components/contact-information/CardContactInformation.vue";
+import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
+import ModalHistorySms from "@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue";
 
 // Services
 import SNLeadsService from "@/views/social-network/services/leads";
 
 export default {
   components: {
-    "card-personal-information": CardPersonalInformation,
-    "card-address": CardAddress,
-    "card-credit-report": CardCreditReport,
-    "card-lead-cards": CardLeadCards,
-    "card-contact-information": CardContactInformation,
+    CardPersonalInformation,
+    CardAddress,
+    CardCreditReport,
+    CardLeadCards,
+    CardContactInformation,
+    ModalSendSms,
+    ModalHistorySms,
   },
   data() {
     return {
@@ -100,6 +138,19 @@ export default {
       },
       lead: {},
       user: null,
+
+      historySms: {
+        leadName: "",
+        id: null,
+      },
+
+      leads_sms: [],
+      typesms: 1,
+      leads_sms_o: [],
+      name_leads_arr: [],
+
+      // Modals
+      showModalSendSms: false,
     };
   },
   computed: {
@@ -111,6 +162,24 @@ export default {
     },
   },
   methods: {
+    openModalSendSms(item) {
+      this.rowData = item;
+      this.leads_sms = [];
+      this.typesms = 1;
+      this.leads_sms_o = [];
+      this.leads_sms_o.push(item.id);
+      this.name_leads_arr = [{ name: item.lead_name, id: item.id }];
+      this.showModalSendSms = true;
+    },
+    closeModalSendSms() {
+      this.showModalSendSms = false;
+    },
+    openModalHistorySms() {
+      this.historySms.id = this.lead.id;
+      this.historySms.leadName = this.lead.lead_name;
+      this.$bvModal.show("modal-history-sms");
+    },
+    closeModalHistorySms() {},
     async getLead() {
       try {
         this.addPreloader();
@@ -187,7 +256,7 @@ export default {
         phonem: this.lead.mobile,
         id_user: this.user.user_id,
         typee: 3,
-        module_id: this.currentUser.modul_id
+        module_id: this.currentUser.modul_id,
       };
 
       // Required field for create task in CRM
