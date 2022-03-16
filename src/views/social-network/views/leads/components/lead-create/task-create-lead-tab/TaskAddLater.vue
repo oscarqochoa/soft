@@ -17,7 +17,7 @@
             >
               <kendo-datepicker
 
-                  :format="'MM-dd-yyyy'"
+                  :format="'MM/dd/yyyy'"
                   v-model="lead.date"
                   v-mask="'##/##/####'"
                   class="leads-datepicker"
@@ -234,8 +234,7 @@ export default {
     async findSellers() {
       if(this.lead.date && this.lead.from) {
         const date_date = this.lead.date.split('/')
-        this.lead.date = `${date_date[2]}-${date_date[0]}-${date_date[1]}`
-        await this.A_GET_SELLER_TASK_FAVORITE({date_hour: `${this.lead.date} ${this.lead.from}`})
+        await this.A_GET_SELLER_TASK_FAVORITE({date_hour: `${date_date[2]}-${date_date[0]}-${date_date[1]} ${this.lead.from}`})
       } else{
         this.$bvToast.toast(`You must select a date and time`, {
           title: `Information`,

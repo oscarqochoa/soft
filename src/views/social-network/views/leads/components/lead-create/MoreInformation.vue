@@ -8,6 +8,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
+          <p>p: {{lead.dob}}</p>
           <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-20,DOB">
             <b-form-group
                 id="fieldset-horizontal"
@@ -21,7 +22,7 @@
             >
               <kendo-datepicker
 
-                  :format="'MM-dd-yyyy'"
+                  :format="'MM/dd/yyyy'"
                   v-model="lead.dob"
                   v-mask="'##/##/####'"
                   class="leads-datepicker"
@@ -198,7 +199,7 @@ export default {
 
   },
   mounted() {
-    document.getElementById('input-create-lead-19').placeholder='Type DOB';
+    document.getElementById('input-create-lead-20').placeholder='Type DOB';
   },
   components: {
     StreetCreateSN,
@@ -253,7 +254,7 @@ export default {
 .picker-select-date{
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.4);
-  background: #17171a !important;
+  background: #fff !important;
   .leads-datepicker{border: none !important}
   &:hover{
     border: 1px solid rgba(255, 255, 255, 0.4);
@@ -262,6 +263,9 @@ export default {
     color: #4c4c4f;
     font-weight: 600;
   }
+}
+.dark-layout .picker-select-date{
+  background: #17171a !important;
 }
 .border-error-datepicker{
   border: 1px solid #fc424a;

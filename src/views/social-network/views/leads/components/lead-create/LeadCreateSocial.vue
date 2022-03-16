@@ -294,22 +294,25 @@ export default {
     async onSubmit() {
       try {
         const validate = await this.$refs.refFormLeadObserver;
-        // Transformar fechas
-        const data_dob = this.lead.dob.split('-')
-        const date_date = this.lead.date.split('-')
-        const date_due_date = this.lead.due_date.split('-')
-        this.lead.dob = data_dob[0] == '' || data_dob[2].length != 4 ? this.lead.dob : `${data_dob[2]}-${data_dob[0]}-${data_dob[1]}`;
-        this.lead.date = date_date[0] == '' || date_date[2].length != 4 ? this.lead.date : `${date_date[2]}-${date_date[0]}-${date_date[1]}`;
-        this.lead.due_date = date_due_date[0] == '' || date_due_date[2].length != 4 ? this.lead.due_date : `${date_due_date[2]}-${date_due_date[0]}-${date_due_date[1]}`;
         // Validar formulario
         if (await validate.validate() && this.isValidNickname && this.isValidMobile) {
+
           const resp = await this.showConfirmSwal(
               "Are you sure?",
               "You won't be able to revert this!",
               "question"
           )
+          console.log('data1: ', this.lead)
           if(resp.value){
             this.addPreloader()
+            // Transformar fechas
+            this.lead.dob = this.transformDate(this.lead.dob);
+            this.lead.date = this.transformDate(this.lead.date);
+            this.lead.due_date = this.transformDate(this.lead.due_date);
+
+            console.log('data2: ', this.lead)
+
+            // Enviar peticion a la api
             await this.A_CREATE_LEAD_SN(this.lead);
 
             setTimeout(async () => {
@@ -548,6 +551,11 @@ export default {
       var sortMenu = this.$refs.containerSidebarSreateLead.scrollLeft;
       console.log(sortMenu);
     },
+    transformDate(date) {
+      const data_dob = date.split('/');
+      const data = data_dob[0] == '' || data_dob[2].length != 4 ? this.lead.dob : `${data_dob[2]}/${data_dob[0]}/${data_dob[1]}`;
+      return data.replaceAll('/','-');
+    }
   },
   watch: {
     async "lead.nickname"() {
