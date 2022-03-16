@@ -92,7 +92,16 @@ export default {
     vSelect,
   },
   async created() {
+    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", { type: "hidden" });
+    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", true);
     await this.getLogs()
+  },
+  destroyed() {
+    this.$store.commit("appConfig/UPDATE_NAVBAR_CONFIG", {
+      type: 'sticky',
+    });
+    this.$store.commit("appConfig/UPDATE_NAV_MENU_HIDDEN", false);
+    this.$store.commit("appConfig/UPDATE_LAYOUT_TYPE", "vertical");
   },
   data(){
     return {
