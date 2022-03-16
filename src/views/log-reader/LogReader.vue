@@ -12,7 +12,7 @@
     <b-card>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <span v-if="dateFilter==='' && finishedLoading" class="k-font-weight-bold font-medium-1" >Showing All Logs</span>
+          <span v-if="dateFilter==='' && finishedLoading && items.length !== 0" class="k-font-weight-bold font-medium-1" >Showing All Logs</span>
           <span v-if="items.length !== 0 && finishedLoading && dateFilter!==''" class="k-font-weight-bold font-medium-1" >Showing Logs: {{dateFilter}}</span>
           <span v-if="items.length === 0 && finishedLoading" class="k-font-weight-bold font-medium-1" >There are no logs</span>
           <div class="d-inline mx-2">
@@ -163,12 +163,13 @@ export default {
             this.filteredItems = this.items
             this.datesOptions = data.data.data.available_log_dates
             this.filename = data.data.data.filename
-            // if(!date) this.dateFilter = this.datesOptions[0]
+            if(!date) this.dateFilter = this.datesOptions[0]
           } else {
             this.finishedLoading = true
             this.items = []
             this.filteredItems = []
             this.datesOptions = []
+            this.dateFilter = ''
             this.filename = []
           }
         }
@@ -179,7 +180,6 @@ export default {
       }
     },
     async onChangeDate(){
-      console.log('on changee')
       await this.getLogs(this.dateFilter)
     },
     async clearByDate(){
