@@ -53,21 +53,21 @@
             <div class="container-task-later">
 
               <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="Day event">
+                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-32,Day event">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
                       :state="errors[0] ? false : null"
                       label="Day Event:"
                   >
-                    <b-form-datepicker
-                        :class="{'border-error-sn' :errors[0]}"
-                        :state="errors[0] ? false : null"
+                    <kendo-datepicker
+
+                        :format="'MM/dd/yyyy'"
                         v-model="lead.date"
-                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                        locale="en"
-                        class="font-small-4"
-                        placeholder="Select day"
+                        v-mask="'##/##/####'"
+                        class="leads-datepicker"
+                        id="input-create-lead-32"
+                        :class="errors[0] ? 'w-100 rounded bg-transparent k-picker-custom border-error-datepicker picker-select-date' : 'w-100 rounded bg-transparent k-picker-custom picker-select-date'"
                     />
                     <div v-if="errors[0]" class="text-error-sn text-center">Day event {{errors[0]}}</div>
                   </b-form-group>
@@ -75,11 +75,11 @@
               </div>
 
               <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="From">
+                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-33,From">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
-
+                      id="input-create-lead-33"
                       label="From:"
                   >
                     <b-form-timepicker
@@ -94,11 +94,10 @@
                 </ValidationProvider>
               </div>
               <div class="text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="To">
+                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-34,To">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
-
                       label="To:"
                   >
                     <b-form-timepicker
@@ -107,6 +106,7 @@
                         v-model="lead.to"
                         class="font-small-4"
                         placeholder="Select hour"
+                        id="input-create-lead-34"
                     ></b-form-timepicker>
                     <div v-if="errors[0]" class="text-error-sn text-center">To {{errors[0]}}</div>
                   </b-form-group>
@@ -132,7 +132,7 @@
               </div>
 
               <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="Title seller">
+                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-34,Title seller">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
@@ -144,6 +144,7 @@
                         :state="errors[0] ? false : null"
                         v-model="lead.title"
                         placeholder="Type title"
+                        id="input-create-lead-34"
                     ></b-input>
                     <div v-if="errors[0]" class="text-error-sn text-center">Title {{errors[0]}}</div>
                   </b-form-group>
@@ -152,7 +153,7 @@
 
               <div class="">
                 <b-col md="12 text-left">
-                  <ValidationProvider v-slot="{errors}" rules="required" name="Seller">
+                  <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-35,Seller">
                     <b-form-group
                         :state="errors[0] ? false : null"
                         label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -160,6 +161,7 @@
                         label="Seller"
                     >
                       <v-select
+                          id="input-create-lead-35"
                           label="user_name"
                           :reduce="el => el.value"
                           :options="S_SELLERS"
@@ -209,7 +211,7 @@
               <div class="mr-1 text-left">
 
                 <b-col md="12">
-                  <ValidationProvider v-slot="{errors}" rules="required" name="Subject">
+                  <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-36,Subject">
                     <b-form-group
                         label="Subject"
                         label-for="subject"
@@ -219,7 +221,7 @@
 
                     >
                       <v-select
-                          id="subject_id_task"
+                          id="input-create-lead-36"
                           v-model="lead.subject"
                           :options="subjectOptions"
                           :clearable="false"
@@ -233,7 +235,7 @@
 
               <div class="mr-1 text-left">
                 <b-col md="12">
-                  <ValidationProvider v-slot="{errors}" rules="required" name="Assign to">
+                  <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-37,Assign to">
                     <b-form-group
                         :state="errors[0] ? false : null"
                         label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -241,6 +243,7 @@
                         label="Assign to"
                     >
                       <v-select
+                          id="input-create-lead-37"
                           :reduce="el => el.value"
                           :options="S_SELLERS"
                           label="user_name"
@@ -272,32 +275,34 @@
 
               </div>
               <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="Due date">
+                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-38,Due date">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
 
                       label="Due Date"
                   >
-                    <b-form-datepicker
+                    <kendo-datepicker
+                        :format="'MM/dd/yyyy'"
                         v-model="lead.due_date"
-                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                        locale="en"
-                        :class="{'border-error-sn' :errors[0]}"
-                        :state="errors[0] ? false : null"
+                        v-mask="'##/##/####'"
+                        class="leads-datepicker"
+                        id="input-create-lead-38"
+                        :class="errors[0] ? 'w-100 rounded bg-transparent k-picker-custom border-error-datepicker picker-select-date' : 'w-100 rounded bg-transparent k-picker-custom picker-select-date'"
                     />
                     <div v-if="errors[0]" class="text-error-sn text-center">Due date {{errors[0]}}</div>
                   </b-form-group>
                 </ValidationProvider>
               </div>
               <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="Due hour">
+                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-39,Due hour">
                   <b-form-group
                       label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                       label-for="input-horizontal"
                       label="Due Hour"
                   >
                     <b-form-timepicker
+                        id="input-create-lead-39"
                         :class="{'border-error-sn' :errors[0]}"
                         :state="errors[0] ? false : null"
                         v-model="lead.hour"
@@ -391,6 +396,11 @@ export default {
     console.log(this.leadGa)
 
   },
+  mounted() {
+    //document.getElementById('input-create-lead-32').placeholder='Type Day event';
+    //document.getElementById('input-create-lead-38').placeholder='Type Due date';
+    //console.log('ZXC:', document.getElementById('input-create-lead-38'))
+  },
   computed : {
     ...mapState('SocialNetworkLeadsStore', ['S_SELLERS']),
 
@@ -443,6 +453,8 @@ export default {
     },
     async findSellers() {
       if(this.lead.date && this.lead.from) {
+        const date_date = this.lead.date.split('/')
+        this.lead.date = `${date_date[2]}-${date_date[0]}-${date_date[1]}`
         await this.A_GET_SELLER_TASK_FAVORITE({date_hour: `${this.lead.date} ${this.lead.from}`})
       } else{
         this.$bvToast.toast(`You must select a date and time`, {

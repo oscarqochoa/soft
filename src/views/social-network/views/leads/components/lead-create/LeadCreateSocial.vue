@@ -27,10 +27,10 @@
           <validation-observer ref="refFormLeadObserver">
             <CatchmentCreateSn :lead="lead"/>
 
-            <BasicInformationCreateLeadSn :lead="lead" />
+            <BasicInformationCreateLeadSn :lead="lead" :isValidNickname="isValidNickname"/>
 
             <template v-if="lead.addEvidence">
-              <PersonalInformationCreateLeadSn :lead="lead"/>
+              <PersonalInformationCreateLeadSn :lead="lead" :isValidMobile="isValidMobile"/>
             </template>
 
             <template v-if="lead.moreInfo">
@@ -96,19 +96,13 @@
     >
       <template #toast-title>
         <div class="d-flex flex-grow-1 align-items-center mr-1">
-          <b-img
-              :src="require('@/assets/images/logo/logo.png')"
-              class="mr-1"
-              height="18"
-              width="25"
-              alt="Toast image"
-          />
-          <strong class="mr-auto">Warning validation</strong>
+          <amg-icon icon="AmgIcon" size="26"/>
+          <strong class="mr-auto pl-1 text-primary">Warning validation</strong>
         </div>
       </template>
 
       <div>
-        <p class="m-0" v-for="(value, index) in toastData" :key="index">{{index +1 }}. {{ value.label }} {{ value.error }}</p>
+        <p class="m-0" v-for="(value, index) in toastData" :key="index"><span class="font-weight-bolder">{{index +1 }}.</span> {{ value.label }} {{ value.error }}</p>
       </div>
 
     </b-toast>
@@ -131,6 +125,7 @@ import MoreInformation from "@/views/social-network/views/leads/components/lead-
 import BillingInformation from "@/views/social-network/views/leads/components/lead-create/BillingInformation";
 import {mapActions, mapGetters, mapState} from "vuex";
 import VueScrollTo from 'vue-scrollto'
+import {amgApi} from "@/service/axios";
 
 export default {
   name: 'LeadCreateSocial',
@@ -253,7 +248,10 @@ export default {
         value: null,
       }],
       optionPrograms: [],
-      toastData: []
+      toastData: [],
+      isValidNickname: true,
+      isValidPhone: true,
+      isValidMobile: true
     };
   },
   async created() {
@@ -295,30 +293,15 @@ export default {
     ),
 
     async onSubmit() {
-
-      const options = {
-        container: '#container-create-lead-sn',
-        easing: 'ease-in',
-        offset: -60,
-        force: true,
-        cancelable: true,
-        onStart: function(element) {
-          // scrolling started
-        },
-        onDone: function(element) {
-          // scrolling is done
-        },
-        onCancel: function() {
-          // scrolling has been interrupted
-        },
-        x: false,
-        y: true
-      }
-
-
       try {
         const validate = await this.$refs.refFormLeadObserver;
-        if (await validate.validate()) {
+        const data_dob = this.lead.dob.split('/')
+        const date_date = this.lead.date.split('/')
+        const date_due_date = this.lead.date.split('/')
+        this.lead.dob = `${data_dob[2]}-${data_dob[0]}-${data_dob[1]}`
+        this.lead.date = `${date_date[2]}-${date_date[0]}-${date_date[1]}`
+        this.lead.due_date = `${date_due_date[2]}-${date_due_date[0]}-${date_due_date[1]}`
+        if (await validate.validate() && this.isValidNickname && this.isValidMobile) {
           const resp = await this.showConfirmSwal(
               "Are you sure?",
               "You won't be able to revert this!",
@@ -326,7 +309,8 @@ export default {
           )
           if(resp.value){
             this.addPreloader()
-            await this.A_CREATE_LEAD_SN(this.lead);
+            // TODO activar peticion de crear lead
+            //await this.A_CREATE_LEAD_SN(this.lead);
 
             setTimeout(async () => {
               await this.resetForm()
@@ -357,36 +341,59 @@ export default {
             },1000)
           }
         } else {
-
-          //Object.values(validate.refs)[0].$el.scrollTop
-
           const fields = Object.values(validate.fields).map(field => field.name);
-          const errors = Object.values(validate.errors)
-          let errorToast = [];
-          errors.forEach((error, index) => {
-            console.log('RT', error)
-            if(error.length > 0) {
-              errorToast.push({
-                index,
-                error: error[0],
-                label: fields[index],
-                id: `input-create-lead-${index + 1}`
-              })
+          let errors = Object.values(validate.errors)
+          errors = errors.map((error, index) => {
+            return {
+              index: fields[index].split('-')[3] ? parseInt(fields[index].split('-')[3].split(',')[0]) : null,
+              error: error[0],
+              id: fields[index].split(',')[0],
+              label: fields[index].split(',')[1]
             }
-          })
-          this.toastData = errorToast.filter(error => !error.label.includes('card-number-'));
-          //this.$bvToast.show('toast-validation-create-lead')
-          console.log('INPUT',this.toastData[0].id, document.getElementById(`${this.toastData[0].id}`));
+          }).filter(error => error.error !== undefined && error.index !== null)
+          //this.toastData = errors.filter(error => !error.label.includes('card-number-'));
+
+          const nickValid = errors.find(err => err.id == 'input-create-lead-10')
+          if(!nickValid && !this.isValidNickname) {
+            console.log('encontro nick')
+            const isNickValidItem = {
+              error: "is not unique",
+              id: "input-create-lead-10",
+              index: 10,
+              label: "NickName",
+            }
+            errors.push(isNickValidItem)
+            errors.sort(function (a, b) {
+              if (a.index > b.index) {
+                return 1;
+              }  else {
+                return  -1;
+              }
+            });
+          }
+          const phoneValid = errors.find(err => err.id == 'input-create-lead-14')
+          if(!phoneValid && this.lead.addEvidence && !this.isValidMobile) {
+            console.log('encontro phone')
+            const isPhoneValidItem = {
+              error: "is not unique",
+              id: "input-create-lead-14",
+              index: 14,
+              label: "Phone(M)",
+            }
+            errors.push(isPhoneValidItem)
+            errors.sort(function (a, b) {
+              if (a.index > b.index) {
+                return 1;
+              }  else {
+                return  -1;
+              }
+            });
+          }
+
+          this.toastData = errors;
+          this.$bvToast.show('toast-validation-create-lead')
           const input = document.getElementById(`${this.toastData[0].id}`);
           input.scrollIntoView({behavior: "smooth"});
-          //const myEl = this.$refs.refLeadCreate1
-          //await this.$router.push({ hash: '#toHash'})
-          //userId
-          //validate.refs.Email
-          //console.log('EF', validate.refs.Email)
-
-
-
         }
 
       } catch (error) {
@@ -537,7 +544,28 @@ export default {
     },
   },
   watch: {
-
+    async "lead.nickname"() {
+      const resp = await amgApi.post('/lead/social-network/validate-exists-nickname', {
+        nickname: this.lead.nickname, lead_id: null
+      });
+      if(resp.data.code) {
+        this.isValidNickname = false;
+      } else {
+        this.isValidNickname = true;
+        this.toastData = this.toastData.filter(err => err.id !== "input-create-lead-10")
+      }
+    },
+    async "lead.mobile" () {
+      const resp = await amgApi.post('/lead/social-network/unique-mobile-sn', {
+        mobile: this.lead.mobile
+      });
+      if(resp.data.code) {
+        this.isValidMobile = false;
+      } else {
+        this.isValidMobile = true;
+        this.toastData = this.toastData.filter(err => err.id !== "input-create-lead-14")
+      }
+    }
   }
 }
 </script>

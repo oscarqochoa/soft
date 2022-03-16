@@ -8,7 +8,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="DOB">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-19,DOB">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -19,20 +19,21 @@
                 content-cols-lg="8"
                 label="DOB"
             >
-              <b-form-datepicker
+              <kendo-datepicker
 
                   :format="'MM/dd/yyyy'"
                   v-model="lead.dob"
-                  :class="{'border-error-sn' :errors[0]}"
-                  :state="errors[0] ? false : null"
-                  id="input-create-lead-21"
+                  v-mask="'##/##/####'"
+                  class="leads-datepicker"
+                  id="input-create-lead-19"
+                  :class="errors[0] ? 'w-100 rounded bg-transparent k-picker-custom border-error-datepicker picker-select-date' : 'w-100 rounded bg-transparent k-picker-custom picker-select-date'"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">DOB {{errors[0]}}</div>
             </b-form-group>
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="Status">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-20,Status">
 
             <b-form-group
                 label="Status"
@@ -47,14 +48,11 @@
             >
               <v-select
                   v-model="lead.state_lead"
-                  selected=""
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   label="label"
                   :options="optionsState"
-                  :clearable="false"
                   :reduce="el => el.value"
                   :class="{'border-error-sn' :errors[0]}"
-                  id="input-create-lead-22"
+                  id="input-create-lead-20"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Status {{errors[0]}}</div>
             </b-form-group>
@@ -65,7 +63,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="Type doc.">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-21,Type doc.">
             <b-form-group
                 label="Type doc."
                 label-for="st-ad"
@@ -85,7 +83,7 @@
                   :options="documents"
                   :clearable="false"
                   :reduce="el => el.value"
-                  id="input-create-lead-23"
+                  id="input-create-lead-21"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Type doc. {{errors[0]}}</div>
             </b-form-group>
@@ -93,7 +91,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="Document">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-22,Document">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -111,7 +109,7 @@
                   placeholder="Please type document"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
-                  id="input-create-lead-24"
+                  id="input-create-lead-22"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">document {{errors[0]}}</div>
             </b-form-group>
@@ -120,7 +118,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6 text-left">
-          <ValidationProvider rules="required" v-slot="{errors}" name="Phone(H)">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-23,Phone(H)">
             <b-form-group
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                 label-cols-sm="4"
@@ -129,7 +127,7 @@
                 content-cols-sm
                 content-cols-lg="8"
                 label="Phone(H)"
-                id="input-create-lead-25"
+                id="input-create-lead-23"
             >
               <b-form-input
                   v-model="lead.phone"
@@ -196,6 +194,11 @@ export default {
   },
   created() {
     this.loadStateLeads()
+    //document.getElementsByName('input-create-lead-19')[0].placeholder='Tu nuevo placeholder';
+
+  },
+  mounted() {
+    document.getElementById('input-create-lead-19').placeholder='Type DOB';
   },
   components: {
     StreetCreateSN,
@@ -230,12 +233,44 @@ export default {
     },
   },
   watch: {
-    "lead.type_document" () {
+    "lead.type_document"() {
       const doc = this.documents.find(doc => doc.value === this.lead.type_document)
       this.selectDocument = doc.label;
+    },
+    "lead.dob" () {
+      //console.log('dob: ', this.lead.dob)
     }
   }
 
 }
 </script>
+
+<style lang="scss">
+.k-select {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+.picker-select-date{
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: #17171a !important;
+  .leads-datepicker{border: none !important}
+  &:hover{
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+  input::placeholder {
+    color: #4c4c4f;
+    font-weight: 600;
+  }
+}
+.border-error-datepicker{
+  border: 1px solid #fc424a;
+  .k-icon{
+    color: #fc424a;
+  }
+  &:hover{
+    border: 1px solid #fc424a;
+  }
+}
+</style>
 
