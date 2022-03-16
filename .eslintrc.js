@@ -1,5 +1,4 @@
 module.exports = {
-<<<<<<< HEAD
     lintOnSave: false,
     root: true,
     env: {
@@ -12,19 +11,6 @@ module.exports = {
     rules: {
         'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-=======
-  root: true,
-  env: {
-    node: true,
-  },
-  //extends: ['plugin:vue/recommended', '@vue/airbnb'],
-  parserOptions: {
-    parser: 'babel-eslint',
-  },
-  rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
->>>>>>> release/social
 
         semi: ['error', 'never'],
         'max-len': 'off',
