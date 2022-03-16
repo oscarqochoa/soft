@@ -34,8 +34,12 @@
             v-ripple.400="'rgba(186, 191, 199, 0.15)'"
             type="button"
             variant="info"
-            @click="resetuserData(); $refs.refFormObserver.reset()"
-          >Reset</b-button>
+            @click="
+              resetuserData();
+              $refs.refFormObserver.reset();
+            "
+            >Reset</b-button
+          >
         </b-col>
         <b-col lg="6">
           <div class="d-flex justify-content-end">
@@ -55,8 +59,13 @@
               v-ripple.400="'rgba(186, 191, 199, 0.15)'"
               type="button"
               variant="outline-secondary"
-              @click="resetuserData(); $refs.refFormObserver.reset(); $emit('update:is-add-new-user-sidebar-active', false)"
-            >Cancel</b-button>
+              @click="
+                resetuserData();
+                $refs.refFormObserver.reset();
+                $emit('update:is-add-new-user-sidebar-active', false);
+              "
+              >Cancel</b-button
+            >
           </div>
         </b-col>
       </b-row>
@@ -65,7 +74,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from "vuex";
 import {
   BSidebar,
   BForm,
@@ -73,19 +82,19 @@ import {
   BFormInput,
   BFormInvalidFeedback,
   BButton,
-} from 'bootstrap-vue'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+} from "bootstrap-vue";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
 
-import { required, alphaNum, email } from '@validations'
-import Ripple from 'vue-ripple-directive'
-import vSelect from 'vue-select'
+import { required, alphaNum, email } from "@validations";
+import Ripple from "vue-ripple-directive";
+import vSelect from "vue-select";
 
-import formValidation from '@core/comp-functions/forms/form-validation'
-import countries from '@/@fake-db/data/other/countries'
+import formValidation from "@core/comp-functions/forms/form-validation";
+import countries from "@/@fake-db/data/other/countries";
 
-import BasicInformationLead from './BasicInformationLead.vue'
-import BillingInformationLead from './BillingInformationLead.vue'
-import LeadInformationLead from './LeadInformationLead.vue'
+import BasicInformationLead from "./BasicInformationLead.vue";
+import BillingInformationLead from "./BillingInformationLead.vue";
+import LeadInformationLead from "./LeadInformationLead.vue";
 
 export default {
   components: {
@@ -108,8 +117,8 @@ export default {
     Ripple,
   },
   model: {
-    prop: 'isAddNewUserSidebarActive',
-    event: 'update:is-add-new-user-sidebar-active',
+    prop: "isAddNewUserSidebarActive",
+    event: "update:is-add-new-user-sidebar-active",
   },
   props: {
     isAddNewUserSidebarActive: {
@@ -118,81 +127,81 @@ export default {
     },
   },
   data() {
-    const resetRowData = () => {}
-    const { getValidationState, resetForm } = formValidation(resetRowData)
+    const resetRowData = () => {};
+    const { getValidationState, resetForm } = formValidation(resetRowData);
     return {
       getValidationState,
       resetForm,
       blankUserData: {
-        first_name: '',
-        middle_name: '',
-        last_name: '',
-        email: '',
+        first_name: "",
+        middle_name: "",
+        last_name: "",
+        email: "",
         programs: [],
-        dob: '',
-        language: '',
+        dob: "",
+        language: "",
         stateLead: null,
-        social: '',
-        ssn: '',
-        itin: '',
-        other: '',
-        phone: '',
-        mobile: '',
-        other: '',
+        social: "",
+        ssn: "",
+        itin: "",
+        other: "",
+        phone: "",
+        mobile: "",
+        other: "",
         address: {
-          prename: 'main',
-          streetReal: '',
-          street: '',
-          city: '',
-          state: 'CA',
-          zipcode: '',
-          country: 'United States',
+          prename: "main",
+          streetReal: "",
+          street: "",
+          city: "",
+          state: "CA",
+          zipcode: "",
+          country: "United States",
         },
         origin_country: 146,
-        another_address: '',
+        another_address: "",
         otherAddress: {
-          prename: 'origin',
-          streetReal: '',
-          street: '',
-          city: '',
-          state: '',
-          zipcode: '',
-          country: 'United States',
+          prename: "origin",
+          streetReal: "",
+          street: "",
+          city: "",
+          state: "",
+          zipcode: "",
+          country: "United States",
         },
         user_id: null,
-        source_id: '',
-        leadstatus_id: '',
-        sourcesname_id: '',
-        cardNumber1: '',
-        cardNumber2: '',
-        cardNumber3: '',
-        cardNumber4: '',
-        cardExpiMonth: '',
-        cardExpiYear: '',
-        cardHoldername: '',
-        cardSecurityCode: '',
+        source_id: "",
+        leadstatus_id: "",
+        sourcesname_id: "",
+        cardNumber1: "",
+        cardNumber2: "",
+        cardNumber3: "",
+        cardNumber4: "",
+        cardExpiMonth: "",
+        cardExpiYear: "",
+        cardHoldername: "",
+        cardSecurityCode: "",
         cardAddress: {
-          prename: 'card',
-          streetReal: '',
-          street: '',
-          city: '',
-          state: '',
-          zipcode: '',
-          country: 'United States',
+          prename: "card",
+          streetReal: "",
+          street: "",
+          city: "",
+          state: "",
+          zipcode: "",
+          country: "United States",
         },
         programId: null,
-        work: '',
+        work: "",
         creditReport: true,
-        payment: '0',
-        ammount: '',
-        description: '',
-        cardNumber: '',
-        typeCredit: '0',
-        dateOnline: '',
+        payment: "0",
+        ammount: "",
+        description: "",
+        cardNumber: "",
+        typeCredit: "0",
+        dateOnline: "",
         plataform: null,
-        usernameOnline: '',
-        passwordonline: '',
-        memberNumberOnline: '',
+        usernameOnline: "",
+        passwordonline: "",
+        memberNumberOnline: "",
       },
       userData: {},
       required,
@@ -200,91 +209,92 @@ export default {
       email,
       countries,
       isLoading: false,
-      newLead: 'newLead',
-    }
+      newLead: "newLead",
+    };
   },
   created() {
-    this.resetuserData()
+    this.resetuserData();
   },
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token',
-      G_STATE_LEADS: 'CrmLeadStore/G_STATE_LEADS',
-      G_STATUS_LEADS: 'CrmLeadStore/G_STATUS_LEADS',
-      G_SOURCE_NAMES: 'CrmGlobalStore/G_SOURCE_NAMES',
-      G_SELLERS: 'CrmGlobalStore/G_SELLERS',
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      G_STATE_LEADS: "CrmLeadStore/G_STATE_LEADS",
+      G_STATUS_LEADS: "CrmLeadStore/G_STATUS_LEADS",
+      G_SOURCE_NAMES: "CrmGlobalStore/G_SOURCE_NAMES",
+      G_SELLERS: "CrmGlobalStore/G_SELLERS",
     }),
   },
   methods: {
     ...mapActions({
-      A_SET_LEADS: 'CrmLeadStore/A_SET_LEADS',
+      A_SET_LEADS: "CrmLeadStore/A_SET_LEADS",
     }),
     resetuserData() {
-      this.blankUserData.user_id = this.currentUser.user_id
-      this.userData = JSON.parse(JSON.stringify(this.blankUserData))
+      this.blankUserData.user_id = this.currentUser.user_id;
+      this.userData = JSON.parse(JSON.stringify(this.blankUserData));
     },
     getSelectValue(element, state) {
       if (element && state && this[state] && this[state].length) {
-        const index = this[state].map(el => el.id).indexOf(element)
-        if (index !== -1) return this[state][index]
+        const index = this[state].map((el) => el.id).indexOf(element);
+        if (index !== -1) return this[state][index];
       }
-      return new Object()
+      return new Object();
     },
     async onSubmit() {
       try {
         if (await this.$refs.refFormObserver.validate()) {
-          this.isLoading = true
-          let route = ''
+          this.isLoading = true;
+          let route = "";
           switch (this.currentUser.modul_id) {
             case 2:
-              route = 'show/'
-              break
+              route = "show/";
+              break;
             case 3:
-              route = '/bussiness/leads'
-              break
+              route = "/bussiness/leads";
+              break;
             case 4:
-              route = '/administration/leads'
-              break
+              route = "/administration/leads";
+              break;
             case 5:
-              route = '/debtsolution/leads'
-              break
+              route = "/debtsolution/leads";
+              break;
             case 6:
-              route = '/creditexperts/leads'
-              break
+              route = "/creditexperts/leads";
+              break;
             case 7:
-              route = '/boostcredit/leads'
-              break
+              route = "/boostcredit/leads";
+              break;
             case 8:
-              route = '/taxresearch/leads'
-              break
+              route = "/taxresearch/leads";
+              break;
             case 10:
-              route = '/claimdepartment/leads'
-              break
+              route = "/claimdepartment/leads";
+              break;
             case 11:
-              route = '/specialists/leads'
-              break
+              route = "/specialists/leads";
+              break;
           }
-          route = 'lead-show'
+          route = "lead-show";
           if (
             ![
               this.userData.cardNumber1,
               this.userData.cardNumber2,
               this.userData.cardNumber3,
               this.userData.cardNumber4,
-            ].includes('')
+            ].includes("")
           ) {
-            this.userData.cardNumber = `${this.userData.cardNumber1}-${this.userData.cardNumber2}-${this.userData.cardNumber3}-${this.userData.cardNumber4}`
+            this.userData.cardNumber = `${this.userData.cardNumber1}-${this.userData.cardNumber2}-${this.userData.cardNumber3}-${this.userData.cardNumber4}`;
           }
           // VALIDATION ITIN & SSN
-          const val = this.userData.social.substr(0, 1)
+          const val = this.userData.social.substr(0, 1);
           if (val == 9) {
-            this.userData.itin = this.userData.social
+            this.userData.itin = this.userData.social;
           } else {
-            this.userData.ssn = this.userData.social
+            this.userData.ssn = this.userData.social;
           }
-          const { role_id } = this.currentUser
-          this.userData.programs = this.$refs.refBasicInformationLead.returnProgramlist()
+          const { role_id } = this.currentUser;
+          this.userData.programs =
+            this.$refs.refBasicInformationLead.returnProgramlist();
           const {
             email,
             user_id,
@@ -325,9 +335,9 @@ export default {
             another_address,
             otherAddress,
             origin_country,
-          } = this.userData
+          } = this.userData;
           const body = {
-            id: '',
+            id: "",
             email,
             user_id,
             first_name,
@@ -342,7 +352,7 @@ export default {
             credit_report: creditReport,
             payment,
             ammount,
-            program: programs.map(el => ({
+            program: programs.map((el) => ({
               id: el.id,
               value: el.label,
               name: el.label,
@@ -364,8 +374,8 @@ export default {
             super: role_id,
             created_by: user_id,
             usercreator: user_id,
-            datecreator: this.$moment(dob, 'YYYY-MM-DDTHH:mm:ss').format(
-              'YYYY-MM-DD',
+            datecreator: this.$moment(dob, "YYYY-MM-DDTHH:mm:ss").format(
+              "YYYY-MM-DD"
             ),
             streetcard: cardAddress.street,
             citycard: cardAddress.city,
@@ -390,51 +400,56 @@ export default {
             otherzipcode: otherAddress.zipcode,
             originCountry: origin_country,
             lead_name: `${first_name} ${last_name}`, // fot table leads
-            state_hour: this.getSelectValue(state_lead, 'G_STATE_LEADS').label, // fot table leads
-            status: this.getSelectValue(leadstatus_id, 'G_STATUS_LEADS').label, // fot table leads
-            source_name: this.getSelectValue(sourcesname_id, 'G_SOURCE_NAMES')
+            state_hour: this.getSelectValue(state_lead, "G_STATE_LEADS").label, // fot table leads
+            status: this.getSelectValue(leadstatus_id, "G_STATUS_LEADS").label, // fot table leads
+            source_name: this.getSelectValue(sourcesname_id, "G_SOURCE_NAMES")
               .label, // fot table leads
-            owner: this.getSelectValue(user_id, 'G_SELLERS').label, // fot table leads
-          }
-          const response = await this.A_SET_LEADS(body)
+            owner: this.getSelectValue(user_id, "G_SELLERS").label, // fot table leads
+          };
+          const response = await this.A_SET_LEADS(body);
           if (response && (response.status == 200 || response.status == 201)) {
-            this.isLoading = false
-            this.$refs.refFormObserver.reset()
-            this.$emit('update:is-add-new-user-sidebar-active', false)
-            this.resetuserData()
+            this.isLoading = false;
+            this.$refs.refFormObserver.reset();
+            this.$emit("update:is-add-new-user-sidebar-active", false);
+            this.resetuserData();
+            let routeData = this.$router.resolve({
+              name: "lead-show",
+              params: { id: response.data.id },
+            });
+            window.open(routeData.href, "_blank");
             /* this.$router.push({ name: route, params: { id: response.data.id } }) */
             this.$emit("saveLead");
             this.showToast(
-              'success',
-              'top-right',
-              'Success!',
-              'CheckIcon',
-              'Successful operation',
-            )
+              "success",
+              "top-right",
+              "Success!",
+              "CheckIcon",
+              "Successful operation"
+            );
           } else {
             this.showToast(
-              'warning',
-              'top-right',
-              'Warning!',
-              'AlertTriangleIcon',
-              'Something went wrong.',
-            )
+              "warning",
+              "top-right",
+              "Warning!",
+              "AlertTriangleIcon",
+              "Something went wrong."
+            );
           }
         }
       } catch (error) {
-        console.log('spmething went wrong onSubmit: ', error)
-        this.isLoading = false
+        console.log("spmething went wrong onSubmit: ", error);
+        this.isLoading = false;
         this.showToast(
-          'danger',
-          'top-right',
-          'Oop!',
-          'AlertOctagonIcon',
-          this.getInternalErrors(error),
-        )
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss">

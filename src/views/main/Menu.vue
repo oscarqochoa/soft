@@ -10,6 +10,7 @@
           cols="6"
           class="text-center mb-5 center-fix"
         >
+          {{$log(item)}}
           <router-link
             v-if="enviroment === 'deploy' ? item.module_route == 'crm' : (item.module_route == 'crm' || item.module_route == 'socialnetwork')"
             :to="{ path: item.module_route }"
@@ -74,6 +75,7 @@ export default {
       return JSON.parse(this.currentUser.arrRoles)
     },
     currentUser() {
+      console.log('currentUser', this.$store.getters['auth/currentUser'])
       return this.$store.getters['auth/currentUser']
     },
     skin() {

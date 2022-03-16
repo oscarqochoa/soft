@@ -81,49 +81,8 @@
               @click="openModalProgram(data.item, data.index)"
             >
               <span
-                v-if="data.item.program === 'Business'"
-                v-b-tooltip.bottom="'Business'"
-                >BU</span
-              >
-              <span
-                v-if="data.item.program === 'Boost Credit'"
-                v-b-tooltip.bottom="'Boost Credit'"
-                >BC</span
-              >
-              <span
-                v-if="data.item.program === 'Credit Experts'"
-                v-b-tooltip.bottom="'Credit Experts'"
-                >CE</span
-              >
-              <span
-                v-if="data.item.program === 'Debt Solution'"
-                v-b-tooltip.bottom="'Debt Solution'"
-                >DS</span
-              >
-              <span
-                v-if="data.item.program === 'Tax Research'"
-                v-b-tooltip.bottom="'Tax Research'"
-                >TR</span
-              >
-              <span
-                v-if="data.item.program === 'General Support'"
-                v-b-tooltip.bottom="'General Support'"
-                >GS</span
-              >
-              <span
-                v-if="data.item.program === 'Specialist'"
-                v-b-tooltip.bottom="'Specialist'"
-                >SP</span
-              >
-              <span
-                v-if="data.item.program === 'KeyBook'"
-                v-b-tooltip.bottom="'KeyBook'"
-                >KB</span
-              >
-              <span
-                v-if="data.item.program === 'Paragon'"
-                v-b-tooltip.bottom="'Paragon'"
-                >PR</span
+                v-b-tooltip.bottom="data.item.program"
+                >{{data.item.program_initials}}</span
               >
               <feather-icon
                 v-if="data.item.haveRates !== 1"
@@ -1251,96 +1210,13 @@ export default {
       };
     },
     subtotal() {
-      if (this.items.length > 0) {
+      if (this.items[0]) {
         return {
-          tcmc: this.items
-            .reduce((previous, current) => {
-              const currentComissionCapturedAmount = current.commission
-                ? parseFloat(current.commission[0].commission)
-                : 0.0;
-              if (typeof previous === "object") {
-                const previousComissionCapturedAmount = previous.commission
-                  ? parseFloat(previous.commission[0].commission)
-                  : 0.0;
-                return (
-                  currentComissionCapturedAmount +
-                  previousComissionCapturedAmount
-                );
-              }
-              return currentComissionCapturedAmount + previous;
-            })
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-          tcms: this.items
-            .reduce((previous, current) => {
-              const currentComissionSellerAmount = current.commission
-                ? parseFloat(current.commission[1].commission)
-                : 0.0;
-              if (typeof previous === "object") {
-                const previousComissionSellerAmount = previous.commission
-                  ? parseFloat(previous.commission[1].commission)
-                  : 0.0;
-                return (
-                  currentComissionSellerAmount + previousComissionSellerAmount
-                );
-              }
-              return currentComissionSellerAmount + previous;
-            })
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-          tfee: this.items
-            .reduce((previous, current) => {
-              const currentFeeAmount =
-                current.fee && typeof current.fee === "string"
-                  ? parseFloat(current.fee.replaceAll(",", ""))
-                  : typeof current.fee === "number"
-                  ? current.fee
-                  : 0.0;
-              if (typeof previous === "object") {
-                const previousFeeAmount =
-                  previous.fee && typeof previous.fee === "string"
-                    ? parseFloat(previous.fee.replaceAll(",", ""))
-                    : typeof previous.fee === "number"
-                    ? previous.fee
-                    : 0.0;
-                return currentFeeAmount + previousFeeAmount;
-              }
-              return currentFeeAmount + previous;
-            })
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-          tip: this.items
-            .reduce((previous, current) => {
-              const currentInitialAmount =
-                current.initial_amount !== "0.00"
-                  ? parseFloat(current.initial_amount.replaceAll(",", ""))
-                  : 0.0;
-              if (typeof previous === "object") {
-                const previousInitialAmount =
-                  previous.initial_amount !== "0.00"
-                    ? parseFloat(previous.initial_amount.replaceAll(",", ""))
-                    : 0.0;
-                return currentInitialAmount + previousInitialAmount;
-              }
-              return currentInitialAmount + previous;
-            })
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-          tma: this.items
-            .reduce((previous, current) => {
-              const currentMonthlyAmount = current.monthly_amount
-                ? parseFloat(current.monthly_amount.replaceAll(",", ""))
-                : 0.0;
-              if (typeof previous === "object") {
-                const previousMonthlyAmount = previous.monthly_amount
-                  ? parseFloat(previous.monthly_amount.replaceAll(",", ""))
-                  : 0.0;
-                return currentMonthlyAmount + previousMonthlyAmount;
-              }
-              return currentMonthlyAmount + previous;
-            })
-            .toFixed(2)
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+          tcmc: this.items[0].stcmc,
+          tcms: this.items[0].stcms,
+          tfee: this.items[0].stfee,
+          tip: this.items[0].stip,
+          tma: this.items[0].stma,
         };
       }
       return {

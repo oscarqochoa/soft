@@ -29,7 +29,7 @@
             <template #amount>
               <b-form-input disabled v-model="statusAmount"></b-form-input>
             </template>
-             <!-- Row Date -->
+            <!-- Row Date -->
             <template #date>
               <b-form-input disabled v-model="statusDate"></b-form-input>
             </template>

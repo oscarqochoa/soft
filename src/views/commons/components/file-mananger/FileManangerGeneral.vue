@@ -5,17 +5,20 @@
         <template #actions>
           <b-row>
             <b-col
-                class="d-flex align-items-end justify-content-end flex-column"
+              class="d-flex align-items-end justify-content-end flex-column"
             >
               <div>
                 <b-button
-                    class="mr-1"
-                    variant="outline-info"
-                    @click="openModalNewFolder"
+                  class="mr-1"
+                  variant="outline-info"
+                  @click="openModalNewFolder"
                 >
                   New Folder
                 </b-button>
-                <b-button variant="outline-primary" @click="openUploadFileMoadl">
+                <b-button
+                  variant="outline-primary"
+                  @click="openUploadFileMoadl"
+                >
                   Add Files
                 </b-button>
               </div>
@@ -28,102 +31,99 @@
       <b-row class="pl-1">
         <template v-for="(route, index) in history">
           <div
-              :key="index"
-              class="d-flex align-items-center justify-content-between cursor-pointer"
-              @click="historyClicked(index)"
+            :key="index"
+            class="d-flex align-items-center justify-content-between cursor-pointer"
+            @click="historyClicked(index)"
           >
             <feather-icon
-                class="font-medium-5"
-                :icon="route.icon"
-                :class="{
-              'text-warning': route.icon === '',
-              'text-primary': route.icon === 'HomeIcon',
-            }"
+              class="font-medium-5"
+              :icon="route.icon"
+              :class="{
+                'text-warning': route.icon === '',
+                'text-primary': route.icon === 'HomeIcon',
+              }"
             />
             <span
-                class="ml-50 d-flex align-items-center justify-content-center font-medium-1"
-            >{{ route.label }}</span
+              class="ml-50 d-flex align-items-center justify-content-center font-medium-1"
+              >{{ route.label }}</span
             >
             <span class="font-large-1 ml-50">/</span>
           </div>
         </template>
       </b-row>
     </b-card>
-    <b-card
-      class="p-0"
-      body-class="py-0"
-    >
+    <b-card class="p-0" body-class="py-0">
       <b-row class="my-1">
         <b-col class="d-flex align-items-center justify-content-end py-0">
           <b-form-radio-group
-              buttons
-              button-variant="outline-primary"
-              v-model="selectedView"
+            buttons
+            button-variant="outline-primary"
+            v-model="selectedView"
           >
-            <b-form-radio
-                :value="true"
-            >
+            <b-form-radio :value="true">
               <feather-icon icon="FolderIcon" size="18" />
             </b-form-radio>
-            <b-form-radio
-                :value="false"
-            >
+            <b-form-radio :value="false">
               <feather-icon icon="ListIcon" size="18" />
             </b-form-radio>
-
           </b-form-radio-group>
         </b-col>
       </b-row>
       <b-row class="mb-4" v-if="selectedView">
         <b-col
-            v-for="(content, index) in currentFiles"
-            :key="index"
-            cols="6"
-            sm="4"
-            md="3"
-            lg="2"
-            xl="2"
-            :class="skin === 'dark' ? 'hover-shadow-dark' : 'hover-shadow-light'"
+          v-for="(content, index) in currentFiles"
+          :key="index"
+          cols="6"
+          sm="4"
+          md="3"
+          lg="2"
+          xl="2"
+          :class="skin === 'dark' ? 'hover-shadow-dark' : 'hover-shadow-light'"
         >
           <file-component
-              :current-user="currentUser"
-              :content="content"
-              @contentClicked="contentClicked"
-              @details="openFileDetail"
-              @deleteFile="deleteFile"
-              @shareFile="openShareFileModal"
-              @edit="updateEditState"
+            :current-user="currentUser"
+            :content="content"
+            @contentClicked="contentClicked"
+            @details="openFileDetail"
+            @deleteFile="deleteFile"
+            @shareFile="openShareFileModal"
+            @edit="updateEditState"
           />
         </b-col>
       </b-row>
       <b-row class="mb-1" v-else>
         <b-table :fields="fields" :items="currentFiles" responsive>
           <template #cell(file_name)="data">
-          <span
+            <span
               v-if="selectedFile !== data.item || !editState"
-              class="cursor-pointer d-flex align-items-center justify-content-start"
-              @click="contentClicked(data.item)"
-          >
-            <amg-icon
-                :icon="
-                data.item.extension ? 'CustomFileIcon' : 'CustomFolderIcon'
+              class="
+                cursor-pointer
+                d-flex
+                align-items-center
+                justify-content-start
               "
+              @click="contentClicked(data.item)"
+            >
+              <amg-icon
+                :icon="
+                  data.item.extension ? 'CustomFileIcon' : 'CustomFolderIcon'
+                "
                 :style="data.item.type === 'Folder' ? 'fill: #ff9f43' : ''"
                 class="mr-50"
                 :class="{ 'text-warning': data.item.type === 'Folder' }"
                 size="15"
-            />
-            <span class="font-small-4">{{
+              />
+              <span class="font-small-4">{{
                 data.item.file_name +
                 (data.item.extension ? "." + data.item.extension : "")
               }}</span>
-          </span>
+            </span>
             <b-form-input
-                v-else
-                v-model="selectedFile.file_name"
-                size="sm"
-                @keyup.enter="renameFile(data.item)"
-                @blur="renameFile(data.item)"
+              v-else
+              v-model="selectedFile.file_name"
+              size="sm"
+              @keyup.enter="renameFile(data.item)"
+              @blur="renameFile(data.item)"
             />
           </template>
           <template #cell(countfiel)="data">
@@ -143,27 +143,30 @@
           <template #cell(actions)="data">
             <b-row>
               <b-col
-                  v-if="currentUser.modul_id === data.item.module_id"
-                  class="d-flex align-items-center justify-content-around"
+                v-if="currentUser.modul_id === data.item.module_id"
+                class="d-flex align-items-center justify-content-around"
               >
                 <feather-icon
-                    class="text-primary cursor-pointer"
-                    icon="EditIcon"
-                    size="15"
-                    @click="selectedFile = data.item"
+                  class="text-primary cursor-pointer"
+                  icon="EditIcon"
+                  size="15"
+                  @click="
+                    selectedFile = currentFiles[data.index];
+                    updateEditState(true);
+                  "
                 />
                 <feather-icon
-                    class="text-danger cursor-pointer"
-                    icon="TrashIcon"
-                    size="15"
-                    @click="asyncDeleteFile(data.item)"
+                  class="text-danger cursor-pointer"
+                  icon="TrashIcon"
+                  size="15"
+                  @click="asyncDeleteFile(data.item)"
                 />
                 <feather-icon
-                    v-if="data.item.parent == null"
-                    class="text-success cursor-pointer"
-                    icon="Share2Icon"
-                    size="15"
-                    @click="openShareFileModal(data.item)"
+                  v-if="data.item.parent == null"
+                  class="text-success cursor-pointer"
+                  icon="Share2Icon"
+                  size="15"
+                  @click="openShareFileModal(data.item)"
                 />
               </b-col>
             </b-row>
@@ -273,15 +276,13 @@
       body-class="p-50"
       button-size="sm"
       ok-title="Ok"
-      hide-footer
+      :hide-footer="files.length === 0"
       centered
       @hidden="actionOnHideUploadFileModal"
     >
       <drag-and-drop v-model="files" :files-array="files" />
       <template #modal-footer>
-        <b-button v-show="files.length" variant="primary" @click="onUploadFile">
-          Upload
-        </b-button>
+        <b-button variant="primary" @click="onUploadFile"> Upload </b-button>
       </template>
     </b-modal>
   </div>

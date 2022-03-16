@@ -37,7 +37,7 @@
             <router-link
               class
               :to="{
-                name: 'lead-show',
+                name: $route.meta.leadRoute,
                 params: { id: data.item.lead_id },
               }"
               target="_blank"
@@ -118,7 +118,7 @@
             <router-link
               v-if="data.item.cr == 1"
               :to="{
-                name: 'report-lead',
+                name: $route.meta.reportLeadRoute,
                 params: {idfile:data.item.score_id,idlead:data.item.lead_id,
                   modul: 2,
                   global: {

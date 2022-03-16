@@ -1,6 +1,6 @@
 export default [
   {
-    title: 'Test',
+    title: 'Tests',
     icon: 'PieChartIcon',
     route: 'calendar-social-network',
   },

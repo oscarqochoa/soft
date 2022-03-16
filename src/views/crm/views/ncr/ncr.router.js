@@ -7,6 +7,11 @@ export default [
     meta: {
       isClientsTab: true,
       module: 2,
+      pendingRoute: "ncr-pending",
+      returnedRoute: "ncr-returned",
+      completedRoute: "ncr-completed",
+      reportLeadRoute: "report-lead",
+      leadRoute: 'lead-show'
     },
     children: [
       {
@@ -26,6 +31,11 @@ export default [
               active: true,
             },
           ],
+          pendingRoute: "ncr-pending",
+          returnedRoute: "ncr-returned",
+          completedRoute: "ncr-completed",
+          reportLeadRoute: "report-lead",
+          leadRoute: 'lead-show'
         },
       },
       {
@@ -45,6 +55,11 @@ export default [
               active: true,
             },
           ],
+          pendingRoute: "ncr-pending",
+          returnedRoute: "ncr-returned",
+          completedRoute: "ncr-completed",
+          reportLeadRoute: "report-lead",
+          leadRoute: 'lead-show'
         },
       },
       {
@@ -65,6 +80,11 @@ export default [
               active: true,
             },
           ],
+          pendingRoute: "ncr-pending",
+          returnedRoute: "ncr-returned",
+          completedRoute: "ncr-completed",
+          reportLeadRoute: "report-lead",
+          leadRoute: 'lead-show'
         },
       },
     ],
@@ -78,6 +98,11 @@ export default [
     meta: {
       isClientsTab: true,
       module: 2,
+      pendingRoute: "ncr-pending",
+      returnedRoute: "ncr-returned",
+      completedRoute: "ncr-completed",
+      reportLeadRoute: "report-lead",
+      leadRoute: 'lead-show'
     },
   },
 ];

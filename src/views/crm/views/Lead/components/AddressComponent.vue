@@ -23,6 +23,7 @@
               :class="{ 'border border-danger': errors[0] }"
               :readonly="(addressData.id && disabled.street) || isDisabled"
               @placechanged="getAddressData"
+              @keyup="(e) => onChangeMaillingAddress(e, addressData)"
             />
             <template v-if="addressData.id && isEditable">
               <b-input-group-append
@@ -231,6 +232,9 @@ export default {
   },
   mounted() {},
   methods: {
+    onChangeMaillingAddress(event, data){
+      this.$set(data, 'street', event.target.value)
+    },
     fieldsNotDisabled() {
       if (!(this.addressData.id && this.isEditable))
         this.disabled.street = false;
@@ -255,6 +259,7 @@ export default {
       const location = mainAddress;
       const address = `${location.street_number} ${location.route}`;
       this.addressData.state = mainAddress.administrative_area_level_1;
+      this.$refs[`${this.addressData.prename}-street`].$el.value = address
       this.addressData.street = address;
       this.addressData.city = location.locality;
       this.addressData.zipcode = location.postal_code;

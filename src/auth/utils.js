@@ -1,4 +1,4 @@
-import useJwt from '@/auth/jwt/useJwt'
+import useJwt from "@/auth/jwt/useJwt";
 
 /**
  * Return if user is logged in
@@ -7,11 +7,14 @@ import useJwt from '@/auth/jwt/useJwt'
  */
 // eslint-disable-next-line arrow-body-style
 export const isUserLoggedIn = () => {
-  return localStorage.getItem('userData') && localStorage.getItem(useJwt.jwtConfig.storageTokenKeyName)
-}
+  return (
+    localStorage.getItem("userData") &&
+    localStorage.getItem(useJwt.jwtConfig.storageTokenKeyName)
+  );
+};
 
-export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
-export const getUserToken = () => localStorage.getItem('accessToken')
+export const getUserData = () => JSON.parse(localStorage.getItem("userData"));
+export const getUserToken = () => localStorage.getItem("accessToken");
 
 /**
  * This function is used for demo purpose route navigation
@@ -21,11 +24,13 @@ export const getUserToken = () => localStorage.getItem('accessToken')
  * NOTE: If you have different pages to navigate based on user ability then this function can be useful. However, you need to update it.
  * @param {Object} user Role of user
  */
-export const getHomeRouteForLoggedInUser = user => {
-  if (typeof user === 'object' && user !== null) {
-    if (user.module) {
-      return `/${user.module}`
+export const getHomeRouteForLoggedInUser = (user) => {
+  if (typeof user === "object" && user !== null) {
+    if (user.route) {
+      return user.route;
+    } else if (user.module) {
+      return `/${user.module}`;
     }
   }
-  return '/'
-}
+  return "/";
+};
