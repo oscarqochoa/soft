@@ -9,7 +9,7 @@
       <b-row class="mt-2">
         <b-col mb="6" class="text-left">
 
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-10,Nickname">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-11,Nickname">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -26,7 +26,7 @@
                   class="select-icon-none font-bureau-style border-hover bg-white-c"
                   :class="errors[0] || !isValidNickname ? 'border-error-sn' : ''"
                   :state="errors[0] || !isValidNickname ? false : null"
-                  id="input-create-lead-10"
+                  id="input-create-lead-11"
                   debounce="600"
               ></b-form-input>
               <div class="d-flex align-items-center justify-content-center">
@@ -39,7 +39,7 @@
 
         </b-col>
         <b-col mb="6" class="text-left">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-11,Language">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-12,Language">
 
             <b-form-group
                 label="Language"
@@ -60,7 +60,7 @@
                   :options="languagesOptions"
                   :clearable="false"
                   :reduce="el => el.value"
-                  id="input-create-lead-11"
+                  id="input-create-lead-12"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Language {{errors[0]}}</div>
             </b-form-group>

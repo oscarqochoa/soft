@@ -8,7 +8,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-19,DOB">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-20,DOB">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -21,11 +21,11 @@
             >
               <kendo-datepicker
 
-                  :format="'MM/dd/yyyy'"
+                  :format="'MM-dd-yyyy'"
                   v-model="lead.dob"
                   v-mask="'##/##/####'"
                   class="leads-datepicker"
-                  id="input-create-lead-19"
+                  id="input-create-lead-20"
                   :class="errors[0] ? 'w-100 rounded bg-transparent k-picker-custom border-error-datepicker picker-select-date' : 'w-100 rounded bg-transparent k-picker-custom picker-select-date'"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">DOB {{errors[0]}}</div>
@@ -33,7 +33,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-20,Status">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-21,Status">
 
             <b-form-group
                 label="Status"
@@ -52,7 +52,7 @@
                   :options="optionsState"
                   :reduce="el => el.value"
                   :class="{'border-error-sn' :errors[0]}"
-                  id="input-create-lead-20"
+                  id="input-create-lead-21"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Status {{errors[0]}}</div>
             </b-form-group>
@@ -63,7 +63,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-21,Type doc.">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-22,Type doc.">
             <b-form-group
                 label="Type doc."
                 label-for="st-ad"
@@ -83,7 +83,7 @@
                   :options="documents"
                   :clearable="false"
                   :reduce="el => el.value"
-                  id="input-create-lead-21"
+                  id="input-create-lead-22"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Type doc. {{errors[0]}}</div>
             </b-form-group>
@@ -91,7 +91,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-22,Document">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-23,Document">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -109,7 +109,7 @@
                   placeholder="Please type document"
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
-                  id="input-create-lead-22"
+                  id="input-create-lead-23"
               ></b-form-input>
               <div v-if="errors[0]" class="text-error-sn text-center">document {{errors[0]}}</div>
             </b-form-group>
@@ -118,7 +118,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6 text-left">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-23,Phone(H)">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-24,Phone(H)">
             <b-form-group
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                 label-cols-sm="4"
@@ -127,7 +127,7 @@
                 content-cols-sm
                 content-cols-lg="8"
                 label="Phone(H)"
-                id="input-create-lead-23"
+                id="input-create-lead-24"
             >
               <b-form-input
                   v-model="lead.phone"

@@ -293,7 +293,6 @@
 
           <div v-if="lead.state_h && lead.fanpage_id && lead.sourcesname_id == 17">
             <b-form-group
-                id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                 label-cols-sm="4"
                 label-for="input-horizontal"
@@ -301,8 +300,9 @@
                 content-cols-sm
                 content-cols-lg="10"
                 label="Flyers"
+                id="input-create-lead-10"
             >
-              <ValidationProvider  rules="required" v-slot="{errors}" name="input-create-lead-11, Flyer">
+              <ValidationProvider  rules="required" v-slot="{errors}" name="input-create-lead-10, Flyer">
                 <div class="content-flyer">
                   <div class="d-flex margin-flyer" id="input-create-lead-11">
                     <b-avatar

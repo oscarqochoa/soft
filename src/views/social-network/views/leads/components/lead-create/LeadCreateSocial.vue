@@ -124,7 +124,6 @@ import TaskCreateLeadSn from "@/views/social-network/views/leads/components/lead
 import MoreInformation from "@/views/social-network/views/leads/components/lead-create/MoreInformation";
 import BillingInformation from "@/views/social-network/views/leads/components/lead-create/BillingInformation";
 import {mapActions, mapGetters, mapState} from "vuex";
-import VueScrollTo from 'vue-scrollto'
 import {amgApi} from "@/service/axios";
 
 export default {
@@ -211,7 +210,7 @@ export default {
         from: "",
         to: "",
         date: "",
-        sms_status: 0,
+        sms_status: false,
         due_date: "",
         assign: 1,
         attend: null,
@@ -295,12 +294,14 @@ export default {
     async onSubmit() {
       try {
         const validate = await this.$refs.refFormLeadObserver;
-        const data_dob = this.lead.dob.split('/')
-        const date_date = this.lead.date.split('/')
-        const date_due_date = this.lead.date.split('/')
-        this.lead.dob = `${data_dob[2]}-${data_dob[0]}-${data_dob[1]}`
-        this.lead.date = `${date_date[2]}-${date_date[0]}-${date_date[1]}`
-        this.lead.due_date = `${date_due_date[2]}-${date_due_date[0]}-${date_due_date[1]}`
+        // Transformar fechas
+        const data_dob = this.lead.dob.split('-')
+        const date_date = this.lead.date.split('-')
+        const date_due_date = this.lead.due_date.split('-')
+        this.lead.dob = data_dob[0] == '' || data_dob[2].length != 4 ? this.lead.dob : `${data_dob[2]}-${data_dob[0]}-${data_dob[1]}`;
+        this.lead.date = date_date[0] == '' || date_date[2].length != 4 ? this.lead.date : `${date_date[2]}-${date_date[0]}-${date_date[1]}`;
+        this.lead.due_date = date_due_date[0] == '' || date_due_date[2].length != 4 ? this.lead.due_date : `${date_due_date[2]}-${date_due_date[0]}-${date_due_date[1]}`;
+        // Validar formulario
         if (await validate.validate() && this.isValidNickname && this.isValidMobile) {
           const resp = await this.showConfirmSwal(
               "Are you sure?",
@@ -309,8 +310,7 @@ export default {
           )
           if(resp.value){
             this.addPreloader()
-            // TODO activar peticion de crear lead
-            //await this.A_CREATE_LEAD_SN(this.lead);
+            await this.A_CREATE_LEAD_SN(this.lead);
 
             setTimeout(async () => {
               await this.resetForm()
@@ -390,7 +390,13 @@ export default {
             });
           }
 
-          this.toastData = errors;
+          this.toastData = errors.sort(function (a, b) {
+            if (a.index > b.index) {
+              return 1;
+            }  else {
+              return  -1;
+            }
+          });
           this.$bvToast.show('toast-validation-create-lead')
           const input = document.getElementById(`${this.toastData[0].id}`);
           input.scrollIntoView({behavior: "smooth"});

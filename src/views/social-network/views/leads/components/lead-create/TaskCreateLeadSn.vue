@@ -44,278 +44,12 @@
       </b-row>
 
       <template v-if="addLater">
-        <b-row class="mt-2">
-          <b-col md="2" class="d-flex align-items-center">
-            <h3 class="title-card m-0 font-medium-1">Content Task</h3>
-          </b-col>
-          <b-col md="5" class="d-flex align-items-center ">
-
-            <div class="container-task-later">
-
-              <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-32,Day event">
-                  <b-form-group
-                      label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                      label-for="input-horizontal"
-                      :state="errors[0] ? false : null"
-                      label="Day Event:"
-                  >
-                    <kendo-datepicker
-
-                        :format="'MM/dd/yyyy'"
-                        v-model="lead.date"
-                        v-mask="'##/##/####'"
-                        class="leads-datepicker"
-                        id="input-create-lead-32"
-                        :class="errors[0] ? 'w-100 rounded bg-transparent k-picker-custom border-error-datepicker picker-select-date' : 'w-100 rounded bg-transparent k-picker-custom picker-select-date'"
-                    />
-                    <div v-if="errors[0]" class="text-error-sn text-center">Day event {{errors[0]}}</div>
-                  </b-form-group>
-                </ValidationProvider>
-              </div>
-
-              <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-33,From">
-                  <b-form-group
-                      label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                      label-for="input-horizontal"
-                      id="input-create-lead-33"
-                      label="From:"
-                  >
-                    <b-form-timepicker
-                        :class="{'border-error-sn' :errors[0]}"
-                        :state="errors[0] ? false : null"
-                        v-model="lead.from"
-                        class="font-small-4"
-                        placeholder="Select hour"
-                    ></b-form-timepicker>
-                    <div v-if="errors[0]" class="text-error-sn text-center">From {{errors[0]}}</div>
-                  </b-form-group>
-                </ValidationProvider>
-              </div>
-              <div class="text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-34,To">
-                  <b-form-group
-                      label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                      label-for="input-horizontal"
-                      label="To:"
-                  >
-                    <b-form-timepicker
-                        :class="{'border-error-sn' :errors[0]}"
-                        :state="errors[0] ? false : null"
-                        v-model="lead.to"
-                        class="font-small-4"
-                        placeholder="Select hour"
-                        id="input-create-lead-34"
-                    ></b-form-timepicker>
-                    <div v-if="errors[0]" class="text-error-sn text-center">To {{errors[0]}}</div>
-                  </b-form-group>
-                </ValidationProvider>
-              </div>
-
-            </div>
-
-          </b-col>
-          <b-col md="5" class="d-flex align-items-center">
-
-            <div class="container-task-later task-later-seller">
-
-              <div class="mr-1 d-flex align-items-center justify-content-center">
-                <b-button
-                    v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-                    variant="danger"
-                    class="btn-find-seller-later"
-                    @click="findSellers"
-                >
-                  <span >Find Seller</span>
-                </b-button>
-              </div>
-
-              <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-34,Title seller">
-                  <b-form-group
-                      label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                      label-for="input-horizontal"
-
-                      label="Title:"
-                  >
-                    <b-input
-                        :class="{'border-error-sn' :errors[0]}"
-                        :state="errors[0] ? false : null"
-                        v-model="lead.title"
-                        placeholder="Type title"
-                        id="input-create-lead-34"
-                    ></b-input>
-                    <div v-if="errors[0]" class="text-error-sn text-center">Title {{errors[0]}}</div>
-                  </b-form-group>
-                </ValidationProvider>
-              </div>
-
-              <div class="">
-                <b-col md="12 text-left">
-                  <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-35,Seller">
-                    <b-form-group
-                        :state="errors[0] ? false : null"
-                        label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                        label-for="input-horizontal"
-                        label="Seller"
-                    >
-                      <v-select
-                          id="input-create-lead-35"
-                          label="user_name"
-                          :reduce="el => el.value"
-                          :options="S_SELLERS"
-                          v-model="lead.seller">
-
-                        <template #option="{ user_name, status_session }">
-                          <div class="d-flex align-items-center justify-content-start">
-                            <div class="point-seller" :class="status_session ? 'bg-green' : ''"> </div>
-                            <p class="m-0 font-small-2 truncate truncate-options">{{ user_name }}</p>
-                          </div>
-                        </template>
-
-                        <template #selected-option="{ user_name, status_session }">
-                          <div class="d-flex align-items-center justify-content-start">
-                            <div class="point-seller" :class="status_session ? 'bg-green' : ''"> </div>
-                            <p class="m-0 font-small-2 truncate">{{ user_name }}</p>
-                          </div>
-                        </template>
-
-                      </v-select>
-                      <div v-if="errors[0]" class="text-error-sn text-center">Title {{errors[0]}}</div>
-                    </b-form-group>
-                    <input type="radio" class="d-none bg-green" v-model="lead.seller" />
-
-                  </ValidationProvider>
-
-                </b-col>
-
-              </div>
-
-            </div>
-
-          </b-col>
-        </b-row>
+        <task-add-later :lead="this.lead"/>
 
       </template>
 
       <template v-if="addNow">
-        <b-row class="mt-2">
-          <b-col md="2" class="d-flex align-items-center">
-            <h3 class="title-card m-0 font-medium-1">Content Task</h3>
-          </b-col>
-          <b-col md="10" class="d-flex align-items-center ">
-
-            <div class="container-task-later task-now-seller">
-
-              <div class="mr-1 text-left">
-
-                <b-col md="12">
-                  <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-36,Subject">
-                    <b-form-group
-                        label="Subject"
-                        label-for="subject"
-                        :state="errors[0] ? false : null"
-                        id="fieldset-horizontal"
-                        label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-
-                    >
-                      <v-select
-                          id="input-create-lead-36"
-                          v-model="lead.subject"
-                          :options="subjectOptions"
-                          :clearable="false"
-                      ></v-select>
-                    </b-form-group>
-                  </ValidationProvider>
-                  <input type="radio" class="d-none bg-green" v-model="lead.subject" />
-
-                </b-col>
-              </div>
-
-              <div class="mr-1 text-left">
-                <b-col md="12">
-                  <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-37,Assign to">
-                    <b-form-group
-                        :state="errors[0] ? false : null"
-                        label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                        label-for="input-horizontal"
-                        label="Assign to"
-                    >
-                      <v-select
-                          id="input-create-lead-37"
-                          :reduce="el => el.value"
-                          :options="S_SELLERS"
-                          label="user_name"
-                          v-model="lead.assign"
-                      >
-
-                        <template #option="{ user_name, status_session }">
-                          <div class="d-flex align-items-center justify-content-start">
-                            <div style="margin-bottom: 3px;" class="point-seller mr-1" :class="status_session ? 'bg-green' : ''"> </div>
-                            <p class="m-0 font-small-2">{{ user_name }}</p>
-                          </div>
-                        </template>
-
-                        <template #selected-option="{ user_name, status_session }">
-                          <div class="d-flex align-items-center justify-content-start">
-                            <div style="margin-bottom: 3px;" class="point-seller mr-1" :class="status_session ? 'bg-green' : ''"> </div>
-                            <p class="m-0 font-small-2">{{ user_name }}</p>
-                          </div>
-                        </template>
-
-                      </v-select>
-                      <div v-if="errors[0]" class="text-error-sn text-center">Assign to {{errors[0]}}</div>
-                    </b-form-group>
-                    <input type="radio" class="d-none bg-green" v-model="lead.assign" />
-
-                  </ValidationProvider>
-
-                </b-col>
-
-              </div>
-              <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-38,Due date">
-                  <b-form-group
-                      label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                      label-for="input-horizontal"
-
-                      label="Due Date"
-                  >
-                    <kendo-datepicker
-                        :format="'MM/dd/yyyy'"
-                        v-model="lead.due_date"
-                        v-mask="'##/##/####'"
-                        class="leads-datepicker"
-                        id="input-create-lead-38"
-                        :class="errors[0] ? 'w-100 rounded bg-transparent k-picker-custom border-error-datepicker picker-select-date' : 'w-100 rounded bg-transparent k-picker-custom picker-select-date'"
-                    />
-                    <div v-if="errors[0]" class="text-error-sn text-center">Due date {{errors[0]}}</div>
-                  </b-form-group>
-                </ValidationProvider>
-              </div>
-              <div class="mr-1 text-left">
-                <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-39,Due hour">
-                  <b-form-group
-                      label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                      label-for="input-horizontal"
-                      label="Due Hour"
-                  >
-                    <b-form-timepicker
-                        id="input-create-lead-39"
-                        :class="{'border-error-sn' :errors[0]}"
-                        :state="errors[0] ? false : null"
-                        v-model="lead.hour"
-                    ></b-form-timepicker>
-                    <div v-if="errors[0]" class="text-error-sn text-center">Due hour {{errors[0]}}</div>
-                  </b-form-group>
-                </ValidationProvider>
-              </div>
-
-            </div>
-
-          </b-col>
-        </b-row>
+        <task-add-now :lead="this.lead"/>
       </template>
 
       <template v-if="(!(lead.first_name === '') && !(lead.last_name === '') && !(lead.mobile === '')) && (addNow || addLater)">
@@ -326,7 +60,6 @@
           <b-col md="5" class="d-flex align-items-center ">
 
             <div class="container-task-later">
-
               <VueToggles
                   class="mt-1"
                   height="31"
@@ -358,9 +91,13 @@ import Ripple from "vue-ripple-directive";
 import {mapActions, mapState} from "vuex";
 import vSelect from "vue-select";
 import VueToggles from "vue-toggles";
+import TaskAddLater from "@/views/social-network/views/leads/components/lead-create/task-create-lead-tab/TaskAddLater";
+import TaskAddNow from "@/views/social-network/views/leads/components/lead-create/reason-not-potential/TaskAddNow";
 
 export default {
   components: {
+    TaskAddNow,
+    TaskAddLater,
     vSelect,
     VueToggles
   },
@@ -383,12 +120,6 @@ export default {
       addLater: false,
       addNow: false,
       leadGa: {},
-      subjectOptions: [
-        {
-          label: 'CALL',
-          value: 1
-        }
-      ]
     }
   },
   async created() {
@@ -399,7 +130,7 @@ export default {
   mounted() {
     //document.getElementById('input-create-lead-32').placeholder='Type Day event';
     //document.getElementById('input-create-lead-38').placeholder='Type Due date';
-    //console.log('ZXC:', document.getElementById('input-create-lead-38'))
+    console.log('ZXC:', document.getElementById('input-create-lead-38'))
   },
   computed : {
     ...mapState('SocialNetworkLeadsStore', ['S_SELLERS']),
@@ -427,6 +158,7 @@ export default {
 
         const hour = await this.A_GET_HOUR_SYSTEM();
         const date = await this.A_FORMAT_DATE(new Date());
+        console.log('date 123: ', date)
         await this.A_GET_SELLER_TASK_FAVORITE({date_hour: `${date} ${hour}:00`})
         this.lead.attend = 2;
 
@@ -447,7 +179,7 @@ export default {
       this.lead.to = null;
       this.lead.date = "";
 
-      this.lead.sms_status = 0;
+      this.lead.sms_status = false;
       this.lead.due_date = "";
       this.lead.attend = null;
     },
