@@ -21,6 +21,8 @@ export default [
         key: 'status',
         label: 'Status',
         sortable: false,
+        thClass: 'text-center',
+        tdClass: 'text-center'
     },
     {
         key: 'status_recovery',
