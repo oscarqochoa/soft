@@ -13,6 +13,8 @@ import infoAdmToCrm from "@/views/crm/views/Lead/pusher/info-adm-to-crm.pusher";
 import changeUserStatusSession from "@/views/commons/pusher/change-user-status-session.pusher";
 import salesMadePusher from "@/views/crm/views/sales-made/sales-made.pusher";
 import {newFlyerNotification} from "@/views/social-network/views/bank-of-flyers/new-flyer.pusher";
+import assignTaskToSeller from "@/views/commons/pusher/assign-task-to-seller.pusher";
+import socialAcceptAppoitment from "@/views/commons/pusher/social-accept-appointment.pusher";
 
 const subscribePusher = () => {
     const pusher = new Pusher(process.env.VUE_APP_PUSHER_APP_KEY, {
@@ -40,6 +42,8 @@ const subscribePusher = () => {
         changeUserStatusSession();
         salesMadePusher();
         newFlyerNotification();
+        assignTaskToSeller();
+        socialAcceptAppoitment();
     } catch (error) {
         console.error(error, "error");
     }
