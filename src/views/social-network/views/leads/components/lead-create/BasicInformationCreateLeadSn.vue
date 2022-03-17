@@ -193,7 +193,6 @@ export default {
 }
 .card{
 //border: 1px solid red !important;
-  z-index: 100;
   box-shadow: 4px 4px 24px 4px rgb(34,41,47, 0.1) !important;
 }
 .dark-layout .card {
