@@ -60,19 +60,10 @@
             @click="(tab = 2), getReports()"
           >
             <template #title>
-              Pending
-              <div
-                v-if="countData == 0"
-                class="rounded-circle text-white"
-                style="
-                  display: inline-block;
-                  background: red;
-                  padding: 0px 4px 0px 4px;
-                  margin-left: 10px;
-                "
-              >
+              Pending {{countData}}
+              <b-badge variant="danger" pill v-if="countData != 0">
                 {{ countData }}
-              </div>
+              </b-badge>
             </template>
           </b-tab>
         </b-tabs>
@@ -111,7 +102,7 @@
             <a
               v-if="data.item.state == 1"
               :href="
-                '/socialnetwork/leads/report/' +
+                '/socialnetwork/ncr/reportLead/' +
                 data.item.lead_id +
                 '/' +
                 data.item.id

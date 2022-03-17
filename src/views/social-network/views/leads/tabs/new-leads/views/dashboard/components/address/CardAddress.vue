@@ -47,7 +47,7 @@
           <vue-google-autocomplete
             v-model="personalAddress.street"
             id="street_address"
-            class="form-control form-group-col-12"
+            class="form-control form-group-col-12 street-address-vue-google"
             :placeholder="editInformation ? 'Pleace type your address' : ''"
             country="us"
             v-on:placechanged="getAddressData"
