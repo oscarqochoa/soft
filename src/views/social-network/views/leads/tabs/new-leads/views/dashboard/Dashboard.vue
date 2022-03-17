@@ -2,18 +2,7 @@
   <div>
     <header-slot>
       <b-row slot="actions" class="justify-content-end">
-        <b-button
-          variant="primary"
-          class="mr-1"
-          :to="{ name: 'sn-create-new-lead' }"
-        >
-          <feather-icon
-            icon="PlusIcon"
-            size="15"
-            class="mr-50 text-white"
-          ></feather-icon>
-          CREATE
-        </b-button>
+        <lead-create-social color_btn="primary"/>
         <b-button
           variant="success"
           class="mr-1"
@@ -110,6 +99,7 @@ import CardLeadCards from "./components/cards/CardLeadCards.vue";
 import CardContactInformation from "./components/contact-information/CardContactInformation.vue";
 import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
 import ModalHistorySms from "@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue";
+import LeadCreateSocial from "@/views/social-network/views/leads/components/lead-create/LeadCreateSocial";
 
 // Services
 import SNLeadsService from "@/views/social-network/services/leads";
@@ -123,6 +113,7 @@ export default {
     CardContactInformation,
     ModalSendSms,
     ModalHistorySms,
+    LeadCreateSocial
   },
   data() {
     return {
@@ -293,9 +284,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .card-group > div > .card > .card-header {
   border-bottom: none !important;
   margin-bottom: 0px !important;
 }
+
+
 </style>

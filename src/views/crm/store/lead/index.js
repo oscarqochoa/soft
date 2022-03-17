@@ -201,7 +201,6 @@ const actions = {
   async A_GET_W_POTENTIAL_LEADS({ commit }, body) {
     try {
       const response = await crmLead.getLeadsWPotential(body)
-      /* console.log('A_GET_W_POTENTIAL_LEADS response', response) */
       commit('SET_DATA', {
         destination: 'S_W_POTENTIAL_LEADS',
         data: response.data,

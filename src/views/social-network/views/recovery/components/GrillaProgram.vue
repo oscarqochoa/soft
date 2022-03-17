@@ -20,6 +20,18 @@
         @reload="getSNRecoveryLeads"
         @onChangeCurrentPage="onChangeCurrentPage"
       >
+
+        <template #buttons>
+          <b-button
+            variant="success"
+            class="ml-1"
+            :disabled="!leadsSelecteds.length"
+            @click="modalSmssOpen"
+          >
+            <feather-icon icon="MessageCircleIcon" class="mr-50" />Send SMS
+          </b-button>
+        </template>
+
         <b-table
           slot="table"
           class="position-relative"
@@ -37,12 +49,24 @@
           :items="S_LEADS.items"
           :sort-desc.sync="isSortDirDesc"
           :busy.sync="isBusy"
+          @row-selected="onRowSelected"
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
               <b-spinner class="align-middle mr-1" />
               <strong>Loading ...</strong>
             </div>
+          </template>
+
+          <template #head(selected)>
+            <b-form-checkbox v-model="selectAll" @input="selectedAll" />
+          </template>
+
+          <!-- Column: Selected -->
+          <template #cell(selected)="data">
+            <b-form-group>
+              <b-form-checkbox v-model="data.item.selected" @input="onSelectedRow(data.item)" />
+            </b-form-group>
           </template>
 
           <!-- Column: Nickname -->
@@ -282,7 +306,8 @@ export default {
     "modal-evidence-sn": ModalEvidenceSn,
   },
   data() {
-    return {
+    return{
+      items: [],
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
       filters: dataFilters,
       filterPrincipal: {
@@ -310,14 +335,17 @@ export default {
       sendModalSms: false,
       rowData: [],
       typesms: null,
-      leads_sms_o: null,
+      leads_sms_o: [],
+      leads_sms: [],
       name_leads_arr: [],
       showImage: null,
       itemImage: [],
       modalEvidence: false,
       lead_id: "",
       lead_name: "",
-    };
+      selectAll: false,
+      leadsSelecteds: [],
+    }
   },
   computed: {
     ...mapState({
@@ -346,7 +374,8 @@ export default {
       "A_GET_FILTER_SELLERS",
       "A_GET_SUB_SOURCES_FILTERS"
     ]),
-    ...mapMutations("SocialNetworkLeadsStore", ["M_SET_EVIDENCE_URL"]),
+    ...mapMutations('SocialNetworkLeadsStore', ['M_SET_EVIDENCE_URL']),
+    ...mapActions('CrmLeadStore', ['A_SET_SELECTED_LEADS']),
     async getSNRecoveryLeads() {
       try {
 
@@ -450,6 +479,7 @@ export default {
       this.leads_sms = [];
       this.typesms = 1;
       this.leads_sms_o = [];
+      this.leads_sms_o.push(item.id);
       this.name_leads_arr = [{ name: item.lead_name, id: item.id }];
       this.sendModalSms = true;
     },
@@ -467,6 +497,39 @@ export default {
     closeModalSmsList() {
       this.showModalSmsList = false;
     },
+
+    modalSmssOpen() {
+      this.typesms = 0;
+      this.name_leads_arr = this.leadsSelecteds.map(el => ({
+        name: el.lead_name,
+        id: el.id
+      }));
+      this.leads_sms = this.leadsSelecteds.map(el => el.id);
+      this.sendModalSms = true;
+    },
+
+    onSelectedRow(data) {
+      const index = this.leadsSelecteds.findIndex(
+          select => select.id === data.id
+      );
+      if (data.selected === true && index === -1)
+        this.leadsSelecteds.push(data);
+      else if (data.selected === false && index !== -1)
+        this.leadsSelecteds.splice(index, 1);
+      this.onRowSelected();
+    },
+
+    onRowSelected() {
+      this.A_SET_SELECTED_LEADS(this.leadsSelecteds);
+    },
+
+    selectedAll() {
+      if (this.selectAll)
+        this.S_LEADS.items.forEach(item => (item.selected = true));
+      else this.S_LEADS.items.forEach(item => (item.selected = false));
+      this.onRowSelected();
+    },
+
     open(image) {
       this.itemImage = [image];
       this.showImage = 0;

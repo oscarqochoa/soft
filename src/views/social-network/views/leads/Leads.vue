@@ -17,23 +17,44 @@
       </template>
     </header-slot>
 
-    <!-- <b-nav card-header pills class="m-0">
-      <b-nav-item
-        exact-active-class="active"
-        :link-classes="['px-3', bgTabsNavs]"
-        exact
-        :to="{ name: 'sn-list-new-leads' }"
-        >NEW LEADS
-      </b-nav-item>
-      <b-nav-item
-        exact-active-class="active"
-        :link-classes="['px-3', bgTabsNavs]"
-        exact
-        :to="{ name: 'sn-list-old-leads' }"
-        >OLD LEADS
-      </b-nav-item>
-    </b-nav> -->
-    <new-leads></new-leads>
+    <div v-if="G_IS_CEO || G_IS_SUPERVISOR">
+        <b-nav card-header pills class="m-0">
+          <b-nav-item
+            exact-active-class="active"
+            :link-classes="['px-3', bgTabsNavs]"
+            exact
+            :to="{ name: 'sn-list-new-leads' }"
+            >LEADS
+          </b-nav-item>
+
+          <b-nav-item
+            exact-active-class="active"
+            :link-classes="['px-3', bgTabsNavs]"
+            exact
+            :to="{ name: 'sn-list-without-potential-leads' }"
+            >WITHOUT POTENTIAL
+          </b-nav-item>
+
+          <b-nav-item
+            exact-active-class="active"
+            :link-classes="['px-3', bgTabsNavs]"
+            exact
+            :to="{ name: 'sn-list-closed-leads' }"
+            >CLOSED
+          </b-nav-item>
+        </b-nav>
+        <b-card 
+          no-body
+          class="border-top-primary border-3 border-table-radius px-0"
+        > 
+          <router-view :key="$route.name"/>
+        </b-card>
+    </div>
+
+    <div v-else>
+      <new-leads></new-leads>
+    </div>
+
   </div>
 </template>
 
