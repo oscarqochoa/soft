@@ -34,7 +34,7 @@
 
       <template #default>
         <!-- BODY -->
-        <div class="mx-4 container-create" id="container-create-lead-sn">
+        <div class="px-4 container-create" id="container-create-lead-sn">
           <validation-observer ref="refFormLeadObserver">
             <CatchmentCreateSn :lead="lead"/>
 
