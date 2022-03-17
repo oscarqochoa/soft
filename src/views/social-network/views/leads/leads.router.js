@@ -6,6 +6,12 @@ import OldLeads from './tabs/old-leads/OldLeads.vue'
 import DashboardOldLead from './tabs/old-leads/views/dashboard/Dashboard.vue'
 import EditOldLead from './tabs/old-leads/views/edit/Edit.vue'
 
+import WithoutLeads from './tabs/without-leads/WithoutLeads.vue'
+
+// import ClosedLeads from './tabs/closed-leads/ClosedLeads.vue'
+
+
+
 export default [
     {
         path: '/social-network/leads',
@@ -41,6 +47,42 @@ export default [
                     permittedRoles: [12, 9, 11, 2, 1]
                 },
             },
+            {
+                path: 'without-potential',
+                component: WithoutLeads,
+                name: 'sn-list-without-potential-leads',
+                meta: {
+                    pageTitle: 'Leads',
+                    breadcrumb: [
+                        {
+                            text: 'Leads'
+                        },
+                        {
+                            text: 'Without Potential',
+                            active: true
+                        },
+                    ],
+                    permittedRoles: [12, 9, 11, 2, 1]
+                },
+            },
+            // {
+            //     path: 'closed',
+            //     component: ClosedLeads,
+            //     name: 'sn-list-closed-leads',
+            //     meta: {
+            //         pageTitle: 'Leads',
+            //         breadcrumb: [
+            //             {
+            //                 text: 'Leads'
+            //             },
+            //             {
+            //                 text: 'Closed',
+            //                 active: true
+            //             },
+            //         ],
+            //         permittedRoles: [12, 9, 11, 2, 1]
+            //     },
+            // },
         ],
     },
     {

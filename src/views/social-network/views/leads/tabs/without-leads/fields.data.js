@@ -2,56 +2,39 @@ import { title } from '@core/utils/filter'
 
 export default [
     {
-        key: "selected",
-        label: "",
-        sortable: false,
-    },
-    {
-        key: 'nickname',
+        key: 'lead_name',
         label: 'Nickname',
-        sortable: true,
         formatter: title,
+        sortable: true,
     },
     {
-        key: 'parent',
-        label: 'Source / SubSource',
+        key: 'source',
+        label: 'Source',
         sortable: false,
     },
     {
         key: 'mobile',
         label: 'Mobile',
-        sortable: true,
+        sortable: false,
     },
     {
         key: 'status',
         label: 'Status',
         sortable: false,
-        thClass: 'text-center',
-        tdClass: 'text-center'
     },
     {
-        key: 'status_recovery',
-        label: 'Type',
-        sortable: false,
-    },
-    {
-        key: 'fanpage',
+        key: 'program',
         label: 'Fanpage',
         sortable: false,
     },
     {
-        key: 'programs',
-        label: 'Recomendations',
+        key: 'recomendations',
+        label: 'Recommendations',
         sortable: false,
     },
     {
         key: 'attend',
-        label: 'Task',
-        sortable: false,
-    },
-    {
-        key: 'file_evidence',
-        label: 'Evidence',
+        label: 'Appointment',
         sortable: false,
     },
     {
@@ -60,14 +43,14 @@ export default [
         sortable: true,
     },
     {
-        key: 'owner',
+        key: 'catcher',
         label: 'Owner',
         sortable: true,
     },
     {
-        key: 'tracking',
-        label: 'Tracking',
-        sortable: false,
+        key: 'catcher',
+        label: 'Reason',
+        sortable: true,
     },
     {
         key: 'actions',

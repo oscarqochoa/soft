@@ -2,6 +2,11 @@ import { title } from '@core/utils/filter'
 
 export default [
     {
+        key: "selected",
+        label: "",
+        sortable: false,
+    },
+    {
         key: 'nickname',
         label: 'Nickname',
         sortable: true,
