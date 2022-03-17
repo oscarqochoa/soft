@@ -8,7 +8,6 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <p>p: {{lead.dob}}</p>
           <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-20,DOB">
             <b-form-group
                 id="fieldset-horizontal"
