@@ -625,8 +625,6 @@ export default {
   border: 2px solid #fc424a;
   overflow: hidden;
 }
-.dark-layout .card {
-  box-shadow: 0 1px 3px 0 rgb(255 255 255 / 0.1), 0 1px 2px -1px rgb(255 255 255 / 0.1) !important;
-  background: #222222 !important;
-}
+
+
 </style>
