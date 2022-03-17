@@ -17,7 +17,7 @@
       </template>
     </header-slot>
 
-    <div v-if="G_IS_CEO || G_IS_SUPERVISOR">
+    <div v-if="isCeo || isSupervisor">
         <b-nav card-header pills class="m-0">
           <b-nav-item
             exact-active-class="active"
