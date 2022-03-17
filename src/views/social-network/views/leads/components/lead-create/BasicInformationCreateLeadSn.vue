@@ -9,7 +9,7 @@
       <b-row class="mt-2">
         <b-col mb="6" class="text-left">
 
-          <ValidationProvider rules="required|unique-nickname" v-slot="{errors}" name="Nickname">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-11,Nickname">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -24,17 +24,22 @@
                   placeholder="Please type nickname"
                   v-model="lead.nickname"
                   class="select-icon-none font-bureau-style border-hover bg-white-c"
-                  :class="errors[0] ? 'border-error-sn' : ''"
-                  :state="errors[0] ? false : null"
-                  id="input-create-lead-10"
+                  :class="errors[0] || !isValidNickname ? 'border-error-sn' : ''"
+                  :state="errors[0] || !isValidNickname ? false : null"
+                  id="input-create-lead-11"
+                  debounce="600"
               ></b-form-input>
-              <div v-if="errors[0]" class="text-error-sn text-center">Nickname {{errors[0]}}</div>
+              <div class="d-flex align-items-center justify-content-center">
+                <p class="text-error-sn text-center" v-if="errors[0]">{{`Nickname ${errors[0]}`}}</p>
+                <p class="mr-1 ml-1" v-if="errors[0] && !isValidNickname">-</p>
+                <p class="text-error-sn text-center" v-if="!isValidNickname">Nickname is not unique</p>
+              </div>
             </b-form-group>
           </ValidationProvider>
 
         </b-col>
         <b-col mb="6" class="text-left">
-          <ValidationProvider rules="required" v-slot="{errors}" name="Language">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-12,Language">
 
             <b-form-group
                 label="Language"
@@ -55,7 +60,7 @@
                   :options="languagesOptions"
                   :clearable="false"
                   :reduce="el => el.value"
-                  id="input-create-lead-11"
+                  id="input-create-lead-12"
               />
               <div v-if="errors[0]" class="text-error-sn text-center">Language {{errors[0]}}</div>
             </b-form-group>
@@ -66,34 +71,30 @@
       </b-row>
       <b-row class="mt-2">
         <b-col mb="6" class="text-left">
-          <ValidationProvider rules="required" v-slot="{errors}">
-            <b-form-group
-                id="fieldset-horizontal"
-                label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                label-cols-sm="4"
-                label-for="input-horizontal"
-                label-cols-lg="4"
-                content-cols-sm
-                content-cols-lg="8"
-                label="Did you start dialogue?"
-            >
-              <VueToggles
-                  class="vue-toggle"
-                  height="31"
-                  width="90"
-                  checkedText="YES"
-                  uncheckedText="NO"
-                  checkedBg="#FF6A6A"
-                  :dotColor="lead.addEvidence? 'white' : '#FF6A6A'"
-                  uncheckedBg="lightgrey"
-                  :value="lead.addEvidence"
-                  @click="lead.addEvidence = !lead.addEvidence"
-                  fontWeight="bold"
-              ></VueToggles>
-            </b-form-group>
-
-
-          </ValidationProvider>
+          <b-form-group
+              id="fieldset-horizontal"
+              label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+              label-cols-sm="4"
+              label-for="input-horizontal"
+              label-cols-lg="4"
+              content-cols-sm
+              content-cols-lg="8"
+              label="Did you start dialogue?"
+          >
+            <VueToggles
+                class="vue-toggle"
+                height="31"
+                width="90"
+                checkedText="YES"
+                uncheckedText="NO"
+                checkedBg="#FF6A6A"
+                :dotColor="lead.addEvidence? 'white' : '#FF6A6A'"
+                uncheckedBg="lightgrey"
+                :value="lead.addEvidence"
+                @click="lead.addEvidence = !lead.addEvidence"
+                fontWeight="bold"
+            ></VueToggles>
+          </b-form-group>
         </b-col>
         <b-col mb="6">
         </b-col>
@@ -116,6 +117,9 @@ export default {
     errorNickname: {
       type: Boolean,
       default: false
+    },
+    isValidNickname: {
+      type: Boolean
     }
   },
   components: {
