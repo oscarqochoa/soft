@@ -322,11 +322,18 @@ export default {
   computed: {
     ...mapState({
       S_LEADS: (state) => state.SocialNetworkLeadsStore.S_LEADS,
+      S_LEAD_STATUS_SN: (state) => state.SocialNetworkLeadsStore.S_LEAD_STATUS_SN,
+      S_SELLERS_FILTERS: (state) => state.SocialNetworkLeadsStore.S_SELLERS_FILTERS,
+      S_SUB_SOURCES_FILTERS: (state) => state.SocialNetworkLeadsStore.S_SUB_SOURCES_FILTERS,
     }),
     ...mapState("auth", ["currentUser"]),
+    sourceFilter(){
+        return this.filters[4].model
+      }
   },
   async created() {
     await this.getSNRecoveryLeads();
+    this.setOptionsOnFilters();
   },
   methods: {
     ...mapActions("SocialNetworkLeadsStore", [
@@ -335,33 +342,38 @@ export default {
       "A_GET_TRACKING_NEW_LEADS",
       "A_DELETE_LEAD",
       "A_GET_SMS_SENT_TO_NEW_LEADS",
+      "A_GET_STATUS_LEAD",
+      "A_GET_FILTER_SELLERS",
+      "A_GET_SUB_SOURCES_FILTERS"
     ]),
     ...mapMutations("SocialNetworkLeadsStore", ["M_SET_EVIDENCE_URL"]),
     async getSNRecoveryLeads() {
       try {
+
+        console.log(this.filters[2].model, 'this.filters[2].model');
         this.isBusy = true;
-        this.setFilters();
         const response = await this.A_GET_RECOVERY_LEADS_SN_BY_PROGRAM({
           name_text: this.filterPrincipal.model,
-          lead_status: null,
-          cr: null,
-          evidence: 0,
+          lead_status: this.filters[3].model,
+          cr: this.filters[2].model,
+          evidence: this.filters[10].model,
           date_from: this.filters[0].model,
           date_to: this.filters[1].model,
           orderby: 10,
           order: "desc",
-          user_owner: null,
-          mobile: 0,
-          iduser: 1,
-          idrole: 1,
+          user_owner: this.filters[7].model,
+          mobile: this.filters[11].model,
+          iduser: this.currentUser.user_id,
+          idrole: this.currentUser.role_id,
           type: 3,
-          task: null,
-          last_action: null,
+          task: this.filters[9].model,
+          last_action: this.filters[8].model,
           fanpage: this.$route.meta.program,
-          sourcename: null,
+          sourcename: this.filters[4].model,
           perpage: this.paginate.perPage,
           page: this.paginate.currentPage,
           notcall: this.$route.meta.program == 0 ? 1 : 0,
+          subsource: this.filters[4].model == 1 ? this.filters[5].model : this.filters[6].model,
         });
         this.totalLeads = response.total;
         this.fromPage = response.from;
@@ -378,15 +390,18 @@ export default {
         );
       }
     },
+    async setOptionsOnFilters() {
+      await Promise.all([
+        this.A_GET_STATUS_LEAD('recovery'),
+        this.A_GET_FILTER_SELLERS({ moduleId: 15, roles: "[]" }),
+      ]);
+      console.log(this.S_LEAD_STATUS_SN, 'this.S_LEAD_STATUS_SN');
+      this.filters[3].options = this.S_LEAD_STATUS_SN;
+      this.filters[7].options = this.S_SELLERS_FILTERS;
+    },
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;
       this.getSNRecoveryLeads();
-    },
-    setFilters() {
-      this.A_SET_FILTERS({
-        from: this.filters[0].model,
-        to: this.filters[1].model,
-      });
     },
     async openModalTracking(id, name) {
       await this.A_GET_TRACKING_NEW_LEADS({
@@ -472,5 +487,33 @@ export default {
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
       this.actionsOptions.push("delete");
   },
+  watch:{
+    async sourceFilter(newValue){
+      if(newValue == 1 || newValue == 2){
+        if(newValue == 1){
+          await this.A_GET_SUB_SOURCES_FILTERS(newValue)
+          this.$set(this.filters[5], 'options', this.S_SUB_SOURCES_FILTERS)
+          this.filters[5].visible = true
+          this.filters[6].options = []
+          this.filters[6].visible = false
+          this.filters[6].model = null
+        }else if(newValue == 2){
+          await this.A_GET_SUB_SOURCES_FILTERS(newValue)
+          this.$set(this.filters[6], 'options', this.S_SUB_SOURCES_FILTERS)
+          this.filters[6].visible = true
+          this.filters[5].options = []
+          this.filters[5].visible = false
+          this.filters[5].model = null
+        }
+      }else{
+        this.filters[5].visible = false
+        this.filters[5].options = []
+        this.filters[5].model = null
+        this.filters[6].options = []
+        this.filters[6].visible = false
+        this.filters[6].model = null
+      }
+    }
+  }
 };
 </script>

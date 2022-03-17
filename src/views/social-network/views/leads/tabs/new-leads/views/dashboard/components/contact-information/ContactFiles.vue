@@ -1,7 +1,7 @@
 <template>
   <div
     class="ml-1"
-    style="box-shadow: 0 0 6px #c8ccd3; height: 360px !important"
+    style="box-shadow: rgb(200 204 211 / 24%) 0px 0px 6px; height: 360px !important"
   >
     <b-card body-class="px-0 ">
       <template #header>

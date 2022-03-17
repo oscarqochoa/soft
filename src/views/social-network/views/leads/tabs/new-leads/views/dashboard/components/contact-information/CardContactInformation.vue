@@ -11,7 +11,7 @@
         id="ci-source-tabs"
         pills
         active-nav-item-class="bg-primary box-shadow-primary border-primary primary"
-        nav-class="border-bottom-vertical-tab pb-1"
+        nav-class="border-bottom-vertical-tab pb-1 rounded-0"
         lazy
         v-model="sourceIndex"
       >
@@ -27,7 +27,7 @@
             pills
             active-nav-item-class="bg-orange-tab"
             content-class="padding-vertical-tab"
-            nav-class="border-bottom-vertical-tab nav-pill-warning mt-2 pb-1"
+            nav-class="border-bottom-vertical-tab nav-pill-warning mt-2 pb-1 rounded-0"
             lazy
             v-model="subSourceIndex"
           >
@@ -44,7 +44,7 @@
                 <b-tabs
                   id="ci-vertical-tabs"
                   active-nav-item-class="font-weight-bold text-uppercase nav-link-sn-active"
-                  nav-class="border-right-vertical-tab border-bottom-0 h-100"
+                  nav-class="border-right-vertical-tab border-bottom-0 h-100 rounded-0"
                   lazy
                   vertical
                   v-model="replyIndex"

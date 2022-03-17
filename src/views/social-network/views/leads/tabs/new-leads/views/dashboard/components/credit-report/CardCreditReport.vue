@@ -60,7 +60,7 @@
             @click="(tab = 2), getReports()"
           >
             <template #title>
-              Pending {{countData}}
+              Pending
               <b-badge variant="danger" pill v-if="countData != 0">
                 {{ countData }}
               </b-badge>

@@ -1,10 +1,9 @@
 <template>
   <b-row>
     <template v-for="(filter, index) in filters">
-      <transition name="bounce">
+      <transition name="bounce" :key="index">
         <b-col
           v-if="filter.visible === undefined ? true : filter.visible"
-          :key="index"
           :cols="filter.cols ? filter.cols : ''"
           :class="filter.margin === true ? 'mt-1' : ''"
         >

@@ -34,7 +34,7 @@ export default [
                             text: 'Leads'
                         },
                         {
-                            text: 'New',
+                            text: 'Active',
                             active: true
                         },
                     ],
@@ -75,9 +75,6 @@ export default [
             breadcrumb: [
                 {
                     text: 'Leads',
-                },
-                {
-                    text: 'New',
                     to: { name: 'sn-list-new-leads' }
                 },
                 {
