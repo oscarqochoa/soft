@@ -33,6 +33,7 @@ const infoAdmToCrm = () => {
                             window.focus()
                         }
                     )
+                    await window.amgApi.post('/commons/close-all-swal', data)
                 }
             }
             else if (data.status == "3") {
@@ -85,6 +86,7 @@ const infoAdmToCrm = () => {
                             window.focus()
                         }
                     )
+                    await window.amgApi.post('/commons/close-all-swal', data)
 
                 }
 
@@ -139,6 +141,7 @@ const infoAdmToCrm = () => {
                             window.focus()
                         }
                     )
+                    await window.amgApi.post('/commons/close-all-swal', data)
                 }
             }
             else if (data.status == "9") {
@@ -161,7 +164,7 @@ const infoAdmToCrm = () => {
                     html: htmlSwal,
                 })
                 if (result.value) {
-                    //CLose all swal
+                    await window.amgApi.post('/commons/close-all-swal', data)
                 }
                 NotificationMixin.methods.showWindowNotification(
                     data.lead_name,
@@ -193,7 +196,7 @@ const infoAdmToCrm = () => {
                     html: htmlSwal,
                 })
                 if (result.value) {
-                    // CLose all swal
+                    await window.amgApi.post('/commons/close-all-swal', data)
                 }
                 NotificationMixin.methods.showWindowNotification(
                     data.lead_name,

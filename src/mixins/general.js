@@ -244,7 +244,7 @@ export default {
             confirmButtonText: "Yes",
             customClass: {
               confirmButton: "btn btn-primary mr-1",
-              cancelButton: "btn btn-outline-danger  ",
+              cancelButton: "btn btn-outline-danger",
             },
             ...config,
           });
