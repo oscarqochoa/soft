@@ -641,13 +641,13 @@ const actions = {
             throw error
         }
     },
-    async A_GET_STATUS_LEAD({ commit }, body) {
+    async A_GET_STATUS_LEAD({ commit }, type) {
         try {
             const response = await MigrationsService.getStatusLead()
             if (response.status == 200) {
                 let data = response.data
                 let dataFiltered = data.filter(status => {
-                    return (status.id != 4 && status.id != 5)
+                    return type=='leads'?(status.id != 4 && status.id != 5):(status.id == 4 || status.id == 5)
                 })
                 commit('M_SET_LEAD_STATUS_SN', dataFiltered)
             }

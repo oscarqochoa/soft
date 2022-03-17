@@ -175,11 +175,16 @@
       </b-col>
       <b-col md="6">
         <standar-form-group label="DOB" :disabled="!editPersonal">
-          <b-form-datepicker
+          <b-form-input
+            type="date"
+            v-model="personalInfo.dob"
+             :disabled="!editPersonal"
+          ></b-form-input>
+          <!-- <b-form-datepicker
             class="bg-color-white font-bureau-style"
             :disabled="!editPersonal"
             v-model="personalInfo.dob"
-          ></b-form-datepicker>
+          ></b-form-datepicker> -->
         </standar-form-group>
       </b-col>
       <b-col md="6">
@@ -227,15 +232,16 @@
               "
               v-if="showDocument || emptyDocument"
             />
-            <div
+            <input
               :placeholder="startTypingP"
               type="text"
               class="form-control border-document"
               style="padding-top: 7px"
               v-else
-            >
-              {{ personalInfo.numberDocumentEnc }}
-            </div>
+              disabled
+              :value="personalInfo.numberDocumentEnc"
+            />
+
             <b-input-group-append>
               <b-button
                 :disabled="!isCeoOrSupervisor || editPersonal"
@@ -590,11 +596,7 @@ export default {
         }
       } catch (error) {
         this.removePreloader();
-        swal.fire(
-          "Error!",
-          "The information could not be saved, contact support or try again",
-          "error"
-        );
+        this.showErrorSwal("The information could not be saved, contact support or try again");
       }
     },
     onNotCall() {
@@ -820,7 +822,7 @@ export default {
   },
   watch: {
     "personalMobile.phonem"(newValue) {
-      if (newValue.length === 14 && this.editPersonal) {
+      if (newValue.length === 14 && (this.editPersonal || this.editMobile)) {
         this.validateMobile(newValue);
       }
     },

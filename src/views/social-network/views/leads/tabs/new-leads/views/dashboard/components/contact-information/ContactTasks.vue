@@ -2,7 +2,7 @@
   <div
     style="
       margin-bottom: 15px;
-      box-shadow: 0 0 6px #c8ccd3;
+      box-shadow: rgb(200 204 211 / 24%) 0px 0px 6px;
       height: 360px !important;
     "
   >

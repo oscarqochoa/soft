@@ -1,14 +1,14 @@
 <template>
   <div>
-    <b-input-group prepend="GLOBAL SEARCH">
+    <b-input-group prepend="Global Search">
       <b-form-input
         placeholder="By Nickname, Name, Last Name or Mobile"
         v-model="searchGlobal"
         @keyup.enter="search()"
       ></b-form-input>
       <b-input-group-append>
-        <b-button variant="info" @click="search()">
-          <feather-icon icon="SearchIcon" size="12"> </feather-icon>
+        <b-button variant="info" @click="search()" size="sm">
+          <feather-icon icon="SearchIcon"> </feather-icon>
         </b-button>
       </b-input-group-append>
     </b-input-group>

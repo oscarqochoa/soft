@@ -3,8 +3,7 @@ import refreshMessageQuantites from "@/commons/messages/messages.pusher";
 import reloadCounterLoan from '@/views/commons/pusher/reload-counter-loan.pusher'
 import acceptLeadFromSocialNetwork from "@/views/crm/views/Lead/pusher/social-accept-yes-or-not.pusher";
 import sendJustifyFromSupervisor from "@/views/crm/views/schedules/pusher/send-justify-to-supervisor.pusher";
-import sendFromRrhhJustifyToManagment
-    from "@/views/crm/views/schedules/pusher/send-from-rrhh-justify-to-management.pusher";
+import sendFromRrhhJustifyToManagment from "@/views/crm/views/schedules/pusher/send-from-rrhh-justify-to-management.pusher";
 import closedAllSwal from "@/views/commons/pusher/closed-all-swal.pusher";
 import alertMarkSchedules from "@/views/crm/views/schedules/pusher/alert-mark-schedules.pusher";
 import taskAlert from "@/views/commons/pusher/task-alert.pusher";

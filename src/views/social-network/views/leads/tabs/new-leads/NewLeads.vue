@@ -295,7 +295,6 @@ export default {
   created() {
     this.getSocialNetworkLeads();
     this.setOptionsOnFilters();
-    console.log('busy: ', this.S_BUSY_NEW_LEADS)
   },
   methods: {
     ...mapActions('SocialNetworkLeadsStore', ['A_DELETE_LEAD', 'A_GET_STATE_LEAD', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_GET_SMS_SENT_TO_NEW_LEADS', 'A_GET_STATUS_LEAD', 'A_GET_FAN_PAGE_PROGRAMS_FILTERS', 'A_GET_FILTER_SELLERS', 'A_GET_SUB_SOURCES_FILTERS']),
@@ -408,7 +407,6 @@ export default {
     },
     async getSocialNetworkLeads() {
       try {
-        this.setFilters();
         const response = await this.A_GET_NEW_LEADS({
           cr: this.filter[2].model,
           date_from: this.filter[0].model,
@@ -425,7 +423,8 @@ export default {
           type: 1,
           user_owner: this.filter[8].model,
           perpage: this.paginate.perPage,
-          page: this.paginate.currentPage
+          page: this.paginate.currentPage,
+          subsource: this.filter[5].model == 1 ? this.filter[6].model : this.filter[7].model,
         });
         this.totalLeads = response.total;
         this.fromPage = response.from;
@@ -445,7 +444,7 @@ export default {
     async setOptionsOnFilters() {
       await Promise.all([
         this.A_GET_STATE_LEAD(),
-        this.A_GET_STATUS_LEAD(),
+        this.A_GET_STATUS_LEAD('leads'),
         this.A_GET_FAN_PAGE_PROGRAMS_FILTERS(),
         this.A_GET_FILTER_SELLERS({moduleId: 15, roles: "[]"}),
       ])
@@ -463,22 +462,6 @@ export default {
       this.paginate.currentPage = e;
       this.getSocialNetworkLeads();
     },
-    setFilters() {
-      this.A_SET_FILTERS_LEADS({
-        from: this.filter[0].model,
-        to: this.filter[1].model,
-        statusLead: this.filter[2].model,
-        owner: this.filter[3].model,
-        assignTo: this.filter[4].model,
-        cr: this.filter[5].model,
-        program: this.filter[6].model,
-        stAd: this.filter[7].model,
-        sourceName: this.filter[8].model,
-        typeDoc: this.filter[9].model,
-        perPage: this.paginate.perPage,
-        currentPage: this.paginate.currentPage
-      });
-    },
   },
   mounted() {
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
@@ -486,7 +469,6 @@ export default {
   },
   watch:{
     async sourceFilter(newValue){
-      console.log(newValue, "newValue")
       if(newValue == 1 || newValue == 2){
         if(newValue == 1){
           await this.A_GET_SUB_SOURCES_FILTERS(newValue)

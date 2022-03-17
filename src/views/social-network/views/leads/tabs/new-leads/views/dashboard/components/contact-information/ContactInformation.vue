@@ -11,7 +11,6 @@
           <b-form-input
             v-model.trim="contactInfo.catcher"
             type="text"
-            :class="['bg-white']"
           ></b-form-input>
         </b-form-group>
         <b-form-group
@@ -23,7 +22,6 @@
           <b-form-input
             v-model.trim="contactInfo.program"
             type="text"
-            :class="['bg-white']"
           ></b-form-input>
         </b-form-group>
         <b-form-group
@@ -35,7 +33,6 @@
           <b-form-input
             v-model="contactInfo.date"
             type="email"
-            :class="['bg-white']"
           ></b-form-input>
         </b-form-group>
         <b-form-group
