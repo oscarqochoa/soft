@@ -130,6 +130,7 @@
                 v-b-toggle.sidebar-right
                 v-b-tooltip.bottom="'Advanced Search'"
                 variant="primary"
+                v-if="hasFilters"
               >
                 <div class="d-flex justify-content-between">
                   <feather-icon icon="FilterIcon" size="15" />
@@ -191,7 +192,7 @@ export default {
     vSelect,
   },
   props: {
-    filter: { required: true, type: Array },
+    filter: { required: false, type: Array },
     totalRows: { required: false, type: Number },
     paginate: { required: true, type: Object },
     startPage: { required: false, type: Number },
@@ -206,6 +207,9 @@ export default {
     ...mapState({
       perPage: (state) => state.appConfig.perPage,
     }),
+    hasFilters(){
+      return this.filter ? (Object.keys(this.filter).length !== 0) : false;
+    }
   },
   created() {
     this.filter.map((fil) => {

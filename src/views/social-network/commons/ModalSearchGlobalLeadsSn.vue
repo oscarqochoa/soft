@@ -1,13 +1,11 @@
 <template>
   <div>
     <b-modal
-      modal
       title="GLOBAL SEARCH"
       v-model="mutableShow"
       size="xl"
-      modal-class="modal-primary"
       hide-footer
-      body-class="mb-2"
+      body-class="p-0"
       @hidden="close"
       title-tag="h3"
     >
@@ -62,14 +60,14 @@
                 <b-img
                   fluid
                   :src="baseUrl + '/images/social-network/facebook.png'"
-                  style="width: 50px"
+                  style="width: 30px"
                 />
               </div>
               <div v-if="data.item.sourcesname_id == 32" class="text-center">
                 <b-img
                   fluid
                   :src="baseUrl + '/images/social-network/google.png'"
-                  style="width: 50px"
+                  style="width: 30px"
                 />
               </div>
             </div>
