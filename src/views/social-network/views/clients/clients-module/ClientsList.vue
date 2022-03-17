@@ -1,55 +1,56 @@
 <template>
   <div>
     <b-card
-      no-body
-      class="mb-0"
+        no-body
+        class="mb-0"
     >
 
       <filter-slot
 
-        :filter="filter"
-        :filter-principal="filterPrincipal"
-        :total-rows="totalRows"
-        :paginate="paginate"
-        :start-page="startPage"
-        :to-page="toPage"
-        @reset-all-filters="resetAllFilters"
-        @reload="$refs['clientsList'].refresh()"
+          :filter="filter"
+          :filter-principal="filterPrincipal"
+          :total-rows="totalRows"
+          :paginate="paginate"
+          :start-page="startPage"
+          :to-page="toPage"
+          @reset-all-filters="resetAllFilters"
+          @reload="$refs['clientsList'].refresh()"
       >
 
         <b-table
-          id="clientsList"
-          slot="table"
-          ref="clientsList"
-          show-empty
-          sticky-header="50vh"
-          no-provider-filtering
-          :busy.sync="isBusy"
-          :items="search"
-          :fields="filteredFields"
-          :per-page="paginate.perPage"
-          :current-page="paginate.currentPage"
-          :filter="filter"
+            id="clientsList"
+            slot="table"
+            ref="clientsList"
+            show-empty
+            sticky-header="50vh"
+            no-provider-filtering
+            :busy.sync="isBusy"
+            :items="search"
+            :fields="filteredFields"
+            :per-page="paginate.perPage"
+            :current-page="paginate.currentPage"
+            :filter="filter"
 
-          responsive="sm"
+            responsive="sm"
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
-              <b-spinner class="align-middle mr-1" />
+              <b-spinner class="align-middle mr-1"/>
               <strong>Loading ...</strong>
             </div>
           </template>
 
           <template v-slot:cell(name)="data">
             <div
-              class="d-flex flex-column  justify-content-center align-items-start "
+                class="d-flex flex-column  justify-content-center align-items-start "
             >
 
               <router-link
-                :class="[textLink]"
-                :to="`/crm/leads/${data.item.lead_id}`"
-                target="_blank"
-              >  {{ data.item.lead_name }}</router-link>
+                  :class="[textLink]"
+                  :to="`/social-network/leads/new/dashboard/${data.item.lead_id}`"
+                  target="_blank"
+              > {{ data.item.lead_name }}
+              </router-link>
 
             </div>
 
@@ -67,9 +68,9 @@
 
             <div class="d-flex flex-column  justify-content-center align-items-start ">
               <span
-                v-for="(account, index) in data.item.accounts"
-                :key="index"
-                style="padding-bottom: 4px"
+                  v-for="(account, index) in data.item.accounts"
+                  :key="index"
+                  style="padding-bottom: 4px"
               >{{ account.account }}</span>
             </div>
 
@@ -79,56 +80,56 @@
 
             <div class="d-flex flex-column  justify-content-center align-items-start  ">
               <template
-                v-for="(account, index) in data.item.accounts"
+                  v-for="(account, index) in data.item.accounts"
               >
 
                 <span
-                  :key="index"
-                  class="d-flex justify-content-between align-items-center "
-                  style="padding-bottom: 4px"
+                    :key="index"
+                    class="d-flex justify-content-between align-items-center "
+                    style="padding-bottom: 4px"
                 >
                   <feather-icon
-                    v-if="account.status === 1"
-                    icon="CircleIcon"
-                    size="13"
-                    :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                      v-if="account.status === 1"
+                      icon="CircleIcon"
+                      size="13"
+                      :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                   />
                   <div
-                    v-if="account.status === 2"
-                    class="client-status client-status-hold1"
-                    :style="`top: 50%;margin-right: 5px; background: ${
+                      v-if="account.status === 2"
+                      class="client-status client-status-hold1"
+                      :style="`top: 50%;margin-right: 5px; background: ${
                       account.validate_sp === 2 ? 'red' : ''
                     }`"
                   />
                   <feather-icon
-                    v-if="account.status === 3"
-                    icon="CircleIcon"
-                    size="13"
-                    :style="`color: #0066FF; border-color: #0066FF; background: #0066FF; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                      v-if="account.status === 3"
+                      icon="CircleIcon"
+                      size="13"
+                      :style="`color: #0066FF; border-color: #0066FF; background: #0066FF; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                   />
                   <feather-icon
-                    v-if="
+                      v-if="
                       account.status == 4 ||
                         account.status == 5 ||
                         account.status == 6
                     "
-                    icon="CircleIcon"
-                    size="13"
-                    :style="`color: red; border-color: red; background: red; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                      icon="CircleIcon"
+                      size="13"
+                      :style="`color: red; border-color: red; background: red; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                   />
                   <span>
                     {{
                       account.status == 1
-                        ? "Active"
-                        : account.status == 2
-                          ? "Hold"
-                          : account.status == 3
-                            ? "Transition"
-                            : account.status == 4
-                              ? "Canceled"
-                              : account.status == 5
-                                ? "Loyal"
-                                : "Closed"
+                          ? "Active"
+                          : account.status == 2
+                              ? "Hold"
+                              : account.status == 3
+                                  ? "Transition"
+                                  : account.status == 4
+                                      ? "Canceled"
+                                      : account.status == 5
+                                          ? "Loyal"
+                                          : "Closed"
                     }}
                   </span>
                 </span>
@@ -140,30 +141,30 @@
 
           <template #cell(advisor)="data">
             <div
-              class="d-flex flex-column justify-content-start align-items-start"
+                class="d-flex flex-column justify-content-start align-items-start"
             >
               <span
-                v-for="(account, index) in data.item.accounts"
-                :key="index"
-                style="padding-bottom: 4px"
+                  v-for="(account, index) in data.item.accounts"
+                  :key="index"
+                  style="padding-bottom: 4px"
               > <span>
                 <feather-icon
-                  v-if="account.state_advisor === 1"
-                  icon="CircleIcon"
-                  size="13"
-                  :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                    v-if="account.state_advisor === 1"
+                    icon="CircleIcon"
+                    size="13"
+                    :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                 />
                 <feather-icon
-                  v-if="account.state_advisor === 2"
-                  icon="CircleIcon"
-                  size="13"
-                  :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                    v-if="account.state_advisor === 2"
+                    icon="CircleIcon"
+                    size="13"
+                    :style="`color: #00CC00; border-color: #00CC00; background: #00CC00; border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                 />
                 <feather-icon
-                  v-if="account.state_advisor === 0"
-                  icon="CircleIcon"
-                  size="13"
-                  :style="`color: rgb(204, 204, 204); border-color: #00CC00; background: rgb(204, 204, 204); border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
+                    v-if="account.state_advisor === 0"
+                    icon="CircleIcon"
+                    size="13"
+                    :style="`color: rgb(204, 204, 204); border-color: #00CC00; background: rgb(204, 204, 204); border-radius: 50%; margin-bottom: 2px; margin-right: 5px;`"
                 />
               </span>{{ account.advisor_name }}</span>
             </div>
@@ -171,12 +172,12 @@
 
           <template #cell(creation_date)="data">
             <div
-              class="d-flex flex-column justify-content-center align-items-start"
+                class="d-flex flex-column justify-content-center align-items-start"
             >
               <span
-                v-for="(account, index) in data.item.accounts"
-                :key="index"
-                style="padding-bottom: 4px"
+                  v-for="(account, index) in data.item.accounts"
+                  :key="index"
+                  style="padding-bottom: 4px"
               >{{ account.created_at | myGlobal }}</span>
             </div>
           </template>
@@ -184,10 +185,10 @@
           <template #cell(fee_charges)="data">
 
             <div
-              v-for="(account, index) in data.item.accounts"
-              :key="index"
-              class="d-flex flex-column justify-content-center align-items-start "
-              style="padding-bottom: 4px"
+                v-for="(account, index) in data.item.accounts"
+                :key="index"
+                class="d-flex flex-column justify-content-center align-items-start "
+                style="padding-bottom: 4px"
             >
               ${{ account.charges }}
             </div>
@@ -197,10 +198,10 @@
           <template #cell(mp)="data">
 
             <div
-              v-for="(account, index) in data.item.accounts"
-              :key="index"
-              class="d-flex flex-column justify-content-start align-items-start"
-              style="padding-bottom: 4px"
+                v-for="(account, index) in data.item.accounts"
+                :key="index"
+                class="d-flex flex-column justify-content-start align-items-start"
+                style="padding-bottom: 4px"
             >
 
               ${{ account.monthly_amount }}
@@ -209,45 +210,45 @@
 
           <template #cell(pt)="data">
             <div
-              class="d-flex flex-column justify-content-start align-items-start"
+                class="d-flex flex-column justify-content-start align-items-start"
             >
               <span
-                v-for="(account, index) in data.item.accounts"
-                :key="index"
-                style="padding-bottom: 4px"
+                  v-for="(account, index) in data.item.accounts"
+                  :key="index"
+                  style="padding-bottom: 4px"
               >
 
                 <b-img
-                  v-if="account.type_payment == 'PA' && account.status_payment == '1' && account.srb == 'ACTIVE'"
-                  :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-auto.ico`"
-                  style="height: 20px"
+                    v-if="account.type_payment == 'PA' && account.status_payment == '1' && account.srb == 'ACTIVE'"
+                    :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-auto.ico`"
+                    style="height: 20px"
                 />
 
                 <b-img
-                  v-if="account.type_payment == 'PA' && account.status_payment == '0' && account.srb != 'ACTIVE'"
-                  :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-auto-no.ico`"
-                  style="height: 20px"
+                    v-if="account.type_payment == 'PA' && account.status_payment == '0' && account.srb != 'ACTIVE'"
+                    :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-auto-no.ico`"
+                    style="height: 20px"
                 />
                 <b-img
-                  v-if="account.type_payment == 'PA' && account.status_payment == '1' && account.srb != 'ACTIVE'"
-                  :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-auto-no.ico`"
-                  style="height: 20px"
-                />
-
-                <b-img
-                  v-if="account.type_payment == 'MA'"
-                  :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-manual.ico`"
-                  style="height: 20px"
+                    v-if="account.type_payment == 'PA' && account.status_payment == '1' && account.srb != 'ACTIVE'"
+                    :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-auto-no.ico`"
+                    style="height: 20px"
                 />
 
                 <b-img
-                  v-if="account.type_payment == 'OT'"
-                  :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-others.ico`"
-                  style="height: 20px"
+                    v-if="account.type_payment == 'MA'"
+                    :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-manual.ico`"
+                    style="height: 20px"
+                />
+
+                <b-img
+                    v-if="account.type_payment == 'OT'"
+                    :src="`${baseImg}/assets/images/social-network/paymentType/paymenttype-others.ico`"
+                    style="height: 20px"
                 />
                 <span
-                  v-if="account.day_payment!=null"
-                  class="pl-1"
+                    v-if="account.day_payment!=null"
+                    class="pl-1"
                 >({{ account.day_payment }})</span>
 
               </span>
@@ -262,12 +263,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
 import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
 import dataFields
-from '@/views/social-network/views/clients/clients-module/fields.data'
+  from '@/views/social-network/views/clients/clients-module/fields.data'
 import dataFilters
-from '@/views/social-network/views/clients/clients-module/filters.data'
+  from '@/views/social-network/views/clients/clients-module/filters.data'
 
 import ClientService from '@/views/social-network/views/clients/client.service'
 
@@ -396,7 +397,7 @@ export default {
           type: this.paymentType,
           day: this.paymentDay,
           rol_id: this.currentUser.arrRoles.find(rol => rol.module_id == 2)
-            .role_id,
+              .role_id,
           session: this.currentUser.user_id,
           modul: this.modul,
         }

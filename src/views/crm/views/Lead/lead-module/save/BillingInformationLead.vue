@@ -106,7 +106,7 @@
               <img
                 :src="imgcard"
                 :style="`${!imgCardChange ? 'display:none':'display:block'}height:30px;width:70px;`"
-              />
+               alt=""/>
             </b-col>
           </b-row>
         </b-form-group>

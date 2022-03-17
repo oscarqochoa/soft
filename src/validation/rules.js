@@ -1,12 +1,6 @@
-import { extend } from 'vee-validate'
-import {
-  required,
-  email,
-  length,
-  max,
-  min,
-  min_value,
-} from 'vee-validate/dist/rules'
+import {extend} from 'vee-validate'
+import {email, length, max, min, min_value, required,} from 'vee-validate/dist/rules'
+import {amgApi} from "@/service/axios";
 
 extend('secret', {
   validate: value => value === 'example',
@@ -14,14 +8,10 @@ extend('secret', {
 })
 extend('title-required', {
   validate(value) {
-    if (value.title) {
-      return true
-    }
-    return false
+    return !!value.title;
   },
   message: 'Title is required',
 })
-
 extend('length', {
   ...length,
   message: 'is length',
@@ -45,7 +35,6 @@ extend('required', {
 extend('email', {
   ...email,
   message: 'This field must be a valid email',
-
 })
 extend('chat-compose-required', {
     ...required,
@@ -68,7 +57,6 @@ extend('boolean', {
   validate: value => value == true,
   message: '',
 })
-
 extend('validate-hours-92', {
   validate: value => value >= 92,
   message: 'The minimum of hours is 92',
@@ -99,3 +87,23 @@ extend('specialpassword', {
   },
   message: 'The Format must have a minimum. A capital letter, a lowercase, a number, a special character, and a minimum of 8 characters. Example: Abcd1234@',
 })
+
+extend('unique-nickname', {
+  async validate(value) {
+    const resp = await amgApi.post('/lead/social-network/validate-exists-nickname', {
+      nickname: value, lead_id: null
+    });
+    return !resp.data.code;
+  },
+  message: 'is not unique',
+});
+
+extend('unique-mobile', {
+  async validate(value) {
+    const resp = await amgApi.post('/lead/social-network/unique-mobile-sn', {
+      mobile: value
+    });
+    return !resp.data.code;
+  },
+  message: 'is not unique',
+});

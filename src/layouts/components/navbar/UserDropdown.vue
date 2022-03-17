@@ -9,7 +9,7 @@
         <p
           class="user-name font-weight-bolder mb-0"
         >{{ currentUser.fullName || currentUser.username }}</p>
-        <span class="user-status">{{ currentUser.roleName }}</span>
+        <span class="user-status">{{ currentUser.role_name ? currentUser.role_name : currentUser.roleName }} {{ ((isCeo || isSupervisor) ? '' : (currentUser.level_name || '')) }}</span>
       </div>
       <b-avatar
         size="40"

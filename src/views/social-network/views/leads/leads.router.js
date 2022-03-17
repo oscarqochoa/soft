@@ -12,10 +12,16 @@ export default [
         name: 'leads-social-network',
         component: () => import('@/views/social-network/views/leads/Leads.vue'),
         redirect: { name: 'sn-list-new-leads' },
+        meta: {
+            permittedRoles: [12, 9, 11, 2, 1]
+        },
         children: [
             {
                 path: '',
-                redirect: { name: 'sn-list-new-leads' }
+                redirect: { name: 'sn-list-new-leads' },
+                meta: {
+                    permittedRoles: [12, 9, 11, 2, 1]
+                },
             },
             {
                 path: 'new',
@@ -32,24 +38,7 @@ export default [
                             active: true
                         },
                     ],
-                },
-            },
-
-            {
-                path: 'old',
-                component: OldLeads,
-                name: 'sn-list-old-leads',
-                meta: {
-                    pageTitle: 'Leads',
-                    breadcrumb: [
-                        {
-                            text: 'Leads'
-                        },
-                        {
-                            text: 'Old',
-                            active: true
-                        },
-                    ],
+                    permittedRoles: [12, 9, 11, 2, 1]
                 },
             },
         ],
@@ -73,6 +62,7 @@ export default [
                     active: true,
                 }
             ],
+            permittedRoles: [12, 9, 11, 2, 1]
         }
 
     },
@@ -95,6 +85,7 @@ export default [
                     active: true,
                 },
             ],
+            permittedRoles: [12, 9, 11, 2, 1]
         },
     },
     {
@@ -115,7 +106,8 @@ export default [
                     text: 'Dashboard',
                     active: true
                 }
-            ]
+            ],
+            permittedRoles: [12, 9, 11, 2, 1]
         }
     },
     {
@@ -136,7 +128,8 @@ export default [
                     text: 'Edit Lead',
                     active: true,
                 }
-            ]
+            ],
+            permittedRoles: [12, 9, 11, 2, 1]
         }
     }
 

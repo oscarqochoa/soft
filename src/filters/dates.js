@@ -32,3 +32,6 @@ Vue.filter("myGlobalDay", (created) => {
 Vue.filter("myDate", function (created) {
   return moment(created).format("MMMM Do YYYY");
 });
+Vue.filter("formatDate", function (created) {
+  return moment(created).format("YYYY-MM-DD");
+});
