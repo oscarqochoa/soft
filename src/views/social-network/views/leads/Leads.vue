@@ -5,31 +5,6 @@
     <header-slot>
       <template #actions>
         <div>
-
-            <!-- v-if="[1, 2].includes(currentUser.role_id) && isLeadsRoute" -->
-          <b-dropdown
-            v-if="false"
-            id="dropdown-6"
-            variant="info"
-            :disabled="isLoading"
-          >
-            <template #button-content>
-              <template v-if="isLoading">
-                <b-spinner small />
-              </template>
-              <template v-else>
-                <feather-icon icon="DownloadIcon" size="16" class="align-middle" />
-              </template>
-              <span class="ml-1">Export To Excel</span>
-            </template>
-
-            <b-dropdown-item @click="exportExcel(1, 1)">Export Current Page</b-dropdown-item>
-            <b-dropdown-item @click="exportExcel(1, 2)">Export All Page</b-dropdown-item>
-            <b-dropdown-item
-              :disabled="!S_SELECTED_LEADS.length"
-              @click="exportExcel(1, 3)"
-            >Export Selection</b-dropdown-item>
-          </b-dropdown>
           <b-row style="justify-content: right;">
             <b-col md="9">
               <global-search-component></global-search-component>
@@ -42,36 +17,43 @@
       </template>
     </header-slot>
 
-    <!-- <b-nav card-header pills class="m-0">
-      <b-nav-item
-        exact-active-class="active"
-        :link-classes="['px-3', bgTabsNavs]"
-        exact
-        :to="{ name: 'sn-list-new-leads' }"
-        >NEW LEADS
-      </b-nav-item>
-      <b-nav-item
-        exact-active-class="active"
-        :link-classes="['px-3', bgTabsNavs]"
-        exact
-        :to="{ name: 'sn-list-old-leads' }"
-        >OLD LEADS
-      </b-nav-item>
-    </b-nav> -->
-    <new-leads></new-leads>
+    <div v-if="G_IS_CEO || G_IS_SUPERVISOR">
+        <b-nav card-header pills class="m-0">
+          <b-nav-item
+            exact-active-class="active"
+            :link-classes="['px-3', bgTabsNavs]"
+            exact
+            :to="{ name: 'sn-list-new-leads' }"
+            >LEADS
+          </b-nav-item>
 
-    <!-- <modal-search-global-leads-sn
-      v-if="modalGlobalSearch"
-      :show="modalGlobalSearch"
-      @onClose="closeModalGlobalSearch">
-    </modal-search-global-leads-sn> -->
-    <!-- b-modal#modalCreateAnswer(v-model='modalGlobalSearch' header-class='b-vue-modal-header' hide-footer   scrollable body-class="search-global-modal" modal-class="search-modal" size="xl")
-        template(#modal-header='{ close }')
-            span
-            h3 GLOBAL SEARCH
-            i.fas.fa-times-circle.text-white(style='color: #d0cdc5; font-size: 20px; cursor: pointer' @click='close')
-        modal-global-leads(:global="global" :data="leadsGlobal"  ) -->
+          <b-nav-item
+            exact-active-class="active"
+            :link-classes="['px-3', bgTabsNavs]"
+            exact
+            :to="{ name: 'sn-list-without-potential-leads' }"
+            >WITHOUT POTENTIAL
+          </b-nav-item>
 
+          <b-nav-item
+            exact-active-class="active"
+            :link-classes="['px-3', bgTabsNavs]"
+            exact
+            :to="{ name: 'sn-list-closed-leads' }"
+            >CLOSED
+          </b-nav-item>
+        </b-nav>
+        <b-card 
+          no-body
+          class="border-top-primary border-3 border-table-radius px-0"
+        > 
+          <router-view :key="$route.name"/>
+        </b-card>
+    </div>
+
+    <div v-else>
+      <new-leads></new-leads>
+    </div>
 
   </div>
 </template>
@@ -86,7 +68,6 @@ import GlobalSearchComponent from '../../commons/GlobalSearchComponent.vue'
 export default {
   components: {
     LeadListAddNew,
-    // "modal-search-global-leads-sn": ModalSearchGlobalLeadsSn,
     LeadCreateSocial,
     NewLeads,
     GlobalSearchComponent
@@ -110,6 +91,8 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
+      G_IS_SUPERVISOR: "auth/isSupervisor",
+      G_IS_CEO: "auth/isCeo",
     }),
     ...mapState({
       S_SELECTED_LEADS: state => state.CrmLeadStore.S_SELECTED_LEADS,
