@@ -188,7 +188,10 @@ export default {
              this.userId = this.userOfRecoveryList[0].id
              this.keyUser++
           }
-          console.log(this.userOfRecoveryList)
+          if(this.currentUser.role_id == 11){
+            this.firstRequestStatusButton()
+          }
+          
         } catch (error) {
           console.log(error)
           this.showToast(
@@ -258,8 +261,10 @@ export default {
     },
   },
   created: function () {
-    this.firstRequestStatusButton()
     this.getUserOfRecoveryList()
+    if(this.currentUser.role_id != 11){
+      this.firstRequestStatusButton()
+    }
   },
 }
 </script>

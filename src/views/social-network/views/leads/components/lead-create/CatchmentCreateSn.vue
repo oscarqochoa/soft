@@ -11,7 +11,7 @@
       </b-row>
       <b-row class="mt-2">
         <b-col md="4" class="text-left">
-          <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-1">
+          <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-1,ST/AD">
             <b-col md="12" >
               <b-form-group
                   label="ST/AD"
@@ -40,7 +40,7 @@
               <input type="radio" class="d-none bg-green" v-model="lead.state_h" />
             </b-col>
           </ValidationProvider>
-          <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-2">
+          <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-2,Lead Owner">
             <b-col md="12">
 
               <b-form-group
@@ -70,7 +70,7 @@
 
             </b-col>
           </ValidationProvider>
-          <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-3">
+          <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-3,Suggestions">
             <b-col md="12">
               <b-form-group
                   id="fieldset-horizontal"
@@ -117,7 +117,7 @@
           >
             <b-row>
               <b-col md="6" class="">
-                <ValidationProvider id="input-create-lead-4" rules="required" v-slot="{errors}" name="input-create-lead-4">
+                <ValidationProvider id="input-create-lead-4" rules="required" v-slot="{errors}" name="input-create-lead-4,Source facebook">
                   <b-row>
                     <b-col  md="12" class=" text-center d-flex align-items-center justify-content-center">
                       <button
@@ -138,7 +138,7 @@
                 </ValidationProvider>
 
                 <!-- Sub Sources Facebook -->
-                <ValidationProvider id="input-create-lead-5" rules="required" v-slot="{errors}" name="input-create-lead-5">
+                <ValidationProvider id="input-create-lead-5" rules="required" v-slot="{errors}" name="input-create-lead-5,Subsource facebook">
                   <div class="mt-3 d-flex align-items-center justify-content-between">
                     <template v-for="(subSource, index) in S_SUB_SOURCES">
                       <div
@@ -169,7 +169,7 @@
               <!-- GOOGLE -->
 
               <b-col md="6 pt-0" class="">
-                <ValidationProvider id="input-create-lead-6" rules="required" v-slot="{errors}" name="input-create-lead-6">
+                <ValidationProvider id="input-create-lead-6" rules="required" v-slot="{errors}" name="input-create-lead-6,Source google">
                   <b-row>
                     <b-col md="12" class="text-center d-flex align-items-center justify-content-center">
                       <button
@@ -189,7 +189,7 @@
                 </ValidationProvider>
 
                 <!-- Contact Method -->
-                <ValidationProvider id="input-create-lead-7" :rules="`${ isGoogle? 'required' : ''}`" v-slot="{errors}" name="input-create-lead-7">
+                <ValidationProvider id="input-create-lead-7" :rules="`${ isGoogle? 'required' : ''}`" v-slot="{errors}" name="input-create-lead-7,Google ads">
                   <div class="mt-3 d-flex align-items-center justify-content-between">
                     <button
                         class="rounded btn btn-light border-0 btn-source font-small-2"
@@ -226,7 +226,7 @@
                 </ValidationProvider>
 
                 <!-- Sub Sources Google -->
-                <ValidationProvider id="input-create-lead-8" rules="required" v-slot="{errors}" name="input-create-lead-8">
+                <ValidationProvider id="input-create-lead-8" rules="required" v-slot="{errors}" name="input-create-lead-8,Subsource google">
                   <div class="mt-2 d-flex align-items-center justify-content-between">
                     <template v-for="(subSource, index) in S_SUB_SOURCES">
                       <div
@@ -269,7 +269,8 @@
                 label="Program"
 
             >
-              <ValidationProvider id="input-create-lead-9" rules="required" v-slot="{errors}" name="input-create-lead-9">
+
+              <ValidationProvider id="input-create-lead-9" rules="required" v-slot="{errors}" name="input-create-lead-9,Programs">
                 <b-row class="d-flex justify-content-around align-items-center px-0 content-program">
                   <template v-for="(program, index) in S_FAN_PAGE_PROGRAMS">
                     <div class="" :key="index" :title="program.value">
@@ -293,7 +294,6 @@
 
           <div v-if="lead.state_h && lead.fanpage_id && lead.sourcesname_id == 17">
             <b-form-group
-                id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                 label-cols-sm="4"
                 label-for="input-horizontal"
@@ -301,8 +301,9 @@
                 content-cols-sm
                 content-cols-lg="10"
                 label="Flyers"
+                id="input-create-lead-10"
             >
-              <ValidationProvider  rules="required" v-slot="{errors}" name="input-create-lead-11">
+              <ValidationProvider  rules="required" v-slot="{errors}" name="input-create-lead-10, Flyer">
                 <div class="content-flyer">
                   <div class="d-flex margin-flyer" id="input-create-lead-11">
                     <b-avatar
@@ -542,25 +543,31 @@ export default {
 .sub-sources{
   padding: 6px 10px;
   font-size: 14px;
+  transition: .3s all ease-in-out;
 }
 .btn-fanpage{
   color: #fff;
   font-weight: normal;
 }
 .btn-program-1{
-  background: #dfa62e;
+  background: #dfa62e !important;
+  color: #fff !important;
 }
 .btn-program-2{
-  background: #f9b402;
+  background: #f9b402 !important;
+  color: #fff !important;
 }
 .btn-program-3{
-  background: #00559b;
+  background: #00559b !important;
+  color: #fff !important;
 }
 .btn-program-4{
-  background: #4c6534;
+  background: #4c6534 !important;
+  color: #fff !important;
 }
 .btn-program-5{
-  background: #00c5a2;
+  background: #00c5a2 !important;
+  color: #fff !important;
 }
 .image-flyer{
   height: 168px;
@@ -620,6 +627,6 @@ export default {
 }
 .dark-layout .card {
   box-shadow: 0 1px 3px 0 rgb(255 255 255 / 0.1), 0 1px 2px -1px rgb(255 255 255 / 0.1) !important;
-  background: #222222;
+  background: #222222 !important;
 }
 </style>

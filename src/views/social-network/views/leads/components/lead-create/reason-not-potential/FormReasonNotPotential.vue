@@ -1,5 +1,5 @@
 <template>
-  <div class="container-reaseon-not-potential" id="input-create-lead-20">
+  <div class="container-reaseon-not-potential" id="input-create-lead-18">
     <b-form-input
         v-model="reason"
         class="font-bureau-style border-hover mt-2 mb-2"
