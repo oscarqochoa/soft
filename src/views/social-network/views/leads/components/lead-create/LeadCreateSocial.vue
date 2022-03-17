@@ -1,8 +1,8 @@
 <template>
   <div >
     <b-button
-        variant="success"
-        class="mr-1 d-flex align-items-center"
+        :variant="color_btn"
+        :class="`mr-1 d-flex align-items-center btn-${color_btn}`"
         @click="onOpenSidebar"
     >
       <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
@@ -15,11 +15,22 @@
         shadow
         backdrop
         right
-        title="Create Lead"
         header-class="text-primary"
         lazy
         @hidden="onCloseSidebar"
     >
+      <header-slot>
+
+      </header-slot>
+
+      <template #header>
+        <div class="sidebar-header">
+          <h2>Create Lead</h2>
+          <button @click="onCloseSidebar" class="btn-close">
+            <feather-icon icon="XIcon" size="24"/>
+          </button>
+        </div>
+      </template>
 
       <template #default>
         <!-- BODY -->
@@ -143,6 +154,10 @@ export default {
     Ripple,
   },
   props: {
+    color_btn: {
+      type: String,
+      default: 'success'
+    }
   },
   data() {
     return {
@@ -584,7 +599,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .btn-create-lead{
   padding-top: .15rem !important;
   margin-left: .3rem;
@@ -597,5 +612,30 @@ export default {
 .container-create{
   overflow-y: scroll !important;
   scroll-behavior: smooth !important;
+}
+.b-sidebar{
+  width: 100% !important;
+}
+.sidebar-xl{
+  width: 90rem !important;
+}
+.sidebar-header{
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  h2{
+    color: #0090e7 !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+  }
+  .btn-close{
+    background: none;
+    border: none;
+    color: #1b2337 !important;
+  }
+}
+.dark-layout .sidebar-header .btn-close {
+  color: #f1f1f1 !important;
 }
 </style>

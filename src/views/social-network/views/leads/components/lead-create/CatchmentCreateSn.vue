@@ -269,6 +269,7 @@
                 label="Program"
 
             >
+
               <ValidationProvider id="input-create-lead-9" rules="required" v-slot="{errors}" name="input-create-lead-9,Programs">
                 <b-row class="d-flex justify-content-around align-items-center px-0 content-program">
                   <template v-for="(program, index) in S_FAN_PAGE_PROGRAMS">
@@ -542,25 +543,31 @@ export default {
 .sub-sources{
   padding: 6px 10px;
   font-size: 14px;
+  transition: .3s all ease-in-out;
 }
 .btn-fanpage{
   color: #fff;
   font-weight: normal;
 }
 .btn-program-1{
-  background: #dfa62e;
+  background: #dfa62e !important;
+  color: #fff !important;
 }
 .btn-program-2{
-  background: #f9b402;
+  background: #f9b402 !important;
+  color: #fff !important;
 }
 .btn-program-3{
-  background: #00559b;
+  background: #00559b !important;
+  color: #fff !important;
 }
 .btn-program-4{
-  background: #4c6534;
+  background: #4c6534 !important;
+  color: #fff !important;
 }
 .btn-program-5{
-  background: #00c5a2;
+  background: #00c5a2 !important;
+  color: #fff !important;
 }
 .image-flyer{
   height: 168px;
@@ -620,6 +627,6 @@ export default {
 }
 .dark-layout .card {
   box-shadow: 0 1px 3px 0 rgb(255 255 255 / 0.1), 0 1px 2px -1px rgb(255 255 255 / 0.1) !important;
-  background: #222222;
+  background: #222222 !important;
 }
 </style>
