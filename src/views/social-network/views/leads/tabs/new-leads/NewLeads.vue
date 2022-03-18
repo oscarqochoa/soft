@@ -69,7 +69,7 @@
                 :class="textLink"
                 :to="`/social-network/leads/new/dashboard/${data.item.id}`"
                 target="_blank"
-              >{{ data.item.nickname }}</router-link>
+              >{{ data.item.nickname ? data.item.nickname : data.item.not_nickname }}</router-link>
               <br>
               <span>{{data.item.lead_name}}</span>
             </div>
