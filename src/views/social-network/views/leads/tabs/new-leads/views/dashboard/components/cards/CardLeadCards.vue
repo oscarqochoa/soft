@@ -5,7 +5,18 @@
         <div>Credit Cards</div>
       </b-card-title>
     </template>
-
+    <template #footer>
+      <div class="text-right">
+        <b-button
+          variant="primary"
+          class="float-right mt-2 mr-2"
+          @click="openModalCreateCard"
+        >
+          <feather-icon icon="PlusIcon"></feather-icon>
+          ADD
+        </b-button>
+      </div>
+    </template>
     <b-table small :fields="table.fields" :items="cards" sticky-header="250px">
       <template #cell(card_number)="data">
         {{ "XXXX-XXXX-XXXX-" + data.item.cardnumber }}
@@ -38,15 +49,6 @@
         </b-button>
       </template>
     </b-table>
-
-    <b-button
-      variant="primary"
-      class="float-right mt-3 mr-2"
-      @click="openModalCreateCard"
-    >
-      <feather-icon icon="PlusIcon"></feather-icon>
-      ADD
-    </b-button>
 
     <modal-create-card
       v-if="showModalCreateCard"

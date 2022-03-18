@@ -6,11 +6,30 @@
       height: 360px !important;
     "
   >
-    <b-card body-class="px-0" class="h-card-sn">
+    <b-card body-class="px-0" class="h-card-sn h-100">
       <template #header>
         <b-card-title class="font-weight-bolder"> Tasks </b-card-title>
       </template>
-
+      <template #footer>
+        <div class="col-lg-12 text-right">
+          <b-button
+            v-show="countTaskDone != 0"
+            variant="outline-secondary"
+            class="btn-icon mr-1"
+            title="History Tasks"
+            @click="openModalTaskHistory"
+          >
+            <feather-icon icon="ListIcon"></feather-icon>
+          </b-button>
+          <b-button
+            variant="primary"
+            @click="openModalCreateTask"
+            v-if="isLeadFull || taskForSn"
+          >
+            <feather-icon icon="PlusIcon"></feather-icon> ADD
+          </b-button>
+        </div>
+      </template>
       <b-col sm="12" md="12" lg="12" xl="12" class="px-2">
         <b-tabs id="sn-d-ci-tasks" pills class="override-tab">
           <b-tab
@@ -39,7 +58,19 @@
         </b-tabs>
       </b-col>
 
-      <b-table small :fields="fields" :items="tasks" sticky-header="180px">
+      <b-table
+        small
+        :fields="fields"
+        :items="tasks"
+        sticky-header="180px"
+        :busy="isBusy"
+      >
+        <template #table-busy>
+          <div class="text-center text-primary my-2">
+            <b-spinner class="align-middle mr-1" />
+            <strong>Loading ...</strong>
+          </div>
+        </template>
         <template #cell(date)="data">
           <template v-if="!lead.state || lead.state == 'UNK'">
             {{ data.item.due_date | myGlobalDay }}
@@ -104,25 +135,6 @@
           </b-button>
         </template>
       </b-table>
-
-      <div class="col-lg-12 text-right">
-        <b-button
-          v-show="countTaskDone != 0"
-          variant="outline-secondary"
-          class="btn-icon mr-1"
-          title="History Tasks"
-          @click="openModalTaskHistory"
-        >
-          <feather-icon icon="ListIcon"></feather-icon>
-        </b-button>
-        <b-button
-          variant="primary"
-          @click="openModalCreateTask"
-          v-if="isLeadFull || taskForSn"
-        >
-          <feather-icon icon="PlusIcon"></feather-icon> ADD
-        </b-button>
-      </div>
 
       <div class="ml-3" v-if="!isLeadFull &amp;&amp; !taskForSn">
         <p style="color: red">
@@ -209,7 +221,7 @@ export default {
     return {
       tasks: [],
       task: null,
-
+      isBusy: false,
       countTaskDone: 0,
       isDisabledModal: false,
       dataTask: [],
@@ -378,6 +390,7 @@ export default {
       this.getTaskShow(this.taskForSn);
     },
     async getTaskShow(type) {
+      this.isBusy = true;
       let leadId = this.$route.params.id;
 
       this.spinner = true;
@@ -399,6 +412,7 @@ export default {
           this.countTaskDone = response.data[0].count_task;
         }
       }
+      this.isBusy = false;
     },
   },
   async created() {

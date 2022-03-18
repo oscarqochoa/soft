@@ -1,13 +1,23 @@
 <template>
   <div
     class="ml-1"
-    style="box-shadow: rgb(200 204 211 / 24%) 0px 0px 6px; height: 360px !important"
+    style="
+      box-shadow: rgb(200 204 211 / 24%) 0px 0px 6px;
+      height: 360px !important;
+    "
   >
-    <b-card body-class="px-0 ">
+    <b-card body-class="px-0 " class="h-100">
       <template #header>
         <b-card-title class="font-weight-bolder"> Files </b-card-title>
       </template>
-
+      <template #footer>
+        <div class="text-right">
+          <b-button variant="primary" @click="openModalUploadFiles()">
+            <feather-icon icon="FileIcon"></feather-icon>
+            UPLOAD FILES
+          </b-button>
+        </div>
+      </template>
       <div class="table-side" v-if="files.length > 0">
         <b-table
           small
@@ -109,13 +119,6 @@
             </b-button>
           </template>
         </b-table>
-      </div>
-
-      <div class="text-right mr-2">
-        <b-button variant="primary" @click="openModalUploadFiles()">
-          <feather-icon icon="FileIcon"></feather-icon>
-          UPLOAD FILES
-        </b-button>
       </div>
     </b-card>
 

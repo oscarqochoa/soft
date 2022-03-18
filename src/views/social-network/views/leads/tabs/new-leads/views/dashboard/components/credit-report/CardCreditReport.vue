@@ -1,9 +1,20 @@
 <template>
-  <b-card body-class="px-0">
+  <b-card body-class="px-0" >
     <template #header>
       <b-card-title class="card-title-cr"> Credit Report </b-card-title>
     </template>
-
+    <template #footer>
+      <div class="text-right">
+        <b-button
+          variant="primary"
+          class="float-right mt-2"
+          @click="openModalRequestCreditReport"
+        >
+          <feather-icon icon="PlusIcon" class="mr-50"></feather-icon>
+          REQUEST CR
+        </b-button>
+      </div>
+    </template>
     <b-row class="mt-1 mb-3">
       <b-col sm="4" md="4" lg="4" class="text-center">
         <span class="font-bureau-style text-center font-weight-bolder">
@@ -119,7 +130,11 @@
               v-if="data.item.route_pdf"
               target="_blank"
             >
-              <img src="/assets/images/extensions/pdf.png" width="23px" alt="">
+              <img
+                src="/assets/images/extensions/pdf.png"
+                width="23px"
+                alt=""
+              />
             </a>
           </template>
         </b-table>
@@ -181,18 +196,6 @@
             </span>
           </template>
         </b-table>
-      </b-col>
-      <b-col sm="12" md="12" lg="12" xl="12">
-        <b-form-group>
-          <b-button
-            variant="primary"
-            class="float-right mt-2 mr-2"
-            @click="openModalRequestCreditReport"
-          >
-            <feather-icon icon="PlusIcon" class="mr-50"></feather-icon>
-            REQUEST CR
-          </b-button>
-        </b-form-group>
       </b-col>
     </b-row>
 
