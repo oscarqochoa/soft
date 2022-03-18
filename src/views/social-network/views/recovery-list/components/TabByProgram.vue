@@ -238,6 +238,7 @@ export default {
     },
 
     changeStatusLead: async function (Lead) {
+      console.log(Lead.lead_id)
       try {
         let params = {
           date_from: null,
@@ -246,6 +247,7 @@ export default {
           id_program: this.programId,
           status: Lead.status == "1" ? 1 : 0,
           update_id: Lead.id,
+          id_lead:Lead.lead_id,
         }
         const data = await RecoveryListService.searchRecoveryList(params)
         this.countPendingTask = data.data.data[0].quantity_pending
