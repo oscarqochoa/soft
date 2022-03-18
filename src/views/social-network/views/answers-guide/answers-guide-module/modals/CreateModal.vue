@@ -44,6 +44,7 @@
                           <b-img
                             :src="baseUrl + program.logo"
                             class="img-fan-page"
+                            :alt="'Logo of the program '+program.value"
                             fluid
                             thumbnail
                         />
@@ -109,7 +110,7 @@
                 </b-row>
               </validation-provider>
 
-              <b-row v-show="selectedProgram" class="mt-2">
+              <b-row v-if="selectedProgram" class="mt-2">
                 <b-col v-if="!fromTree">
                   <b-form-checkbox
                     v-model="selectedSubOption"
@@ -118,8 +119,8 @@
                   >
                     Is sub option?
                   </b-form-checkbox>
-
-                  <template v-if="showAnswersTree">
+                  <span v-if="answers.length==0" class="text-primary">There are no sub options to show</span>
+                  <template v-if="showAnswersTree && answers.length!==0">
                     <validation-provider
                       v-slot="{ errors }"
                       name="suboption"
@@ -323,6 +324,7 @@ export default {
           this.father = null
           this.getAnswerGuide(this.selectedProgram, this.father).then((res) => {
             this.answers = res
+            console.log('selected program ', this.answers)
           })
         }
         if (this.type !== 4) {
@@ -340,6 +342,7 @@ export default {
         this.father = null
         this.getAnswerGuide(this.selectedProgram, this.father).then((res) => {
           this.answers = res;
+          console.log('selected sub option ', this.answers)
         })
 
         this.showAnswersTree = true

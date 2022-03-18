@@ -123,7 +123,7 @@
           <!-- Column: Task -->
           <template #cell(attend)="data">
             <div>
-              <span class="text-capitalize text-success" v-if="data.item.attend == 2"> YES 
+              <span class="text-capitalize text-success" v-if="data.item.attend == 2"> YES
                 <feather-icon
                   icon="CheckCircleIcon"
                   size="15"

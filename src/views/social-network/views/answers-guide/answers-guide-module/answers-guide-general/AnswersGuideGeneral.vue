@@ -86,6 +86,7 @@
               @click="openEditWatchModal(1, data.item)"
             />
             <feather-icon
+              v-if="isCeo || isSupervisor || isTeamLeader"
               class="mr-1 pointer bigger text-warning"
               icon="EditIcon"
               @click="openEditWatchModal(2, data.item)"
