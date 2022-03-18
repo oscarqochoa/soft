@@ -18,7 +18,7 @@
             cols="12"
             sm=""
             md="12"
-            lg="8"
+            lg="9"
             xl="8"
           >
             <div class="">
@@ -44,7 +44,7 @@
       
       class="mb-1 d-flex justify-content-start"
     >
-      <b-col cols="6" sm="4" md="4" lg="3" xl="2">
+      <b-col cols="6" sm="5" md="4" lg="3" xl="2" class="pb-1">
         <div>
           <div
             class="text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
@@ -54,23 +54,23 @@
           </div>
         </div>
       </b-col>
-      <b-col cols="6" sm="4" md="4" lg="3" xl="2">
+      <b-col cols="6" sm="5" md="4" lg="3" xl="2"  class="pb-1">
         <div>
           <div
             class="text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
             style="padding-top: 5px; padding-bottom: 5px; background: linear-gradient(90deg, #FAC632 0%, #F37432 100%);"
           >
-            Pending Total : {{ pendingTotal}} 
+            Pending T : {{ pendingTotal}} 
           </div>
         </div>
       </b-col>
-      <b-col cols="6" sm="4" md="4" lg="3" xl="2">
+      <b-col cols="6" sm="5" md="4" lg="3" xl="2"  class="pb-1">
         <div>
           <div
             class="text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
             style="padding-top: 5px; padding-bottom: 5px;background: linear-gradient(90deg, #ADD210 0%, #5F873E 100%);"
           >
-            Done Total : {{ doneTotal }}
+            Done T : {{ doneTotal }}
           </div>
         </div>
       </b-col>
