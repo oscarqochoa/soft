@@ -272,7 +272,6 @@ export default {
 
   },
   async mounted() {
-    console.log('current: ', this.currentUser.user_id)
     this.lead.super = this.currentUser.user_id;
     this.lead.usercreator = this.currentUser.user_id;
     this.lead.catcher = this.currentUser.user_id;
@@ -317,7 +316,6 @@ export default {
               "You won't be able to revert this!",
               "question"
           )
-          console.log('data1: ', this.lead)
           if(resp.value){
             this.addPreloader()
             // Transformar fechas
@@ -325,7 +323,6 @@ export default {
             this.lead.date = this.transformDate(this.lead.date);
             this.lead.due_date = this.transformDate(this.lead.due_date);
 
-            console.log('data2: ', this.lead)
 
             // Enviar peticion a la api
             await this.A_CREATE_LEAD_SN(this.lead);
@@ -373,7 +370,6 @@ export default {
 
           const nickValid = errors.find(err => err.id == 'input-create-lead-10')
           if(!nickValid && !this.isValidNickname) {
-            console.log('encontro nick')
             const isNickValidItem = {
               error: "is not unique",
               id: "input-create-lead-10",
@@ -391,7 +387,6 @@ export default {
           }
           const phoneValid = errors.find(err => err.id == 'input-create-lead-14')
           if(!phoneValid && this.lead.addEvidence && !this.isValidMobile) {
-            console.log('encontro phone')
             const isPhoneValidItem = {
               error: "is not unique",
               id: "input-create-lead-14",
@@ -421,7 +416,6 @@ export default {
         }
 
       } catch (error) {
-        console.log('error', error)
         setTimeout(async () => {
           await this.removePreloader()
         },1000)
@@ -564,7 +558,6 @@ export default {
     },
     handleScroll () {
       var sortMenu = this.$refs.containerSidebarSreateLead.scrollLeft;
-      console.log(sortMenu);
     },
     transformDate(date) {
       const data_dob = date.split('/');

@@ -740,7 +740,7 @@ export default {
           this.isPreloading(false);
         }
       } catch (error) {
-        console.log("spmething went wrong onValidSsn: ", error);
+        console.log("Something went wrong onValidSsn: ", error);
         this.isPreloading(false);
         this.showErrorSwal();
       }
@@ -768,7 +768,7 @@ export default {
           this.isPreloading(false);
         }
       } catch (error) {
-        console.log("spmething went wrong onValidSsn: ", error);
+        console.log("Something went wrong onValidSsn: ", error);
         this.isPreloading(false);
         this.showErrorSwal();
       }
@@ -796,7 +796,7 @@ export default {
           this.isPreloading(false);
         }
       } catch (error) {
-        console.log("spmething went wrong onValidSsn: ", error);
+        console.log("Something went wrong onValidSsn: ", error);
         this.isPreloading(false);
         this.showErrorSwal();
       }
@@ -838,7 +838,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log("spmething went wrong onSubmitFields: ", error);
+          console.log("Something went wrong onSubmitFields: ", error);
           this.isPreloading(false);
           this.showErrorSwal();
         });
@@ -877,7 +877,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log("spmething went wrong onSubmitAddress: ", error);
+          console.log("Something went wrong onSubmitAddress: ", error);
           this.isPreloading(false);
           this.showErrorSwal();
         });
@@ -916,7 +916,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log("spmething went wrong onSubmitAnotherAddress: ", error);
+          console.log("Something went wrong onSubmitAnotherAddress: ", error);
           this.isPreloading(false);
           this.showErrorSwal();
         });

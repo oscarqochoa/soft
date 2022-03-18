@@ -231,7 +231,6 @@ export default {
     async closeModalAddReply(data) {
       try {
         if (data) {
-          console.log(data, 'gaaaaaaaaa')
           await this.tabChanges(data);
         }
         this.showModalAddReply = false;

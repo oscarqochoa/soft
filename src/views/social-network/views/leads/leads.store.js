@@ -160,7 +160,6 @@ const actions = {
                 fromPage: response.from,
                 toPage: response.to,
             }
-            console.log('data: ', data)
             commit('M_SET_BUSY_NEW_LEADS', false)
             commit('SET_DATA', {
                 destination: 'S_LEADS',
@@ -332,7 +331,6 @@ const actions = {
     async A_GET_SUB_SOURCES_FILTERS({ commit }, sourceId) {
         try {
             const response = await SNLeadsService.getSubSourceSn()
-            console.log(sourceId);
             let responseData = []
 
             if (sourceId == 1) {
@@ -511,7 +509,6 @@ const actions = {
     async A_UNIQUE_MOBILE_SN({ commit }, params) {
         try {
             const resp = await SNLeadsService.uniqueMobileSn(params);
-            console.log(resp);
         } catch (e) {
             console.log(e)
         }

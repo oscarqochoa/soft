@@ -378,8 +378,6 @@ export default {
     ...mapActions('CrmLeadStore', ['A_SET_SELECTED_LEADS']),
     async getSNRecoveryLeads() {
       try {
-
-        console.log(this.filters[2].model, 'this.filters[2].model');
         this.isBusy = true;
         const response = await this.A_GET_RECOVERY_LEADS_SN_BY_PROGRAM({
           name_text: this.filterPrincipal.model,
@@ -424,7 +422,6 @@ export default {
         this.A_GET_STATUS_LEAD('recovery'),
         this.A_GET_FILTER_SELLERS({ moduleId: 15, roles: "[]" }),
       ]);
-      console.log(this.S_LEAD_STATUS_SN, 'this.S_LEAD_STATUS_SN');
       this.filters[3].options = this.S_LEAD_STATUS_SN;
       this.filters[7].options = this.S_SELLERS_FILTERS;
     },

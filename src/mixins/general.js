@@ -99,7 +99,6 @@ export default {
             return module;
         },
         convertModuleToProgramString(program) {
-            console.log('program', program)
             let module = 0;
             if (program == 0) {
                 module = 0;
@@ -147,7 +146,6 @@ export default {
                         break;
                 }
             }
-            console.log('module:', module)
             return module;
         },
         getModuleName(module) {

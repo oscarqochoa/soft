@@ -439,15 +439,12 @@ export default {
         nextElement.focus()
       }
       if(this.lead.card_expi_month === '00') {
-        console.log('ASD', this.lead.card_expi_month, typeof this.lead.card_expi_month)
         this.lead.card_expi_month = '01'
       }
 
     },
     "lead.card_expi_year"() {
-      console.log('month: ', this.lead.card_expi_month)
       if(this.lead.card_expi_month < 10 && this.lead.card_expi_month.length == 1) {
-        console.log('YEAR: ', this.lead.card_expi_month)
         this.lead.card_expi_month = `0${this.lead.card_expi_month}`
       }
     }

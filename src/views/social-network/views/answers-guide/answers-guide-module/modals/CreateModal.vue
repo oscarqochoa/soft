@@ -324,7 +324,6 @@ export default {
           this.father = null
           this.getAnswerGuide(this.selectedProgram, this.father).then((res) => {
             this.answers = res
-            console.log('selected program ', this.answers)
           })
         }
         if (this.type !== 4) {
@@ -342,7 +341,6 @@ export default {
         this.father = null
         this.getAnswerGuide(this.selectedProgram, this.father).then((res) => {
           this.answers = res;
-          console.log('selected sub option ', this.answers)
         })
 
         this.showAnswersTree = true

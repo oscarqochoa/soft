@@ -138,7 +138,6 @@ export default {
     onChangeAddress(event, data) {
       this.street = `${event.target.value}`;
       this.$emit('street-changed', { street: this.street, state: this.state, city: this.city })
-      console.log('1')
     },
     getAddressData: function (addressData) {
       const address = `${addressData.route} ${addressData.locality} ${addressData.administrative_area_level_1} ${addressData.country}`;
@@ -146,7 +145,6 @@ export default {
       this.state = addressData.administrative_area_level_1
       this.street = address;
       this.$emit('street-changed', { street: this.street, state: this.state, city: this.city })
-      console.log('2')
     },
   }
 }

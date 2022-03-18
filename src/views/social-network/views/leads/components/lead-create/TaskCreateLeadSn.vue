@@ -124,13 +124,7 @@ export default {
   },
   async created() {
     this.leadGa = this.lead
-    console.log(this.leadGa)
 
-  },
-  mounted() {
-    //document.getElementById('input-create-lead-32').placeholder='Type Day event';
-    //document.getElementById('input-create-lead-38').placeholder='Type Due date';
-    console.log('ZXC:', document.getElementById('input-create-lead-38'))
   },
   computed : {
     ...mapState('SocialNetworkLeadsStore', ['S_SELLERS']),
@@ -158,7 +152,6 @@ export default {
 
         const hour = await this.A_GET_HOUR_SYSTEM();
         const date = await this.A_FORMAT_DATE(new Date());
-        console.log('date 123: ', date)
         await this.A_GET_SELLER_TASK_FAVORITE({date_hour: `${date} ${hour}:00`})
         this.lead.attend = 2;
 

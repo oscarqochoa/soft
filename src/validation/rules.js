@@ -92,7 +92,6 @@ extend('specialpassword', {
 
 extend('unique-nickname', {
   async validate(value) {
-    //console.log('qwe', value)
     //store.commit("app/SET_LOADING", true);
     const resp = await amgApi.post('/lead/social-network/validate-exists-nickname', {
       nickname: value, lead_id: null

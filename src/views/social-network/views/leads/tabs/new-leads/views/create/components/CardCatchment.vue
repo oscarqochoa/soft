@@ -446,8 +446,6 @@ export default {
       this.showModalChooseFlyer = false;
     },
     selectFlyer(id, flyer) {
-      console.log(flyer);
-
       this.showModalChooseFlyer = false;
       this.lead.flyer = id;
       this.lead.flyer_selected = flyer;

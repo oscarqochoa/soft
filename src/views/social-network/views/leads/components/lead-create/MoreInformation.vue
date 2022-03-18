@@ -237,9 +237,6 @@ export default {
       const doc = this.documents.find(doc => doc.value === this.lead.type_document)
       this.selectDocument = doc.label;
     },
-    "lead.dob" () {
-      //console.log('dob: ', this.lead.dob)
-    }
   }
 
 }

@@ -201,7 +201,6 @@ export default function userCalendar() {
     },
     async eventClick({ event: clickedEvent }) {
       try {
-        console.log('Lucas gay', clickedEvent._def.extendedProps.id)
         const response = await crmEvent.getEvent({ id: clickedEvent._def.extendedProps.id })
         if (mixins.methods.isResponseSuccess(response)) {
           mixins.methods.toggleModal('modal-event-edit')

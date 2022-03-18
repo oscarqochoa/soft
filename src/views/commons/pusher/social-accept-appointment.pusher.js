@@ -4,7 +4,6 @@ import NotificationMixin from '@/mixins/notification'
 const socialAcceptAppoitment = () => {
     window.pusher.bind('social-accept-appointment', async data => {
         const sessionId = store.state.auth.currentUser.user_id
-        console.log(data, sessionId)
         if (data.to_id == sessionId) {
             const result = await Vue.swal.fire({
                 icon: "success",

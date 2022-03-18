@@ -423,10 +423,6 @@ class SocialNetworkServiceCommissions {
         user_name: "Jack Sari",
       },
     ];
-    setTimeout(()=> {
-      console.log('asd')
-    },3000)
-
     return data
   }
 

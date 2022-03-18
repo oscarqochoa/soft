@@ -201,7 +201,6 @@ export default {
           perpage: this.paginate.perPage,
           page: this.paginate.currentPage,
         });
-        console.log(response, 'response')
         this.totalLeads = response.total;
         this.fromPage = response.from;
         this.toPage = response.to;

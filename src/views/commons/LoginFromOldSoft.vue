@@ -88,7 +88,6 @@ export default {
           // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
           if (module) userData.module = module;
           if (route) userData.route = route;
-          console.log(userData);
           this.$router
             .replace(getHomeRouteForLoggedInUser(userData))
             .then(() => {

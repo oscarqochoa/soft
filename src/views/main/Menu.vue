@@ -75,7 +75,6 @@ export default {
       return JSON.parse(this.currentUser.arrRoles)
     },
     currentUser() {
-      console.log('currentUser', this.$store.getters['auth/currentUser'])
       return this.$store.getters['auth/currentUser']
     },
     skin() {

@@ -501,13 +501,11 @@ export default {
     },
     selectSubSource(id) {
       this.lead.sub_source = id;
-      console.log(this.lead.sub_source, id)
     },
     selectMethod(id) {
       this.lead.google_ads = id;
     },
     selectProgram(id, value ) {
-      //console.log(id, value)
       this.lead.fanpage_id = id;
       this.titleFanPageProgram = value;
     },
@@ -522,7 +520,6 @@ export default {
   },
   watch: {
     async isChangeState() {
-      console.log('state', this.lead.state_h, this.lead.fanpage_id)
       await this.A_GET_FLYERS({program_id: this.lead.fanpage_id, state: this.lead.state_h})
     },
     async isChangeFanPage() {

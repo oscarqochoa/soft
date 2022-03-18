@@ -97,7 +97,7 @@
               <router-link
                 :class="textLink"
                 :to="{
-                  name: 'lead-show',
+                  name: 'sn-dashboard-new-lead',
                   params: { id: data.item.lead_id },
                 }"
                 target="_blank"

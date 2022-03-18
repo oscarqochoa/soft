@@ -299,7 +299,6 @@ export default {
       this.showModalTaskHistory = false;
     },
     onReloadTasks(tasks) {
-      console.log(tasks);
       this.tasks = tasks;
     },
     async openModalEditTask(id, isDisabled) {
@@ -394,8 +393,6 @@ export default {
       });
 
       if (response.status == 200) {
-        console.log(response.data);
-
         this.spinner = false;
         this.tasks = response.data;
         if (response.data[0]) {

@@ -13,22 +13,8 @@ const countNotification = async () => {
     }
     store.commit('SidebarStore/UPDATE_SIDEBAR_ITEM_PROPERTY', payload)
 }
-
-const counter2 = () => {
-    console.log('aaaa')
-}
-const counter3 = () => {
-    console.log('aaaa')
-}
-const counter4 = () => {
-    console.log('aaaa')
-}
-
 const allCountersSocialNetwork = async () => {
     await countNotification()
-    counter2()
-    counter3()
-    counter4()
 }
 
 export default allCountersSocialNetwork
