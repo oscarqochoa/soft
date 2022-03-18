@@ -160,7 +160,6 @@ const actions = {
                 fromPage: response.from,
                 toPage: response.to,
             }
-            console.log('data: ', data)
             commit('M_SET_BUSY_NEW_LEADS', false)
             commit('SET_DATA', {
                 destination: 'S_LEADS',

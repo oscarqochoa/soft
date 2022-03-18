@@ -272,13 +272,11 @@ export default {
 
   },
   async mounted() {
-    console.log('current: ', this.currentUser.user_id)
     this.lead.super = this.currentUser.user_id;
     this.lead.usercreator = this.currentUser.user_id;
     this.lead.catcher = this.currentUser.user_id;
     this.lead.created_by = this.currentUser.user_id;
     this.lead.created_date = this.$options.filters.formatDate(new Date());
-    window.addEventListener('scroll', this.handleScroll)
   },
 
   computed: {
@@ -373,7 +371,6 @@ export default {
 
           const nickValid = errors.find(err => err.id == 'input-create-lead-10')
           if(!nickValid && !this.isValidNickname) {
-            console.log('encontro nick')
             const isNickValidItem = {
               error: "is not unique",
               id: "input-create-lead-10",
@@ -391,7 +388,6 @@ export default {
           }
           const phoneValid = errors.find(err => err.id == 'input-create-lead-14')
           if(!phoneValid && this.lead.addEvidence && !this.isValidMobile) {
-            console.log('encontro phone')
             const isPhoneValidItem = {
               error: "is not unique",
               id: "input-create-lead-14",
@@ -561,10 +557,6 @@ export default {
       this.lead.images= []
       this.lead.other= ""
       this.$refs.refFormLeadObserver.reset();
-    },
-    handleScroll () {
-      var sortMenu = this.$refs.containerSidebarSreateLead.scrollLeft;
-      console.log(sortMenu);
     },
     transformDate(date) {
       const data_dob = date.split('/');

@@ -271,7 +271,6 @@ export default {
   created() {
     this.getSocialNetworkLeads();
     this.setOptionsOnFilters();
-    console.log('busy: ', this.S_BUSY_NEW_LEADS)
   },
   methods: {
     ...mapActions('SocialNetworkLeadsStore', ['A_DELETE_LEAD', 'A_GET_STATE_LEAD', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_GET_SMS_SENT_TO_NEW_LEADS', 'A_GET_STATUS_LEAD', 'A_GET_FAN_PAGE_PROGRAMS_FILTERS', 'A_GET_FILTER_SELLERS', 'A_GET_SUB_SOURCES_FILTERS']),
@@ -428,7 +427,6 @@ export default {
   },
   watch:{
     async sourceFilter(newValue){
-      console.log(newValue, "newValue")
       if(newValue == 1 || newValue == 2){
         if(newValue == 1){
           await this.A_GET_SUB_SOURCES_FILTERS(newValue)

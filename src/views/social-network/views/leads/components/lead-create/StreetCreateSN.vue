@@ -2,7 +2,7 @@
   <div>
     <b-row class="mt-2 text-left">
       <b-col mb="12">
-        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.title} address`">
+        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.titleC} address`">
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -14,15 +14,15 @@
               label="Address"
           >
             <vue-google-autocomplete
-                :id="`${title}-${street}-street`"
-                :ref="`${title}-${street}-street`"
-                v-model="street"
+                :id="`${titleC}-${streetC}-street`"
+                :ref="`${titleC}-${streetC}-street`"
+                v-model="streetC"
                 class="form-control input-form fond-white border-hover pl-1"
                 placeholder="Please type your address"
                 country="us"
                 :readonly="false"
                 @placechanged="getAddressData"
-                @keyup="(e) => onChangeAddress(e, street)"
+                @keyup="(e) => onChangeAddress(e, streetC)"
                 :state="errors[0] ? false : null"
                 :class="{'border-error-sn style-chooser' :errors[0]}"
             />
@@ -33,7 +33,7 @@
     </b-row>
     <b-row class="mt-2 text-left">
       <b-col mb="6">
-        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.title} city`">
+        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.titleC} city`">
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -45,7 +45,7 @@
               label="City"
           >
             <b-form-input
-                v-model="city"
+                v-model="cityC"
                 class="select-icon-none font-bureau-style border-hover bg-white-c"
                 :class="{'border-error-sn' :errors[0]}"
                 placeholder="Please type city"
@@ -57,7 +57,7 @@
         </ValidationProvider>
       </b-col>
       <b-col mb="6">
-        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.title} state`">
+        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.titleC} state`">
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -71,7 +71,7 @@
           >
             <v-select
                 id="state_more_information"
-                v-model="state"
+                v-model="stateC"
                 :selected="null"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 label="label"
@@ -79,7 +79,7 @@
                 :clearable="false"
                 :reduce="el => el.value"
             />
-            <input type="radio" class="d-none bg-green" v-model="state" />
+            <input type="radio" class="d-none bg-green" v-model="stateC" />
             <div v-if="errors[0]" class="text-error-sn text-center">State {{errors[0]}}</div>
           </b-form-group>
 
@@ -108,7 +108,15 @@ export default {
     },
     title: {
       type: String,
-      default: 'asdasd'
+      default: 'asd'
+    }
+  },
+  data () {
+    return {
+      streetC: '',
+      cityC: '',
+      stateC: '',
+      titleC: ''
     }
   },
   components: {
@@ -122,6 +130,9 @@ export default {
   },
   async created() {
     await this.A_GET_STATE_EEUU()
+    this.streetC = this.street;
+    this.cityC = this.city;
+    this.stateC = this.state
   },
   mounted() {
 
@@ -136,17 +147,15 @@ export default {
     ),
 
     onChangeAddress(event, data) {
-      this.street = `${event.target.value}`;
-      this.$emit('street-changed', { street: this.street, state: this.state, city: this.city })
-      console.log('1')
+      this.streetC = `${event.target.value}`;
+      this.$emit('street-changed', { street: this.streetC, state: this.state, city: this.cityC })
     },
     getAddressData: function (addressData) {
       const address = `${addressData.route} ${addressData.locality} ${addressData.administrative_area_level_1} ${addressData.country}`;
-      this.city = addressData.locality;
-      this.state = addressData.administrative_area_level_1
-      this.street = address;
-      this.$emit('street-changed', { street: this.street, state: this.state, city: this.city })
-      console.log('2')
+      this.cityC = addressData.locality;
+      this.stateC = addressData.administrative_area_level_1
+      this.streetC = address;
+      this.$emit('street-changed', { street: this.streetC, state: this.stateC, city: this.cityC })
     },
   }
 }
