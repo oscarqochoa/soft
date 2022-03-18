@@ -40,6 +40,11 @@ export default [
               hasLevelValidation: true,
             },
             {
+              role_id: 10,
+              level_id: 3,
+              hasLevelValidation: true,
+            },
+            {
               role_id: 11,
               level_id: null,
               hasLevelValidation: false,

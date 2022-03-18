@@ -16,7 +16,7 @@ class SocialNetworkService {
 
     async getPrograms(body) {
         try {
-            const data = await amgApi.get('/commons/all-fangapes', body)
+            const data = await amgApi.post('/commons/all-fangapes', body)
             return data
         } catch (error) {
             console.log('Something went wrong on getStates:', error)
