@@ -226,8 +226,10 @@ export default {
           this.countDoneTask = data.data.data[0].quantity_done
           if(this.currentUser.role_id == 11){
             let taskCompleted = this.countDoneTask - this.countPendingTask == this.countDoneTask ? true : false
+          let pendingTotal = data.data.data[0].quantity_pending_total
+          let doneTotal = data.data.data[0].quantity_done_total
           // this.statusButton = taskCompleted
-            this.$emit("statusCompletedTask",taskCompleted)
+            this.$emit("statusCompletedTask",taskCompleted,pendingTotal,doneTotal)
           }
         }
         return items || []
@@ -254,8 +256,12 @@ export default {
         let countDone = parseInt(data.data.data[0].count_done)
         let countPending = parseInt(data.data.data[0].count_pending)
         let taskCompleted = countDone - countPending == countDone ? true : false
+
+        let pendingTotal = parseInt(data.data.data[0].quantity_pending_total)
+        let doneTotal = parseInt(data.data.data[0].quantity_done_total)
+
         this.$emit("TaskCompleted", taskCompleted)
-         this.$emit("statusCompletedTask",taskCompleted)
+         this.$emit("statusCompletedTask",taskCompleted,pendingTotal,doneTotal)
       } catch (error) {
         console.log(error)
         this.showToast(
