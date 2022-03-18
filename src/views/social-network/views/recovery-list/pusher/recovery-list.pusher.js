@@ -14,7 +14,7 @@ const recoveryListAlert = () => {
         .fire({ 
           html:
             `<img src="${swalSuccessIcon}" style="margin-bottom: 10px;">` +
-            '<div><h2 style="font-weight: 600;">REVIEW RECOVERY LIST</h2></div>' +
+            '<div style="margin-top: 15px;"><h2 style="font-weight: 600;">REVIEW RECOVERY LIST</h2></div>' +
             '<div style="text-align: center;">' +
             '<div style="font-weight: bolder; text-transform: uppercase;">User Recovery : '+ data.fullname+
             " </div>" + 
