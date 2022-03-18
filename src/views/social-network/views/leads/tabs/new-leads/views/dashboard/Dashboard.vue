@@ -12,7 +12,7 @@
             icon="MessageCircleIcon"
             size="15"
             class="mr-50 text-white"
-          ></feather-icon>
+          />
           SEND SMS
         </b-button>
         <b-button
@@ -20,7 +20,7 @@
           class="btn-icon mr-1"
           @click="openModalHistorySms"
         >
-          <feather-icon icon="ListIcon" size="18"></feather-icon>
+          <feather-icon icon="ListIcon" size="18"/>
         </b-button>
       </b-row>
     </header-slot>

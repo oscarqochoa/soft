@@ -7,7 +7,7 @@
         title-tag="h3"
         hide-footer
         size="lg"
-        @hidden="close"
+        @hidden="close(null)"
       >
         <!-- FACEBOOK -->
         <b-row>
@@ -400,6 +400,7 @@ export default {
       }
     },
     close(data) {
+      this.show = false
       this.$emit("onClose", data);
     },
   },

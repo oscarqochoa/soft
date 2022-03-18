@@ -156,7 +156,7 @@ export default {
   props: {
     modul: {
       type: Number,
-      required: true,
+      required: false,
     },
     type: {
       type: Number,
