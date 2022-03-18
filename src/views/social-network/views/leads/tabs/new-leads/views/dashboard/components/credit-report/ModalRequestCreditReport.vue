@@ -248,7 +248,7 @@
               <b-button
                 variant="primary"
                 @click="sendRequest"
-                :disabled="this.form.dob == null"
+                :disabled="disabledButton"
               >
                 <i class="fas fa-sendRequest"></i>
                 Send
@@ -341,6 +341,14 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    disabledButton() {
+      if(this.form.type_card == 1)
+      {
+        if(this.cards.length == 0) return true
+        return !this.form.id_card
+      }
+      return this.form.dob == null
+    }
   },
   methods: {
     async openModalViewCard(id) {

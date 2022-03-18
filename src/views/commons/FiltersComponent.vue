@@ -53,7 +53,7 @@ export default {
   },
 }
 </script>
-<style >
+<style scoped>
 .p-1px{
   margin-left: 5px;
   margin-right: 5px;

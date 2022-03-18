@@ -106,6 +106,10 @@
       .swal2-content {
         color: $theme-dark-body-color;
       }
+      .swal2-validation-message {
+        color: $theme-dark-body-color;
+        background-color: $theme-dark-card-bg !important;
+      }
 
       select.swal2-select {
         border-color: $theme-dark-border-color;

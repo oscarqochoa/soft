@@ -11,6 +11,7 @@
           <b-form-input
             v-model.trim="contactInfo.catcher"
             type="text"
+            disabled
           ></b-form-input>
         </b-form-group>
         <b-form-group
@@ -22,6 +23,7 @@
           <b-form-input
             v-model.trim="contactInfo.program"
             type="text"
+            disabled
           ></b-form-input>
         </b-form-group>
         <b-form-group
@@ -33,6 +35,7 @@
           <b-form-input
             v-model="contactInfo.date"
             type="email"
+            disabled
           ></b-form-input>
         </b-form-group>
         <b-form-group

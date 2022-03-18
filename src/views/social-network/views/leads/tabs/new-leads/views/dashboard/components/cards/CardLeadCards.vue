@@ -78,9 +78,6 @@ import SNLeadsService from "@/views/social-network/services/leads";
 import CreditCardService from "@/views/crm/services/creditCard";
 
 export default {
-  modul: {
-    type: Number,
-  },
   props: {
     lead: {
       type: Object,
@@ -88,6 +85,9 @@ export default {
     cardsLead: {
       type: Object,
       default: () => ({}),
+    },
+    modul: {
+      type: Number,
     },
   },
   components: {

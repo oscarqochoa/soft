@@ -229,10 +229,15 @@ export default {
       this.showModalAddReply = true;
     },
     async closeModalAddReply(data) {
-      if (data) {
-        await this.tabChanges(data);
+      try {
+        if (data) {
+          console.log(data, 'gaaaaaaaaa')
+          await this.tabChanges(data);
+        }
+        this.showModalAddReply = false;
+      } catch(e) {
+        console.error(e)
       }
-      this.showModalAddReply = false;
     },
     setActiveColor(index) {
       this.activeReply = index;
