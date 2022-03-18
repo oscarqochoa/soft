@@ -238,7 +238,6 @@ export default {
     },
 
     changeStatusLead: async function (Lead) {
-      console.log(Lead.lead_id)
       try {
         let params = {
           date_from: null,

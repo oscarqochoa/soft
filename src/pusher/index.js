@@ -14,6 +14,7 @@ import salesMadePusher from "@/views/crm/views/sales-made/sales-made.pusher";
 import {newFlyerNotification} from "@/views/social-network/views/bank-of-flyers/new-flyer.pusher";
 import assignTaskToSeller from "@/views/commons/pusher/assign-task-to-seller.pusher";
 import socialAcceptAppoitment from "@/views/commons/pusher/social-accept-appointment.pusher";
+import recoveryListAlert from "@/views/social-network/views/recovery-list/pusher/recovery-list.pusher";
 
 const subscribePusher = () => {
     const pusher = new Pusher(process.env.VUE_APP_PUSHER_APP_KEY, {
@@ -43,6 +44,7 @@ const subscribePusher = () => {
         newFlyerNotification();
         assignTaskToSeller();
         socialAcceptAppoitment();
+        recoveryListAlert();
     } catch (error) {
         console.error(error, "error");
     }

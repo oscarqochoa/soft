@@ -26,7 +26,7 @@ const recoveryListAlert = () => {
           showConfirmButton: true,
           confirmButtonText: "Ok",
         })
-        .then((res) => {
+        .then(async (res) => {
           if (res) {
             window.open(`${process.env.VUE_APP_BASE_URL_FRONT}/socialnetwork/recovery-list`, '_blank');
             await window.amgApi.post('/commons/close-all-swal', data)
