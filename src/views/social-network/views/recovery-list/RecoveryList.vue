@@ -54,6 +54,26 @@
           </div>
         </div>
       </b-col>
+      <b-col cols="6" sm="4" md="4" lg="3" xl="2">
+        <div>
+          <div
+            class="text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
+            style="padding-top: 5px; padding-bottom: 5px; background: linear-gradient(90deg, #FAC632 0%, #F37432 100%);"
+          >
+            Pending Total : {{ pendingTotal}} 
+          </div>
+        </div>
+      </b-col>
+      <b-col cols="6" sm="4" md="4" lg="3" xl="2">
+        <div>
+          <div
+            class="text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
+            style="padding-top: 5px; padding-bottom: 5px;background: linear-gradient(90deg, #ADD210 0%, #5F873E 100%);"
+          >
+            Done Total : {{ doneTotal }}
+          </div>
+        </div>
+      </b-col>
     </b-row>
     <!-- Tabs -->
     <b-tabs
@@ -147,6 +167,8 @@ export default {
   },
   data() {
     return {
+      pendingTotal:0,
+      doneTotal:0,
       statusButton: false,
       userId: null,
       keyUser: 0,
@@ -156,7 +178,7 @@ export default {
   },
   computed: {
     statusUserRedirected() {
-      return this.currentUser.role_id == 11 ? true : false
+      return this.currentUser.role_id != 10 ? true : false
     },
     getStatusButton() {
       return this.statusButton
@@ -170,27 +192,25 @@ export default {
       this.keyUser++
       this.firstRequestStatusButton()
     },
-    statusCompletedTask: function (status) {
+    statusCompletedTask: function (status,pendingTotal,doneTotal) {
       this.statusCompletedTaskU = status
+      this.pendingTotal = pendingTotal
+      this.doneTotal = doneTotal
     },
     TaskCompleted: function (status) {
       this.statusButton = status
     },
     getUserOfRecoveryList: async function () {
-      if (this.currentUser.role_id == 11) {
+      if (this.currentUser.role_id != 10) {
         try {
-          let params = {
-            userId: this.currentUser.user_id,
-          }
-          const data = await RecoveryListService.getUserOfRecoveryList(params)
+          const data = await RecoveryListService.getUserOfRecoveryList({})
           this.userOfRecoveryList = data.data
           if(this.userOfRecoveryList!=null){
              this.userId = this.userOfRecoveryList[0].id
              this.keyUser++
           }
-          if(this.currentUser.role_id == 11){
-            this.firstRequestStatusButton()
-          }
+          this.firstRequestStatusButton()
+          
           
         } catch (error) {
           console.log(error)
@@ -211,6 +231,8 @@ export default {
             count_list: this.userId !=null? this.userId : parseInt(this.currentUser.user_id),
           }
           const data = await RecoveryListService.searchRecoveryList(params)
+          this.pendingTotal = data.data.data[0].quantity_pending_total
+          this.doneTotal = data.data.data[0].quantity_done_total
           let countDone = parseInt(data.data.data[0].count_done)
           let countPending = parseInt(data.data.data[0].count_pending)
           let taskCompleted =
@@ -262,7 +284,7 @@ export default {
   },
   created: function () {
     this.getUserOfRecoveryList()
-    if(this.currentUser.role_id != 11){
+    if(this.currentUser.role_id == 10){
       this.firstRequestStatusButton()
     }
   },
