@@ -11,6 +11,7 @@ export default [
         dateFormOptions: { year: 'numeric', month: 'numeric', day: 'numeric' },
         cols: 6
     },
+
     {
         type: 'datepicker',
         margin: true,
@@ -22,5 +23,54 @@ export default [
         locale: 'en',
         dateFormOptions: { year: 'numeric', month: 'numeric', day: 'numeric' },
         cols: 6
+    },
+
+    {
+        type: 'select',
+        margin: true,
+        showLabel: true,
+        label: 'FANPAGE',
+        model: null,
+        options: [],
+        reduce: 'id',
+        selectText: 'value',
+        cols: 6,
+    },
+
+    {
+        type: 'select',
+        margin: true,
+        showLabel: true,
+        label: 'SOURCE',
+        model: null,
+        options: [
+            {
+                id: 0,
+                name: "ALL",
+            },
+            {
+                id: 1,
+                name: "Facebook",
+            },
+            {
+                id: 2,
+                name: "Google",
+            },
+        ],
+        reduce: 'id',
+        selectText: 'name',
+        cols: 6,
+    },
+
+    {
+        type: 'select',
+        margin: true,
+        showLabel: true,
+        label: 'OWNER',
+        model: null,
+        options: [],
+        reduce: 'id',
+        selectText: 'user_name',
+        cols: 12,
     },
 ]

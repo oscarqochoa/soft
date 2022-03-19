@@ -44,7 +44,7 @@
             <div style="white-space: pre-wrap;">
               <router-link
                 :class="textLink"
-                :to="`/social-network/leads/new/dashboard/${data.item.id}`"
+                :to="`/social-network/leads/new/dashboard/${data.item.lead_id}`"
                 target="_blank"
               >{{ data.item.nickname }}</router-link>
               <br />
@@ -62,7 +62,7 @@
                 />
                 <b-img
                   fluid
-                  :src="baseUrl + '/images/social-network/facebook.png'"
+                  :src="baseUrl + '/images/social-network/google.png'"
                   style="width: 30px"
                   v-if="data.item.sourcesname_id == 32"
                 />
@@ -149,12 +149,9 @@ import { mapActions, mapState, mapMutations } from "vuex";
 import dataFilters from "./filters.data";
 import Fields from "./fields.data";
 
-// Components
-// import ActionsTable from "./components/ActionsTable.vue";
-
 export default {
   components: {
-    // "actions-table": ActionsTable,
+    //
   },
   data() {
     return{
@@ -184,13 +181,17 @@ export default {
     ...mapState({
       S_W_POTENTIAL_LEADS: (state) => state.CrmLeadStore.S_W_POTENTIAL_LEADS,
     }),
+    ...mapState('SocialNetworkLeadsStore', ['S_SELLERS_FILTERS']),
+    ...mapState('SocialNetworkGlobalStore', ['S_STATES']),
     ...mapState('auth',['currentUser']),
   },
   created() {
     this.getSocialNetworkLeadsPotential();
+    this.setOptionsOnFilters();
   },
   methods: {
-    ...mapActions('SocialNetworkLeadsStore', ['A_SET_FILTERS']),
+    ...mapActions('SocialNetworkLeadsStore', ['A_SET_FILTERS', 'A_GET_FILTER_SELLERS']),
+    ...mapActions('SocialNetworkGlobalStore', ['A_GET_STATES']),
     ...mapActions('CrmLeadStore', ['A_GET_W_POTENTIAL_LEADS', 'A_UPDATE_STATUS_POTENTIAL_SN']),
     ...mapMutations('CrmLeadStore', ['M_SET_ACTIONS_STATUS_POTENTIAL']),
     async getSocialNetworkLeadsPotential() {
@@ -206,11 +207,11 @@ export default {
           date_to: this.filters[1].model,
           orderby: 10,
           order: "desc",
-          user_owner: null,
+          user_owner: this.filters[2].model,
           type: 3,
           lead_situation: 2,
-          state_h: null,
-          sourcename: null,
+          state_h: this.filters[4].model,
+          sourcename: this.filters[3].model,
           reason_not: null,
           subsource: null,
           potential: 2,
@@ -268,6 +269,16 @@ export default {
             );
           }
         }
+    },
+
+    async setOptionsOnFilters() {
+      await Promise.all([
+        this.A_GET_FILTER_SELLERS({moduleId: 15, roles: "[]"}),
+        this.A_GET_STATES({type: 1}),
+        
+      ])
+      this.filters[2].options = this.S_SELLERS_FILTERS;
+      this.filters[4].options = this.S_STATES;
     },
   },
   mounted() {

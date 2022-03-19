@@ -62,7 +62,7 @@
                 />
                 <b-img
                   fluid
-                  :src="baseUrl + '/images/social-network/facebook.png'"
+                  :src="baseUrl + '/images/social-network/google.png'"
                   style="width: 30px"
                   v-if="data.item.sourcesname_id == 32"
                 />
@@ -127,19 +127,6 @@
               @onDeleteLead="deleteLead"
             ></actions-table>
           </template>
-
-           <!-- div(style="width: 110px")
-              select.float-left(
-                :id="'status_' + lead.id",
-                @change="processLead(lead.id)",
-                v-if="lead.status_sn_id != 7",
-                style="width: 75px"
-              )
-                option(disabled, selected)
-                option(value="1") IN CATCHER
-                option(value="5") RECOVERY
-                option(value="7") APPROVE -->
-
         </b-table>
       </filter-slot>
     </b-card>
@@ -158,7 +145,6 @@
 import { mapActions, mapState, mapMutations } from "vuex";
 import dataFilters from "./filters.data";
 import Fields from "./fields.data";
-import {swalErrorIcon, swalInfoIcon, swalSuccessIcon, swalWarningIcon} from "@/icons/statusIcons";
 
 // Components
 import ModalTracking from "../../components/ModalTracking.vue";
@@ -192,21 +178,25 @@ export default {
       isBusy: false,
       showModalTracking: false,
       nameLeadSelected: "",
+      programs: [],
     }
     
   },
   computed: {
-    ...mapState('SocialNetworkLeadsStore',['S_LEADS', 'S_LEADS_COUNT_CLOSED_COUNTER']),
+    ...mapState('SocialNetworkLeadsStore',['S_LEADS', 'S_LEADS_COUNT_CLOSED_COUNTER', 'S_FAN_PAGE_PROGRAMS_FILTERS', 'S_SELLERS_FILTERS']),
     ...mapState('auth',['currentUser']),
     
   },
   created() {
     this.getSocialNetworkLeadsPotential();
+    this.setOptionsOnFilters();
+    console.log(this.filters[2].options);
   },
   methods: {
-    ...mapActions('SocialNetworkLeadsStore', ['A_SET_FILTERS', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_DELETE_LEAD']),
+    ...mapActions('SocialNetworkLeadsStore', ['A_SET_FILTERS', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_DELETE_LEAD', 'A_GET_FAN_PAGE_PROGRAMS_FILTERS', 'A_GET_FILTER_SELLERS']),
     ...mapActions('CrmLeadStore', ['A_PROCESS_LEADS']),
     ...mapMutations('SocialNetworkLeadsStore', ['REMOVE_LEAD_DATA', 'SET_DATA']),
+    
     async getSocialNetworkLeadsPotential() {
       try {
         this.isBusy = true;
@@ -220,13 +210,13 @@ export default {
           date_to: this.filters[1].model,
           orderby: 10,
           order: "desc",
-          user_owner: null,
+          user_owner: this.filters[4].model,
           iduser: this.currentUser.user_id,
           idrole: this.currentUser.role_id,
           user_catcher: null,
-          fanpage: null,
+          fanpage: this.filters[2].model,
           type: 2,
-          sourcename: null,
+          sourcename: this.filters[3].model,
           perpage: this.paginate.perPage,
           page: this.paginate.currentPage,
         });
@@ -352,6 +342,17 @@ export default {
         from: this.filters[0].model,
         to: this.filters[1].model,
       });
+    },
+
+    async setOptionsOnFilters() {
+      await Promise.all([
+        this.A_GET_FAN_PAGE_PROGRAMS_FILTERS(),
+        this.A_GET_FILTER_SELLERS({moduleId: 15, roles: "[]"}),
+      ])
+      this.filters[2].options = this.S_FAN_PAGE_PROGRAMS_FILTERS;
+      this.filters[4].options = this.S_SELLERS_FILTERS;
+
+
     },
   },
   mounted() {

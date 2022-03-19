@@ -81,7 +81,7 @@
                 {{ data.item.nickname }}
               </router-link>
               <br />
-              <small>{{ data.item.lead_name }}</small>
+              <small v-if="data.item.lead_name != null">{{ data.item.lead_name }}</small>
             </div>
           </template>
 
@@ -477,7 +477,7 @@ export default {
       this.typesms = 1;
       this.leads_sms_o = [];
       this.leads_sms_o.push(item.id);
-      this.name_leads_arr = [{ name: item.lead_name, id: item.id }];
+      this.name_leads_arr = [{ name: item.nickname, id: item.id }];
       this.sendModalSms = true;
     },
     closeModalSendSms(value) {
@@ -498,7 +498,7 @@ export default {
     modalSmssOpen() {
       this.typesms = 0;
       this.name_leads_arr = this.leadsSelecteds.map(el => ({
-        name: el.lead_name,
+        name: el.nickname,
         id: el.id
       }));
       this.leads_sms = this.leadsSelecteds.map(el => el.id);

@@ -40,6 +40,7 @@
             :link-classes="['px-3', bgTabsNavs]"
             exact
             :to="{ name: 'sn-list-closed-leads' }"
+            class="tab-count-nav-closed"
             >CLOSED
             <b-badge pill variant="success" class="ml-1">{{ S_LEADS_COUNT_CLOSED_COUNTER }}</b-badge>
           </b-nav-item>
@@ -94,3 +95,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  .tab-count-nav-closed a{
+    padding: 7.5px 40px !important;
+  }
+</style>
