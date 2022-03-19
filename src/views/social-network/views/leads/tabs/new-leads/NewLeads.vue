@@ -57,7 +57,7 @@
 
           <!-- Column: Selected -->
           <template #cell(selected)="data">
-            <b-form-group>
+            <b-form-group v-if="data.item.mobile">
               <b-form-checkbox v-model="data.item.selected" @input="onSelectedRow(data.item)" />
             </b-form-group>
           </template>

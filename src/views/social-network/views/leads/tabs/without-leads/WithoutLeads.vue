@@ -11,7 +11,7 @@
         :start-page="fromPage"
         :to-page="toPage"
         :send-multiple-sms="false"
-        @reload="getSocialNetworkLeads"
+        @reload="getSocialNetworkLeadsPotential"
         @onChangeCurrentPage="onChangeCurrentPage"
       >
         <b-table
@@ -40,13 +40,13 @@
             </div>
           </template>
 
-          <template #cell(lead_name)="data">
+          <template #cell(nickname)="data">
             <div style="white-space: pre-wrap;">
               <router-link :to="{ name: 'sn-dashboard-old-lead' }">
-                {{ data.item.lead_name }}
+                {{ data.item.nickname }}
               </router-link>
               <br />
-              <small>{{ data.item.nickname }}</small>
+              <small>{{ data.item.lead_name }}</small>
             </div>
           </template>
 
@@ -122,6 +122,19 @@
             <small>{{ data.item.created_at | myGlobalDay }}</small>
           </template>
 
+          <template #cell(actions)="data">
+            <div>
+                <span v-if="data.item.status_potential == 2">
+                  <template v-if="currentUser.role_id == 1 || currentUser.role_id == 2">
+                    <b-button variant="success" size="sm" @click="confirmPotential(data.item.lead_id, 3)">Yes</b-button>
+                    <b-button variant="danger" size="sm" class="ml-1" @click="confirmPotential(data.item.lead_id, 4)">No</b-button>
+                  </template>
+                  <b-badge v-else variant="secondary">PENDING</b-badge>
+                </span>
+                <b-badge variant="primary" v-if="data.item.status_potential == 1 || data.item.status_potential == 3">YES</b-badge>
+            </div>
+          </template>
+
         </b-table>
       </filter-slot>
     </b-card>
@@ -172,12 +185,13 @@ export default {
     ...mapState('auth',['currentUser']),
   },
   created() {
-    this.getSocialNetworkLeads();
+    this.getSocialNetworkLeadsPotential();
   },
   methods: {
     ...mapActions('SocialNetworkLeadsStore', ['A_SET_FILTERS']),
-    ...mapActions('CrmLeadStore', ['A_GET_W_POTENTIAL_LEADS']),
-    async getSocialNetworkLeads() {
+    ...mapActions('CrmLeadStore', ['A_GET_W_POTENTIAL_LEADS', 'A_UPDATE_STATUS_POTENTIAL_SN']),
+    ...mapMutations('CrmLeadStore', ['M_SET_ACTIONS_STATUS_POTENTIAL']),
+    async getSocialNetworkLeadsPotential() {
       try {
         this.isBusy = true;
         this.setFilters();
@@ -201,13 +215,12 @@ export default {
           perpage: this.paginate.perPage,
           page: this.paginate.currentPage,
         });
-        console.log(response, 'response')
         this.totalLeads = response.total;
         this.fromPage = response.from;
         this.toPage = response.to;
         this.isBusy = false;
       } catch (error) {
-        console.log("Somtehing went wrong getSocialNetworkLeads", error);
+        console.log("Somtehing went wrong getSocialNetworkLeadsPotential", error);
         this.showToast(
           "danger",
           "top-right",
@@ -219,13 +232,40 @@ export default {
     },
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;
-      this.getSocialNetworkLeads();
+      this.getSocialNetworkLeadsPotential();
     },
     setFilters() {
       this.A_SET_FILTERS({
         from: this.filters[0].model,
         to: this.filters[1].model,
       });
+    },
+    async confirmPotential(lead_id, status_potential) {
+      const result = await this.showConfirmSwal(
+        "Are you sure?",
+        "You won't be able to revert this!",
+        "question"
+      )
+      if (result.value) {
+          const response = await this.A_UPDATE_STATUS_POTENTIAL_SN({
+            lead_id: lead_id,
+            status_potential: status_potential,
+          });
+          if (this.isResponseSuccess(response)) {
+            if(status_potential == 3){
+              await this.M_SET_ACTIONS_STATUS_POTENTIAL({lead_id: lead_id, status_potential: status_potential});
+            }
+            this.showToast();
+          } else {
+            this.showToast(
+              "warning",
+              "top-right",
+              "Warning!",
+              "AlertTriangleIcon",
+              `Something went wrong.${response.message}`
+            );
+          }
+        }
     },
   },
   mounted() {

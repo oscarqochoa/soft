@@ -124,6 +124,12 @@ const mutations = {
     state.S_LEAD_EDIT = payload
     Vue.set(state.S_LEAD_EDIT, 'state_lead', payload.state_lead)
   },
+
+  M_SET_ACTIONS_STATUS_POTENTIAL(state, params) {
+    state.S_W_POTENTIAL_LEADS.find(
+        (lead) => lead.lead_id == params.lead_id
+    ).status_potential = params.status_potential
+  },
 }
 const actions = {
   async A_GET_LEADS({ commit }, body) {
@@ -618,6 +624,16 @@ const actions = {
       const response = await crmLead.exportLeadsToExcel(body)
       return response
     } catch (error) {
+      throw error
+    }
+  },
+
+  async A_UPDATE_STATUS_POTENTIAL_SN({ commit }, body) {
+    try {
+      const response = await crmLead.updateStatusPotentialSn(body)
+      return response
+    } catch (error) {
+      console.log('ERROR_UPDATE_STATUS_POTENTIAL_SN [ACTION]', error)
       throw error
     }
   },

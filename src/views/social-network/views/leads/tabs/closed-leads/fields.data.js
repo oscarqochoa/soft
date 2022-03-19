@@ -2,7 +2,7 @@ import { title } from '@core/utils/filter'
 
 export default [
     {
-        key: 'lead_name',
+        key: 'nickname',
         label: 'Nickname',
         formatter: title,
         sortable: true,
@@ -33,24 +33,19 @@ export default [
         sortable: false,
     },
     {
-        key: 'attend',
-        label: 'Appointment',
+        key: 'owner',
+        label: 'Owner',
         sortable: false,
     },
     {
-        key: 'created_at',
-        label: 'Created date',
-        sortable: true,
+        key: 'catcher',
+        label: 'Catcher',
+        sortable: false,
     },
     {
-        key: 'catcher',
-        label: 'Owner',
-        sortable: true,
-    },
-    {
-        key: 'catcher',
-        label: 'Reason',
-        sortable: true,
+        key: 'tracking',
+        label: 'Tracking',
+        sortable: false,
     },
     {
         key: 'actions',
