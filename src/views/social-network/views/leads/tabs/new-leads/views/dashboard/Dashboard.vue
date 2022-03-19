@@ -40,6 +40,7 @@
         <card-address
           :personalAddress="personalAddress"
           :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
+          @cancel-edit-address="cancelEditAddress"
         />
       </b-col>
       <b-col md="6">
@@ -161,6 +162,9 @@ export default {
       this.leads_sms_o.push(item.id);
       this.name_leads_arr = [{ name: item.lead_name, id: item.id }];
       this.showModalSendSms = true;
+    },
+    cancelEditAddress(originalAddress) {
+      this.personalAddress = originalAddress;
     },
     closeModalSendSms() {
       this.showModalSendSms = false;

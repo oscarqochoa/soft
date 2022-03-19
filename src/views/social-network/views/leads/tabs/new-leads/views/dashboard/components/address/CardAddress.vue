@@ -47,6 +47,7 @@
           <vue-google-autocomplete
             v-model="personalAddress.street"
             id="street_address"
+            ref="streetAdress"
             class="form-control form-group-col-12 street-address-vue-google"
             :placeholder="editInformation ? 'Pleace type your address' : ''"
             country="us"
@@ -125,6 +126,7 @@ export default {
   data() {
     return {
       editInformation: false,
+      personalAddressTempo: {},
     };
   },
   computed: {
@@ -145,6 +147,8 @@ export default {
         "question"
       ).then((result) => {
         if (result.value) {
+          this.personalAddressTempo = {...this.personalAddress};
+          this.$set(this.personalAddress, 'street', this.personalAddressTempo.street);
           this.editInformation = true;
         }
       });
@@ -156,6 +160,10 @@ export default {
         "question"
       ).then((result) => {
         if (result.value) {
+          this.$emit('cancel-edit-address', this.personalAddressTempo);
+          console.log(this.personalAddress.street)
+          console.log(this.personalAddressTempo.street)
+          this.$set(this.personalAddress, 'street', this.personalAddressTempo.street);
           this.editInformation = false;
         }
       });
