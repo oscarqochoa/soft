@@ -2,7 +2,7 @@ import { title } from '@core/utils/filter'
 
 export default [
     {
-        key: 'lead_name',
+        key: 'nickname',
         label: 'Nickname',
         formatter: title,
         sortable: true,
@@ -48,7 +48,7 @@ export default [
         sortable: true,
     },
     {
-        key: 'catcher',
+        key: 'reason',
         label: 'Reason',
         sortable: true,
     },

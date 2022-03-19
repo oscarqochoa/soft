@@ -344,6 +344,18 @@ class CrmLead {
       throw error;
     }
   }
+
+  async updateStatusPotentialSn(body) {
+    try {
+      const { data, status } = await amgApi.post(
+        "/lead/social-network/update-status-potential-sn", body
+      );
+      return { data, status };
+    } catch (error) {
+      console.log("Something went wrong on updateStatusPotentialSn:", error);
+      throw error;
+    }
+  }
 }
 
 export default new CrmLead();

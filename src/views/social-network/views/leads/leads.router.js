@@ -7,8 +7,7 @@ import DashboardOldLead from './tabs/old-leads/views/dashboard/Dashboard.vue'
 import EditOldLead from './tabs/old-leads/views/edit/Edit.vue'
 
 import WithoutLeads from './tabs/without-leads/WithoutLeads.vue'
-
-// import ClosedLeads from './tabs/closed-leads/ClosedLeads.vue'
+import ClosedLeads from './tabs/closed-leads/ClosedLeads.vue'
 
 
 
@@ -65,24 +64,24 @@ export default [
                     permittedRoles: [12, 9, 11, 2, 1]
                 },
             },
-            // {
-            //     path: 'closed',
-            //     component: ClosedLeads,
-            //     name: 'sn-list-closed-leads',
-            //     meta: {
-            //         pageTitle: 'Leads',
-            //         breadcrumb: [
-            //             {
-            //                 text: 'Leads'
-            //             },
-            //             {
-            //                 text: 'Closed',
-            //                 active: true
-            //             },
-            //         ],
-            //         permittedRoles: [12, 9, 11, 2, 1]
-            //     },
-            // },
+            {
+                path: 'closed',
+                component: ClosedLeads,
+                name: 'sn-list-closed-leads',
+                meta: {
+                    pageTitle: 'Leads',
+                    breadcrumb: [
+                        {
+                            text: 'Leads'
+                        },
+                        {
+                            text: 'Closed',
+                            active: true
+                        },
+                    ],
+                    permittedRoles: [12, 9, 11, 2, 1]
+                },
+            },
         ],
     },
     {
