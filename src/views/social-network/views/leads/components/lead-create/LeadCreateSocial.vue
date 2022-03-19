@@ -277,7 +277,6 @@ export default {
     this.lead.catcher = this.currentUser.user_id;
     this.lead.created_by = this.currentUser.user_id;
     this.lead.created_date = this.$options.filters.formatDate(new Date());
-    window.addEventListener('scroll', this.handleScroll)
   },
 
   computed: {

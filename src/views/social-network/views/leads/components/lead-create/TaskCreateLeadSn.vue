@@ -119,12 +119,11 @@ export default {
     return {
       addLater: false,
       addNow: false,
-      leadGa: {},
     }
   },
   async created() {
-    this.leadGa = this.lead
-
+  },
+  mounted() {
   },
   computed : {
     ...mapState('SocialNetworkLeadsStore', ['S_SELLERS']),

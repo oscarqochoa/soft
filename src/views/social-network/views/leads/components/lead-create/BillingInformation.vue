@@ -46,7 +46,7 @@
               <b-col xs="6" md="2" class="px-0">
                 <validation-provider
                     v-slot="{errors}"
-                    name="input-create-lead-26,card-number-1"
+                    name="input-create-lead-26,Card number 1"
                     rules="required"
                 >
                   <b-form-input
@@ -72,7 +72,7 @@
               <b-col xs="6" md="2" class="px-0">
                 <validation-provider
                     v-slot="{errors}"
-                    name="input-create-lead-27,card-number-2"
+                    name="input-create-lead-27,Card number 2"
                     rules="required"
                 >
                   <b-form-input
@@ -92,7 +92,7 @@
               <b-col xs="6" md="2" class="px-0">
                 <validation-provider
                     v-slot="{errors}"
-                    name="input-create-lead-28,card-number-3"
+                    name="input-create-lead-28,Card number 3"
                     rules="required"
                 >
                   <b-form-input
@@ -112,7 +112,7 @@
               <b-col xs="6" md="2" class="px-0">
                 <validation-provider
                     v-slot="{errors}"
-                    name="input-create-lead-29,card-number-4"
+                    name="input-create-lead-29,Card number 4"
                     rules="required"
                 >
                   <b-form-input

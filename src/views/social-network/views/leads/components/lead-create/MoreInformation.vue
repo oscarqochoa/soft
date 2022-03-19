@@ -256,12 +256,16 @@ export default {
     border: 1px solid rgba(255, 255, 255, 0.4);
   }
   input::placeholder {
-    color: #4c4c4f;
-    font-weight: 600;
+    color: #ccccd3;
+    font-weight: 400;
   }
 }
 .dark-layout .picker-select-date{
   background: #17171a !important;
+  input::placeholder{
+    color: #4f4f52 !important;
+    font-weight: 600;
+  }
 }
 .border-error-datepicker{
   border: 1px solid #fc424a;
