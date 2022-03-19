@@ -506,6 +506,15 @@ class SNLeads {
         }
     }
 
+    async getCountLeadClosed(body) {
+        try {
+            const { data } = await amgApi.get('/lead/get-count-lead-closed?date_val=' + '2021-04-17', body)
+            return data 
+        } catch (error) {
+            throw error
+        }
+    }
+
 }
 
 export default new SNLeads()

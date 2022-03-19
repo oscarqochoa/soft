@@ -42,9 +42,11 @@
 
           <template #cell(nickname)="data">
             <div style="white-space: pre-wrap;">
-              <router-link :to="{ name: 'sn-dashboard-old-lead' }">
-                {{ data.item.nickname }}
-              </router-link>
+              <router-link
+                :class="textLink"
+                :to="`/social-network/leads/new/dashboard/${data.item.id}`"
+                target="_blank"
+              >{{ data.item.nickname }}</router-link>
               <br>
               {{ data.item.nickname }}
             </div>
@@ -194,7 +196,7 @@ export default {
     
   },
   computed: {
-    ...mapState('SocialNetworkLeadsStore',['S_LEADS']),
+    ...mapState('SocialNetworkLeadsStore',['S_LEADS', 'S_LEADS_COUNT_CLOSED_COUNTER']),
     ...mapState('auth',['currentUser']),
     
   },
@@ -204,7 +206,7 @@ export default {
   methods: {
     ...mapActions('SocialNetworkLeadsStore', ['A_SET_FILTERS', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_DELETE_LEAD']),
     ...mapActions('CrmLeadStore', ['A_PROCESS_LEADS']),
-    ...mapMutations('SocialNetworkLeadsStore', ['REMOVE_LEAD_DATA']),
+    ...mapMutations('SocialNetworkLeadsStore', ['REMOVE_LEAD_DATA', 'SET_DATA']),
     async getSocialNetworkLeadsPotential() {
       try {
         this.isBusy = true;
@@ -279,7 +281,10 @@ export default {
               });
               if (this.isResponseSuccess(response)) {
                 await this.REMOVE_LEAD_DATA({destination: "S_LEADS", id: lead_id})
-
+                this.SET_DATA({
+                    destination: "S_LEADS_COUNT_CLOSED_COUNTER",
+                    data: this.S_LEADS_COUNT_CLOSED_COUNTER-1
+                })
                 this.showToast(
                     "success",
                     "top-right",

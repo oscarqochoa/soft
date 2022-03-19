@@ -17,7 +17,7 @@
       </template>
     </header-slot>
 
-    <div v-if="G_IS_CEO || G_IS_SUPERVISOR">
+    <div v-if="isCeo || isSupervisor || isTeamLeader">
         <b-nav card-header pills class="m-0">
           <b-nav-item
             exact-active-class="active"
@@ -41,6 +41,7 @@
             exact
             :to="{ name: 'sn-list-closed-leads' }"
             >CLOSED
+            <b-badge pill variant="success" class="ml-1">{{ S_LEADS_COUNT_CLOSED_COUNTER }}</b-badge>
           </b-nav-item>
         </b-nav>
         <b-card 
@@ -91,9 +92,8 @@ export default {
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
-      G_IS_SUPERVISOR: "auth/isSupervisor",
-      G_IS_CEO: "auth/isCeo",
     }),
+    ...mapState("SocialNetworkLeadsStore", ["S_LEADS_COUNT_CLOSED_COUNTER"]),
     ...mapState({
       S_SELECTED_LEADS: state => state.CrmLeadStore.S_SELECTED_LEADS,
       S_FILTERS_LEADS: state => state.CrmLeadStore.S_FILTERS_LEADS
@@ -103,6 +103,22 @@ export default {
     }
   },
   methods: {
+    ...mapActions('SocialNetworkLeadsStore', ['A_GET_COUNT_LEAD_CLOSED']),
+    async getCountLeadClosed() {
+      try {
+        await this.A_GET_COUNT_LEAD_CLOSED();
+      } catch (error) {
+        console.log("Something went wrong getCountLeadClosed:", error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
+      }
+    },
+
     ...mapActions({
       A_GET_STATUS_LEADS: " /A_GET_STATUS_LEADS",
       A_GET_OWNERS: "StandarStore/A_GET_OWNERS",
@@ -250,6 +266,7 @@ export default {
     //
   },
   async created() {
+    await this.getCountLeadClosed();
 
   },
 };
