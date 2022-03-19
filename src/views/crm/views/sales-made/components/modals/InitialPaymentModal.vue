@@ -565,7 +565,7 @@ export default {
                 sale_id: this.initial_payment.payments.sale_id,
                 user_id: this.initial_payment.sessionId,
                 program_id: this.initial_payment.payments.program_id,
-                modul: this.initial_payment.modul,
+                // modul: this.initial_payment.modul,
                 charge: this.charge == true ? 0 : 1,
                 sendsms: sms === true ? 1 : 0,
                 min_ip: this.initial_payment.payments.min_ip,
