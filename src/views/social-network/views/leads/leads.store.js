@@ -58,6 +58,7 @@ const state = {
     S_FAN_PAGE_PROGRAMS_FILTERS: [],
     S_SELLERS_FILTERS: [],
     S_SUB_SOURCES_FILTERS: [],
+    S_LEADS_COUNT_CLOSED_COUNTER: 0,
 }
 const getters = {
     G_STATUS_LEADS() {
@@ -669,6 +670,20 @@ const actions = {
             return response;
         } catch (error) {
             console.log("ERROR_A_GET_FILTER_SELLERS [ACTION]", error)
+            throw error
+        }
+    },
+
+    async A_GET_COUNT_LEAD_CLOSED({ commit }, body) {
+        try {
+            const response = await SNLeadsService.getCountLeadClosed(body) 
+            commit("SET_DATA", {
+                destination: "S_LEADS_COUNT_CLOSED_COUNTER",
+                data: response[0].closed || 0
+            })
+            return response[0].closed;
+        } catch (error) {
+            console.log("ERROR_GET_COUNT_LEAD_CLOSED[ACTION]", error)
             throw error
         }
     },

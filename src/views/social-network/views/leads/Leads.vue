@@ -17,7 +17,7 @@
       </template>
     </header-slot>
 
-    <div v-if="isCeo || isSupervisor">
+    <div v-if="isCeo || isSupervisor || isTeamLeader">
         <b-nav card-header pills class="m-0">
           <b-nav-item
             exact-active-class="active"
@@ -41,6 +41,7 @@
             exact
             :to="{ name: 'sn-list-closed-leads' }"
             >CLOSED
+            <b-badge pill variant="success" class="ml-1">{{ S_LEADS_COUNT_CLOSED_COUNTER }}</b-badge>
           </b-nav-item>
         </b-nav>
         <b-card 
@@ -59,17 +60,34 @@
 </template>
 
 <script>
-import LeadListAddNew from "@/views/crm/views/Lead/lead-module/save/LeadListAddNew.vue";
-import LeadCreateSocial from "@/views/social-network/views/leads/components/lead-create/LeadCreateSocial";
-import NewLeads from "./tabs/new-leads/NewLeads.vue";
 import GlobalSearchComponent from "../../commons/GlobalSearchComponent.vue";
 // components
 export default {
   components: {
-    LeadListAddNew,
-    LeadCreateSocial,
-    NewLeads,
-    GlobalSearchComponent,
+    GlobalSearchComponent
+  },
+  computed: {
+    ...mapState("SocialNetworkLeadsStore", ["S_LEADS_COUNT_CLOSED_COUNTER"]),
+  },
+  methods: {
+    ...mapActions('SocialNetworkLeadsStore', ['A_GET_COUNT_LEAD_CLOSED']),
+    async getCountLeadClosed() {
+      try {
+        await this.A_GET_COUNT_LEAD_CLOSED();
+      } catch (error) {
+        console.log("Something went wrong getCountLeadClosed:", error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
+      }
+    },
+  },
+  async created() {
+    await this.getCountLeadClosed();
   },
 };
 </script>

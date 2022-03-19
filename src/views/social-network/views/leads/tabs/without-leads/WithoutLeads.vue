@@ -42,9 +42,11 @@
 
           <template #cell(nickname)="data">
             <div style="white-space: pre-wrap;">
-              <router-link :to="{ name: 'sn-dashboard-old-lead' }">
-                {{ data.item.nickname }}
-              </router-link>
+              <router-link
+                :class="textLink"
+                :to="`/social-network/leads/new/dashboard/${data.item.id}`"
+                target="_blank"
+              >{{ data.item.nickname }}</router-link>
               <br />
               <small>{{ data.item.lead_name }}</small>
             </div>
