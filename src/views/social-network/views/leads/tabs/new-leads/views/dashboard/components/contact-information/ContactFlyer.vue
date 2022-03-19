@@ -4,7 +4,7 @@
       <div class="col-lg-12">
         <div>
           <template v-if="fyerReply.flyer_id">
-            <template v-if="initialFlyer">
+            <template >
               <div>
                 <label style="max-width: 22rem" class="p-relative">
                   <b-img-lazy
@@ -17,8 +17,8 @@
                 </label>
               </div>
             </template>
-            <template v-else>
-              <div
+            <!-- <template v-else>
+              asdasd<div
                 :value="item.id"
                 v-for="item in flyers"
                 :key="item.id"
@@ -38,7 +38,7 @@
                   }}</span>
                 </label>
               </div>
-            </template>
+            </template> -->
           </template>
           <div class="p-relative" v-if="!fyerReply.flyer_id">
             <b-avatar rounded size="22rem">
@@ -103,6 +103,7 @@
       v-if="modalChooseFlyer"
       :title="titleModalChoose"
       @onSelect="closeModalChooseFlyer"
+      @onClose="modalChooseFlyer = false"
     ></modal-choose-flyer>
   </div>
 </template>
@@ -138,7 +139,7 @@ export default {
       imgFanpage: "",
       initialFlyer: true,
       returnFlyer: null,
-
+      returnFlyerImage: null,
       //lazy Img
       mainProps: {
         center: false,
@@ -196,11 +197,11 @@ export default {
 
       this.removePreloader();
     },
-    closeModalChooseFlyer(flyer) {
+    closeModalChooseFlyer(flyer, flyerObj) {
       this.modalChooseFlyer = false;
       this.initialFlyer = false;
-
-      this.fyerReply.flyer_id = flyer.id;
+      this.fyerReply.flyer_id = flyer;
+      this.$set(this.fyerReply, "route", flyerObj.route_thumb);
     },
     async activateEditFlyer() {
       const confirm = await this.showGenericConfirmSwal({
@@ -209,6 +210,7 @@ export default {
 
       if (confirm.value) {
         this.returnFlyer = JSON.parse(JSON.stringify(this.fyerReply.flyer_id));
+        this.returnFlyerImage = this.fyerReply.route;
         this.editFlyer = true;
       }
     },
@@ -219,6 +221,7 @@ export default {
 
       if (confirm.value) {
         this.fyerReply.flyer_id = this.returnFlyer;
+        this.fyerReply.route = this.returnFlyerImage;
         this.editFlyer = false;
       }
     },
@@ -243,11 +246,14 @@ export default {
 
             //Show in the front the new flyer
             this.reply.flyer_id = this.fyerReply.flyer_id;
-            this.flyers.forEach((flyer) => {
-              if (flyer.id == this.fyerReply.flyer_id) {
-                this.reply.flyer_route = flyer.route_thumb;
-              }
-            });
+            this.reply.flyer_route = this.fyerReply.route;
+            // console.log(this.reply, 'flyer');
+            // this.flyers.forEach((flyer) => {
+            //   if (flyer.id == this.fyerReply.flyer_id) {
+            //     console.log(flyer, 'flyer2222');
+            //     this.reply.flyer_route = flyer.route_thumb;
+            //   }
+            // });
           }
 
           this.removePreloader();

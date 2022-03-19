@@ -348,7 +348,7 @@
     >
       <b-container>
         <div class="container-flyers">
-          <div v-for="flyer in S_FLYERS" class="d-flex align-items-center justify-content-center">
+          <div v-for="flyer in S_FLYERS" class="d-flex align-items-center justify-content-center" :key="flyer.id">
 
             <div @click="selectFlyer(flyer.id, flyer.route_thumb)" class="image-flyer d-flex align-items-center justify-content-center" :class="lead.flyer == flyer.id ? 'select-flyer' : 'asd'">
               <b-avatar

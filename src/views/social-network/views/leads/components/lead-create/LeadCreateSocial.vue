@@ -606,9 +606,6 @@ export default {
   overflow-y: scroll !important;
   scroll-behavior: smooth !important;
 }
-.b-sidebar{
-  //width: 100% !important;
-}
 .sidebar-xl{
   width: 90rem !important;
 }
