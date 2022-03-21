@@ -186,7 +186,6 @@ export default {
       }
     }, //Changes Percentages Crm
     editPercentageDepartment() {
-      console.log('percent', this.percentApartment)
       this.returnPercent = JSON.parse(JSON.stringify(this.percentApartment));
       this.editPercent = true;
     },

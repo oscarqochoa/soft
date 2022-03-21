@@ -1,11 +1,21 @@
 <template>
-  <b-card body-class="px-0">
-    <b-container>
-      <b-row>
-        <h3 class="title-card ml-3">Credit Report</h3>
-      </b-row>
-    </b-container>
-    <b-row class="mt-2 mb-3">
+  <b-card body-class="px-0" >
+    <template #header>
+      <b-card-title class="card-title-cr"> Credit Report </b-card-title>
+    </template>
+    <template #footer>
+      <div class="text-right">
+        <b-button
+          variant="primary"
+          class="float-right mt-2"
+          @click="openModalRequestCreditReport"
+        >
+          <feather-icon icon="PlusIcon" class="mr-50"></feather-icon>
+          REQUEST CR
+        </b-button>
+      </div>
+    </template>
+    <b-row class="mt-1 mb-3">
       <b-col sm="4" md="4" lg="4" class="text-center">
         <span class="font-bureau-style text-center font-weight-bolder">
           TransUnion
@@ -13,6 +23,8 @@
         <div class="circle-bureau" :class="colorScore(scoreTransunion, 2)">
           <span class="text-circle" :class="colorScore(scoreTransunion, 1)">
             {{ scoreTransunion }}
+            <!--class="show-lead-score-cr"
+            style="border: 2px solid #0aafdb" -->
           </span>
         </div>
       </b-col>
@@ -60,170 +72,154 @@
           >
             <template #title>
               Pending
-              <div
-                v-if="countData == 0"
-                class="rounded-circle text-white"
-                style="
-                  display: inline-block;
-                  background: red;
-                  padding: 0px 4px 0px 4px;
-                  margin-left: 10px;
-                "
-              >
+              <b-badge variant="danger" pill v-if="countData != 0">
                 {{ countData }}
-              </div>
+              </b-badge>
             </template>
           </b-tab>
         </b-tabs>
       </b-col>
       <b-col sm="12" md="12" lg="12" xl="12">
-        <div
-          id="cont-list"
-          :style="isOverSize ? 'height: 170px; overflow: auto;' : ''"
+        <b-table
+          v-if="tab == 1"
+          small
+          :fields="tableObtained.fields"
+          :items="reports"
+          sticky-header="180px"
         >
-          <b-table
-            v-if="tab == 1"
-            small
-            :fields="tableObtained.fields"
-            :items="reports"
-          >
-            <template #cell(provider)="data">
-              {{data.item.plataform_icon}}
+          <template #cell(provider)="data">
+            <div
+              v-b-tooltip.hover.top="data.item.plataform_name"
+              style="
+                width: 20px;
+                height: 20px;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: contain;
+              "
+              :style="{
+                backgroundImage: `url(${baseUrl + data.item.plataform_icon})`,
+              }"
+            />
+          </template>
+
+          <template #cell(date)="data">
+            <span v-if="data.item.date != null">
+              {{ data.item.date | myGlobal }}
+            </span>
+          </template>
+
+          <template #cell(cr)="data">
+            <a
+              v-if="data.item.state == 1"
+              :href="
+                '/socialnetwork/ncr/reportLead/' +
+                data.item.lead_id +
+                '/' +
+                data.item.id
+              "
+              target="_blank"
+              style="cursor: pointer"
+            >
+              <feather-icon icon="FileIcon"></feather-icon>
+            </a>
+          </template>
+          <template #cell(pdf)="data">
+            <a
+              :href="data.item.route_pdf"
+              v-if="data.item.route_pdf"
+              target="_blank"
+            >
               <img
-                :src="data.item.plataform_icon"
-                :title="data.item.plataform_name"
-                alt
+                src="/assets/images/extensions/pdf.png"
+                width="23px"
+                alt=""
               />
-            </template>
+            </a>
+          </template>
+        </b-table>
 
-            <template #cell(date)="data">
-              <span v-if="data.item.date != null">
-                {{ data.item.date | myGlobal }}
-              </span>
-            </template>
+        <b-table
+          v-if="tab == 2"
+          small
+          :fields="tablePending.fields"
+          :items="pendings"
+          sticky-header="180px"
+        >
+          <template #cell(request_by)="data">
+            <div>{{ data.item.seller_name }}</div>
+            <div>{{ data.item.date | myGlobalDay }}</div>
+          </template>
+          <template #cell(tracking)="data">
+            <b-button
+              variant="flat-primary"
+              class="btn-icon"
+              @click="
+                openModalTrackingStatus(data.item.score_id, data.item.lead_name)
+              "
+            >
+              <feather-icon icon="ListIcon"></feather-icon>
+            </b-button>
+          </template>
 
-            <template #cell(cr)="data">
-              <a
-                v-if="data.item.state == 1"
-                :href="
-                  '/socialnetwork/leads/report/' +
-                  data.item.lead_id +
-                  '/' +
-                  data.item.id
-                "
-                target="_blank"
-                style="cursor: pointer"
-              >
-                <feather-icon icon="FileIcon"></feather-icon>
-              </a>
-            </template>
-            <template #cell(pdf)="data">
-              <a
-                :href="data.item.route_pdf"
-                v-if="data.item.route_pdf"
-                target="_blank"
-              >
-                <i
-                  class="far fa-file-pdf text-dark"
-                  style="font-size: 20px"
-                ></i>
-              </a>
-            </template>
-          </b-table>
-
-          <b-table
-            v-if="tab == 2"
-            small
-            :fields="tablePending.fields"
-            :items="pendings"
-          >
-            <template #cell(request_by)="data">
-              <div>{{ data.item.seller_name }}</div>
-              <div>{{ data.item.date | myGlobalDay }}</div>
-            </template>
-            <template #cell(tracking)="data">
-              <b-button
-                variant="flat-primary"
-                class="btn-icon"
-                @click="
-                  openTrackingStatus(data.item.score_id, data.item.lead_name)
-                "
-              >
-                <feather-icon icon="ListIcon"></feather-icon>
-              </b-button>
-            </template>
-
-            <template #cell(action)="data">
+          <template #cell(action)="data">
+            <span
+              v-if="data.item.status_id == 3"
+              @click="changeStatus(data.item.score_id, 4)"
+              style="cursor: pointer"
+            >
+              Validate Information
               <span
-                v-if="data.item.status_id == 3"
-                @click="changeStatus(data.item.score_id, 4)"
+                class="ml-1"
+                v-if="data.item.status_id == 3 && data.item.attemps_count < 3"
+                @click="changeStatus(data.item.score_id, 5)"
                 style="cursor: pointer"
               >
-                Validate Information
-                <span
-                  class="ml-1"
-                  v-if="data.item.status_id == 3 && data.item.attemps_count < 3"
-                  @click="changeStatus(data.item.score_id, 5)"
-                  style="cursor: pointer"
-                >
-                  | Other Source (DI)
-                </span>
-                <span
-                  class="ml-1"
-                  v-if="data.item.status_id == 6"
-                  @click="changeStatus(data.item.score_id, 7)"
-                  style="cursor: pointer"
-                >
-                  Information Was Correct
-                </span>
-                <span
-                  class="ml-1"
-                  v-if="data.item.status_id == 6 && data.item.attemps_count < 3"
-                  @click="changeStatus(data.item.score_id, 8)"
-                  style="cursor: pointer"
-                >
-                  | Other Source (II)
-                </span>
+                | Other Source (DI)
               </span>
-            </template>
-          </b-table>
-        </div>
-      </b-col>
-      <b-col sm="12" md="12" lg="12" xl="12">
-        <b-form-group>
-          <b-button
-            variant="primary"
-            class="float-right mt-2 mr-2"
-            @click="openRequestReport"
-          >
-            <feather-icon icon="PlusIcon" class="mr-50"></feather-icon>
-            REQUEST CR
-          </b-button>
-        </b-form-group>
+              <span
+                class="ml-1"
+                v-if="data.item.status_id == 6"
+                @click="changeStatus(data.item.score_id, 7)"
+                style="cursor: pointer"
+              >
+                Information Was Correct
+              </span>
+              <span
+                class="ml-1"
+                v-if="data.item.status_id == 6 && data.item.attemps_count < 3"
+                @click="changeStatus(data.item.score_id, 8)"
+                style="cursor: pointer"
+              >
+                | Other Source (II)
+              </span>
+            </span>
+          </template>
+        </b-table>
       </b-col>
     </b-row>
 
-    <modal-request-credit-report-crm
-      :ifModal="modalOpenRequestCR"
-      v-if="modalOpenRequestCR"
-      :lead_id="this.global.editleads[0].id"
-      :global="this.global"
-      :modul="this.modul"
-      @click="closeModalRequestCR"
-      @close="closeModalRequestCRC"
-    ></modal-request-credit-report-crm>
+    <modal-request-credit-report
+      v-if="showModalRequestCreditReport"
+      :lead_id="lead.id"
+      :modul="15"
+      @onClose="closeModalRequestCreditReport"
+    ></modal-request-credit-report>
 
-    <modal-ncr-crm-tracking-status-ad
-      v-if="modalTrackingStatus"
-      :ifModal="modalTrackingStatus"
+    <modal-tracking-status
+      v-if="showModalTrackingStatus"
       :score_id="score_id"
       :lead_name="lead_name"
-      @click="closeTrackingStatus"
-    ></modal-ncr-crm-tracking-status-ad>
+      @onClose="closeModalTrackingStatus"
+    ></modal-tracking-status>
   </b-card>
 </template>
 
 <script>
+// Components
+import ModalRequestCreditReport from "./ModalRequestCreditReport.vue";
+import ModalTrackingStatus from "./ModalTrackingStatus.vue";
+
 // Services
 import SNLeadsService from "@/views/social-network/services/leads";
 
@@ -232,6 +228,10 @@ export default {
     lead: {
       type: Object,
     },
+  },
+  components: {
+    ModalRequestCreditReport,
+    ModalTrackingStatus,
   },
   data() {
     return {
@@ -256,7 +256,6 @@ export default {
         ],
       },
 
-      modalOpenRequestCR: false,
       reports: [],
       pendings: [],
       countData: 0,
@@ -267,6 +266,10 @@ export default {
       scoreEquifax: "...",
       scoreTransunion: "...",
       scoreExperian: "...",
+
+      // Modals
+      showModalRequestCreditReport: false,
+      showModalTrackingStatus: false,
     };
   },
   computed: {
@@ -279,8 +282,27 @@ export default {
         (this.tab == 2 && this.pendings.length >= 2)
       );
     },
+    leadIdParam() {
+      return this.$route.params.id;
+    },
   },
   methods: {
+    openModalRequestCreditReport() {
+      this.showModalRequestCreditReport = true;
+    },
+    closeModalRequestCreditReport() {
+      this.showModalRequestCreditReport = false;
+      this.getReports();
+    },
+    openModalTrackingStatus(id, lead_name) {
+      this.score_id = id;
+      this.lead_name = lead_name;
+
+      this.showModalTrackingStatus = true;
+    },
+    closeModalTrackingStatus() {
+      this.showModalTrackingStatus = false;
+    },
     colorScore(score, type) {
       if (score < 659) {
         return type == 1 ? "text-danger" : "bg-light-danger";
@@ -290,46 +312,29 @@ export default {
       }
       return type == 1 ? "text-success" : "bg-light-success";
     },
-    changeStatus(score_id, status_id) {
-      swal
-        .fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#ab9220",
-          cancelButtonColor: "#8f9194",
-          confirmButtonText: "Yes",
-          input: "textarea",
-        })
-        .then((result) => {
-          if (result.value) {
-            this.addPreloader();
-            // axios
-            //   .post("/api/ncr-leads-change-status", {
-            //     user_id: this.global.layout.id,
-            //     score_id: score_id,
-            //     status_id: status_id,
-            //     text: result.value,
-            //   })
-            //   .then((response) => {
-            //     if (response.status == 200) {
-            //       this.getReports();
-            //       this.removePreloader();
-            //       swal.fire({
-            //         type: "success",
-            //         title: "OPERATION SUCCESSFULLY",
-            //       });
-            //     }
-            //   });
-          }
+    async changeStatus(score_id, status_id) {
+      const confirm = await this.showConfirmSwal();
+
+      if (confirm.value) {
+        const response = await SNLeadsService.changeCreditReportStatus({
+          user_id: this.global.layout.id,
+          score_id: score_id,
+          status_id: status_id,
+          text: result.value,
         });
+
+        if (response.status == 200) {
+          this.getReports();
+          this.removePreloader();
+          this.showToast();
+        }
+      }
     },
     async getReports() {
       try {
         if (this.tab == 1) {
           const response = await SNLeadsService.getCreditReports({
-            id: this.lead.id,
+            id: this.leadIdParam,
           });
 
           if (response.status == 200) {
@@ -338,7 +343,7 @@ export default {
           }
         } else {
           const response = await SNLeadsService.getPendingCreditReport({
-            id: this.lead.id,
+            id: this.leadIdParam,
             modul: 15,
           });
 
@@ -356,82 +361,47 @@ export default {
         throw error;
       }
     },
-    closeTrackingStatus() {
-      this.modalTrackingStatus = false;
+    async countPendingTab() {
+      try {
+        const response = await SNLeadsService.getCountPendingReports({
+          id: this.leadIdParam,
+          modul: 15,
+        });
+
+        if (response.status == 200) {
+          this.countData =
+            response.data[0].countPending > 99
+              ? "+99"
+              : response.data[0].countPending;
+        }
+      } catch (error) {
+        throw error;
+      }
     },
-    openTrackingStatus(id, lead_name) {
-      this.lead_name = lead_name;
-      this.score_id = id;
-      this.modalTrackingStatus = true;
-    },
-    countPendingTab() {
-      // axios
-      //   .post("/api/get-cr-count-pending-tab", {
-      //     id: this.global.editleads[0].id,
-      //     modul: this.modul,
-      //   })
-      //   .then((response) => {
-      //     if (response.status == 200) {
-      //       this.countData =
-      //         response.data[0].countPending > 99
-      //           ? "+99"
-      //           : response.data[0].countPending;
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.error(err);
-      //   });
-    },
-    getScore() {
-      // axios
-      //   .post("/api/get-score-by-lead-sn", {
-      //     id: this.global.editleads[0].id,
-      //   })
-      //   .then((response) => {
-      //     if (response.status == 200) {
-      //       this.scoreEquifax = response.data.equifax;
-      //       this.scoreTransunion = response.data.transunion;
-      //       this.scoreExperian = response.data.experian;
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.error(err);
-      //   });
-    },
-    closeModalRequestCR() {
-      this.tab = 2;
-      this.getReports();
-      this.modalOpenRequestCR = false;
-    },
-    closeModalRequestCRC() {
-      this.modalOpenRequestCR = false;
-    },
-    openRequestReport() {
-      this.modalOpenRequestCR = true;
-    },
-    addPreloader() {
-      var x = document.getElementById("app");
-      x.classList.add("preloader");
-      x.classList.add("opacity-uno");
-    },
-    removePreloader() {
-      var x = document.getElementById("app");
-      x.classList.remove("preloader");
-      x.classList.remove("opacity-uno");
+    async getScore() {
+      try {
+        const response = await SNLeadsService.getCreditReportScore({
+          id: this.leadIdParam,
+        });
+
+        if (response.status == 200) {
+          this.scoreEquifax = response.data.equifax;
+          this.scoreTransunion = response.data.transunion;
+          this.scoreExperian = response.data.experian;
+        }
+      } catch (error) {
+        throw error;
+      }
     },
   },
-  created() {
-    this.getScore();
-    this.getReports();
+  async created() {
+    await this.getScore();
+    await this.getReports();
   },
 };
 </script>
 
-<style scoped>
-.center-fix {
-  display: flex;
-  justify-content: center;
-}
+<style lang="scss" scoped>
 .text-danger {
   color: #dc3545 !important;
 }
@@ -450,13 +420,14 @@ export default {
   border: 1px solid #ffc107 !important;
 }
 .bg-light-success {
-  background-color: #e4ffdb !important;
+  background-color: #f0ffea !important;
   border: 1px solid #28a745 !important;
 }
 .circle-bureau {
-  width: 85px;
+  margin-top: 5px !important;
+  max-width: 85px !important;
   height: 85px;
-  border-radius: 50%;
+  border-radius: 30px;
   margin: auto;
   background: #eeedfd;
 }
@@ -478,5 +449,9 @@ export default {
 }
 .nav-link .bg-default-tab {
   border-bottom: none !important;
+}
+.card-title-cr {
+  width: 100%;
+  font-weight: 600 !important;
 }
 </style>

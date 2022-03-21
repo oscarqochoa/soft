@@ -2,6 +2,11 @@ import { title } from '@core/utils/filter'
 
 export default [
     {
+        key: "selected",
+        label: "",
+        sortable: false,
+    },
+    {
         key: 'nickname',
         label: 'Nickname',
         sortable: true,
@@ -21,6 +26,8 @@ export default [
         key: 'status',
         label: 'Status',
         sortable: false,
+        thClass: 'text-center',
+        tdClass: 'text-center'
     },
     {
         key: 'status_recovery',

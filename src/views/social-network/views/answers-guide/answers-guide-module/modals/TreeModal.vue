@@ -118,22 +118,22 @@
         <template>
           <div class="d-flex flex-column align-items-center ">
             <feather-icon
-              class="pointer ml-1 bigger mb-2 mt-1 fill"
+              class="pointer bigger mb-2 mt-1 fill"
               icon="XCircleIcon"
               @click="onControl=false"
             />
             <feather-icon
-              class="pointer ml-1 bigger icon fill"
+              class="pointer bigger icon fill"
               icon="PlusCircleIcon"
               @click="zoomIn"
             />
             <feather-icon
-              class="pointer ml-1 bigger icon fill"
+              class="pointer bigger icon fill"
               icon="MinusCircleIcon"
               @click="zoomOut"
             />
             <feather-icon
-              class="pointer ml-1 bigger icon"
+              class="pointer bigger icon"
               icon="MinimizeIcon"
               @click="restore"
             />

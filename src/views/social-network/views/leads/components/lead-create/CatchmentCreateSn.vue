@@ -10,9 +10,9 @@
         </b-col>
       </b-row>
       <b-row class="mt-2">
-        <b-col md="4">
-          <ValidationProvider v-slot="{errors}" rules="required" name="ST/AD">
-            <b-col md="12">
+        <b-col md="4" class="text-left">
+          <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-1,ST/AD">
+            <b-col md="12" >
               <b-form-group
                   label="ST/AD"
                   label-for="st-ad"
@@ -26,7 +26,6 @@
               >
 
                 <v-select
-                    id="userId"
                     v-model="lead.state_h"
                     selected=""
                     :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -34,14 +33,14 @@
                     :options="optionsStatesAd"
                     :clearable="false"
                     :reduce="el => el.value"
+                    id="input-create-lead-1"
                 />
                 <p v-if="errors[0]" class="text-error-sn text-center m-0">ST/AD {{errors[0]}}</p>
               </b-form-group>
               <input type="radio" class="d-none bg-green" v-model="lead.state_h" />
-
             </b-col>
           </ValidationProvider>
-          <ValidationProvider v-slot="{errors}" rules="required" name="lead-owner">
+          <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-2,Lead Owner">
             <b-col md="12">
 
               <b-form-group
@@ -57,13 +56,13 @@
                   content-cols-lg="8"
               >
                 <v-select
-                    id="lead-owner"
                     :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                     label="label"
                     :clearable="false"
                     v-model="lead.user_id"
                     :options="optionsOwners"
                     :reduce="el => el.value"
+                    id="input-create-lead-2"
                 />
                 <p v-if="errors[0]" class="text-error-sn text-center m-0">Lead owner {{errors[0]}}</p>
               </b-form-group>
@@ -71,7 +70,7 @@
 
             </b-col>
           </ValidationProvider>
-          <ValidationProvider v-slot="{errors}" rules="required" name="suggestions">
+          <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-3,Suggestions">
             <b-col md="12">
               <b-form-group
                   id="fieldset-horizontal"
@@ -96,13 +95,14 @@
                     label="name"
                     track-by="name"
                     :preselect-first="true"
+                    id="input-create-lead-3"
                 ></v-select>
                 <p v-if="errors[0]" class="text-error-sn text-center m-0">Suggestions {{errors[0]}}</p>
               </b-form-group>
             </b-col>
           </ValidationProvider>
         </b-col>
-        <b-col md="8">
+        <b-col md="8" class="text-left">
 
 
           <b-form-group
@@ -117,13 +117,13 @@
           >
             <b-row>
               <b-col md="6" class="">
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider id="input-create-lead-4" rules="required" v-slot="{errors}" name="input-create-lead-4,Source facebook">
                   <b-row>
-                    <b-col md="12" class=" text-center d-flex align-items-center justify-content-center">
+                    <b-col  md="12" class=" text-center d-flex align-items-center justify-content-center">
                       <button
-                          class="w-75 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-around"
+                          class="w-100 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-center"
                           :class="{'btn-primary': isFacebook}"
-                          @click="selectSource(1)"
+                          @click="selectSource(17)"
                       >
                         <feather-icon icon="FacebookIcon" size="15" class="t-dark mr-1" :class="{'t-white': isFacebook}" />Facebook
                       </button>
@@ -138,7 +138,7 @@
                 </ValidationProvider>
 
                 <!-- Sub Sources Facebook -->
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider id="input-create-lead-5" rules="required" v-slot="{errors}" name="input-create-lead-5,Subsource facebook">
                   <div class="mt-3 d-flex align-items-center justify-content-between">
                     <template v-for="(subSource, index) in S_SUB_SOURCES">
                       <div
@@ -167,14 +167,15 @@
               </b-col>
 
               <!-- GOOGLE -->
+
               <b-col md="6 pt-0" class="">
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider id="input-create-lead-6" rules="required" v-slot="{errors}" name="input-create-lead-6,Source google">
                   <b-row>
                     <b-col md="12" class="text-center d-flex align-items-center justify-content-center">
                       <button
-                          class="w-75 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-around"
+                          class="w-100 btn btn-light px-4 font-medium-3 font-semibold d-flex align-items-center justify-content-center"
                           :class="{'btn-danger': isGoogle}"
-                          @click="selectSource(2)"
+                          @click="selectSource(32)"
                       >
                         <feather-icon icon="MailIcon" size="15" :class="{'t-white': isGoogle}" class="t-dark mr-1"/>
                         Google
@@ -188,7 +189,7 @@
                 </ValidationProvider>
 
                 <!-- Contact Method -->
-                <ValidationProvider :rules="`${ isGoogle? 'required' : ''}`" v-slot="{errors}">
+                <ValidationProvider id="input-create-lead-7" :rules="`${ isGoogle? 'required' : ''}`" v-slot="{errors}" name="input-create-lead-7,Google ads">
                   <div class="mt-3 d-flex align-items-center justify-content-between">
                     <button
                         class="rounded btn btn-light border-0 btn-source font-small-2"
@@ -225,7 +226,7 @@
                 </ValidationProvider>
 
                 <!-- Sub Sources Google -->
-                <ValidationProvider rules="required" v-slot="{errors}">
+                <ValidationProvider id="input-create-lead-8" rules="required" v-slot="{errors}" name="input-create-lead-8,Subsource google">
                   <div class="mt-2 d-flex align-items-center justify-content-between">
                     <template v-for="(subSource, index) in S_SUB_SOURCES">
                       <div
@@ -268,7 +269,8 @@
                 label="Program"
 
             >
-              <ValidationProvider rules="required" v-slot="{errors}">
+
+              <ValidationProvider id="input-create-lead-9" rules="required" v-slot="{errors}" name="input-create-lead-9,Programs">
                 <b-row class="d-flex justify-content-around align-items-center px-0 content-program">
                   <template v-for="(program, index) in S_FAN_PAGE_PROGRAMS">
                     <div class="" :key="index" :title="program.value">
@@ -290,9 +292,8 @@
 
           <!-- Flyers -->
 
-          <div v-if="lead.state_h && lead.fanpage_id && lead.source_id === 1">
+          <div v-if="lead.state_h && lead.fanpage_id && lead.sourcesname_id == 17">
             <b-form-group
-                id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                 label-cols-sm="4"
                 label-for="input-horizontal"
@@ -300,19 +301,30 @@
                 content-cols-sm
                 content-cols-lg="10"
                 label="Flyers"
+                id="input-create-lead-10"
             >
-              <ValidationProvider rules="required" v-slot="{errors}">
-                <div class="d-flex margin-flyer">
-                  <b-avatar square class="image-flyer" :src="imageFlyer" size="10rem" ></b-avatar>
-                  <div class="d-flex align-items-center">
-                    <button
-                        class="rounded sub-sources border-0 btn-block btn btn-light"
-                        @click="openModalSelectFlyer"
-                    >Select</button>
-                  </div>
+              <ValidationProvider  rules="required" v-slot="{errors}" name="input-create-lead-10, Flyer">
+                <div class="content-flyer">
+                  <div class="d-flex margin-flyer" id="input-create-lead-11">
+                    <b-avatar
+                        square
+                        class="image-flyer"
+                        :src="imageFlyer"
+                        size="10rem"
+                        icon="card-image"
+                        :class="errors[0] ? 'border-error-flyer' : ''"
+                    />
+                    <div class="d-flex align-items-center">
+                      <button
+                          class="rounded sub-sources border-0 btn-block btn btn-light"
+                          @click="openModalSelectFlyer"
+                      >Select</button>
+                    </div>
 
-                  <div v-if="errors[0]" class="text-error-sn text-center">Program {{errors[0]}}</div>
-                  <input type="radio" class="d-none" v-model="lead.fanpage_id" />
+
+                    <input type="radio" class="d-none" v-model="lead.flyer" />
+                  </div>
+                  <p v-if="errors[0]" class="text-error-sn text-left">Flyer {{errors[0]}}</p>
                 </div>
               </ValidationProvider>
             </b-form-group>
@@ -336,10 +348,12 @@
     >
       <b-container>
         <div class="container-flyers">
-          <div v-for="flyer in S_FLYERS" class="d-flex align-items-center justify-content-center">
+          <div v-for="flyer in S_FLYERS" class="d-flex align-items-center justify-content-center" :key="flyer.id">
 
             <div @click="selectFlyer(flyer.id, flyer.route_thumb)" class="image-flyer d-flex align-items-center justify-content-center" :class="lead.flyer == flyer.id ? 'select-flyer' : 'asd'">
-              <b-avatar :src="flyer.route_thumb" size="8rem" ></b-avatar>
+              <b-avatar
+                  :src="flyer.route_thumb"
+                  size="8rem" icon="card-image"/>
             </div>
 
           </div>
@@ -419,10 +433,10 @@ export default {
     ...mapState('SocialNetworkLeadsStore', ['S_STATES_LEADS','S_SUB_SOURCES','S_FAN_PAGE_PROGRAMS','S_FLYERS']),
 
     isFacebook() {
-      return this.lead.source_id === 1;
+      return this.lead.sourcesname_id == 17;
     },
     isGoogle() {
-      return this.lead.source_id === 2;
+      return this.lead.sourcesname_id == 32;
     },
     isChangeState() {
       return this.lead.state_h;
@@ -473,28 +487,25 @@ export default {
     },
 
     selectSource(id) {
-      if(id === 7) {
+      if(id === 17) {
         this.lead.sourcesname_id = 17
-      } else if (id === 1){
-        this.lead.sourcesname_id = 17
+      } else if (id === 32){
+        this.lead.sourcesname_id = 32
       }
 
       if(this.lead.source_id !== id) {
         this.lead.sub_source = null;
         this.lead.google_ads = null;
       }
-      this.lead.source_id = id;
-      console.log('source', id)
+      this.lead.source_id = 7;
     },
     selectSubSource(id) {
       this.lead.sub_source = id;
-      console.log(this.lead.sub_source, id)
     },
     selectMethod(id) {
       this.lead.google_ads = id;
     },
     selectProgram(id, value ) {
-      //console.log(id, value)
       this.lead.fanpage_id = id;
       this.titleFanPageProgram = value;
     },
@@ -509,7 +520,6 @@ export default {
   },
   watch: {
     async isChangeState() {
-      console.log('state', this.lead.state_h, this.lead.fanpage_id)
       await this.A_GET_FLYERS({program_id: this.lead.fanpage_id, state: this.lead.state_h})
     },
     async isChangeFanPage() {
@@ -530,25 +540,31 @@ export default {
 .sub-sources{
   padding: 6px 10px;
   font-size: 14px;
+  transition: .3s all ease-in-out;
 }
 .btn-fanpage{
   color: #fff;
   font-weight: normal;
 }
 .btn-program-1{
-  background: #dfa62e;
+  background: #dfa62e !important;
+  color: #fff !important;
 }
 .btn-program-2{
-  background: #f9b402;
+  background: #f9b402 !important;
+  color: #fff !important;
 }
 .btn-program-3{
-  background: #00559b;
+  background: #00559b !important;
+  color: #fff !important;
 }
 .btn-program-4{
-  background: #4c6534;
+  background: #4c6534 !important;
+  color: #fff !important;
 }
 .btn-program-5{
-  background: #00c5a2;
+  background: #00c5a2 !important;
+  color: #fff !important;
 }
 .image-flyer{
   height: 168px;
@@ -556,7 +572,6 @@ export default {
   object-fit: cover;
   margin-left: -12px;
   margin-right: 20px;
-  border-radius: 5px;
   span{
     cursor: pointer;
     border: 3px solid transparent;
@@ -594,5 +609,19 @@ export default {
 .margin-flyer{
   margin-left: 9px;
 }
+.content-flyer{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  .text-left{
+    margin-top: .5rem;
+    margin-left: 1.1rem;
+  }
+}
+.border-error-flyer{
+  border: 2px solid #fc424a;
+  overflow: hidden;
+}
+
 
 </style>

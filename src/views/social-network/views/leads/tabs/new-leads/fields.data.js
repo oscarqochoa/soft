@@ -2,6 +2,11 @@ import { title } from '@core/utils/filter'
 
 export default [
     {
+        key: "selected",
+        label: "",
+        sortable: false,
+    },
+    {
         key: 'nickname',
         label: 'Nickname',
         sortable: true,
@@ -29,7 +34,7 @@ export default [
     },
     {
         key: 'fanpage',
-        label: 'Fanpage',
+        label: 'Program',
         sortable: false,
     },
     {
@@ -40,6 +45,16 @@ export default [
     {
         key: 'attend',
         label: 'Task',
+        sortable: false,
+    },
+    {
+        key: 'credit_report',
+        label: 'CR',
+        sortable: false,
+    },
+    {
+        key: 'sale_lead_status',
+        label: 'Sale',
         sortable: false,
     },
     {

@@ -1,7 +1,16 @@
 <template>
   <div>
     <b-form-group label="LEAD" label-cols-md="2">
-      <b-form-input :value="`${lead.first_name} ${lead.last_name}`" readonly />
+      <b-form-input
+        :value="
+          lead.first_name == 'undefined' ||
+          lead.first_name == null ||
+          lead.first_name == ''
+            ? lead.lead_name
+            : lead.first_name + ' ' + lead.last_name
+        "
+        readonly
+      />
     </b-form-group>
     <b-table
       show-empty

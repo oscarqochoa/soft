@@ -17,7 +17,6 @@ export const canNavigate = (to, roles) => to.matched.some(route => {
             }
         }
     } else {
-        console.log(to, 'route')
         return true
     }
 })

@@ -223,7 +223,6 @@ export default {
         if (success) {
           this.showSwalGeneric("Are you sure?", "", "question").then(
             async (result) => {
-              console.log(this.lead);
             }
           );
         }

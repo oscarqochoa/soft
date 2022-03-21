@@ -1,9 +1,10 @@
 <template>
-  <div class="container-reaseon-not-potential">
+  <div class="container-reaseon-not-potential" id="input-create-lead-18">
     <b-form-input
         v-model="reason"
         class="font-bureau-style border-hover mt-2 mb-2"
         placeholder="Add Reason Not Potential"
+
     ></b-form-input>
     <b-button
         v-if="reason"

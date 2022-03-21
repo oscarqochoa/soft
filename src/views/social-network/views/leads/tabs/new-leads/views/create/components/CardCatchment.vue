@@ -389,7 +389,7 @@ import {mapState, mapGetters, mapActions} from "vuex";
 
 // Components
 import vSelect from "vue-select";
-import ModalChooseFlyer from "./ModalChooseFlyer.vue";
+import ModalChooseFlyer from "../../../../../components/ModalChooseFlyer.vue";
 
 export default {
   components: {
@@ -446,8 +446,6 @@ export default {
       this.showModalChooseFlyer = false;
     },
     selectFlyer(id, flyer) {
-      console.log(flyer);
-
       this.showModalChooseFlyer = false;
       this.lead.flyer = id;
       this.lead.flyer_selected = flyer;

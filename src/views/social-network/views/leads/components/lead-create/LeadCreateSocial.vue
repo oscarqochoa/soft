@@ -1,8 +1,8 @@
 <template>
   <div >
     <b-button
-        variant="success"
-        class="mr-1"
+        :variant="color_btn"
+        :class="`mr-1 d-flex align-items-center btn-${color_btn}`"
         @click="onOpenSidebar"
     >
       <feather-icon icon="PlusIcon" size="15" class="mr-50 text-white" />Create
@@ -15,22 +15,33 @@
         shadow
         backdrop
         right
-        title="Create Lead"
         header-class="text-primary"
         lazy
         @hidden="onCloseSidebar"
     >
+      <header-slot>
+
+      </header-slot>
+
+      <template #header>
+        <div class="sidebar-header">
+          <h2>Create Lead</h2>
+          <button @click="onCloseSidebar" class="btn-close">
+            <feather-icon icon="XIcon" size="24"/>
+          </button>
+        </div>
+      </template>
 
       <template #default>
         <!-- BODY -->
-        <div class="mx-4">
+        <div class="px-4 container-create" id="container-create-lead-sn">
           <validation-observer ref="refFormLeadObserver">
             <CatchmentCreateSn :lead="lead"/>
 
-            <BasicInformationCreateLeadSn :lead="lead" />
+            <BasicInformationCreateLeadSn :lead="lead" :isValidNickname="isValidNickname"/>
 
             <template v-if="lead.addEvidence">
-              <PersonalInformationCreateLeadSn :lead="lead"/>
+              <PersonalInformationCreateLeadSn :lead="lead" :isValidMobile="isValidMobile"/>
             </template>
 
             <template v-if="lead.moreInfo">
@@ -41,18 +52,6 @@
             <template v-if="lead.addEvidence">
               <TaskCreateLeadSn :lead="lead"/>
             </template>
-
-            <b-button
-                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-                variant="success"
-                class=""
-                @click="onSubmit"
-            >
-              <div class="d-flex align-items-center justify-content-center px-2">
-                <feather-icon icon="CheckIcon" size="16" class="text-white"/>
-                <span class="btn-create-lead">Create</span>
-              </div>
-            </b-button>
 
           </validation-observer>
 
@@ -102,6 +101,23 @@
         </div>
       </template>
     </b-sidebar>
+
+    <b-toast
+        id="toast-validation-create-lead"
+    >
+      <template #toast-title>
+        <div class="d-flex flex-grow-1 align-items-center mr-1">
+          <amg-icon icon="AmgIcon" size="26"/>
+          <strong class="mr-auto pl-1 text-primary">Warning validation</strong>
+        </div>
+      </template>
+
+      <div>
+        <p class="m-0" v-for="(value, index) in toastData" :key="index"><span class="font-weight-bolder">{{index +1 }}.</span> {{ value.label }} {{ value.error }}</p>
+      </div>
+
+    </b-toast>
+
   </div>
 
 </template>
@@ -119,6 +135,8 @@ import TaskCreateLeadSn from "@/views/social-network/views/leads/components/lead
 import MoreInformation from "@/views/social-network/views/leads/components/lead-create/MoreInformation";
 import BillingInformation from "@/views/social-network/views/leads/components/lead-create/BillingInformation";
 import {mapActions, mapGetters, mapState} from "vuex";
+import {amgApi} from "@/service/axios";
+
 export default {
   name: 'LeadCreateSocial',
   components: {
@@ -136,6 +154,10 @@ export default {
     Ripple,
   },
   props: {
+    color_btn: {
+      type: String,
+      default: 'success'
+    }
   },
   data() {
     return {
@@ -203,7 +225,7 @@ export default {
         from: "",
         to: "",
         date: "",
-        sms_status: 0,
+        sms_status: false,
         due_date: "",
         assign: 1,
         attend: null,
@@ -240,19 +262,21 @@ export default {
         value: null,
       }],
       optionPrograms: [],
+      toastData: [],
+      isValidNickname: true,
+      isValidPhone: true,
+      isValidMobile: true
     };
   },
   async created() {
 
   },
   async mounted() {
-    console.log('current: ', this.currentUser.user_id)
     this.lead.super = this.currentUser.user_id;
     this.lead.usercreator = this.currentUser.user_id;
     this.lead.catcher = this.currentUser.user_id;
     this.lead.created_by = this.currentUser.user_id;
     this.lead.created_date = this.$options.filters.formatDate(new Date());
-
   },
 
   computed: {
@@ -282,9 +306,9 @@ export default {
 
     async onSubmit() {
       try {
-        if (await this.$refs.refFormLeadObserver.validate()) {
-          console.log('data: ', this.$refs.refFormLeadObserver)
-          await this.A_CREATE_LEAD_SN(this.lead);
+        const validate = await this.$refs.refFormLeadObserver;
+        // Validar formulario
+        if (await validate.validate() && this.isValidNickname && this.isValidMobile) {
 
           const resp = await this.showConfirmSwal(
               "Are you sure?",
@@ -293,16 +317,25 @@ export default {
           )
           if(resp.value){
             this.addPreloader()
+            // Transformar fechas
+            this.lead.dob = this.transformDate(this.lead.dob);
+            this.lead.date = this.transformDate(this.lead.date);
+            this.lead.due_date = this.transformDate(this.lead.due_date);
+
+
+            // Enviar peticion a la api
+            await this.A_CREATE_LEAD_SN(this.lead);
 
             setTimeout(async () => {
               await this.resetForm()
               await this.onCloseSidebar();
-              await this.removePreloader()
-              await this.showSuccessSwal(
+              await this.removePreloader();
+
+              this.showSuccessSwal(
                   "Success!",
                   "Successful Process",
                   ""
-              )
+              );
               await this.A_GET_NEW_LEADS({
                 cr: null,
                 date_from: null,
@@ -317,21 +350,71 @@ export default {
                 state_h: null,
                 type: 1,
                 user_owner: null,
-              })
+              });
 
             },1000)
+          }
+        } else {
+          const fields = Object.values(validate.fields).map(field => field.name);
+          let errors = Object.values(validate.errors)
+          errors = errors.map((error, index) => {
+            return {
+              index: fields[index].split('-')[3] ? parseInt(fields[index].split('-')[3].split(',')[0]) : null,
+              error: error[0],
+              id: fields[index].split(',')[0],
+              label: fields[index].split(',')[1]
+            }
+          }).filter(error => error.error !== undefined && error.index !== null)
+          //this.toastData = errors.filter(error => !error.label.includes('card-number-'));
 
-
+          const nickValid = errors.find(err => err.id == 'input-create-lead-10')
+          if(!nickValid && !this.isValidNickname) {
+            const isNickValidItem = {
+              error: "is not unique",
+              id: "input-create-lead-10",
+              index: 10,
+              label: "NickName",
+            }
+            errors.push(isNickValidItem)
+            errors.sort(function (a, b) {
+              if (a.index > b.index) {
+                return 1;
+              }  else {
+                return  -1;
+              }
+            });
+          }
+          const phoneValid = errors.find(err => err.id == 'input-create-lead-14')
+          if(!phoneValid && this.lead.addEvidence && !this.isValidMobile) {
+            const isPhoneValidItem = {
+              error: "is not unique",
+              id: "input-create-lead-14",
+              index: 14,
+              label: "Phone(M)",
+            }
+            errors.push(isPhoneValidItem)
+            errors.sort(function (a, b) {
+              if (a.index > b.index) {
+                return 1;
+              }  else {
+                return  -1;
+              }
+            });
           }
 
-        } else {
-          console.log('Sin validacion')
-          await this.removePreloader()
-
+          this.toastData = errors.sort(function (a, b) {
+            if (a.index > b.index) {
+              return 1;
+            }  else {
+              return  -1;
+            }
+          });
+          this.$bvToast.show('toast-validation-create-lead')
+          const input = document.getElementById(`${this.toastData[0].id}`);
+          input.scrollIntoView({behavior: "smooth"});
         }
 
       } catch (error) {
-        console.log('error')
         setTimeout(async () => {
           await this.removePreloader()
         },1000)
@@ -471,18 +554,77 @@ export default {
       this.lead.images= []
       this.lead.other= ""
       this.$refs.refFormLeadObserver.reset();
+    },
+    handleScroll () {
+      var sortMenu = this.$refs.containerSidebarSreateLead.scrollLeft;
+    },
+    transformDate(date) {
+      const data_dob = date.split('/');
+      const data = data_dob[0] == '' || data_dob[2].length != 4 ? this.lead.dob : `${data_dob[2]}/${data_dob[0]}/${data_dob[1]}`;
+      return data.replaceAll('/','-');
     }
   },
   watch: {
-
+    async "lead.nickname"() {
+      const resp = await amgApi.post('/lead/social-network/validate-exists-nickname', {
+        nickname: this.lead.nickname, lead_id: null
+      });
+      if(resp.data.code) {
+        this.isValidNickname = false;
+      } else {
+        this.isValidNickname = true;
+        this.toastData = this.toastData.filter(err => err.id !== "input-create-lead-10")
+      }
+    },
+    async "lead.mobile" () {
+      const resp = await amgApi.post('/lead/social-network/unique-mobile-sn', {
+        mobile: this.lead.mobile
+      });
+      if(resp.data.code) {
+        this.isValidMobile = false;
+      } else {
+        this.isValidMobile = true;
+        this.toastData = this.toastData.filter(err => err.id !== "input-create-lead-14")
+      }
+    }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 .btn-create-lead{
   padding-top: .15rem !important;
   margin-left: .3rem;
   font-size: 16px;
+}
+.b-sidebar-body{
+  //background: red !important;
+  scroll-behavior: smooth !important;
+}
+.container-create{
+  overflow-y: scroll !important;
+  scroll-behavior: smooth !important;
+}
+.sidebar-xl{
+  width: 90rem !important;
+}
+.sidebar-header{
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  h2{
+    color: #0090e7 !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+  }
+  .btn-close{
+    background: none;
+    border: none;
+    color: #1b2337 !important;
+  }
+}
+.dark-layout .sidebar-header .btn-close {
+  color: #f1f1f1 !important;
 }
 </style>

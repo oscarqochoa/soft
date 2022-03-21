@@ -2,91 +2,119 @@
   <div>
     <header-slot>
       <b-row slot="actions" class="justify-content-end">
-        <b-button
-          variant="primary"
-          class="mr-1"
-          :to="{ name: 'sn-create-new-lead' }"
-        >
-          <feather-icon
-            icon="PlusIcon"
-            size="15"
-            class="mr-50 text-white"
-          ></feather-icon>
-          CREATE
-        </b-button>
+        <lead-create-social color_btn="primary"/>
         <b-button
           variant="success"
           class="mr-1"
-          :to="{ name: 'sn-create-new-lead' }"
+          @click="openModalSendSms(lead)"
         >
           <feather-icon
             icon="MessageCircleIcon"
             size="15"
             class="mr-50 text-white"
-          ></feather-icon>
+          />
           SEND SMS
+        </b-button>
+        <b-button
+          variant="outline-secondary"
+          class="btn-icon mr-1"
+          @click="openModalHistorySms"
+        >
+          <feather-icon icon="ListIcon" size="18"/>
         </b-button>
       </b-row>
     </header-slot>
 
-    <card-personal-information
-      class="card-group"
-      :personalInfo="personalInfo"
-      :personalAddress="personalAddress"
-      :personalMobile="personalMobile"
-      :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
-    />
-
-    <card-address
-      class="card-group"
-      :personalAddress="personalAddress"
-      :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
-    />
-
-    <b-row>
-      <b-col md="6">
-        <card-credit-report class="card-group" :lead="lead" />
+    <b-row class="card-group">
+      <b-col md="12">
+        <card-personal-information
+          :modul="modul"
+          :lead="lead"
+          :personalInfo="personalInfo"
+          :personalAddress="personalAddress"
+          :personalMobile="personalMobile"
+          :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
+        />
+      </b-col>
+      <b-col md="12">
+        <card-address
+          :personalAddress="personalAddress"
+          :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
+          @cancel-edit-address="cancelEditAddress"
+        />
       </b-col>
       <b-col md="6">
-        <card-lead-cards
-          class="card-group"
+        <card-credit-report :lead="lead" />
+      </b-col>
+      <b-col md="6">
+        <card-lead-cards :lead="lead" :cardsLead="cardsLead" :modul="modul" />
+      </b-col>
+      <b-col md="12">
+        <card-contact-information
+          :catcher="currentUser.user_id"
           :lead="lead"
-          :cardsLead="cardsLead"
+          :personalInfo="personalInfo"
+          :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
+          :modul="modul"
         />
       </b-col>
     </b-row>
 
-    <!--<card-contact-information
-      class="card-group"
-      :catcher="currentUser.user_id"
-      :lead_id="lead.id"
-      :personalInfo="personalInfo"
-      :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
-      :modul="15"
-    />-->
+    <modal-send-sms
+      v-if="showModalSendSms"
+      :smss="leads_sms"
+      :modul="currentUser.modul_id"
+      :typesms="typesms"
+      :sms="leads_sms_o"
+      :name-leads="name_leads_arr"
+      @hide="closeModalSendSms"
+    />
+
+    <b-modal
+      id="modal-history-sms"
+      ok-only
+      modal-class="modal-primary"
+      title-class="text-white h4"
+      centered
+      size="lg"
+      title="History of Sms"
+      hide-footer
+    >
+      <modal-history-sms
+        :id="historySms.id"
+        :modul="currentUser.modul_id"
+        :lead-name="historySms.leadName"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 // Components
-import CardPersonalInformation from "./components/CardPersonalInformation.vue";
-import CardAddress from "./components/CardAddress.vue";
+import CardPersonalInformation from "./components/personal-information/CardPersonalInformation.vue";
+import CardAddress from "./components/address/CardAddress.vue";
 import CardCreditReport from "./components/credit-report/CardCreditReport.vue";
 import CardLeadCards from "./components/cards/CardLeadCards.vue";
 import CardContactInformation from "./components/contact-information/CardContactInformation.vue";
+import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
+import ModalHistorySms from "@/views/crm/views/Lead/lead-sms/ModalHistorySms.vue";
+import LeadCreateSocial from "@/views/social-network/views/leads/components/lead-create/LeadCreateSocial";
 
 // Services
 import SNLeadsService from "@/views/social-network/services/leads";
 
 export default {
   components: {
-    "card-personal-information": CardPersonalInformation,
-    "card-address": CardAddress,
-    "card-credit-report": CardCreditReport,
-    "card-lead-cards": CardLeadCards,
-    "card-contact-information": CardContactInformation,
+    CardPersonalInformation,
+    CardAddress,
+    CardCreditReport,
+    CardLeadCards,
+    CardContactInformation,
+    ModalSendSms,
+    ModalHistorySms,
+    LeadCreateSocial
   },
   data() {
     return {
@@ -100,20 +128,58 @@ export default {
         mobile: null,
         state: null,
       },
-      lead: null,
+      lead: {},
       user: null,
+
+      historySms: {
+        leadName: "",
+        id: null,
+      },
+
+      leads_sms: [],
+      typesms: 1,
+      leads_sms_o: [],
+      name_leads_arr: [],
+
+      // Modals
+      showModalSendSms: false,
     };
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
     }),
+    modul() {
+      return this.$route.meta.module;
+    },
   },
   methods: {
+    openModalSendSms(item) {
+      this.rowData = item;
+      this.leads_sms = [];
+      this.typesms = 1;
+      this.leads_sms_o = [];
+      this.leads_sms_o.push(item.id);
+      this.name_leads_arr = [{ name: item.lead_name, id: item.id }];
+      this.showModalSendSms = true;
+    },
+    cancelEditAddress(originalAddress) {
+      this.personalAddress = originalAddress;
+    },
+    closeModalSendSms() {
+      this.showModalSendSms = false;
+    },
+    openModalHistorySms() {
+      this.historySms.id = this.lead.id;
+      this.historySms.leadName = this.lead.lead_name;
+      this.$bvModal.show("modal-history-sms");
+    },
+    closeModalHistorySms() {},
     async getLead() {
       try {
         this.addPreloader();
         let idParam = this.$route.params.id;
+
         const response = await SNLeadsService.getLead(idParam);
 
         if (response.status == 200) {
@@ -185,14 +251,14 @@ export default {
         phonem: this.lead.mobile,
         id_user: this.user.user_id,
         typee: 3,
-        module_id: this.currentUser.modul_id
+        module_id: this.currentUser.modul_id,
       };
 
       // Required field for create task in CRM
       this.requiredFieldsForCreateCrmTask.first_name = this.personalInfo.name;
       this.requiredFieldsForCreateCrmTask.last_name =
         this.personalInfo.last_name;
-      this.requiredFieldsForCreateCrmTask.mobile = this.personalInfo.phone_m;
+      this.requiredFieldsForCreateCrmTask.mobile = this.personalMobile.phonem;
 
       // Personal address
       this.personalAddress = {
@@ -216,20 +282,17 @@ export default {
   },
   async created() {
     await this.getLead();
-    this.getPersonalInformation();
+    await this.getPersonalInformation();
     this.getCardsLead();
   },
 };
 </script>
 
-<style lang="scss">
-.card-group > .card {
-  > .card-header {
-    border-bottom: 1px solid rgb(80 85 99 / 50%);
-    margin-bottom: 1.5rem;
-    .card-title {
-      font-weight: bold;
-    }
-  }
+<style lang="scss" scoped>
+.card-group > div > .card > .card-header {
+  border-bottom: none !important;
+  margin-bottom: 0px !important;
 }
+
+
 </style>

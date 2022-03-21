@@ -1,6 +1,8 @@
 import {extend} from 'vee-validate'
 import {email, length, max, min, min_value, required,} from 'vee-validate/dist/rules'
 import {amgApi} from "@/service/axios";
+import generalMixin from '@/mixins/general'
+import store from "@/store";
 
 extend('secret', {
   validate: value => value === 'example',
@@ -90,9 +92,11 @@ extend('specialpassword', {
 
 extend('unique-nickname', {
   async validate(value) {
+    //store.commit("app/SET_LOADING", true);
     const resp = await amgApi.post('/lead/social-network/validate-exists-nickname', {
       nickname: value, lead_id: null
     });
+    //await store.commit("app/SET_LOADING", false);
     return !resp.data.code;
   },
   message: 'is not unique',

@@ -21,7 +21,9 @@ const infoAdmToCrm = () => {
                     buttonsStyling: false,
                 })
                 if (res) {
-                    window.open("/crm/leads/" + data.lead_id, "_blank");
+                    let routeSocialNetwork = "/social-network/leads/new/dashboard/" + data.lead_id;      
+                    let routeCrm = "/crm/leads/" + data.lead_id;      
+                    window.open(store.state.auth.currentUser.modul_id == 15?routeSocialNetwork:routeCrm, "_blank");
                     NotificationMixin.methods.showWindowNotification(
                         data.lead_name,
                         'CREDIT REPORT WAS OBTAINED SUCCESSFULLY',
@@ -31,6 +33,7 @@ const infoAdmToCrm = () => {
                             window.focus()
                         }
                     )
+                    await window.amgApi.post('/commons/close-all-swal', data)
                 }
             }
             else if (data.status == "3") {
@@ -83,6 +86,7 @@ const infoAdmToCrm = () => {
                             window.focus()
                         }
                     )
+                    await window.amgApi.post('/commons/close-all-swal', data)
 
                 }
 
@@ -137,6 +141,7 @@ const infoAdmToCrm = () => {
                             window.focus()
                         }
                     )
+                    await window.amgApi.post('/commons/close-all-swal', data)
                 }
             }
             else if (data.status == "9") {
@@ -159,7 +164,7 @@ const infoAdmToCrm = () => {
                     html: htmlSwal,
                 })
                 if (result.value) {
-                    //CLose all swal
+                    await window.amgApi.post('/commons/close-all-swal', data)
                 }
                 NotificationMixin.methods.showWindowNotification(
                     data.lead_name,
@@ -191,7 +196,7 @@ const infoAdmToCrm = () => {
                     html: htmlSwal,
                 })
                 if (result.value) {
-                    // CLose all swal
+                    await window.amgApi.post('/commons/close-all-swal', data)
                 }
                 NotificationMixin.methods.showWindowNotification(
                     data.lead_name,

@@ -60,10 +60,6 @@ export default {
     CommissionsList,
 
   },
-
-  created() {
-    console.log('meta commissions 123: ', this.$route.hash)
-  },
   computed: {
     ...mapGetters('auth', ['isSupervisor', 'isCeo','currentUser']),
     isSupervisorModule() {

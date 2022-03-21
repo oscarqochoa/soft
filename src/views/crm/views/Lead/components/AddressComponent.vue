@@ -256,7 +256,6 @@ export default {
       return null;
     },
     getAddressData(mainAddress) {
-      console.log('asd', mainAddress)
       const location = mainAddress;
       const address = `${location.street_number} ${location.route}`;
       this.addressData.state = mainAddress.administrative_area_level_1;

@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div class="flex">
-      <h2>Answers Guide</h2>
-      <b-button class="m-1" variant="success" @click="openCreateModal()">
-        <feather-icon
-          icon="PlusIcon"
-          size="15"
-          class="mr-50 text-white"
-        />Create
-      </b-button>
-    </div>
-
+    <header-slot>
+      <template #actions>
+        <div>
+          <b-button v-if="isCeo || isSupervisor || isTeamLeader" variant="success" @click="openCreateModal()">
+            <feather-icon
+                icon="PlusIcon"
+                size="15"
+                class="mr-50 text-white"
+            />Create
+          </b-button>
+        </div>
+      </template>
+    </header-slot>
     <b-nav pills class="m-0">
       <b-nav-item
         v-for="program in programs"

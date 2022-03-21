@@ -26,13 +26,16 @@
         <template #footer>
           <b-container>
             <b-row class="d-flex p-1 float-right">
-              <b-button variant="info" @click="resetFiltersButtons">Reset</b-button>
+              <b-button variant="info" @click="resetFiltersButtons"
+                >Reset</b-button
+              >
               <b-button
                 v-b-toggle.sidebar-right
                 variant="primary"
                 class="ml-1"
                 @click="sideBarSearch"
-              >Search</b-button>
+                >Search</b-button
+              >
             </b-row>
           </b-container>
         </template>
@@ -45,8 +48,7 @@
             class="d-flex align-items-center justify-content-center justify-content-sm-start"
           >
             <span class="text-muted">
-              Showing {{ startPage }} to {{ toPage }} of
-              {{ totalRows }} entries
+              Showing {{ startPage }} to {{ toPage }} of {{ totalRows }} entries
             </span>
           </b-col>
           <!-- Pagination -->
@@ -106,7 +108,9 @@
           </b-col>
           <!-- Search -->
           <b-col cols="12" md="6">
-            <div class="d-flex align-items-center justify-content-end align-items-center">
+            <div
+              class="d-flex align-items-center justify-content-end align-items-center"
+            >
               <b-input-group v-if="!noVisiblePrincipalFilter" class="mr-1">
                 <b-form-input
                   v-if="filterPrincipal.type === 'input'"
@@ -126,6 +130,7 @@
                 v-b-toggle.sidebar-right
                 v-b-tooltip.bottom="'Advanced Search'"
                 variant="primary"
+                v-if="hasFilters"
               >
                 <div class="d-flex justify-content-between">
                   <feather-icon icon="FilterIcon" size="15" />
@@ -140,15 +145,18 @@
       </div>
       <div class="mx-2 mb-2 mt-2">
         <b-row>
-          <b-col class="d-flex align-items-center justify-content-center justify-content-sm-start">
+          <b-col
+            class="d-flex align-items-center justify-content-center justify-content-sm-start"
+          >
             <span class="text-muted">
-              Showing {{ startPage }} to {{ toPage }} of
-              {{ totalRows }} entries
+              Showing {{ startPage }} to {{ toPage }} of {{ totalRows }} entries
             </span>
           </b-col>
           <!-- Pagination -->
           <slot name="footer" />
-          <b-col class="d-flex align-items-center justify-content-center justify-content-sm-end">
+          <b-col
+            class="d-flex align-items-center justify-content-center justify-content-sm-end"
+          >
             <b-pagination
               v-model="paginate.currentPage"
               :total-rows="totalRows"
@@ -176,42 +184,58 @@
 
 <script>
 import vSelect from "vue-select";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "SalesMadeNewClientComponent",
   components: {
-    vSelect
+    vSelect,
   },
   props: {
-    filter: { required: true, type: Array },
+    filter: { required: false, type: Array },
     totalRows: { required: false, type: Number },
     paginate: { required: true, type: Object },
     startPage: { required: false, type: Number },
     toPage: { required: false, type: Number },
     filterPrincipal: { required: true, type: Object },
-    noVisiblePrincipalFilter: { required: false, default: false }
+    noVisiblePrincipalFilter: { required: false, default: false },
   },
   computed: {
     ...mapGetters({
-      skin: "appConfig/skin"
-    })
+      skin: "appConfig/skin",
+    }),
+    ...mapState({
+      perPage: (state) => state.appConfig.perPage,
+    }),
+    hasFilters(){
+      return this.filter ? (Object.keys(this.filter).length !== 0) : false;
+    }
   },
   created() {
-    this.filter.map(fil => {
+    this.filter.map((fil) => {
       fil.model = null;
     });
     this.filterPrincipal.model = "";
   },
+  mounted() {
+    this.paginate.perPage = this.perPage;
+    this.$emit("reload");
+  },
+  watch: {
+    perPage(newVal) {
+      this.paginate.perPage = newVal;
+      this.$emit("reload");
+    },
+  },
   methods: {
     resetFiltersButtons() {
-      this.filter.map(fil => {
+      this.filter.map((fil) => {
         fil.model = null;
       });
       this.$emit("reset-all-filters");
     },
     resetFilter() {
-      this.filter.map(fil => {
+      this.filter.map((fil) => {
         fil.model = null;
       });
       this.filterPrincipal.model = "";
@@ -220,8 +244,8 @@ export default {
     sideBarSearch() {
       this.filterPrincipal.model = "";
       this.$emit("reload");
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -19,6 +19,7 @@ export default {
     isSeller: state => state.currentUser.role_id == 5,
     isAdvisor: state => state.currentUser.role_id == 3,
     isCoordinator: state => state.currentUser.is_coordinator == 1,
+    isTeamLeader: state => state.currentUser.role_id == 11,
     moduleId: state => state.currentUser.modul_id,
     roleId: state => state.currentUser.role_id,
     userRole: state => {

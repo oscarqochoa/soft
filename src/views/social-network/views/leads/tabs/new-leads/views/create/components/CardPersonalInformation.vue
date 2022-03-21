@@ -211,7 +211,6 @@ export default {
         });
 
         if (response.status == 200) {
-          console.log(response);
           if ((response.data.code = "mobile")) {
             this.showToast(
               "warning",

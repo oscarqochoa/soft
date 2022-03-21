@@ -7,11 +7,10 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col md="8">
+        <b-col md="8" class="text-left">
           <!-- Card Holder Name -->
-          <ValidationProvider rules="required" v-slot="{errors}">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-25,Card Holder Name">
             <b-form-group
-                id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                 label-cols-sm="4"
                 label-for="input-horizontal"
@@ -19,6 +18,7 @@
                 content-cols-sm
                 content-cols-lg="8"
                 label="Card Holder Name"
+                id="input-create-lead-25"
             >
               <b-form-input
                   v-model="lead.cardholdername"
@@ -46,11 +46,10 @@
               <b-col xs="6" md="2" class="px-0">
                 <validation-provider
                     v-slot="{errors}"
-                    name="card-number-1"
+                    name="input-create-lead-26,Card number 1"
                     rules="required"
                 >
                   <b-form-input
-                      id="card-number-1"
                       ref="input-1"
                       trim
                       maxlength="4"
@@ -60,6 +59,7 @@
                       v-model="cardNumber1"
                       @input="activeFocus(1, 4)"
                       placeholder="####"
+                      id="input-create-lead-26"
                   />
                   <div class="d-flex align-items-center justify-content-center position-relative">
                     <p v-if="errors[0]" class="text-error-sn text-center text-transparent m-0">Card</p>
@@ -72,11 +72,11 @@
               <b-col xs="6" md="2" class="px-0">
                 <validation-provider
                     v-slot="{errors}"
-                    name="card-number-2"
+                    name="input-create-lead-27,Card number 2"
                     rules="required"
                 >
                   <b-form-input
-                      id="card-number-2"
+                      id="input-create-lead-27"
                       ref="input-2"
                       v-model="cardNumber2"
                       @input="activeFocus(2, 4)"
@@ -92,11 +92,11 @@
               <b-col xs="6" md="2" class="px-0">
                 <validation-provider
                     v-slot="{errors}"
-                    name="card-number-3"
+                    name="input-create-lead-28,Card number 3"
                     rules="required"
                 >
                   <b-form-input
-                      id="card-number-3"
+                      id="input-create-lead-28"
                       ref="input-3"
                       v-model="cardNumber3"
                       @input="activeFocus(3, 4)"
@@ -112,11 +112,11 @@
               <b-col xs="6" md="2" class="px-0">
                 <validation-provider
                     v-slot="{errors}"
-                    name="card-number-4"
+                    name="input-create-lead-29,Card number 4"
                     rules="required"
                 >
                   <b-form-input
-                      id="card-number-4"
+                      id="input-create-lead-29"
                       ref="input-4"
                       v-model="cardNumber4"
                       @input="activeFocus(4, 4)"
@@ -153,11 +153,11 @@
               <b-col sm="4">
                 <validation-provider
                     v-slot="{errors}"
-                    name="card-expi-month"
+                    name="input-create-lead-30,Card month"
                     rules="required"
                 >
                   <b-form-input
-                      id="card-expi-month"
+                      id="input-create-lead-30"
                       ref="input-5"
                       placeholder="MM"
                       v-model="lead.card_expi_month"
@@ -174,11 +174,11 @@
               <b-col sm="4">
                 <validation-provider
                     v-slot="{errors}"
-                    name="card-expi-year"
+                    name="input-create-lead-31,Card year"
                     rules="required"
                 >
                   <b-form-input
-                      id="card-expi-year"
+                      id="input-create-lead-31"
                       ref="input-6"
                       placeholder="YY"
                       v-model="lead.card_expi_year"
@@ -194,11 +194,11 @@
               <b-col sm="4">
                 <validation-provider
                     v-slot="{errors}"
-                    name="card-security-code"
+                    name="input-create-lead-32,Card code"
                     rules="required"
                 >
                   <b-form-input
-                      id="card-security-code"
+                      id="input-create-lead-32"
                       ref="input-7"
                       placeholder="CVV"
                       v-model="lead.cardsecuritycode"
@@ -215,7 +215,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <b-row class="mt-2 mb-1">
+      <b-row class="mt-2 mb-1 text-left">
         <b-col md="3">
           <div  class="d-flex align-items-center justify-content-center">
             <span>
@@ -251,18 +251,18 @@
       <template v-if="addAddress">
 
         <StreetCreateSN
-            component="MoreInfo2"
+            title="Billing street"
             :street="lead.streetcard"
             :city="lead.citycard"
             :state="lead.statecard"
             @street-changed="streetChangedBilling"
         />
 
-        <b-row class="mt-2">
-          <b-col mb="6">
-            <ValidationProvider rules="required" v-slot="{errors}">
+        <b-row class="mt-2 text-left">
+          <b-col mb="6" >
+            <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-33,Card zip code">
               <b-form-group
-                  id="fieldset-horizontal"
+                  id="input-create-lead-33"
                   label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                   label-cols-sm="4"
                   label-for="input-horizontal"
@@ -283,9 +283,9 @@
             </ValidationProvider>
           </b-col>
           <b-col mb="6">
-            <ValidationProvider rules="required" v-slot="{errors}">
+            <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-34,Card Country">
               <b-form-group
-                  id="fieldset-horizontal"
+                  id="input-create-lead-34"
                   label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                   label-cols-sm="4"
                   label-for="input-horizontal"
@@ -315,7 +315,7 @@
 import Ripple from "vue-ripple-directive";
 import vSelect from "vue-select";
 import {mapState} from "vuex";
-import StreetCreateSN from "@/views/social-network/views/commissions/lead-create/StreetCreateSN";
+import StreetCreateSN from "./StreetCreateSN";
 import imageVisa from "@/assets/images/cards/visa2.png";
 import imageAmerican from "@/assets/images/cards/american.png";
 import imageDiscover from "@/assets/images/cards/Discover.jpg";
@@ -439,15 +439,12 @@ export default {
         nextElement.focus()
       }
       if(this.lead.card_expi_month === '00') {
-        console.log('ASD', this.lead.card_expi_month, typeof this.lead.card_expi_month)
         this.lead.card_expi_month = '01'
       }
 
     },
     "lead.card_expi_year"() {
-      console.log('month: ', this.lead.card_expi_month)
       if(this.lead.card_expi_month < 10 && this.lead.card_expi_month.length == 1) {
-        console.log('YEAR: ', this.lead.card_expi_month)
         this.lead.card_expi_month = `0${this.lead.card_expi_month}`
       }
     }

@@ -99,7 +99,6 @@ export default {
             return module;
         },
         convertModuleToProgramString(program) {
-            console.log('program', program)
             let module = 0;
             if (program == 0) {
                 module = 0;
@@ -147,7 +146,6 @@ export default {
                         break;
                 }
             }
-            console.log('module:', module)
             return module;
         },
         getModuleName(module) {
@@ -229,6 +227,27 @@ export default {
         },
 
         /** *** SWALS **** */
+        showGenericConfirmSwal({
+          title = "Are you sure?",
+          text = "You won't be able to revert this!",
+          config = {}
+        }) {
+          return this.$swal({
+            title,
+            text,
+            imageUrl: swalWarningIcon,
+            imageWidth: 70,
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes",
+            customClass: {
+              confirmButton: "btn btn-primary mr-1",
+              cancelButton: "btn btn-outline-danger",
+            },
+            ...config,
+          });
+        },
+
         showConfirmSwal(
             title = "Are you sure?",
             text = "You won't be able to revert this!",

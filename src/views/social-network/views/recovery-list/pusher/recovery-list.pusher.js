@@ -1,6 +1,6 @@
 import Vue from "vue";
 import store from "@/store";
-
+import {swalSuccessIcon} from "@/icons/statusIcons";
 const recoveryListAlert = () => {
   window.pusher.bind("recovery-list-alert", async (data) => {
     let isInside = false
@@ -13,10 +13,8 @@ const recoveryListAlert = () => {
       Vue.swal
         .fire({ 
           html:
-            '<img src="' +
-            baseUrl +
-            '/assets/images/icons/swal/success.svg" style="margin-bottom: 10px;">' +
-            '<div><h2 style="font-weight: 600;">REVIEW RECOVERY LIST</h2></div>' +
+            `<img src="${swalSuccessIcon}" style="margin-bottom: 10px;">` +
+            '<div style="margin-top: 15px;"><h2 style="font-weight: 600;">REVIEW RECOVERY LIST</h2></div>' +
             '<div style="text-align: center;">' +
             '<div style="font-weight: bolder; text-transform: uppercase;">User Recovery : '+ data.fullname+
             " </div>" + 
@@ -26,10 +24,10 @@ const recoveryListAlert = () => {
           showConfirmButton: true,
           confirmButtonText: "Ok",
         })
-        .then((res) => {
+        .then(async (res) => {
           if (res) {
             window.open(`${process.env.VUE_APP_BASE_URL_FRONT}/socialnetwork/recovery-list`, '_blank');
-
+            await window.amgApi.post('/commons/close-all-swal', data)
           }
         });
      

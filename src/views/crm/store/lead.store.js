@@ -461,7 +461,6 @@ const actions = {
       const response = await crmService.postSendMessageLead(body);
       return response;
     } catch (error) {
-      console.log("ERROR_UNIQUE_MOBILE [ACTION]", error);
       throw error;
     }
   },

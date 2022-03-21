@@ -91,7 +91,6 @@
           >
             <feather-icon icon="EditIcon"></feather-icon>
           </b-button>
-
           <b-button
             @click="deleteFile(data.item.id)"
             variant="flat-danger rounded-circle"
@@ -114,7 +113,6 @@
 
     <modal-upload-files
       v-if="showModalUploadFiles"
-      :show="showModalUploadFiles"
       :lead="lead"
       @onSaved="filesSaved"
       @onClose="closeModalUploadFiles"
