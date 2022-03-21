@@ -340,6 +340,7 @@ export default {
               program
             });
             if (this.isResponseSuccess(response)) {
+              this.lead.not_call = JSON.stringify(response.data);
               this.showToast(
                 "success",
                 "top-right",

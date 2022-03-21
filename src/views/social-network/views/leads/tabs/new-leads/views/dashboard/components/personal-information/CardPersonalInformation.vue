@@ -623,6 +623,8 @@ export default {
               program,
             });
             if (this.isResponseSuccess(response)) {
+              this.lead.not_call = JSON.stringify(response.data);
+              this.personalInfo.valueStatus = "RECOVERY"
               this.showToast(
                 "success",
                 "top-right",
