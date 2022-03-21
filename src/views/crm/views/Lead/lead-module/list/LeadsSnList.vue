@@ -155,7 +155,6 @@ export default {
   },
   created() {
     this.addPaddingTd();
-    this.myProvider();
     this.setOptionsOnFilters();
   },
   methods: {

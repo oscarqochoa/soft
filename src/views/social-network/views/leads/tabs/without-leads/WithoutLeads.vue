@@ -72,9 +72,8 @@
           <template #cell(status)="data">
             <div>
               <b-badge
-                pill
-                :variant="data.item.status | variant"
-                class="text-capitalize"
+                :variant="`light-${resolveLeadSnStatusVariant(data.item.status_sn_id)}`"
+                class="text-capitalize w-100"
               >
                 {{ data.item.status }}
               </b-badge>
@@ -148,7 +147,7 @@
 import { mapActions, mapState, mapMutations } from "vuex";
 import dataFilters from "./filters.data";
 import Fields from "./fields.data";
-
+import helpers from '../helpers'
 export default {
   components: {
     //
@@ -186,10 +185,10 @@ export default {
     ...mapState('auth',['currentUser']),
   },
   created() {
-    this.getSocialNetworkLeadsPotential();
     this.setOptionsOnFilters();
   },
   methods: {
+    ...helpers,
     ...mapActions('SocialNetworkLeadsStore', ['A_SET_FILTERS', 'A_GET_FILTER_SELLERS']),
     ...mapActions('SocialNetworkGlobalStore', ['A_GET_STATES']),
     ...mapActions('CrmLeadStore', ['A_GET_W_POTENTIAL_LEADS', 'A_UPDATE_STATUS_POTENTIAL_SN']),

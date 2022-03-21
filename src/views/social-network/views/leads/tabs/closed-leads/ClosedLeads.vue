@@ -11,7 +11,7 @@
         :start-page="fromPage"
         :to-page="toPage"
         :send-multiple-sms="false"
-        @reload="getSocialNetworkLeadsPotential"
+        @reload="getSocialNetworkLeadsClosed"
         @onChangeCurrentPage="onChangeCurrentPage"
       >
         <b-table
@@ -72,9 +72,8 @@
           <template #cell(status)="data">
             <div>
               <b-badge
-                pill
-                :variant="data.item.status | variant"
-                class="text-capitalize"
+                :variant="`light-${resolveLeadSnStatusVariant(data.item.status_sn_id)}`"
+                class="text-capitalize w-100"
               >
                 {{ data.item.status }}
               </b-badge>
@@ -149,7 +148,7 @@ import Fields from "./fields.data";
 // Components
 import ModalTracking from "../../components/ModalTracking.vue";
 import ActionsTable from "./components/ActionsTable.vue";
-
+import helpers from '../helpers'
 export default {
   components: {
     "modal-tracking": ModalTracking,
@@ -188,16 +187,15 @@ export default {
     
   },
   created() {
-    this.getSocialNetworkLeadsPotential();
     this.setOptionsOnFilters();
-    console.log(this.filters[2].options);
   },
   methods: {
+    ...helpers,
     ...mapActions('SocialNetworkLeadsStore', ['A_SET_FILTERS', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_DELETE_LEAD', 'A_GET_FAN_PAGE_PROGRAMS_FILTERS', 'A_GET_FILTER_SELLERS']),
     ...mapActions('CrmLeadStore', ['A_PROCESS_LEADS']),
     ...mapMutations('SocialNetworkLeadsStore', ['REMOVE_LEAD_DATA', 'SET_DATA']),
     
-    async getSocialNetworkLeadsPotential() {
+    async getSocialNetworkLeadsClosed() {
       try {
         this.isBusy = true;
         this.setFilters();
@@ -225,7 +223,7 @@ export default {
         this.toPage = response.to;
         this.isBusy = false;
       } catch (error) {
-        console.log("Somtehing went wrong getSocialNetworkLeadsPotential", error);
+        console.log("Somtehing went wrong getSocialNetworkLeadsClosed", error);
         this.showToast(
           "danger",
           "top-right",
@@ -335,7 +333,7 @@ export default {
 
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;
-      this.getSocialNetworkLeadsPotential();
+      this.getSocialNetworkLeadsClosed();
     },
     setFilters() {
       this.A_SET_FILTERS({

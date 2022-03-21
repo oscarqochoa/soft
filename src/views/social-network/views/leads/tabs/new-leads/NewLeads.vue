@@ -101,8 +101,8 @@
           <!-- Column: Status -->
           <template #cell(status)="data">
             <b-badge
-              :variant="`light-${resolveLeadSnStatusVariant(data.item.status)}`"
-              class="text-capitalize"
+              :variant="`light-${resolveLeadSnStatusVariant(data.item.status_sn_id)}`"
+              class="text-capitalize w-100"
               >{{ data.item.status }}</b-badge
             >
           </template>
@@ -216,6 +216,7 @@ import ModalTracking from "../../components/ModalTracking.vue";
 import ActionsTable from "./components/ActionsTable.vue";
 import ModalSmsList from "../../components/ModalSmsList.vue";
 import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
+import helpers from '../helpers'
 export default {
   components: {
     "filter-slot": FilterSlot,
@@ -243,7 +244,7 @@ export default {
       toPage: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: "50"
       },
       perPageOptions: [10, 25, 50, 100],
       sortBy: "id",
@@ -293,10 +294,10 @@ export default {
     }
   },
   created() {
-    this.getSocialNetworkLeads();
     this.setOptionsOnFilters();
   },
   methods: {
+    ...helpers,
     ...mapActions('SocialNetworkLeadsStore', ['A_DELETE_LEAD', 'A_GET_STATE_LEAD', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_GET_SMS_SENT_TO_NEW_LEADS', 'A_GET_STATUS_LEAD', 'A_GET_FAN_PAGE_PROGRAMS_FILTERS', 'A_GET_FILTER_SELLERS', 'A_GET_SUB_SOURCES_FILTERS']),
     ...mapActions('CrmLeadStore', ['A_SET_FILTERS_LEADS', 'A_SET_SELECTED_LEADS']),
 
@@ -396,14 +397,6 @@ export default {
     },
     closeModalSmsList() {
       this.showModalSmsList = false;
-    },
-    resolveLeadSnStatusVariant(status) {
-      if (status === 2) return "success";
-      if ([3, 4].includes(status)) return "primary";
-      if (status === 5) return "secondary";
-      if (status === 6) return "warning";
-      if (status === 7) return "danger";
-      return "primary";
     },
     async getSocialNetworkLeads() {
       try {
