@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import ModalNotesCreditOld from "@/views/commons/components/first-notes/credit-experts/ModalNotesCreditOld.vue"
+import ModalNotesCreditOld from "@/views/commons/components/first-notes/credit-experts/ModalNotesCreditOld.vue";
 import ModalNotesCreditNew from "@/views/commons/components/first-notes/credit-experts/ModalNotesCreditNew.vue";
 export default {
   name: "ModalNotasCredit",
@@ -70,6 +70,7 @@ export default {
       });
       if (this.isResponseSuccess(response)) {
         this.creates = response.data.creates;
+        this.noteInfo.created = this.creates;
       }
     } catch (error) {
       this.showErrorSwal(error);

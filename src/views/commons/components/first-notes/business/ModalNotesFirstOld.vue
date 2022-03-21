@@ -653,7 +653,9 @@ export default {
     await this.getFirstNote();
     await this.listTypeBusiness();
     await this.getCountries();
-    this.note.country.value = this.noteInfo.originCountry;
+    this.note.country.value = this.noteInfo.originCountry
+      ? this.noteInfo.originCountry
+      : 146;
     this.removePreloader();
   },
   methods: {

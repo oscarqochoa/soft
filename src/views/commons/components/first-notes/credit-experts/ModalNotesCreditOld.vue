@@ -352,7 +352,7 @@ import ButtonSaveAndComplete from "@/views/commons/utilities/ButtonSaveAndComple
 import ButtonUpdate from "@/views/commons/utilities/ButtonUpdate";
 
 export default {
-  name: "ModalNotesCreditOld",
+  name: "ModalNotesCredit",
   components: {
     ButtonUpdate,
     ButtonSaveAndComplete,
@@ -677,10 +677,12 @@ export default {
   },
   async created() {
     this.addPreloader();
+    this.getCountries();
     await this.getFirstNote();
     await this.getNoCredit();
-    await this.getCountries();
-    this.note.country.value = this.noteInfo.originCountry;
+    this.note.country.value = this.noteInfo.originCountry
+      ? this.noteInfo.originCountry
+      : 146; //MEXICO
     this.removePreloader();
   },
   methods: {

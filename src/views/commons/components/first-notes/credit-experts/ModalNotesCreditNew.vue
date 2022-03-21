@@ -677,10 +677,12 @@ export default {
   },
   async created() {
     this.addPreloader();
+    this.getCountries();
     await this.getFirstNote();
     await this.getNoCredit();
-    await this.getCountries();
-    this.note.country.value = this.noteInfo.originCountry;
+    this.note.country.value = this.noteInfo.originCountry
+      ? this.noteInfo.originCountry
+      : 146; //MEXICO
     this.removePreloader();
   },
   methods: {
@@ -767,8 +769,16 @@ export default {
 
     answersNote() {
       return [
-        {number: 231, value: JSON.stringify(this.note.recomendations.selectedsOptions)},
-        {number: 232, value: this.note.recomendations.value ? this.note.recomendations.value : '0'},
+        {
+          number: 231,
+          value: JSON.stringify(this.note.recomendations.selectedsOptions),
+        },
+        {
+          number: 232,
+          value: this.note.recomendations.value
+            ? this.note.recomendations.value
+            : "0",
+        },
         { number: 24, value: JSON.stringify(this.note.pending.value) },
         { number: 25, value: JSON.stringify(this.note.goals.value) },
         { number: 1058, value: this.note.emergencyContact.value },
@@ -815,14 +825,16 @@ export default {
     },
     getDetailsAnswers(note) {
       note.forEach((answer) => {
-          console.log(answer)
         if (answer.answer != "null" && answer.answer != "[]") {
           if (answer.question_id === 231) {
             answer.answer = answer.answer.replace(/\\\\n/g, "<br>");
-            this.note.recomendations.selectedsOptions = JSON.parse(answer.answer.replace(/\\/g, '"'));
+            this.note.recomendations.selectedsOptions = JSON.parse(
+              answer.answer.replace(/\\/g, '"')
+            );
           }
           if (answer.question_id === 232) {
-               this.note.recomendations.value = answer.answer == 0 ? '' : answer.answer;
+            this.note.recomendations.value =
+              answer.answer == 0 ? "" : answer.answer;
           }
           if (answer.question_id === 24) {
             answer.answer = answer.answer.replace(/\\\\n/g, "<br>");
