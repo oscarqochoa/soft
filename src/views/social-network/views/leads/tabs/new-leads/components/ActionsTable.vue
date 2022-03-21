@@ -7,6 +7,16 @@
         class="align-middle text-body"
       />
     </template>
+    <b-dropdown-item @click="sendToRecovery">
+      <feather-icon icon="AlignLeftIcon"></feather-icon>
+      <span class="align-middle ml-50"> Send Recovery </span>
+    </b-dropdown-item>
+
+    <b-dropdown-item @click="sendToClosed">
+      <feather-icon icon="AlignLeftIcon"></feather-icon>
+      <span class="align-middle ml-50"> Send Closed </span>
+    </b-dropdown-item>
+    
     <b-dropdown-item @click="sendSMS">
       <feather-icon icon="MessageCircleIcon"></feather-icon>
       <span class="align-middle ml-50"> Send SMS </span>
@@ -36,10 +46,10 @@ export default {
   },
   methods: {
     sendToRecovery() {
-      this.$emit("onSendToRecovery", this.id);
+      this.$emit("onSendToRecovery", this.id, 5);
     },
     sendToClosed() {
-      this.$emit("onSendToClosed", this.id);
+      this.$emit("onSendToClosed", this.id, 6);
     },
     sendSMS() {
       this.$emit("onSendSms", this.id);
