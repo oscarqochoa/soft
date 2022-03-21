@@ -221,6 +221,8 @@
             <actions-table
               :id="data.item.id"
               :name="data.item.nickname"
+              @onSendToRecovery="onProcessLead"
+              @onSendToClosed="onProcessLead"
               @onDeleteLead="deleteLead"
               @onShowSmsList="openModalSmsList"
               @onSendSms="openModalSendSMS(data.item)"
@@ -370,6 +372,7 @@ export default {
     ...mapActions("CrmLeadStore", [
       "A_SET_FILTERS_LEADS",
       "A_SET_SELECTED_LEADS",
+      "A_PROCESS_LEADS"
     ]),
 
     selectedAll() {
@@ -508,6 +511,54 @@ export default {
       }
     },
 
+    onProcessLead(lead_id, status) {
+      this.showConfirmSwal(
+          "Are you sure?",
+          "You won't be able to revert this!",
+          {
+            input: "textarea",
+            inputValidator: value => {
+              if (!value) {
+                return "You need to write something!";
+              }
+            }
+          }
+      )
+          .then(async result => {
+            if (result.value) {
+              const { user_id, role_id } = this.currentUser;
+              const response = await this.A_PROCESS_LEADS({
+                lead_id: lead_id,
+                status: status,
+                user_id,
+                description: result.value
+              });
+              if (this.isResponseSuccess(response)) {
+                // await this.REMOVE_LEAD_DATA({destination: "S_LEADS", id: lead_id})
+                this.showToast(
+                    "success",
+                    "top-right",
+                    "Success!",
+                    "CheckIcon",
+                    "Successful operation"
+                );
+              } else {
+                this.showToast(
+                    "warning",
+                    "top-right",
+                    "Warning!",
+                    "AlertTriangleIcon",
+                    `Something went wrong.${response.message}`
+                );
+              }
+            }
+          })
+          .catch(error => {
+            console.log("Something went wrong onRowProcess:", error);
+            this.showErrorSwal(error);
+          });
+    },
+    
     async setOptionsOnFilters() {
       await Promise.all([
         this.A_GET_STATE_LEAD(),
