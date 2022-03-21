@@ -32,7 +32,6 @@
           :sort-desc.sync="isSortDirDesc"
           :busy.sync="isBusy"
         >
-
           <template #table-busy>
             <div class="text-center text-primary my-2">
               <b-spinner class="align-middle mr-1" />
@@ -41,38 +40,41 @@
           </template>
 
           <template #cell(nickname)="data">
-            <div style="white-space: pre-wrap;">
+            <div style="white-space: pre-wrap">
               <router-link
                 :class="textLink"
                 :to="`/social-network/leads/new/dashboard/${data.item.id}`"
                 target="_blank"
-              >{{ data.item.nickname }}</router-link>
-              <br>
+                >{{ data.item.nickname }}</router-link
+              >
+              <br />
               {{ data.item.nickname }}
             </div>
           </template>
 
           <template #cell(source)="data">
             <div>
-                <b-img
-                  fluid
-                  :src="baseUrl + '/images/social-network/facebook.png'"
-                  style="width: 30px"
-                  v-if="data.item.sourcesname_id == 17"
-                />
-                <b-img
-                  fluid
-                  :src="baseUrl + '/images/social-network/google.png'"
-                  style="width: 30px"
-                  v-if="data.item.sourcesname_id == 32"
-                />
+              <b-img
+                fluid
+                :src="baseUrl + '/images/social-network/facebook.png'"
+                style="width: 30px"
+                v-if="data.item.sourcesname_id == 17"
+              />
+              <b-img
+                fluid
+                :src="baseUrl + '/images/social-network/google.png'"
+                style="width: 30px"
+                v-if="data.item.sourcesname_id == 32"
+              />
             </div>
           </template>
 
           <template #cell(status)="data">
             <div>
               <b-badge
-                :variant="`light-${resolveLeadSnStatusVariant(data.item.status_sn_id)}`"
+                :variant="`light-${resolveLeadSnStatusVariant(
+                  data.item.status_sn_id
+                )}`"
                 class="text-capitalize w-100"
               >
                 {{ data.item.status }}
@@ -83,6 +85,8 @@
           <template #cell(program)="data">
             <div>
               <b-img
+                thumbnail
+                fluid
                 :src="data.item.program_name | renderProgramLogo"
                 style="height: 40px"
               />
@@ -103,19 +107,19 @@
           <!-- Column: Created Date -->
           <template #cell(owner)="data">
             <small>{{ data.item.owner }}</small>
-            <br>
+            <br />
             <small>{{ data.item.created_at | myGlobalDay }}</small>
           </template>
 
           <!-- Column: Tracking -->
           <template #cell(tracking)="data">
             <div class="text-center">
-                <feather-icon
-                  icon="ListIcon"
-                  size="15"
-                  class="text-primary cursor-pointer"
-                  @click="openModalTracking(data.item.id, data.item.nickname)"
-                />
+              <feather-icon
+                icon="ListIcon"
+                size="15"
+                class="text-primary cursor-pointer"
+                @click="openModalTracking(data.item.id, data.item.nickname)"
+              />
             </div>
           </template>
 
@@ -136,7 +140,6 @@
       :name="nameLeadSelected"
       @onClose="closeModalTracking"
     ></modal-tracking>
-
   </div>
 </template>
 
@@ -148,26 +151,26 @@ import Fields from "./fields.data";
 // Components
 import ModalTracking from "../../components/ModalTracking.vue";
 import ActionsTable from "./components/ActionsTable.vue";
-import helpers from '../helpers'
+import helpers from "@/views/social-network/helpers";
 export default {
   components: {
     "modal-tracking": ModalTracking,
     "actions-table": ActionsTable,
   },
   data() {
-    return{
+    return {
       baseUrl: process.env.VUE_APP_BASE_URL_ASSETS,
       filters: dataFilters,
       filterPrincipal: {
         type: "input",
         inputType: "text",
         placeholder: "Search...",
-        model: ""
+        model: "",
       },
       totalLeads: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       fromPage: 0,
       toPage: 0,
@@ -178,23 +181,36 @@ export default {
       showModalTracking: false,
       nameLeadSelected: "",
       programs: [],
-    }
-    
+    };
   },
   computed: {
-    ...mapState('SocialNetworkLeadsStore',['S_LEADS', 'S_LEADS_COUNT_CLOSED_COUNTER', 'S_FAN_PAGE_PROGRAMS_FILTERS', 'S_SELLERS_FILTERS']),
-    ...mapState('auth',['currentUser']),
-    
+    ...mapState("SocialNetworkLeadsStore", [
+      "S_LEADS",
+      "S_LEADS_COUNT_CLOSED_COUNTER",
+      "S_FAN_PAGE_PROGRAMS_FILTERS",
+      "S_SELLERS_FILTERS",
+    ]),
+    ...mapState("auth", ["currentUser"]),
   },
   created() {
     this.setOptionsOnFilters();
   },
   methods: {
     ...helpers,
-    ...mapActions('SocialNetworkLeadsStore', ['A_SET_FILTERS', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_DELETE_LEAD', 'A_GET_FAN_PAGE_PROGRAMS_FILTERS', 'A_GET_FILTER_SELLERS']),
-    ...mapActions('CrmLeadStore', ['A_PROCESS_LEADS']),
-    ...mapMutations('SocialNetworkLeadsStore', ['REMOVE_LEAD_DATA', 'SET_DATA']),
-    
+    ...mapActions("SocialNetworkLeadsStore", [
+      "A_SET_FILTERS",
+      "A_GET_NEW_LEADS",
+      "A_GET_TRACKING_NEW_LEADS",
+      "A_DELETE_LEAD",
+      "A_GET_FAN_PAGE_PROGRAMS_FILTERS",
+      "A_GET_FILTER_SELLERS",
+    ]),
+    ...mapActions("CrmLeadStore", ["A_PROCESS_LEADS"]),
+    ...mapMutations("SocialNetworkLeadsStore", [
+      "REMOVE_LEAD_DATA",
+      "SET_DATA",
+    ]),
+
     async getSocialNetworkLeadsClosed() {
       try {
         this.isBusy = true;
@@ -244,57 +260,59 @@ export default {
       this.showModalTracking = false;
     },
 
-
     onProcessLead(lead_id, status) {
       this.showConfirmSwal(
-          "Are you sure?",
-          "You won't be able to revert this!",
-          {
-            input: "textarea",
-            inputValidator: value => {
-              if (!value) {
-                return "You need to write something!";
-              }
+        "Are you sure?",
+        "You won't be able to revert this!",
+        {
+          input: "textarea",
+          inputValidator: (value) => {
+            if (!value) {
+              return "You need to write something!";
+            }
+          },
+        }
+      )
+        .then(async (result) => {
+          if (result.value) {
+            const { user_id, role_id } = this.currentUser;
+            const response = await this.A_PROCESS_LEADS({
+              lead_id: lead_id,
+              status: status,
+              user_id,
+              description: result.value,
+            });
+            if (this.isResponseSuccess(response)) {
+              await this.REMOVE_LEAD_DATA({
+                destination: "S_LEADS",
+                id: lead_id,
+              });
+              this.SET_DATA({
+                destination: "S_LEADS_COUNT_CLOSED_COUNTER",
+                data: this.S_LEADS_COUNT_CLOSED_COUNTER - 1,
+              });
+              this.showToast(
+                "success",
+                "top-right",
+                "Success!",
+                "CheckIcon",
+                "Successful operation"
+              );
+            } else {
+              this.showToast(
+                "warning",
+                "top-right",
+                "Warning!",
+                "AlertTriangleIcon",
+                `Something went wrong.${response.message}`
+              );
             }
           }
-      )
-          .then(async result => {
-            if (result.value) {
-              const { user_id, role_id } = this.currentUser;
-              const response = await this.A_PROCESS_LEADS({
-                lead_id: lead_id,
-                status: status,
-                user_id,
-                description: result.value
-              });
-              if (this.isResponseSuccess(response)) {
-                await this.REMOVE_LEAD_DATA({destination: "S_LEADS", id: lead_id})
-                this.SET_DATA({
-                    destination: "S_LEADS_COUNT_CLOSED_COUNTER",
-                    data: this.S_LEADS_COUNT_CLOSED_COUNTER-1
-                })
-                this.showToast(
-                    "success",
-                    "top-right",
-                    "Success!",
-                    "CheckIcon",
-                    "Successful operation"
-                );
-              } else {
-                this.showToast(
-                    "warning",
-                    "top-right",
-                    "Warning!",
-                    "AlertTriangleIcon",
-                    `Something went wrong.${response.message}`
-                );
-              }
-            }
-          })
-          .catch(error => {
-            console.log("Something went wrong onRowProcess:", error);
-            this.showErrorSwal(error);
-          });
+        })
+        .catch((error) => {
+          console.log("Something went wrong onRowProcess:", error);
+          this.showErrorSwal(error);
+        });
     },
 
     async deleteLead(id) {
@@ -302,34 +320,33 @@ export default {
         "Are you sure?",
         "You won't be able to revert this!",
         "question"
-      )
+      );
       if (result.value) {
-          const { user_id } = this.currentUser;
-          const response = await this.A_DELETE_LEAD({
-            lead_id: id,
-            user_id: user_id,
-          });
+        const { user_id } = this.currentUser;
+        const response = await this.A_DELETE_LEAD({
+          lead_id: id,
+          user_id: user_id,
+        });
 
-          if (this.isResponseSuccess(response)) {
-            this.showToast(
-              "success",
-              "top-right",
-              "Deleted!",
-              "CheckIcon",
-              "Your file has been deleted."
-            );
-          } else {
-            this.showToast(
-              "warning",
-              "top-right",
-              "Warning!",
-              "AlertTriangleIcon",
-              `Something went wrong.${response.message}`
-            );
-          }
+        if (this.isResponseSuccess(response)) {
+          this.showToast(
+            "success",
+            "top-right",
+            "Deleted!",
+            "CheckIcon",
+            "Your file has been deleted."
+          );
+        } else {
+          this.showToast(
+            "warning",
+            "top-right",
+            "Warning!",
+            "AlertTriangleIcon",
+            `Something went wrong.${response.message}`
+          );
         }
+      }
     },
-
 
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;
@@ -345,17 +362,15 @@ export default {
     async setOptionsOnFilters() {
       await Promise.all([
         this.A_GET_FAN_PAGE_PROGRAMS_FILTERS(),
-        this.A_GET_FILTER_SELLERS({moduleId: 15, roles: "[]"}),
-      ])
+        this.A_GET_FILTER_SELLERS({ moduleId: 15, roles: "[]" }),
+      ]);
       this.filters[2].options = this.S_FAN_PAGE_PROGRAMS_FILTERS;
       this.filters[4].options = this.S_SELLERS_FILTERS;
-
-
     },
   },
   mounted() {
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
       this.actionsOptions.push("delete");
-  }
-}
+  },
+};
 </script>

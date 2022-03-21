@@ -114,8 +114,8 @@
           <template #cell(status)="data">
             <div>
               <b-badge
-                :variant="data.item.status | variant"
-                class="text-capitalize"
+                :variant="`light-${resolveLeadSnStatusVariant(data.item.status_sn_id)}`"
+                class="text-capitalize w-100"
               >
                 {{ data.item.status }}
               </b-badge>
@@ -294,7 +294,7 @@ import ActionsTable from "./ActionsTable.vue";
 import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
 import ModalSmsList from "../../leads/components//ModalSmsList.vue";
 import ModalEvidenceSn from "./ModalEvidenceSn.vue";
-
+import helpers from '@/views/social-network/helpers';
 export default {
   components: {
     FeatherIcon,
@@ -360,10 +360,10 @@ export default {
       }
   },
   async created() {
-    await this.getSNRecoveryLeads();
     this.setOptionsOnFilters();
   },
   methods: {
+    ...helpers,
     ...mapActions("SocialNetworkLeadsStore", [
       "A_GET_RECOVERY_LEADS_SN_BY_PROGRAM",
       "A_SET_FILTERS",

@@ -58,42 +58,56 @@
           <!-- Column: Selected -->
           <template #cell(selected)="data">
             <b-form-group v-if="data.item.mobile">
-              <b-form-checkbox v-model="data.item.selected" @input="onSelectedRow(data.item)" />
+              <b-form-checkbox
+                v-model="data.item.selected"
+                @input="onSelectedRow(data.item)"
+              />
             </b-form-group>
           </template>
 
           <!-- Column: Name -->
           <template #cell(nickname)="data">
-            <div style="white-space: pre-wrap;">
+            <div style="white-space: pre-wrap">
               <router-link
                 :class="textLink"
                 :to="`/social-network/leads/new/dashboard/${data.item.id}`"
                 target="_blank"
-              >{{ data.item.nickname ? data.item.nickname : data.item.not_nickname }}</router-link>
-              <br>
-              <span>{{data.item.lead_name}}</span>
+                >{{
+                  data.item.nickname
+                    ? data.item.nickname
+                    : data.item.not_nickname
+                }}</router-link
+              >
+              <br />
+              <span>{{ data.item.lead_name }}</span>
             </div>
           </template>
           <template #cell(source)="data">
             <div>
-              <div v-if="data.item.parent == 1" class="text-center d-flex flex-column align-items-center">
+              <div
+                v-if="data.item.parent == 1"
+                class="text-center d-flex flex-column align-items-center"
+              >
                 <b-img
                   fluid
                   :src="baseUrl + '/images/social-network/facebook.png'"
                   style="width: 30px"
                 />
                 <span class="mt-1">
-                  {{data.item.child}}
+                  {{ data.item.child }}
                 </span>
               </div>
-              <div v-if="data.item.parent == 2" class="text-center d-flex flex-column align-items-center">
+              <div
+                v-if="data.item.parent == 2"
+                class="text-center d-flex flex-column align-items-center"
+              >
                 <b-img
                   fluid
                   :src="baseUrl + '/images/social-network/google.png'"
                   style="width: 30px"
                 />
                 <span class="mt-1">
-                  {{String(data.item.contact_method).toUpperCase()}}
+                  {{ String(data.item.contact_method).toUpperCase() }}
                 </span>
               </div>
             </div>
@@ -101,7 +115,9 @@
           <!-- Column: Status -->
           <template #cell(status)="data">
             <b-badge
-              :variant="`light-${resolveLeadSnStatusVariant(data.item.status_sn_id)}`"
+              :variant="`light-${resolveLeadSnStatusVariant(
+                data.item.status_sn_id
+              )}`"
               class="text-capitalize w-100"
               >{{ data.item.status }}</b-badge
             >
@@ -109,7 +125,12 @@
 
           <!-- Column: Fanpage -->
           <template #cell(fanpage)="data">
-            <b-img thumbnail fluid :src="baseUrl + data.item.logo" style="width: 50px" />
+            <b-img
+              thumbnail
+              fluid
+              :src="baseUrl + data.item.logo"
+              style="width: 50px"
+            />
           </template>
 
           <!-- Column: Recomendations -->
@@ -123,30 +144,63 @@
           <!-- Column: Task -->
           <template #cell(attend)="data">
             <div>
-              <span class="text-capitalize text-success" v-if="data.item.attend == 2"> YES
+              <span
+                class="text-capitalize text-success"
+                v-if="data.item.attend == 2"
+              >
+                YES
                 <feather-icon
                   icon="CheckCircleIcon"
                   size="15"
                   class="mr-50 text-success"
                 />
               </span>
-              <span class="text-capitalize text-success" v-else-if="data.item.attend == 1"> YES </span>
-              <span class="text-capitalize text-danger" v-else-if="data.item.attend == null"> NO </span>
-              <div v-if="data.item.seller_name != null"> {{ data.item.seller_name }} </div>
-              <div v-if="data.item.attend_date != null"> {{ data.item.attend_date | myGlobalDay }} </div>
-              <div v-if="data.item.real_time != null && data.item.state_hour != 'CA'"> {{ data.item.real_time | myGlobalDay }} {{ data.item.state_hour }}</div>
+              <span
+                class="text-capitalize text-success"
+                v-else-if="data.item.attend == 1"
+              >
+                YES
+              </span>
+              <span
+                class="text-capitalize text-danger"
+                v-else-if="data.item.attend == null"
+              >
+                NO
+              </span>
+              <div v-if="data.item.seller_name != null">
+                {{ data.item.seller_name }}
+              </div>
+              <div v-if="data.item.attend_date != null">
+                {{ data.item.attend_date | myGlobalDay }}
+              </div>
+              <div
+                v-if="
+                  data.item.real_time != null && data.item.state_hour != 'CA'
+                "
+              >
+                {{ data.item.real_time | myGlobalDay }}
+                {{ data.item.state_hour }}
+              </div>
             </div>
           </template>
           <template #cell(credit_report)="data">
-            <span :class="data.item.credit_report == '1'?'text-danger':'text-success'">
-              {{ data.item.credit_report == "1" ? 'NO' : 'YES' }}
+            <span
+              :class="
+                data.item.credit_report == '1' ? 'text-danger' : 'text-success'
+              "
+            >
+              {{ data.item.credit_report == "1" ? "NO" : "YES" }}
             </span>
           </template>
           <template #cell(sale_lead_status)="data">
-            <b-badge :variant="data.item.sale_status == 1 ? 'info' : 'success'" class="w-100" v-if="data.item.sale_lead_status">
-                {{data.item.sale_lead_status}}
-            </b-badge>
-          </template><!-- Column: Created Date -->
+            <b-badge
+              :variant="data.item.sale_status == 1 ? 'info' : 'success'"
+              class="w-100"
+              v-if="data.item.sale_lead_status"
+            >
+              {{ data.item.sale_lead_status }}
+            </b-badge> </template
+          ><!-- Column: Created Date -->
           <template #cell(created_at)="data">
             <small>{{ data.item.created_at | myGlobalDay }}</small>
           </template>
@@ -154,12 +208,12 @@
           <!-- Column: Tracking -->
           <template #cell(tracking)="data">
             <div class="text-center">
-                <feather-icon
-                  icon="ListIcon"
-                  size="15"
-                  class="text-primary cursor-pointer"
-                  @click="openModalTracking(data.item.id, data.item.nickname)"
-                />
+              <feather-icon
+                icon="ListIcon"
+                size="15"
+                class="text-primary cursor-pointer"
+                @click="openModalTracking(data.item.id, data.item.nickname)"
+              />
             </div>
           </template>
 
@@ -172,7 +226,6 @@
               @onSendSms="openModalSendSMS(data.item)"
             ></actions-table>
           </template>
-
         </b-table>
       </filter-slot>
     </b-card>
@@ -199,7 +252,8 @@
       :typesms="typesms"
       :sms="leads_sms_o"
       :name-leads="name_leads_arr"
-      @hide="closeModalSendSms">
+      @hide="closeModalSendSms"
+    >
     </modal-send-sms>
   </div>
 </template>
@@ -216,7 +270,7 @@ import ModalTracking from "../../components/ModalTracking.vue";
 import ActionsTable from "./components/ActionsTable.vue";
 import ModalSmsList from "../../components/ModalSmsList.vue";
 import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
-import helpers from '../helpers'
+import helpers from "@/views/social-network/helpers";
 export default {
   components: {
     "filter-slot": FilterSlot,
@@ -237,14 +291,14 @@ export default {
         type: "input",
         inputType: "text",
         placeholder: "Search...",
-        model: ""
+        model: "",
       },
       totalLeads: 0,
       fromPage: 0,
       toPage: 0,
       paginate: {
         currentPage: 1,
-        perPage: "50"
+        perPage: "50",
       },
       perPageOptions: [10, 25, 50, 100],
       sortBy: "id",
@@ -262,7 +316,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('CrmGlobalStore', ['G_PROGRAMS']),
+    ...mapGetters("CrmGlobalStore", ["G_PROGRAMS"]),
     ...mapGetters({
       currentUser: "auth/currentUser",
       token: "auth/token",
@@ -274,43 +328,60 @@ export default {
       G_CRS: "CrmGlobalStore/G_CRS",
       G_TYPE_DOCS: "CrmGlobalStore/G_TYPE_DOCS",
     }),
-    ...mapState('SocialNetworkLeadsStore',['S_BUSY_NEW_LEADS','S_LEADS']),
+    ...mapState("SocialNetworkLeadsStore", ["S_BUSY_NEW_LEADS", "S_LEADS"]),
     ...mapState({
-      S_LEADS: state => state.SocialNetworkLeadsStore.S_LEADS,
-      S_STATES_LEADS : state => state.SocialNetworkLeadsStore.S_STATES_LEADS,
-      S_LEAD_STATUS_SN: state => state.SocialNetworkLeadsStore.S_LEAD_STATUS_SN,
-      S_FAN_PAGE_PROGRAMS_FILTERS: state => state.SocialNetworkLeadsStore.S_FAN_PAGE_PROGRAMS_FILTERS,
-      S_SELLERS_FILTERS: state => state.SocialNetworkLeadsStore.S_SELLERS_FILTERS,
-      S_SUB_SOURCES_FILTERS : state => state.SocialNetworkLeadsStore.S_SUB_SOURCES_FILTERS,
-      sourceFilter(){
-        return this.filter[5].model
-      }
+      S_LEADS: (state) => state.SocialNetworkLeadsStore.S_LEADS,
+      S_STATES_LEADS: (state) => state.SocialNetworkLeadsStore.S_STATES_LEADS,
+      S_LEAD_STATUS_SN: (state) =>
+        state.SocialNetworkLeadsStore.S_LEAD_STATUS_SN,
+      S_FAN_PAGE_PROGRAMS_FILTERS: (state) =>
+        state.SocialNetworkLeadsStore.S_FAN_PAGE_PROGRAMS_FILTERS,
+      S_SELLERS_FILTERS: (state) =>
+        state.SocialNetworkLeadsStore.S_SELLERS_FILTERS,
+      S_SUB_SOURCES_FILTERS: (state) =>
+        state.SocialNetworkLeadsStore.S_SUB_SOURCES_FILTERS,
+      sourceFilter() {
+        return this.filter[5].model;
+      },
     }),
     routeModule() {
       return this.$route.meta.route;
     },
     moduleId() {
       return this.$route.meta.module;
-    }
+    },
   },
   created() {
     this.setOptionsOnFilters();
   },
   methods: {
     ...helpers,
-    ...mapActions('SocialNetworkLeadsStore', ['A_DELETE_LEAD', 'A_GET_STATE_LEAD', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_GET_SMS_SENT_TO_NEW_LEADS', 'A_GET_STATUS_LEAD', 'A_GET_FAN_PAGE_PROGRAMS_FILTERS', 'A_GET_FILTER_SELLERS', 'A_GET_SUB_SOURCES_FILTERS']),
-    ...mapActions('CrmLeadStore', ['A_SET_FILTERS_LEADS', 'A_SET_SELECTED_LEADS']),
+    ...mapActions("SocialNetworkLeadsStore", [
+      "A_DELETE_LEAD",
+      "A_GET_STATE_LEAD",
+      "A_GET_NEW_LEADS",
+      "A_GET_TRACKING_NEW_LEADS",
+      "A_GET_SMS_SENT_TO_NEW_LEADS",
+      "A_GET_STATUS_LEAD",
+      "A_GET_FAN_PAGE_PROGRAMS_FILTERS",
+      "A_GET_FILTER_SELLERS",
+      "A_GET_SUB_SOURCES_FILTERS",
+    ]),
+    ...mapActions("CrmLeadStore", [
+      "A_SET_FILTERS_LEADS",
+      "A_SET_SELECTED_LEADS",
+    ]),
 
     selectedAll() {
       if (this.selectAll)
-        this.S_LEADS.items.forEach(item => (item.selected = true));
-      else this.S_LEADS.items.forEach(item => (item.selected = false));
+        this.S_LEADS.items.forEach((item) => (item.selected = true));
+      else this.S_LEADS.items.forEach((item) => (item.selected = false));
       this.onRowSelected();
     },
 
     onSelectedRow(data) {
       const index = this.leadsSelecteds.findIndex(
-          select => select.id === data.id
+        (select) => select.id === data.id
       );
       if (data.selected === true && index === -1)
         this.leadsSelecteds.push(data);
@@ -325,11 +396,11 @@ export default {
 
     modalSmssOpen() {
       this.typesms = 0;
-      this.name_leads_arr = this.leadsSelecteds.map(el => ({
+      this.name_leads_arr = this.leadsSelecteds.map((el) => ({
         name: el.nickname,
-        id: el.id
+        id: el.id,
       }));
-      this.leads_sms = this.leadsSelecteds.map(el => el.id);
+      this.leads_sms = this.leadsSelecteds.map((el) => el.id);
       this.sendModalSms = true;
     },
 
@@ -360,32 +431,32 @@ export default {
         "Are you sure?",
         "You won't be able to revert this!",
         "question"
-      )
+      );
       if (result.value) {
-          const { user_id } = this.currentUser;
-          const response = await this.A_DELETE_LEAD({
-            lead_id: id,
-            user_id: user_id,
-          });
+        const { user_id } = this.currentUser;
+        const response = await this.A_DELETE_LEAD({
+          lead_id: id,
+          user_id: user_id,
+        });
 
-          if (this.isResponseSuccess(response)) {
-            this.showToast(
-              "success",
-              "top-right",
-              "Deleted!",
-              "CheckIcon",
-              "Your file has been deleted."
-            );
-          } else {
-            this.showToast(
-              "warning",
-              "top-right",
-              "Warning!",
-              "AlertTriangleIcon",
-              `Something went wrong.${response.message}`
-            );
-          }
+        if (this.isResponseSuccess(response)) {
+          this.showToast(
+            "success",
+            "top-right",
+            "Deleted!",
+            "CheckIcon",
+            "Your file has been deleted."
+          );
+        } else {
+          this.showToast(
+            "warning",
+            "top-right",
+            "Warning!",
+            "AlertTriangleIcon",
+            `Something went wrong.${response.message}`
+          );
         }
+      }
     },
     async openModalSmsList(id, name) {
       await this.A_GET_SMS_SENT_TO_NEW_LEADS({
@@ -417,7 +488,10 @@ export default {
           user_owner: this.filter[8].model,
           perpage: this.paginate.perPage,
           page: this.paginate.currentPage,
-          subsource: this.filter[5].model == 1 ? this.filter[6].model : this.filter[7].model,
+          subsource:
+            this.filter[5].model == 1
+              ? this.filter[6].model
+              : this.filter[7].model,
         });
         this.totalLeads = response.total;
         this.fromPage = response.from;
@@ -437,10 +511,10 @@ export default {
     async setOptionsOnFilters() {
       await Promise.all([
         this.A_GET_STATE_LEAD(),
-        this.A_GET_STATUS_LEAD('leads'),
+        this.A_GET_STATUS_LEAD("leads"),
         this.A_GET_FAN_PAGE_PROGRAMS_FILTERS(),
-        this.A_GET_FILTER_SELLERS({moduleId: 15, roles: "[]"}),
-      ])
+        this.A_GET_FILTER_SELLERS({ moduleId: 15, roles: "[]" }),
+      ]);
       // this.filter[2].options = this.G_STATUS_LEADS;
       this.filter[3].options = this.S_LEAD_STATUS_SN;
       this.filter[4].options = this.S_FAN_PAGE_PROGRAMS_FILTERS;
@@ -460,33 +534,33 @@ export default {
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)
       this.actionsOptions.push("delete");
   },
-  watch:{
-    async sourceFilter(newValue){
-      if(newValue == 1 || newValue == 2){
-        if(newValue == 1){
-          await this.A_GET_SUB_SOURCES_FILTERS(newValue)
-          this.$set(this.filter[6], 'options', this.S_SUB_SOURCES_FILTERS)
-          this.filter[6].visible = true
-          this.filter[7].options = []
-          this.filter[7].visible = false
-          this.filter[7].model = null
-        }else if(newValue == 2){
-          await this.A_GET_SUB_SOURCES_FILTERS(newValue)
-          this.$set(this.filter[7], 'options', this.S_SUB_SOURCES_FILTERS)
-          this.filter[7].visible = true
-          this.filter[6].options = []
-          this.filter[6].visible = false
-          this.filter[6].model = null
+  watch: {
+    async sourceFilter(newValue) {
+      if (newValue == 1 || newValue == 2) {
+        if (newValue == 1) {
+          await this.A_GET_SUB_SOURCES_FILTERS(newValue);
+          this.$set(this.filter[6], "options", this.S_SUB_SOURCES_FILTERS);
+          this.filter[6].visible = true;
+          this.filter[7].options = [];
+          this.filter[7].visible = false;
+          this.filter[7].model = null;
+        } else if (newValue == 2) {
+          await this.A_GET_SUB_SOURCES_FILTERS(newValue);
+          this.$set(this.filter[7], "options", this.S_SUB_SOURCES_FILTERS);
+          this.filter[7].visible = true;
+          this.filter[6].options = [];
+          this.filter[6].visible = false;
+          this.filter[6].model = null;
         }
-      }else{
-        this.filter[6].visible = false
-        this.filter[6].options = []
-        this.filter[6].model = null
-        this.filter[7].options = []
-        this.filter[7].visible = false
-        this.filter[7].model = null
+      } else {
+        this.filter[6].visible = false;
+        this.filter[6].options = [];
+        this.filter[6].model = null;
+        this.filter[7].options = [];
+        this.filter[7].visible = false;
+        this.filter[7].model = null;
       }
-    }
-  }
+    },
+  },
 };
 </script>
