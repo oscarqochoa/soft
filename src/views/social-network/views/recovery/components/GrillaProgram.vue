@@ -78,7 +78,9 @@
                 :to="`/social-network/leads/new/dashboard/${data.item.id}`"
                 target="_blank"
               >
-                {{ data.item.nickname }}
+                {{ data.item.nickname
+                    ? data.item.nickname
+                    : data.item.not_nickname }}
               </router-link>
               <br />
               <small v-if="data.item.lead_name != null">{{ data.item.lead_name }}</small>
