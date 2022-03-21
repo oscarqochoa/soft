@@ -1,10 +1,10 @@
 <template>
   <e-charts
-    ref="line"
-    autoresize
-    :options="line"
-    theme="theme-color"
-    auto-resize
+      ref="line"
+      autoresize
+      :options="line"
+      theme="theme-color"
+      auto-resize
   />
 </template>
 
@@ -39,7 +39,6 @@ export default {
 
           max: 400,
         }],
-
         grid: {
           width: '95%',
           left: '40px',
@@ -57,6 +56,7 @@ export default {
           type: 'value',
           splitLine: { show: false },
         },
+
         // series: {
         //   type: 'line',
         //   name: this.optionData.series.name,
@@ -79,5 +79,7 @@ export default {
 </script>
 
 <style>
-
+.echarts {
+  width: 100% !important;
+}
 </style>

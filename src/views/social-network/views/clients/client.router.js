@@ -4,10 +4,9 @@ export default [
   {
     path: '/socialnetwork/clients',
     name: 'clients',
+    redirect: {name: 'list-clients'},
     component: () => import('@/views/social-network/views/clients/Clients.vue'),
-    meta: {
-      permittedRoles: [12, 9, 10, 11, 2, 1]
-    },
+
     children: [
 
       {

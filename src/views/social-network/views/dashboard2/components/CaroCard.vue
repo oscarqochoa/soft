@@ -12,16 +12,13 @@
 
           :style="`border: 1px solid ${i.color}!important`"
           :class="i.cursor ? 'pointer' : '' "
-          @click=" i.cursor ? clickCard(i,index) : ''"
+          @click=" i.cursor ? clickCardGeneral(i,index) : ''"
         >
           <b-card-body class="pb-0  ">
             <div
               class="d-flex align-items-end  justify-content-between"
             >
-              <!--              <b-img-->
-              <!--                class="img"-->
-              <!--                :src="`${baseImg}/assets${i.icon}`"-->
-              <!--              />-->
+
               <span class="mb-25 mt-1 title text-uppercase ">
                 {{ i.title }}
 
@@ -51,28 +48,33 @@
             >
 
               <div
-                class="cuadrado   "
+                class="cuadrado"
                 style="width: 50%"
+                @click=" i.cursor ? clickCard(4,3) : ''"
               >
                 <span
                   class="title-mobile"
                   style="margin-left: 9px"
+
                 >
                   ACTIVE:
                 </span>
                 <span
+
                   class="data-mobile"
                   style="margin-left: 6px"
                 >{{ i.data }}</span>
               </div>
-              <div style="width: 50%">
+              <div  style="width: 50%"  @click=" i.cursor ? clickCard(6,5) : ''">
                 <span
                   style="margin-left: 6px"
                   class="title-mobile"
+
                 >
                   RECOVERY:
                 </span>
                 <span
+
                   class="data-mobile"
                   style="margin-left: 6px"
                 >{{ i.data_rec ? i.data_rec : 0 }}
@@ -123,10 +125,7 @@ export default {
   props: {
     id: null,
 
-    color: {
-      type: String,
-      default: 'primary',
-    },
+
     chartData: {
       type: Array,
       default: () => [],
@@ -138,11 +137,14 @@ export default {
 
     // eslint-disable-next-line vue/require-default-prop
     data: null,
+
     type: null,
     date_init: null,
     date_end: null,
     program: null,
     user: null,
+
+
 
   },
 
@@ -152,7 +154,7 @@ export default {
       item: {},
       baseImg: process.env.VUE_APP_BASE_URL_FRONT,
       card: null,
-
+      color : null
     }
   },
 
@@ -170,6 +172,24 @@ export default {
     },
     closeInfoModal() {
       this.modalInfo = false
+    },
+
+    clickCardGeneral(item, index) {
+
+      if (index !== 3 && index !== 5) {
+        this.showModalLead = true
+        this.card = index + 1
+        this.item = {
+          //   type: this.type,
+          date_init: this.date_init,
+          date_end: this.date_end,
+          program: this.program,
+          card: index + 1,
+          user: this.user,
+        }
+        this.modalInfo = true
+        this.color = item.styleModal
+      }
     },
     clickCard(item, index) {
       this.showModalLead = true
@@ -204,8 +224,8 @@ export default {
 }
 
 .pad{
-  border-radius: 10px;
-  border: 1px solid rgba(207, 190, 190, 0.5) !important;
+  border-radius: 5px;
+  border: 1px solid rgba(207, 190, 190, 0.5)  !important;
 
 }
 .cuadrado{
@@ -216,6 +236,7 @@ export default {
   .title-mobile{
     font-size: 10px !important;
     margin: 1px !important;
+
 
   }
   .data-mobile {

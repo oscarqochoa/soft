@@ -54,7 +54,7 @@
           <b-button
 
             v-b-tooltip.hover
-            class="btn btn-filters "
+            class="btn rounded "
             variant="primary"
             title="FILTERS"
             @click="advanceFilter = !advanceFilter"
@@ -196,7 +196,7 @@
               v-b-tooltip.hover
               style="padding-top: 7px"
               size="30"
-              class="btn-show "
+              class="rounded"
               variant="primary"
               title="CHANGE"
               @click="(showGraphForWeek = !showGraphForWeek),getGraphics(),firstGraphics()"

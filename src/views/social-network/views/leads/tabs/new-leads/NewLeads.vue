@@ -331,7 +331,7 @@ export default {
       this.leads_sms = this.leadsSelecteds.map(el => el.id);
       this.sendModalSms = true;
     },
-    
+
     async openModalTracking(id, name) {
       await this.A_GET_TRACKING_NEW_LEADS({
         lead_id: id,
@@ -414,7 +414,7 @@ export default {
           lead_status: this.filter[3].model,
           name_text: this.filterPrincipal.model,
           sourcename: this.filter[5].model,
-          task: this.filter[9].model, 
+          task: this.filter[9].model,
           type_document: this.filter[11].model,
           order: "desc",
           orderby: 10,

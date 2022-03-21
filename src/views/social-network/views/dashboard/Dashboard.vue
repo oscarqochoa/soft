@@ -16,7 +16,7 @@
             <b-button
               :disabled="today < '2021-04-15'"
               variant="info"
-              class="btn-icon rounded-circle mr-1"
+              class="btn-icon rounded mr-1"
               @click="changeDateCard(-1)"
             >
               <feather-icon icon="ChevronLeftIcon" />
