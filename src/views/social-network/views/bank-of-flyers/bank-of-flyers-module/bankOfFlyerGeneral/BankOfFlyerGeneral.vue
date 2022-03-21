@@ -50,7 +50,7 @@
               :per-page="paginate.perPage"
               :current-page="paginate.currentPage"
               :filter="filter"
-
+              show-empty
 
           >
             <template #table-busy>
