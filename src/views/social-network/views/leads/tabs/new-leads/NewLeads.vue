@@ -130,9 +130,12 @@
               fluid
               :src="baseUrl + data.item.logo"
               style="width: 50px"
+              v-if="data.item.logo"
             />
+            <b-badge variant="primary" v-else style="width: 50px">
+              CRM
+            </b-badge>
           </template>
-
           <!-- Column: Recomendations -->
           <template #cell(programs)="data">
             <template v-for="(program, key) in JSON.parse(data.item.programs)">
