@@ -207,7 +207,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState, mapMutations} from "vuex";
 
 import dataFields from "./fields.data";
 import dataFilters from "./filters.data";
@@ -301,9 +301,8 @@ export default {
   methods: {
     ...helpers,
     ...mapActions('SocialNetworkLeadsStore', ['A_DELETE_LEAD', 'A_GET_STATE_LEAD', 'A_GET_NEW_LEADS', 'A_GET_TRACKING_NEW_LEADS', 'A_GET_SMS_SENT_TO_NEW_LEADS', 'A_GET_STATUS_LEAD', 'A_GET_FAN_PAGE_PROGRAMS_FILTERS', 'A_GET_FILTER_SELLERS', 'A_GET_SUB_SOURCES_FILTERS']),
-    ...mapActions('CrmLeadStore', ['A_SET_FILTERS_LEADS', 'A_SET_SELECTED_LEADS']),
-    ...mapActions('CrmLeadStore', ['A_PROCESS_LEADS']),
-
+    ...mapActions('CrmLeadStore', ['A_SET_FILTERS_LEADS', 'A_SET_SELECTED_LEADS', 'A_PROCESS_LEADS']),
+    ...mapMutations('SocialNetworkLeadsStore', ['REMOVE_LEAD_DATA']),
     selectedAll() {
       if (this.selectAll)
         this.S_LEADS.items.forEach(item => (item.selected = true));
@@ -460,7 +459,7 @@ export default {
                 description: result.value
               });
               if (this.isResponseSuccess(response)) {
-                // await this.REMOVE_LEAD_DATA({destination: "S_LEADS", id: lead_id})
+                await this.REMOVE_LEAD_DATA({destination: "S_LEADS", id: lead_id})
                 this.showToast(
                     "success",
                     "top-right",
