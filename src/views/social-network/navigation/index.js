@@ -19,7 +19,8 @@ const navigation = [
   {
     header: 'SOCIAL NETWORK',
   },
-  ...DashboardNavigation,
+  ...DashboardNavigation2,
+  // ...DashboardNavigation,
   ...LeadsNav,
   ...RecoveryNavigation,
   ...ClientNavigation,
@@ -32,7 +33,6 @@ const navigation = [
   ...InventoryNavigation,
   ScheduleNavigation,
   ...ActivitiesNavigation,
-  ...DashboardNavigation2,
   ...RecoveryListNavigation,
 ]
 export default navigation

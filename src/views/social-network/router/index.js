@@ -16,7 +16,7 @@ import RecoveryListRoute from '@/views/social-network/views/recovery-list/recove
 import RecoveryRoute from '@/views/social-network/views/recovery/recovery.router'
 
 const routes = [
-  { path: '/socialnetwork', redirect: { name: 'dashboard-social-network' } },
+  { path: '/socialnetwork', redirect: { name: 'dashboard2-social-network' } },
   ...testRoute,
   ...LeadsRouter,
   ...answersGuideRouter,

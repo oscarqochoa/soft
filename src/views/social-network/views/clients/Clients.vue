@@ -14,10 +14,7 @@
         >ALL CLIENTS</b-nav-item>
 
       </b-nav>
-    <b-card class="border-top-primary border-3 border-table-radius px-0">
-      <router-view :key="$route.name"></router-view>
-
-    </b-card>
+    <router-view :key="$route.name"></router-view>
 
   </div>
 </template>

@@ -67,15 +67,15 @@
           <template v-slot:cell(cr)="data">
 
             <span
-                v-if="data.item.credit_report === '1'"
+                v-if="data.item.credit_report === 1"
                 class="text-danger"
             >
               NO
             </span>
 
             <span
-                v-if="data.item.credit_report === '2'"
-                class="text-primary"
+                v-if="data.item.credit_report === 2"
+                class="text-success"
             >
               YES
             </span>
@@ -83,15 +83,15 @@
           <template v-slot:cell(sale)="data">
 
             <span
-                v-if="data.item.sale === '1'"
+                v-if="data.item.sale === 1"
                 class="text-danger"
             >
               NO
             </span>
 
             <span
-                v-if="data.item.sale === '2'"
-                class="text-primary"
+                v-if="data.item.sale === 2"
+                class="text-success"
             >
               YES
             </span>

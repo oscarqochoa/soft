@@ -24,13 +24,13 @@
             show-empty
             sticky-header="50vh"
             no-provider-filtering
+            small
             :busy.sync="isBusy"
             :items="search"
             :fields="filteredFields"
             :per-page="paginate.perPage"
             :current-page="paginate.currentPage"
             :filter="filter"
-
             responsive="sm"
         >
           <template #table-busy>

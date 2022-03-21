@@ -347,6 +347,14 @@ export default {
     closeModalQuestionnaire:function() {
       this.modalQuestionnaire = false;
     },
+    statusColor(status){
+      if (status === 1) return "#38c172";
+      if (status === 2) return "#3490dc";
+      if ([3, 6, 9, 10].includes(status)) return "#e13232";
+      if ([7, 8].includes(status)) return "#eabc73";
+      if ([4, 5].includes(status)) return "#eabc73";
+      return "#e13232";
+    },
     changeStatus:function(score_id, status_id) {
       this.$swal
         .fire({

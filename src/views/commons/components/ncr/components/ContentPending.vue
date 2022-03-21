@@ -33,7 +33,9 @@
         </template>
         <!-- Column LEAD NAME -->
         <template #cell(lead_name)="data">
-          <div class="d-flex flex-column justify-content-start align-items-start">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
             <router-link
               :class="textLink"
               :to="{
@@ -41,13 +43,16 @@
                 params: { id: data.item.lead_id },
               }"
               target="_blank"
-            >{{ data.item.lead_name }}</router-link>
-             <div v-if="data.item.mobile">{{data.item.mobile}}</div>
+              >{{ data.item.lead_name }}</router-link
+            >
+            <div v-if="data.item.mobile">{{ data.item.mobile }}</div>
           </div>
         </template>
         <!-- Column REQUEST BY -->
         <template #cell(seller_name)="data">
-          <div class="d-flex flex-column justify-content-start align-items-start">
+          <div
+            class="d-flex flex-column justify-content-start align-items-start"
+          >
             <span>{{ data.item.seller_name }}</span>
             <div>{{ data.item.date | myGlobalDay }}</div>
             <!-- <span>{{ data.item.date | myGlobalDay }}</span> -->
@@ -55,16 +60,20 @@
         </template>
         <!-- Column Status -->
         <template #cell(status)="data">
-          <div class="d-flex flex-column justify-content-center align-items-center">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
             <span
               class="ncr-leads-status-successful w-100"
               style="
                 color: white;
                 border-radius: 30px;
                 padding-left: 15px;
-                padding-right: 15px;"
-                :style="`background-color:${statusColor(data.item.status_id)}`"
-            >{{ data.item.status }}</span>
+                padding-right: 15px;
+              "
+              :style="`background-color:${statusColor(data.item.status_id)}`"
+              >{{ data.item.status }}</span
+            >
           </div>
         </template>
         <!-- Column QU -->
@@ -100,7 +109,9 @@
         </template>
         <!-- Column Tracking -->
         <template #cell(tracking)="data">
-          <div class="d-flex flex-column justify-content-center align-items-center">
+          <div
+            class="d-flex flex-column justify-content-center align-items-center"
+          >
             <feather-icon
               icon="ListIcon"
               class="font-medium-4"
@@ -146,20 +157,20 @@ import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot
 import ModalTrackingStatus from "../modal/ModalTrackingStatus.vue";
 import ModalQuestionnaire from "../modal/ModalQuestionnaire.vue";
 // Import Data
-import fields from '../data/fields.content.pending.data'
-import filters from '../data/filter.content.general.data'
+import fields from "../data/fields.content.pending.data";
+import filters from "../data/filter.content.general.data";
 // Import Mixin
 import ncrmixin from "../mixin";
 
 export default {
   mixins: [ncrmixin],
   components: { vSelect, ModalTrackingStatus, ModalQuestionnaire, FilterSlot },
-  data:function() {
+  data: function () {
     return {
       totalRows: 0,
       paginate: {
         currentPage: 1,
-        perPage: 10
+        perPage: 10,
       },
       startPage: null,
       toPage: null,
@@ -169,7 +180,7 @@ export default {
         type: "input",
         inputType: "text",
         placeholder: "Client...",
-        model: ""
+        model: "",
       },
       arrayColumns: fields,
       dato2: 4,
@@ -187,32 +198,34 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser"
-    })
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
-    
-    updateGrid:function() {
+    updateGrid: function () {
       this.$refs.refClientsList.refresh();
     },
-    resetSearch:function() {
+    resetSearch: function () {
       this.$refs.refClientsList.refresh();
     },
-    myProvider:async function(ctx) {
-      try{
+    myProvider: async function (ctx) {
+      try {
         let params = {
-        perPage: ctx.perPage,
-        name_text: this.filterPrincipal.model,
-        date_from: this.filter[1].model,
-        date_to: this.filter[2].model,
-        orderby: this.dato2 == null ? 4 : this.dato2,
-        order: this.dato1 == null ? "desc" : this.dato1,
-        user_id: this.currentUser.user_id,
-        role_id: this.currentUser.role_id,
-        seller: this.filter[0].model,
-        modul: this.$route.meta.module
-      }
-        const data = await amgApi.post(`${ctx.apiUrl}?page=${ctx.currentPage}`,params );
+          perPage: ctx.perPage,
+          name_text: this.filterPrincipal.model,
+          date_from: this.filter[1].model,
+          date_to: this.filter[2].model,
+          orderby: this.dato2 == null ? 4 : this.dato2,
+          order: this.dato1 == null ? "desc" : this.dato1,
+          user_id: this.currentUser.user_id,
+          role_id: this.currentUser.role_id,
+          seller: this.filter[0].model,
+          modul: this.$route.meta.module,
+        };
+        const data = await amgApi.post(
+          `${ctx.apiUrl}?page=${ctx.currentPage}`,
+          params
+        );
         const items = data.data.data;
         this.startPage = data.data.from;
         this.currentPage = data.data.current_page;
@@ -223,24 +236,30 @@ export default {
         this.totalRows = data.data.total;
         this.toPage = data.data.to;
         return items || [];
-
-      }catch(error){
-        console.error(error)
+      } catch (error) {
+        console.error(error);
         return [];
       }
     },
-
-    openTrackingStatus:function(id, lead_name) {
+    statusColor(status){
+      if (status === 1) return "#38c172";
+      if (status === 2) return "#3490dc";
+      if ([3, 6, 9, 10].includes(status)) return "#e13232";
+      if ([7, 8].includes(status)) return "#eabc73";
+      if ([4, 5].includes(status)) return "#eabc73";
+      return "#e13232";
+    },
+    openTrackingStatus: function (id, lead_name) {
       this.lead_name = lead_name;
       this.score_id = id;
       this.modalTrackingStatus = true;
     },
-    closeTrackingStatus:function() {
+    closeTrackingStatus: function () {
       this.modalTrackingStatus = false;
     },
-    closeModalQuestionnaire:function() {
+    closeModalQuestionnaire: function () {
       this.modalQuestionnaire = false;
-    }
+    },
   },
 };
 </script>

@@ -35,7 +35,7 @@
         <template #cell(lead_name)="data">
           <div class="d-flex flex-column justify-content-start align-items-start">
             <router-link
-              class
+              :class="textLink"
               :to="{
                 name: $route.meta.leadRoute,
                 params: { id: data.item.lead_id },
@@ -129,7 +129,7 @@
               }"
               target="_blank"
             >
-              <img :src="assetsImg + '/images/icons/report2.ico'" />
+              <img :src="assetsImg + '/images/icons/report2.ico'" :style="{filter: skinApp == 'dark'?'invert(1)':''}" />
             </router-link>
           </div>
           <div v-if="status == 2">
@@ -266,7 +266,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentUser: "auth/currentUser"
+      currentUser: "auth/currentUser",
+      skinApp: "appConfig/skin"
     }),
     clientRoute:function() {
       return this.status == 1
@@ -320,6 +321,14 @@ export default {
     },
     updateGrid:function() {
       this.$refs.refClientsList.refresh();
+    },
+    statusColor(status){
+      if (status === 1) return "#38c172";
+      if (status === 2) return "#3490dc";
+      if ([3, 6, 9, 10].includes(status)) return "#e13232";
+      if ([7, 8].includes(status)) return "#eabc73";
+      if ([4, 5].includes(status)) return "#eabc73";
+      return "#e13232";
     },
     openTrackingStatus:function(id, lead_name) {
       this.lead_name = lead_name;
