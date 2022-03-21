@@ -261,7 +261,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState, mapMutations} from "vuex";
 
 import dataFields from "./fields.data";
 import dataFilters from "./filters.data";
@@ -374,7 +374,7 @@ export default {
       "A_SET_SELECTED_LEADS",
       "A_PROCESS_LEADS"
     ]),
-
+    ...mapMutations('SocialNetworkLeadsStore', ['REMOVE_LEAD_DATA']),
     selectedAll() {
       if (this.selectAll)
         this.S_LEADS.items.forEach((item) => (item.selected = true));
@@ -534,7 +534,7 @@ export default {
                 description: result.value
               });
               if (this.isResponseSuccess(response)) {
-                // await this.REMOVE_LEAD_DATA({destination: "S_LEADS", id: lead_id})
+                await this.REMOVE_LEAD_DATA({destination: "S_LEADS", id: lead_id})
                 this.showToast(
                     "success",
                     "top-right",
