@@ -128,9 +128,6 @@ export default {
       type: Boolean,
     },
   },
-  mounted() {
-    console.log(this.S_SEARCH_GLOBAL_LEADS_SN, "S_SEARCH_GLOBAL_LEADS_SN");
-  },
   data() {
     return {
       mutableShow: this.show,

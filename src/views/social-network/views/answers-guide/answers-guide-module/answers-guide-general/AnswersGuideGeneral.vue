@@ -19,12 +19,6 @@
               <strong>Loading ...</strong>
             </div>
           </template>
-          <template #table-busy>
-            <div class="text-center text-primary my-2">
-              <b-spinner class="align-middle mr-1" />
-              <strong>Loading ...</strong>
-            </div>
-          </template>
           <template #cell(content)="data">
             <div
               v-if="data.item.ans_open && data.item.count_father"
