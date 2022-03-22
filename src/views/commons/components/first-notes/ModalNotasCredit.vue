@@ -57,7 +57,7 @@ export default {
       return this.$moment(this.creates);
     },
     deployMoment() {
-      return this.$moment("2022-03-21");
+      return this.$moment("2022-03-22");
     },
     createsMomentIsBefore() {
       return this.createsMoment.isBefore(this.deployMoment);
