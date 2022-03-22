@@ -21,7 +21,9 @@ class GlobalService {
 
   async getHourSystem(params) {
     try {
-      const { data } = await amgApi.post(`/commons/get-hour-system?timezone=${params}`);
+      const { data } = await amgApi.post(
+        `/commons/get-hour-system?timezone=${params}`
+      );
       return data;
     } catch (error) {
       throw error;
@@ -30,7 +32,10 @@ class GlobalService {
 
   async getUsersByModuleAndRoles(moduleId, params) {
     try {
-      const { data } = await amgApi.post(`/commons/user-module/${moduleId}`, params);
+      const { data } = await amgApi.post(
+        `/commons/user-module/${moduleId}`,
+        params
+      );
       return data;
     } catch (error) {
       throw error;

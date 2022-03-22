@@ -158,7 +158,7 @@ const actions = {
     }
   },
 
-  async A_GET_HOUR_SYSTEM(body) {
+  async A_GET_HOUR_SYSTEM({}, body) {
     try {
       const response = await GlobalService.getHourSystem(body);
       return response;

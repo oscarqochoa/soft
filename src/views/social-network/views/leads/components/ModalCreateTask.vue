@@ -350,6 +350,7 @@ export default {
       try {
         this.isPreloading(true);
         const response = await this.A_GET_HOUR_SYSTEM(this.lead.state);
+
         let hour = response.substr(0, 2);
         let minute = response.substr(3, 4);
         if (minute >= "00" && minute <= "14") {
