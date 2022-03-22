@@ -5,7 +5,7 @@
     </b-col>
     <b-col md="8" class="d-flex align-items-center ">
 
-      <div class="container-task-later">
+      <div class="container-task-later pt-2 pb-2">
 
         <div class="mr-1 text-left">
           <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-35,Day event">
