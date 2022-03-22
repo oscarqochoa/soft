@@ -154,7 +154,7 @@
               <b-col md="2">
                 <b-form-group>
                   <b-form-input
-                    :value="modul === 15 ? 'UNK' : lead.state"
+                    :value="lead.state ? lead.state : 'UNK'"
                     readonly
                   />
                 </b-form-group>
