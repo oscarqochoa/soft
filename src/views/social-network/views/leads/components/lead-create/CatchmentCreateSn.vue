@@ -589,14 +589,15 @@ export default {
 .select-flyer{
   span{
     cursor: pointer;
-    border-color: #0e1d44;
+    border-color: #fc424a ;
+    border-width: 5px !important;
   }
 }
 .dark-layout{
   .select-flyer{
     span{
       cursor: pointer;
-      border-color: #fff;
+      border-color: #fc424a ;
     }
   }
 }

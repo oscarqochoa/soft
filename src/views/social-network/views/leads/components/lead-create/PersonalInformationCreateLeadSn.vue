@@ -8,7 +8,7 @@
       </b-row>
       <b-row class="mt-2 text-left" >
         <b-col mb="6" >
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-13,First Name">
+          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-13,First Name">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -32,7 +32,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-14,Last Name">
+          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-14,Last Name">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -58,7 +58,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required|min:14" v-slot="{errors}" name="input-create-lead-15,Phone(M)">
+          <ValidationProvider rules="min:14" v-slot="{errors}" name="input-create-lead-15,Phone(M)">
             <b-form-group
                           label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                           label-cols-sm="4"
@@ -88,7 +88,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-16,Zip Code">
+          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-16,Zip Code">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -117,7 +117,7 @@
         <b-col mb="6">
           <ValidationProvider
               v-slot="{errors}"
-              rules="required|email"
+              rules="email"
               name="input-create-lead-17,Email"
           >
             <b-form-group
@@ -143,7 +143,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-18,Note">
+          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-18,Note">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -375,11 +375,7 @@ export default {
   },
   watch: {
     async isValidPhone() {
-      if (this.lead.phone.length > 13) {
-        await this.A_UNIQUE_MOBILE_SN({
-          mobile: this.lead.phone,
-        })
-      }
+
     },
     "lead.potential"() {
       if(!this.lead.potential) {

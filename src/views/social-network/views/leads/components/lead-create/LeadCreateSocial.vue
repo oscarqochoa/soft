@@ -163,7 +163,7 @@ export default {
     return {
       lead: {
         // Catchment
-        state_h: null,
+        state_h: 'CA',
         user_id: null,
         program: [],
         source_id: null,
@@ -171,11 +171,11 @@ export default {
         google_ads: null,
         fanpage_id: null,
         flyer: null,
-        sourcesname_id: null,
+        sourcesname_id: 17,
 
         // Basic information
         nickname: "",
-        language: null,
+        language: "ES",
         addEvidence: false,
 
         // Personal information
@@ -276,7 +276,10 @@ export default {
     this.lead.usercreator = this.currentUser.user_id;
     this.lead.catcher = this.currentUser.user_id;
     this.lead.created_by = this.currentUser.user_id;
+    this.lead.user_id = this.currentUser.user_id;
     this.lead.created_date = this.$options.filters.formatDate(new Date());
+    // console.log('user', this.currentUser)
+
   },
 
   computed: {
@@ -308,14 +311,13 @@ export default {
       try {
         const validate = await this.$refs.refFormLeadObserver;
         // Validar formulario
-        if (await validate.validate() && this.isValidNickname && this.isValidMobile) {
+        if (await validate.validate()) {
 
           const resp = await this.showConfirmSwal(
               "Are you sure?",
               "You won't be able to revert this!",
               "question"
           )
-          console.log('data1: ', this.lead)
           if(resp.value){
             this.addPreloader()
             // Transformar fechas
@@ -323,10 +325,9 @@ export default {
             this.lead.date = this.transformDate(this.lead.date);
             this.lead.due_date = this.transformDate(this.lead.due_date);
 
-            console.log('data2: ', this.lead)
 
             // Enviar peticion a la api
-            await this.A_CREATE_LEAD_SN(this.lead);
+            //await this.A_CREATE_LEAD_SN(this.lead);
 
             setTimeout(async () => {
               await this.resetForm()
@@ -471,7 +472,7 @@ export default {
       this.loading = false;
     },
     resetForm() {
-      this.lead.state_h = null
+      this.lead.state_h = 'CA'
       this.lead.user_id = null
       this.lead.program = []
       this.lead.source_id = null
@@ -479,11 +480,11 @@ export default {
       this.lead.google_ads = null
       this.lead.fanpage_id = null
       this.lead.flyer = null
-      this.lead.sourcesname_id =  null
+      this.lead.sourcesname_id = 17
 
           // Basic information
       this.lead.nickname = ""
-      this.lead.language = null
+      this.lead.language = "ES"
       this.lead.addEvidence = false
 
           // Personal information
@@ -571,6 +572,10 @@ export default {
       });
       if(resp.data.code) {
         this.isValidNickname = false;
+        this.showInfoSwal(
+            `The Nickname already exists: ${resp.data.message}`,
+            "Information nick is not unique",
+        )
       } else {
         this.isValidNickname = true;
         this.toastData = this.toastData.filter(err => err.id !== "input-create-lead-10")
@@ -582,6 +587,10 @@ export default {
       });
       if(resp.data.code) {
         this.isValidMobile = false;
+        this.showInfoSwal(
+            `The phone(M) already exists: ${resp.data.message}`,
+            "Information phone(M) is not unique",
+        )
       } else {
         this.isValidMobile = true;
         this.toastData = this.toastData.filter(err => err.id !== "input-create-lead-14")

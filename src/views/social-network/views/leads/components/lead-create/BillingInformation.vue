@@ -9,7 +9,7 @@
       <b-row>
         <b-col md="8" class="text-left">
           <!-- Card Holder Name -->
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-25,Card Holder Name">
+          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-25,Card Holder Name">
             <b-form-group
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                 label-cols-sm="4"
@@ -47,7 +47,7 @@
                 <validation-provider
                     v-slot="{errors}"
                     name="input-create-lead-26,Card number 1"
-                    rules="required"
+                    rules=""
                 >
                   <b-form-input
                       ref="input-1"
@@ -73,7 +73,7 @@
                 <validation-provider
                     v-slot="{errors}"
                     name="input-create-lead-27,Card number 2"
-                    rules="required"
+                    rules=""
                 >
                   <b-form-input
                       id="input-create-lead-27"
@@ -93,7 +93,7 @@
                 <validation-provider
                     v-slot="{errors}"
                     name="input-create-lead-28,Card number 3"
-                    rules="required"
+                    rules=""
                 >
                   <b-form-input
                       id="input-create-lead-28"
@@ -113,7 +113,7 @@
                 <validation-provider
                     v-slot="{errors}"
                     name="input-create-lead-29,Card number 4"
-                    rules="required"
+                    rules=""
                 >
                   <b-form-input
                       id="input-create-lead-29"
@@ -154,7 +154,7 @@
                 <validation-provider
                     v-slot="{errors}"
                     name="input-create-lead-30,Card month"
-                    rules="required"
+                    rules=""
                 >
                   <b-form-input
                       id="input-create-lead-30"
@@ -175,7 +175,7 @@
                 <validation-provider
                     v-slot="{errors}"
                     name="input-create-lead-31,Card year"
-                    rules="required"
+                    rules=""
                 >
                   <b-form-input
                       id="input-create-lead-31"
@@ -195,7 +195,7 @@
                 <validation-provider
                     v-slot="{errors}"
                     name="input-create-lead-32,Card code"
-                    rules="required"
+                    rules=""
                 >
                   <b-form-input
                       id="input-create-lead-32"
@@ -260,7 +260,7 @@
 
         <b-row class="mt-2 text-left">
           <b-col mb="6" >
-            <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-33,Card zip code">
+            <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-33,Card zip code">
               <b-form-group
                   id="input-create-lead-33"
                   label-class="font-bureau-style font-weight-normal color-gray-input-sn"

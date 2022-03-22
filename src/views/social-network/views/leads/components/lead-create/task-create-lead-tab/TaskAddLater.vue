@@ -3,7 +3,7 @@
     <b-col md="2" class="d-flex align-items-center">
       <h3 class="title-card m-0 font-medium-1">Content Task</h3>
     </b-col>
-    <b-col md="5" class="d-flex align-items-center ">
+    <b-col md="8" class="d-flex align-items-center ">
 
       <div class="container-task-later">
 
@@ -70,85 +70,6 @@
               <div v-if="errors[0]" class="text-error-sn text-center">To {{errors[0]}}</div>
             </b-form-group>
           </ValidationProvider>
-        </div>
-
-      </div>
-
-    </b-col>
-    <b-col md="5" class="d-flex align-items-center">
-
-      <div class="container-task-later task-later-seller">
-
-        <div class="mr-1 d-flex align-items-center justify-content-center">
-          <b-button
-              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-              variant="danger"
-              class="btn-find-seller-later"
-              @click="findSellers"
-          >
-            <span >Find Seller</span>
-          </b-button>
-        </div>
-
-        <div class="mr-1 text-left">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-38,Title seller">
-            <b-form-group
-                label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                label-for="input-horizontal"
-
-                label="Title:"
-            >
-              <b-input
-                  :class="{'border-error-sn' :errors[0]}"
-                  :state="errors[0] ? false : null"
-                  v-model="lead.title"
-                  placeholder="Type title"
-                  id="input-create-lead-38"
-              ></b-input>
-              <div v-if="errors[0]" class="text-error-sn text-center">Title {{errors[0]}}</div>
-            </b-form-group>
-          </ValidationProvider>
-        </div>
-
-        <div class="">
-          <b-col md="12 text-left">
-            <ValidationProvider v-slot="{errors}" rules="required" name="input-create-lead-39,Seller">
-              <b-form-group
-                  :state="errors[0] ? false : null"
-                  label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-                  label-for="input-horizontal"
-                  label="Seller"
-              >
-                <v-select
-                    id="input-create-lead-39"
-                    label="user_name"
-                    :reduce="el => el.value"
-                    :options="S_SELLERS"
-                    v-model="lead.seller">
-
-                  <template #option="{ user_name, status_session }">
-                    <div class="d-flex align-items-center justify-content-start">
-                      <div class="point-seller" :class="status_session ? 'bg-green' : ''"> </div>
-                      <p class="m-0 font-small-2 truncate truncate-options">{{ user_name }}</p>
-                    </div>
-                  </template>
-
-                  <template #selected-option="{ user_name, status_session }">
-                    <div class="d-flex align-items-center justify-content-start">
-                      <div class="point-seller" :class="status_session ? 'bg-green' : ''"> </div>
-                      <p class="m-0 font-small-2 truncate">{{ user_name }}</p>
-                    </div>
-                  </template>
-
-                </v-select>
-                <div v-if="errors[0]" class="text-error-sn text-center">Title {{errors[0]}}</div>
-              </b-form-group>
-              <input type="radio" class="d-none bg-green" v-model="lead.seller" />
-
-            </ValidationProvider>
-
-          </b-col>
-
         </div>
 
       </div>
