@@ -4,7 +4,6 @@
       <b-card-title class="card-title-address">
         <div>Address</div>
         <div>
-          <b-button @click="openSweetAlert">sweet</b-button>
           <b-button
             v-if="!editInformation"
             variant="default"
@@ -145,46 +144,6 @@ export default {
     }),
   },
   methods: {
-    async openSweetAlert() {
-      let timerInterval = 0;
-      const result = await Vue.swal.fire({
-        icon: "warning",
-        input: "select",
-        inputOptions: [2, 3, 4],
-        html: "I will close in <strong></strong> seconds.",
-        timer: 300000,
-        title: "Task alert",
-        text: `Please select a seller to assign the task or pass to the next catcher 1`,
-        showCancelButton: true,
-        confirmButtonText: "Assign",
-        customClass: {
-          confirmButton: "btn btn-primary mr-1",
-          cancelButton: "btn btn-danger  ",
-        },
-        didOpen: () => {
-            const content = Vue.swal.getHtmlContainer();
-            console.log(content);
-
-            Vue.swal.showLoading()
-            timerInterval = setInterval(() => {
-              Vue.swal.getHtmlContainer().querySelector("strong").textContent =
-                (Vue.swal.getTimerLeft() / 1000).toFixed(0);
-            }, 100);
-          },
-          willClose: () => {
-            clearInterval(timerInterval);
-          },
-      });
-
-      // if(result.isConfirmed) {
-      //     data.assign_id = result.value
-      //     await window.amgApi.post('/round-robin/social-network/on-accept-task-seller-assign', data)
-      // } else {
-      //     data.catchers_denny.push(sessionId);
-      //     console.log(data);
-      //     await window.amgApi.post('/round-robin/social-network/on-deny-task-seller-assign', data)
-      // }
-    },
     ...mapActions({
       A_GET_STATES_EEUU: "StandarStore/A_GET_STATES_EEUU",
       A_POST_UPDATE_LEAD_INFORMATION_FIELDS:
