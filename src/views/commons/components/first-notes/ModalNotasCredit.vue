@@ -552,8 +552,8 @@ export default {
               value: "Email",
             },
             {
-              text: "Ups",
-              value: "Ups",
+              text: "Usps",
+              value: "Usps",
             },
             {
               text: "Voice",

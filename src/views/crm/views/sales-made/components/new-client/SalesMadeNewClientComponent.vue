@@ -80,10 +80,9 @@
               class="font-weight-bolder"
               @click="openModalProgram(data.item, data.index)"
             >
-              <span
-                v-b-tooltip.bottom="data.item.program"
-                >{{data.item.program_initials}}</span
-              >
+              <span v-b-tooltip.bottom="data.item.program">{{
+                data.item.program_initials
+              }}</span>
               <feather-icon
                 v-if="data.item.haveRates !== 1"
                 icon="AlertTriangleIcon"
@@ -328,6 +327,27 @@
                   "
                 />
               </div>
+              <template
+                v-if="
+                  (data.item.status === 1 || data.item.status === 3) &&
+                  G_IS_SELLER
+                "
+              >
+                <br />
+                <b-icon
+                  v-if="!data.item.editFee"
+                  icon="list-ul"
+                  class="cursor-pointer ml-07"
+                  @click="
+                    openTrackingCapturedByModal(
+                      data.item.program,
+                      data.item.client,
+                      data.item.id,
+                      3
+                    )
+                  "
+                />
+              </template>
             </span>
           </template>
           <template v-slot:cell(initial_amount)="data">
@@ -519,7 +539,13 @@
           <template v-slot:cell(actions)="data">
             <b-row
               v-if="data.item.creates > '2021-05-16 00:00:00'"
-              class="d-flex align-items-center justify-content-center flex-column px-1"
+              class="
+                d-flex
+                align-items-center
+                justify-content-center
+                flex-column
+                px-1
+              "
               :class="{
                 'not-pointer':
                   data.item.user_id != currentUser.user_id &&
@@ -635,7 +661,13 @@
                   G_IS_SELLER &&
                   !isCoordinator,
               }"
-              class="d-flex align-items-center justify-content-center flex-column px-1"
+              class="
+                d-flex
+                align-items-center
+                justify-content-center
+                flex-column
+                px-1
+              "
             >
               <!-- Just for Seller after finish all requirements -->
               <b-button
@@ -1236,6 +1268,7 @@ export default {
           body: {
             roles: "[1,5,2,3]",
             type: "1",
+            spec: 0,
           },
         }),
         this.$store.dispatch("crm-store/getCaptured", {
@@ -1249,13 +1282,23 @@ export default {
         this.$store.dispatch("crm-store/getSources"),
         this.$store.dispatch("crm-store/getStates"),
       ]);
+
       this.filter[2].options = this.captured;
       this.filter[3].options = this.sellers;
-      this.filter[4].options = this.sources;
-      this.filter[5].options = this.statusFilter;
-      this.filter[6].options = this.programs;
-      this.filter[7].options = this.stip;
-      this.filter[8].options = this.sts;
+
+      console.log(this.sellers);
+
+      this.filter[4].options = [
+        { label: "All", value: "" },
+        { label: "Active", value: 1 },
+        { label: "Inactive", value: 0 },
+      ];
+
+      this.filter[5].options = this.sources;
+      this.filter[6].options = this.statusFilter;
+      this.filter[7].options = this.programs;
+      this.filter[8].options = this.stip;
+      this.filter[9].options = this.sts;
     } catch (error) {
       console.error(error);
     }
@@ -1340,12 +1383,18 @@ export default {
           if (ctx.sortDesc) sortDirection = "desc";
           else sortDirection = "asc";
         }
+
+        let filterPrograms =
+          this.filter[7].model != null ? this.filter[7].model.toString() : "";
+        let filterSourceName =
+          this.filter[5].model != null ? this.filter[5].model.toString() : "";
+
         const data = await CrmService.getSaleMade(
           {
             text: this.filterPrincipal.model,
-            status: this.filter[5].model,
-            program: this.filter[6].model,
-            state_h: this.filter[8].model,
+            status: this.filter[6].model,
+            program: filterPrograms,
+            state_h: this.filter[9].model,
             from: this.filter[0].model,
             to: this.filter[1].model,
             orderby: sortBy,
@@ -1354,8 +1403,8 @@ export default {
             seller: this.filter[3].model,
             salemade: 0,
             rolsession: this.currentUser.role_id,
-            statusip: this.filter[7].model,
-            sourcesname_id: this.filter[4].model,
+            statusip: this.filter[8].model,
+            sourcesname_id: filterSourceName,
             done: this.done,
             per_page: ctx.perPage,
           },
@@ -1441,24 +1490,31 @@ export default {
       this.selectedIndex = index;
       switch (true) {
         case created >= "2020-05-28" && program == 1:
+          console.log("1");
           this.modalData.notes.programSelected = "ModalNotesFirst"; // ready
           break;
         case created >= "2020-10-29" && program == 2:
+          console.log("2");
           this.modalData.notes.programSelected = "ModalNotesBoost"; // ready
           break;
         case created >= "2021-03-04" && program == 3:
+          console.log("3");
           this.modalData.notes.programSelected = "ModalNotesCredit"; // ready
           break;
         case created >= "2020-09-24" && program == 5:
+          console.log("4");
           this.modalData.notes.programSelected = "ModalNotesTax"; // ready
           break;
         case created >= "2020-10-23" && program == 7:
+          console.log("5");
           this.modalData.notes.programSelected = "ModalNotesSpecialist"; // ready
           break;
         case program == 9:
+          console.log("6");
           this.modalData.notes.programSelected = "ModalNotesParagon"; // ready
           break;
         default:
+          console.log("7");
           this.modalData.notes.programSelected = "ModalNotesAll"; // next
           break;
       }

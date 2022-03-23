@@ -29,9 +29,18 @@
             v-model="filter.model"
             :class="filter.class"
             :options="filter.options"
+            :multiple="filter.multiple === undefined ? false : filter.multiple"
             :label="filter.selectText"
-            :reduce="value => value[filter.reduce]"
+            :reduce="(value) => value[filter.reduce]"
             :placeholder="filter.placeholder"
+          />
+          <b-form-checkbox
+            v-else-if="filter.type === 'switch'"
+            v-model="filter.model"
+            checked="true"
+            class="custom-control-primary"
+            name="check-button"
+            switch
           />
         </b-col>
       </transition>
@@ -40,7 +49,7 @@
 </template>
 
 <script>
-import vSelect from 'vue-select'
+import vSelect from "vue-select";
 
 export default {
   components: {
@@ -49,21 +58,19 @@ export default {
   props: {
     filters: Array,
   },
-  methods: {
-
-  },
-}
+  methods: {},
+};
 </script>
 <style >
-.p-1px{
+.p-1px {
   margin-left: 5px;
   margin-right: 5px;
 }
 .bounce-enter-active {
-  animation: bounce-in .5s;
+  animation: bounce-in 0.5s;
 }
 .bounce-leave-active {
-  animation: bounce-in .5s reverse;
+  animation: bounce-in 0.5s reverse;
 }
 @keyframes bounce-in {
   0% {
