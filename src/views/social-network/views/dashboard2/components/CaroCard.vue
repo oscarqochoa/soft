@@ -12,6 +12,7 @@
 
           :style="`border: 1px solid ${i.color}!important`"
           :class="i.cursor ? 'pointer' : '' "
+          class="card"
           @click=" i.cursor ? clickCardGeneral(i,index) : ''"
         >
           <b-card-body class="pb-0  ">
@@ -37,37 +38,40 @@
             </div>
             <div>
 
-              <div v-if="index !==3">
+              <div v-if="index !==3"  class="  mt-2 mb-1 ">
                 <span class="data"> {{ i.data }} </span>
               </div>
 
             </div>
+          </b-card-body>
             <div
               v-if="index===3"
-              class="pad d-inline-flex w-100 mt-1 mb-1 "
+              class=" d-inline-flex w-100 mt-1 mb-1 "
+              :style="`border: 1px solid ${i.color}!important`"
             >
 
               <div
                 class="cuadrado"
-                style="width: 50%"
+                style="width: 50%; padding-top: 7px; padding-bottom: 7px"
+                :style=" `border-right: 1px solid ${i.color} !important;`"
                 @click=" i.cursor ? clickCard(4,3) : ''"
               >
                 <span
                   class="title-mobile"
-                  style="margin-left: 9px"
+                  style="margin-left: 20px"
 
                 >
-                  ACTIVE:
+                  TODAY:
                 </span>
                 <span
 
                   class="data-mobile"
-                  style="margin-left: 6px"
+                  style="margin-left: 7px"
                 >{{ i.data }}</span>
               </div>
-              <div  style="width: 50%"  @click=" i.cursor ? clickCard(6,5) : ''">
+              <div  style="width: 50%; padding-top: 7px; padding-bottom: 7px"  @click=" i.cursor ? clickCard(6,5) : ''">
                 <span
-                  style="margin-left: 6px"
+                  style="margin-left: 20px"
                   class="title-mobile"
 
                 >
@@ -84,7 +88,7 @@
               </div>
 
             </div>
-          </b-card-body>
+
           <vue-apex-charts
             :key="i.key"
             type="area"
@@ -211,21 +215,21 @@ export default {
 <style scoped>
 .data {
 
-  font-size: 20px;
+  font-size: 16px;
+
 }
 
 .data-mobile {
 
-  font-size: 15px;
+  font-size: 16px;
 }
 .title{
   font-weight:  600;
   font-size: medium;
 }
 
-.pad{
-  border-radius: 5px;
-  border: 1px solid rgba(207, 190, 190, 0.5)  !important;
+.title-mobile {
+  font-size: 12px !important;
 
 }
 .cuadrado{
@@ -233,25 +237,37 @@ export default {
 }
 @media (max-width: 1400px) {
 
-  .title-mobile{
-    font-size: 10px !important;
-    margin: 1px !important;
+  .title-mobile {
+    font-size: 11px !important;
 
+    margin-left: 15px !important;
+  }
+
+  .data {
+
+    font-size: 14px;
 
   }
+
   .data-mobile {
-    margin: 1px !important;
-    font-size: 12px;
+    margin: 0.5px !important;
+    font-size: 10.5px;
 
   }
-  .icon{
+
+  .icon {
     font-size: 60%;
   }
-  .title{
-    font-weight:  600;
+
+  .title {
+    font-weight: 600;
     font-size: 13px;
+
   }
 
+  .card {
+    margin: 5px;
+  }
 }
 
 </style>

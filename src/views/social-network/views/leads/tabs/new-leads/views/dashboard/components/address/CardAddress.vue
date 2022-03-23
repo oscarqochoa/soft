@@ -173,7 +173,7 @@ export default {
         ? mainAddress.street_number + " " + mainAddress.route
         : mainAddress.route;
 
-      this.personalAddress.street = address;
+      this.personalAddress.street = addrexss;
       this.personalAddress.city = mainAddress.locality;
       this.personalAddress.zipcode = mainAddress.postal_code;
       this.personalAddress.state = mainAddress.administrative_area_level_1;
