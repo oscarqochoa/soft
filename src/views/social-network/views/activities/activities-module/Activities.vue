@@ -180,6 +180,7 @@
           v-if="modalInsertTaskModal"
           :edit-task="editTask"
           :task-out="taskOut"
+          @getSchedules="getSchedulesIn"
           @close="closeInsertTaskModal"
       />
 
@@ -348,11 +349,12 @@ export default {
       // this.dataByDay(this.schedules)
       return this.schedules;
     },
-    openInsertTaskModal(editTask, task) {
+   async openInsertTaskModal(editTask, task) {
       if (this.isCeo || this.isSupervisor || this.isTeamLeader) {
         this.editTask = editTask;
         this.modalInsertTaskModal = true;
         this.taskOut = task;
+
       }
     },
 

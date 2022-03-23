@@ -19,7 +19,7 @@
       >
 
         <div class="text-center">
-          <span style="font-size: 20px; font-weight: 900; color: #ffffff; ">Create Task</span>
+          <span style="font-size: 20px; font-weight: 900; color: #ffffff; ">Create Activity</span>
         </div>
         <i
           class="fas fa-times-circle text-white"
@@ -29,7 +29,7 @@
       </div>
       <div v-if="editTask===true">
         <div class="text-center">
-          <span style="font-size: 20px; font-weight: 900; color: #ffffff;">Update Task</span>
+          <span style="font-size: 20px; font-weight: 900; color: #ffffff;">Update Activity</span>
         </div>
         <i
           class="fas fa-times-circle text-white"
@@ -283,6 +283,7 @@ export default {
 
           const data = await ActivitiesService.insertTask(params)
           if (data.status === 200) {
+
             this.showSuccessSwal()
             this.closeModal()
           }
@@ -313,6 +314,7 @@ export default {
 
             const data = await ActivitiesService.updateTask(params)
             if (data.status === 200) {
+              this.$emit("getSchedules");
               this.showSuccessSwal()
               this.closeModal()
             }
