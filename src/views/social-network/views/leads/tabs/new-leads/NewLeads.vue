@@ -215,7 +215,9 @@
                 icon="ListIcon"
                 size="15"
                 class="text-primary cursor-pointer"
-                @click="openModalTracking(data.item.id, data.item.nickname)"
+                @click="openModalTracking(data.item.id, (data.item.nickname
+                    ? data.item.nickname
+                    : data.item.not_nickname))"
               />
             </div>
           </template>
@@ -223,7 +225,9 @@
           <template #cell(actions)="data">
             <actions-table
               :id="data.item.id"
-              :name="data.item.nickname"
+              :name="(data.item.nickname
+                    ? data.item.nickname
+                    : data.item.not_nickname)"
               @onSendToRecovery="onProcessLead"
               @onSendToClosed="onProcessLead"
               @onDeleteLead="deleteLead"

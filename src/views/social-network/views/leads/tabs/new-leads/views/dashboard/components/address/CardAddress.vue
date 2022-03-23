@@ -44,7 +44,15 @@
           cols="12"
           :disabled="!editInformation"
         >
+          <b-form-input
+            v-if="!editInformation"
+            v-model="personalAddress.street"
+            type="text"
+            class="form-control form-group-col-12 street-address-vue-google"
+            disabled
+          ></b-form-input>
           <vue-google-autocomplete
+            v-else
             v-model="personalAddress.street"
             id="street_address"
             ref="streetAdress"
@@ -52,6 +60,7 @@
             :placeholder="editInformation ? 'Pleace type your address' : ''"
             country="us"
             v-on:placechanged="getAddressData"
+            @keyup="(e) => onChangeAddress(e, personalAddress)"
             :disabled="!editInformation"
           >
           </vue-google-autocomplete>
@@ -106,7 +115,7 @@ import { mapGetters, mapActions } from "vuex";
 import vSelect from "vue-select";
 import StandarFormGroup from "@/views/social-network/views/leads/components/StandarFormGroup.vue";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
-
+import Vue from "vue";
 export default {
   components: {
     vSelect,
@@ -147,8 +156,13 @@ export default {
         "question"
       ).then((result) => {
         if (result.value) {
-          this.personalAddressTempo = {...this.personalAddress};
-          this.$set(this.personalAddress, 'street', this.personalAddressTempo.street);
+          this.personalAddressTempo = { ...this.personalAddress };
+          this.personalAddress.street = this.personalAddressTempo.street;
+          this.$set(
+            this.personalAddress,
+            "street",
+            this.personalAddressTempo.street
+          );
           this.editInformation = true;
         }
       });
@@ -160,20 +174,23 @@ export default {
         "question"
       ).then((result) => {
         if (result.value) {
-          this.$emit('cancel-edit-address', this.personalAddressTempo);
-          console.log(this.personalAddress.street)
-          console.log(this.personalAddressTempo.street)
-          this.$set(this.personalAddress, 'street', this.personalAddressTempo.street);
+          this.$emit("cancel-edit-address", this.personalAddressTempo);
+          this.$set(
+            this.personalAddress,
+            "street",
+            this.personalAddressTempo.street
+          );
           this.editInformation = false;
         }
       });
     },
+    onChangeAddress(event, data) {
+      this.$set(data, "street", event.target.value);
+    },
     getAddressData(mainAddress, details, type) {
-      let address = mainAddress.street_number
-        ? mainAddress.street_number + " " + mainAddress.route
-        : mainAddress.route;
-
-      this.personalAddress.street = addrexss;
+      const address = `${mainAddress.street_number} ${mainAddress.route}`;
+      this.$refs[`streetAdress`].$el.value = address;
+      this.personalAddress.street = address;
       this.personalAddress.city = mainAddress.locality;
       this.personalAddress.zipcode = mainAddress.postal_code;
       this.personalAddress.state = mainAddress.administrative_area_level_1;

@@ -266,7 +266,7 @@ export default {
         street: this.lead.street,
         city: this.lead.city,
         zipcode: this.lead.zipcode,
-        state: this.lead.state,
+        state: this.lead.state_slug,
         country: this.lead.country ? this.lead.country : "United States",
         id_user: this.user.user_id,
         typee: 1,
