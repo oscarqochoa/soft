@@ -14,9 +14,15 @@ export default [
         meta: {
           program: 2,
           pageTitle: 'Answers Guide',
-          breadcrumb: [{
+          breadcrumb: [
+            {
+              text: 'Answers Guide',
+            },
+            {
             text: 'Boost Credit',
-          }],
+              active: true,
+            }
+            ],
           permittedRoles: [
             {
               role_id: 2,
@@ -69,9 +75,14 @@ export default [
         meta: {
           program: 1,
           pageTitle: 'Answers Guide',
-          breadcrumb: [{
+          breadcrumb: [
+            {
+              text: 'Answers Guide',
+            },
+            {
             text: 'Business',
-          }],
+              active: true,
+            }],
           permittedRoles: [
             {
               role_id: 2,
@@ -119,9 +130,14 @@ export default [
         meta: {
           program: 3,
           pageTitle: 'Answers Guide',
-          breadcrumb: [{
+          breadcrumb: [
+            {
+              text: 'Answers Guide',
+            },
+            {
             text: 'Credit Experts',
-          }],
+              active: true,
+            }],
           permittedRoles: [
             {
               role_id: 2,
@@ -169,9 +185,14 @@ export default [
         meta: {
           program: 5,
           pageTitle: 'Answers Guide',
-          breadcrumb: [{
-            text: 'Tax Research',
-          }],
+          breadcrumb: [
+            {
+              text: 'Answers Guide',
+            },
+            {
+              text: 'Tax Research',
+              active: true,
+            }],
           permittedRoles: [
             {
               role_id: 2,
@@ -219,8 +240,13 @@ export default [
         meta: {
           program: 4,
           pageTitle: 'Answers Guide',
-          breadcrumb: [{
+          breadcrumb: [
+            {
+              text: 'Answers Guide',
+            },
+            {
             text: 'Debt Solution',
+              active: true,
           }],
           permittedRoles: [
             {
