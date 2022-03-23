@@ -91,7 +91,7 @@
                 fluid
                 :src="data.item.program_name | renderProgramLogo"
                 style="height: 40px"
-                v-if="data.item.logo"
+                v-if="data.item.program_name"
               />
               <b-badge variant="primary" v-else style="width: 40px">
               CRM
