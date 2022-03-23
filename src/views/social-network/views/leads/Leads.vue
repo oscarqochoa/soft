@@ -63,11 +63,13 @@
 <script>
 import GlobalSearchComponent from "../../commons/GlobalSearchComponent.vue";
 import LeadCreateSocial from "@/views/social-network/views/leads/components/lead-create/LeadCreateSocial";
+import NewLeads from "@/views/social-network/views/leads/tabs/new-leads/NewLeads.vue";
 import {mapState, mapActions} from 'vuex'
 // components
 export default {
   components: {
-    GlobalSearchComponent,
+    "global-search-component": GlobalSearchComponent,
+    "new-leads": NewLeads,
     LeadCreateSocial
   },
   computed: {

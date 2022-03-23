@@ -72,12 +72,9 @@
                 :class="textLink"
                 :to="`/social-network/leads/new/dashboard/${data.item.id}`"
                 target="_blank"
-                >{{
-                  data.item.nickname
-                    ? data.item.nickname
-                    : data.item.not_nickname
-                }}</router-link
-              >
+                >
+                {{ data.item.nickname ? data.item.nickname : data.item.not_nickname }}
+              </router-link>
               <br />
               <span>{{ data.item.lead_name }}</span>
             </div>
@@ -228,6 +225,7 @@
               :name="(data.item.nickname
                     ? data.item.nickname
                     : data.item.not_nickname)"
+              :statusLead="data.item.status_sn_id"
               @onSendToRecovery="onProcessLead"
               @onSendToClosed="onProcessLead"
               @onDeleteLead="deleteLead"
@@ -586,6 +584,14 @@ export default {
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;
       this.getSocialNetworkLeads();
+    },
+    resolveLeadSnStatusVariant(status) {
+      if (status === 2) return "success";
+      if ([3, 4].includes(status)) return "primary";
+      if (status === 5) return "secondary";
+      if (status === 6) return "warning";
+      if (status === 7) return "danger";
+      return "primary";
     },
   },
   mounted() {

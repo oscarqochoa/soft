@@ -627,13 +627,17 @@ const actions = {
     async A_SEARCH_GLOBAL_LEADS_SN({ commit }, body) {
         try {
             const response = await SNLeadsService.searchGlobalLeadsSn(body)
-            if (response.status == 200) {
-                const data = response.data
-                commit('SET_DATA', {
-                    destination: 'S_SEARCH_GLOBAL_LEADS_SN',
-                    data
-                })
+            const data = {
+                items: response.data,
+                total: response.total,
+                fromPage: response.from,
+                toPage: response.to,
             }
+            commit('SET_DATA', {
+                destination: 'S_SEARCH_GLOBAL_LEADS_SN',
+                data
+            })
+            return response;
         } catch (error) {
             console.log("ERROR_SEARCH_GLOBAL_LEADS_SN [ACTION]", error)
             throw error

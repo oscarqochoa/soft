@@ -9,9 +9,6 @@
               <global-search-component></global-search-component>
             </b-col>
           </b-row>
-
-          <!-- span.advice-not-found(v-if="search_not_found") Search not found -->
-
         </div>
       </template>
     </header-slot>
@@ -75,42 +72,14 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import GlobalSearchComponent from '../../commons/GlobalSearchComponent.vue'
 export default {
   components: {
-    GlobalSearchComponent,
+    "global-search-component": GlobalSearchComponent,
   },
   data() {
     return {
-      searchGlobal: "",
-      leadsGlobal: [],
-      modalGlobalSearch: false,
-      searchGlobal_error: false,
+      //
     };
   },
   methods: {
-    //Global Search
-    search() {
-      if (!this.searchGlobal.trim()) {
-        this.searchGlobal_error = true;
-      } else {
-        axios
-          .post("/api/search-global-leads-sn", {
-            name_text: this.searchGlobal
-          })
-          .then(response => {
-            if (response.status == 200) {
-              if (response.data.length > 0) {
-                this.leadsGlobal = response.data;
-                this.modalGlobalSearch = true;
-              } else {
-                this.search_not_found = true;
-                this.searchGlobal_error = true;
-              }
-            }
-          });
-      }
-    }
-  },
-
-  watch: {
     //
   },
 };
