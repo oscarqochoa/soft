@@ -283,6 +283,7 @@ export default {
 
           const data = await ActivitiesService.insertTask(params)
           if (data.status === 200) {
+
             this.showSuccessSwal()
             this.closeModal()
           }
@@ -313,6 +314,7 @@ export default {
 
             const data = await ActivitiesService.updateTask(params)
             if (data.status === 200) {
+              this.$emit("getSchedules");
               this.showSuccessSwal()
               this.closeModal()
             }
