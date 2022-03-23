@@ -612,7 +612,7 @@ export default {
               ...this.task,
               sms: this.task.sms ? this.task.sms : "",
               sms_status: this.task.sms_status ? this.task.sms_status : 0,
-              asigned: !this.task.attend_type ? this.task.seller : null,
+              asigned: this.task.seller,
               method: this.authUser.role_id === 7 ? this.task.method : null,
               withsms: this.task.withsms ? 1 : 0,
               taskForSn: this.taskForSn,
