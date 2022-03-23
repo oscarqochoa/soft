@@ -327,7 +327,7 @@ export default {
 
 
             // Enviar peticion a la api
-            //await this.A_CREATE_LEAD_SN(this.lead);
+            await this.A_CREATE_LEAD_SN(this.lead);
 
             setTimeout(async () => {
               await this.resetForm()
