@@ -131,12 +131,18 @@
 
           <!-- Column: Fanpage -->
           <template #cell(fanpage)="data">
-            <b-img
-              thumbnail
-              fluid
-              :src="baseUrl + data.item.logo"
-              style="width: 50px"
-            />
+            <div>
+              <b-img
+                thumbnail
+                fluid
+                :src="baseUrl + data.item.logo"
+                style="width: 50px"
+                v-if="data.item.logo"
+              />
+                <b-badge variant="primary" v-else style="width: 40px">
+                  CRM
+                </b-badge>
+            </div>
           </template>
 
           <!-- Column: Recomendations -->
