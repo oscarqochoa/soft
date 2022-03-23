@@ -6,9 +6,9 @@ export default [
       component: () => import('@/views/social-network/views/recovery-list/RecoveryList.vue'),
       meta: {
         // permittedRoles :[10,11],
-        pageTitle: 'RecoveryList',
+        pageTitle: 'Recovery List',
         breadcrumb: [{
-          text: 'RecoveryList',
+          text: 'Recovery List',
         }],
         tab: "rl",
       },

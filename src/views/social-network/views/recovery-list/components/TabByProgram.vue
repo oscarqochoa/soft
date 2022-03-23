@@ -12,73 +12,18 @@
         :send-multiple-sms="false"
         @reload="$refs['refClientsList'].refresh()"
       >
-        <!-- Slot Counters -->
-        <template #recovery-list>
-          <b-row class="ml-2">
-            <!-- Count Pending -->
-            <b-col cols="10" sm="6" md="5" lg="4" xl="3">
-              <b-form-group
-                label="Pending"
-                label-cols="4"
-                content-cols="8"
-                label-cols-sm="5"
-                content-cols-sm="6"
-                label-cols-md="3"
-                content-cols-md="6"
-                label-cols-lg="3"
-                content-cols-lg="6"
-                label-class=""
-              >
-                <div>
-                  <div
-                    class="text-center class-coco-campo-text rounded text-white font-medium-1 px-1"
-                    style="padding-top: 5px; padding-bottom: 5px; background: linear-gradient(90deg, #FAC632 0%, #F37432 100%);"
-                  >
-                    {{ countPendingTask }}
-                  </div>
-                </div>
-              </b-form-group>
-            </b-col>
-            <!-- Count Done -->
-            <b-col cols="10" sm="6" md="5" lg="4" xl="3">
-              <b-form-group
-                label="Done"
-                label-cols="4"
-                content-cols="8"
-                label-cols-sm="5"
-                content-cols-sm="6"
-                label-cols-md="3"
-                content-cols-md="6"
-                label-cols-lg="3"
-                content-cols-lg="6"
-                label-class=""
-              >
-                <div>
-                  <div
-                    class="text-center class-coco-campo-text  rounded text-white font-medium-1 px-1"
-                    style="padding-top: 5px; padding-bottom: 5px;background: linear-gradient(90deg, #ADD210 0%, #5F873E 100%);"
-                    
-                  >
-                    {{ countDoneTask }}
-                  </div>
-                </div>
-              </b-form-group>
-            </b-col>
-          </b-row>
-        </template>
         <b-table
           slot="table"
           no-provider-filtering
-          :api-url="clientRoute"
           ref="refClientsList"
-          :items="myProvider"
+          :items="getDateRecovery"
           :fields="arrayColumns"
           primary-key="id"
           table-class="text-nowrap"
           responsive="sm"
           show-empty
           sticky-header="50vh"
-          :busy="isBusy"
+          :busy.sync="isBusy"
           :current-page="paginate.currentPage"
           :per-page="paginate.perPage"
         >
@@ -89,20 +34,12 @@
             </div>
           </template>
           <!-- COLUMN NAME LEAD -->
-          <template #cell(fullNameLead)="data">
+          <template #cell(user_name)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
             >
               <!-- Route To Lead Show -->
-              <router-link
-                :class="textLink"
-                :to="{
-                  name: 'sn-dashboard-new-lead',
-                  params: { id: data.item.lead_id },
-                }"
-                target="_blank"
-                >{{ data.item.fullNameLead }}</router-link
-              >
+              <span @click="clickNameUSer(data.item.user_name, data.item.user_id, data.item.created_at)" class="text-primary click-user-recovery-list">{{ data.item.user_name }}</span>
             </div>
           </template>
           <!-- COLUMN CREATE DATE -->
@@ -114,34 +51,71 @@
             </div>
           </template>
           <!-- COLUMN LEAD CREATED AT -->
-          <template #cell(leadCreated)="data">
+          <template #cell(t1)="data">
             <div
-              class="d-flex flex-column justify-content-start align-items-start"
+              class="d-flex align-items-center justify-content-center"
             >
-              <span>{{ data.item.leadCreated | myGlobalDay }}</span>
+              <span>{{ data.item.t1 }}</span>
             </div>
           </template>
           <!-- COLUMN DONE -->
-          <template #cell(done)="data">
+          <template #cell(pending)="data">
             <div
               class="d-flex flex-column justify-content-center align-items-center"
             >
-              <b-form-checkbox
-                :disabled="statusUserRedirected"
-                v-model="data.item.status"
-                :value="1"
-                @change="changeStatusLead(data.item)"
-              ></b-form-checkbox>
+              <span>{{ data.item.pending }}</span>
             </div>
+          </template>
+          <template #cell(done)="data">
+            <div
+                class="d-flex flex-column justify-content-center align-items-center"
+            >
+              <span>{{ data.item.done }}</span>
+            </div>
+          </template>
+          <template #cell(status)="data">
+            <div
+                class="d-flex flex-column justify-content-center align-items-center"
+            >
+              <b-badge class="w-75" variant="success" v-if="data.item.status">
+                DONE
+              </b-badge>
+              <b-badge class="w-75" variant="danger" v-else>
+                PENDING
+              </b-badge>
+            </div>
+          </template>
+
+          <template #custom-foot>
+            <b-tr>
+              <b-th class="">NAME USER</b-th>
+              <b-th class="">DATE</b-th>
+              <b-th class="text-center">{{ totalSum.total }}</b-th>
+              <b-th class="text-center">{{ totalSum.pending }}</b-th>
+              <b-th class="text-center">{{ totalSum.done }}</b-th>
+              <b-th class="text-center">STATUS</b-th>
+
+            </b-tr>
           </template>
         </b-table>
       </filter-slot>
     </b-card>
+
+
+    <b-modal
+        size="lg"
+        :title="`Recovery List del usuario: ${userSelect ? userSelect.name : null} de la fecha: ${userSelect ? userSelect.date : null}`"
+        v-model="openModal"
+        body-class="p-0"
+        @hidden="closeModalRecovery"
+    >
+      <TableListLeadsByUser :user="userSelect"/>
+    </b-modal>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex"
+import {mapActions, mapGetters} from "vuex"
 // Import Filter
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue"
 // Import Service
@@ -149,8 +123,10 @@ import RecoveryListService from "../service/recovery.list.service"
 // Import Data
 import fields from "../data/fields.recovery.list.data"
 import filtersList from "../data/filters.recovery.list.data"
+import TableListLeadsByUser from "@/views/social-network/views/recovery-list/components/TableListLeadsByUser";
 export default {
   components: {
+    TableListLeadsByUser,
     FilterSlot,
   },
   props: {
@@ -160,6 +136,7 @@ export default {
     userId: {
       type: [Number, String],
     },
+
   },
   data() {
     return {
@@ -184,95 +161,108 @@ export default {
       },
       countPendingTask: 0,
       countDoneTask: 0,
+      data: [],
+      openModal: false,
+      userSelect: null,
+      totalSum: {
+        total: 0,
+        pending: 0,
+        done: 0
+      }
     }
   },
+  async mounted() {
+    const owners = (await this.A_GET_OWNERS({ modul: 15, body: { roles: "[]", type: "1" }})).map(owner => {
+      return {
+        label: owner.user_name,
+        value: owner.id
+      }
+    }).filter(item => item.value === this.currentUser.user_id || this.isCeo || this.isSupervisor || this.isTeamLeader)
+    owners.unshift({ label: "All", value: null },)
+    this.filter[2].options = owners
+    console.log('CURRENT: ', this.currentUser)
+  },
   computed: {
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      G_LANGUAGES: "CrmGlobalStore/G_LANGUAGES",
+    }),
     statusUserRedirected() {
       return this.userId != null ? true : false
     },
-    ...mapGetters({
-      currentUser: "auth/currentUser",
-    }),
     clientRoute(){
       return "/social-network/recovery-list/search-recovery-by-user"
     },
   },
   methods: {
-    myProvider: async function (ctx) {
-      try {
-        const data = await amgApi.post(`${ctx.apiUrl}`, {
-          npage: this.paginate.currentPage,
-          perPage: this.paginate.perPage,
-          date_from: this.filter[0].model,
-          date_to: this.filter[1].model,
-          id_user:
-            this.userId != null
-              ? parseInt(this.userId)
-              : this.currentUser.user_id,
-          id_program: this.programId,
-          status: this.filter[2].model,
-          update_id: "",
-        })
-        const items = data.data.data
-        this.startPage = data.data.from
-        this.currentPage = data.data.current_page
-        this.perPage = data.data.per_page
-        this.nextPage = this.startPage + 1
-        this.endPage = data.data.last_page
-        this.totalRows = data.data.total
-        this.toPage = data.data.to
-        if (data.data.data[0] != null) {
-          this.countPendingTask = data.data.data[0].quantity_pending
-          this.countDoneTask = data.data.data[0].quantity_done
-          if(this.currentUser.role_id == 11){
-            let taskCompleted = this.countDoneTask - this.countPendingTask == this.countDoneTask ? true : false
-          let pendingTotal = data.data.data[0].quantity_pending_total
-          let doneTotal = data.data.data[0].quantity_done_total
-          // this.statusButton = taskCompleted
-            this.$emit("statusCompletedTask",taskCompleted,pendingTotal,doneTotal)
-          }
-        }
-        return items || []
-      } catch (error) {
-        console.error(error)
-        return []
-      }
+    ...mapActions(
+        'SocialNetworkLeadsStore',
+        [
+          'A_GET_OWNERS',
+        ]
+    ),
+    clickNameUSer(name, id, date) {
+      this.openModal = true;
+      this.userSelect = {
+        name, id, date
+      };
     },
+    async getDateRecovery(ctx) {
+      const resp1 = await RecoveryListService.getRecoveryListByUser({
+        perpage: ctx.perPage,
+        npage: ctx.currentPage,
+        user_id:  (this.isCeo || this.isSupervisor || this.isTeamLeader) ? this.filter[2].model : this.currentUser.user_id,
+        date_in: null,
+        date_from: this.filter[0].model,
+        date_to: this.filter[1].model,
+        status: null,
+        program_id: null,
+        rol_id: 11,
+        update_status: null,
+        id_list: null
+      })
+      const resp = resp1[0];
 
-    changeStatusLead: async function (Lead) {
-      try {
-        let params = {
-          date_from: null,
-          date_to: null,
-          id_user: this.currentUser.user_id,
-          id_program: this.programId,
-          status: Lead.status == "1" ? 1 : 0,
-          update_id: Lead.id,
-          id_lead:Lead.lead_id,
-        }
-        const data = await RecoveryListService.searchRecoveryList(params)
-        this.countPendingTask = data.data.data[0].quantity_pending
-        this.countDoneTask = data.data.data[0].quantity_done
-        let countDone = parseInt(data.data.data[0].count_done)
-        let countPending = parseInt(data.data.data[0].count_pending)
-        let taskCompleted = countDone - countPending == countDone ? true : false
+      this.paginate.currentPage = resp.current_page
+      this.paginate.perPage = resp.per_page
+      this.perPage = resp.per_page
+      this.nextPage = this.startPage + 1
+      this.endPage = resp.last_page
+      this.totalRows = resp.total
+      this.toPage = resp.to
+      this.totalSum.total = 0;
+      this.totalSum.pending = 0;
+      this.totalSum.done = 0;
 
-        let pendingTotal = parseInt(data.data.data[0].quantity_pending_total)
-        let doneTotal = parseInt(data.data.data[0].quantity_done_total)
-
-        this.$emit("TaskCompleted", taskCompleted)
-         this.$emit("statusCompletedTask",taskCompleted,pendingTotal,doneTotal)
-      } catch (error) {
-        console.log(error)
-        this.showToast(
-          "danger",
-          "top-right",
-          "Error",
-          "XIcon",
-          "Something went wrong with data!"
-        )
-      }
+      resp.data.forEach(item => {
+        this.totalSum.total = this.totalSum.total + parseInt(item.t1);
+        this.totalSum.pending = this.totalSum.pending + parseInt(item.pending)
+        this.totalSum.done = this.totalSum.done + parseInt(item.done)
+      })
+      return resp.data || []
+    },
+    closeModalRecovery() {
+      this.$refs['refClientsList'].refresh()
+    },
+    onChangeCurrentPage(e) {
+      console.log('page: ', e)
+      this.paginate.currentPage = e;
+      this.getDateRecovery();
     },
   },
+  watch: {
+
+  }
 }
 </script>
+
+<style lang="scss">
+.click-user-recovery-list{
+  transition: .1s color ease-in-out;
+  cursor: pointer;
+  &:hover{
+    font-weight: 600 !important;
+  }
+}
+</style>
