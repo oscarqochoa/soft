@@ -16,38 +16,34 @@
       </div>
     </template>
     <b-row class="mt-1 mb-3">
-      <b-col sm="4" md="4" lg="4" class="text-center">
-        <span class="font-bureau-style text-center font-weight-bolder">
-          TransUnion
-        </span>
-        <div class="circle-bureau" :class="colorScore(scoreTransunion, 2)">
-          <span class="text-circle" :class="colorScore(scoreTransunion, 1)">
-            {{ scoreTransunion }}
-            <!--class="show-lead-score-cr"
-            style="border: 2px solid #0aafdb" -->
+        <b-col v-if="scoreTransunion !== ''" cols="4" class="text-center">
+          <p style="color: #0aafdb">TransUnion</p>
+          <span
+            class="show-lead-score-cr"
+            style="border: 2px solid #0aafdb"
+            :style="`color: ${colorScoreTransunion(scoreTransunion)};`"
+          >
+            {{ transunionCharAt == "N" ? "-" : scoreTransunion}}
           </span>
-        </div>
-      </b-col>
-      <b-col sm="4" md="4" lg="4" class="text-center">
-        <span class="font-bureau-style text-center font-weight-bolder">
-          Experian
-        </span>
-        <div class="circle-bureau" :class="colorScore(scoreExperian, 2)">
-          <span class="text-circle" :class="colorScore(scoreExperian, 1)">
-            {{ scoreExperian }}
-          </span>
-        </div>
-      </b-col>
-      <b-col sm="4" md="4" lg="4" class="text-center">
-        <span class="font-bureau-style text-center font-weight-bolder">
-          Equifax
-        </span>
-        <div class="circle-bureau" :class="colorScore(scoreEquifax, 2)">
-          <span class="text-circle" :class="colorScore(scoreEquifax, 1)">
-            {{ scoreEquifax }}
-          </span>
-        </div>
-      </b-col>
+        </b-col>
+
+        <b-col v-if="scoreExperian !== ''" cols="4" class="text-center">
+          <p style="color: #0566b7">Experian</p>
+          <span
+            class="show-lead-score-cr"
+            style="border: 2px solid #0566b7"
+            :style="`color: ${colorScoreTransunion(scoreExperian)};`"
+          >{{ experianCharAt == "N" ? "-" : scoreExperian }}</span>
+        </b-col>
+
+        <b-col v-if="scoreEquifax !== ''" cols="4" class="text-center">
+          <p style="color: #f31414">EQUIFAX</p>
+          <span
+            class="show-lead-score-cr"
+            style="border: 2px solid #f31414"
+            :style="`color: ${colorScoreTransunion(scoreEquifax)};`"
+          >{{ equifaxCharAt == "N" ? "-" : scoreEquifax }}</span>
+        </b-col>
     </b-row>
     <b-row>
       <b-col sm="12" md="12" lg="12" xl="12">
@@ -285,6 +281,15 @@ export default {
     leadIdParam() {
       return this.$route.params.id;
     },
+    transunionCharAt() {
+      return this.scoreTransunion?.charAt(0);
+    },
+    experianCharAt() {
+      return this.scoreExperian?.charAt(0);
+    },
+    equifaxCharAt() {
+      return this.scoreEquifax?.charAt(0);
+    }
   },
   methods: {
     openModalRequestCreditReport() {
@@ -302,15 +307,6 @@ export default {
     },
     closeModalTrackingStatus() {
       this.showModalTrackingStatus = false;
-    },
-    colorScore(score, type) {
-      if (score < 659) {
-        return type == 1 ? "text-danger" : "bg-light-danger";
-      }
-      if (score >= 659 && score < 699) {
-        return type == 1 ? "text-warning" : "bg-light-warning";
-      }
-      return type == 1 ? "text-success" : "bg-light-success";
     },
     async changeStatus(score_id, status_id) {
       const confirm = await this.showConfirmSwal();
@@ -393,6 +389,13 @@ export default {
         throw error;
       }
     },
+    colorScoreTransunion(score) {
+      if (score <= 659) return "#ff0707";
+      if (score >= 660 && score <= 699) return "#ffc107";
+      if (score >= 700 && score <= 759) return "#bfff00";
+      if (score >= 760 && score <= 850) return "#0dff34";
+      return "#000";
+    },
   },
   async created() {
     await this.getScore();
@@ -402,56 +405,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.text-danger {
-  color: #dc3545 !important;
-}
-.text-warning {
-  color: #ffc107 !important;
-}
-.text-success {
-  color: #28a745 !important;
-}
-.bg-light-danger {
-  background-color: #f9e7e7 !important;
-  border: 1px solid #dc3545 !important;
-}
-.bg-light-warning {
-  background-color: #f9f9d9 !important;
-  border: 1px solid #ffc107 !important;
-}
-.bg-light-success {
-  background-color: #f0ffea !important;
-  border: 1px solid #28a745 !important;
-}
-.circle-bureau {
-  margin-top: 5px !important;
-  max-width: 85px !important;
-  height: 85px;
-  border-radius: 30px;
-  margin: auto;
-  background: #eeedfd;
-}
-.text-circle {
-  font-family: "Rubik", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 25px;
-  line-height: 28px;
-  color: #8561fb;
-  display: flex;
-  justify-items: center;
-  justify-content: space-around;
-  align-items: center;
-  height: 85px;
-}
-.nav-tabs .override-tab {
-  border-bottom: none !important;
-}
-.nav-link .bg-default-tab {
-  border-bottom: none !important;
-}
-.card-title-cr {
-  width: 100%;
-  font-weight: 600 !important;
-}
+  .show-lead-score-cr {
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 13px 7px;
+  }
+  .number-circle {
+    width: 1rem;
+    height: 1rem;
+    text-align: center;
+    border: 0.5px solid #fff;
+    border-radius: 50%;
+  }
+  .number-circle {
+    border: 0.5px solid #ff9f43;
+    font-size: 8pt;
+  }
+  .card-title-cr {
+    width: 100%;
+    font-weight: 600 !important;
+  }
 </style>

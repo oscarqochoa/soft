@@ -7,7 +7,7 @@
         class="align-middle text-body"
       />
     </template>
-    <b-dropdown-item @click="sendToRecovery">
+    <b-dropdown-item @click="sendToRecovery" v-if="statusLead != 2">
       <feather-icon icon="AlignLeftIcon"></feather-icon>
       <span class="align-middle ml-50"> Send Recovery </span>
     </b-dropdown-item>
@@ -43,6 +43,9 @@ export default {
     name: {
       type: String,
     },
+    statusLead: {
+      type: Number,
+    }
   },
   methods: {
     sendToRecovery() {

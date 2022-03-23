@@ -12,9 +12,11 @@
         </b-button>
       </b-input-group-append>
     </b-input-group>
+
     <modal-search-global-leads-sn
       v-if="modalGlobalSearch"
       :show="modalGlobalSearch"
+      :searchGlobal="this.searchGlobal"
       @onClose="closeModalGlobalSearch"
     >
     </modal-search-global-leads-sn>
@@ -35,7 +37,6 @@ export default {
     "modal-search-global-leads-sn": ModalSearchGlobalLeadsSn,
   },
   methods: {
-      ...mapActions('SocialNetworkLeadsStore', ['A_SEARCH_GLOBAL_LEADS_SN']),
     async search() {
       if (!this.searchGlobal.trim()) {
         this.showToast(
@@ -46,11 +47,6 @@ export default {
           "Please enter a valid text."
         );
       } else {
-        this.addPreloader();
-        await this.A_SEARCH_GLOBAL_LEADS_SN({
-          name_text: this.searchGlobal,
-        });
-        this.removePreloader();
         this.modalGlobalSearch = true;
       }
     },

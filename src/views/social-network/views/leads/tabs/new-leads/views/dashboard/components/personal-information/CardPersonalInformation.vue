@@ -41,9 +41,8 @@
             >
               <feather-icon icon="SettingsIcon" size="18"></feather-icon>
             </b-button>
-
             <b-button
-              v-if="lead.status_sn_id && modul === 15"
+              v-if="lead.status_sn_id && lead.status_sn_id != 2 && modul === 15"
               size="sm"
               v-b-tooltip.hover.bottom="'Not Call'"
               variant="default"

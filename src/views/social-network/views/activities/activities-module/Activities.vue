@@ -1,11 +1,20 @@
 <template>
   <div>
-    <header-slot/>
-    <div class="d-flex justify-content-end mb-1">
-      <b-button v-if="isCeo || isSupervisor || isTeamLeader" variant="primary" @click="openInsertTaskModal(false)">
-        CREATE TASK
-      </b-button>
-    </div>
+    <header-slot>
+
+      <template #actions>
+        <div>
+          <b-row style="justify-content: right;">
+            <b-col md="9">
+              <b-button v-if="isCeo || isSupervisor || isTeamLeader" variant="primary" size="sm" @click="openInsertTaskModal(false)">
+                CREATE ACTIVITY
+              </b-button>
+            </b-col>
+          </b-row>
+        </div>
+      </template>
+    </header-slot>
+
     <b-card no-body>
       <!--      <div class="card-header d-flex justify-content-end" style="background: transparent" >-->
 

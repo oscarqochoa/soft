@@ -342,6 +342,14 @@ export default {
       this.filters[2].options = this.S_SELLERS_FILTERS;
       this.filters[4].options = this.S_STATES;
     },
+    resolveLeadSnStatusVariant(status) {
+      if (status === 2) return "success";
+      if ([3, 4].includes(status)) return "primary";
+      if (status === 5) return "secondary";
+      if (status === 6) return "warning";
+      if (status === 7) return "danger";
+      return "primary";
+    },
   },
   mounted() {
     if ([1, 2].includes(this.currentUser.role_id) && this.type === 0)

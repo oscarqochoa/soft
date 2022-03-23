@@ -212,9 +212,11 @@ export default {
     }
   },
   created() {
-    this.filter.map((fil) => {
-      fil.model = null;
-    });
+    if(this.filter){
+      this.filter.map((fil) => {
+        fil.model = null;
+      });
+    }
     this.filterPrincipal.model = "";
   },
   mounted() {
@@ -229,15 +231,19 @@ export default {
   },
   methods: {
     resetFiltersButtons() {
-      this.filter.map((fil) => {
-        fil.model = null;
-      });
+      if(this.filter){
+        this.filter.map((fil) => {
+          fil.model = null;
+        });
+      }
       this.$emit("reset-all-filters");
     },
     resetFilter() {
-      this.filter.map((fil) => {
-        fil.model = null;
-      });
+      if(this.filter){
+        this.filter.map((fil) => {
+          fil.model = null;
+        });
+      }
       this.filterPrincipal.model = "";
       this.$emit("reload");
     },
