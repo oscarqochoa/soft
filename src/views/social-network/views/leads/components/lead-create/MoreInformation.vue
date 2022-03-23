@@ -8,7 +8,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-20,DOB">
+          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-20,DOB">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -33,7 +33,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-21,Status">
+          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-21,Status">
 
             <b-form-group
                 label="Status"
@@ -63,7 +63,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-22,Type doc.">
+          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-22,Type doc.">
             <b-form-group
                 label="Type doc."
                 label-for="st-ad"
@@ -91,7 +91,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-23,Document">
+          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-23,Document">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -118,7 +118,7 @@
       </b-row>
       <b-row class="mt-2 text-left">
         <b-col mb="6 text-left">
-          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-24,Phone(H)">
+          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-24,Phone(H)">
             <b-form-group
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"
                 label-cols-sm="4"
