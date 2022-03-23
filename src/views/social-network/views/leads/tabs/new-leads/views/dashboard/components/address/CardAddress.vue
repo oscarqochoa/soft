@@ -4,6 +4,7 @@
       <b-card-title class="card-title-address">
         <div>Address</div>
         <div>
+          <b-button @click="openSweetAlert">sweet</b-button>
           <b-button
             v-if="!editInformation"
             variant="default"
@@ -45,12 +46,12 @@
           :disabled="!editInformation"
         >
           <b-form-input
-              v-if="!editInformation"
-              v-model="personalAddress.street"
-              type="text"
-              class="form-control form-group-col-12 street-address-vue-google"
-              disabled
-            ></b-form-input>
+            v-if="!editInformation"
+            v-model="personalAddress.street"
+            type="text"
+            class="form-control form-group-col-12 street-address-vue-google"
+            disabled
+          ></b-form-input>
           <vue-google-autocomplete
             v-else
             v-model="personalAddress.street"
@@ -115,7 +116,7 @@ import { mapGetters, mapActions } from "vuex";
 import vSelect from "vue-select";
 import StandarFormGroup from "@/views/social-network/views/leads/components/StandarFormGroup.vue";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
-
+import Vue from "vue";
 export default {
   components: {
     vSelect,
@@ -144,6 +145,46 @@ export default {
     }),
   },
   methods: {
+    async openSweetAlert() {
+      let timerInterval = 0;
+      const result = await Vue.swal.fire({
+        icon: "warning",
+        input: "select",
+        inputOptions: [2, 3, 4],
+        html: "I will close in <strong></strong> seconds.",
+        timer: 300000,
+        title: "Task alert",
+        text: `Please select a seller to assign the task or pass to the next catcher 1`,
+        showCancelButton: true,
+        confirmButtonText: "Assign",
+        customClass: {
+          confirmButton: "btn btn-primary mr-1",
+          cancelButton: "btn btn-danger  ",
+        },
+        didOpen: () => {
+            const content = Vue.swal.getHtmlContainer();
+            console.log(content);
+
+            Vue.swal.showLoading()
+            timerInterval = setInterval(() => {
+              Vue.swal.getHtmlContainer().querySelector("strong").textContent =
+                (Vue.swal.getTimerLeft() / 1000).toFixed(0);
+            }, 100);
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          },
+      });
+
+      // if(result.isConfirmed) {
+      //     data.assign_id = result.value
+      //     await window.amgApi.post('/round-robin/social-network/on-accept-task-seller-assign', data)
+      // } else {
+      //     data.catchers_denny.push(sessionId);
+      //     console.log(data);
+      //     await window.amgApi.post('/round-robin/social-network/on-deny-task-seller-assign', data)
+      // }
+    },
     ...mapActions({
       A_GET_STATES_EEUU: "StandarStore/A_GET_STATES_EEUU",
       A_POST_UPDATE_LEAD_INFORMATION_FIELDS:
@@ -156,9 +197,13 @@ export default {
         "question"
       ).then((result) => {
         if (result.value) {
-          this.personalAddressTempo = {...this.personalAddress};
+          this.personalAddressTempo = { ...this.personalAddress };
           this.personalAddress.street = this.personalAddressTempo.street;
-          this.$set(this.personalAddress, 'street', this.personalAddressTempo.street);
+          this.$set(
+            this.personalAddress,
+            "street",
+            this.personalAddressTempo.street
+          );
           this.editInformation = true;
         }
       });
@@ -170,14 +215,18 @@ export default {
         "question"
       ).then((result) => {
         if (result.value) {
-          this.$emit('cancel-edit-address', this.personalAddressTempo);
-          this.$set(this.personalAddress, 'street', this.personalAddressTempo.street);
+          this.$emit("cancel-edit-address", this.personalAddressTempo);
+          this.$set(
+            this.personalAddress,
+            "street",
+            this.personalAddressTempo.street
+          );
           this.editInformation = false;
         }
       });
     },
     onChangeAddress(event, data) {
-      this.$set(data, 'street', event.target.value)
+      this.$set(data, "street", event.target.value);
     },
     getAddressData(mainAddress, details, type) {
       const address = `${mainAddress.street_number} ${mainAddress.route}`;
