@@ -1,155 +1,18 @@
 <template>
   <div class="p-2">
     <header-slot>
-      <template #actions>
-        <b-row class="d-flex justify-content-end">
-          <!-- Button Done List to Send -->
-          <b-col v-if="!statusUserRedirected" cols="12" md="12" lg="7" xl="7">
-            <b-button
-              :disabled="!getStatusButton"
-              @click="sendForPusher"
-              variant="primary"
-              >Done List</b-button
-            >
-          </b-col>
-          <!-- V-select Users -->
-          <b-col
-            v-if="statusUserRedirected"
-            cols="12"
-            sm=""
-            md="12"
-            lg="9"
-            xl="8"
-          >
-            <div class="">
-              <v-select
-                id="v-user"
-                v-model="userId"
-                label="fullName"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="userOfRecoveryList"
-                :clearable="false"
-                :reduce="(val) => val.id"
-                class="w-100"
-                placeholder="Select"
-                @input="statusLead"
-              />
-            </div>
-          </b-col>
-        </b-row>
-      </template>
+
     </header-slot>
-    <!-- Row for Done List  -->
-    <b-row
-      
-      class="mb-1 d-flex justify-content-start"
-    >
-      <b-col cols="6" sm="5" md="4" lg="3" xl="2" class="pb-1">
-        <div>
-          <div
-            class="text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
-            style="padding-top: 5px; padding-bottom: 5px"
-          >
-            Done List : {{ statusCompletedTaskU == true ? "YES" : "NO" }}
-          </div>
-        </div>
-      </b-col>
-      <b-col cols="6" sm="5" md="4" lg="3" xl="2"  class="pb-1">
-        <div>
-          <div
-            class="text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
-            style="padding-top: 5px; padding-bottom: 5px; background: linear-gradient(90deg, #FAC632 0%, #F37432 100%);"
-          >
-            Pending T : {{ pendingTotal}} 
-          </div>
-        </div>
-      </b-col>
-      <b-col cols="6" sm="5" md="4" lg="3" xl="2"  class="pb-1">
-        <div>
-          <div
-            class="text-center class-coco-campo-text bg-primary rounded text-white font-medium-1 px-1"
-            style="padding-top: 5px; padding-bottom: 5px;background: linear-gradient(90deg, #ADD210 0%, #5F873E 100%);"
-          >
-            Done T : {{ doneTotal }}
-          </div>
-        </div>
-      </b-col>
-    </b-row>
-    <!-- Tabs -->
-    <b-tabs
-      lazy
-      active-tab-class="p-0 "
-      pills
-      nav-class="mb-0"
-      active-nav-item-class="bg-info box-shadow-info border-info info"
-    >
-      <!-- Tab Credit Experts -->
-      <b-tab
-        title="Credit Experts"
-        :title-link-class="[bgTabsNavs, 'sub-tab px-3']"
-      >
-        <tab-by-program
-          @TaskCompleted="TaskCompleted"
-          @statusCompletedTask="statusCompletedTask"
-          active
-          :programId="3"
-          :userId="userId"
-          :key="keyUser"
-        />
-      </b-tab>
-      <!-- Tab Business -->
-      <b-tab title="Business" :title-link-class="[bgTabsNavs, 'sub-tab px-3']">
-        <tab-by-program
-          @TaskCompleted="TaskCompleted"
-          @statusCompletedTask="statusCompletedTask"
-          :programId="1"
-          :userId="userId"
-          :key="keyUser"
-        />
-      </b-tab>
 
-      <!-- Tax Research -->
-      <b-tab
-        title="Tax Research"
-        :title-link-class="[bgTabsNavs, 'sub-tab px-3']"
-      >
-        <tab-by-program
-          @TaskCompleted="TaskCompleted"
-          @statusCompletedTask="statusCompletedTask"
-          :programId="5"
-          :userId="userId"
-          :key="keyUser"
-        />
-      </b-tab>
+    <tab-by-program
+        @TaskCompleted="TaskCompleted"
+        @statusCompletedTask="statusCompletedTask"
+        active
+        :programId="1"
+        :userId="userId"
+        :key="keyUser"
+    />
 
-      <!-- Debt Solution -->
-      <b-tab
-        title="Debt Solution"
-        :title-link-class="[bgTabsNavs, 'sub-tab px-3']"
-      >
-        <tab-by-program
-          @TaskCompleted="TaskCompleted"
-          @statusCompletedTask="statusCompletedTask"
-          :programId="4"
-          :userId="userId"
-          :key="keyUser"
-        />
-      </b-tab>
-
-      <!-- Boost Credit -->
-      <b-tab
-        title="Boost Credit"
-        :title-link-class="[bgTabsNavs, 'sub-tab px-3']"
-      >
-        <tab-by-program
-          @TaskCompleted="TaskCompleted"
-          @statusCompletedTask="statusCompletedTask"
-          :programId="2"
-          :userId="userId"
-          :key="keyUser"
-        />
-      </b-tab>
-    </b-tabs>
   </div>
 </template>
 

@@ -1,34 +1,36 @@
 export default [
   {
-    key: "fullNameLead",
-    label: "Name Lead",
+    key: "user_name",
+    label: "Name User",
     visible: true,
   },
   {
     key: "created_at",
-    label: "Create Date",
+    label: "Date",
     visible: true,
   },
   {
-    key: "leadCreated",
-    label: "Lead Created at",
+    key: "t1",
+    label: "Total Leads",
     visible: true,
+    class: 'text-center'
   },
-  // {
-  //   key: "value",
-  //   label: "Program",
-  //   visible: true
-  // },
-
   {
-    key: "last_action",
-    label: "Last Action",
+    key: "pending",
+    label: "Produced leads",
     visible: true,
+    class: 'text-center'
   },
   {
     key: "done",
-    label: "Done",
-    class: "text-center",
+    label: "Done Leads",
     visible: true,
+    class: 'text-center'
+  },
+  {
+    key: "status",
+    label: "status",
+    visible: true,
+    class: 'text-center'
   },
 ]
