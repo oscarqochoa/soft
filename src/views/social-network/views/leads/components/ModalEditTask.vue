@@ -560,6 +560,7 @@ export default {
             method: this.currentUser.role_id === 7 ? this.task.method : null,
             withsms: this.task.withsms ? 1 : 0,
             taskForSn: this.taskForSn,
+            status_sn: 2
           };
 
           const response = await TaskService.postCreateLeadTask(params);
