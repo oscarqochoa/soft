@@ -421,7 +421,7 @@ export default {
     //this.removePreloader()
   },
   async mounted() {
-
+    this.lead.fanpage_id = null;
   },
   computed: {
     ...mapGetters({
@@ -507,6 +507,8 @@ export default {
     selectProgram(id, value ) {
       this.lead.fanpage_id = id;
       this.titleFanPageProgram = value;
+      this.lead.flyer = null;
+      this.imageFlyer = null;
     },
     openModalSelectFlyer() {
       this.openModal = !this.openModal;
