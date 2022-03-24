@@ -6,7 +6,7 @@
     scrollable
     title-class="h3 text-white font-weight-bolder"
     header-class="class_modal_js"
-    body-class="p-0"
+
     hide-footer
     size="lg"
     @hidden="closeModal"
@@ -24,7 +24,7 @@
           :fields="fields"
           :items="search"
           :busy="isBusy"
-          class="font-small-3 text-center m-0 p-0"
+          class="font-small-3  m-0 p-0"
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
@@ -34,19 +34,17 @@
           </template>
 
           <template v-slot:cell(nickname)="data">
-            <div
-              class="d-flex flex-column justify-content-start align-items-start"
-            >
+
               <div class="mb-0 font-weight-bold text-important">
                 <router-link
                   :class="[textLink]"
                   :to="`/social-network/leads/new/dashboard/${data.item.id}`"
                   target="_blank"
                 >
-                  {{ data.item.nickname }}
+                  {{ data.item.nickname || data.item.not_nickname }}
                 </router-link>
               </div>
-            </div>
+
           </template>
           <template v-slot:cell(source)="data">
             <p class="mb-0 font-weight-bold">
@@ -91,6 +89,19 @@
               {{ data.item.state_hour }}
             </p>
           </template>
+          <template v-slot:cell(program)="data">
+            <b-img
+                thumbnail
+                fluid
+                :src="data.item.program_id | renderProgramLogobyId"
+                style="height: 40px"
+                v-if="data.item.program_id"
+
+            />
+            <b-badge variant="primary" v-else style="width: 50px">
+              CRM
+            </b-badge>
+          </template>
         </b-table>
       </b-card>
     </div>
@@ -130,7 +141,7 @@ export default {
         return "ANSWERS";
       }
       if (this.card === 4) {
-        return "ACTIVE";
+        return "TODAY";
       }
       if (this.card === 5) {
         return "APPOINTMENTS";
@@ -153,9 +164,9 @@ export default {
       this.fields = [];
       if (
         this.card === 2 ||
-        this.card === 4 ||
-        this.card === 5 ||
-        this.card === 6
+
+        this.card === 5
+
       ) {
         this.fields.push({
           key: "nickname",
@@ -187,6 +198,11 @@ export default {
           key: "st_ad",
           sortable: false,
           label: "ST/AD",
+        });
+        this.fields.push({
+          key: "program",
+          sortable: false,
+          label: "Program",
         });
       }
     },
