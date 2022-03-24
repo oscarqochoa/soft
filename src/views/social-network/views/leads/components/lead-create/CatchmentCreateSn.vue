@@ -344,6 +344,7 @@
         hide-footer
         body-class="mb-2"
         title-tag="h3"
+        scrollable
     >
       <b-container>
         <div class="container-flyers">
