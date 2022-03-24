@@ -74,11 +74,7 @@ export default {
           })
         }
       }else{
-        if(this.toggleItem){
-          this.toggleItem = false
-        } else {
-          this.toggleItem = true
-        }
+        this.toggleItem = !this.toggleItem;
       }
 
     },
