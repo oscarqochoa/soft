@@ -104,7 +104,7 @@
 
     <b-modal
         size="lg"
-        :title="`Recovery List ${userSelect ? userSelect.name : null} - ${userSelect ? userSelect.date : null}`"
+        :title="`RECOVERY LIST / ${userSelect ? userSelect.name : null} / ${userSelect ? `${userSelect.date.split('-')[1]}-${userSelect.date.split('-')[2]}-${userSelect.date.split('-')[0]}` : null}`"
         v-model="openModal"
         body-class="p-0"
         @hidden="closeModalRecovery"

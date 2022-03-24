@@ -64,11 +64,7 @@
         </template>
 
         <template #cell(status)="data">
-          <div
-              class="d-flex flex-column justify-content-center align-items-center"
-          >
-            <b-checkbox @change="onChangeStatus(data.item)" v-model="data.item.status === 1 ? true : false"/>
-          </div>
+          <StatusTableRecoveryListItem :item="data.item" :doneLeads="doneLeads" :totalStatus="totalStatus" :user="user" @updateStatusDone="updateStatusDone"/>
         </template>
 
 
@@ -90,9 +86,12 @@
 import filtersList from "../data/filters-modal.recovery.list.data";
 import RecoveryListService from "@/views/social-network/views/recovery-list/service/recovery.list.service";
 import {mapActions, mapGetters} from "vuex";
+import StatusTableRecoveryListItem
+  from "@/views/social-network/views/recovery-list/components/StatusTableRecoveryListItem";
 
 export default {
   name: 'TableListLeadsByUser',
+  components: {StatusTableRecoveryListItem},
   data() {
     return {
       filter: filtersList,
@@ -271,6 +270,10 @@ export default {
           )
         }
       }
+    },
+    updateStatusDone({done, status}) {
+      this.doneLeads = done;
+      this.totalStatus = status;
     }
   },
   watch: {
