@@ -92,7 +92,7 @@
             <v-select
               v-model="paginate.perPage"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="[3, 10, 25, 50, 100]"
+              :options="[10, 25, 50, 100]"
               :clearable="false"
               class="per-page-selector d-inline-block mx-50"
               @input="$emit('reload', false)"

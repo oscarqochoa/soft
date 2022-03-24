@@ -39,7 +39,12 @@
               class="d-flex flex-column justify-content-start align-items-start"
             >
               <!-- Route To Lead Show -->
-              <span @click="clickNameUSer(data.item.user_name, data.item.user_id, data.item.created_at)" class="text-primary click-user-recovery-list">{{ data.item.user_name }}</span>
+              <span @click="clickNameUSer(data.item.user_name, data.item.user_id, data.item.created_at)"
+                    class="click-user-recovery-list"
+                    :class="textLink"
+              >
+                {{ data.item.user_name }}
+              </span>
             </div>
           </template>
           <!-- COLUMN CREATE DATE -->
@@ -55,7 +60,7 @@
             <div
               class="d-flex align-items-center justify-content-center"
             >
-              <span class="text-primary click-user-recovery-list" @click="clickNameUSer(data.item.user_name, data.item.user_id, data.item.created_at)">{{ data.item.t1 }}</span>
+              <span class="click-user-recovery-list" :class="textLink" @click="clickNameUSer(data.item.user_name, data.item.user_id, data.item.created_at)">{{ data.item.t1 }}</span>
             </div>
           </template>
           <!-- COLUMN DONE -->
@@ -104,7 +109,7 @@
 
     <b-modal
         size="lg"
-        :title="`Recovery List ${userSelect ? userSelect.name : null} - ${userSelect ? userSelect.date : null}`"
+        :title="`RECOVERY LIST / ${userSelect ? userSelect.name : null} / ${userSelect ? `${userSelect.date.split('-')[1]}-${userSelect.date.split('-')[2]}-${userSelect.date.split('-')[0]}` : null}`"
         v-model="openModal"
         body-class="p-0"
         @hidden="closeModalRecovery"

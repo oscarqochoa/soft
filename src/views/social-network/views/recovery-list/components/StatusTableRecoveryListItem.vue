@@ -2,7 +2,7 @@
   <div
       class="d-flex flex-column justify-content-center align-items-center"
   >
-    <b-checkbox @change="onChangeStatus(item)" v-model="item.status === 1 ? true : false"/>
+    <b-checkbox :disabled="disabledItem" @change="onChangeStatus(item)" v-model="toggleItem"/>
   </div>
 </template>
 
@@ -13,39 +13,75 @@ export default {
   name: 'StatusTableRecoveryListItem',
   data(){
     return {
-      totalStatus: 0
+      //totalStatus: 0,
+      disabledItem: true,
+      toggleItem: false
     }
   },
   props: {
     item: {
       type: Object,
       default: () => {}
-    }
+    },
+    doneLeads: Number,
+    totalStatus: Number,
+    user: {
+      type: Object,
+      default: () => {}
+    },
   },
   created() {
-    console.log('item', this.item)
+    this.toggleItem = this.item.status === 1
+    const date = this.item.list_date.substr(0,10).split('-');
+    const dateI = new Date(date[0],date[1] - 1,date[2]);
+    if(new Date(dateI.getTime() + (5 * 24 * 60 * 60000)) > new Date()){
+      this.disabledItem = false;
+    }
   },
   methods: {
     async onChangeStatus (lead) {
-      console.log(lead)
-      let recovery_status = true;
-      lead.status == 0 ? recovery_status = true : recovery_status = false;
-      recovery_status ? this.totalStatus++ : this.totalStatus--;
-      const resp = await RecoveryListService.getRecoveryListByUser({
-        perpage: 50,
-        npage: 1,
-        user_id: this.user.id,
-        date_in: this.user.date,
-        date_from: null,
-        date_to: null,
-        status: recovery_status,
-        program_id: null,
-        rol_id: 10,
-        update_status: 1,
-        id_list: lead.id
-      })
+      const swal = await this.showConfirmSwal(
+          "Are you sure?",
+          "You won't be able to revert this!",
+          "question"
+      )
+      if(swal.isConfirmed) {
+        let statusData = 0;
+        if( this.toggleItem ) {
+          statusData = 1
+        }
+        //recovery_status ? this.totalStatus++ : this.totalStatus--;
+        const resp = await RecoveryListService.getRecoveryListByUser({
+          perpage: 50,
+          npage: 1,
+          user_id: this.user.id,
+          date_in: this.user.date,
+          date_from: null,
+          date_to: null,
+          status: statusData,
+          program_id: null,
+          rol_id: 10,
+          update_status: 1,
+          id_list: lead.id
+        })
+        if(this.toggleItem){
+          this.$emit('updateStatusDone',{
+            done: resp[1].status + 1, status: resp[1].count
+          })
+        } else {
+          this.$emit('updateStatusDone',{
+            done: resp[1].status - 1, status: resp[1].count
+          })
+        }
+      }else{
+        if(this.toggleItem){
+          this.toggleItem = false
+        } else {
+          this.toggleItem = true
+        }
+      }
 
     },
-  }
+  },
 }
 </script>

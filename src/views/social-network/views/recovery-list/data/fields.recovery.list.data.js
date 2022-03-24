@@ -11,19 +11,19 @@ export default [
   },
   {
     key: "t1",
-    label: "Total Leads",
+    label: "Total",
     visible: true,
     class: 'text-center'
   },
   {
     key: "pending",
-    label: "Produced leads",
+    label: "Pending",
     visible: true,
     class: 'text-center'
   },
   {
     key: "done",
-    label: "Done Leads",
+    label: "Done",
     visible: true,
     class: 'text-center'
   },

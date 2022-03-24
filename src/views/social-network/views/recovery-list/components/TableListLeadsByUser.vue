@@ -13,7 +13,7 @@
     >
       <template #buttons-filter>
         <div class="d-flex align-items-center justify-content-between pl-2 pr-2">
-          <b-button class="botton-replay" v-if="totalRows === doneLeads" variant="success" @click="replay">SEND TO REVISSION</b-button>
+          <b-button href="" class="botton-replay" v-if="btnRecoverySend" variant="success" @click="replay">SEND TO REVISSION</b-button>
         </div>
       </template>
       <b-table
@@ -41,15 +41,15 @@
 
         <template #cell(fullNameLead)="data">
           <div
-              class="d-flex flex-column justify-content-center align-items-center"
+              class="text-left"
           >
-            <span @click="linkLead(data.item.lead_id)" class="text-primary click-user-recovery-list">{{ data.item.fullNameLead }}</span>
+            <a :href="`/social-network/leads/new/dashboard/${data.item.id}`" target="_blank" class=" click-user-recovery-list" :class="textLink">{{ data.item.fullNameLead }}</a>
           </div>
         </template>
 
         <template #cell(created_at)="data">
           <div
-              class="d-flex flex-column justify-content-center align-items-center"
+              class="text-left"
           >
             <span>{{ data.item.created_at | myGlobalDay }}</span>
           </div>
@@ -57,18 +57,14 @@
 
         <template #cell(program)="data">
           <div
-              class="d-flex flex-column justify-content-center align-items-center"
+              class="text-left"
           >
             <span>{{ data.item.program }}</span>
           </div>
         </template>
 
         <template #cell(status)="data">
-          <div
-              class="d-flex flex-column justify-content-center align-items-center"
-          >
-            <b-checkbox @change="onChangeStatus(data.item)" v-model="data.item.status === 1 ? true : false"/>
-          </div>
+          <StatusTableRecoveryListItem :item="data.item" :doneLeads="doneLeads" :totalStatus="totalStatus" :user="user" @updateStatusDone="updateStatusDone"/>
         </template>
 
 
@@ -90,9 +86,12 @@
 import filtersList from "../data/filters-modal.recovery.list.data";
 import RecoveryListService from "@/views/social-network/views/recovery-list/service/recovery.list.service";
 import {mapActions, mapGetters} from "vuex";
+import StatusTableRecoveryListItem
+  from "@/views/social-network/views/recovery-list/components/StatusTableRecoveryListItem";
 
 export default {
   name: 'TableListLeadsByUser',
+  components: {StatusTableRecoveryListItem},
   data() {
     return {
       filter: filtersList,
@@ -101,19 +100,19 @@ export default {
           key: "fullNameLead",
           label: "Lead",
           visible: true,
-          class: 'text-center'
+          class: 'text-left'
         },
         {
           key: "created_at",
           label: "Date",
           visible: true,
-          class: 'text-center'
+          class: 'text-left'
         },
         {
           key: "program",
           label: "Program",
           visible: true,
-          class: 'text-center'
+          class: 'text-left'
         },
         {
           key: "status",
@@ -138,7 +137,8 @@ export default {
       isBusy: false,
       data: [],
       totalStatus: 0,
-      doneLeads: 0
+      doneLeads: 0,
+      btnRecoverySend: false
     }
   },
   props: {
@@ -235,13 +235,8 @@ export default {
       //this.totalStatus, this.doneLeads
 
     },
-    addDaysToDate(date, days){
-      let res = new Date(date);
-      res.setDate(res.getDate() + days);
-      return res;
-    },
     async replay() {
-      console.log('replay')
+
       const confirm = await this.showConfirmSwal(
           "Send to Team Leader",
           "You won't be able to revert this!"
@@ -271,11 +266,18 @@ export default {
           )
         }
       }
+    },
+    updateStatusDone({done, status}) {
+      this.doneLeads = done;
+      this.totalStatus = status;
     }
   },
   watch: {
-    totalStatus() {
-      console.log('boton enviar: ', this.totalStatus, this.doneLeads)
+    //
+    doneLeads () {
+      if(this.totalRows === this.doneLeads){
+        this.btnRecoverySend = true
+      }
     }
   }
 }
