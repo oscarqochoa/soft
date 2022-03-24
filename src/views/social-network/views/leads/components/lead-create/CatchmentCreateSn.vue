@@ -422,6 +422,7 @@ export default {
   },
   async mounted() {
     this.lead.fanpage_id = null;
+    this.lead.program - [];
   },
   computed: {
     ...mapGetters({
