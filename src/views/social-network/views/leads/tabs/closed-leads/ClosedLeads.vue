@@ -89,13 +89,13 @@
               <b-img
                 thumbnail
                 fluid
-                :src="data.item.program_name | renderProgramLogo"
-                style="height: 40px"
+                :src="baseUrl + data.item.logo"
+                style="width: 50px"
                 v-if="data.item.logo"
               />
-              <b-badge variant="primary" v-else style="width: 40px">
-                CRM
-              </b-badge>
+                <b-badge variant="primary" v-else style="width: 40px">
+                  CRM
+                </b-badge>
             </div>
           </template>
 
