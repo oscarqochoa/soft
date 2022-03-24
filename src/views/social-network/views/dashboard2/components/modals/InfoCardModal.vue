@@ -57,7 +57,7 @@
 
               <b-img
                 v-if="data.item.source_name === 'INSTAGRAM'"
-                :src="`${baseImg}/assets/images/social-network/instagram.png`"
+                :src="`${baseImg}/assets/images/social-network/INSTAGRAM.png`"
                 style="height: 20px; padding-left: 10px"
               />
             </p>
@@ -74,7 +74,7 @@
 
               <b-img
                 v-if="data.item.sub_source_name === 'INSTAGRAM'"
-                :src="`${baseImg}/assets/images/social-network/instagram.png`"
+                :src="`${baseImg}/assets/images/social-network/INSTAGRAM.png`"
                 style="height: 20px; padding-left: 10px"
               />
               <b-img
