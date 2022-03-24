@@ -617,6 +617,7 @@ export default {
               withsms: this.task.withsms ? 1 : 0,
               taskForSn: this.taskForSn,
               reply_id: this.replyId,
+              status_sn: 2
             };
             const response = await this.A_SET_LEAD_TASK(params);
             this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
