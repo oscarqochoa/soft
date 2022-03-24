@@ -143,7 +143,7 @@
           </ValidationProvider>
         </b-col>
         <b-col mb="6">
-          <ValidationProvider rules="" v-slot="{errors}" name="input-create-lead-18,Note">
+          <ValidationProvider rules="required" v-slot="{errors}" name="input-create-lead-18,Note">
             <b-form-group
                 id="fieldset-horizontal"
                 label-class="font-bureau-style font-weight-normal color-gray-input-sn"

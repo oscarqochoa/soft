@@ -166,8 +166,8 @@ export default {
         state_h: 'CA',
         user_id: null,
         program: [],
-        source_id: null,
-        sub_source: null,
+        source_id: 7,
+        sub_source: 3,
         google_ads: null,
         fanpage_id: null,
         flyer: null,
@@ -320,11 +320,10 @@ export default {
           )
           if(resp.value){
             this.addPreloader()
+
             // Transformar fechas
             this.lead.dob = this.transformDate(this.lead.dob);
-            this.lead.date = this.transformDate(this.lead.date);
-            this.lead.due_date = this.transformDate(this.lead.due_date);
-
+            this.lead.date =  this.transformDate(this.lead.date);
 
             // Enviar peticion a la api
             await this.A_CREATE_LEAD_SN(this.lead);
@@ -453,7 +452,7 @@ export default {
     onCloseSidebar(){
       //this.$emit('closeSidebar')
 
-      this.resetForm();
+      //this.resetForm();
       this.loading = true;
     },
     async onOpenSidebar() {
@@ -472,14 +471,14 @@ export default {
     },
     resetForm() {
       this.lead.state_h = 'CA'
-      this.lead.user_id = null
-      this.lead.program = []
-      this.lead.source_id = null
-      this.lead.sub_source = null
-      this.lead.google_ads = null
-      this.lead.fanpage_id = null
-      this.lead.flyer = null
-      this.lead.sourcesname_id = 17
+        this.lead.user_id = this.currentUser.user_id;
+        this.lead.program = []
+        this.lead.source_id = 7
+        this.lead.sub_source = 3
+        this.lead.google_ads = null
+        this.lead.fanpage_id = null
+        this.lead.flyer = null
+        this.lead.sourcesname_id = 17
 
           // Basic information
       this.lead.nickname = ""
@@ -538,14 +537,14 @@ export default {
       this.lead.assign= 1
       this.lead.attend= null
 
-          this.lead.recovery= 0
+      this.lead.recovery= 0
       this.lead.last_action= 1
       this.lead.program_id= null
-      this.lead.super= null
-      this.lead.usercreator= null
-      this.lead.catcher= null
-      this.lead.created_by= null,
-          this.lead.created_date= null
+      this.lead.super= this.currentUser.user_id
+      this.lead.usercreator= this.currentUser.user_id
+      this.lead.catcher= this.currentUser.user_id
+      this.lead.created_by= this.currentUser.user_id;
+      this.lead.created_date= this.$options.filters.formatDate(new Date());
 
 
       this.lead.content= ""
@@ -557,9 +556,6 @@ export default {
       this.lead.images= []
       this.lead.other= ""
       this.$refs.refFormLeadObserver.reset();
-    },
-    handleScroll () {
-      var sortMenu = this.$refs.containerSidebarSreateLead.scrollLeft;
     },
     transformDate(date) {
       const data_dob = date.split('/');

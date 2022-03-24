@@ -55,7 +55,7 @@
       <template v-if="(!(lead.first_name === '') && !(lead.last_name === '') && !(lead.mobile === '')) && (addNow || addLater)">
         <b-row class="">
           <b-col md="2" class="d-flex align-items-center">
-            <h3 class="title-card m-0 font-medium-1">Send Sms?</h3>
+            <h3 class="title-card m-0 font-medium-1">Send SMS?</h3>
           </b-col>
           <b-col md="5" class="d-flex align-items-center ">
 

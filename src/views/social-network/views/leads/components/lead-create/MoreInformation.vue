@@ -251,7 +251,10 @@ export default {
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.4);
   background: #fff !important;
-  .leads-datepicker{border: none !important}
+  .leads-datepicker{
+    height: 35px !important;
+    border: none !important
+  }
   &:hover{
     border: 1px solid rgba(255, 255, 255, 0.4);
   }
