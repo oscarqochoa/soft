@@ -396,8 +396,7 @@ export default {
           advisor: this.filter[2].model,
           type: this.paymentType,
           day: this.paymentDay,
-          rol_id: this.currentUser.arrRoles.find(rol => rol.module_id == 2)
-              .role_id,
+          rol_id: this.currentUser.role_id,
           session: this.currentUser.user_id,
           modul: this.modul,
         }
