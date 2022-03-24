@@ -202,5 +202,8 @@ export default {
 .btn-find-seller-later{
   margin-top: 9px;
 }
+.leads-datepicker{
+  background: red !important;
+}
 
 </style>

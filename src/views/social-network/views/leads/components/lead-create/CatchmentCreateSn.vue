@@ -104,7 +104,6 @@
         </b-col>
         <b-col md="8" class="text-left">
 
-
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"

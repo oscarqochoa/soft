@@ -55,7 +55,7 @@
             <div
               class="d-flex align-items-center justify-content-center"
             >
-              <span>{{ data.item.t1 }}</span>
+              <span class="text-primary click-user-recovery-list" @click="clickNameUSer(data.item.user_name, data.item.user_id, data.item.created_at)">{{ data.item.t1 }}</span>
             </div>
           </template>
           <!-- COLUMN DONE -->
@@ -88,7 +88,7 @@
 
           <template #custom-foot>
             <b-tr>
-              <b-th class="">NAME USER</b-th>
+              <b-th v-if="(isCeo || isSupervisor || isTeamLeader)" class="">NAME USER</b-th>
               <b-th class="">DATE</b-th>
               <b-th class="text-center">{{ totalSum.total }}</b-th>
               <b-th class="text-center">{{ totalSum.pending }}</b-th>
@@ -104,7 +104,7 @@
 
     <b-modal
         size="lg"
-        :title="`Recovery List del usuario: ${userSelect ? userSelect.name : null} de la fecha: ${userSelect ? userSelect.date : null}`"
+        :title="`Recovery List ${userSelect ? userSelect.name : null} - ${userSelect ? userSelect.date : null}`"
         v-model="openModal"
         body-class="p-0"
         @hidden="closeModalRecovery"
@@ -141,7 +141,7 @@ export default {
   data() {
     return {
       filter: filtersList,
-      arrayColumns: fields,
+      arrayColumns: [],
       totalRows: 0,
       paginate: {
         currentPage: 1,
@@ -172,15 +172,25 @@ export default {
     }
   },
   async mounted() {
-    const owners = (await this.A_GET_OWNERS({ modul: 15, body: { roles: "[]", type: "1" }})).map(owner => {
+
+
+    if((this.isCeo || this.isSupervisor || this.isTeamLeader)){
+      this.arrayColumns = fields
+    } else {
+      this.arrayColumns = fields.filter(item => item.key != 'user_name')
+    }
+
+
+    const { data } = await RecoveryListService.getUserOfRecoveryList();
+    const owners = data.map(owner => {
       return {
-        label: owner.user_name,
+        label: owner.fullName,
         value: owner.id
       }
     }).filter(item => item.value === this.currentUser.user_id || this.isCeo || this.isSupervisor || this.isTeamLeader)
     owners.unshift({ label: "All", value: null },)
     this.filter[2].options = owners
-    console.log('CURRENT: ', this.currentUser)
+
   },
   computed: {
     ...mapGetters({

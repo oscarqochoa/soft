@@ -150,7 +150,7 @@ export default {
     const hour = await this.A_GET_HOUR_SYSTEM();
     //const date = this.A_FORMAT_DATE(new Date());
 
-    this.lead.due_date = new Date();
+    this.lead.due_date = this.$options.filters.formatDate(new Date());
     this.lead.hour = hour;
     this.loading = false;
   },
@@ -183,18 +183,11 @@ export default {
         this.addNow = true;
         this.addLater = false;
 
-
-
         const hour = await this.A_GET_HOUR_SYSTEM();
         const date = await this.A_FORMAT_DATE(new Date());
         await this.A_GET_SELLER_TASK_FAVORITE({date_hour: `${date} ${hour}:00`})
         this.lead.attend = 2;
 
-      } else {
-        this.addNow = false;
-        this.addLater = true;
-
-        this.lead.attend = 1;
       }
     },
     resetValues() {
@@ -224,7 +217,24 @@ export default {
         });
       }
     },
+    transformDate(date) {
+      const data_dob = date.split('/');
+      const data = data_dob[0] == '' || data_dob[2].length != 4 ? this.lead.dob : `${data_dob[2]}/${data_dob[0]}/${data_dob[1]}`;
+      return data.replaceAll('/','-');
+    }
   },
+  watch: {
+    "lead.due_date"() {
+      if(this.lead.due_date.includes('/')) {
+        this.lead.due_date = this.transformDate(this.lead.due_date);
+      }
+    },
+    "lead.hour" () {
+      if(this.lead.hour.length === 5) {
+        this.lead.hour = this.lead.hour + ':00';
+      }
+    }
+  }
 }
 </script>
 <style scoped lang="scss">

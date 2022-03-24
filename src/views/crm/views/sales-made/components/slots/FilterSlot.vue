@@ -111,6 +111,7 @@
             <div
               class="d-flex align-items-center justify-content-end align-items-center"
             >
+              <slot name="buttons-filter" />
               <b-input-group v-if="!noVisiblePrincipalFilter" class="mr-1">
                 <b-form-input
                   v-if="filterPrincipal.type === 'input'"

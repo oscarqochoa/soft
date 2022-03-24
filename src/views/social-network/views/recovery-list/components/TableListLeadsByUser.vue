@@ -11,9 +11,9 @@
         :send-multiple-sms="false"
         @reload="$refs['refRecoveryByUser'].refresh()"
     >
-      <template #buttons>
+      <template #buttons-filter>
         <div class="d-flex align-items-center justify-content-between pl-2 pr-2">
-          <b-button v-if="totalRows === doneLeads" variant="success" @click="replay">Replay</b-button>
+          <b-button class="botton-replay" v-if="totalRows === doneLeads" variant="success" @click="replay">SEND TO REVISSION</b-button>
         </div>
       </template>
       <b-table
@@ -77,7 +77,7 @@
             <b-th class=""></b-th>
             <b-th class="text-center"></b-th>
             <b-th class="text-center"></b-th>
-            <b-th class="text-center">TOTAL: {{ totalStatus }}</b-th>
+            <b-th class="text-center">TOTAL: {{ doneLeads }}</b-th>
 
           </b-tr>
         </template>
@@ -185,7 +185,10 @@ export default {
         update_status: null,
         id_list: null
       })
-      this.doneLeads = resp1[1];
+      //this.doneLeads = resp1[1];
+      this.doneLeads = resp1[1].status;
+      this.totalStatus = resp1[1].count;
+      console.log('asd: ', resp1[1])
       const resp = resp1[0]
       this.data = resp.data;
 
@@ -197,13 +200,7 @@ export default {
       this.totalRows = resp.total
       this.toPage = resp.to
 
-      let sum = 0
-      resp.data.forEach(item => {
-        if (item.status == 1) {
-          sum = sum + 1;
-        }
-      })
-      this.totalStatus = sum
+      //this.totalStatus = sum
       return resp.data;
     },
     async programsAll() {
@@ -219,7 +216,7 @@ export default {
     async onChangeStatus (lead) {
       let recovery_status = true;
       lead.status == 0 ? recovery_status = true : recovery_status = false;
-      recovery_status ? this.totalStatus++ : this.totalStatus--;
+      //recovery_status ? this.totalStatus++ : this.totalStatus--;
       const resp = await RecoveryListService.getRecoveryListByUser({
         perpage: 50,
         npage: 1,
@@ -233,6 +230,9 @@ export default {
         update_status: 1,
         id_list: lead.id
       })
+      this.doneLeads = resp[1].status + 1;
+      this.totalStatus = resp[1].count;
+      //this.totalStatus, this.doneLeads
 
     },
     addDaysToDate(date, days){
@@ -272,6 +272,11 @@ export default {
         }
       }
     }
+  },
+  watch: {
+    totalStatus() {
+      console.log('boton enviar: ', this.totalStatus, this.doneLeads)
+    }
   }
 }
 </script>
@@ -283,5 +288,8 @@ export default {
   &:hover{
     font-weight: 600 !important;
   }
+}
+.botton-replay{
+  width: 180px;
 }
 </style>
