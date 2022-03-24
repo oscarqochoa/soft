@@ -275,9 +275,7 @@ export default {
   watch: {
     //
     doneLeads () {
-      if(this.totalRows === this.doneLeads){
-        this.btnRecoverySend = true
-      }
+      this.btnRecoverySend = this.totalRows === this.doneLeads;
     }
   }
 }
