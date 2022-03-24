@@ -189,6 +189,7 @@ export default {
       selectedItem: null,
       mood: null,
       sidebarController: true,
+      hasChanged: false,
     }
   },
   async created() {
@@ -224,10 +225,12 @@ export default {
   },
   methods: {
     close() {
+      if (this.hasChanged) this.$emit('reload')
       this.$emit('close')
     },
     async getReloadData() {
       await this.getTreeData(this.treeId)
+      this.hasChanged = true
     },
     openWatchModal(mood, body) {
       this.selectedItem = body

@@ -154,14 +154,14 @@
               <b-col md="2">
                 <b-form-group>
                   <b-form-input
-                    :value="modul === 15 ? 'UNK' : lead.state"
+                    :value="lead.state ? lead.state : 'UNK'"
                     readonly
                   />
                 </b-form-group>
               </b-col>
             </b-row>
           </b-col>
-          <b-col v-if="!task.attend_type" cols="12 form-group-md-2">
+          <b-col v-if="!task.attend_type || taskForSn" cols="12 form-group-md-2">
               <validation-provider
                 v-slot="{ errors }"
                 name="Assign to"
@@ -433,7 +433,7 @@ import Ripple from "vue-ripple-directive";
 import vSelect from "vue-select";
 import moment from "moment";
 import formValidation from "@core/comp-functions/forms/form-validation";
-import GlobalService from "@/views/services/global.service";
+import GlobalService from "@/service/global";
 
 // Services
 import SNLeadsService from "@/views/social-network/services/leads";
@@ -612,7 +612,7 @@ export default {
               ...this.task,
               sms: this.task.sms ? this.task.sms : "",
               sms_status: this.task.sms_status ? this.task.sms_status : 0,
-              asigned: !this.task.attend_type ? this.task.seller : null,
+              asigned: this.task.seller,
               method: this.authUser.role_id === 7 ? this.task.method : null,
               withsms: this.task.withsms ? 1 : 0,
               taskForSn: this.taskForSn,
@@ -673,10 +673,21 @@ export default {
     close() {
       this.$emit("onClose");
     },
+    async getSellersFromSN() {
+      const sellers = await GlobalService.getSellers(15, {
+          roles: "[]",
+          type: "1",
+        });
+      this.sellers = sellers.data;
+    },
   },
   async created() {
     await this.getHourSystem();
-    await this.getSellers();
+    if(this.taskForSn){
+      await this.getSellersFromSN();
+    }else{
+      await this.getSellers();
+    }
 
     this.authUser = this.currentUser;
     this.blankTask = { ...this.task };

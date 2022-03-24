@@ -293,8 +293,9 @@
                     </b-row>
                   </template>
                 </v-select>
+                
                 <v-select
-                  v-model="task.seller"
+                  v-model="seller"
                   :options="sellers"
                   :clearable="false"
                   label="user_name"
@@ -437,7 +438,7 @@ import formValidation from "@core/comp-functions/forms/form-validation";
 // Services
 import SNLeadsService from "@/views/social-network/services/leads";
 import TaskService from "@/service/task";
-
+import GlobalService from "@/service/global";
 export default {
   props: {
     modul: {
@@ -577,10 +578,22 @@ export default {
     close() {
       this.$emit("onClose");
     },
+    async getSellersFromSN() {
+      const sellers = await GlobalService.getSellers(15, {
+        roles: "[]",
+        type: "1",
+      });
+      this.sellers = sellers.data;
+      this.seller = this.task.user_id;
+    },
   },
   async created() {
     this.blankTask = { ...this.task };
-    await this.getSellers();
+    if (this.taskForSn) {
+      await this.getSellersFromSN();
+    } else {
+      await this.getSellers();
+    }
     this.removePreloader();
     this.show = true;
   },

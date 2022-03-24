@@ -7,9 +7,10 @@
       size="lg"
       modal-class="modal-primary"
       hide-footer
-      body-class="mb-2"
+      body-class="mb-2 p-0"
       @hidden="close"
       title-tag="h3"
+      scrollable
     >
       <b-container>
         <b-input-group class="my-2">

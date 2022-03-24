@@ -31,30 +31,29 @@ export default [
       },
       cols: 6
     },
-    // {
-    //   type: "select",
-    //   margin: true,
-    //   showLabel: true,
-    //   label: "Status",
-    //   options: [
-    //     { value: null, label: "All" },
-    //     { value: 0, label: "Missing" },
-    //     { value: 1, label: "Done" }
-    //   ],
-    //   model: null,
-    //   reduce: "value",
-    //   selectText: "label",
-    //   cols: 12,
-    //   md: 2,
-    //   visible: true
-    // },
+    {
+      type: "select",
+      margin: true,
+      showLabel: true,
+      label: "Status",
+      options: [
+        { value: null, label: "All" },
+        { value: 0, label: "Missing" },
+        { value: 1, label: "Done" }
+      ],
+      model: null,
+      reduce: "value",
+      selectText: "label",
+      cols: 12,
+      md: 2,
+      visible: true
+    },
   {
     type: "select",
     margin: true,
     showLabel: true,
-    label: "User",
+    label: "Program",
     options: [
-
     ],
     model: null,
     reduce: "value",

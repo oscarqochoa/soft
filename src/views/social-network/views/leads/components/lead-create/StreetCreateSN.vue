@@ -2,7 +2,7 @@
   <div>
     <b-row class="mt-2 text-left">
       <b-col mb="12">
-        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.titleC} address`">
+        <ValidationProvider rules="" v-slot="{errors}" :name="`${this.titleC} address`">
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -33,7 +33,7 @@
     </b-row>
     <b-row class="mt-2 text-left">
       <b-col mb="6">
-        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.titleC} city`">
+        <ValidationProvider rules="" v-slot="{errors}" :name="`${this.titleC} city`">
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -57,7 +57,7 @@
         </ValidationProvider>
       </b-col>
       <b-col mb="6">
-        <ValidationProvider rules="required" v-slot="{errors}" :name="`${this.titleC} state`">
+        <ValidationProvider rules="" v-slot="{errors}" :name="`${this.titleC} state`">
           <b-form-group
               id="fieldset-horizontal"
               label-class="font-bureau-style font-weight-normal color-gray-input-sn"
@@ -151,7 +151,8 @@ export default {
       this.$emit('street-changed', { street: this.streetC, state: this.state, city: this.cityC })
     },
     getAddressData: function (addressData) {
-      const address = `${addressData.route} ${addressData.locality} ${addressData.administrative_area_level_1} ${addressData.country}`;
+      const address = `${addressData.street_number} ${addressData.route}`;
+      this.$refs[`${this.titleC}-${this.streetC}-street`].$el.value = address;
       this.cityC = addressData.locality;
       this.stateC = addressData.administrative_area_level_1
       this.streetC = address;

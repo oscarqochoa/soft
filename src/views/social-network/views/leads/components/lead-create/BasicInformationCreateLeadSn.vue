@@ -164,25 +164,7 @@ export default {
     }
   },
   watch: {
-    async nickname(newValue, oldValue) {
-      if (this.nickname.length > 2) {
-        const resp = await this.A_VALIDATE_NICKNAME({
-          nickname: this.nickname, lead_id: null
-        })
-        if(resp.data.code){
 
-          this.$bvToast.toast(`The Nickname already exists: ${resp.data.message}`, {
-            title: `Information`,
-            autoHideDelay: 4000,
-            appendToast: true,
-            variant: 'info'
-          });
-
-
-        }
-
-      }
-    },
   }
 }
 </script>

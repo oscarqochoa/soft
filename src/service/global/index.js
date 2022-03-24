@@ -34,7 +34,7 @@ class GlobalService {
 
     async getSellers(modul, body) {
         try {
-            const data = await amgApi.post(`/sellerall/${modul}`, body)
+            const data = await amgApi.post(`commons/sellerall/${modul}`, body)
             return data
         } catch (error) {
             console.log('Something went wrong on getSellers:', error)
