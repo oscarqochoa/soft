@@ -12,6 +12,9 @@
         :send-multiple-sms="false"
         @reload="$refs['refClientsList'].refresh()"
       >
+        <template #buttons-filter>
+          <ModalCreateRecoveryList :userCreateModal="userCreateModal" @closeModalRecovery="closeModalRecovery"/>
+        </template>
         <b-table
           slot="table"
           no-provider-filtering
@@ -34,6 +37,7 @@
             </div>
           </template>
           <!-- COLUMN NAME LEAD -->
+
           <template #cell(user_name)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
@@ -129,8 +133,10 @@ import RecoveryListService from "../service/recovery.list.service"
 import fields from "../data/fields.recovery.list.data"
 import filtersList from "../data/filters.recovery.list.data"
 import TableListLeadsByUser from "@/views/social-network/views/recovery-list/components/TableListLeadsByUser";
+import ModalCreateRecoveryList from "@/views/social-network/views/recovery-list/components/ModalCreateRecoveryList";
 export default {
   components: {
+    ModalCreateRecoveryList,
     TableListLeadsByUser,
     FilterSlot,
   },
@@ -173,7 +179,8 @@ export default {
         total: 0,
         pending: 0,
         done: 0
-      }
+      },
+      userCreateModal: []
     }
   },
   async mounted() {
@@ -187,6 +194,7 @@ export default {
 
 
     const { data } = await RecoveryListService.getUserOfRecoveryList();
+    this.userCreateModal = data;
     const owners = data.map(owner => {
       return {
         label: owner.fullName,
