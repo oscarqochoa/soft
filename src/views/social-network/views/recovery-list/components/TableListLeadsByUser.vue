@@ -256,7 +256,6 @@ export default {
               "Message sent successfully to Team Leader "
           )
         } catch (error) {
-          console.log(error)
           this.showToast(
               "danger",
               "top-right",
