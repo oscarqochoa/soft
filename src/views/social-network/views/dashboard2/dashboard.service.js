@@ -71,12 +71,21 @@ class DashboardService {
     }
   }
 
-  async getTasksGraphic(body) {
+  async getTasksGraphicCrm(body) {
     try {
-      const data = await amgApi.post('social-network/get-tasks-graphic', body)
+      const data = await amgApi.post('social-network/get-tasks-graphic-crm', body)
       return data
     } catch (error) {
-      console.log('Something went wrong on getTasksGraphic:', error)
+      console.log('Something went wrong on getTasksGraphicCrm:', error)
+      throw error
+    }
+  }
+  async getTasksGraphicSn(body) {
+    try {
+      const data = await amgApi.post('social-network/get-tasks-graphic-sn', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getTasksGraphicSn:', error)
       throw error
     }
   }
