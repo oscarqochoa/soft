@@ -471,7 +471,6 @@ export default {
   data() {
     return {
       show: false,
-
       mutableShow: true,
       blankTask: {},
       isLoading: false,
@@ -537,21 +536,21 @@ export default {
     },
     async submit() {
       try {
+        
         const swal = await this.showConfirmSwal();
         if (swal.isConfirmed) {
           this.isLoading = true;
-
           const params = {
             task_id: this.task.id,
             attend_id: this.attend_type ? 1 : 2,
-            user_id: this.currentUser.user_id,
             lead_id: this.lead.id,
             state: this.lead.state,
+            user_id: this.currentUser.user_id,
             modul_id: this.modul,
             program_id:
               this.currentUser.role_id === 7 &&
-              this.this.lead.lead_programs.length
-                ? this.this.lead.lead_programs[0].program_id
+              this.lead.lead_programs.length
+                ? this.lead.lead_programs[0].program_id
                 : null,
             ...this.task,
             sms: this.task.sms ? this.task.sms : "",
@@ -562,9 +561,9 @@ export default {
             taskForSn: this.taskForSn,
             status_sn: 2
           };
-
+          console.log(this.currentUser.user_id);
+          params.user_id = this.currentUser.user_id;
           const response = await TaskService.postCreateLeadTask(params);
-
           params.task_id = "";
           await this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
           this.$emit("onReloadTasks", response.data);
@@ -612,7 +611,6 @@ export default {
       this.attend_type =
         this.task.type_attend_social == "programed" ? true : false;
     }
-
     this.task.sms_status = !!this.task.sms_status;
     this.task.date = this.$moment(
       this.task.real_time ? this.task.real_time : this.task.due_date
