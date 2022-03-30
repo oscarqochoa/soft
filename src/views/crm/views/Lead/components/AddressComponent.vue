@@ -260,6 +260,7 @@ export default {
       const address = `${location.street_number} ${location.route}`;
       this.$refs[`${this.addressData.prename}-street`].$el.value = address;
       this.addressData.state = mainAddress.administrative_area_level_1;
+      this.$refs[`${this.addressData.prename}-street`].$el.value = address
       this.addressData.street = address;
       this.addressData.city = location.locality;
       this.addressData.zipcode = location.postal_code;

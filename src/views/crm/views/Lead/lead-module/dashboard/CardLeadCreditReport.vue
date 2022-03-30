@@ -30,7 +30,7 @@
           </span>
         </b-col>
         <b-col v-if="score.experian !== ''" cols="4" class="text-center">
-          <p style="color: #0566b7">Experian {{ score.experian }}</p>
+          <p style="color: #0566b7">Experian</p>
           <span
             class="show-lead-score-cr"
             style="border: 2px solid #0566b7"

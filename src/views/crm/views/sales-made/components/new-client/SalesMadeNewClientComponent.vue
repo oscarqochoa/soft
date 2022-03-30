@@ -81,49 +81,8 @@
               @click="openModalProgram(data.item, data.index)"
             >
               <span
-                v-if="data.item.program === 'Business'"
-                v-b-tooltip.bottom="'Business'"
-                >BU</span
-              >
-              <span
-                v-if="data.item.program === 'Boost Credit'"
-                v-b-tooltip.bottom="'Boost Credit'"
-                >BC</span
-              >
-              <span
-                v-if="data.item.program === 'Credit Experts'"
-                v-b-tooltip.bottom="'Credit Experts'"
-                >CE</span
-              >
-              <span
-                v-if="data.item.program === 'Debt Solution'"
-                v-b-tooltip.bottom="'Debt Solution'"
-                >DS</span
-              >
-              <span
-                v-if="data.item.program === 'Tax Research'"
-                v-b-tooltip.bottom="'Tax Research'"
-                >TR</span
-              >
-              <span
-                v-if="data.item.program === 'General Support'"
-                v-b-tooltip.bottom="'General Support'"
-                >GS</span
-              >
-              <span
-                v-if="data.item.program === 'Specialist'"
-                v-b-tooltip.bottom="'Specialist'"
-                >SP</span
-              >
-              <span
-                v-if="data.item.program === 'KeyBook'"
-                v-b-tooltip.bottom="'KeyBook'"
-                >KB</span
-              >
-              <span
-                v-if="data.item.program === 'Paragon'"
-                v-b-tooltip.bottom="'Paragon'"
-                >PR</span
+                v-b-tooltip.bottom="data.item.program"
+                >{{data.item.program_initials}}</span
               >
               <feather-icon
                 v-if="data.item.haveRates !== 1"

@@ -2,11 +2,25 @@
   <div class="details">
     <b-row v-if="details">
       <template v-for="(detail, key) in details">
-        <b-col sm="6" v-bind:key="key" v-if="detail && detail.length && includeElements(detail)">
+        <b-col
+          :sm="'6'"
+          v-bind:key="key"
+          v-if="detail && detail.length && includeElements(detail)"
+        >
           <detail-component :modul="modul" :details="detail" />
         </b-col>
         <template v-else-if="detail && !detail.length">
-          <b-col sm="6" v-bind:key="key">
+          <b-col
+            :sm="
+              (detail.label == 'SSN:' ||
+                detail.label == 'ITIN:' ||
+                detail.label == 'CPN:') &&
+              includeElements(details) == 3
+                ? '4'
+                : '6'
+            "
+            v-bind:key="key"
+          >
             <b-form-group :label="detail.label">
               <span v-html="detail.value"></span>
             </b-form-group>
@@ -27,24 +41,24 @@ import DetailComponent from "@/views/crm/views/Lead/components/DetailComponent.v
 export default {
   name: "DetailComponent",
   components: {
-    DetailComponent
+    DetailComponent,
   },
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token"
+      token: "auth/token",
       /* G_TEMPLATES: 'CrmTemplateStore/G_TEMPLATES' */
     }),
     ...mapState({
       /* S_TEMPLATES: event => event.CrmTemplateStore.S_TEMPLATES */
-    })
+    }),
   },
   created() {
     this.authUser = this.currentUser;
   },
   data() {
     return {
-      authUser: {}
+      authUser: {},
     };
   },
   directives: { Ripple },
@@ -54,24 +68,24 @@ export default {
     }),
     includeElements(detail) {
       let result = 0;
-      detail.forEach(element => {
+      detail.forEach((element) => {
         if (element !== null) result++;
       });
       return result;
-    }
+    },
   },
   mounted() {},
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     details: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
-  setup() {}
+  setup() {},
 };
 </script>
 
