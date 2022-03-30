@@ -2,7 +2,7 @@
   <div>
     <b-modal
       v-model="show"
-      :title="'Upload File (Lead: ' + ')'"
+      :title="`Upload File (Lead: ${!lead.lead_name.trim() ? lead.nickname : lead.lead_name})`"
       title-tag="h3"
       title-class="text-white"
       id="modal-sn-upload-files"
