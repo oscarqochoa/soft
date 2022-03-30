@@ -28,18 +28,8 @@ export default [
         sortable: true,
     },
     {
-        key: 'status',
-        label: 'Status',
-        sortable: false,
-    },
-    {
         key: 'fanpage',
         label: 'Program',
-        sortable: false,
-    },
-    {
-        key: 'programs',
-        label: 'Recomendations',
         sortable: false,
     },
     {

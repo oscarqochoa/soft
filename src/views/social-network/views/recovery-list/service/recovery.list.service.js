@@ -25,8 +25,8 @@ class RecoveryListService {
     }
     async createListRecoveryByProgram(params) {
         console.log('params: ', params)
-        //const { data } = await amgApi.post("/social-network/recovery-list/create", params);
-        //return data;
+        const { data } = await amgApi.post("/social-network/recovery-list/create-recovery-list", params);
+        return data;
     }
     //userId,programId,cant
 }

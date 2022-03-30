@@ -14,15 +14,15 @@
     >
       <div class="p-2">
         <h4 class="mb-1">Select program</h4>
-        <div class="d-flex align-items-center justify-content-between  w-100">
-          <div :class="btnProgram ? item.id === btnProgram.id ? 'select-program' : '' : null" class=" p-1 card-programs-recovery cursor-pointer card" @click="selectProgramById(item.id)" v-for="item in programs">
+        <div class="d-flex align-items-center justify-content-start  w-100">
+          <div :class="btnProgram ? (item.id === btnProgram.id ? 'select-program-recovery' : 'card') : 'card'" class=" p-1 card-programs-recovery cursor-pointer mr-2" @click="selectProgramById(item.id)" v-for="item in programs" :key="item.id">
             <p class="p-0  m-0">{{ item.value }}: <span class="">{{ item.count }}</span></p>
           </div>
         </div>
       </div>
 
       <div class="pr-2 pl-2">
-        <h4 class="mb-1">Select program</h4>
+        <h4 class="mb-1">Select Users Recovery</h4>
         <div class="select-container-user-program">
           <v-select
               v-model="users"
@@ -35,7 +35,9 @@
               class=" rounded"
               label="name"
               :preselect-first="true"
-          ></v-select>
+              :selectable = "option => option.status==2"
+          >
+          </v-select>
           <div>
             <div class=" p-1 card-programs-recovery cursor-pointer card m-0" v-if="btnProgram">
               <p class="p-0  m-0">{{ btnProgram.value }}: <span class="">{{ btnProgram.count }}</span></p>
@@ -69,22 +71,10 @@ export default {
       usersTotal: []
     }
   },
-  props: {
-    userCreateModal: {
-      type: Array,
-      default: []
-    }
-  },
-  async mounted() {
-    this.addPreloader();
-    this.users = [];
-    this.btnProgram = null;
-    this.programs = await RecoveryListService.getRecoveryListByProgram();
-    this.removePreloader()
-  },
   methods: {
     openModalCreateList() {
       this.openModal = true;
+      this.getUsersAndProgramsRecovery()
     },
     selectProgramById(id) {
       this.selectProgram = id;
@@ -100,34 +90,34 @@ export default {
       if (resp.value) {
 
         this.addPreloader();
-        console.log('create')
         await RecoveryListService.createListRecoveryByProgram({
           usersId: this.users.map(user => user.id),
           programId: this.btnProgram ? this.btnProgram.id : null,
           cant: this.users.length
         })
-        //userId,programId,cant
-        setTimeout(() => {
-          this.removePreloader();
-          this.openModal = false;
-        }, 3000)
+          this.closeModal()
       }
 
     },
+    async getUsersAndProgramsRecovery(){
+      this.programs = await RecoveryListService.getRecoveryListByProgram();
+      const { data } = await RecoveryListService.getUserOfRecoveryList();
+      this.usersTotal = data.map(item => {
+        return {
+          name: item.fullName,
+          id: item.id,
+          status: item.statusListUser
+        }
+      })
+    },
     closeModal() {
+      this.users = [];
+      this.btnProgram = null;
+      this.openModal = false,
+      this.removePreloader();      
       this.$emit('closeModalRecovery')
     }
   },
-  watch: {
-    userCreateModal() {
-      this.usersTotal = this.userCreateModal.map(item => {
-        return {
-          name: item.fullName,
-          id: item.id
-        }
-      })
-    }
-  }
 }
 </script>
 
@@ -139,9 +129,13 @@ export default {
     color: #fff;
   }
 }
-.select-program{
+.select-program-recovery{
   background: #0090e7 !important;
   color: #fff;
+  border-radius: 0.428rem;
+  box-shadow: none !important;
+  order: none;
+  margin-bottom: 2rem;
 }
 .select-container-user-program{
   padding: 1rem 2rem;

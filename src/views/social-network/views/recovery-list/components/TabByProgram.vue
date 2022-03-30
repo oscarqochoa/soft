@@ -103,14 +103,11 @@
               <b-th class="text-center">{{ totalSum.pending }}</b-th>
               <b-th class="text-center">{{ totalSum.done }}</b-th>
               <b-th class="text-center">STATUS</b-th>
-
             </b-tr>
           </template>
         </b-table>
       </filter-slot>
     </b-card>
-
-
     <b-modal
         size="lg"
         :title="`RECOVERY LIST / ${userSelect ? userSelect.name : null} / ${userSelect ? `${userSelect.date.split('-')[1]}-${userSelect.date.split('-')[2]}-${userSelect.date.split('-')[0]}` : null}`"
@@ -184,25 +181,23 @@ export default {
     }
   },
   async mounted() {
-
-
     if((this.isCeo || this.isSupervisor || this.isTeamLeader)){
       this.arrayColumns = fields
     } else {
       this.arrayColumns = fields.filter(item => item.key != 'user_name')
     }
 
-
     const { data } = await RecoveryListService.getUserOfRecoveryList();
     this.userCreateModal = data;
     const owners = data.map(owner => {
       return {
         label: owner.fullName,
-        value: owner.id
+        value: owner.id,
       }
     }).filter(item => item.value === this.currentUser.user_id || this.isCeo || this.isSupervisor || this.isTeamLeader)
     owners.unshift({ label: "All", value: null },)
     this.filter[2].options = owners
+
 
   },
   computed: {
@@ -269,7 +264,6 @@ export default {
       this.$refs['refClientsList'].refresh()
     },
     onChangeCurrentPage(e) {
-      console.log('page: ', e)
       this.paginate.currentPage = e;
       this.getDateRecovery();
     },

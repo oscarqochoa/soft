@@ -23,35 +23,13 @@ export default [
         sortable: true,
     },
     {
-        key: 'status',
-        label: 'Status',
-        sortable: false,
-        thClass: 'text-center',
-        tdClass: 'text-center'
-    },
-    {
-        key: 'status_recovery',
-        label: 'Type',
-        sortable: false,
-    },
-    {
         key: 'fanpage',
         label: 'Fanpage',
         sortable: false,
     },
     {
-        key: 'programs',
-        label: 'Recomendations',
-        sortable: false,
-    },
-    {
         key: 'attend',
         label: 'Task',
-        sortable: false,
-    },
-    {
-        key: 'file_evidence',
-        label: 'Evidence',
         sortable: false,
     },
     {

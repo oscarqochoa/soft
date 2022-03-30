@@ -112,23 +112,6 @@
             </div>
           </template>
 
-          <!-- Column: Status -->
-          <template #cell(status)="data">
-            <div>
-              <b-badge
-                :variant="`light-${resolveLeadSnStatusVariant(data.item.status_sn_id)}`"
-                class="text-capitalize w-100"
-              >
-                {{ data.item.status }}
-              </b-badge>
-            </div>
-          </template>
-
-          <!-- Type -->
-          <template #cell(status_recovery)="data">
-            <span style="font-size: 9pt">{{ data.item.status_recovery }}</span>
-          </template>
-
           <!-- Column: Fanpage -->
           <template #cell(fanpage)="data">
             <div>
@@ -142,18 +125,6 @@
                 <b-badge variant="primary" v-else style="width: 40px">
                   CRM
                 </b-badge>
-            </div>
-          </template>
-
-          <!-- Column: Recomendations -->
-          <template #cell(programs)="data">
-            <div>
-              <small
-                v-for="(program, index) in JSON.parse(data.item.programs)"
-                :key="index"
-              >
-                {{ program }} <br />
-              </small>
             </div>
           </template>
 
@@ -197,26 +168,6 @@
                 {{ data.item.real_time | myGlobalDay }}
                 {{ data.item.state_hour }}
               </div>
-            </div>
-          </template>
-
-          <!-- Column: Evidence -->
-          <template #cell(file_evidence)="data">
-            <div class="text-center">
-              <feather-icon
-                v-if="data.item.file_evidence"
-                icon="FolderIcon"
-                size="15"
-                class="text-success cursor-pointer"
-                @click="open(data.item.file_evidence)"
-              />
-              <feather-icon
-                icon="UploadCloudIcon"
-                size="15"
-                class="text-success cursor-pointer"
-                v-else
-                @click="openModalEvidence(data.item.id, data.item.nickname)"
-              />
             </div>
           </template>
 
@@ -275,15 +226,6 @@
       @hide="closeModalSendSms"
     >
     </modal-send-sms>
-
-    <modal-evidence-sn
-      v-if="modalEvidence"
-      :show="modalEvidence"
-      :lead_id="lead_id"
-      :lead_name="lead_name"
-      @onClose="closeModalEvidence"
-    >
-    </modal-evidence-sn>
   </div>
 </template>
 
@@ -301,7 +243,6 @@ import ModalTracking from "../../leads/components/ModalTracking.vue";
 import ActionsTable from "./ActionsTable.vue";
 import ModalSendSms from "@/views/crm/views/Lead/lead-sms/ModalSendSms.vue";
 import ModalSmsList from "../../leads/components//ModalSmsList.vue";
-import ModalEvidenceSn from "./ModalEvidenceSn.vue";
 import helpers from '@/views/social-network/helpers';
 export default {
   components: {
@@ -311,7 +252,6 @@ export default {
     "modal-send-sms": ModalSendSms,
     "modal-sms-list": ModalSmsList,
     "cool-light-box": CoolLightBox,
-    "modal-evidence-sn": ModalEvidenceSn,
   },
   data() {
     return{
@@ -348,7 +288,6 @@ export default {
       name_leads_arr: [],
       showImage: null,
       itemImage: [],
-      modalEvidence: false,
       lead_id: "",
       lead_name: "",
       selectAll: false,
@@ -361,6 +300,7 @@ export default {
       S_LEAD_STATUS_SN: (state) => state.SocialNetworkLeadsStore.S_LEAD_STATUS_SN,
       S_SELLERS_FILTERS: (state) => state.SocialNetworkLeadsStore.S_SELLERS_FILTERS,
       S_SUB_SOURCES_FILTERS: (state) => state.SocialNetworkLeadsStore.S_SUB_SOURCES_FILTERS,
+      S_FAN_PAGE_PROGRAMS_FILTERS: (state) => state.SocialNetworkLeadsStore.S_FAN_PAGE_PROGRAMS_FILTERS,
     }),
     ...mapState("auth", ["currentUser"]),
     sourceFilter(){
@@ -380,9 +320,9 @@ export default {
       "A_GET_SMS_SENT_TO_NEW_LEADS",
       "A_GET_STATUS_LEAD",
       "A_GET_FILTER_SELLERS",
-      "A_GET_SUB_SOURCES_FILTERS"
+      "A_GET_SUB_SOURCES_FILTERS",
+      "A_GET_FAN_PAGE_PROGRAMS_FILTERS"
     ]),
-    ...mapMutations('SocialNetworkLeadsStore', ['M_SET_EVIDENCE_URL']),
     ...mapActions('CrmLeadStore', ['A_SET_SELECTED_LEADS']),
     async getSNRecoveryLeads() {
       try {
@@ -391,18 +331,18 @@ export default {
           name_text: this.filterPrincipal.model,
           lead_status: this.filters[3].model,
           cr: this.filters[2].model,
-          evidence: this.filters[10].model,
+          evidence: null,
           date_from: this.filters[0].model,
           date_to: this.filters[1].model,
           orderby: 10,
           order: "desc",
           user_owner: this.filters[7].model,
-          mobile: this.filters[11].model,
+          mobile: this.filters[9].model,
           iduser: this.currentUser.user_id,
           idrole: this.currentUser.role_id,
           type: 3,
-          task: this.filters[9].model,
-          last_action: this.filters[8].model,
+          task: this.filters[8].model,
+          last_action: null,
           fanpage: this.$route.meta.program,
           sourcename: this.filters[4].model,
           perpage: this.paginate.perPage,
@@ -428,9 +368,11 @@ export default {
     async setOptionsOnFilters() {
       await Promise.all([
         this.A_GET_STATUS_LEAD('recovery'),
+        this.A_GET_FAN_PAGE_PROGRAMS_FILTERS(),
         this.A_GET_FILTER_SELLERS({ moduleId: 15, roles: "[]" }),
       ]);
       this.filters[3].options = this.S_LEAD_STATUS_SN;
+      this.filters[10].options = this.S_FAN_PAGE_PROGRAMS_FILTERS;
       this.filters[7].options = this.S_SELLERS_FILTERS;
     },
     onChangeCurrentPage(e) {
@@ -538,25 +480,6 @@ export default {
     open(image) {
       this.itemImage = [image];
       this.showImage = 0;
-    },
-    openModalEvidence(id, lead_name) {
-      this.lead_id = id;
-      this.lead_name = lead_name;
-      this.modalEvidence = true;
-    },
-    closeModalEvidence(payload) {
-      if (payload) {
-        this.M_SET_EVIDENCE_URL(payload);
-      }
-      this.modalEvidence = false;
-    },
-    resolveLeadSnStatusVariant(status) {
-      if (status === 2) return "success";
-      if ([3, 4].includes(status)) return "primary";
-      if (status === 5) return "secondary";
-      if (status === 6) return "warning";
-      if (status === 7) return "danger";
-      return "primary";
     },
   },
   mounted() {
