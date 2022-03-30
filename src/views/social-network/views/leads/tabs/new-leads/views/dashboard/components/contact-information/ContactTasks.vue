@@ -284,6 +284,7 @@ export default {
       A_GET_TASK: "TaskStore/A_GET_TASK",
     }),
     openModalCreateTask() {
+      console.log(this.lead.lead_name, this.lead.nickname)
       if (!this.lead.lead_name.trim()) {
         this.nameOrNick = this.lead.nickname;
       } else {

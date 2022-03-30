@@ -12,6 +12,9 @@
         :send-multiple-sms="false"
         @reload="$refs['refClientsList'].refresh()"
       >
+        <template #buttons-filter>
+          <ModalCreateRecoveryList :userCreateModal="userCreateModal" @closeModalRecovery="closeModalRecovery"/>
+        </template>
         <b-table
           slot="table"
           no-provider-filtering
@@ -34,6 +37,7 @@
             </div>
           </template>
           <!-- COLUMN NAME LEAD -->
+
           <template #cell(user_name)="data">
             <div
               class="d-flex flex-column justify-content-start align-items-start"
@@ -99,14 +103,11 @@
               <b-th class="text-center">{{ totalSum.pending }}</b-th>
               <b-th class="text-center">{{ totalSum.done }}</b-th>
               <b-th class="text-center">STATUS</b-th>
-
             </b-tr>
           </template>
         </b-table>
       </filter-slot>
     </b-card>
-
-
     <b-modal
         size="lg"
         :title="`RECOVERY LIST / ${userSelect ? userSelect.name : null} / ${userSelect ? `${userSelect.date.split('-')[1]}-${userSelect.date.split('-')[2]}-${userSelect.date.split('-')[0]}` : null}`"
@@ -129,8 +130,10 @@ import RecoveryListService from "../service/recovery.list.service"
 import fields from "../data/fields.recovery.list.data"
 import filtersList from "../data/filters.recovery.list.data"
 import TableListLeadsByUser from "@/views/social-network/views/recovery-list/components/TableListLeadsByUser";
+import ModalCreateRecoveryList from "@/views/social-network/views/recovery-list/components/ModalCreateRecoveryList";
 export default {
   components: {
+    ModalCreateRecoveryList,
     TableListLeadsByUser,
     FilterSlot,
   },
@@ -173,28 +176,28 @@ export default {
         total: 0,
         pending: 0,
         done: 0
-      }
+      },
+      userCreateModal: []
     }
   },
   async mounted() {
-
-
     if((this.isCeo || this.isSupervisor || this.isTeamLeader)){
       this.arrayColumns = fields
     } else {
       this.arrayColumns = fields.filter(item => item.key != 'user_name')
     }
 
-
     const { data } = await RecoveryListService.getUserOfRecoveryList();
+    this.userCreateModal = data;
     const owners = data.map(owner => {
       return {
         label: owner.fullName,
-        value: owner.id
+        value: owner.id,
       }
     }).filter(item => item.value === this.currentUser.user_id || this.isCeo || this.isSupervisor || this.isTeamLeader)
     owners.unshift({ label: "All", value: null },)
     this.filter[2].options = owners
+
 
   },
   computed: {
@@ -261,7 +264,6 @@ export default {
       this.$refs['refClientsList'].refresh()
     },
     onChangeCurrentPage(e) {
-      console.log('page: ', e)
       this.paginate.currentPage = e;
       this.getDateRecovery();
     },

@@ -11,6 +11,7 @@ export default [
         dateFormOptions: { year: 'numeric', month: 'numeric', day: 'numeric' },
         cols: 6
     },
+
     {
         type: 'datepicker',
         margin: true,
@@ -23,6 +24,7 @@ export default [
         dateFormOptions: { year: 'numeric', month: 'numeric', day: 'numeric' },
         cols: 6
     },
+
     {
         type: 'select',
         margin: true,
@@ -38,6 +40,7 @@ export default [
         selectText: 'label',
         cols: 6,
     },
+
     {
         type: 'select',
         margin: true,
@@ -49,6 +52,7 @@ export default [
         selectText: 'name',
         cols: 6,
     },
+
     {
         type: 'select',
         margin: true,
@@ -73,6 +77,7 @@ export default [
         selectText: 'name',
         cols: 12,
     },
+
     {
         type: 'select',
         margin: true,
@@ -85,6 +90,7 @@ export default [
         cols: 12,
         visible: false
     },
+
     {
         type: 'select',
         margin: true,
@@ -97,6 +103,7 @@ export default [
         cols: 12,
         visible: false
     },
+
     {
         type: 'select',
         margin: true,
@@ -108,23 +115,7 @@ export default [
         selectText: 'user_name',
         cols: 12,
     },
-    {
-        type: 'select',
-        margin: true,
-        showLabel: true,
-        label: 'LAST ACTION',
-        model: null,
-        options: [
-            { value: "0", label: 'ALL' },
-            { value: "1", label: 'PENDING' },
-            { value: "2", label: 'NOT ANSWER' },
-            { value: "3", label: 'CLOSED' },
-            { value: "4", label: 'INFORMATION REQUESTED' },
-        ],
-        reduce: 'value',
-        selectText: 'label',
-        cols: 6,
-    },
+
     {
         type: 'select',
         margin: true,
@@ -141,21 +132,7 @@ export default [
         selectText: 'label',
         cols: 6,
     },
-    {
-        type: 'select',
-        margin: true,
-        showLabel: true,
-        label: 'EVIDENCE',
-        model: null,
-        options: [
-            { value: "0", label: 'ALL' },
-            { value: "1", label: 'YES' },
-            { value: "2", label: 'NO' },
-        ],
-        reduce: 'value',
-        selectText: 'label',
-        cols: 6,
-    },
+
     {
         type: 'select',
         margin: true,
@@ -170,5 +147,18 @@ export default [
         reduce: 'value',
         selectText: 'label',
         cols: 6,
+    },
+
+    {
+        type: 'select',
+        margin: true,
+        showLabel: true,
+        label: 'FANPAGE',
+        model: null,
+        options: [],
+        reduce: 'id',
+        selectText: 'value',
+        cols: 12,
+        visible: false
     },
 ]

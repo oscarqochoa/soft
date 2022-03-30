@@ -109,16 +109,6 @@
               </div>
             </div>
           </template>
-          <!-- Column: Status -->
-          <template #cell(status)="data">
-            <b-badge
-              :variant="`light-${resolveLeadSnStatusVariant(
-                data.item.status_sn_id
-              )}`"
-              class="text-capitalize w-100"
-              >{{ data.item.status }}</b-badge
-            >
-          </template>
 
           <!-- Column: Fanpage -->
           <template #cell(fanpage)="data">
@@ -132,13 +122,6 @@
             <b-badge variant="primary" v-else style="width: 50px">
               CRM
             </b-badge>
-          </template>
-          <!-- Column: Recomendations -->
-          <template #cell(programs)="data">
-            <template v-for="(program, key) in JSON.parse(data.item.programs)">
-              <span :key="key">{{ program }}</span>
-              <br :key="JSON.parse(data.item.programs).length + key" />
-            </template>
           </template>
 
           <!-- Column: Task -->
@@ -584,14 +567,6 @@ export default {
     onChangeCurrentPage(e) {
       this.paginate.currentPage = e;
       this.getSocialNetworkLeads();
-    },
-    resolveLeadSnStatusVariant(status) {
-      if (status === 2) return "success";
-      if ([3, 4].includes(status)) return "primary";
-      if (status === 5) return "secondary";
-      if (status === 6) return "warning";
-      if (status === 7) return "danger";
-      return "primary";
     },
   },
   mounted() {
