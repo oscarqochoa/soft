@@ -562,7 +562,7 @@ export default {
         data.data.unshift(firstOption)
 
         this.users = data.data
-        console.log(this.users)
+
         this.userFilter = this.users[0]
 
         return this.users
