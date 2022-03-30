@@ -54,7 +54,7 @@
           sm="3"
         >
           <div
-            v-if=" (isTeamLeader || isSupervisor || isCeo)"
+            v-if=" (isTeamLeader || isSupervisor || isCeo) && labelGraph!=='Answers'"
 
             class=" ml-2 "
           >
@@ -69,15 +69,6 @@
           </div>
         </b-col>
       </b-row>
-      <!--      <Card-->
-      <!--        :key="cardUpdate"-->
-      <!--        :data="card"-->
-      <!--        :type="typeCard"-->
-      <!--        :date_init="dateRange.startDate"-->
-      <!--        :date_end="dateRange.endDate"-->
-      <!--        :program="programFilter"-->
-      <!--        :user="userFilter"-->
-      <!--      />-->
 
     </b-card>
     <caro-card
@@ -110,6 +101,7 @@
                 @input="getFilterCard(),getGraphics(idSelected)"
             />
             <v-select
+                :disabled="firstValidation"
                 v-if="labelGraph==='Answers'"
                 v-model="userFilter"
                 :options="users"
@@ -118,7 +110,7 @@
             />
 
           </b-col>
-          <b-col md="2" >
+          <b-col md="3" >
             <v-select
                 v-model="chardOption.option"
 
@@ -178,7 +170,8 @@
             </b-button>
           </b-col>
 
-          <div class="d-flex align-content-center mb-1 mb-sm-0 col-lg-3 col-sm-2 col-md-2 showWeek">
+          <b-col md="auto">
+
             <b-button
                :disabled="chardOption.option.id===11"
               v-b-tooltip.hover
@@ -195,15 +188,17 @@
               />
               {{ showGraphForWeek ? "SHOW MONTH" : "SHOW WEEK" }}
             </b-button>
+          </b-col>
 
-          </div>
         </b-row>
         <app-echart-line-social-network
           :key="idEchart"
           :option-data="option"
         />
+        <pre>{{userFilter}}</pre>
       </b-card>
     </div>
+
   </div></template>
 
 <script>
@@ -216,6 +211,7 @@ import Card from '@/views/social-network/views/dashboard2/components/Card.vue'
 import AppEchartLineSocialNetwork
 from '@/views/social-network/views/dashboard2/components/chard/AppEchartLineSocialNetwork.vue'
 import CaroCard from '@/views/social-network/views/dashboard2/components/CaroCard.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -405,6 +401,7 @@ export default {
       ],
       keychart: 0,
       idSelected: '',
+      firstValidation: '',
     }
   },
   watch: {
@@ -429,20 +426,41 @@ export default {
     },
 
   },
-  created() {
+  computed: {
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
+  },
+   async created() {
+    this.addPreloader()
+  this.validation()
+     this.programFilter.id = 0
+    if(this.isSupervisor || this.isTeamLeader || this.isCeo){
 
-    this.programFilter.id = 0
+      this.userFilter.id= 0
+    }
+    else{
+
+      this.userFilter.id = this.currentUser.user_id
+    }
+
     this.chardOption.option = 'Replies'
     this.chardOption.id = 0
-    this.getUsers()
-    this.getGraphics(this.chardOption.id)
+   await this.getUsers()
+   await this.getGraphics(this.chardOption.id)
 
     this.validateDate = this.showGraphForWeek ? this.endDay : this.endDayOfMonth
+
+     this.removePreloader()
   },
   mounted() {
     this.getFilterCard()
   },
   methods: {
+
+    validation(){
+      this.firstValidation = !(this.isSupervisor || this.isTeamLeader || this.isCeo);
+    },
     kFormatter,
     statusColor(name) {
       let color = ''
@@ -544,7 +562,8 @@ export default {
         data.data.unshift(firstOption)
 
         this.users = data.data
-        this.userFilter = this.users[0].user_name
+        console.log(this.users)
+        this.userFilter = this.users[0]
 
         return this.users
       } catch (e) {
@@ -622,7 +641,14 @@ export default {
     async getGraphics(chardOption) {
 
       this.idSelected = chardOption
-      console.log(chardOption)
+
+
+      if(!(this.isSupervisor || this.isTeamLeader || this.isCeo)){
+
+        this.userFilter.id = this.currentUser.user_id
+        this.userFilter.user_name =this.currentUser.first_name +' '+ this.currentUser.last_name
+      }
+
       try {
         const params = {
           from: this.showGraphForWeek ? this.firstDay : this.firstDayOfMonth,
