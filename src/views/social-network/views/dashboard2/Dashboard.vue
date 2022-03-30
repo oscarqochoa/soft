@@ -47,48 +47,14 @@
 
           </div>
         </b-col>
-        <b-col
-          md="auto"
-          sm="auto"
-        >
-          <b-button
 
-            v-b-tooltip.hover
-            class="btn rounded "
-            variant="primary"
-            title="FILTERS"
-            @click="advanceFilter = !advanceFilter"
-          >
 
-            <span v-text="advanceFilter ? 'BASIC' : 'ADVANCE'" />
-          </b-button>
-        </b-col>
         <b-col
           md="3"
           sm="3"
         >
           <div
-            v-if="advanceFilter"
-
-            class=" ml-2 "
-          >
-
-            <v-select
-              v-model="programFilter"
-              class="w-100"
-              :options="OptionProgram"
-              label="option"
-              @input="getFilterCard(),getGraphics()"
-            />
-
-          </div>
-        </b-col>
-        <b-col
-          md="3"
-          sm="3"
-        >
-          <div
-            v-if="advanceFilter"
+            v-if=" (isTeamLeader || isSupervisor || isCeo)"
 
             class=" ml-2 "
           >
@@ -97,7 +63,7 @@
               v-model="userFilter"
               :options="users"
               label="user_name"
-              @input="getFilterCard(),getGraphics()"
+              @input="getFilterCard(),getGraphics(idSelected)"
             />
 
           </div>
@@ -118,7 +84,7 @@
       v-if="subscribersGained.analyticsData"
 
       :key="cardUpdate"
-      @getGraphics_version2="getGraphics_version2"
+      @getGraphics_version2="getGraphics"
       :chart-data="subscribersGained.series"
       :data="card"
       :type="typeCard"
@@ -134,16 +100,37 @@
       >
 
         <b-row>
-          <b-col md="3">
+          <b-col md="2" v-if="labelGraph==='Leads' || labelGraph==='Answers'">
             <v-select
-              v-model="chardOption"
-              class="per-page-selector"
-              style="font-size: 15px"
-              :clearable="false"
-              label="option"
-              :options="arrayOptions"
-              @input="getGraphics"
+                v-if="labelGraph==='Leads'"
+                v-model="programFilter"
+                class="w-100"
+                :options="OptionProgram"
+                label="option"
+                @input="getFilterCard(),getGraphics(idSelected)"
             />
+            <v-select
+                v-if="labelGraph==='Answers'"
+                v-model="userFilter"
+                :options="users"
+                label="user_name"
+                @input="getFilterCard(),getGraphics(idSelected)"
+            />
+
+          </b-col>
+          <b-col md="2" >
+            <v-select
+                v-model="chardOption.option"
+
+                class="per-page-selector"
+                style="font-size: 15px"
+                :clearable="false"
+                label="option"
+                :options="arrayOptions"
+                @input="getGraphics"
+            />
+
+
           </b-col>
           <b-col md="auto" sm="auto">
             <span
@@ -172,7 +159,7 @@
 
               variant="info"
               class="btn-icon rounded-circle mr-1  "
-              @click="showGraphForWeek ? changeWeek(-1) : changeMonth(-1)"
+              @click="showGraphForWeek ? changeWeek(-1) : changeMonth(-1),getGraphics(idSelected)"
             >
               <feather-icon
                 icon="ChevronLeftIcon"
@@ -183,7 +170,7 @@
               variant="info"
               class="btn-icon rounded-circle"
               :disabled="validateDate > currentDay"
-              @click="showGraphForWeek ? changeWeek(1) : changeMonth(1)"
+              @click="showGraphForWeek ? changeWeek(1) : changeMonth(1),getGraphics(idSelected)"
             >
               <feather-icon
                 icon="ChevronRightIcon"
@@ -193,14 +180,16 @@
 
           <div class="d-flex align-content-center mb-1 mb-sm-0 col-lg-3 col-sm-2 col-md-2 showWeek">
             <b-button
+               :disabled="chardOption.option.id===11"
               v-b-tooltip.hover
               style="padding-top: 7px"
               size="30"
               class="rounded"
               variant="primary"
               title="CHANGE"
-              @click="(showGraphForWeek = !showGraphForWeek),getGraphics(),firstGraphics()"
+              @click="(showGraphForWeek = !showGraphForWeek),getGraphics(idSelected)"
             >
+
               <feather-icon
                 icon="CalendarIcon"
               />
@@ -358,36 +347,13 @@ export default {
         },
       ],
       arrayOptions: [
+
         {
-          id: 2,
-          option: 'Replies',
-        },
-        {
-          id: 1,
-          option: 'Leads',
-        },
-        {
-          id: 3,
-          option: 'Answers',
-        },
-        {
-          id: 4,
-          option: 'Mobiles',
-        },
-        {
-          id: 5,
-          option: 'Appointment',
-        },
-        {
-          id: 6,
-          option: 'Productivity',
-        },
-        {
-          id: 7,
+          id: 10,
           option: 'Seller appointment',
         },
         {
-          id: 8,
+          id: 11,
           option: 'Weekly Average',
         },
       ],
@@ -438,6 +404,7 @@ export default {
         'Sunday',
       ],
       keychart: 0,
+      idSelected: '',
     }
   },
   watch: {
@@ -458,18 +425,17 @@ export default {
       this.validateDate = this.showGraphForWeek
         ? this.endDay
         : this.endDayOfMonth
+
     },
-    selectedOption() {
-      this.getGraphics()
-    },
+
   },
   created() {
 
     this.programFilter.id = 0
     this.chardOption.option = 'Replies'
-    this.chardOption.id = 2
+    this.chardOption.id = 0
     this.getUsers()
-    this.getGraphics()
+    this.getGraphics(this.chardOption.id)
 
     this.validateDate = this.showGraphForWeek ? this.endDay : this.endDayOfMonth
   },
@@ -491,11 +457,19 @@ export default {
         case 'Answers':
           color = '#E67B4F'
           break
-        case 'Mobiles':
+        case 'Mobiles Today':
           color = '#4EC4F0'
           break
-        case 'Appointments':
+        case 'Mobiles Recovery':
+          color = '#4EC4F3'
+          break
+
+        case 'Crm Appointments':
           color = '#515CEE'
+          break
+        case 'Social Network Appointments':
+
+          color = '#515CE0'
           break
         case 'Productivity':
           color = '#40A094'
@@ -594,7 +568,8 @@ export default {
         this.card[2].data = data.data.answer
         this.card[3].data = data.data.mobiles_act
         this.card[3].data_rec = data.data.mobiles_rec
-        this.card[4].data = data.data.appointments
+        this.card[4].data = data.data.appointments_crm
+        this.card[4].data_sn = data.data.appointments_sn
         this.card[5].data = `${data.data.productivity}%`
 
         return data
@@ -622,7 +597,7 @@ export default {
         .add(month, 'month')
         .endOf('month')
         .format('YYYY-MM-DD 00:00:00')
-      this.getGraphics()
+
 
       this.validateDate = this.showGraphForWeek
         ? this.endDay
@@ -636,78 +611,18 @@ export default {
       this.endDay = moment(this.firstDay)
         .add(6, 'days')
         .format('YYYY-MM-DD 00:00:00')
-      this.getGraphics()
+
 
       this.validateDate = this.showGraphForWeek
         ? this.endDay
         : this.endDayOfMonth
-    },
-    async getGraphics() {
-      try {
-        const params = {
-          from: this.showGraphForWeek ? this.firstDay : this.firstDayOfMonth,
-          to: this.showGraphForWeek ? this.endDay : this.endDayOfMonth,
-          program: this.programFilter.id,
-          user: this.userFilter.id,
 
-        }
-        this.juniorUser = false
-        if (this.chardOption.id === 1) {
-          const data = await DashboardService.getLeadsGraphic(params)
-
-          this.graph = data.data
-          this.labelGraph = 'Leads'
-          this.type = ''
-        } else if (this.chardOption.id === 2) {
-          const data = await DashboardService.getRepliesGraphic(params)
-
-          this.graph = data.data
-
-          this.labelGraph = 'Replies'
-          this.type = ''
-        } else if (this.chardOption.id === 3) {
-          const data = await DashboardService.getAnswersGraphic(params)
-          this.graph = data.data
-          this.labelGraph = 'Answers'
-          this.type = ''
-        } else if (this.chardOption.id === 4) {
-          const data = await DashboardService.getMobilesGraphic(params)
-          this.graph = data.data
-          this.labelGraph = 'Mobiles'
-          this.type = ''
-        } else if (this.chardOption.id === 5) {
-          const data = await DashboardService.getTasksGraphic(params)
-          this.graph = data.data
-          this.labelGraph = 'Appointments'
-          this.type = ''
-        } else if (this.chardOption.id === 6) {
-          const data = await DashboardService.getProductivityGraphic(params)
-          this.graph = data.data
-          this.labelGraph = 'Productivity'
-          this.juniorUser = true
-          this.type = ''
-        } else if (this.chardOption.id === 7) {
-          const data = await DashboardService.getTaskCatcherGraphic(params)
-          this.graph = data.data
-          this.labelGraph = 'Seller Appointments'
-          this.isDate = false
-          this.type = 'sellers'
-        } else if (this.chardOption.id === 8) {
-          const data = await DashboardService.getMultiChartGraphic(params)
-          this.graph = data.data
-          this.type = 'multi'
-        }
-        this.prueba(this.type)
-
-        return this.graph
-      } catch (e) {
-        this.showErrorSwal(e)
-        return []
-      }
     },
 
-    // eslint-disable-next-line consistent-return
-    async getGraphics_version2(chardOption) {
+    async getGraphics(chardOption) {
+
+      this.idSelected = chardOption
+      console.log(chardOption)
       try {
         const params = {
           from: this.showGraphForWeek ? this.firstDay : this.firstDayOfMonth,
@@ -723,28 +638,48 @@ export default {
           this.graph = data.data
           this.labelGraph = 'Leads'
           this.type = ''
+          this.chardOption.option = 'Leads'
         } else if (chardOption === 0) {
           const data = await DashboardService.getRepliesGraphic(params)
 
           this.graph = data.data
 
           this.labelGraph = 'Replies'
+          this.chardOption.option = 'Replies'
           this.type = ''
         } else if (chardOption === 2) {
           const data = await DashboardService.getAnswersGraphic(params)
           this.graph = data.data
           this.labelGraph = 'Answers'
           this.type = ''
-        } else if (chardOption === 5) {
-          const data = await DashboardService.getTasksGraphicCrm(params)
-          this.graph = data.data
-          this.labelGraph = 'CRM'
-          this.type = ''
+          this.chardOption.option = 'Answers'
         }
         else if (chardOption === 6) {
+          const data = await DashboardService.getMobilesGraphicToday(params)
+          this.graph = data.data
+          this.labelGraph = 'Mobiles Today'
+          this.type = ''
+          this.chardOption.option = 'Mobiles Today'
+        }
+        else if (chardOption === 7) {
+          const data = await DashboardService.getMobilesGraphicRecovery(params)
+          this.graph = data.data
+          this.labelGraph = 'Mobiles Recovery'
+          this.type = ''
+          this.chardOption.option = 'Mobiles Recovery'
+        }
+        else if (chardOption === 8) {
+          const data = await DashboardService.getTasksGraphicCrm(params)
+          this.graph = data.data
+          this.labelGraph = 'Crm Appointments'
+          this.type = ''
+          this.chardOption.option = 'Crm Appointments'
+        }
+        else if (chardOption === 9) {
           const data = await DashboardService.getTasksGraphicSn(params)
           this.graph = data.data
-          this.labelGraph = 'Social Network'
+          this.labelGraph = 'Social Network Appointments'
+          this.chardOption.option = 'Social Network Appointments'
           this.type = ''
         }
         else if (chardOption === 5) {
@@ -752,8 +687,23 @@ export default {
           this.graph = data.data
           this.labelGraph = 'Productivity'
           this.juniorUser = true
+          this.chardOption.option = 'Productivity'
           this.type = ''
         }
+            else if (this.chardOption.option.id === 10) {
+              const data = await DashboardService.getTaskCatcherGraphic(params)
+              this.graph = data.data
+              this.labelGraph = 'Seller Appointments'
+              this.isDate = false
+          this.chardOption.option = 'Seller Appointments'
+              this.type = 'sellers'
+            } else if (this.chardOption.option.id === 11) {
+              this.showGraphForWeek = false
+              const data = await DashboardService.getMultiChartGraphic(params)
+          this.chardOption.option = 'Weekly Average'
+              this.graph = data.data
+              this.type = 'multi'
+            }
      this.prueba(this.type)
         return this.graph
       } catch (e) {

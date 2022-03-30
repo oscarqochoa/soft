@@ -54,7 +54,7 @@
                 class="cuadrado"
                 style="width: 50%; padding-top: 7px; padding-bottom: 7px"
                 :style=" `border-right: 1px solid ${i.color} !important;`"
-                @click=" i.cursor ? clickCardGeneral(index) : ''"
+                @click=" i.cursor ? clickCardEspecial(6) : ''"
               >
                 <span
                   class="title-mobile"
@@ -69,7 +69,9 @@
                   style="margin-left: 7px"
                 >{{ i.data }}</span>
               </div>
-              <div  style="width: 50%; padding-top: 7px; padding-bottom: 7px"  @click=" i.cursor ? clickCard(6,5) : ''">
+              <div  style="width: 50%; padding-top: 7px; padding-bottom: 7px"
+
+                    @click=" i.cursor ? clickCardEspecial(7) : ''">
                 <span
                   style="margin-left: 20px"
                   class="title-mobile"
@@ -99,7 +101,7 @@
                 class="cuadrado"
                 style="width: 50%; padding-top: 7px; padding-bottom: 7px"
                 :style=" `border-right: 1px solid ${i.color} !important;`"
-                @click=" i.cursor ? clickCardGeneral(5) : ''"
+                @click=" i.cursor ? clickCardEspecial(8) : ''"
             >
                 <span
                     class="title-mobile"
@@ -114,7 +116,8 @@
                   style="margin-left: 7px"
               >{{ i.data }}</span>
             </div>
-            <div  style="width: 50%; padding-top: 7px; padding-bottom: 7px"  @click=" i.cursor ? clickCardGeneral(6) : ''">
+            <div  style="width: 50%; padding-top: 7px; padding-bottom: 7px"
+                  @click=" i.cursor ? clickCardEspecial(9) : ''">
                 <span
                     style="margin-left: 20px"
                     class="title-mobile"
@@ -126,7 +129,7 @@
 
                   class="data-mobile"
                   style="margin-left: 6px"
-              >{{ i.data_rec ? i.data_rec : 0 }}
+              >{{ i.data_sn ? i.data_sn : 0 }}
 
                 </span>
 
@@ -180,7 +183,9 @@ export default {
       item: {},
       baseImg: process.env.VUE_APP_BASE_URL_FRONT,
       card: null,
-      color : null
+      color : null,
+      idSelected: null,
+
     }
   },
 
@@ -193,7 +198,21 @@ export default {
 
     clickCardGeneral( index) {
 
-     this.$emit('getGraphics_version2',index)
+      if(index===0 || index===1 ||index===2 ||index===5  ){
+
+        this.$emit('getGraphics_version2',index)
+      }
+
+    },
+
+    clickCardEspecial( index) {
+
+      if(index===6 || index===7 ||index===8 ||index===9  ){
+
+        this.$emit('getGraphics_version2',index)
+
+      }
+
     },
     clickCard(item, index) {
       this.showModalLead = true

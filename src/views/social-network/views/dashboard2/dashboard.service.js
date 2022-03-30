@@ -61,9 +61,18 @@ class DashboardService {
     }
   }
 
-  async getMobilesGraphic(body) {
+  async getMobilesGraphicToday(body) {
     try {
-      const data = await amgApi.post('social-network/get-mobiles-graphic', body)
+      const data = await amgApi.post('social-network/get-mobiles-graphic-today', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getMobilesGraphic:', error)
+      throw error
+    }
+  }
+  async getMobilesGraphicRecovery(body) {
+    try {
+      const data = await amgApi.post('social-network/get-mobiles-graphic-recovery', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getMobilesGraphic:', error)
