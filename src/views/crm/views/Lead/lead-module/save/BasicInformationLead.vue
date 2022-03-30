@@ -56,8 +56,7 @@
         <b-form-group>
           <b-form-checkbox
               id="without-email"
-              name="without-email"
-              value="without-email"
+              v-model="hasNotEmailChecked"  
               @input="disabledemail = !disabledemail"
           >Client has not email
           </b-form-checkbox>
@@ -146,6 +145,11 @@ import moment from "moment";
 import AddressInformationLead from "./AddressInformationLead.vue";
 
 export default {
+  mounted(){
+    if(!this.userData.email && this.typeForm == 'editLead'){
+      this.hasNotEmailChecked = true;
+    }
+  },
   components: {
     BSidebar,
     BForm,
@@ -192,7 +196,8 @@ export default {
         locale: "en",
         allowInput: true,
       },
-      programsList: []
+      programsList: [],
+      hasNotEmailChecked: false
     };
   },
   computed: {

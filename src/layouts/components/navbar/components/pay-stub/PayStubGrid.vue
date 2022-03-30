@@ -69,10 +69,17 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       stacked="md"
+      :busy="isBusy"
       show-empty
       small
       @filtered="onFiltered"
     >
+      <template #table-busy>
+        <div class="text-center text-primary my-2">
+          <b-spinner class="align-middle mr-1" />
+          <strong>Loading ...</strong>
+        </div>
+      </template>
       <template #cell(start_date)="data">{{
         data.item.start_date | myGlobal
       }}</template>
@@ -82,7 +89,7 @@
       <template #cell(name)="data">
         <a
           target="_blank"
-          :href="item.url"
+          :href="data.item.url"
           @click="readFile(data.item.id, data.item.statusView)"
           >{{ data.item.name }}</a
         >
@@ -154,6 +161,7 @@ export default {
         masked: false,
       },
       text: null,
+      isBusy: false,
     };
   },
   mounted() {
@@ -176,15 +184,19 @@ export default {
     async readFile(id_file, statusView) {
       if (statusView == 1) {
         const data = await PayStubService.readFile(id_file, statusView);
-        this.getFilesPayStub();
-        this.all();
+        this.getUserPayRolls();
+        this.$emit('updatePayStubCounter')
       }
+      
     },
     async getUserPayRolls() {
+      this.isBusy = true;
       const user = this.currentUser.user_id;
       const data = await PayStubService.getUserPayStub(user);
+      console.log(data, "data");
       this.items = data;
       this.totalRows = this.items.length;
+      this.isBusy = false;
     },
     resetInfoModal() {
       this.infoModal.title = "";

@@ -169,6 +169,12 @@ export default {
                 label: "ITIN:",
                 value: `XXX-XX-${this.lead.itin}`
               }
+            : null,
+          this.lead.cpn
+            ? {
+                label: "CPN:",
+                value: `XXX-XX-${this.lead.cpn}`
+              }
             : null
         ],
         this.modul !== 15

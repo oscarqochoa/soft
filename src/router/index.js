@@ -16,6 +16,7 @@ import chartsMaps from './routes/charts-maps'
 import formsTable from './routes/forms-tables'
 import others from './routes/others'
 import commons from './routes/amg/common'
+import LogReaderRouter from '@/views/log-reader/log-reader.router'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,7 @@ const router = new VueRouter({
   },
   routes: [
     { path: '/', redirect: { name: 'amg-menu' } },
+    ...LogReaderRouter,
     ...crm,
     ...socialNetwork,
     ...users,
