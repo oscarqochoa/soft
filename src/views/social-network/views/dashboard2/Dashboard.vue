@@ -195,7 +195,6 @@
           :key="idEchart"
           :option-data="option"
         />
-        <pre>{{userFilter}}</pre>
       </b-card>
     </div>
 
