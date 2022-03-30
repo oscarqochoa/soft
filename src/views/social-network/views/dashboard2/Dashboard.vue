@@ -47,48 +47,14 @@
 
           </div>
         </b-col>
-        <b-col
-          md="auto"
-          sm="auto"
-        >
-          <b-button
 
-            v-b-tooltip.hover
-            class="btn rounded "
-            variant="primary"
-            title="FILTERS"
-            @click="advanceFilter = !advanceFilter"
-          >
 
-            <span v-text="advanceFilter ? 'BASIC' : 'ADVANCE'" />
-          </b-button>
-        </b-col>
         <b-col
           md="3"
           sm="3"
         >
           <div
-            v-if="advanceFilter"
-
-            class=" ml-2 "
-          >
-
-            <v-select
-              v-model="programFilter"
-              class="w-100"
-              :options="OptionProgram"
-              label="option"
-              @input="getFilterCard(),getGraphics(),firstGraphics()"
-            />
-
-          </div>
-        </b-col>
-        <b-col
-          md="3"
-          sm="3"
-        >
-          <div
-            v-if="advanceFilter"
+            v-if=" (isTeamLeader || isSupervisor || isCeo) && labelGraph!=='Answers'"
 
             class=" ml-2 "
           >
@@ -97,28 +63,19 @@
               v-model="userFilter"
               :options="users"
               label="user_name"
-              @input="getFilterCard(),getGraphics(),firstGraphics()"
+              @input="getFilterCard(),getGraphics(idSelected)"
             />
 
           </div>
         </b-col>
       </b-row>
-      <!--      <Card-->
-      <!--        :key="cardUpdate"-->
-      <!--        :data="card"-->
-      <!--        :type="typeCard"-->
-      <!--        :date_init="dateRange.startDate"-->
-      <!--        :date_end="dateRange.endDate"-->
-      <!--        :program="programFilter"-->
-      <!--        :user="userFilter"-->
-      <!--      />-->
 
     </b-card>
     <caro-card
       v-if="subscribersGained.analyticsData"
 
       :key="cardUpdate"
-
+      @getGraphics_version2="getGraphics"
       :chart-data="subscribersGained.series"
       :data="card"
       :type="typeCard"
@@ -134,16 +91,38 @@
       >
 
         <b-row>
-          <b-col md="3">
+          <b-col md="2" v-if="labelGraph==='Leads' || labelGraph==='Answers'">
             <v-select
-              v-model="chardOption"
-              class="per-page-selector"
-              style="font-size: 15px"
-              :clearable="false"
-              label="option"
-              :options="arrayOptions"
-              @input="getGraphics"
+                v-if="labelGraph==='Leads'"
+                v-model="programFilter"
+                class="w-100"
+                :options="OptionProgram"
+                label="option"
+                @input="getFilterCard(),getGraphics(idSelected)"
             />
+            <v-select
+                :disabled="firstValidation"
+                v-if="labelGraph==='Answers'"
+                v-model="userFilter"
+                :options="users"
+                label="user_name"
+                @input="getFilterCard(),getGraphics(idSelected)"
+            />
+
+          </b-col>
+          <b-col md="3" >
+            <v-select
+                v-model="chardOption.option"
+
+                class="per-page-selector"
+                style="font-size: 15px"
+                :clearable="false"
+                label="option"
+                :options="arrayOptions"
+                @input="getGraphics"
+            />
+
+
           </b-col>
           <b-col md="auto" sm="auto">
             <span
@@ -172,7 +151,7 @@
 
               variant="info"
               class="btn-icon rounded-circle mr-1  "
-              @click="showGraphForWeek ? changeWeek(-1) : changeMonth(-1)"
+              @click="showGraphForWeek ? changeWeek(-1) : changeMonth(-1),getGraphics(idSelected)"
             >
               <feather-icon
                 icon="ChevronLeftIcon"
@@ -183,7 +162,7 @@
               variant="info"
               class="btn-icon rounded-circle"
               :disabled="validateDate > currentDay"
-              @click="showGraphForWeek ? changeWeek(1) : changeMonth(1)"
+              @click="showGraphForWeek ? changeWeek(1) : changeMonth(1),getGraphics(idSelected)"
             >
               <feather-icon
                 icon="ChevronRightIcon"
@@ -191,23 +170,26 @@
             </b-button>
           </b-col>
 
-          <div class="d-flex align-content-center mb-1 mb-sm-0 col-lg-3 col-sm-2 col-md-2 showWeek">
+          <b-col md="auto">
+
             <b-button
+               :disabled="chardOption.option.id===11"
               v-b-tooltip.hover
               style="padding-top: 7px"
               size="30"
               class="rounded"
               variant="primary"
               title="CHANGE"
-              @click="(showGraphForWeek = !showGraphForWeek),getGraphics(),firstGraphics()"
+              @click="(showGraphForWeek = !showGraphForWeek),getGraphics(idSelected)"
             >
+
               <feather-icon
                 icon="CalendarIcon"
               />
               {{ showGraphForWeek ? "SHOW MONTH" : "SHOW WEEK" }}
             </b-button>
+          </b-col>
 
-          </div>
         </b-row>
         <app-echart-line-social-network
           :key="idEchart"
@@ -215,6 +197,7 @@
         />
       </b-card>
     </div>
+
   </div></template>
 
 <script>
@@ -227,6 +210,7 @@ import Card from '@/views/social-network/views/dashboard2/components/Card.vue'
 import AppEchartLineSocialNetwork
 from '@/views/social-network/views/dashboard2/components/chard/AppEchartLineSocialNetwork.vue'
 import CaroCard from '@/views/social-network/views/dashboard2/components/CaroCard.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -351,43 +335,20 @@ export default {
           styleModal: 'background: linear-gradient(75.42deg, #3ACDBB 24.3%, #42EDD8 99.88%)!important;',
 
           icon: 'PercentIcon',
-          cursor: false,
+          cursor: true,
           back: 'background-color: rgba(0, 210, 91, 0.12)!important',
           series: [],
           key: 0,
         },
       ],
       arrayOptions: [
+
         {
-          id: 2,
-          option: 'Replies',
-        },
-        {
-          id: 1,
-          option: 'Leads',
-        },
-        {
-          id: 3,
-          option: 'Answers',
-        },
-        {
-          id: 4,
-          option: 'Mobiles',
-        },
-        {
-          id: 5,
-          option: 'Appointment',
-        },
-        {
-          id: 6,
-          option: 'Productivity',
-        },
-        {
-          id: 7,
+          id: 10,
           option: 'Seller appointment',
         },
         {
-          id: 8,
+          id: 11,
           option: 'Weekly Average',
         },
       ],
@@ -438,6 +399,8 @@ export default {
         'Sunday',
       ],
       keychart: 0,
+      idSelected: '',
+      firstValidation: '',
     }
   },
   watch: {
@@ -458,25 +421,45 @@ export default {
       this.validateDate = this.showGraphForWeek
         ? this.endDay
         : this.endDayOfMonth
+
     },
-    selectedOption() {
-      this.getGraphics()
-    },
+
   },
-  created() {
-    this.$store.commit('app/SET_LOADING', true)
-    this.programFilter.id = 0
+  computed: {
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
+  },
+   async created() {
+    this.addPreloader()
+  this.validation()
+     this.programFilter.id = 0
+    if(this.isSupervisor || this.isTeamLeader || this.isCeo){
+
+      this.userFilter.id= 0
+    }
+    else{
+
+      this.userFilter.id = this.currentUser.user_id
+    }
+
     this.chardOption.option = 'Replies'
-    this.chardOption.id = 2
-    this.getUsers()
-    this.getGraphics()
-    this.firstGraphics()
+    this.chardOption.id = 0
+   await this.getUsers()
+   await this.getGraphics(this.chardOption.id)
+
     this.validateDate = this.showGraphForWeek ? this.endDay : this.endDayOfMonth
+
+     this.removePreloader()
   },
   mounted() {
     this.getFilterCard()
   },
   methods: {
+
+    validation(){
+      this.firstValidation = !(this.isSupervisor || this.isTeamLeader || this.isCeo);
+    },
     kFormatter,
     statusColor(name) {
       let color = ''
@@ -491,11 +474,19 @@ export default {
         case 'Answers':
           color = '#E67B4F'
           break
-        case 'Mobiles':
+        case 'Mobiles Today':
           color = '#4EC4F0'
           break
-        case 'Appointments':
+        case 'Mobiles Recovery':
+          color = '#4EC4F3'
+          break
+
+        case 'Crm Appointments':
           color = '#515CEE'
+          break
+        case 'Social Network Appointments':
+
+          color = '#515CE0'
           break
         case 'Productivity':
           color = '#40A094'
@@ -570,7 +561,8 @@ export default {
         data.data.unshift(firstOption)
 
         this.users = data.data
-        this.userFilter = this.users[0].user_name
+
+        this.userFilter = this.users[0]
 
         return this.users
       } catch (e) {
@@ -594,7 +586,8 @@ export default {
         this.card[2].data = data.data.answer
         this.card[3].data = data.data.mobiles_act
         this.card[3].data_rec = data.data.mobiles_rec
-        this.card[4].data = data.data.appointments
+        this.card[4].data = data.data.appointments_crm
+        this.card[4].data_sn = data.data.appointments_sn
         this.card[5].data = `${data.data.productivity}%`
 
         return data
@@ -622,8 +615,8 @@ export default {
         .add(month, 'month')
         .endOf('month')
         .format('YYYY-MM-DD 00:00:00')
-      this.getGraphics()
-      this.firstGraphics()
+
+
       this.validateDate = this.showGraphForWeek
         ? this.endDay
         : this.endDayOfMonth
@@ -636,13 +629,25 @@ export default {
       this.endDay = moment(this.firstDay)
         .add(6, 'days')
         .format('YYYY-MM-DD 00:00:00')
-      this.getGraphics()
-      this.firstGraphics()
+
+
       this.validateDate = this.showGraphForWeek
         ? this.endDay
         : this.endDayOfMonth
+
     },
-    async getGraphics() {
+
+    async getGraphics(chardOption) {
+
+      this.idSelected = chardOption
+
+
+      if(!(this.isSupervisor || this.isTeamLeader || this.isCeo)){
+
+        this.userFilter.id = this.currentUser.user_id
+        this.userFilter.user_name =this.currentUser.first_name +' '+ this.currentUser.last_name
+      }
+
       try {
         const params = {
           from: this.showGraphForWeek ? this.firstDay : this.firstDayOfMonth,
@@ -652,148 +657,80 @@ export default {
 
         }
         this.juniorUser = false
-        if (this.chardOption.id === 1) {
+        if (chardOption === 1) {
           const data = await DashboardService.getLeadsGraphic(params)
 
           this.graph = data.data
           this.labelGraph = 'Leads'
           this.type = ''
-        } else if (this.chardOption.id === 2) {
+          this.chardOption.option = 'Leads'
+        } else if (chardOption === 0) {
           const data = await DashboardService.getRepliesGraphic(params)
 
           this.graph = data.data
 
           this.labelGraph = 'Replies'
+          this.chardOption.option = 'Replies'
           this.type = ''
-        } else if (this.chardOption.id === 3) {
+        } else if (chardOption === 2) {
           const data = await DashboardService.getAnswersGraphic(params)
           this.graph = data.data
           this.labelGraph = 'Answers'
           this.type = ''
-        } else if (this.chardOption.id === 4) {
-          const data = await DashboardService.getMobilesGraphic(params)
+          this.chardOption.option = 'Answers'
+        }
+        else if (chardOption === 6) {
+          const data = await DashboardService.getMobilesGraphicToday(params)
           this.graph = data.data
-          this.labelGraph = 'Mobiles'
+          this.labelGraph = 'Mobiles Today'
           this.type = ''
-        } else if (this.chardOption.id === 5) {
-          const data = await DashboardService.getTasksGraphic(params)
+          this.chardOption.option = 'Mobiles Today'
+        }
+        else if (chardOption === 7) {
+          const data = await DashboardService.getMobilesGraphicRecovery(params)
           this.graph = data.data
-          this.labelGraph = 'Appointments'
+          this.labelGraph = 'Mobiles Recovery'
           this.type = ''
-        } else if (this.chardOption.id === 6) {
+          this.chardOption.option = 'Mobiles Recovery'
+        }
+        else if (chardOption === 8) {
+          const data = await DashboardService.getTasksGraphicCrm(params)
+          this.graph = data.data
+          this.labelGraph = 'Crm Appointments'
+          this.type = ''
+          this.chardOption.option = 'Crm Appointments'
+        }
+        else if (chardOption === 9) {
+          const data = await DashboardService.getTasksGraphicSn(params)
+          this.graph = data.data
+          this.labelGraph = 'Social Network Appointments'
+          this.chardOption.option = 'Social Network Appointments'
+          this.type = ''
+        }
+        else if (chardOption === 5) {
           const data = await DashboardService.getProductivityGraphic(params)
           this.graph = data.data
           this.labelGraph = 'Productivity'
           this.juniorUser = true
+          this.chardOption.option = 'Productivity'
           this.type = ''
-        } else if (this.chardOption.id === 7) {
-          const data = await DashboardService.getTaskCatcherGraphic(params)
-          this.graph = data.data
-          this.labelGraph = 'Seller Appointments'
-          this.isDate = false
-          this.type = 'sellers'
-        } else if (this.chardOption.id === 8) {
-          const data = await DashboardService.getMultiChartGraphic(params)
-          this.graph = data.data
-          this.type = 'multi'
         }
-        this.prueba(this.type)
-
+            else if (this.chardOption.option.id === 10) {
+              const data = await DashboardService.getTaskCatcherGraphic(params)
+              this.graph = data.data
+              this.labelGraph = 'Seller Appointments'
+              this.isDate = false
+          this.chardOption.option = 'Seller Appointments'
+              this.type = 'sellers'
+            } else if (this.chardOption.option.id === 11) {
+              this.showGraphForWeek = false
+              const data = await DashboardService.getMultiChartGraphic(params)
+          this.chardOption.option = 'Weekly Average'
+              this.graph = data.data
+              this.type = 'multi'
+            }
+     this.prueba(this.type)
         return this.graph
-      } catch (e) {
-        this.showErrorSwal(e)
-        return []
-      }
-    },
-
-    // eslint-disable-next-line consistent-return
-    async firstGraphics() {
-      try {
-        const params = {
-          from: this.showGraphForWeek ? this.firstDay : this.firstDayOfMonth,
-          to: this.showGraphForWeek ? this.endDay : this.endDayOfMonth,
-          program: this.programFilter.id,
-          user: this.userFilter.id,
-
-        }
-        this.juniorUser = false
-
-        const [replies, lead, answers, mobiles, appointments, productivity] = await Promise.all(
-            [DashboardService.getRepliesGraphic(params), DashboardService.getLeadsGraphic(params),
-          DashboardService.getAnswersGraphic(params), DashboardService.getMobilesGraphic(params),
-          DashboardService.getTasksGraphic(params), DashboardService.getProductivityGraphic(params)])
-
-        const infoReplies = []
-        this.card[0].series = []
-        replies.data.map(data => {
-          infoReplies.push((data.count).toString())
-        })
-
-        this.card[0].series.push({
-          data: infoReplies,
-        })
-        this.card[0].key++
-
-        const infoLead = []
-        this.card[1].series = []
-        lead.data.map(data => {
-          infoLead.push((data.count).toString())
-        })
-
-        this.card[1].series.push({
-          data: infoLead,
-        })
-        this.card[1].key++
-
-
-        const infoAnswers = []
-        this.card[2].series = []
-        answers.data.map(data => {
-          infoAnswers.push((data.count).toString())
-        })
-
-        this.card[2].series.push({
-          data: infoAnswers,
-        })
-        this.card[2].key++
-
-        const infoMobiles = []
-        this.card[3].series = []
-        mobiles.data.map(data => {
-          infoMobiles.push((data.count).toString())
-        })
-
-        this.card[3].series.push({
-          data: infoMobiles,
-        })
-        this.card[3].key++
-
-
-        const infoAppointments = []
-        this.card[4].series = []
-        appointments.data.map(data => {
-          infoAppointments.push((data.count).toString())
-        })
-
-        this.card[4].series.push({
-          data: infoAppointments,
-        })
-        this.card[4].key++
-
-        const infoProductivity = []
-        this.card[5].series = []
-        productivity.data.map(data => {
-          infoProductivity.push((data.count).toString())
-        })
-
-        this.card[5].series.push({
-          data: infoProductivity,
-        })
-        this.card[5].key++
-
-        if (productivity.status === 200) {
-          this.$store.commit('app/SET_LOADING', false)
-        }
       } catch (e) {
         this.showErrorSwal(e)
         return []

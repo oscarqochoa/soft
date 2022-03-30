@@ -3,7 +3,7 @@
     <div>
       <b-card-group
         deck
-        class="mb-3"
+        class="mb-2"
       >
         <b-card
           v-for="(i,index) in data"
@@ -13,9 +13,9 @@
           :style="`border: 1px solid ${i.color}!important`"
           :class="i.cursor ? 'pointer' : '' "
           class="card"
-          @click=" i.cursor ? clickCardGeneral(i,index) : ''"
+          @click=" i.cursor ? clickCardGeneral(index) : ''"
         >
-          <b-card-body class="pb-0  ">
+          <b-card-body >
             <div
               class="d-flex align-items-end  justify-content-between"
             >
@@ -38,7 +38,7 @@
             </div>
             <div>
 
-              <div v-if="index !==3"  class="  mt-2 mb-1 ">
+              <div v-if="index !==3 && index !==4"  class="  mt-2 mb-1 ">
                 <span class="data"> {{ i.data }} </span>
               </div>
 
@@ -46,15 +46,15 @@
           </b-card-body>
             <div
               v-if="index===3"
-              class=" d-inline-flex w-100 mt-1 mb-1 "
-              :style="`border: 1px solid ${i.color}!important`"
+              class=" d-inline-flex w-100  "
+              :style="`border-top: 1px solid ${i.color}!important;border-bottom: 1px solid ${i.color}!important`"
             >
 
               <div
                 class="cuadrado"
                 style="width: 50%; padding-top: 7px; padding-bottom: 7px"
                 :style=" `border-right: 1px solid ${i.color} !important;`"
-                @click=" i.cursor ? clickCard(4,3) : ''"
+                @click=" i.cursor ? clickCardEspecial(6) : ''"
               >
                 <span
                   class="title-mobile"
@@ -69,7 +69,9 @@
                   style="margin-left: 7px"
                 >{{ i.data }}</span>
               </div>
-              <div  style="width: 50%; padding-top: 7px; padding-bottom: 7px"  @click=" i.cursor ? clickCard(6,5) : ''">
+              <div  style="width: 50%; padding-top: 7px; padding-bottom: 7px"
+
+                    @click=" i.cursor ? clickCardEspecial(7) : ''">
                 <span
                   style="margin-left: 20px"
                   class="title-mobile"
@@ -89,25 +91,56 @@
 
             </div>
 
-          <vue-apex-charts
-            :key="i.key"
-            type="area"
-            height="60"
-            width="100%"
-            :options="chartOptionsComputed(i.color)"
-            :series="i.series"
-          />
+          <div
+              v-if="index===4"
+              class=" d-inline-flex w-100  "
+              :style="`border-top: 1px solid ${i.color}!important;border-bottom: 1px solid ${i.color}!important`"
+          >
+
+            <div
+                class="cuadrado"
+                style="width: 50%; padding-top: 7px; padding-bottom: 7px"
+                :style=" `border-right: 1px solid ${i.color} !important;`"
+                @click=" i.cursor ? clickCardEspecial(8) : ''"
+            >
+                <span
+                    class="title-mobile"
+                    style="margin-left: 20px"
+
+                >
+                  CRM:
+                </span>
+              <span
+
+                  class="data-mobile"
+                  style="margin-left: 7px"
+              >{{ i.data }}</span>
+            </div>
+            <div  style="width: 50%; padding-top: 7px; padding-bottom: 7px"
+                  @click=" i.cursor ? clickCardEspecial(9) : ''">
+                <span
+                    style="margin-left: 20px"
+                    class="title-mobile"
+
+                >
+                  SN:
+                </span>
+              <span
+
+                  class="data-mobile"
+                  style="margin-left: 6px"
+              >{{ i.data_sn ? i.data_sn : 0 }}
+
+                </span>
+
+            </div>
+
+          </div>
 
         </b-card>
       </b-card-group>
     </div>
-    <info-card-modal
-      v-if="modalInfo"
-      :card="card"
-      :color="color"
-      :item="item"
-      @close="closeInfoModal"
-    />
+
   </div>
 </template>
 
@@ -116,7 +149,7 @@ import { BCard, BCardBody, BAvatar } from 'bootstrap-vue'
 import VueApexCharts from 'vue-apexcharts'
 
 import { areaChartOptions } from '@/views/social-network/views/dashboard2/components/charOptions'
-import InfoCardModal from '@/views/social-network/views/dashboard2/components/modals/InfoCardModal.vue'
+
 
 export default {
   components: {
@@ -124,20 +157,12 @@ export default {
     BCard,
     BCardBody,
     BAvatar,
-    InfoCardModal,
+
   },
   props: {
     id: null,
 
 
-    chartData: {
-      type: Array,
-      default: () => [],
-    },
-    chartOptions: {
-      type: Object,
-      default: null,
-    },
 
     // eslint-disable-next-line vue/require-default-prop
     data: null,
@@ -158,42 +183,36 @@ export default {
       item: {},
       baseImg: process.env.VUE_APP_BASE_URL_FRONT,
       card: null,
-      color : null
+      color : null,
+      idSelected: null,
+
     }
   },
 
   methods: {
 
-    chartOptionsComputed(color) {
-      if (this.chartOptions === null) {
-        const options = JSON.parse(JSON.stringify(areaChartOptions))
-        options.theme.monochrome.color = color
 
-        return options
-      }
-
-      return this.chartOptions
-    },
     closeInfoModal() {
       this.modalInfo = false
     },
 
-    clickCardGeneral(item, index) {
+    clickCardGeneral( index) {
 
-      if (index !== 3 && index !== 5) {
-        this.showModalLead = true
-        this.card = index + 1
-        this.item = {
-          //   type: this.type,
-          date_init: this.date_init,
-          date_end: this.date_end,
-          program: this.program,
-          card: index + 1,
-          user: this.user,
-        }
-        this.modalInfo = true
-        this.color = item.styleModal
+      if(index===0 || index===1 ||index===2 ||index===5  ){
+
+        this.$emit('getGraphics_version2',index)
       }
+
+    },
+
+    clickCardEspecial( index) {
+
+      if(index===6 || index===7 ||index===8 ||index===9  ){
+
+        this.$emit('getGraphics_version2',index)
+
+      }
+
     },
     clickCard(item, index) {
       this.showModalLead = true
@@ -234,6 +253,14 @@ export default {
 }
 .cuadrado{
   border-right: 1px solid rgba(207, 190, 190, 0.5) !important;
+}
+
+.card{
+  background-size: 200% auto;
+
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
 }
 @media (max-width: 1400px) {
 
