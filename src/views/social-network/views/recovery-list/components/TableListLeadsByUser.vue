@@ -188,7 +188,6 @@ export default {
       //this.doneLeads = resp1[1];
       this.doneLeads = resp1[1].status;
       this.totalStatus = resp1[1].count;
-      console.log('asd: ', resp1[1])
       const resp = resp1[0]
       this.data = resp.data;
 
@@ -246,7 +245,8 @@ export default {
           let params = {
             id_user: this.currentUser.user_id,
             fullname: `${this.currentUser.first_name} ${this.currentUser.last_name}`,
-            idProgram: this.data[0].programId
+            idProgram: this.data[0].programId,
+            breakFreeList: this.data[0].updated_at
           }
           const data = await RecoveryListService.sendForPusher(params)
           this.showToast(
