@@ -5,7 +5,7 @@
         <div>Personal Information</div>
         <div>
           <b-badge :variant="statusVariant" style="padding-top: 10px">
-            {{ personalInfo.valueStatus }}
+            {{ personalInfo.valueStatus ? personalInfo.valueStatus : "CLIENT" }}
           </b-badge>
         </div>
         <div>
