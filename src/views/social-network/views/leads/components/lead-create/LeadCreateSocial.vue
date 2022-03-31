@@ -219,7 +219,7 @@ export default {
 
         // Task
         title: "",
-        seller: 1,
+        seller: null,
         subject: "CALL",
         hour: "",
         from: "",
@@ -227,7 +227,7 @@ export default {
         date: "",
         sms_status: false,
         due_date: "",
-        assign: 1,
+        assign: null,
         attend: null,
 
 
@@ -279,6 +279,7 @@ export default {
     this.lead.user_id = this.currentUser.user_id;
     this.lead.created_date = this.$options.filters.formatDate(new Date());
     // console.log('user', this.currentUser)
+    this.lead.seller = this.currentUser.user_id;
 
   },
 
@@ -526,7 +527,7 @@ export default {
 
           // Task
       this.lead.title= ""
-      this.lead.seller= 1
+      this.lead.seller= null
       this.lead.subject= "CALL"
       this.lead.hour= ""
       this.lead.from= ""
@@ -534,7 +535,7 @@ export default {
       this.lead.date= ""
       this.lead.sms_status= 0
       this.lead.due_date= ""
-      this.lead.assign= 1
+      this.lead.assign= null
       this.lead.attend= null
 
       this.lead.recovery= 0

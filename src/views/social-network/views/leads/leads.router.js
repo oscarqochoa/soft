@@ -1,8 +1,6 @@
 import NewLeads from './tabs/new-leads/NewLeads.vue'
 import CreateNewLead from './tabs/new-leads/views/create/Create.vue'
 import DashboardNewLead from './tabs/new-leads/views/dashboard/Dashboard.vue'
-
-import OldLeads from './tabs/old-leads/OldLeads.vue'
 import DashboardOldLead from './tabs/old-leads/views/dashboard/Dashboard.vue'
 import EditOldLead from './tabs/old-leads/views/edit/Edit.vue'
 
