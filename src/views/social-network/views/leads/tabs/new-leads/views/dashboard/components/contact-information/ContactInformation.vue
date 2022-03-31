@@ -114,7 +114,7 @@
                 </div>
               </ValidationProvider>
             </b-col>
-            <b-col cols="1" class="p-0">
+            <b-col cols="1" class="p-0" v-if="isCeo || isSupervisor || isTeamLeader">
               <b-button size="sm" variant="primary" @click="addReason()">+</b-button>
             </b-col>
 
