@@ -88,7 +88,7 @@
 
 <script>
 import Ripple from "vue-ripple-directive";
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import vSelect from "vue-select";
 import VueToggles from "vue-toggles";
 import TaskAddLater from "@/views/social-network/views/leads/components/lead-create/task-create-lead-tab/TaskAddLater";
@@ -127,7 +127,9 @@ export default {
   },
   computed : {
     ...mapState('SocialNetworkLeadsStore', ['S_SELLERS']),
-
+    ...mapGetters({
+      currentUser: "auth/currentUser",
+    }),
   },
   methods: {
     ...mapActions(
@@ -162,7 +164,7 @@ export default {
       }
     },
     resetValues() {
-      this.lead.seller = null
+      this.lead.seller = this.currentUser.user_id;
       this.lead.assign = null
       this.lead.title = "";
       this.lead.subject = "CALL";

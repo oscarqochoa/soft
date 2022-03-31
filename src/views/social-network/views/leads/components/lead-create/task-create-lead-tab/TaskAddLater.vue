@@ -42,6 +42,7 @@
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
                   v-model="lead.from"
+                  minutes-step="15"
                   class="font-small-4"
                   placeholder="Select hour"
                   id="input-create-lead-36"
@@ -63,9 +64,9 @@
                   :class="{'border-error-sn' :errors[0]}"
                   :state="errors[0] ? false : null"
                   v-model="lead.to"
+                  minutes-step="15"
                   class="font-small-4"
                   placeholder="Select hour"
-
               ></b-form-timepicker>
               <div v-if="errors[0]" class="text-error-sn text-center">To {{errors[0]}}</div>
             </b-form-group>
@@ -79,7 +80,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import vSelect from "vue-select";
 import Ripple from "vue-ripple-directive";
 
@@ -93,7 +94,6 @@ export default {
   },
   mounted() {
     document.getElementById('input-create-lead-35').placeholder = 'Type day event'
-
   },
   directives: {
     Ripple,
@@ -137,34 +137,21 @@ export default {
         this.lead.attend = 1;
       }
     },
-    resetValues() {
-      this.lead.seller = null
-      this.lead.assign = null
-      this.lead.title = "";
-      this.lead.subject = "CALL";
-      this.lead.hour = "";
-      this.lead.from = "";
-      this.lead.to = null;
-      this.lead.date = "";
 
-      this.lead.sms_status = false;
-      this.lead.due_date = "";
-      this.lead.attend = null;
-    },
-    async findSellers() {
-      if(this.lead.date && this.lead.from) {
-        const date_date = this.lead.date.split('/')
-        await this.A_GET_SELLER_TASK_FAVORITE({date_hour: `${date_date[2]}-${date_date[0]}-${date_date[1]} ${this.lead.from}`})
-      } else{
-        this.$bvToast.toast(`You must select a date and time`, {
-          title: `Information`,
-          autoHideDelay: 3000,
-          appendToast: true,
-          variant: 'info'
-        });
-      }
-    },
   },
+  watch: {
+    "lead.from" () {
+      //console.log('time1: ', this.lead.from.split(':'), this.lead)
+      const date = new Date(2011, 0, 1, this.lead.from.split(':')[0], this.lead.from.split(':')[1], this.lead.from.split(':')[2])
+      date.setMinutes(date.getMinutes() + 30);
+      //date.getHours(), date.getMinutes(), date.getSeconds()
+      console.log(date.getMinutes() )
+      let hour = date.getHours() < 10 ? `0${date.getHours()}` : `${date.getHours()}`
+      let minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`
+      console.log(`${hour}:${minutes}:00`)
+      this.lead.to = `${hour}:${minutes}:00`
+    }
+  }
 }
 </script>
 <style scoped lang="scss">
@@ -203,7 +190,7 @@ export default {
   margin-top: 9px;
 }
 .leads-datepicker{
-  background: red !important;
+  //background: red !important;
 }
 
 </style>

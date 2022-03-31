@@ -302,7 +302,7 @@
                 label="Flyers"
                 id="input-create-lead-10"
             >
-              <ValidationProvider  rules="required" v-slot="{errors}" name="input-create-lead-10, Flyer">
+              <ValidationProvider  rules="" v-slot="{errors}" name="input-create-lead-10, Flyer">
                 <div class="content-flyer">
                   <div class="d-flex margin-flyer" id="input-create-lead-11">
                     <b-avatar
