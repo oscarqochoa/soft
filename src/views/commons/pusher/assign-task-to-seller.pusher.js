@@ -60,8 +60,8 @@ const assignTaskToSeller = () => {
                   await window.amgApi.post('/commons/close-all-swal', data)
               } else if (result.isDismissed && (result.dismiss == 'timer' || result.dismiss == 'backdrop' || result.dismiss == 'cancel')) {
                   data.catchers_denny.push(sessionId);
-                  await window.amgApi.post('/round-robin/social-network/on-deny-task-seller-assign', data)
                   await window.amgApi.post('/commons/close-all-swal', data)
+                  await window.amgApi.post('/round-robin/social-network/on-deny-task-seller-assign', data)
               }
           }
         }, Math.floor(Math.random() * 10000));
