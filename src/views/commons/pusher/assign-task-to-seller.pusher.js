@@ -28,6 +28,7 @@ const assignTaskToSeller = () => {
                   customClass: {
                   confirmButton: "btn btn-primary mr-1",
                   cancelButton: "btn btn-danger  ",
+                  allowOutsideClick: false,
                   },
                   didOpen: () => {
                     function secondsToHms(d) {
