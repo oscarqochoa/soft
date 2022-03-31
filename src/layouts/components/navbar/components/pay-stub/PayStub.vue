@@ -47,7 +47,6 @@ export default {
       this.payStubModalController = true;
     },
     async getPayStubCounter() {
-      console.log('ejecuta')
       const counter = await PayStubService.getPayStubCounter(this.currentUser.user_id);
       this.payStubCounter = counter[0].cant;
     },

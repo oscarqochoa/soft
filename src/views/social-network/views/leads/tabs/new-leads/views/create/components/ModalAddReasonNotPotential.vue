@@ -2,7 +2,7 @@
   <div>
     <b-modal
       modal
-      title="Add reason"
+      title="Add Reason"
       v-model="mutableShow"
       size="lg"
       modal-class="modal-primary"
