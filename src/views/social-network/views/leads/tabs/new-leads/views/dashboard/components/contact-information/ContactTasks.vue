@@ -312,7 +312,7 @@ export default {
       this.showModalTaskHistory = false;
     },
     onReloadTasks(tasks) {
-      this.tasks = tasks;
+      this.getTaskShow(this.taskForSn);
     },
     async openModalEditTask(id, isDisabled) {
       this.addPreloader();

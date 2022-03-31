@@ -39,7 +39,7 @@
             <template v-for="task in notification.tasks">
               <b-link :key="task.id">
                 <router-link
-                  :to="{ name: 'lead-show', params: { id: task.lead_id } }"
+                  :to="resolveRoute(task)"
                 >
                   <b-media>
                     <template #aside>
@@ -159,6 +159,17 @@ export default {
         await this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id }, true);
       } catch (error) {}
     },
+    resolveRoute(task){
+      if(!task.lead_id){
+        return `/${task.module}/clients/account/${task.account_id}`
+      }else{
+        if(task.module == 'socialnetwork'){
+          return `/social-network/leads/new/dashboard/${task.lead_id}`
+        }else{
+          return `/${task.module}/leads/show/${task.lead_id}`
+        }
+      }
+    }
   },
 };
 </script>

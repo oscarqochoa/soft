@@ -35,7 +35,7 @@
                   class="text-important"
                   :to="
                     data.item.account_id == null
-                      ? `/${data.item.route}/leads/${data.item.lead_id}`
+                      ? (data.item.route == 'socialnetwork' ? `/social-network/leads/new/dashboard/${data.item.lead_id}` : `/${data.item.route}/leads/${data.item.lead_id}`)
                       : `/${data.item.route}/clients/account/'${data.item.account_id}`
                   "
                   target="_blank"
