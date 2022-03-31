@@ -246,6 +246,7 @@ export default {
           let params = {
             id_user: this.currentUser.user_id,
             fullname: `${this.currentUser.first_name} ${this.currentUser.last_name}`,
+            idProgram: this.data[0].programId
           }
           const data = await RecoveryListService.sendForPusher(params)
           this.showToast(

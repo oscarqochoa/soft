@@ -5,7 +5,7 @@
         <div>Personal Information</div>
         <div>
           <b-badge :variant="statusVariant" style="padding-top: 10px">
-            {{ personalInfo.valueStatus }}
+            {{ personalInfo.valueStatus ? personalInfo.valueStatus : "CLIENT" }}
           </b-badge>
         </div>
         <div>
@@ -569,7 +569,10 @@ export default {
             title: "Updated",
             text: "Information was saved",
           });
+          this.lead.first_name = response.data[0].first_name;
+          this.lead.last_name = response.data[0].last_name;
 
+          this.lead.lead_name = (response.data[0].first_name ? response.data[0].first_name: '') + ' ' + (response.data[0].last_name ? response.data[0].last_name : '');
           this.requiredFieldsForCreateCrmTask.first_name =
             response.data[0].first_name;
           this.requiredFieldsForCreateCrmTask.last_name =
