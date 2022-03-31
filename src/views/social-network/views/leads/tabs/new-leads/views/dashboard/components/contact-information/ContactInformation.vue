@@ -96,7 +96,7 @@
           id="modalReasonNoPotential"
           v-model="modalReasonNoPotential"
           size="md"
-          title="Choose a reason"
+          title="Choose a Reason"
           centered
           @ok.prevent="confirmPotential"
           no-close-on-backdrop
