@@ -312,10 +312,9 @@
             rules="required"
           >
             <b-form-group label="Pending" label-class="font-weight-bolder">
-              <quill-editor
+              <b-form-checkbox-group
                 v-model="note.pending.value"
-                :disabled="disabled"
-                :options="editorOption"
+                :options="note.pending.options"
                 :class="{ 'border-danger rounded': errors[0] }"
               />
             </b-form-group>
@@ -572,8 +571,21 @@ export default {
           disabled: false,
         },
         pending: {
-          value: "",
-          disabled: false,
+          value: [],
+          options: [
+            {
+              text: "ID",
+              value: {
+                id: "pen-1",
+              },
+            },
+            {
+              text: "UB",
+              value: {
+                id: "pen-2",
+              },
+            },
+          ],
         },
       },
     };
@@ -712,7 +724,7 @@ export default {
         { number: 1012, value: this.note.information.value },
         { number: 1013, value: this.note.indications.value },
         { number: 1014, value: this.note.suggestion.value },
-        { number: 1015, value: this.note.pending.value },
+        { number: 1015, value: JSON.stringify(this.note.pending.value) },
         {
           number: 1063,
           value: this.dateTypeAgreement ? this.note.typeOfAgreement.value : 1,
@@ -768,8 +780,14 @@ export default {
             this.note.indications.value = answer.answer;
           if (answer.question_id === 1014)
             this.note.suggestion.value = answer.answer;
-          if (answer.question_id === 1015)
-            this.note.pending.value = answer.answer;
+          if (answer.question_id === 1015) {
+            answer.answer = answer.answer.replace(/\\\\n/g, "<br>");
+            this.note.pending.value = JSON.parse(
+              answer.answer.replace(/\\/g, '"')
+            );
+          }
+
+          //  this.note.pending.value = answer.answer;
           if (answer.question_id === 1063)
             this.note.typeOfAgreement.value = answer.answer;
           if (answer.question_id === 1004)

@@ -43,7 +43,7 @@ export default [
     options: [],
     reduce: 'id',
     selectText: 'label',
-    cols: 8,
+    cols: 7,
   },
   {
     type: 'select',
@@ -51,9 +51,11 @@ export default [
     showLabel: true,
     label: 'Status Seller',
     model: null,
-    reduce: 'id',
+    reduce: 'value',
     selectText: 'label',
-    cols: 4,
+    cols: 5,
+    emitEvent: true,
+    typeEvent: 'status_seller'
   },
   {
     type: 'select',

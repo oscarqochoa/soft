@@ -21,7 +21,7 @@
           </div>
         </template>
         <b-container>
-          <filters-component :filters="filter" />
+          <filters-component :filters="filter" @onSelectChange="emitEvent" />
         </b-container>
         <template #footer>
           <b-container>
@@ -45,7 +45,11 @@
           <b-col
             cols="12"
             sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-start"
+            class="
+              d-flex
+              align-items-center
+              justify-content-center justify-content-sm-start
+            "
           >
             <span class="text-muted">
               Showing {{ startPage }} to {{ toPage }} of {{ totalRows }} entries
@@ -55,7 +59,11 @@
           <b-col
             cols="12"
             sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-end"
+            class="
+              d-flex
+              align-items-center
+              justify-content-center justify-content-sm-end
+            "
           >
             <b-pagination
               v-model="paginate.currentPage"
@@ -108,7 +116,12 @@
           <!-- Search -->
           <b-col cols="12" md="6">
             <div
-              class="d-flex align-items-center justify-content-end align-items-center"
+              class="
+                d-flex
+                align-items-center
+                justify-content-end
+                align-items-center
+              "
             >
               <b-input-group v-if="!noVisiblePrincipalFilter" class="mr-1">
                 <b-form-input
@@ -144,7 +157,11 @@
       <div class="mx-2 mb-2 mt-2">
         <b-row>
           <b-col
-            class="d-flex align-items-center justify-content-center justify-content-sm-start"
+            class="
+              d-flex
+              align-items-center
+              justify-content-center justify-content-sm-start
+            "
           >
             <span class="text-muted">
               Showing {{ startPage }} to {{ toPage }} of {{ totalRows }} entries
@@ -153,7 +170,11 @@
           <!-- Pagination -->
           <slot name="footer" />
           <b-col
-            class="d-flex align-items-center justify-content-center justify-content-sm-end"
+            class="
+              d-flex
+              align-items-center
+              justify-content-center justify-content-sm-end
+            "
           >
             <b-pagination
               v-model="paginate.currentPage"
@@ -239,6 +260,9 @@ export default {
     sideBarSearch() {
       this.filterPrincipal.model = "";
       this.$emit("reload");
+    },
+    emitEvent(type) {
+      this.$emit("onSelectChange", type);
     },
   },
 };

@@ -227,19 +227,19 @@
           </b-form-group>
         </b-col>
         <b-col cols="12">
-          <b-form-group label="Pending">
-            <validation-provider
-              v-slot="{ errors }"
-              name="pending"
-              rules="required"
-            >
-              <b-form-radio-group
-                :class="{ 'border-danger rounded': errors[0] }"
+          <validation-provider
+            v-slot="{ errors }"
+            name="pending"
+            rules="required"
+          >
+            <b-form-group label="Pending">
+              <b-form-checkbox-group
+                v-model="note.pendingValue"
                 :options="note.pending.options"
-                v-model="note.pending.value"
+                :class="{ 'border-danger rounded': errors[0] }"
               />
-            </validation-provider>
-          </b-form-group>
+            </b-form-group>
+          </validation-provider>
         </b-col>
       </b-row>
     </validation-observer>
@@ -383,9 +383,22 @@ export default {
         isAnyIndicator: {
           value: "",
         },
+        pendingValue: [],
         pending: {
-          value: "",
-          options: ["ID", "UB"],
+          options: [
+            {
+              text: "ID",
+              value: {
+                id: "pen-1",
+              },
+            },
+            {
+              text: "UB",
+              value: {
+                id: "pen-2",
+              },
+            },
+          ],
         },
       },
     };
@@ -513,7 +526,8 @@ export default {
         { number: 2010, value: this.note.whatDoesTheClientNeed.value },
         { number: 2011, value: this.note.whatDidYouSuggest.value },
         { number: 2012, value: this.note.isAnyIndicator.value },
-        { number: 2013, value: this.note.pending.value },
+        //{ number: 2013, value: this.note.pending.value },
+        { number: 2013, value: JSON.stringify(this.note.pendingValue) },
       ];
     },
     hideModal(status) {
@@ -563,8 +577,14 @@ export default {
             this.note.whatDidYouSuggest.value = answer.answer;
           if (answer.question_id === 2012)
             this.note.isAnyIndicator.value = answer.answer;
-          if (answer.question_id === 2013)
-            this.note.pending.value = answer.answer;
+          // if (answer.question_id === 2013)
+          //   this.note.pending.value = answer.answer;
+          if (answer.question_id === 2013) {
+            answer.answer = answer.answer.replace(/\\\\n/g, "<br>");
+            this.note.pendingValue = JSON.parse(
+              answer.answer.replace(/\\/g, '"')
+            );
+          }
         } else this.noteNull = true;
       });
     },

@@ -13,8 +13,13 @@ class CrmLead {
 
   async getLeads(body) {
     try {
-      const data = await amgApi.post("/lead/search-leads", body);
-      return data;
+      const response = await amgApi.post("/lead/search-leads", body);
+
+      response.data.data.map((item) => {
+        item.editStatus = false;
+      });
+
+      return response;
     } catch (error) {
       console.log("Something went wrong on getLeads:", error);
       throw error;

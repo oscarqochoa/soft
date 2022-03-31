@@ -22,9 +22,9 @@
             v-if="lead.state && lead.state !== 'UNK' && data.item.real_time"
           >
             <br />
-            <span class="font-weight-bolder"
-              >{{ data.item.real_time | myGlobalDay }} ({{ lead.state }})</span
-            >
+            <span class="font-weight-bolder">
+              {{ data.item.real_time | myGlobalDay }} ({{ lead.state }})
+            </span>
           </template>
         </div>
       </template>

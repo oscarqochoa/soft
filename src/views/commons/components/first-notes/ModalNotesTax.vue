@@ -17,10 +17,7 @@
     <validation-observer ref="form">
       <b-row>
         <b-col md="9">
-          <b-form-group
-            label="Marital Status"
-            label-class="font-weight-bolder"
-          >
+          <b-form-group label="Marital Status" label-class="font-weight-bolder">
             <validation-provider
               v-slot="{ errors }"
               name="maritalStatus"
@@ -30,7 +27,7 @@
                 v-model="note.maritalStatus.value"
                 :disabled="disabled"
                 :options="note.maritalStatus.options"
-                :class="{'border-danger': errors[0]}"
+                :class="{ 'border-danger': errors[0] }"
               />
             </validation-provider>
           </b-form-group>
@@ -50,7 +47,7 @@
                 v-model="note.dependents.value"
                 v-mask="'##'"
                 type="number"
-                :class="{'border-danger rounded': errors[0]}"
+                :class="{ 'border-danger rounded': errors[0] }"
               />
             </validation-provider>
           </b-form-group>
@@ -71,7 +68,7 @@
                 v-model="note.migrationSituation.value"
                 :disabled="disabled"
                 :options="note.migrationSituation.options"
-                :class="{'border-danger rounded': errors[0]}"
+                :class="{ 'border-danger rounded': errors[0] }"
               />
             </b-form-group>
           </validation-provider>
@@ -82,15 +79,12 @@
             name="bankruptcy"
             rules="required"
           >
-            <b-form-group
-              label="Bankruptcy"
-              label-class="font-weight-bolder"
-            >
+            <b-form-group label="Bankruptcy" label-class="font-weight-bolder">
               <b-form-radio-group
                 v-model="note.bankruptcy.value"
                 :disabled="disabled"
                 :options="note.bankruptcy.options"
-                :class="{'border-danger rounded': errors[0]}"
+                :class="{ 'border-danger rounded': errors[0] }"
               />
             </b-form-group>
           </validation-provider>
@@ -111,7 +105,7 @@
                   v-mask="'####'"
                   :disabled="disabled"
                   type="number"
-                  :class="{ 'border-danger' : errors[0] }"
+                  :class="{ 'border-danger': errors[0] }"
                 />
               </b-form-group>
             </validation-provider>
@@ -124,16 +118,13 @@
               name="bankruptcyChapter"
               rules="required"
             >
-              <b-form-group
-                label="Chapter"
-                label-class="font-weight-bolder"
-              >
+              <b-form-group label="Chapter" label-class="font-weight-bolder">
                 <b-form-input
                   v-model="note.bankruptcy.chapter"
                   v-mask="'####'"
                   :disabled="disabled"
                   type="number"
-                  :class="{ 'border-danger' : errors[0] }"
+                  :class="{ 'border-danger': errors[0] }"
                 />
               </b-form-group>
             </validation-provider>
@@ -156,30 +147,24 @@
                 v-mask="'####'"
                 :disabled="disabled"
                 type="number"
-                :class="{'border-danger' : errors[0]}"
+                :class="{ 'border-danger': errors[0] }"
               />
             </b-form-group>
           </validation-provider>
         </b-col>
         <b-col>
-          <b-form-group
-            label="Origin Country"
-            label-class="font-weight-bolder"
-          >
+          <b-form-group label="Origin Country" label-class="font-weight-bolder">
             <v-select
               v-model="note.country.value"
               :clearable="false"
               :disabled="disabled"
               label="name"
-              :reduce="value => value.id"
+              :reduce="(value) => value.id"
               :options="note.country.options"
             />
           </b-form-group>
         </b-col>
-        <b-col
-          v-if="dateTypeAgreement"
-          md="3"
-        >
+        <b-col v-if="dateTypeAgreement" md="3">
           <validation-provider
             v-slot="{ errors }"
             name="typeOfAgreement"
@@ -193,10 +178,18 @@
                 v-model="note.typeOfAgreement.value"
                 :disabled="disabled"
                 :options="note.typeOfAgreement.options"
-                :class="{'border-danger rounded': errors[0]}"
+                :class="{ 'border-danger rounded': errors[0] }"
               />
             </b-form-group>
           </validation-provider>
+        </b-col>
+        <b-col cols="12">
+          <b-form-group label="Pending" label-class="font-weight-bolder">
+            <b-form-checkbox-group
+              v-model="note.pending.value"
+              :options="note.pending.options"
+            />
+          </b-form-group>
         </b-col>
       </b-row>
       <b-row>
@@ -206,15 +199,12 @@
             name="information"
             rules="required"
           >
-            <b-form-group
-              label="Information"
-              label-class="font-weight-bolder"
-            >
+            <b-form-group label="Information" label-class="font-weight-bolder">
               <quill-editor
                 v-model="note.information.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger rounded' : errors[0]}"
+                :class="{ 'border-danger rounded': errors[0] }"
               />
             </b-form-group>
           </validation-provider>
@@ -227,15 +217,12 @@
             name="indications"
             rules="required"
           >
-            <b-form-group
-              label="Indications"
-              label-class="font-weight-bolder"
-            >
+            <b-form-group label="Indications" label-class="font-weight-bolder">
               <quill-editor
                 v-model="note.indications.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger rounded' : errors[0]}"
+                :class="{ 'border-danger rounded': errors[0] }"
               />
             </b-form-group>
           </validation-provider>
@@ -248,15 +235,12 @@
             name="suggestions"
             rules="required"
           >
-            <b-form-group
-              label="Suggestions"
-              label-class="font-weight-bolder"
-            >
+            <b-form-group label="Suggestions" label-class="font-weight-bolder">
               <quill-editor
                 v-model="note.suggestion.value"
                 :disabled="disabled"
                 :options="editorOption"
-                :class="{'border-danger rounded' : errors[0]}"
+                :class="{ 'border-danger rounded': errors[0] }"
               />
             </b-form-group>
           </validation-provider>
@@ -264,37 +248,31 @@
       </b-row>
     </validation-observer>
     <template #modal-footer>
-      <button-save
-        v-if="showButtonSave"
-        @click="saveNotesIncomplete"
-      />
+      <button-save v-if="showButtonSave" @click="saveNotesIncomplete" />
       <button-save-and-complete
         v-if="showButtonSave"
         @click="saveNotesCompleted"
       />
-      <button-update
-        v-if="showButtonUpdate"
-        @click="updateNotesCompleted"
-      />
+      <button-update v-if="showButtonUpdate" @click="updateNotesCompleted" />
     </template>
   </b-modal>
 </template>
 
 <script>
-import { quillEditor } from 'vue-quill-editor'
-import vSelect from 'vue-select'
-import HeaderModalNotes from '@/views/commons/components/first-notes/HeaderModalNotes.vue'
-import NotesServices from '@/views/commons/components/first-notes/services/notes.service'
-import ButtonSave from '@/views/commons/utilities/ButtonSave.vue'
-import ButtonSaveAndComplete from '@/views/commons/utilities/ButtonSaveAndComplete.vue'
-import ButtonUpdate from '@/views/commons/utilities/ButtonUpdate.vue'
+import { quillEditor } from "vue-quill-editor";
+import vSelect from "vue-select";
+import HeaderModalNotes from "@/views/commons/components/first-notes/HeaderModalNotes.vue";
+import NotesServices from "@/views/commons/components/first-notes/services/notes.service";
+import ButtonSave from "@/views/commons/utilities/ButtonSave.vue";
+import ButtonSaveAndComplete from "@/views/commons/utilities/ButtonSaveAndComplete.vue";
+import ButtonUpdate from "@/views/commons/utilities/ButtonUpdate.vue";
 
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
 
 export default {
-  name: 'ModalNotesTax',
+  name: "ModalNotesTax",
   components: {
     ButtonUpdate,
     ButtonSaveAndComplete,
@@ -308,7 +286,7 @@ export default {
       type: Object,
       required: true,
       default: () => ({
-        programSelected: '',
+        programSelected: "",
         roleId: null,
         notesProgram: null,
         nameProgram: null,
@@ -342,185 +320,204 @@ export default {
       },
       note: {
         maritalStatus: {
-          value: '',
+          value: "",
           options: [
             {
-              text: 'Single',
+              text: "Single",
               value: 1,
             },
             {
-              text: 'Married',
+              text: "Married",
               value: 2,
             },
             {
-              text: 'Divorced',
+              text: "Divorced",
               value: 3,
             },
             {
-              text: 'Separated',
+              text: "Separated",
               value: 4,
             },
             {
-              text: 'Widowed',
+              text: "Widowed",
               value: 5,
             },
             {
-              text: 'Unmarried',
+              text: "Unmarried",
               value: 6,
             },
           ],
         },
         dependents: {
-          value: '',
+          value: "",
         },
         migrationSituation: {
-          value: '',
+          value: "",
           options: [
             {
-              text: 'Resident',
+              text: "Resident",
               value: 0,
             },
             {
-              text: 'Citizen',
+              text: "Citizen",
               value: 1,
             },
             {
-              text: 'Undocumented',
+              text: "Undocumented",
               value: 2,
             },
           ],
         },
         bankruptcy: {
-          value: '',
+          value: "",
           options: [
             {
-              text: 'Yes',
-              value: 'YES',
+              text: "Yes",
+              value: "YES",
             },
             {
-              text: 'No',
-              value: 'NO',
+              text: "No",
+              value: "NO",
             },
           ],
-          bankruptcyYear: '0',
-          chapter: '0',
+          bankruptcyYear: "0",
+          chapter: "0",
         },
         taxYearsPending: {
-          value: '',
+          value: "",
         },
         country: {
           value: [],
           options: [],
         },
         typeOfAgreement: {
-          value: '',
+          value: "",
           options: [
             {
-              text: 'Email',
-              value: 'Email',
+              text: "Email",
+              value: "Email",
             },
             {
-              text: 'Ups',
-              value: 'Ups',
+              text: "Ups",
+              value: "Ups",
             },
             {
-              text: 'Voice',
-              value: 'Voice ',
+              text: "Voice",
+              value: "Voice ",
             },
           ],
         },
         information: {
-          value: '',
+          value: "",
           disabled: false,
         },
         indications: {
-          value: '',
+          value: "",
           disabled: false,
         },
         suggestion: {
-          value: '',
+          value: "",
           disabled: false,
         },
+        pending: {
+          value: [],
+          options: [
+            {
+              text: "ID",
+              value: {
+                id: "pen-1",
+              },
+            },
+            {
+              text: "UB",
+              value: {
+                id: "pen-2",
+              },
+            },
+          ],
+        },
       },
-    }
+    };
   },
   computed: {
     disabled() {
-      return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller
+      return this.noteInfo.statusSale === 4 || this.noteInfo.notSeller;
     },
     dateTypeAgreement() {
-      return this.noteInfo.created > '2021-08-05'
+      return this.noteInfo.created > "2021-08-05";
     },
     newNote() {
-      return this.noteInfo.created > '2021-05-16 00:00:00'
+      return this.noteInfo.created > "2021-05-16 00:00:00";
     },
     emptyNote() {
       if (this.newNote) {
-        return this.noteInfo.notes_status_new == null
+        return this.noteInfo.notes_status_new == null;
       }
-      return this.noteInfo.notes_status == 0
+      return this.noteInfo.notes_status == 0;
     },
     showButtonSave() {
-      return this.showSave && !this.noteInfo.notSeller
+      return this.showSave && !this.noteInfo.notSeller;
     },
     showButtonUpdate() {
-      return this.showUpdate && !this.noteInfo.notSeller
+      return this.showUpdate && !this.noteInfo.notSeller;
     },
   },
   watch: {
-    'note.bankruptcy.value': {
+    "note.bankruptcy.value": {
       handler(newVal) {
-        if (newVal !== 'YES') {
+        if (newVal !== "YES") {
           this.note.bankruptcy.bankruptcyYear = this.note.bankruptcy
             .bankruptcyYear
             ? this.note.bankruptcy.bankruptcyYear
-            : 0
+            : 0;
           this.note.bankruptcy.chapter = this.note.bankruptcy.chapter
             ? this.note.bankruptcy.chapter
-            : 0
+            : 0;
         } else {
-          this.note.bankruptcy.bankruptcyYear = this.note.bankruptcy.bankruptcyYear === '0'
-            || this.note.bankruptcy.bankruptcyYear === 0
-            ? ''
-            : this.note.bankruptcy.bankruptcyYear
-          this.note.bankruptcy.chapter = this.note.bankruptcy.chapter === '0'
-            || this.note.bankruptcy.chapter === 0
-            ? ''
-            : this.note.bankruptcy.chapter
+          this.note.bankruptcy.bankruptcyYear =
+            this.note.bankruptcy.bankruptcyYear === "0" ||
+            this.note.bankruptcy.bankruptcyYear === 0
+              ? ""
+              : this.note.bankruptcy.bankruptcyYear;
+          this.note.bankruptcy.chapter =
+            this.note.bankruptcy.chapter === "0" ||
+            this.note.bankruptcy.chapter === 0
+              ? ""
+              : this.note.bankruptcy.chapter;
         }
       },
       deep: true,
     },
   },
   async created() {
-    this.addPreloader()
-    await this.getFirstNote()
-    await this.getCountries()
-    this.note.country.value = this.noteInfo.originCountry
-    this.removePreloader()
+    this.addPreloader();
+    await this.getFirstNote();
+    await this.getCountries();
+    this.note.country.value = this.noteInfo.originCountry;
+    this.removePreloader();
   },
   methods: {
     async saveNotesIncomplete() {
       if (this.emptyNote) {
-        await this.saveUpdate('insert')
+        await this.saveUpdate("insert");
       } else {
-        await this.saveUpdate('update')
+        await this.saveUpdate("update");
       }
     },
     async saveNotesCompleted() {
-      const validate = await this.$refs.form.validate()
+      const validate = await this.$refs.form.validate();
       if (validate) {
         if (this.emptyNote) {
-          await this.saveUpdate('insert')
+          await this.saveUpdate("insert");
         } else {
-          await this.saveUpdate('update')
+          await this.saveUpdate("update");
         }
       }
     },
     async updateNotesCompleted() {
-      const validate = await this.$refs.form.validate()
+      const validate = await this.$refs.form.validate();
       if (validate) {
-        await this.saveUpdate('update')
+        await this.saveUpdate("update");
       }
     },
     paramsNote() {
@@ -529,21 +526,22 @@ export default {
         note: this.answersNote(),
         originCountry: this.note.country.value,
         idLead: this.noteInfo.idLead,
-      }
-      return params
+      };
+      return params;
     },
     async saveUpdate(type) {
-      const swal = await this.showConfirmSwal()
+      const swal = await this.showConfirmSwal();
       if (swal.isConfirmed) {
-        this.addPreloader()
+        this.addPreloader();
         try {
-          const service = type == 'insert' ? 'insertFirstNote' : 'updateFirstNote'
-          await NotesServices[service](this.paramsNote())
-          this.hideModal(true)
+          const service =
+            type == "insert" ? "insertFirstNote" : "updateFirstNote";
+          await NotesServices[service](this.paramsNote());
+          this.hideModal(true);
         } catch (error) {
-          console.log(error)
-          this.removePreloader()
-          this.showErrorSwal(error)
+          console.log(error);
+          this.removePreloader();
+          this.showErrorSwal(error);
         }
       }
     },
@@ -560,67 +558,85 @@ export default {
         { number: 1028, value: this.note.indications.value },
         { number: 1029, value: this.note.information.value },
         { number: 1030, value: this.note.suggestion.value },
+        { number: 2015, value: JSON.stringify(this.note.pending.value) },
         {
           number: 1063,
           value: this.dateTypeAgreement ? this.note.typeOfAgreement.value : 1,
         },
-      ]
+      ];
     },
     hideModal(status) {
-      this.modalUp = false
-      this.$emit('hide', status)
+      this.modalUp = false;
+      this.$emit("hide", status);
     },
     async getCountries() {
       try {
-        const response = await amgApi.post('/commons/get-world-countrys', {})
-        this.note.country.options = response.data
+        const response = await amgApi.post("/commons/get-world-countrys", {});
+        this.note.country.options = response.data;
       } catch (error) {
-        this.showErrorSwal(error)
+        this.showErrorSwal(error);
       }
     },
     getDetailsAnswers(note) {
-      note.forEach(answer => {
-        if (answer.answer != 'null') {
-          if (answer.question_id === 1021) this.note.maritalStatus.value = answer.answer
-          if (answer.question_id === 1022) this.note.dependents.value = answer.answer
-          if (answer.question_id === 1023) this.note.migrationSituation.value = answer.answer
-          if (answer.question_id === 1024) this.note.bankruptcy.value = answer.answer
-          if (answer.question_id === 1025) this.note.bankruptcy.bankruptcyYear = answer.answer
-          if (answer.question_id === 1026) this.note.bankruptcy.chapter = answer.answer
-          if (answer.question_id === 1027) this.note.taxYearsPending.value = answer.answer
-          if (answer.question_id === 1028) this.note.indications.value = answer.answer
-          if (answer.question_id === 1029) this.note.information.value = answer.answer
-          if (answer.question_id === 1030) this.note.suggestion.value = answer.answer
-          if (answer.question_id === 1063) this.note.typeOfAgreement.value = answer.answer
-        } else this.noteNull = true
-      })
+      note.forEach((answer) => {
+        if (answer.answer != "null") {
+          if (answer.question_id === 1021)
+            this.note.maritalStatus.value = answer.answer;
+          if (answer.question_id === 1022)
+            this.note.dependents.value = answer.answer;
+          if (answer.question_id === 1023)
+            this.note.migrationSituation.value = answer.answer;
+          if (answer.question_id === 1024)
+            this.note.bankruptcy.value = answer.answer;
+          if (answer.question_id === 1025)
+            this.note.bankruptcy.bankruptcyYear = answer.answer;
+          if (answer.question_id === 1026)
+            this.note.bankruptcy.chapter = answer.answer;
+          if (answer.question_id === 1027)
+            this.note.taxYearsPending.value = answer.answer;
+          if (answer.question_id === 1028)
+            this.note.indications.value = answer.answer;
+          if (answer.question_id === 1029)
+            this.note.information.value = answer.answer;
+          if (answer.question_id === 1030)
+            this.note.suggestion.value = answer.answer;
+          if (answer.question_id === 1063)
+            this.note.typeOfAgreement.value = answer.answer;
+          if (answer.question_id === 2015) {
+            answer.answer = answer.answer.replace(/\\\\n/g, "<br>");
+            this.note.pending.value = JSON.parse(
+              answer.answer.replace(/\\/g, '"')
+            );
+          }
+        } else this.noteNull = true;
+      });
     },
     initialValidationNote(note) {
       if (note.length != 0 && this.noteInfo.statusSale != 4 && !this.noteNull) {
-        this.showUpdate = true
+        this.showUpdate = true;
       } else if (this.noteInfo.editmodal == false) {
-        this.showSave = false
-        this.showUpdate = false
+        this.showSave = false;
+        this.showUpdate = false;
       } else if (note.length == 0 || this.noteNull) {
-        this.showSave = true
+        this.showSave = true;
       }
     },
     async getFirstNote() {
       try {
-        const params = { sale_id: this.noteInfo.saleId }
-        const response = await NotesServices.getFirstNote(params)
-        this.getDetailsAnswers(response)
-        await this.initialValidationNote(response)
-        this.modalUp = true
-        this.removePreloader()
+        const params = { sale_id: this.noteInfo.saleId };
+        const response = await NotesServices.getFirstNote(params);
+        this.getDetailsAnswers(response);
+        await this.initialValidationNote(response);
+        this.modalUp = true;
+        this.removePreloader();
       } catch (error) {
-        this.modalUp = false
-        this.showErrorSwal(error)
-        this.removePreloader()
+        this.modalUp = false;
+        this.showErrorSwal(error);
+        this.removePreloader();
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>

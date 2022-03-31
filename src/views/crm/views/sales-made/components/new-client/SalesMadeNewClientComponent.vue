@@ -8,6 +8,7 @@
       :start-page="startPage"
       :to-page="toPage"
       @reload="$refs['new-client-done-table'].refresh()"
+      @onSelectChange="getSellers()"
     >
       <template #buttons>
         <b-button
@@ -28,7 +29,7 @@
           small
           no-provider-filtering
           :busy.sync="isBusy"
-          :items="search"
+          :items="statusEmit ? removeFromTable : search"
           :fields="filteredFields"
           :per-page="paginate.perPage"
           :current-page="paginate.currentPage"
@@ -124,7 +125,9 @@
 
               <div
                 v-if="
-                  (data.item.status == 1 || data.item.status == 3) &&
+                  (data.item.status == 1 ||
+                    data.item.status == 3 ||
+                    data.item.status == 5) &&
                   (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator)
                 "
                 class="mt-07 text-right mr-1"
@@ -206,7 +209,9 @@
 
               <div
                 v-if="
-                  (data.item.status == 1 || data.item.status == 3) &&
+                  (data.item.status == 1 ||
+                    data.item.status == 3 ||
+                    data.item.status == 5) &&
                   (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator)
                 "
                 class="mt-07 text-right mr-1"
@@ -568,8 +573,9 @@
                 class="m-10px w-100"
                 size="sm"
                 @click="revisionSale(5, data.item, data.index)"
-                >Revission</b-button
               >
+                Revission
+              </b-button>
 
               <!-- Revission to Administration for Supervisor or Ceo -->
               <b-button
@@ -591,8 +597,9 @@
                 class="m-10px w-100"
                 size="sm"
                 @click="revisionSale(2, data.item, data.index)"
-                >Revission</b-button
               >
+                Revission
+              </b-button>
 
               <!-- IN SUPERVISOR REVISSION  -->
               <b-button
@@ -958,6 +965,7 @@
         updateRow();
         modal.revission = false;
       "
+      @removeFromTable="removeFromTable"
     />
 
     <!-- NOTES -->
@@ -990,6 +998,7 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import CrmServices from "@/views/crm/services/crm.service";
 
 import vSelect from "vue-select";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
@@ -1195,11 +1204,13 @@ export default {
       selectAll: false,
       selectedIndex: null,
       newRowFromSelectedIndex: null,
+      sellers: [],
+      statusEmit: false,
     };
   },
   computed: {
     ...mapState({
-      sellers: (state) => state["crm-store"].sellersCrm,
+      //sellers: (state) => state["crm-store"].sellersCrm,
       captured: (state) => state["crm-store"].capturedCrm,
       // TODO HACERLO GLOBAL
       programs: (state) => state["crm-store"].programs,
@@ -1263,14 +1274,7 @@ export default {
   async created() {
     try {
       await Promise.all([
-        this.$store.dispatch("crm-store/getSellers", {
-          module: 2,
-          body: {
-            roles: "[1,5,2,3]",
-            type: "1",
-            spec: 0,
-          },
-        }),
+        this.getSellers(),
         this.$store.dispatch("crm-store/getCaptured", {
           module: 2,
           body: {
@@ -1284,14 +1288,11 @@ export default {
       ]);
 
       this.filter[2].options = this.captured;
-      this.filter[3].options = this.sellers;
-
-      console.log(this.sellers);
+      //this.filter[3].options = this.sellers;
 
       this.filter[4].options = [
-        { label: "All", value: "" },
-        { label: "Active", value: 1 },
-        { label: "Inactive", value: 0 },
+        { label: "Active", value: "1" },
+        { label: "Inactive", value: "0" },
       ];
 
       this.filter[5].options = this.sources;
@@ -1306,6 +1307,35 @@ export default {
     this.addPaddingTd();
   },
   methods: {
+    removeFromTable(saleId) {
+      this.statusEmit = true;
+      if (this.done == 0) {
+        const index = this.items.map((el) => el.id).indexOf(saleId);
+
+        if (index !== -1) {
+          this.items.splice(index, 1);
+        }
+      }
+      return this.items;
+    },
+    async getSellers() {
+      let type = this.filter[4].model == null ? "1" : this.filter[4].model;
+
+      const tempSellers = await CrmServices.getSellersCrm(2, {
+        roles: "[1,5,2,3]",
+        type: type,
+      });
+
+      const formatedSellers = tempSellers.map((seller) => ({
+        id: seller.id,
+        label: seller.user_name,
+      }));
+
+      this.sellers = [{ id: 0, label: "All" }];
+      this.sellers.push(...formatedSellers);
+
+      this.filter[3].options = this.sellers;
+    },
     async hideInitialPaymentModal(val) {
       this.modal.initial_payment = false;
       if (val) {
@@ -1388,6 +1418,8 @@ export default {
           this.filter[7].model != null ? this.filter[7].model.toString() : "";
         let filterSourceName =
           this.filter[5].model != null ? this.filter[5].model.toString() : "";
+        let filterStatusSeller =
+          this.filter[4].model != null ? this.filter[4].model : 1;
 
         const data = await CrmService.getSaleMade(
           {
@@ -1401,6 +1433,7 @@ export default {
             order: sortDirection,
             captured: this.filter[2].model,
             seller: this.filter[3].model,
+            status_seller: filterStatusSeller,
             salemade: 0,
             rolsession: this.currentUser.role_id,
             statusip: this.filter[8].model,

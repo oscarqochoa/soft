@@ -72,7 +72,11 @@
       />
     </b-col>
     <b-col cols="12" lg="6">
-      <card-lead-files v-if="Object.keys(S_LEAD).length" :modul="modul" :lead="S_LEAD" />
+      <card-lead-files
+        v-if="Object.keys(S_LEAD).length"
+        :modul="modul"
+        :lead="S_LEAD"
+      />
     </b-col>
     <b-col v-if="modul !== 15" cols="12">
       <card-lead-payment
@@ -110,7 +114,7 @@ export default {
     CardLeadNotes,
     CardLeadPayment,
     CardLeadTask,
-    LeadUpdate
+    LeadUpdate,
   },
   props: {},
   data() {
@@ -120,7 +124,7 @@ export default {
       isBusyCall: false,
       isBusyCreditReportObtained: false,
       isBusyCreditReportPending: false,
-      editSidebar: "first"
+      editSidebar: "first",
     };
   },
   created() {
@@ -135,20 +139,20 @@ export default {
   computed: {
     ...mapGetters({
       currentUser: "auth/currentUser",
-      token: "auth/token"
+      token: "auth/token",
     }),
     ...mapState({
-      S_LEAD: state => state.CrmLeadStore.S_LEAD,
-      S_LEAD_EDIT: state => state.CrmLeadStore.S_LEAD_EDIT,
-      S_KEY_UPDATE_DETAILS_LEAD: state =>
-        state.CrmLeadStore.S_KEY_UPDATE_DETAILS_LEAD
+      S_LEAD: (state) => state.CrmLeadStore.S_LEAD,
+      S_LEAD_EDIT: (state) => state.CrmLeadStore.S_LEAD_EDIT,
+      S_KEY_UPDATE_DETAILS_LEAD: (state) =>
+        state.CrmLeadStore.S_KEY_UPDATE_DETAILS_LEAD,
     }),
     onlyRead() {
       return this.modul === 18;
     },
     modul() {
       return this.$route.meta.module;
-    }
+    },
   },
   watch: {},
   methods: {
@@ -169,7 +173,7 @@ export default {
       A_GET_STATES: "CrmGlobalStore/A_GET_STATES",
       A_GET_EEUU_STATES: "CrmGlobalStore/A_GET_EEUU_STATES",
       A_GET_COUNTRIES: "CrmGlobalStore/A_GET_COUNTRIES",
-      A_GET_SELLERS: "CrmGlobalStore/A_GET_SELLERS"
+      A_GET_SELLERS: "CrmGlobalStore/A_GET_SELLERS",
     }),
     async openEditLead() {
       // await all promises
@@ -185,7 +189,7 @@ export default {
           this.getStates(),
           this.getEeuuStates(),
           this.getCountries(),
-          this.getOwners()
+          this.getOwners(),
         ]);
         this.removePreloader();
         this.editSidebar = "second";
@@ -240,7 +244,7 @@ export default {
         this.isBusyCreditReportPending = true;
         await this.A_GET_CREDIT_REPORT_PENDINGS({
           id: this.$route.params.id,
-          modul: this.modul
+          modul: this.modul,
         });
         this.isBusyCreditReportPending = false;
       } catch (error) {
@@ -277,7 +281,7 @@ export default {
         const roles = [2, 4].includes(this.modul) ? "[1,2,5]" : "[1,2,3,5]";
         await this.A_GET_OWNERS({
           modul: this.modul,
-          body: { roles, type: "1" }
+          body: { roles, type: "1" },
         });
       } catch (error) {
         console.log("Something went wrong getOwners:", error);
@@ -309,7 +313,7 @@ export default {
         this.isBusyCall = true;
         await this.A_GET_CALLS({
           lead_id: this.$route.params.id,
-          limit
+          limit,
         });
         this.isBusyCall = false;
       } catch (error) {
@@ -427,7 +431,7 @@ export default {
       try {
         await this.A_GET_SELLERS({
           modul: this.currentUser.modul_id,
-          body: { roles: "[]", type: "1" }
+          body: { roles: "[]", type: "1" },
         });
       } catch (error) {
         console.log("Something went wrong getSellers:", error);
@@ -439,8 +443,8 @@ export default {
           this.getInternalErrors(error)
         );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
