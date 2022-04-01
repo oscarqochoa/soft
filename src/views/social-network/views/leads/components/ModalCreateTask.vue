@@ -516,7 +516,6 @@ export default {
       A_VALIDATE_TASK_FAVORITE: "TaskStore/A_VALIDATE_TASK_FAVORITE",
       A_SET_LEAD_TASK: "TaskStore/A_SET_LEAD_TASK",
       A_GET_HOUR_SYSTEM: "TaskStore/A_GET_HOUR_SYSTEM",
-      A_GET_USERS_BY_MODULE: "global-store/A_GET_USERS_BY_MODULE",
       A_GET_TASK_COUNTER: "TaskStore/A_GET_TASK_COUNTER",
     }),
     async getHourSystem() {

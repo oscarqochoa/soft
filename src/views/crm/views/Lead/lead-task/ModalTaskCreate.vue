@@ -293,7 +293,7 @@ export default {
     },
     async getSellers() {
       try {
-        const response = await this.A_GET_USERS_BY_MODULE({payload: this.moduleId});
+        const response = await this.A_GET_USERS_BY_MODULE({moduleId: this.moduleId});
         this.sellers = response;
         this.task.seller = this.authUser.user_id;
       } catch (error) {}
