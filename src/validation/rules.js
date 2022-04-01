@@ -26,6 +26,10 @@ extend('min', {
   ...min,
   message: 'is min',
 })
+extend('valid-document', {
+  validate: value => (value.length == 11 || value.length == 0),
+  message: 'Please enter a valid Document',
+})
 extend('max', {
   ...max,
   message: 'is max',

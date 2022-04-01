@@ -70,226 +70,235 @@
         </div>
       </b-card-title>
     </template>
-
-    <b-row class="ml-xl-2 ml-lg-2 ml-md-2 ml-sm-0 ml-0 mt-1">
-      <b-col md="6">
-        <standar-form-group label="Nickname" :disabled="!editPersonal">
-          <b-form-input
-            v-model.trim="personalInfo.nickname"
-            :placeholder="startTypingP"
-            type="text"
-            :class="['bg-color-white', 'font-bureau-style', borderNickname]"
-            :disabled="!editPersonal"
-          ></b-form-input>
-        </standar-form-group>
-      </b-col>
-      <b-col md="6">
-        <standar-form-group label="Phone(M)" :disabled="!editPersonal">
-          <b-input-group>
+    <validation-observer ref="form" tag="b-card">
+      <b-row class="ml-xl-2 ml-lg-2 ml-md-2 ml-sm-0 ml-0 mt-1">
+        <b-col md="6">
+          <standar-form-group label="Nickname" :disabled="!editPersonal">
             <b-form-input
-              v-model="personalMobile.phonem"
-              :placeholder="startTypingM"
-              v-mask="'(###) ###-####'"
-              :disabled="!editMobile"
-            />
-            <b-input-group-append class="border-right" v-if="editMobile">
-              <b-button
-                variant="outline-primary"
-                class="btn-icon"
-                @click="updateInformation(3)"
-              >
-                <feather-icon icon="SaveIcon" class="cursor-pointer" />
-              </b-button>
-            </b-input-group-append>
-            <b-input-group-append>
-              <b-button
-                v-if="!editMobile"
-                variant="outline-warning"
-                class="btn-icon"
-                @click="activateInformationEdit(3)"
-              >
-                <feather-icon icon="Edit2Icon" class="cursor-pointer" />
-              </b-button>
-              <b-button
-                v-if="editMobile"
-                variant="outline-danger"
-                class="btn-icon"
-                @click="cancelInformationEdit(3)"
-              >
-                <feather-icon icon="TrashIcon" class="cursor-pointer" />
-              </b-button>
-            </b-input-group-append>
-            <b-input-group-append
-              class="cursor-pointer"
-              @click="onModalTrackingChangeOpen(3, 'PHONE (M)')"
-            >
-              <b-input-group-text>
-                <feather-icon icon="ListIcon" />
-              </b-input-group-text>
-            </b-input-group-append>
-          </b-input-group>
-        </standar-form-group>
-      </b-col>
-      <b-col md="6">
-        <standar-form-group label="Name" :disabled="!editPersonal">
-          <b-form-input
-            v-model.trim="personalInfo.name"
-            :placeholder="startTypingP"
-            type="text"
-            :class="['bg-color-white', 'font-bureau-style']"
-            :disabled="!editPersonal"
-          ></b-form-input>
-        </standar-form-group>
-      </b-col>
-      <b-col md="6">
-        <standar-form-group label="ST/AD" :disabled="!editPersonal">
-          <v-select
-            v-model="personalInfo.stateAd"
-            :options="optionsStatesAd"
-            :disabled="!editPersonal"
-            :reduce="(el) => el.value"
-          ></v-select>
-        </standar-form-group>
-      </b-col>
-      <b-col md="6">
-        <standar-form-group label="Lastname" :disabled="!editPersonal">
-          <b-form-input
-            v-model.trim="personalInfo.last_name"
-            :placeholder="startTypingP"
-            type="text"
-            class="bg-color-white font-bureau-style"
-            :disabled="!editPersonal"
-          ></b-form-input>
-        </standar-form-group>
-      </b-col>
-      <b-col md="6">
-        <standar-form-group label="Status" :disabled="!editPersonal">
-          <v-select
-            v-model="personalInfo.status"
-            :options="optionsStatus"
-            :disabled="!editPersonal"
-            :reduce="(el) => el.value"
-          ></v-select>
-        </standar-form-group>
-      </b-col>
-      <b-col md="6">
-        <standar-form-group label="DOB" :disabled="!editPersonal">
-          <b-form-input
-            type="date"
-            v-model="personalInfo.dob"
-             :disabled="!editPersonal"
-          ></b-form-input>
-          <!-- <b-form-datepicker
-            class="bg-color-white font-bureau-style"
-            :disabled="!editPersonal"
-            v-model="personalInfo.dob"
-          ></b-form-datepicker> -->
-        </standar-form-group>
-      </b-col>
-      <b-col md="6">
-        <b-form-group
-          id="fieldset-horizontal"
-          label-class="p-0"
-          label-for="input-horizontal"
-          label-cols-lg="3"
-          label-cols-md="4"
-          label-cols-sm="3"
-          label-cols="6"
-          content-cols-lg="8"
-          content-cols-md="7"
-          content-cols-sm="12"
-          content-cols="12"
-        >
-          <template #label>
-            <v-select
-              v-model="personalInfo.document"
-              :options="optionsDocuments"
-              class="
-                select-icon-none
-                bg-color-white
-                pl-0
-                pr-2
-                font-bureau-style
-                mb-xl-0 mb-lg-0 mb-md-0 mb-sm-1 mb-1
-                mt-xl-0 mt-lg-0 mt-md-0 mt-sm-1 mt-1
-              "
+              v-model.trim="personalInfo.nickname"
+              :placeholder="startTypingP"
+              type="text"
+              :class="['bg-color-white', 'font-bureau-style', borderNickname]"
               :disabled="!editPersonal"
-              :clearable="false"
+            ></b-form-input>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="Phone(M)" :disabled="!editPersonal">
+            <b-input-group>
+              <b-form-input
+                v-model="personalMobile.phonem"
+                :placeholder="startTypingM"
+                v-mask="'(###) ###-####'"
+                :disabled="!editMobile"
+              />
+              <b-input-group-append class="border-right" v-if="editMobile">
+                <b-button
+                  variant="outline-primary"
+                  class="btn-icon"
+                  @click="updateInformation(3)"
+                >
+                  <feather-icon icon="SaveIcon" class="cursor-pointer" />
+                </b-button>
+              </b-input-group-append>
+              <b-input-group-append>
+                <b-button
+                  v-if="!editMobile"
+                  variant="outline-warning"
+                  class="btn-icon"
+                  @click="activateInformationEdit(3)"
+                >
+                  <feather-icon icon="Edit2Icon" class="cursor-pointer" />
+                </b-button>
+                <b-button
+                  v-if="editMobile"
+                  variant="outline-danger"
+                  class="btn-icon"
+                  @click="cancelInformationEdit(3)"
+                >
+                  <feather-icon icon="TrashIcon" class="cursor-pointer" />
+                </b-button>
+              </b-input-group-append>
+              <b-input-group-append
+                class="cursor-pointer"
+                @click="onModalTrackingChangeOpen(3, 'PHONE (M)')"
+              >
+                <b-input-group-text>
+                  <feather-icon icon="ListIcon" />
+                </b-input-group-text>
+              </b-input-group-append>
+            </b-input-group>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="Name" :disabled="!editPersonal">
+            <b-form-input
+              v-model.trim="personalInfo.name"
+              :placeholder="startTypingP"
+              type="text"
+              :class="['bg-color-white', 'font-bureau-style']"
+              :disabled="!editPersonal"
+            ></b-form-input>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="ST/AD" :disabled="!editPersonal">
+            <v-select
+              v-model="personalInfo.stateAd"
+              :options="optionsStatesAd"
+              :disabled="!editPersonal"
               :reduce="(el) => el.value"
             ></v-select>
-          </template>
-          <b-input-group>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="Lastname" :disabled="!editPersonal">
             <b-form-input
-              v-model="personalInfo.numberDocument"
+              v-model.trim="personalInfo.last_name"
               :placeholder="startTypingP"
               type="text"
-              class="bg-color-white font-bureau-style border-document"
-              v-mask="'###-##-####'"
-              :disabled="
-                (!editPersonal || !isCeoOrSupervisor) &&
-                (!emptyDocument || !editPersonal)
-              "
-              v-if="showDocument || emptyDocument"
-            />
-            <input
-              :placeholder="startTypingP"
-              type="text"
-              class="form-control border-document"
-              style="padding-top: 7px"
-              v-else
-              disabled
-              :value="personalInfo.numberDocumentEnc"
-            />
+              class="bg-color-white font-bureau-style"
+              :disabled="!editPersonal"
+            ></b-form-input>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="Status" :disabled="!editPersonal">
+            <v-select
+              v-model="personalInfo.status"
+              :options="optionsStatus"
+              :disabled="!editPersonal"
+              :reduce="(el) => el.value"
+            ></v-select>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="DOB" :disabled="!editPersonal">
+            <b-form-input
+              type="date"
+              v-model="personalInfo.dob"
+              :disabled="!editPersonal"
+            ></b-form-input>
+            <!-- <b-form-datepicker
+              class="bg-color-white font-bureau-style"
+              :disabled="!editPersonal"
+              v-model="personalInfo.dob"
+            ></b-form-datepicker> -->
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <validation-provider rules="valid-document" v-slot="{ errors }">
+            <b-form-group
+              id="fieldset-horizontal"
+              label-class="p-0"
+              label-for="input-horizontal"
+              label-cols-lg="3"
+              label-cols-md="4"
+              label-cols-sm="3"
+              label-cols="6"
+              content-cols-lg="8"
+              content-cols-md="7"
+              content-cols-sm="12"
+              content-cols="12"
+            >
+              <template #label>
+                <v-select
+                  v-model="personalInfo.document"
+                  :options="optionsDocuments"
+                  class="
+                    select-icon-none
+                    bg-color-white
+                    pl-0
+                    pr-2
+                    font-bureau-style
+                    mb-xl-0 mb-lg-0 mb-md-0 mb-sm-1 mb-1
+                    mt-xl-0 mt-lg-0 mt-md-0 mt-sm-1 mt-1
+                  "
+                  :disabled="!editPersonal"
+                  :clearable="false"
+                  :reduce="(el) => el.value"
+                ></v-select>
+              </template>
+              <b-input-group >
+                <b-form-input
+                  v-model="personalInfo.numberDocument"
+                  :placeholder="startTypingP"
+                  v-if="showDocument || emptyDocument"
+                  class="font-bureau-style border-document"
+                  v-mask="'###-##-####'"
+                  :disabled="
+                    (!editPersonal || !isCeoOrSupervisor) &&
+                    (!emptyDocument || !editPersonal)
+                  "
+                  :state="errors[0] ? false : null"
+                />
+                <input
+                  :placeholder="startTypingP"
+                  type="text"
+                  class="form-control border-document"
+                  style="padding-top: 7px"
+                  v-else
+                  disabled
+                  :value="personalInfo.numberDocumentEnc"
+                />
 
-            <b-input-group-append>
-              <b-button
-                :disabled="!isCeoOrSupervisor || editPersonal"
-                variant="outline-primary"
-                class="btn-icon"
-                @click="showDocument = !showDocument"
-              >
-                <feather-icon icon="EyeIcon" v-if="showDocument"></feather-icon>
-                <feather-icon icon="EyeOffIcon" v-else></feather-icon>
-              </b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
-      <b-col md="6">
-        <standar-form-group label="E-mail" :disabled="!editPersonal">
-          <b-form-input
-            v-model="personalInfo.email"
-            :placeholder="startTypingP"
-            type="email"
-            class="bg-color-white font-bureau-style"
-            :disabled="!editPersonal"
-          ></b-form-input>
-        </standar-form-group>
-      </b-col>
-      <b-col md="6">
-        <standar-form-group label="Origin Country" :disabled="!editPersonal">
-          <v-select
-            v-model="personalInfo.origin_country"
-            :options="optionsOriginCountrys"
-            class="select-icon-none bg-color-white font-bureau-style"
-            :placeholder="startTypingP"
-            :disabled="!editPersonal"
-            :reduce="(el) => el.value"
-          ></v-select>
-        </standar-form-group>
-      </b-col>
-      <b-col md="6">
-        <standar-form-group label="Language" :disabled="!editPersonal">
-          <v-select
-            v-model="personalInfo.language"
-            :options="optionsLanguage"
-            class="select-icon-none bg-color-white font-bureau-style"
-            :disabled="!editPersonal"
-            :reduce="(el) => el.value"
-          ></v-select>
-        </standar-form-group>
-      </b-col>
-    </b-row>
+                <b-input-group-append>
+                  <b-button
+                    :disabled="!isCeoOrSupervisor || editPersonal"
+                    variant="outline-primary"
+                    class="btn-icon"
+                    @click="showDocument = !showDocument"
+                  >
+                    <feather-icon
+                      icon="EyeIcon"
+                      v-if="showDocument"
+                    ></feather-icon>
+                    <feather-icon icon="EyeOffIcon" v-else></feather-icon>
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </b-form-group>
+            <b-form-invalid-feedback>
+              {{ errors[0] }}
+            </b-form-invalid-feedback>
+          </validation-provider>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="E-mail" :disabled="!editPersonal">
+            <b-form-input
+              v-model="personalInfo.email"
+              :placeholder="startTypingP"
+              type="email"
+              class="bg-color-white font-bureau-style"
+              :disabled="!editPersonal"
+            ></b-form-input>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="Origin Country" :disabled="!editPersonal">
+            <v-select
+              v-model="personalInfo.origin_country"
+              :options="optionsOriginCountrys"
+              class="select-icon-none bg-color-white font-bureau-style"
+              :placeholder="startTypingP"
+              :disabled="!editPersonal"
+              :reduce="(el) => el.value"
+            ></v-select>
+          </standar-form-group>
+        </b-col>
+        <b-col md="6">
+          <standar-form-group label="Language" :disabled="!editPersonal">
+            <v-select
+              v-model="personalInfo.language"
+              :options="optionsLanguage"
+              class="select-icon-none bg-color-white font-bureau-style"
+              :disabled="!editPersonal"
+              :reduce="(el) => el.value"
+            ></v-select>
+          </standar-form-group>
+        </b-col>
+      </b-row>
+    </validation-observer>
 
     <b-modal
       id="modal-trackin-not-call"
@@ -508,50 +517,53 @@ export default {
       }
     },
     async updateInformation(type) {
-      try {
-        let message =
-          type == 1 ? "information" : type == 2 ? "address" : "mobile";
+      const validate = await this.$refs.form.validate();
+      if (validate) {
+        try {
+          let message =
+            type == 1 ? "information" : type == 2 ? "address" : "mobile";
 
-        const confirm = await this.showConfirmSwal(
-          "Are you sure?",
-          `The ${message} will be save!`
-        );
+          const confirm = await this.showConfirmSwal(
+            "Are you sure?",
+            `The ${message} will be save!`
+          );
 
-        if (confirm.value) {
-          this.addPreloader();
-          let params = {};
+          if (confirm.value) {
+            this.addPreloader();
+            let params = {};
 
-          if (type == 1) {
-            switch (this.personalInfo.document) {
-              case 1:
-                this.personalInfo.ssn = this.personalInfo.numberDocument;
-                break;
-              case 2:
-                this.personalInfo.itin = this.personalInfo.numberDocument;
-                break;
-              case 3:
-                this.personalInfo.other = this.personalInfo.numberDocument;
-                break;
+            if (type == 1) {
+              switch (this.personalInfo.document) {
+                case 1:
+                  this.personalInfo.ssn = this.personalInfo.numberDocument;
+                  break;
+                case 2:
+                  this.personalInfo.itin = this.personalInfo.numberDocument;
+                  break;
+                case 3:
+                  this.personalInfo.other = this.personalInfo.numberDocument;
+                  break;
+              }
+              this.personalInfo.numberDocumentEnc = this.personalInfo
+                .numberDocument
+                ? "XXX-XX-" +
+                  this.personalInfo.numberDocument.substring(
+                    this.personalInfo.numberDocument.length - 4
+                  )
+                : null;
+              params = this.personalInfo;
+              this.getEmptyDocument();
+            } else if (type == 2) {
+              params = this.personalAddress;
+            } else if (type == 3) {
+              params = this.personalMobile;
             }
-            this.personalInfo.numberDocumentEnc = this.personalInfo
-              .numberDocument
-              ? "XXX-XX-" +
-                this.personalInfo.numberDocument.substring(
-                  this.personalInfo.numberDocument.length - 4
-                )
-              : null;
-            params = this.personalInfo;
-            this.getEmptyDocument();
-          } else if (type == 2) {
-            params = this.personalAddress;
-          } else if (type == 3) {
-            params = this.personalMobile;
-          }
 
-          this.updateFunction(params, type);
+            this.updateFunction(params, type);
+          }
+        } catch (error) {
+          throw error;
         }
-      } catch (error) {
-        throw error;
       }
     },
     async updateFunction(params, type) {
@@ -572,7 +584,10 @@ export default {
           this.lead.first_name = response.data[0].first_name;
           this.lead.last_name = response.data[0].last_name;
 
-          this.lead.lead_name = (response.data[0].first_name ? response.data[0].first_name: '') + ' ' + (response.data[0].last_name ? response.data[0].last_name : '');
+          this.lead.lead_name =
+            (response.data[0].first_name ? response.data[0].first_name : "") +
+            " " +
+            (response.data[0].last_name ? response.data[0].last_name : "");
           this.requiredFieldsForCreateCrmTask.first_name =
             response.data[0].first_name;
           this.requiredFieldsForCreateCrmTask.last_name =
@@ -598,7 +613,9 @@ export default {
         }
       } catch (error) {
         this.removePreloader();
-        this.showErrorSwal("The information could not be saved, contact support or try again");
+        this.showErrorSwal(
+          "The information could not be saved, contact support or try again"
+        );
       }
     },
     onNotCall() {
@@ -626,7 +643,7 @@ export default {
             });
             if (this.isResponseSuccess(response)) {
               this.lead.not_call = JSON.stringify(response.data);
-              this.personalInfo.valueStatus = "RECOVERY"
+              this.personalInfo.valueStatus = "RECOVERY";
               this.showToast(
                 "success",
                 "top-right",
@@ -840,9 +857,6 @@ export default {
     },
     "personalInfo.last_name"(newValue) {
       this.personalInfo.last_name = this.capitalize(newValue);
-    },
-    "personalInfo.numberDocument"(newValue) {
-      this.emptyDocument = newValue == null ? true : false;
     },
     editPersonal(newValue) {
       //Selects PlaceHolders
