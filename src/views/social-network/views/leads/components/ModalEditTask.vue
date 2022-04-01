@@ -7,6 +7,7 @@
     size="lg"
     @hidden="close"
     id="modalSNEditTask"
+    no-close-on-backdrop
   >
     <validation-observer #default="{ handleSubmit }" ref="refFormObserver">
       <b-form @submit.prevent="handleSubmit(submit)" @reset.prevent="resetForm">

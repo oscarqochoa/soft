@@ -231,7 +231,7 @@ export default {
       startPage: "",
       endPage: "",
       totalData: "",
-      perPage: 1000,
+      perPage: 20,
       nextPage: "",
       currentPage: 1,
       toPage: "",

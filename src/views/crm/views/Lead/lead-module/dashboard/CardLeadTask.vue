@@ -121,6 +121,7 @@
       size="lg"
       title="Tasks"
       hide-footer
+      no-close-on-backdrop
     >
       <modal-task-create
         :modul="modul"
@@ -141,6 +142,7 @@
       size="lg"
       title="Tasks"
       hide-footer
+      no-close-on-backdrop
     >
       <modal-task-edit
         :modul="modul"

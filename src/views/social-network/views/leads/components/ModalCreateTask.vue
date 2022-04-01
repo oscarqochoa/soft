@@ -6,6 +6,7 @@
     hide-footer
     size="lg"
     @hidden="close"
+    no-close-on-backdrop
   >
     <validation-observer #default="{ handleSubmit }" ref="refFormObserver">
       <!-- Form -->
