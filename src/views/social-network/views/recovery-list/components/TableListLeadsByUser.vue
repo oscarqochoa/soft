@@ -12,7 +12,7 @@
         @reload="$refs['refRecoveryByUser'].refresh()"
     >
       <template #buttons-filter>
-        <div class="d-flex align-items-center justify-content-between pl-2 pr-2">
+        <div v-if="!(isCeo || isSupervisor || isTeamLeader)" class="d-flex align-items-center justify-content-between pl-2 pr-2">
           <b-button href="" class="botton-replay" v-if="btnRecoverySend" variant="success" @click="replay">SEND TO REVISSION</b-button>
         </div>
       </template>

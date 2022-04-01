@@ -15,7 +15,7 @@
       <div class="p-2">
         <h4 class="mb-1">Select program</h4>
         <div class="d-flex align-items-center justify-content-start  w-100">
-          <div :class="btnProgram ? (item.id === btnProgram.id ? 'select-program-recovery' : 'card') : 'card'" class=" p-1 card-programs-recovery cursor-pointer mr-2" @click="selectProgramById(item.id)" v-for="item in programs" :key="item.id">
+          <div :class="btnProgram ? (item.id === btnProgram.id ? 'select-program-recovery' : 'card') : 'card'" class=" p-1 card-programs-recovery cursor-pointer mr-2" @click="selectProgramById(item)" v-for="item in programs" :key="item.id">
             <p class="p-0  m-0">{{ item.value }}: <span class="">{{ item.count }}</span></p>
           </div>
         </div>
@@ -36,11 +36,13 @@
               label="name"
               :preselect-first="true"
               :selectable = "option => option.status==2"
+
           >
           </v-select>
           <div>
             <div class=" p-1 card-programs-recovery cursor-pointer card m-0" v-if="btnProgram">
               <p class="p-0  m-0">{{ btnProgram.value }}: <span class="">{{ btnProgram.count }}</span></p>
+              <p class="p-0  m-0">{{ countProgram && users.length > 0 ? `Per user you will have ${ parseInt(countProgram / users.length) }`  : '' }}</p>
             </div>
           </div>
         </div>
@@ -56,6 +58,7 @@ import RecoveryListService from "@/views/social-network/views/recovery-list/serv
 import vSelect from "vue-select";
 import users from "@/router/routes/amg/users";
 
+//
 export default {
   name: 'ModalCreateRecoveryList',
   components: {
@@ -68,7 +71,8 @@ export default {
       users: [],
       selectProgram: null,
       btnProgram: null,
-      usersTotal: []
+      usersTotal: [],
+      countProgram: null
     }
   },
   methods: {
@@ -76,27 +80,31 @@ export default {
       this.openModal = true;
       this.getUsersAndProgramsRecovery()
     },
-    selectProgramById(id) {
-      this.selectProgram = id;
-      this.btnProgram = this.programs.find(item => item.id === id);
+    selectProgramById(program) {
+      this.selectProgram = program.id;
+      this.countProgram = program.count;
+      this.btnProgram = this.programs.find(item => item.id === program.id);
     },
     async createRecoverList(bvModalEvt) {
       bvModalEvt.preventDefault()
-      const resp = await this.showConfirmSwal(
-          "Are you sure?",
-          "You won't be able to revert this!",
-          "question"
-      )
-      if (resp.value) {
+      if(this.users.length > 0 && this.countProgram) {
+        const resp = await this.showConfirmSwal(
+            "Are you sure?",
+            "You won't be able to revert this!",
+            "question"
+        )
+        if (resp.value) {
 
-        this.addPreloader();
-        await RecoveryListService.createListRecoveryByProgram({
-          usersId: this.users.map(user => user.id),
-          programId: this.btnProgram ? this.btnProgram.id : null,
-          cant: this.users.length
-        })
+          this.addPreloader();
+          await RecoveryListService.createListRecoveryByProgram({
+            usersId: this.users.map(user => user.id),
+            programId: this.btnProgram ? this.btnProgram.id : null,
+            cant: this.users.length
+          })
           this.closeModal()
+        }
       }
+
 
     },
     async getUsersAndProgramsRecovery(){
@@ -124,6 +132,10 @@ export default {
 <style lang="scss">
 .card-programs-recovery{
   transition: .2s all ease-in-out;
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: space-between;
   &:hover{
     background: #0090e7 !important;
     color: #fff;

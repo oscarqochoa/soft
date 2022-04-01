@@ -2,7 +2,7 @@
   <div
       class="d-flex flex-column justify-content-center align-items-center"
   >
-    <b-checkbox :disabled="disabledItem" @change="onChangeStatus(item)" v-model="toggleItem"/>
+    <b-checkbox :disabled="disabledItem  && !(this.isCeo || this.isSupervisor || this.isTeamLeader)" @change="onChangeStatus(item)" v-model="toggleItem"/>
   </div>
 </template>
 
