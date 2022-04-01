@@ -2,7 +2,7 @@
   <div>
     <header-slot>
       <b-row slot="actions" class="justify-content-end">
-        <lead-create-social color_btn="primary"/>
+        <lead-create-social color_btn="primary" />
         <b-button
           variant="success"
           class="mr-1"
@@ -20,7 +20,7 @@
           class="btn-icon mr-1"
           @click="openModalHistorySms"
         >
-          <feather-icon icon="ListIcon" size="18"/>
+          <feather-icon icon="ListIcon" size="18" />
         </b-button>
       </b-row>
     </header-slot>
@@ -34,6 +34,7 @@
           :personalAddress="personalAddress"
           :personalMobile="personalMobile"
           :requiredFieldsForCreateCrmTask="requiredFieldsForCreateCrmTask"
+          :dataAlreadyLoaded="dataAlreadyLoaded"
         />
       </b-col>
       <b-col md="12">
@@ -114,7 +115,7 @@ export default {
     CardContactInformation,
     ModalSendSms,
     ModalHistorySms,
-    LeadCreateSocial
+    LeadCreateSocial,
   },
   data() {
     return {
@@ -143,6 +144,7 @@ export default {
 
       // Modals
       showModalSendSms: false,
+      dataAlreadyLoaded: false,
     };
   },
   computed: {
@@ -271,6 +273,7 @@ export default {
         id_user: this.user.user_id,
         typee: 1,
       };
+      this.dataAlreadyLoaded = true;
     },
     getCardsLead() {
       this.cardsLead = {
@@ -293,6 +296,4 @@ export default {
   border-bottom: none !important;
   margin-bottom: 0px !important;
 }
-
-
 </style>

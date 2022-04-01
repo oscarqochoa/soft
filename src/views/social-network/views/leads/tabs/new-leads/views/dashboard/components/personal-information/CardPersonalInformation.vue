@@ -371,6 +371,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    dataAlreadyLoaded: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     vSelect,
@@ -857,6 +861,9 @@ export default {
     },
     "personalInfo.last_name"(newValue) {
       this.personalInfo.last_name = this.capitalize(newValue);
+    },
+     "dataAlreadyLoaded"() {
+      this.emptyDocument = this.personalInfo.numberDocument == null ? true : false;
     },
     editPersonal(newValue) {
       //Selects PlaceHolders
