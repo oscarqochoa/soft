@@ -104,8 +104,6 @@ export default {
             `The Nickname already exists.${response.data.message}`
           );
         }
-
-        console.log(response);
       } catch (error) {
         console.log("Something went wrong on validateNickname: ", error);
         this.showErrorSwal(error);

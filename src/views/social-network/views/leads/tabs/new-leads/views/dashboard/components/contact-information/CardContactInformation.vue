@@ -1,180 +1,171 @@
 <template>
-  <div>
-    <b-card body-class="px-0">
-      <b-container>
-        <b-row>
-          <b-col cols="6">
-            <h3 class="title-card">Contact Information</h3>
-          </b-col>
-          <b-col cols="6" class="text-right"> </b-col>
-        </b-row>
-      </b-container>
+  <b-card body-class="px-0">
+    <template #header>
+      <b-card-title class="card-title-address">
+        <div>Contact Information</div>
+      </b-card-title>
+    </template>
 
-      <div class="mt-5 p-relative">
-        <b-tabs
-          pills
-          active-nav-item-class="bg-purple-tab"
-          content-class="mt-2"
+    <div class="p-relative">
+      <b-tabs
+        id="ci-source-tabs"
+        pills
+        active-nav-item-class="bg-primary box-shadow-primary border-primary primary"
+        nav-class="border-bottom-vertical-tab pb-1 rounded-0"
+        lazy
+        v-model="sourceIndex"
+      >
+        <b-tab
+          v-for="(source, index) in allInfo"
+          :key="index"
           lazy
-          nav-wrapper-class="card nav-wrapper-class-card"
-          v-model="sourceIndex"
+          title-link-class="sub-tab px-3 ml-2"
         >
-          <span
-            v-if="doneReload"
-            style="position: absolute; z-index: 10; left: 29px; bottom: 984px"
-            class="title-card"
-          >
-            Contact information
-          </span>
-          <b-tab
-            v-for="(source, index) in allInfo"
-            :key="index"
-            title-item-class="text-center w-15"
-            title-link-class="bg-default-purple-tab"
+          <template #title>{{ source.source }}</template>
+          <b-tabs
+            id="ci-subsource-tabs"
+            pills
+            active-nav-item-class="bg-orange-tab"
+            content-class="padding-vertical-tab"
+            nav-class="border-bottom-vertical-tab nav-pill-warning mt-2 pb-1 rounded-0"
             lazy
+            v-model="subSourceIndex"
           >
-            <template #title>{{ source.source }}</template>
-            <b-card no-body>
-              <!-- nav-class="border-primary" -->
-              <div class="mt-2 ml-2">
+            <b-tab
+              v-for="subSource in source.sub_source"
+              :key="subSource.name"
+              title-item-class="text-center ml-3"
+              title-link-class="bg-warning-tab"
+            >
+              <template #title>
+                <span>{{ subSource.name }}</span>
+              </template>
+              <div class="ml-3">
                 <b-tabs
-                  pills
-                  active-nav-item-class="bg-orange-tab"
-                  content-class="padding-vertical-tab"
-                  nav-class="border-bottom-vertical-tab p-4"
+                  id="ci-vertical-tabs"
+                  active-nav-item-class="font-weight-bold text-uppercase nav-link-sn-active"
+                  nav-class="border-right-vertical-tab border-bottom-0 h-100 rounded-0"
                   lazy
-                  v-model="subSourceIndex"
+                  vertical
+                  v-model="replyIndex"
                 >
                   <b-tab
-                    v-for="subSource in source.sub_source"
-                    :key="subSource.name"
-                    title-item-class="text-center w-15"
-                    title-link-class="bg-default-tab"
+                    title-item-class="w-vertical-tab"
+                    title-link-class="nav-link-vertical nav-link-sn mx-0 border-light"
+                    v-for="(reply, index) in subSource.replies"
+                    :key="index"
+                    @click="setActiveColor(index)"
                   >
                     <template #title>
-                      <span>{{ subSource.name }}</span>
-                    </template>
-                    <div class="mt-2 ml-3">
-                      <b-tabs
-                        active-nav-item-class="font-weight-bold text-uppercase nav-link-sn-active"
-                        nav-class="border-right-vertical-tab border-bottom-0 h-100"
-                        lazy
-                        vertical
-                        v-model="replyIndex"
+                      <div
+                        :class="[
+                          'vertical-item',
+                          activeReply == index ? 'vertical-item-active' : '',
+                        ]"
                       >
-                        <b-tab
-                          title-item-class="w-vertical-tab"
-                          title-link-class="nav-link-vertical nav-link-sn mx-0 border-light"
-                          v-for="(reply, index) in subSource.replies"
-                          :key="index"
-                          @click="setActiveColor(index)"
-                        >
-                          <template #title>
-                            <span
-                              class="reply-active-tab-number roboto-class"
-                              :style="
-                                activeReply == index
-                                  ? 'background: #FF6045 !important; color: white !important; font-size: 15px !important;'
-                                  : 'font-size: 15px !important;'
-                              "
-                              >{{ reply.count_reply }}</span
-                            >
-                            <span>{{ reply.type_reply }}</span>
-                          </template>
-                          <b-row>
-                            <b-col :md="source.id == 1 ? 9 : 12">
-                              <b-row style="padding-top: 37px">
-                                <b-col cols="12" md="4">
-                                  <contact-information
-                                    :contactInfo="{
-                                      catcher: reply.name_catcher,
-                                      potential: reply.potencial,
-                                      program: reply.fanpage,
-                                      date: reply.created_at,
-                                      dialogue: reply.dialogue,
-                                      reply_id: reply.reply_id,
-                                      contact_method: reply.contact_method,
-                                      reason: reply.reason,
-                                    }"
-                                    :reply="reply"
-                                    :parent_source="source.id"
-                                  ></contact-information>
-                                </b-col>
-                                <b-col cols="12" md="8">
-                                  <contact-notes
-                                    :reply="reply"
-                                    :personalInfo="personalInfo"
-                                  ></contact-notes>
-                                </b-col>
-                              </b-row>
-                            </b-col>
-                            <b-col md="3" v-show="source.id == 1">
-                              <contact-flyer
-                                :fyerReply="{
-                                  flyer_id: reply.flyer_id,
-                                  reply_id: reply.reply_id,
-                                  route: reply.flyer_route,
-                                  stAD: personalInfo.stateAd,
-                                  fanpage_id: reply.fanpage_id,
-                                  fanpage_name: reply.fanpage,
-                                  flyer_state: reply.flyer_state,
-                                }"
-                                :reply="reply"
-                              ></contact-flyer>
-                            </b-col>
-                            <b-col md="6" class="pr-0">
-                              <contact-tasks
-                                :replyId="reply.reply_id"
-                                :requiredFieldsForCreateCrmTask="
-                                  requiredFieldsForCreateCrmTask
-                                "
-                                :modul="modul"
-                              ></contact-tasks>
-                            </b-col>
-                            <b-col md="6" class="pl-0">
-                              <contact-files
-                                :replyId="reply.reply_id"
-                              ></contact-files>
-                            </b-col>
-                          </b-row>
-                        </b-tab>
-                      </b-tabs>
-                    </div>
+                        {{ reply.count_reply }}
+                      </div>
+                      <span>{{ reply.type_reply }}</span>
+                    </template>
+                    <b-row>
+                      <b-col :md="source.id == 1 ? 9 : 12">
+                        <b-row style="padding-top: 37px">
+                          <b-col cols="12" md="4">
+                            <contact-information
+                              :contactInfo="{
+                                catcher: reply.name_catcher,
+                                potential: reply.potencial,
+                                program: reply.fanpage,
+                                date: reply.created_at,
+                                dialogue: reply.dialogue,
+                                reply_id: reply.reply_id,
+                                contact_method: reply.contact_method,
+                                reason: reply.reason,
+                              }"
+                              :reply="reply"
+                              :parent_source="source.id"
+                            ></contact-information>
+                          </b-col>
+                          <b-col cols="12" md="8">
+                            <contact-notes
+                              :reply="reply"
+                              :personalInfo="personalInfo"
+                              :lead="lead"
+                            ></contact-notes>
+                          </b-col>
+                        </b-row>
+                      </b-col>
+                      <b-col md="3" v-show="source.id == 1">
+                        <contact-flyer
+                          :fyerReply="{
+                            flyer_id: reply.flyer_id,
+                            reply_id: reply.reply_id,
+                            route: reply.flyer_route,
+                            stAD: personalInfo.stateAd,
+                            fanpage_id: reply.fanpage_id,
+                            fanpage_name: reply.fanpage,
+                            flyer_state: reply.flyer_state,
+                          }"
+                          :reply="reply"
+                        ></contact-flyer>
+                      </b-col>
+                      <b-col md="6" class="pr-0">
+                        <contact-tasks
+                          :replyId="reply.reply_id"
+                          :requiredFieldsForCreateCrmTask="
+                            requiredFieldsForCreateCrmTask
+                          "
+                          :modul="modul"
+                          :lead="lead"
+                        ></contact-tasks>
+                      </b-col>
+                      <b-col md="6" class="pl-0">
+                        <contact-files
+                          :replyId="reply.reply_id"
+                          :lead="lead"
+                        ></contact-files>
+                      </b-col>
+                    </b-row>
                   </b-tab>
                 </b-tabs>
               </div>
-            </b-card>
-          </b-tab>
-          <template #tabs-end>
-            <b-button
-              size="sm"
-              class="rounded btn-orange ml-2 position-plus"
-              title="Add new Reply"
-              @click="addReply()"
-            >
-              <i class="fas fa-plus"></i>
-            </b-button>
-          </template>
-        </b-tabs>
-      </div>
-      <!--  <modal-add-reply
-        v-if="openReply"
-        :open="openReply"
-        @hideModal="hideModal"
-        :reply="replyData"
-      ></modal-add-reply> -->
-    </b-card>
-  </div>
+            </b-tab>
+          </b-tabs>
+        </b-tab>
+        <template #tabs-end>
+          <b-button
+            size="sm"
+            variant="primary"
+            class="btn-icon position-plus"
+            title="Add new Reply"
+            @click="openModalAddReply()"
+          >
+            <feather-icon icon="PlusIcon"></feather-icon>
+          </b-button>
+        </template>
+      </b-tabs>
+    </div>
+
+    <modal-add-reply
+      v-if="showModalAddReply"
+      :reply="replyData"
+      @onClose="closeModalAddReply"
+    ></modal-add-reply>
+  </b-card>
 </template>
 
 
 <script>
 // Components
 import ContactInformation from "./ContactInformation.vue";
-import ContactNotes from "./ContactNotes.vue";
+import ContactNotes from "./contact-notes/ContactNotes.vue";
 import ContactFlyer from "./ContactFlyer.vue";
 import ContactTasks from "./ContactTasks.vue";
 import ContactFiles from "./ContactFiles.vue";
+import ModalAddReply from "./ModalAddReply.vue";
+
+// Services
+import SNLeadsService from "@/views/social-network/services/leads";
 
 export default {
   props: {
@@ -190,9 +181,8 @@ export default {
       type: Number,
       default: () => 1,
     },
-    lead_id: {
-      type: Number,
-      default: () => 0,
+    lead: {
+      type: Object,
     },
     modul: [String, Number],
   },
@@ -202,6 +192,7 @@ export default {
     ContactFlyer,
     ContactTasks,
     ContactFiles,
+    ModalAddReply,
   },
   data() {
     return {
@@ -212,7 +203,7 @@ export default {
       replyData: {
         typeReply: null,
         idSubSource: null,
-        id_lead: this.lead_id,
+        id_lead: "",
         idCatcher: this.catcher,
         idProgram: null,
         idMethod: null,
@@ -223,7 +214,7 @@ export default {
       indexReply: 0,
 
       allInfo: [],
-      openReply: false,
+      showModalAddReply: false,
       sourceIndex: 0,
       subSourceIndex: 0,
       replyIndex: 0,
@@ -231,30 +222,24 @@ export default {
       doneReload: false,
     };
   },
-
-  created() {
-    this.getInfoReplies();
-    console.log(this.lead_id);
-  },
-  mounted() {},
-
   computed: {},
   methods: {
+    openModalAddReply(type) {
+      this.replyData.type = type;
+      this.showModalAddReply = true;
+    },
+    async closeModalAddReply(data) {
+      try {
+        if (data) {
+          await this.tabChanges(data);
+        }
+        this.showModalAddReply = false;
+      } catch(e) {
+        console.error(e)
+      }
+    },
     setActiveColor(index) {
       this.activeReply = index;
-    },
-    addReply(type) {
-      //Type //1 = Add Source //2 = Add Sub-Source //3 = Add Reply
-      this.addPreloader();
-      this.openReply = true;
-      this.replyData.type = type;
-    },
-    async hideModal(data) {
-      if (data) {
-        await this.tabChanges(data);
-      }
-      this.openReply = false;
-      this.removePreloader();
     },
     async tabChanges(data) {
       await this.getInfoReplies();
@@ -290,17 +275,31 @@ export default {
       }, 400);
     },
     async getInfoReplies() {
-      //let response = await axios.post("/api/get-lead-replies-sn", {
-      //  id_lead: this.lead_id,
-      //});
-      //this.allInfo = response.data;
-      //this.doneReload = true;
+      try {
+        let leadId = this.$route.params.id;
+
+        const response = await SNLeadsService.getReplies({
+          id_lead: leadId,
+        });
+
+        if (response.status == 200) {
+          this.allInfo = response.data;
+          this.doneReload = true;
+        }
+      } catch (error) {
+        throw error;
+      }
     },
   },
+  async created() {
+    await this.getInfoReplies();
+    this.replyData.id_lead = this.lead.id;
+  },
+  mounted() {},
 };
 </script>
 
-<style scoped>
+<style lang="scss">
 .fs-18 {
   font-size: 18px;
 }
@@ -308,5 +307,82 @@ export default {
 .position-plus {
   position: absolute;
   right: 2rem;
+}
+
+#ci-source-tabs {
+  .nav-item .nav-link {
+    border-radius: 6px !important;
+  }
+
+  .border-bottom-vertical-tab {
+    border-bottom: 1px rgb(223, 223, 223) solid !important;
+  }
+}
+
+#ci-subsource-tabs {
+  .border-bottom-vertical-tab {
+    border-bottom: 1px rgb(223, 223, 223) solid !important;
+  }
+
+  .nav-item .nav-link {
+    border-radius: 6px !important;
+  }
+}
+
+#ci-vertical-tabs {
+  .nav {
+    align-items: flex-start;
+  }
+
+  .border-right-vertical-tab {
+    border-right: 1px rgb(223, 223, 223) solid !important;
+  }
+
+  .nav-item {
+    .nav-link {
+      margin-bottom: 20px;
+      border: none !important;
+    }
+  }
+
+  .nav-item .nav-link::after {
+    background: white !important;
+  }
+
+  .nav-item .nav-link.active {
+    color: #ff6045 !important;
+  }
+}
+
+#sn-d-ci-tasks {
+  .nav-item {
+    .nav-link {
+      margin-bottom: 0px;
+      border: none !important;
+    }
+  }
+
+  .nav-item .nav-link.active {
+    color: white !important;
+  }
+}
+
+.vertical-item {
+  width: 21px;
+  height: 21px;
+  background: rgb(226, 217, 217);
+  font-size: 15px !important;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  border-radius: 5px;
+  margin-right: 10px;
+  color: grey !important;
+
+  &-active {
+    background: #ff6045 !important;
+    color: white !important;
+    font-size: 15px !important;
+  }
 }
 </style>

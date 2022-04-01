@@ -132,7 +132,6 @@ export default {
         var reader = new FileReader();
         reader.readAsDataURL(item);
         reader.onload = () =>
-          //  console.log(reader.result);
           this.arrFiles.push({
             type: reader.result.split(";")[0].split(":")[1],
             file: reader.result,

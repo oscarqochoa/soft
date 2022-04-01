@@ -1,7 +1,7 @@
 export default [
   {
-    title: 'Dashboard2',
-    icon: 'DashboardIcon',
+    title: 'Dashboard',
+    icon: 'ChartLineIcon',
     route: 'dashboard2-social-network',
   },
 ]

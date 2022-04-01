@@ -3,9 +3,7 @@
     <header-slot>
 
     </header-slot>
-
-
-      <b-nav card-header pills class="m-0">
+      <!-- <b-nav card-header pills class="m-0">
         <b-nav-item
           :to="{ name: 'list-clients' }"
           exact
@@ -14,10 +12,9 @@
         >ALL CLIENTS</b-nav-item>
 
       </b-nav>
-    <b-card class="border-top-primary border-3 border-table-radius px-0">
-      <router-view :key="$route.name"></router-view>
+    <router-view :key="$route.name"></router-view> -->
 
-    </b-card>
+    <clients-list></clients-list>
 
   </div>
 </template>
@@ -25,7 +22,12 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import ClientsList from "./clients-module/ClientsList.vue";
+
 export default {
+  components: {
+    "clients-list": ClientsList,
+  },
   name: 'BankOfFlyers',
   computed: {
     ...mapGetters({

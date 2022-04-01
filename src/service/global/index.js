@@ -34,7 +34,7 @@ class GlobalService {
 
     async getSellers(modul, body) {
         try {
-            const data = await amgApi.post(`/sellerall/${modul}`, body)
+            const data = await amgApi.post(`commons/sellerall/${modul}`, body)
             return data
         } catch (error) {
             console.log('Something went wrong on getSellers:', error)
@@ -85,6 +85,15 @@ class GlobalService {
     async getStatusLead() {
         try {
             const data = await amgApi.get('/lead/get-state-leads')
+            return data
+        } catch (error) {
+            console.log('Something went wrong on getStatusLead', error)
+            throw error
+        }
+    }
+    async getHourSystem() {
+        try {
+            const data = await amgApi.post('/commons/get-hour-system')
             return data
         } catch (error) {
             console.log('Something went wrong on getStatusLead', error)

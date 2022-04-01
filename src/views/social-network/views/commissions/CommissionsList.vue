@@ -411,7 +411,6 @@ export default {
     };
   },
   async created() {
-    console.log('meta:', this.$route.meta)
     this.A_SET_MODULE_COMMISSION(this.module_num)
     this.A_SET_MODULE_TOTAL(this.module_total)
     await this.A_GET_DEPARTMENT_PERCENTAGE();
@@ -476,7 +475,6 @@ export default {
         supervisorCrm: this.supervisorCrm,
         subProgram: this.isSupervisorCrm ? this.moduleProgram : null,
       };
-      console.log('params commissions', params)
       // TODO enviar hacia la api
       await this.A_GET_COMMISSIONS(params);
     },

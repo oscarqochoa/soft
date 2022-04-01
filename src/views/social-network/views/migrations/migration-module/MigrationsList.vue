@@ -1,43 +1,43 @@
 <template>
   <div>
 
-    <header-slot />
+    <header-slot/>
     <b-card
-      no-body
-      class="mb-2"
+        no-body
+        class="mb-2"
     >
 
       <filter-slot
 
-        :filter="filter"
-        :filter-principal="filterPrincipal"
-        :total-rows="totalRows"
-        :paginate="paginate"
-        :start-page="startPage"
-        :to-page="toPage"
-        @reset-all-filters="resetAllFilters"
-        @reload="$refs['migrationList'].refresh()"
+          :filter="filter"
+          :filter-principal="filterPrincipal"
+          :total-rows="totalRows"
+          :paginate="paginate"
+          :start-page="startPage"
+          :to-page="toPage"
+          @reset-all-filters="resetAllFilters"
+          @reload="$refs['migrationList'].refresh()"
       >
 
         <b-table
-          id="migrationList"
-          slot="table"
-          ref="migrationList"
+            id="migrationList"
+            slot="table"
+            ref="migrationList"
 
-          sticky-header="50vh"
-          no-provider-filtering
-          :busy.sync="isBusy"
-          :items="search"
-          :fields="filteredFields"
-          :per-page="paginate.perPage"
-          :current-page="paginate.currentPage"
-          :filter="filter"
-          show-empty
-          responsive="sm"
+            sticky-header="50vh"
+            no-provider-filtering
+            :busy.sync="isBusy"
+            :items="search"
+            :fields="filteredFields"
+            :per-page="paginate.perPage"
+            :current-page="paginate.currentPage"
+            :filter="filter"
+            show-empty
+            responsive="sm"
         >
           <template #table-busy>
             <div class="text-center text-primary my-2">
-              <b-spinner class="align-middle mr-1" />
+              <b-spinner class="align-middle mr-1"/>
               <strong>Loading ...</strong>
             </div>
           </template>
@@ -46,10 +46,11 @@
             <div class="d-flex flex-column justify-content-start align-items-start text-important">
 
               <router-link
-                :class="[textLink]"
-                :to="`/crm/leads/${data.item.id}`"
-                target="_blank"
-              >  {{ data.item.lead_name }}</router-link>
+                  :class="[textLink]"
+                  :to="`/social-network/leads/new/dashboard/${data.item.id}`"
+                  target="_blank"
+              > {{ data.item.lead_name }}
+              </router-link>
 
             </div>
 
@@ -66,15 +67,15 @@
           <template v-slot:cell(cr)="data">
 
             <span
-              v-if="data.item.credit_report == '1'"
-              class="text-danger"
+                v-if="data.item.credit_report === 1"
+                class="text-danger"
             >
               NO
             </span>
 
             <span
-              v-if="data.item.credit_report == '2'"
-              class="text-primary"
+                v-if="data.item.credit_report === 2"
+                class="text-success"
             >
               YES
             </span>
@@ -82,15 +83,15 @@
           <template v-slot:cell(sale)="data">
 
             <span
-              v-if="data.item.sale == '1'"
-              class="text-danger"
+                v-if="data.item.sale === 1"
+                class="text-danger"
             >
               NO
             </span>
 
             <span
-              v-if="data.item.sale == '2'"
-              class="text-primary"
+                v-if="data.item.sale === 2"
+                class="text-success"
             >
               YES
             </span>
@@ -98,29 +99,29 @@
           <template v-slot:cell(programs)="data">
 
             <p
-              v-for="(program, index) in JSON.parse(data.item.programs)"
-              :key="index"
-              class="d-flex flex-column justify-content-start align-items-start"
+                v-for="(program, index) in JSON.parse(data.item.programs)"
+                :key="index"
+                class="d-flex flex-column justify-content-start align-items-start"
             >{{ program }}</p>
 
           </template>
 
           <template v-slot:cell(created_by)="data">
             <div
-              class="d-flex flex-column justify-content-start align-items-start"
+                class="d-flex flex-column justify-content-start align-items-start"
             >
               <p>{{ data.item.owner }}</p>
-              <p>{{ data.item.created_at | myGlobalDay }}  </p>
+              <p>{{ data.item.created_at | myGlobalDay }} </p>
             </div>
           </template>
 
           <template v-slot:cell(actions)="data">
             <feather-icon
-              title="DELETED"
-              icon="Trash2Icon"
-              size="20"
-              class="cursor-pointer m-1 text-danger"
-              @click="deletedMigrationLead(data.item.id)"
+                title="DELETED"
+                icon="Trash2Icon"
+                size="20"
+                class="cursor-pointer m-1 text-danger"
+                @click="deletedMigrationLead(data.item.id)"
             />
           </template>
         </b-table>
@@ -132,7 +133,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 import FilterSlot from '@/views/crm/views/sales-made/components/slots/FilterSlot.vue'
 import dataFields from '@/views/social-network/views/migrations/migration-module/fields.data'
 import dataFilters from '@/views/social-network/views/migrations/migration-module/filters.data'
@@ -241,7 +242,7 @@ export default {
           id: 0,
         }
 
-        const newData = data.data.map(el => ({ value: el.name, id: el.id }))
+        const newData = data.data.map(el => ({value: el.name, id: el.id}))
         newData.unshift(firstOption)
         this.filter[2].options = newData
 
@@ -265,7 +266,7 @@ export default {
           id: 0,
         }
 
-        const newData = data.data.map(el => ({ value: el.user_name, id: el.id }))
+        const newData = data.data.map(el => ({value: el.user_name, id: el.id}))
         newData.unshift(firstOption)
         this.filter[4].options = newData
 
@@ -289,7 +290,7 @@ export default {
 
           this.$refs.migrationList.refresh()
 
-          this.showSuccessSwal('File has been deleted successfully')
+          this.showSuccessSwal()
         }
       } catch (e) {
         this.showErrorSwal(e)

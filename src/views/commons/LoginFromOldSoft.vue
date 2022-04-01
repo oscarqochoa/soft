@@ -73,21 +73,21 @@ export default {
           password: this.password,
         });
         if (this.isResponseSuccess(response)) {
-          let userData = response.data.user;
-          const userToken = response.data.access_token;
-          useJwt.setToken(userToken);
-          localStorage.setItem("userData", JSON.stringify(userData));
-          this.$ability.update(userData.ability);
-          this.$set(userData, "modul_id", module_id);
-          this.$set(userData, "module_name", module);
-          await this.$store.dispatch("auth/updateCurrentUser", userData);
-          await this.$store.dispatch("auth/updateToken", userToken);
+          let userData = response.data.user
+          const userToken = response.data.access_token
+          useJwt.setToken(userToken)
+          localStorage.setItem('userData', JSON.stringify(userData))
+          this.$ability.update(userData.ability)
+          this.$set(userData, 'modul_id', module_id)
+          this.$set(userData, 'module_name', module)
+          await this.$store.dispatch('auth/updateCurrentUser', userData)
+          await this.$store.dispatch('auth/updateToken', userToken)
+          this.$store.dispatch('auth/updateCurrentUserModuleRole', module_id)
           // ? This is just for demo purpose as well.
           // ? Because we are showing eCommerce app's cart items count in navbar
           // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
           if (module) userData.module = module;
           if (route) userData.route = route;
-          console.log(userData);
           this.$router
             .replace(getHomeRouteForLoggedInUser(userData))
             .then(() => {
@@ -102,7 +102,7 @@ export default {
                   title: `Welcome ${userData.fullName}`,
                   icon: "CoffeeIcon",
                   variant: "success",
-                  text: `You have successfully logged in as ${userData.roleName}. Now you can start to explore!`,
+                  text: `You have successfully logged in as ${this.currentUser.role_name ? this.currentUser.role_name : this.currentUser.roleName}. Now you can start to explore!`,
                 },
               });
             });

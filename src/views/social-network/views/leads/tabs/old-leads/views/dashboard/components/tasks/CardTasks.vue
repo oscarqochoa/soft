@@ -169,8 +169,6 @@ export default {
       if (response.status == 200) {
         this.isDisabledModal = isDisabled;
         this.task = response.data[0];
-
-        console.log(this.task);
         this.showModalEditTask = true;
       } else {
         this.showToast(

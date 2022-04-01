@@ -4,7 +4,9 @@ export default [
   {
     path: '/socialnetwork/clients',
     name: 'clients',
+    redirect: {name: 'list-clients'},
     component: () => import('@/views/social-network/views/clients/Clients.vue'),
+
     children: [
 
       {
@@ -16,6 +18,7 @@ export default [
           breadcrumb: [{
             text: 'Clients',
           }],
+          permittedRoles: [12, 9, 10, 11, 2, 1]
         },
       },
 
@@ -25,6 +28,7 @@ export default [
       breadcrumb: [{
         text: 'clients',
       }],
+      permittedRoles: [12, 9, 10, 11, 2, 1]
     },
   },
 ]

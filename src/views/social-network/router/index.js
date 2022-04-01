@@ -12,10 +12,11 @@ import FileManagerRouter from '@/views/social-network/views/file-manager/file-ma
 import LoansRouter from '@/views/social-network/views/loans/loans.router'
 import InventoryRouter from '@/views/social-network/views/inventory/inventory.router'
 import SchedulesRouter from '@/views/social-network/views/schedules/schedules.router'
-import CommissionsRoute from '@/views/social-network/views/commissions/commissions.route'
+import RecoveryListRoute from '@/views/social-network/views/recovery-list/recovery-list.router'
+import RecoveryRoute from '@/views/social-network/views/recovery/recovery.router'
 
 const routes = [
-  { path: '/socialnetwork', redirect: { name: 'calendar-social-network' } },
+  { path: '/socialnetwork', redirect: { name: 'dashboard2-social-network' } },
   ...testRoute,
   ...LeadsRouter,
   ...answersGuideRouter,
@@ -30,7 +31,8 @@ const routes = [
   ...LoansRouter,
   ...InventoryRouter,
   ...SchedulesRouter,
-  ...CommissionsRoute
+  ...RecoveryListRoute,
+  ...RecoveryRoute
 ]
 
 // eslint-disable-next-line array-callback-return

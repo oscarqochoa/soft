@@ -22,7 +22,6 @@ const actions = {
         destination: 'S_ANSWERS',
         data: response,
       })
-      console.log('deleted')
       return response
     } catch (error) {
       console.log('ERROR_GET_ANSWERS [ACTION]', error)

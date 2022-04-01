@@ -1,40 +1,31 @@
 <template>
   <b-modal
     id="modalTask"
-
     v-model="ownControl"
     modal
     scrollable
     title-class="h3 text-white font-weight-bolder"
     header-class="class_modal_js"
+
     hide-footer
     size="lg"
     @hidden="closeModal"
   >
     <template #modal-title>
-      <span
-
-        class="text-white"
-        style="font-size: 20px; font-weight: 900;"
-      >{{ name_modal }}</span>
-
+      <span class="text-white" style="font-size: 20px; font-weight: 900">{{
+        nameModal
+      }}</span>
     </template>
-    <div>
-      <b-card
-        no-body
-
-        class="mb-0"
-      >
-
+    <div class="m-0 p-0">
+      <b-card no-body>
         <b-table
-
           small
-
+          show-empty
           :fields="fields"
           :items="search"
-          class="font-small-3 text-center"
+          :busy="isBusy"
+          class="font-small-3  m-0 p-0"
         >
-
           <template #table-busy>
             <div class="text-center text-primary my-2">
               <b-spinner class="align-middle mr-1" />
@@ -43,17 +34,20 @@
           </template>
 
           <template v-slot:cell(nickname)="data">
-            <p
-              class="mb-0 font-weight-bold "
-            >
-              {{ data.item.nickname }}
-            </p>
+
+              <div class="mb-0 font-weight-bold text-important">
+                <router-link
+                  :class="[textLink]"
+                  :to="`/social-network/leads/new/dashboard/${data.item.id}`"
+                  target="_blank"
+                >
+                  {{ data.item.nickname || data.item.not_nickname }}
+                </router-link>
+              </div>
 
           </template>
           <template v-slot:cell(source)="data">
-            <p
-              class="mb-0 font-weight-bold "
-            >
+            <p class="mb-0 font-weight-bold">
               {{ data.item.source_name }}
               <b-img
                 v-if="data.item.source_name === 'FACEBOOK'"
@@ -63,17 +57,14 @@
 
               <b-img
                 v-if="data.item.source_name === 'INSTAGRAM'"
-                :src="`${baseImg}/assets/images/social-network/facebook.png`"
+                :src="`${baseImg}/assets/images/social-network/INSTAGRAM.png`"
                 style="height: 20px; padding-left: 10px"
               />
             </p>
-
           </template>
 
           <template v-slot:cell(sub_source)="data">
-            <p
-              class="mb-0 font-weight-bold "
-            >
+            <p class="mb-0 font-weight-bold">
               {{ data.item.sub_source_name }}
               <b-img
                 v-if="data.item.sub_source_name === 'FACEBOOK'"
@@ -83,19 +74,33 @@
 
               <b-img
                 v-if="data.item.sub_source_name === 'INSTAGRAM'"
-                :src="`${baseImg}/assets/images/social-network/instagram.png`"
+                :src="`${baseImg}/assets/images/social-network/INSTAGRAM.png`"
                 style="height: 20px; padding-left: 10px"
               />
+              <b-img
+                v-if="data.item.sub_source_name === 'MESSENGER'"
+                :src="`${baseImg}/assets/images/social-network/MESSENGER.png`"
+                style="height: 20px; padding-left: 7px"
+              />
             </p>
-
           </template>
           <template v-slot:cell(st_ad)="data">
-            <p
-              class="mb-0 font-weight-bold "
-            >
+            <p class="mb-0 font-weight-bold">
               {{ data.item.state_hour }}
             </p>
+          </template>
+          <template v-slot:cell(program)="data">
+            <b-img
+                thumbnail
+                fluid
+                :src="data.item.program_id | renderProgramLogobyId"
+                style="height: 40px"
+                v-if="data.item.program_id"
 
+            />
+            <b-badge variant="primary" v-else style="width: 50px">
+              CRM
+            </b-badge>
           </template>
         </b-table>
       </b-card>
@@ -104,9 +109,8 @@
 </template>
 
 <script>
-
-import moment from 'moment'
-import DashboardService from '@/views/social-network/views/dashboard2/dashboard.service'
+import moment from "moment";
+import DashboardService from "@/views/social-network/views/dashboard/dashboard.service";
 
 export default {
   props: {
@@ -121,114 +125,134 @@ export default {
       delete: null,
       leads: [],
       baseImg: process.env.VUE_APP_BASE_URL_FRONT,
-    }
+      isBusy: false,
+    };
   },
   computed: {
     // eslint-disable-next-line consistent-return
-    name_modal() {
+    nameModal() {
       if (this.card === 2) {
-        return 'LEADS'
-      } if (this.card === 1) {
-        return 'REPLIES'
-      } if (this.card === 3) {
-        return 'ANSWERS'
-      } if (this.card === 4) {
-        return 'MOBILES'
-      } if (this.card === 5) {
-        return 'APPOINTMENTS'
+        return "LEADS";
+      }
+      if (this.card === 1) {
+        return "REPLIES";
+      }
+      if (this.card === 3) {
+        return "ANSWERS";
+      }
+      if (this.card === 4) {
+        return "TODAY";
+      }
+      if (this.card === 5) {
+        return "APPOINTMENTS";
+      }
+      if (this.card === 6) {
+        return "RECOVERY";
       }
     },
   },
   created() {
-    this.ownControl = true
-    this.creatFields()
+    this.ownControl = true;
+    this.creatFields();
   },
   mounted() {
-    this.backgroundColor()
+    this.backgroundColor();
   },
 
   methods: {
     creatFields() {
-      this.fields = []
-      if (this.card === 2 || this.card === 4 || this.card === 5) {
+      this.fields = [];
+      if (
+        this.card === 2 ||
+
+        this.card === 5
+
+      ) {
         this.fields.push({
-          key: 'nickname',
+          key: "nickname",
           sortable: false,
-          label: 'Nickname',
-        })
+          label: "Nickname",
+        });
         this.fields.push({
-          key: 'st_ad',
+          key: "st_ad",
           sortable: false,
-          label: 'ST/AD',
-        })
+          label: "ST/AD",
+        });
       } else {
         this.fields.push({
-          key: 'nickname',
+          key: "nickname",
           sortable: false,
-          label: 'Nickname',
-        })
+          label: "Nickname",
+        });
         this.fields.push({
-          key: 'source',
+          key: "source",
           sortable: false,
-          label: 'Source',
-        })
+          label: "Source",
+        });
         this.fields.push({
-          key: 'sub_source',
+          key: "sub_source",
           sortable: false,
-          label: 'Sub Source',
-        })
+          label: "Sub Source",
+        });
         this.fields.push({
-          key: 'st_ad',
+          key: "st_ad",
           sortable: false,
-          label: 'ST/AD',
-        })
+          label: "ST/AD",
+        });
+        this.fields.push({
+          key: "program",
+          sortable: false,
+          label: "Program",
+        });
       }
     },
     createClass(name, rules) {
-      const style = document.createElement('style')
-      style.type = 'text/css'
-      document.getElementsByTagName('head')[0].appendChild(style)
-      if (!(style.sheet || {}).insertRule) (style.styleSheet || style.sheet).addRule(name, rules)
-      else style.sheet.insertRule(`${name}{${rules}}`, 0)
+      const style = document.createElement("style");
+      style.type = "text/css";
+      document.getElementsByTagName("head")[0].appendChild(style);
+      if (!(style.sheet || {}).insertRule)
+        (style.styleSheet || style.sheet).addRule(name, rules);
+      else style.sheet.insertRule(`${name}{${rules}}`, 0);
 
-      this.delete = style
+      this.delete = style;
     },
 
     backgroundColor() {
-      this.createClass('#modalTask___BV_modal_header_', this.color)
+      this.createClass("#modalTask___BV_modal_header_", this.color);
     },
     closeModal() {
-      this.deleteClass()
-      this.$emit('close')
+      this.deleteClass();
+      this.$emit("close");
     },
     deleteClass() {
-      this.delete.sheet.deleteRule(0)
+      this.delete.sheet.deleteRule(0);
     },
 
     async search() {
       try {
+        this.isBusy = true;
         const params = {
-          init_date: moment(this.item.date_init).format('Y-MM-D 00:00:00'),
-          end_date: moment(this.item.date_end).format('Y-MM-D 00:00:00'),
+          init_date: moment(this.item.date_init).format("Y-MM-D 00:00:00"),
+          end_date: moment(this.item.date_end).format("Y-MM-D 00:00:00"),
           program: this.item.program.id,
           user: this.item.user.id,
           card: this.item.card,
-        }
-        const data = await DashboardService.getDataLead(params)
+        };
+        const data = await DashboardService.getDataLead(params);
 
-        this.leads = data.data
+        this.leads = data.data;
+        this.isBusy = false;
         // Must return an array of items or an empty array if an error occurred
 
-        return this.leads
+        return this.leads;
       } catch (e) {
-        this.showErrorSwal(e)
-        return []
+        this.showErrorSwal(e);
+        return [];
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>
-
 </style>

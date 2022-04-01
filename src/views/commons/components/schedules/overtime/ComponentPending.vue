@@ -157,7 +157,6 @@ export default {
               parseInt(element.total_hours) - parseInt(element.total_assigned)
           });
         });
-        console.log('no')
         this.removePreloader();
         return items;
       } catch (e) {

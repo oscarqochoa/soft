@@ -4,7 +4,7 @@
     class="content-header"
   >
     <!-- Content Left -->
-    <b-col class="content-header-left mb-2" cols="12" md="9">
+    <b-col class="content-header-left mb-2" cols="12" md="6">
       <b-row class="breadcrumbs-top">
         <b-col cols="12">
           <h2 class="content-header-title float-left pr-1 mb-0">
@@ -36,7 +36,7 @@
     <!-- Content Right -->
     <b-col
       class="content-header-right text-md-right d-md-block d-none mb-2"
-      md="3"
+      md="6"
       cols="12"
     >
       <slot name="actions" />

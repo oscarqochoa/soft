@@ -11,14 +11,18 @@ import FileManagerNavigation from '@/views/social-network/views/file-manager/fil
 import LoansNavigation from '@/views/social-network/views/loans/loans.nav'
 import InventoryNavigation from '@/views/social-network/views/inventory/inventory.nav'
 import ScheduleNavigation from '@/views/social-network/views/schedules/schedules.nav'
-import CommissionsNavigation from '@/views/social-network/views/commissions/commissions.navigation'
+import RecoveryListNavigation from '@/views/social-network/views/recovery-list/recovery-list.navigation'
+
+import RecoveryNavigation from '@/views/social-network/views/recovery/recovery.nav'
 
 const navigation = [
   {
     header: 'SOCIAL NETWORK',
   },
-  ...DashboardNavigation,
+  ...DashboardNavigation2,
+  // ...DashboardNavigation,
   ...LeadsNav,
+  ...RecoveryNavigation,
   ...ClientNavigation,
   ...NcrNavigation,
   ...MigrationsNavigation,
@@ -29,7 +33,6 @@ const navigation = [
   ...InventoryNavigation,
   ScheduleNavigation,
   ...ActivitiesNavigation,
-  ...DashboardNavigation2,
-  ...CommissionsNavigation
+  ...RecoveryListNavigation,
 ]
 export default navigation

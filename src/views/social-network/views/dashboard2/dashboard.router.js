@@ -4,9 +4,9 @@ export default [
     name: 'dashboard2-social-network',
     component: () => import('@/views/social-network/views/dashboard2/Dashboard.vue'),
     meta: {
-      pageTitle: 'Dashboard2',
+      pageTitle: 'Dashboard',
       breadcrumb: [{
-        text: 'Dashboard2',
+        text: 'Dashboard',
       }],
     },
   },

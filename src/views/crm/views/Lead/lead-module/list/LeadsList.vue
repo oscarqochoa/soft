@@ -271,7 +271,6 @@ export default {
   },
   async created() {
     this.addPaddingTd();
-    await this.myProvider();
     this.setOptionsOnFilters();
   },
 

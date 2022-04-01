@@ -4,18 +4,8 @@
 
 
     </header-slot>
-    <div class="d-flex align-items-center justify-content-between my-2">
-      <div></div>
-      <router-link class="btn btn-primary" to="#create">Crear Lead</router-link>
-    </div>
 
-    <div v-if="this.$route.hash === '#create'">
-      <LeadCreateSocial/>
-
-
-    </div>
-
-    <template v-else>
+    <template>
       <b-tabs
           v-if="isSupervisorModule"
           lazy
@@ -63,19 +53,12 @@
 <script>
 import CommissionsList from "./CommissionsList";
 import { mapActions, mapGetters } from 'vuex'
-import LeadCreateSocial from '@/views/social-network/views/commissions/lead-create/LeadCreateSocial'
-import Ripple from 'vue-ripple-directive'
 
 export default {
   name: 'Commissions',
   components: {
-    LeadCreateSocial,
     CommissionsList,
 
-  },
-
-  created() {
-    console.log('meta commissions 123: ', this.$route.hash)
   },
   computed: {
     ...mapGetters('auth', ['isSupervisor', 'isCeo','currentUser']),

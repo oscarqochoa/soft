@@ -154,47 +154,213 @@
               <b-col md="2">
                 <b-form-group>
                   <b-form-input
-                    :value="modul === 15 ? 'UNK' : lead.state"
+                    :value="lead.state ? lead.state : 'UNK'"
                     readonly
                   />
                 </b-form-group>
               </b-col>
             </b-row>
           </b-col>
-          <b-col cols="12 form-group-md-2">
-            <validation-provider
-              v-slot="{ errors }"
-              name="Assign to"
-              rules="required"
-            >
-              <b-form-group
-                label="Assign to"
-                label-cols-md="2"
-                label-for="asigned"
-                :state="errors[0] ? false : null"
+          <b-col v-if="!task.attend_type || taskForSn" cols="12 form-group-md-2">
+              <validation-provider
+                v-slot="{ errors }"
+                name="Assign to"
+                rules="required"
               >
-                <v-select
-                  id="asigned"
-                  v-model="task.seller"
-                  placeholder="Select a Seller"
-                  label="user_name"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="sellers"
-                  :reduce="(val) => val.id"
-                  :clearable="false"
+                <b-form-group
+                  label="Assign to"
+                  label-cols-md="2"
+                  label-for="asigned"
+                  :state="errors[0] ? false : null"
                 >
-                  <template #option="data">
-                    <span
-                      :class="
-                        data.state_advisors == 1 ? 'text-success' : 'text-muted'
-                      "
-                      >{{ data.user_name }}</span
+                  <v-select
+                    v-model="task.seller"
+                    :options="sellers"
+                    :clearable="false"
+                    label="user_name"
+                    v-if="taskForSn == 0"
+                    class="w-100 select-icon-none"
+                    transition
+                    :reduce="(option) => option.id"
+                    :selectable="
+                      (option) =>
+                        !task.attend_type
+                          ? option.status_session == 1 && option.disabled == 0
+                          : option.disabled == 0
+                    "
+                  >
+                    <template #list-header>
+                      <li>
+                        <b-row class="mr-0">
+                          <b-col cols="6" class="text-center">
+                            <strong>Seller</strong>
+                          </b-col>
+                          <b-col cols="2" class="text-center">
+                            <strong>Now</strong>
+                          </b-col>
+                          <b-col cols="2" class="text-center">
+                            <strong>Later today</strong>
+                          </b-col>
+                          <b-col cols="2" class="text-center">
+                            <strong>Later other</strong>
+                          </b-col>
+                        </b-row>
+                      </li>
+                    </template>
+                    <template
+                      #selected-option="{
+                        status_session,
+                        user_name,
+                        count_task,
+                        instantly_sum,
+                        later_today,
+                        later_others,
+                      }"
                     >
-                  </template>
-                </v-select>
-              </b-form-group>
-            </validation-provider>
-          </b-col>
+                      <b-row class="w-100 ml-0 mr-0">
+                        <b-col cols="6">
+                          <div
+                            style="
+                              display: flex;
+                              justify-content: start;
+                              align-items: center;
+                            "
+                          >
+                            <span class="ml-1 mr-2">
+                              <feather-icon
+                                icon="CircleIcon"
+                                :style="
+                                  status_session == 1
+                                    ? 'color: #1ab91a;'
+                                    : 'color: gray;'
+                                "
+                              ></feather-icon>
+                            </span>
+                            <span>{{ user_name }}({{ count_task }})</span>
+                          </div>
+                        </b-col>
+                        <b-col cols="2" class="text-center">{{
+                          Number(instantly_sum)
+                        }}</b-col>
+                        <b-col cols="2" class="text-center">{{
+                          Number(later_today)
+                        }}</b-col>
+                        <b-col cols="2" class="text-center">{{
+                          Number(later_others)
+                        }}</b-col>
+                      </b-row>
+                    </template>
+                    <template v-slot:option="option">
+                      <b-row>
+                        <b-col cols="6">
+                          <div
+                            style="
+                              display: flex;
+                              justify-content: start;
+                              align-items: center;
+                            "
+                          >
+                            <span class="mr-2">
+                              <feather-icon
+                                icon="CircleIcon"
+                                :style="
+                                  option.status_session == 1
+                                    ? 'color: #1ab91a;'
+                                    : 'color: gray;'
+                                "
+                              ></feather-icon>
+                            </span>
+                            <span
+                              >{{ option.user_name }}({{ option.count_task }})
+                              {{
+                                (
+                                  !task.attend_type
+                                    ? option.status_session == 1 &&
+                                      option.disabled == 0
+                                    : option.disabled == 0
+                                )
+                                  ? ""
+                                  : "(Not available)"
+                              }}</span
+                            >
+                          </div>
+                        </b-col>
+                        <b-col cols="2" class="text-center">{{
+                          Number(option.instantly_sum)
+                        }}</b-col>
+                        <b-col cols="2" class="text-center">{{
+                          Number(option.later_today)
+                        }}</b-col>
+                        <b-col cols="2" class="text-center">{{
+                          Number(option.later_others)
+                        }}</b-col>
+                      </b-row>
+                    </template>
+                  </v-select>
+                  <v-select
+                    v-model="task.seller"
+                    :options="sellers"
+                    :clearable="false"
+                    label="user_name"
+                    v-if="taskForSn == 1"
+                    class="w-100 select-icon-none"
+                    transition
+                    :reduce="(option) => option.id"
+                  >
+                    <template #selected-option="{ state_advisors, user_name }">
+                      <b-row class="w-100 ml-0 mr-0">
+                        <b-col cols="6">
+                          <div
+                            style="
+                              display: flex;
+                              justify-content: start;
+                              align-items: center;
+                            "
+                          >
+                            <span class="ml-1 mr-2">
+                              <feather-icon
+                                icon="CircleIcon"
+                                :style="
+                                  state_advisors == 1
+                                    ? 'color: #1ab91a;'
+                                    : 'color: gray;'
+                                "
+                              ></feather-icon>
+                            </span>
+                            <span>{{ user_name }}</span>
+                          </div>
+                        </b-col>
+                      </b-row>
+                    </template>
+                    <template v-slot:option="option">
+                      <b-row>
+                        <b-col cols="6">
+                          <div
+                            style="
+                              display: flex;
+                              justify-content: start;
+                              align-items: center;
+                            "
+                          >
+                            <span class="mr-2">
+                              <feather-icon
+                                icon="CircleIcon"
+                                :style="
+                                  option.state_advisors == 1
+                                    ? 'color: #1ab91a;'
+                                    : 'color: gray;'
+                                "
+                              ></feather-icon>
+                            </span>
+                            <span>{{ option.user_name }}</span>
+                          </div>
+                        </b-col>
+                      </b-row>
+                    </template>
+                  </v-select>
+                </b-form-group>
+              </validation-provider>
+            </b-col>
           <b-col cols="12 form-group-md-2">
             <validation-provider
               v-slot="{ errors }"
@@ -267,7 +433,10 @@ import Ripple from "vue-ripple-directive";
 import vSelect from "vue-select";
 import moment from "moment";
 import formValidation from "@core/comp-functions/forms/form-validation";
-import GlobalService from "@/views/services/global.service";
+import GlobalService from "@/service/global";
+
+// Services
+import SNLeadsService from "@/views/social-network/services/leads";
 
 export default {
   props: {
@@ -282,6 +451,10 @@ export default {
     taskForSn: {
       type: Number,
       required: false,
+      default: 0,
+    },
+    replyId: {
+      type: Number,
       default: 0,
     },
   },
@@ -299,7 +472,7 @@ export default {
       isLoading: false,
       maxDate: new Date(2050, 9, 1),
       minDate: new Date(1000, 1, 1),
-      task: { hour: "", seller: "", date: "" },
+      task: { hour: "", seller: "", date: "", attend_type: null },
       hour: "",
       configFlatPickr: {
         dateFormat: "m/d/Y",
@@ -378,9 +551,12 @@ export default {
     },
     async getSellers() {
       try {
-        const response = await this.A_GET_USERS_BY_MODULE(this.moduleId);
-        this.sellers = response;
-        this.task.seller = this.authUser.user_id;
+        const response = await SNLeadsService.getTaskSellers(this.moduleId);
+
+        if (response.status == 200) {
+          this.sellers = response.data;
+          this.task.seller = this.authUser.user_id;
+        }
       } catch (error) {}
     },
     onChangeSms() {
@@ -431,18 +607,19 @@ export default {
               modul_id: this.modul,
               program_id:
                 this.authUser.role_id === 7 &&
-                this.this.lead.lead_programs.length
-                  ? this.this.lead.lead_programs[0].program_id
+                this.lead.lead_programs.length
+                  ? this.lead.lead_programs[0].program_id
                   : null,
               ...this.task,
               sms: this.task.sms ? this.task.sms : "",
               sms_status: this.task.sms_status ? this.task.sms_status : 0,
-              asigned: this.task.seller,
+              asigned: this.task.attend_type ? this.currentUser.user_id : this.task.seller,
               method: this.authUser.role_id === 7 ? this.task.method : null,
               withsms: this.task.withsms ? 1 : 0,
-              taskForSn: this.taskForSn,
+              taskForSn: this.task.attend_type ? true : this.taskForSn,
+              reply_id: this.replyId,
+              status_sn: 2
             };
-
             const response = await this.A_SET_LEAD_TASK(params);
             this.A_GET_TASK_COUNTER({ id: this.currentUser.user_id });
             this.$emit("onReloadTasks", response.data);
@@ -498,13 +675,25 @@ export default {
     close() {
       this.$emit("onClose");
     },
+    async getSellersFromSN() {
+      const sellers = await GlobalService.getSellers(15, {
+          roles: "[]",
+          type: "1",
+        });
+      this.sellers = sellers.data;
+    },
   },
   async created() {
+    await this.getHourSystem();
+    if(this.taskForSn){
+      await this.getSellersFromSN();
+    }else{
+      await this.getSellers();
+    }
+
     this.authUser = this.currentUser;
     this.blankTask = { ...this.task };
-    this.task.date = moment().format("MM/DD/YYYY");
-    await this.getHourSystem();
-    await this.getSellers();
+    this.task.date = this.$moment().format("MM/DD/YYYY");
 
     this.show = true;
   },
@@ -520,7 +709,20 @@ export default {
 <style lang="scss">
 @import "@core/scss/vue/libs/vue-flatpicker.scss";
 @import "@core/scss/vue/libs/vue-select.scss";
-
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 @media (min-width: 768px) {
   .form-group-md-2 {
     .invalid-feedback {

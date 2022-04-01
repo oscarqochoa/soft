@@ -61,9 +61,18 @@ class DashboardService {
     }
   }
 
-  async getMobilesGraphic(body) {
+  async getMobilesGraphicToday(body) {
     try {
-      const data = await amgApi.post('social-network/get-mobiles-graphic', body)
+      const data = await amgApi.post('social-network/get-mobiles-graphic-today', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getMobilesGraphic:', error)
+      throw error
+    }
+  }
+  async getMobilesGraphicRecovery(body) {
+    try {
+      const data = await amgApi.post('social-network/get-mobiles-graphic-recovery', body)
       return data
     } catch (error) {
       console.log('Something went wrong on getMobilesGraphic:', error)
@@ -71,12 +80,21 @@ class DashboardService {
     }
   }
 
-  async getTasksGraphic(body) {
+  async getTasksGraphicCrm(body) {
     try {
-      const data = await amgApi.post('social-network/get-tasks-graphic', body)
+      const data = await amgApi.post('social-network/get-tasks-graphic-crm', body)
       return data
     } catch (error) {
-      console.log('Something went wrong on getTasksGraphic:', error)
+      console.log('Something went wrong on getTasksGraphicCrm:', error)
+      throw error
+    }
+  }
+  async getTasksGraphicSn(body) {
+    try {
+      const data = await amgApi.post('social-network/get-tasks-graphic-sn', body)
+      return data
+    } catch (error) {
+      console.log('Something went wrong on getTasksGraphicSn:', error)
       throw error
     }
   }

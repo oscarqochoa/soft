@@ -12,31 +12,31 @@
         </b-row>
       </b-container>
       <b-container class="mt-1">
-        <br />
+        <br/>
         <b-row>
           <b-col md="4">
             <b-col md="12">
               <validation-provider
-                #default="{ errors }"
-                name="ST/AD"
-                rules="required"
+                  #default="{ errors }"
+                  name="ST/AD"
+                  rules="required"
               >
                 <b-form-group
-                  label-class="font-bureau-style font-weight-normal color-gray-input-sm"
-                  label-for="stAd"
-                  label-cols-lg="4"
-                  label-cols-sm="4"
-                  content-cols-lg="8"
-                  content-cols-sm="4"
-                  label="ST/AD"
-                  :state="errors[0] ? false : null"
+                    label-class="font-bureau-style font-weight-normal color-gray-input-sm"
+                    label-for="stAd"
+                    label-cols-lg="4"
+                    label-cols-sm="4"
+                    content-cols-lg="8"
+                    content-cols-sm="4"
+                    label="ST/AD"
+                    :state="errors[0] ? false : null"
                 >
                   <v-select
-                    v-model="lead.state_h"
-                    :options="G_STATES"
-                    @input="unselectFlyer"
-                    :reduce="(el) => el.slug"
-                    :state="errors.length > 0 ? false : null"
+                      v-model="lead.state_h"
+                      :options="G_STATES"
+                      @input="unselectFlyer"
+                      :reduce="(el) => el.slug"
+                      :state="errors.length > 0 ? false : null"
                   >
                   </v-select>
                   <small class="text-danger" v-if="errors.length > 0">
@@ -49,20 +49,20 @@
             <!-- <ValidationProvider rules="required"> -->
             <b-col md="12">
               <b-form-group
-                label-class="font-bureau-style font-weight-normal color-gray-input-sm"
-                label-for="stAd"
-                label-cols-lg="4"
-                label-cols-sm="4"
-                content-cols-lg="8"
-                content-cols-sm="4"
-                label="Lead Owner"
+                  label-class="font-bureau-style font-weight-normal color-gray-input-sm"
+                  label-for="stAd"
+                  label-cols-lg="4"
+                  label-cols-sm="4"
+                  content-cols-lg="8"
+                  content-cols-sm="4"
+                  label="Lead Owner"
               >
                 <v-select
-                  v-model="lead.user_id"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :clearable="false"
-                  :options="G_SELLERS"
-                  :reduce="(el) => el.id"
+                    v-model="lead.user_id"
+                    :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                    :clearable="false"
+                    :options="G_SELLERS"
+                    :reduce="(el) => el.id"
                 >
                 </v-select>
               </b-form-group>
@@ -72,21 +72,21 @@
             <validation-provider #default="{ errors }" rules="required">
               <b-col md="12">
                 <b-form-group
-                  label-class="font-bureau-style font-weight-normal color-gray-input-sm"
-                  label-for="stAd"
-                  label-cols-lg="4"
-                  label-cols-sm="4"
-                  content-cols-lg="8"
-                  content-cols-sm="4"
-                  label="Sugestions"
-                  :state="errors.length > 0 ? false : null"
+                    label-class="font-bureau-style font-weight-normal color-gray-input-sm"
+                    label-for="stAd"
+                    label-cols-lg="4"
+                    label-cols-sm="4"
+                    content-cols-lg="8"
+                    content-cols-sm="4"
+                    label="Sugestions"
+                    :state="errors.length > 0 ? false : null"
                 >
                   <v-select
-                    v-model="lead.program"
-                    :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                    multiple
-                    :options="G_PROGRAMS"
-                    :state="errors.length > 0 ? true : false"
+                      v-model="lead.program"
+                      :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                      multiple
+                      :options="G_PROGRAMS"
+                      :state="errors.length > 0 ? true : false"
                   />
                   <small class="text-danger" v-if="errors.length > 0">
                     The field {{ errors[0] }}
@@ -97,12 +97,12 @@
           </b-col>
           <b-col md="8">
             <b-form-group
-              label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-              label-cols-lg="2"
-              label-cols-sm="4"
-              content-cols-lg="10"
-              content-cols-sm
-              label="Source"
+                label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+                label-cols-lg="2"
+                label-cols-sm="4"
+                content-cols-lg="10"
+                content-cols-sm
+                label="Source"
             >
               <b-row>
                 <b-col md="6">
@@ -110,64 +110,64 @@
                     <b-row>
                       <b-col md="12">
                         <b-button
-                          :variant="isFacebook ? 'primary' : 'secondary'"
-                          class="btn-block"
-                          @click="selectSource(17)"
+                            :variant="isFacebook ? 'primary' : 'secondary'"
+                            class="btn-block"
+                            @click="selectSource(17)"
                         >
                           <feather-icon
-                            icon="FacebookIcon"
-                            size="16"
+                              icon="FacebookIcon"
+                              size="16"
                           ></feather-icon>
                           Facebook
                         </b-button>
                       </b-col>
                       <small
-                        class="mt-1 w-100 text-danger text-center"
-                        v-if="errors.length > 0"
+                          class="mt-1 w-100 text-danger text-center"
+                          v-if="errors.length > 0"
                       >
                         Source {{ errors[0] }}
                       </small>
 
                       <b-form-radio
-                        class="d-none"
-                        v-model="lead.sourcesname_id"
+                          class="d-none"
+                          v-model="lead.sourcesname_id"
                       />
                     </b-row>
                   </validation-provider>
 
                   <!-- Sub Sources Facebook -->
                   <validation-provider
-                    :rules="isFacebook ? 'required' : ''"
-                    #default="{ errors }"
+                      :rules="isFacebook ? 'required' : ''"
+                      #default="{ errors }"
                   >
                     <b-row class="mt-1">
                       <template v-for="(item, index) in S_SUB_SOURCES">
                         <b-col
-                          :key="index"
-                          :title="item.name"
-                          v-if="item.parent_id == 1"
+                            :key="index"
+                            :title="item.name"
+                            v-if="item.parent_id == 1"
                         >
                           <b-button
-                            class="btn-block"
-                            :disabled="!isFacebook"
-                            :variant="
+                              class="btn-block"
+                              :disabled="!isFacebook"
+                              :variant="
                               lead.sub_source == item.id
                                 ? 'success'
                                 : 'secondary'
                             "
-                            @click="selectSubSource(item.id)"
+                              @click="selectSubSource(item.id)"
                           >
                             <small>{{ item.name }}</small>
                           </b-button>
                         </b-col>
                       </template>
                       <small
-                        class="mt-05 w-100 text-danger text-center"
-                        v-if="errors.length > 0"
+                          class="mt-05 w-100 text-danger text-center"
+                          v-if="errors.length > 0"
                       >
                         Sub-Source {{ errors[0] }}
                       </small>
-                      <b-form-radio class="d-none" v-model="lead.sub_source" />
+                      <b-form-radio class="d-none" v-model="lead.sub_source"/>
                     </b-row>
                   </validation-provider>
                 </b-col>
@@ -176,168 +176,170 @@
                     <b-row>
                       <b-col md="12">
                         <b-button
-                          :variant="isGoogle ? 'danger' : 'secondary'"
-                          class="btn-block"
-                          @click="selectSource(32)"
+                            :variant="isGoogle ? 'danger' : 'secondary'"
+                            class="btn-block"
+                            @click="selectSource(32)"
                         >
                           Google
                         </b-button>
                       </b-col>
                       <small
-                        class="mt-1 w-100 text-danger text-center"
-                        v-if="errors.length > 0"
+                          class="mt-1 w-100 text-danger text-center"
+                          v-if="errors.length > 0"
                       >
                         Source {{ errors[0] }}
                       </small>
 
                       <b-form-radio
-                        class="d-none"
-                        v-model="lead.sourcesname_id"
+                          class="d-none"
+                          v-model="lead.sourcesname_id"
                       />
                     </b-row>
                   </validation-provider>
 
                   <validation-provider
-                    :rules="isGoogle ? 'required' : ''"
-                    #default="{ errors }"
+                      :rules="isGoogle ? 'required' : ''"
+                      #default="{ errors }"
                   >
                     <b-row class="mt-1 justify-content-md-around">
                       <b-button
-                        size="sm"
-                        :disabled="!isGoogle"
-                        :variant="
+                          size="sm"
+                          :disabled="!isGoogle"
+                          :variant="
                           lead.google_ads == 1 ? 'success' : 'secondary'
                         "
-                        @click="selectMethod(1)"
-                        >E-mail</b-button
+                          @click="selectMethod(1)"
+                      >E-mail
+                      </b-button
                       >
                       <b-button
-                        size="sm"
-                        :disabled="!isGoogle"
-                        :variant="
+                          size="sm"
+                          :disabled="!isGoogle"
+                          :variant="
                           lead.google_ads == 2 ? 'success' : 'secondary'
                         "
-                        @click="selectMethod(2)"
+                          @click="selectMethod(2)"
                       >
                         Messenger
                       </b-button>
                       <b-button
-                        size="sm"
-                        :disabled="!isGoogle"
-                        :variant="
+                          size="sm"
+                          :disabled="!isGoogle"
+                          :variant="
                           lead.google_ads == 4 ? 'success' : 'secondary'
                         "
-                        @click="selectMethod(4)"
+                          @click="selectMethod(4)"
                       >
                         Whatsapp
                       </b-button>
                       <b-button
-                        size="sm"
-                        :disabled="!isGoogle"
-                        :variant="
+                          size="sm"
+                          :disabled="!isGoogle"
+                          :variant="
                           lead.google_ads == 3 ? 'success' : 'secondary'
                         "
-                        @click="selectMethod(3)"
-                        >Call</b-button
+                          @click="selectMethod(3)"
+                      >Call
+                      </b-button
                       >
                     </b-row>
                     <div class="w-100 text-center mt-05">
                       <small class="text-danger" v-if="errors.length > 0">
                         Contact Method {{ errors[0] }}
                       </small>
-                      <b-form-radio class="d-none" v-model="lead.google_ads" />
+                      <b-form-radio class="d-none" v-model="lead.google_ads"/>
                     </div>
                   </validation-provider>
 
                   <validation-provider
-                    :rules="isGoogle ? 'required' : ''"
-                    #default="{ errors }"
+                      :rules="isGoogle ? 'required' : ''"
+                      #default="{ errors }"
                   >
                     <b-row class="mt-1">
                       <template v-for="(item, index) in S_SUB_SOURCES">
                         <b-col
-                          :key="index"
-                          :title="item.name"
-                          v-if="item.parent_id == 2"
+                            :key="index"
+                            :title="item.name"
+                            v-if="item.parent_id == 2"
                         >
                           <b-button
-                            class="btn-block"
-                            :disabled="
+                              class="btn-block"
+                              :disabled="
                               !isGoogle || (isGoogle && lead.google_ads == null)
                             "
-                            :variant="
+                              :variant="
                               lead.sub_source == item.id
                                 ? 'success'
                                 : 'secondary'
                             "
-                            @click="selectSubSource(item.id)"
+                              @click="selectSubSource(item.id)"
                           >
                             <small>{{ item.name }}</small>
                           </b-button>
                         </b-col>
                       </template>
                       <small
-                        class="mt-05 w-100 text-danger text-center"
-                        v-if="errors.length > 0"
+                          class="mt-05 w-100 text-danger text-center"
+                          v-if="errors.length > 0"
                       >
                         Sub-Source {{ errors[0] }}
                       </small>
-                      <b-form-radio class="d-none" v-model="lead.sub_source" />
+                      <b-form-radio class="d-none" v-model="lead.sub_source"/>
                     </b-row>
                   </validation-provider>
                 </b-col>
               </b-row>
             </b-form-group>
-            <br />
+            <br/>
             <b-form-group
-              label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-              label-cols-lg="2"
-              label-cols-sm="4"
-              content-cols-lg="10"
-              content-cols-sm
-              label="Program"
+                label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+                label-cols-lg="2"
+                label-cols-sm="4"
+                content-cols-lg="10"
+                content-cols-sm
+                label="Program"
             >
               <validation-provider rules="required" #default="{ errors }">
                 <b-row class="d-flex justify-content-between">
                   <template v-for="(item, index) in S_FAN_PAGE_PROGRAMS">
                     <div class="mx-1" :key="index" :title="item.value">
                       <b-button
-                        :variant="
+                          :variant="
                           lead.fanpage_id == item.id ? 'warning' : 'secondary'
                         "
-                        @click="selectProgram(item.id, item.value)"
+                          @click="selectProgram(item.id, item.value)"
                       >
                         {{ item.value }}
                       </b-button>
                     </div>
                   </template>
                   <small
-                    class="mt-05 w-100 text-danger text-center"
-                    v-if="errors.length > 0"
+                      class="mt-05 w-100 text-danger text-center"
+                      v-if="errors.length > 0"
                   >
                     Program {{ errors[0] }}
                   </small>
-                  <b-form-radio class="d-none" v-model="lead.fanpage_id" />
+                  <b-form-radio class="d-none" v-model="lead.fanpage_id"/>
                 </b-row>
               </validation-provider>
             </b-form-group>
-            <br />
+            <br/>
             <b-form-group
-              label-class="font-bureau-style font-weight-normal color-gray-input-sn"
-              label-cols-lg="2"
-              label-cols-sm="4"
-              content-cols-lg="10"
-              content-cols-sm
-              label="Flyer"
-              v-if="isFacebook"
+                label-class="font-bureau-style font-weight-normal color-gray-input-sn"
+                label-cols-lg="2"
+                label-cols-sm="4"
+                content-cols-lg="10"
+                content-cols-sm
+                label="Flyer"
+                v-if="isFacebook"
             >
               <b-row class="align-items-center">
                 <div v-if="!lead.flyer">
                   <b-avatar rounded size="12rem" class="ml-1">
                     <template #default>
                       <span
-                        class="b-avatar-text"
-                        style="font-size: calc(1.9rem)"
+                          class="b-avatar-text"
+                          style="font-size: calc(1.9rem)"
                       >
                         UNKNOWN
                       </span>
@@ -350,18 +352,18 @@
                       {{ lead.flyer_selected.state }}
                     </b-badge>
                     <b-img
-                      :src="lead.flyer_selected.route_thumb"
-                      class="img"
+                        :src="lead.flyer_selected.route_thumb"
+                        class="img"
                     ></b-img>
                   </div>
                 </div>
                 <b-button
-                  v-if="isFullFlyer"
-                  variant="info"
-                  size="sm"
-                  class="ml-2"
-                  :disabled="lead.fanpage_id == null"
-                  @click="openModalChooseFlyer"
+                    v-if="isFullFlyer"
+                    variant="info"
+                    size="sm"
+                    class="ml-2"
+                    :disabled="lead.fanpage_id == null"
+                    @click="openModalChooseFlyer"
                 >
                   Select
                 </b-button>
@@ -373,21 +375,21 @@
     </b-card>
 
     <modal-choose-flyer
-      v-if="showModalChooseFlyer"
-      :show="showModalChooseFlyer"
-      :title="titleModalChoose"
-      @onSelect="selectFlyer"
-      @onClose="closeModalChooseFlyer"
+        v-if="showModalChooseFlyer"
+        :show="showModalChooseFlyer"
+        :title="titleModalChoose"
+        @onSelect="selectFlyer"
+        @onClose="closeModalChooseFlyer"
     ></modal-choose-flyer>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import {mapState, mapGetters, mapActions} from "vuex";
 
 // Components
 import vSelect from "vue-select";
-import ModalChooseFlyer from "./ModalChooseFlyer.vue";
+import ModalChooseFlyer from "../../../../../components/ModalChooseFlyer.vue";
 
 export default {
   components: {
@@ -419,7 +421,7 @@ export default {
     ...mapState({
       S_SUB_SOURCES: (state) => state.SocialNetworkLeadsStore.S_SUB_SOURCES,
       S_FAN_PAGE_PROGRAMS: (state) =>
-        state.SocialNetworkLeadsStore.S_FAN_PAGE_PROGRAMS,
+          state.SocialNetworkLeadsStore.S_FAN_PAGE_PROGRAMS,
       S_FLYERS: (state) => state.SocialNetworkLeadsStore.S_FLYERS,
     }),
     isFacebook() {
@@ -444,8 +446,6 @@ export default {
       this.showModalChooseFlyer = false;
     },
     selectFlyer(id, flyer) {
-      console.log(flyer);
-
       this.showModalChooseFlyer = false;
       this.lead.flyer = id;
       this.lead.flyer_selected = flyer;
@@ -479,7 +479,7 @@ export default {
         });
 
         if (response.status == 200) {
-          console.log(response);
+
         }
       } catch (error) {
         console.log("Something went wrong on getFlyers", error);

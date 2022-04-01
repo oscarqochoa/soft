@@ -1,10 +1,13 @@
 import NewLeads from './tabs/new-leads/NewLeads.vue'
 import CreateNewLead from './tabs/new-leads/views/create/Create.vue'
 import DashboardNewLead from './tabs/new-leads/views/dashboard/Dashboard.vue'
-
-import OldLeads from './tabs/old-leads/OldLeads.vue'
 import DashboardOldLead from './tabs/old-leads/views/dashboard/Dashboard.vue'
 import EditOldLead from './tabs/old-leads/views/edit/Edit.vue'
+
+import WithoutLeads from './tabs/without-leads/WithoutLeads.vue'
+import ClosedLeads from './tabs/closed-leads/ClosedLeads.vue'
+
+
 
 export default [
     {
@@ -12,10 +15,16 @@ export default [
         name: 'leads-social-network',
         component: () => import('@/views/social-network/views/leads/Leads.vue'),
         redirect: { name: 'sn-list-new-leads' },
+        meta: {
+            permittedRoles: [12, 9, 11, 2, 1]
+        },
         children: [
             {
                 path: '',
-                redirect: { name: 'sn-list-new-leads' }
+                redirect: { name: 'sn-list-new-leads' },
+                meta: {
+                    permittedRoles: [12, 9, 11, 2, 1]
+                },
             },
             {
                 path: 'new',
@@ -28,17 +37,17 @@ export default [
                             text: 'Leads'
                         },
                         {
-                            text: 'New',
+                            text: 'Active',
                             active: true
                         },
                     ],
+                    permittedRoles: [12, 9, 11, 2, 1]
                 },
             },
-
             {
-                path: 'old',
-                component: OldLeads,
-                name: 'sn-list-old-leads',
+                path: 'without-potential',
+                component: WithoutLeads,
+                name: 'sn-list-without-potential-leads',
                 meta: {
                     pageTitle: 'Leads',
                     breadcrumb: [
@@ -46,10 +55,29 @@ export default [
                             text: 'Leads'
                         },
                         {
-                            text: 'Old',
+                            text: 'Without Potential',
                             active: true
                         },
                     ],
+                    permittedRoles: [12, 9, 11, 2, 1]
+                },
+            },
+            {
+                path: 'closed',
+                component: ClosedLeads,
+                name: 'sn-list-closed-leads',
+                meta: {
+                    pageTitle: 'Leads',
+                    breadcrumb: [
+                        {
+                            text: 'Leads'
+                        },
+                        {
+                            text: 'Closed',
+                            active: true
+                        },
+                    ],
+                    permittedRoles: [12, 9, 11, 2, 1]
                 },
             },
         ],
@@ -73,6 +101,7 @@ export default [
                     active: true,
                 }
             ],
+            permittedRoles: [12, 9, 11, 2, 1]
         }
 
     },
@@ -85,9 +114,6 @@ export default [
             breadcrumb: [
                 {
                     text: 'Leads',
-                },
-                {
-                    text: 'New',
                     to: { name: 'sn-list-new-leads' }
                 },
                 {
@@ -95,6 +121,7 @@ export default [
                     active: true,
                 },
             ],
+            permittedRoles: [12, 9, 11, 2, 1]
         },
     },
     {
@@ -115,7 +142,8 @@ export default [
                     text: 'Dashboard',
                     active: true
                 }
-            ]
+            ],
+            permittedRoles: [12, 9, 11, 2, 1]
         }
     },
     {
@@ -136,7 +164,8 @@ export default [
                     text: 'Edit Lead',
                     active: true,
                 }
-            ]
+            ],
+            permittedRoles: [12, 9, 11, 2, 1]
         }
     }
 

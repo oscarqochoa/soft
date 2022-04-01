@@ -90,7 +90,7 @@ export default [
     ],
   },
   {
-    path: "/crm/ncr/reportLead/:idfile/:idlead",
+    path: "/crm/ncr/reportLead/:idlead/:idfile",
     name: "report-lead",
     component: () =>
       import("@/views/commons/components/ncr/components/ReportLead.vue"),

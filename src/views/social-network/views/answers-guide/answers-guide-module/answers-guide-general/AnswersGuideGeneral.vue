@@ -19,12 +19,6 @@
               <strong>Loading ...</strong>
             </div>
           </template>
-          <template #table-busy>
-            <div class="text-center text-primary my-2">
-              <b-spinner class="align-middle mr-1" />
-              <strong>Loading ...</strong>
-            </div>
-          </template>
           <template #cell(content)="data">
             <div
               v-if="data.item.ans_open && data.item.count_father"
@@ -86,6 +80,7 @@
               @click="openEditWatchModal(1, data.item)"
             />
             <feather-icon
+              v-if="isCeo || isSupervisor || isTeamLeader"
               class="mr-1 pointer bigger text-warning"
               icon="EditIcon"
               @click="openEditWatchModal(2, data.item)"

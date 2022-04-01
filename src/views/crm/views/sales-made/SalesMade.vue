@@ -45,9 +45,6 @@ export default {
       return ["px-3", this.bgTabsNavs];
     }
   },
-  created() {
-    console.log(this.$route.name === "sales-made-crm-new-client", "gaaaaaa");
-  }
 };
 </script>
 

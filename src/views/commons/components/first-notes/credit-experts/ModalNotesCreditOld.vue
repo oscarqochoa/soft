@@ -352,7 +352,7 @@ import ButtonSaveAndComplete from "@/views/commons/utilities/ButtonSaveAndComple
 import ButtonUpdate from "@/views/commons/utilities/ButtonUpdate";
 
 export default {
-  name: "ModalNotesCredit",
+  name: "ModalNotesCreditOld",
   components: {
     ButtonUpdate,
     ButtonSaveAndComplete,
