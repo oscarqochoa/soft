@@ -309,7 +309,7 @@ export default {
     }),
     async getSellers() {
       try {
-        const response = await this.A_GET_USERS_BY_MODULE(this.moduleId);
+        const response = await this.A_GET_USERS_BY_MODULE({payload: this.moduleId});
         this.sellers = response;
         this.seller = this.task.user_id;
       } catch (error) {}
