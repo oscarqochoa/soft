@@ -118,6 +118,11 @@ const mutations = {
         state.S_STATES_EEUU = [...state.S_STATES_EEUU, ...states]
     },
     M_GET_SELLERS(state, states) {
+        state.S_SELLERS = [{
+            user_name: "Select a Seller",
+            value: null,
+            status_session: 0
+        }]
         state.S_SELLERS = [...state.S_SELLERS, ...states];
     },
     M_RESET_SELLERS(state, states) {
