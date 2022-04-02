@@ -277,6 +277,7 @@ class SNLeads {
     async createLeadSN(params) {
         try {
             const resp = await amgApi.post('/lead/social-network/lead-create-socialnetwork', params)
+            return resp;
         } catch (e) {
             console.log('ERROR: ', e.response)
         }

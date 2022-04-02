@@ -571,6 +571,7 @@ const actions = {
     },
     async A_CREATE_LEAD_SN({ commit }, params) {
         const resp = await SNLeadsService.createLeadSN(params);
+        return resp;
     },
 
     async A_GET_RECOVERY_LEADS({ commit }, body) {
