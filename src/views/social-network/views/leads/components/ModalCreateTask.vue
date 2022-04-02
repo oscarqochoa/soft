@@ -613,10 +613,11 @@ export default {
               ...this.task,
               sms: this.task.sms ? this.task.sms : "",
               sms_status: this.task.sms_status ? this.task.sms_status : 0,
-              asigned: this.task.attend_type ? this.currentUser.user_id : this.task.seller,
+              asigned: (this.task.attend_type && this.taskForSn == 0) ? this.currentUser.user_id : this.task.seller,
               method: this.authUser.role_id === 7 ? this.task.method : null,
               withsms: this.task.withsms ? 1 : 0,
               taskForSn: this.task.attend_type ? true : this.taskForSn,
+              taskCreatedInCrmTabAndLater: (this.task.attend_type && this.taskForSn == 0) ? true : false,
               reply_id: this.replyId,
               status_sn: 2
             };

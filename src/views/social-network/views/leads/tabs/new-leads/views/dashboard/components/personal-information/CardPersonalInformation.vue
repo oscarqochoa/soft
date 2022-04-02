@@ -227,7 +227,7 @@
                   class="font-bureau-style border-document"
                   v-mask="'###-##-####'"
                   :disabled="
-                    (!editPersonal || !isCeoOrSupervisor) &&
+                    (!editPersonal || !isCeoOrSupervisorOrTeamLeader) &&
                     (!emptyDocument || !editPersonal)
                   "
                   :state="errors[0] ? false : null"
@@ -244,7 +244,7 @@
 
                 <b-input-group-append>
                   <b-button
-                    :disabled="!isCeoOrSupervisor || editPersonal"
+                    :disabled="!isCeoOrSupervisorOrTeamLeader || editPersonal"
                     variant="outline-primary"
                     class="btn-icon"
                     @click="showDocument = !showDocument"
@@ -456,8 +456,8 @@ export default {
     startTypingM() {
       return this.editMobile ? "Start typing..." : "";
     },
-    isCeoOrSupervisor() {
-      return [1, 2].includes(this.currentUser.role_id);
+    isCeoOrSupervisorOrTeamLeader() {
+      return [1, 2, 11].includes(this.currentUser.role_id);
     },
   },
   methods: {
@@ -489,7 +489,7 @@ export default {
             JSON.stringify(this.personalInfo)
           );
           this.editPersonal = true;
-          if (this.isCeoOrSupervisor) {
+          if (this.isCeoOrSupervisorOrTeamLeader) {
             this.showDocument = true;
           }
         } else if (type == 2) {
@@ -557,6 +557,7 @@ export default {
                 : null;
               params = this.personalInfo;
               this.getEmptyDocument();
+              this.showDocument = false
             } else if (type == 2) {
               params = this.personalAddress;
             } else if (type == 3) {
