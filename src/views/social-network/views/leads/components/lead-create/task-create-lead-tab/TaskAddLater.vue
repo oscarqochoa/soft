@@ -94,6 +94,7 @@ export default {
   },
   mounted() {
     document.getElementById('input-create-lead-35').placeholder = 'Type day event'
+    this.lead.recovery = 1;
   },
   directives: {
     Ripple,
@@ -122,8 +123,6 @@ export default {
       if (type === 'addNow') {
         this.addNow = true;
         this.addLater = false;
-
-
 
         const hour = await this.A_GET_HOUR_SYSTEM();
         const date = await this.A_FORMAT_DATE(new Date());

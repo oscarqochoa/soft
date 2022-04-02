@@ -151,9 +151,9 @@ export default {
 
 
 
-        const hour = await this.A_GET_HOUR_SYSTEM();
-        const date = await this.A_FORMAT_DATE(new Date());
-        await this.A_GET_SELLER_TASK_FAVORITE({date_hour: `${date} ${hour}:00`})
+        //const hour = await this.A_GET_HOUR_SYSTEM();
+        //const date = await this.A_FORMAT_DATE(new Date());
+        //await this.A_GET_SELLER_TASK_FAVORITE({date_hour: `${date} ${hour}:00`})
         this.lead.attend = 2;
 
       } else {

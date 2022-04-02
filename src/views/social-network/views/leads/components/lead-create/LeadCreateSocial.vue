@@ -327,7 +327,10 @@ export default {
             this.lead.date =  this.transformDate(this.lead.date);
 
             // Enviar peticion a la api
-            await this.A_CREATE_LEAD_SN(this.lead);
+            const leadCreated = await this.A_CREATE_LEAD_SN(this.lead);
+
+            window.open(`/social-network/leads/new/dashboard/${leadCreated.data[0].lead_id}`, "_blank")
+            
 
             setTimeout(async () => {
               await this.resetForm()
