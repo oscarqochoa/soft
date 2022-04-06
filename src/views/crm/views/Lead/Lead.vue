@@ -125,6 +125,7 @@ export default {
       dato2: 10,
       isLoading: false,
       keyCreateList: 0,
+      filterDataLoaded: false
     };
   },
   async created() {
@@ -140,6 +141,7 @@ export default {
       this.getCountries(),
       this.getSellers(),
     ]);
+    this.$store.commit('CrmLeadStore/SET_DATA', {destination: 'S_FILTER_DATA_LOADED', data: true})
   },
   methods: {
     ...mapActions({
@@ -342,6 +344,9 @@ export default {
       }
     },
   },
+  beforeDestroy(){
+    this.$store.commit('CrmLeadStore/SET_DATA', {destination: 'S_FILTER_DATA_LOADED', data: false})
+  }
 };
 </script>
 

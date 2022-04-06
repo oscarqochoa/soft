@@ -40,7 +40,7 @@
           :busy="isBusy"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
-          :current-page="currentPage"
+          :current-page.sync="currentPage"
           :per-page="perPage"
           :filter="searchInput"
         >
@@ -228,13 +228,13 @@ export default {
       searchInput: "",
       orderby: "",
       order: "",
-      startPage: "",
+      startPage: 0,
       endPage: "",
-      totalData: "",
-      perPage: 5,
+      totalData: 0,
+      perPage: 20,
       nextPage: "",
       currentPage: 1,
-      toPage: "",
+      toPage: 0,
       isBusy: false,
       perPageOptions: [10, 25, 50, 100],
       modalEdit: false,
@@ -260,7 +260,7 @@ export default {
     async myProvider(ctx) {
       let params = {
         api_url: ctx.apiUrl,
-        current_page: ctx.currentPage,
+        page: ctx.currentPage,
         num: ctx.perPage,
         order: ctx.sortDesc == 1 ? "desc" : "asc",
         orderby: 5,

@@ -260,7 +260,8 @@ export default {
       G_UPDATE_TABLE_LEAD:"CrmLeadStore/G_UPDATE_TABLE_LEAD" 
     }),
     ...mapState({
-      S_LEADS: state => state.CrmLeadStore.S_LEADS
+      S_LEADS: state => state.CrmLeadStore.S_LEADS,
+      S_FILTER_DATA_LOADED: state => state.CrmLeadStore.S_FILTER_DATA_LOADED,
     }),
     routeModule() {
       return this.$route.meta.route;
@@ -271,7 +272,6 @@ export default {
   },
   async created() {
     this.addPaddingTd();
-    this.setOptionsOnFilters();
   },
 
   methods: {
@@ -537,7 +537,12 @@ export default {
         }
         
       }
-    }
+    },
+    S_FILTER_DATA_LOADED(newVal){
+      if (newVal) {
+        this.setOptionsOnFilters();
+      }
+    },
   },
 };
 </script>

@@ -39,26 +39,27 @@ const state = {
     currentPage: 1,
   },
   S_KEY_UPDATE_DETAILS_LEAD: 0,
+  S_FILTER_DATA_LOADED: false
 }
 const getters = {
-  G_UPDATE_TABLE_LEAD(){
+  G_UPDATE_TABLE_LEAD(state){
     return state.S_UPDATE_TABLE_LEAD
   },
-  G_STATE_LEADS() {
+  G_STATE_LEADS(state) {
     const stateLeads = state.S_STATE_LEADS.map(el => ({
       label: el.name,
       id: el.id,
     }))
     return stateLeads
   },
-  G_STATUS_LEADS() {
+  G_STATUS_LEADS(state) {
     const statusLeads = state.S_STATUS_LEADS.map(el => ({
       label: el.value,
       id: el.id,
     }))
     return statusLeads
   },
-  G_SOURCE_LEADS() {
+  G_SOURCE_LEADS(state) {
     const sourceLeads = state.S_SOURCE_LEADS.map(el => ({
       label: el.value,
       id: el.id,
