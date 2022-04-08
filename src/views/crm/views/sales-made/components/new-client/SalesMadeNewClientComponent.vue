@@ -1335,6 +1335,7 @@ export default {
       this.sellers.push(...formatedSellers);
 
       this.filter[3].options = this.sellers;
+      this.filter[3].model = null;
     },
     async hideInitialPaymentModal(val) {
       this.modal.initial_payment = false;

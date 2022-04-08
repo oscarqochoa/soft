@@ -211,9 +211,18 @@
           >
             <b-form-group label="Pending" label-class="font-weight-bolder">
               <b-form-checkbox-group
+                v-if="isAfterLastDeploy"
                 v-model="note.pending.values"
                 :options="note.pending.options"
                 :class="{ 'border-danger': errors[0] }"
+              />
+
+              <quill-editor
+                v-else
+                v-model="note.pending.value"
+                :disabled="disabled"
+                :options="editorOption"
+                :class="{ 'border-danger rounded': errors[0] }"
               />
             </b-form-group>
           </validation-provider>
@@ -281,24 +290,6 @@
       </b-row>
       <b-row>
         <b-col>
-          <validation-provider
-            v-slot="{ errors }"
-            name="pending"
-            rules="required"
-          >
-            <b-form-group label="Pending" label-class="font-weight-bolder">
-              <quill-editor
-                v-model="note.pending.value"
-                :disabled="disabled"
-                :options="editorOption"
-                :class="{ 'border-danger rounded': errors[0] }"
-              />
-            </b-form-group>
-          </validation-provider>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
           <validation-provider v-slot="{ errors }" name="goal" rules="required">
             <b-form-group label="Goal" label-class="font-weight-bolder">
               <quill-editor
@@ -334,6 +325,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { quillEditor } from "vue-quill-editor";
 import vSelect from "vue-select";
 import NotesServices from "@/views/commons/components/first-notes/services/notes.service";
@@ -399,10 +391,6 @@ export default {
           disabled: false,
         },
         recommendations: {
-          value: "",
-          disabled: false,
-        },
-        pending: {
           value: "",
           disabled: false,
         },
@@ -516,6 +504,7 @@ export default {
         },
         pending: {
           values: [],
+          value: "",
           options: [
             {
               text: "ID",
@@ -537,6 +526,7 @@ export default {
       editorOption: {
         modules: { toolbar: false },
       },
+      salesCreated: null,
     };
   },
   computed: {
@@ -569,8 +559,15 @@ export default {
     showNewButtonUpdateAdmin() {
       return this.showUpdateAdmin && this.noteInfo.module == 4;
     },
+    deployMoment() {
+      return this.$moment("2022-03-14");
+    },
+    isAfterLastDeploy() {
+      return this.$moment(this.salesCreated).isAfter(this.deployMoment);
+    },
   },
   async created() {
+    await this.validateCreatesSale();
     this.addPreloader();
     await this.getFirstNote();
     await this.getCountries();
@@ -578,6 +575,19 @@ export default {
     this.removePreloader();
   },
   methods: {
+    ...mapActions({
+      A_GET_CREATES_SALE: "CrmGlobalStore/A_GET_CREATES_SALE",
+    }),
+    async validateCreatesSale() {
+      try {
+        const response = await this.A_GET_CREATES_SALE(this.noteInfo.saleId);
+        if (response.status == 200) {
+          this.salesCreated = response.data.creates;
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
     changeTypeService(newValue) {
       if (newValue === "2") {
         this.note.idTypeNumber.value = "";
@@ -649,11 +659,13 @@ export default {
 
     answersNote() {
       return [
-        { number: 2016, value: JSON.stringify(this.note.pending.values) },
+        this.isAfterLastDeploy
+          ? { number: 2016, value: JSON.stringify(this.note.pending.values) }
+          : { number: 1042, value: this.note.pending.value },
+
         { number: 1039, value: this.note.inconvenience.value },
         { number: 1040, value: this.note.information.value },
         { number: 1041, value: this.note.recommendations.value },
-        { number: 1042, value: this.note.pending.value },
         { number: 1043, value: this.note.goal.value },
         { number: 1063, value: this.note.typeOfAgreement.value },
         { number: 1031, value: this.note.typeOfServices.value },

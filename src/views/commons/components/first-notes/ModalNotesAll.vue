@@ -105,7 +105,7 @@
                     }"
                   />
                   <b-form-checkbox-group
-                    v-if="question.type == 3"
+                    v-if="question.type === 3"
                     v-model="question.answer"
                     :options="JSON.parse(question.options)"
                     :class="{
@@ -317,7 +317,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
 import { quillEditor } from "vue-quill-editor";
 import vSelect from "vue-select";
 import NotesServices from "@/views/commons/components/first-notes/services/notes.service";
@@ -403,6 +403,7 @@ export default {
       notesSales: [{ type_view: null }],
       countryOptions: [],
       contact_schedule: "",
+      salesCreated: null,
     };
   },
   computed: {
@@ -418,8 +419,15 @@ export default {
         this.noteInfo.notSeller
       );
     },
+    deployMoment() {
+      return this.$moment("2022-03-14");
+    },
+    isAfterLastDeploy() {
+      return this.$moment(this.salesCreated).isAfter(this.deployMoment);
+    },
   },
   async created() {
+    await this.validateCreatesSale();
     this.addPreloader();
     await this.getNotesSales();
     await this.getCountrys();
@@ -435,24 +443,55 @@ export default {
     this.removePreloader();
   },
   methods: {
+    ...mapActions({
+      A_GET_CREATES_SALE: "CrmGlobalStore/A_GET_CREATES_SALE",
+    }),
+    async validateCreatesSale() {
+      try {
+        const response = await this.A_GET_CREATES_SALE(this.noteInfo.saleId);
+        if (response.status == 200) {
+          this.salesCreated = response.data.creates;
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
     async getNotesSales() {
       try {
         const params = { id: this.noteInfo.saleId };
         const response = await NotesServices.notesSales(params);
 
+        let typeSelected = "";
         response.map((item) => {
-          if (item.type === 3) {
-            item.answer =
-              item.answer.length > 0
-                ? JSON.parse(item.answer.replace(/\\/g, '"'))
-                : [];
+          if (this.isAfterLastDeploy) {
+            if (item.question == "Pending" && item.type == 3) {
+              item.answer =
+                item.answer.length > 0
+                  ? JSON.parse(item.answer.replace(/\\/g, '"'))
+                  : [];
+
+              typeSelected = 0;
+            }
+          } else {
+            typeSelected = 3;
           }
         });
 
+        let index = response
+          .map((el) => el.question_id)
+          .indexOf(
+            response.find(
+              (el) => el.question == "Pending" && el.type == typeSelected
+            ).question_id
+          );
+
+        response.splice(index, 1);
+
         this.notesSales = response;
 
-        this.contact_schedule = this.notesSales[5].answer
-          ? this.notesSales[5].answer
+        this.contact_schedule = this.notesSales[typeSelected == 0 ? 4 : 5]
+          .answer
+          ? this.notesSales[typeSelected == 0 ? 4 : 5].answer
           : "";
         this.modalUp = true;
         this.removePreloader();

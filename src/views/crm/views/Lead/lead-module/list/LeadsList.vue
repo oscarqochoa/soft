@@ -433,6 +433,7 @@ export default {
           }));
 
           this.filter[index - 1].options = owners;
+          this.filter[index - 1].model = null;
         }
       } catch (error) {
         console.log("Something went wrong getOwners:", error);

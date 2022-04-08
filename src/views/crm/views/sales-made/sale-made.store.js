@@ -28,6 +28,7 @@ export default {
       { id: 2, label: 'Revision', variant: 'primary' },
       { id: 3, label: 'Desaprove', variant: 'danger' },
       { id: 4, label: 'Approved', variant: 'success' },
+      { id: 5, label: 'In Supervisor', variant: 'info' },
     ],
     statusAnnuled: [
       { id: 0, label: 'Pending', variant: 'warning' },

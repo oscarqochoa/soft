@@ -217,6 +217,15 @@ const actions = {
       throw error
     }
   },
+  async A_GET_CREATES_SALE({ commit }, id) {
+    try {
+      const response = await crmGlobal.getCreatesSale(id)
+      return response
+    } catch (error) {
+      console.log('ERROR_GET_CREATES_SALE [ACTION]', error)
+      throw error
+    }
+  }
 }
 export default {
   namespaced: true,

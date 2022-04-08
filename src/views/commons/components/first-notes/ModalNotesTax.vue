@@ -183,7 +183,7 @@
             </b-form-group>
           </validation-provider>
         </b-col>
-        <b-col cols="12">
+        <b-col cols="12" v-if="isAfterLastDeploy">
           <b-form-group label="Pending" label-class="font-weight-bolder">
             <b-form-checkbox-group
               v-model="note.pending.value"
@@ -259,6 +259,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { quillEditor } from "vue-quill-editor";
 import vSelect from "vue-select";
 import HeaderModalNotes from "@/views/commons/components/first-notes/HeaderModalNotes.vue";
@@ -437,6 +438,7 @@ export default {
           ],
         },
       },
+      salesCreated: null,
     };
   },
   computed: {
@@ -460,6 +462,12 @@ export default {
     },
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller;
+    },
+    deployMoment() {
+      return this.$moment("2022-03-14");
+    },
+    isAfterLastDeploy() {
+      return this.$moment(this.salesCreated).isAfter(this.deployMoment);
     },
   },
   watch: {
@@ -490,6 +498,7 @@ export default {
     },
   },
   async created() {
+    await this.validateCreatesSale();
     this.addPreloader();
     await this.getFirstNote();
     await this.getCountries();
@@ -497,6 +506,19 @@ export default {
     this.removePreloader();
   },
   methods: {
+    ...mapActions({
+      A_GET_CREATES_SALE: "CrmGlobalStore/A_GET_CREATES_SALE",
+    }),
+    async validateCreatesSale() {
+      try {
+        const response = await this.A_GET_CREATES_SALE(this.noteInfo.saleId);
+        if (response.status == 200) {
+          this.salesCreated = response.data.creates;
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
     async saveNotesIncomplete() {
       if (this.emptyNote) {
         await this.saveUpdate("insert");

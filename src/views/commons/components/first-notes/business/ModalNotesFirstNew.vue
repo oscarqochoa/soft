@@ -255,6 +255,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { quillEditor } from "vue-quill-editor";
 import vSelect from "vue-select";
 import HeaderModalNotes from "@/views/commons/components/first-notes/HeaderModalNotes.vue";
@@ -269,14 +270,6 @@ import ButtonUpdate from "@/views/commons/utilities/ButtonUpdate";
 
 export default {
   name: "ModalNotesFirstNew",
-  components: {
-    ButtonUpdate,
-    ButtonSaveAndComplete,
-    ButtonSave,
-    HeaderModalNotes,
-    vSelect,
-    quillEditor,
-  },
   props: {
     noteInfo: {
       type: Object,
@@ -306,6 +299,15 @@ export default {
       }),
     },
   },
+  components: {
+    ButtonUpdate,
+    ButtonSaveAndComplete,
+    ButtonSave,
+    HeaderModalNotes,
+    vSelect,
+    quillEditor,
+  },
+
   data() {
     return {
       showSave: false,
@@ -385,22 +387,10 @@ export default {
         },
         pendingValue: [],
         pending: {
-          options: [
-            {
-              text: "ID",
-              value: {
-                id: "pen-1",
-              },
-            },
-            {
-              text: "UB",
-              value: {
-                id: "pen-2",
-              },
-            },
-          ],
+          options: ["ID", "UB"],
         },
       },
+      salesCreated: null,
     };
   },
   computed: {
@@ -421,6 +411,12 @@ export default {
     },
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller;
+    },
+    deployMoment() {
+      return this.$moment("2022-03-14");
+    },
+    isAfterLastDeploy() {
+      return this.$moment(this.salesCreated).isAfter(this.deployMoment);
     },
   },
   watch: {
@@ -458,12 +454,20 @@ export default {
       deep: true,
     },
   },
-  async created() {
-    this.addPreloader();
-    await this.getFirstNote();
-    this.removePreloader();
-  },
   methods: {
+    ...mapActions({
+      A_GET_CREATES_SALE: "CrmGlobalStore/A_GET_CREATES_SALE",
+    }),
+    async validateCreatesSale() {
+      try {
+        const response = await this.A_GET_CREATES_SALE(this.noteInfo.saleId);
+        if (response.status == 200) {
+          this.salesCreated = response.data.creates;
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
     async saveNotesIncomplete() {
       if (this.emptyNote) {
         await this.saveUpdate("insert");
@@ -526,7 +530,6 @@ export default {
         { number: 2010, value: this.note.whatDoesTheClientNeed.value },
         { number: 2011, value: this.note.whatDidYouSuggest.value },
         { number: 2012, value: this.note.isAnyIndicator.value },
-        //{ number: 2013, value: this.note.pending.value },
         { number: 2013, value: JSON.stringify(this.note.pendingValue) },
       ];
     },
@@ -577,8 +580,6 @@ export default {
             this.note.whatDidYouSuggest.value = answer.answer;
           if (answer.question_id === 2012)
             this.note.isAnyIndicator.value = answer.answer;
-          // if (answer.question_id === 2013)
-          //   this.note.pending.value = answer.answer;
           if (answer.question_id === 2013) {
             answer.answer = answer.answer.replace(/\\\\n/g, "<br>");
             this.note.pendingValue = JSON.parse(
@@ -612,6 +613,11 @@ export default {
         this.removePreloader();
       }
     },
+  },
+  async created() {
+    this.addPreloader();
+    await this.getFirstNote();
+    this.removePreloader();
   },
 };
 </script>
