@@ -1461,7 +1461,7 @@ export default {
         this.items = data.data;
         return this.items;
       } catch (e) {
-        this.showToast("danger", "top-right", "Error", "XIcon", e);
+        //this.showToast("danger", "top-right", "Error", "XIcon", e);
         return [];
       }
     },
