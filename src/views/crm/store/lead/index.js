@@ -11,7 +11,7 @@ const state = {
     fromPage: 0,
     toPage: 0,
   },
-  S_UPDATE_TABLE_LEAD:false,
+  S_UPDATE_TABLE_LEAD: false,
   S_SN_LEADS: [],
   S_W_POTENTIAL_LEADS: [],
   S_SELECTED_LEADS: [],
@@ -42,7 +42,7 @@ const state = {
   S_FILTER_DATA_LOADED: false
 }
 const getters = {
-  G_UPDATE_TABLE_LEAD(state){
+  G_UPDATE_TABLE_LEAD() {
     return state.S_UPDATE_TABLE_LEAD
   },
   G_STATE_LEADS(state) {
@@ -59,7 +59,14 @@ const getters = {
     }))
     return statusLeads
   },
-  G_SOURCE_LEADS(state) {
+  G_STATUS_LEADS_S() {
+    const statusLeads = state.S_STATUS_LEADS.map(el => ({
+      text: el.value,
+      value: { value: el.value, id: el.id },
+    }))
+    return statusLeads
+  },
+  G_SOURCE_LEADS() {
     const sourceLeads = state.S_SOURCE_LEADS.map(el => ({
       label: el.value,
       id: el.id,
@@ -68,7 +75,7 @@ const getters = {
   },
 }
 const mutations = {
-  SET_UPDATE_TABLE_LEAD(state,params){
+  SET_UPDATE_TABLE_LEAD(state, params) {
     state.S_UPDATE_TABLE_LEAD = params
   },
   SET_DATA(state, params) {
@@ -310,8 +317,8 @@ const actions = {
   },
 
   /* SETS */
-  A_SET_UPDATE_TABLE_LEAD({ commit }, data){
-    commit("SET_UPDATE_TABLE_LEAD",data)
+  A_SET_UPDATE_TABLE_LEAD({ commit }, data) {
+    commit("SET_UPDATE_TABLE_LEAD", data)
   },
   A_SET_SELECTED_LEADS({ commit }, data) {
     commit('SET_DATA', {
@@ -330,42 +337,42 @@ const actions = {
       const response = await crmLead.postCreateLead(body);
       body.state_hour = body.state
 
-      for(let i = 0; i < body.program.length; i++){
-        switch(body.program[i].value){
+      for (let i = 0; i < body.program.length; i++) {
+        switch (body.program[i].value) {
           case "Business":
             body.program[i] = {
               ...body.program[i],
-              ...{logo:`/images/logos/logo-${'bu'}.png`}
+              ...{ logo: `/images/logos/logo-${'bu'}.png` }
             }
             break
           case "Boost Credit":
             body.program[i] = {
               ...body.program[i],
-              ...{logo:`/images/logos/logo-${'bc'}.png`}
+              ...{ logo: `/images/logos/logo-${'bc'}.png` }
             }
             break
           case "Credit Experts":
             body.program[i] = {
               ...body.program[i],
-              ...{logo:`/images/logos/logo-${'ce'}.png`}
+              ...{ logo: `/images/logos/logo-${'ce'}.png` }
             }
             break
           case "Debt Solution":
             body.program[i] = {
               ...body.program[i],
-              ...{logo:`/images/logos/logo-${'ds'}.png`}
+              ...{ logo: `/images/logos/logo-${'ds'}.png` }
             }
             break
           case "Tax Research":
             body.program[i] = {
               ...body.program[i],
-              ...{logo:`/images/logos/logo-${'tr'}.png`}
+              ...{ logo: `/images/logos/logo-${'tr'}.png` }
             }
             break
           default:
             body.program[i] = {
               ...body.program[i],
-              ...{logo:""}
+              ...{ logo: "" }
             }
             break
         }
@@ -507,11 +514,10 @@ const actions = {
         response.data.map(el => {
           (el.label = body.taskForSn
             ? el.user_name
-            : `${el.user_name} (${el.count_task}) ${
-              el.disabled > 0 ? '(Not Available)' : ''
+            : `${el.user_name} (${el.count_task}) ${el.disabled > 0 ? '(Not Available)' : ''
             }`),
-          (el.value = el.id),
-          (el.itemDisabled = el.disabled > 0)
+            (el.value = el.id),
+            (el.itemDisabled = el.disabled > 0)
         })
         commit('SET_DATA', {
           destination: 'S_USER_APPOINTEMENTS',

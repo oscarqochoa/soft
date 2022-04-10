@@ -2,12 +2,20 @@
   <div>
     <validation-observer #default="{ handleSubmit }" ref="refFormObserver">
       <!-- Form -->
-      <b-form class="pt-2" @submit.prevent="handleSubmit(onSubmit)" @reset.prevent="resetForm">
+      <b-form
+        class="pt-2"
+        @submit.prevent="handleSubmit(onSubmit)"
+        @reset.prevent="resetForm"
+      >
         <b-row>
           <b-col cols="12">
             <b-row>
               <b-col md="4">
-                <validation-provider #default="validationContext" name="Title" rules="required">
+                <validation-provider
+                  #default="validationContext"
+                  name="Title"
+                  rules="required"
+                >
                   <b-form-group
                     label="Title"
                     label-for="title"
@@ -20,14 +28,18 @@
                       :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                       :clearable="false"
                       :options="G_EVENT_TITLES_OPTIONS"
-                      :reduce="val => val.value"
+                      :reduce="(val) => val.value"
                       :disabled="isDisabled"
                     />
                   </b-form-group>
                 </validation-provider>
               </b-col>
               <b-col md="4">
-                <validation-provider #default="validationContext" name="Seller" rules="required">
+                <validation-provider
+                  #default="validationContext"
+                  name="Seller"
+                  rules="required"
+                >
                   <b-form-group
                     label="Seller"
                     label-for="seller"
@@ -46,7 +58,11 @@
                 </validation-provider>
               </b-col>
               <b-col md="4">
-                <validation-provider v-slot="{errors}" name="Location" rules="required">
+                <validation-provider
+                  v-slot="{ errors }"
+                  name="Location"
+                  rules="required"
+                >
                   <b-form-group label="Location" label-for="location">
                     <b-form-input
                       id="location"
@@ -66,7 +82,10 @@
                   />
                 </b-form-group>
               </b-col>
-              <b-col v-if="event.type !== 'task' && event.attend === 2" cols="12">
+              <b-col
+                v-if="event.type !== 'task' && event.attend === 2"
+                cols="12"
+              >
                 <validation-provider>
                   <b-form-group label="Comment" label-for="comment">
                     <b-form-textarea :value="event.comment" :disabled="true" />
@@ -118,7 +137,11 @@
             <b-row>
               <b-col md="4">
                 <b-form-group label="Lead" label-for="lead">
-                  <b-form-input id="lead" :value="event.lead_name" :disabled="true" />
+                  <b-form-input
+                    id="lead"
+                    :value="event.lead_name"
+                    :disabled="true"
+                  />
                 </b-form-group>
               </b-col>
               <b-col md="4">
@@ -129,7 +152,10 @@
               <b-col v-if="event.userupdate" md="4">
                 <validation-provider label-cols="2">
                   <b-form-group label="Modified by">
-                    <b-form-input :value="event.updater_name" :disabled="true" />
+                    <b-form-input
+                      :value="event.updater_name"
+                      :disabled="true"
+                    />
                   </b-form-group>
                 </validation-provider>
               </b-col>
@@ -147,7 +173,9 @@
               <b-col v-if="event.type !== 'task' && event.attend === 2" md="4">
                 <b-form-group label="Sale Made" label-for="saleMade">
                   <b-form-input
-                    :class="event.sale_made === 'YES' ? 'text-success' : 'text-danger'"
+                    :class="
+                      event.sale_made === 'YES' ? 'text-success' : 'text-danger'
+                    "
                     :value="event.sale_made"
                     :disabled="true"
                   />
@@ -209,7 +237,11 @@
           </b-button>
 
           <b-button
-            v-if="!onlyRead && event.seller_id === currentUser.user_id && event.type !== 'task'"
+            v-if="
+              !onlyRead &&
+              event.seller_id === currentUser.user_id &&
+              event.type !== 'task'
+            "
             v-ripple.400="'rgba(186, 191, 199, 0.15)'"
             type="button"
             variant="primary"
@@ -259,32 +291,32 @@ export default {
   components: {
     vSelect,
     ModalSaleMade,
-    flatPickr
+    flatPickr,
   },
   props: {
     modul: {
       type: Number,
-      required: true
+      required: true,
     },
     onlyRead: {
       type: Boolean,
-      required: true
+      required: true,
     },
     lead: {
       type: Object,
-      required: true
+      required: true,
     },
     event: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   setup() {
     const { refFormObserver, getValidationState } = formValidation(() => {});
 
     return {
       refFormObserver,
-      getValidationState
+      getValidationState,
     };
   },
   data() {
@@ -306,12 +338,13 @@ export default {
           moment(this.event.date).format("MM/DD/YYYY") >
           moment().format("MM/DD/YYYY")
             ? moment().format("MM/DD/YYYY")
-            : moment(this.event.date).format("MM/DD/YYYY")
-      }
+            : moment(this.event.date).format("MM/DD/YYYY"),
+      },
     };
   },
   mounted() {},
-  created() {
+  async created() {
+    await this.getOwners();
     this.sellers = this.G_OWNERS;
     this.event.date = moment(this.event.date).format("MM/DD/YYYY");
     this.setDataBlank("event");
@@ -321,7 +354,7 @@ export default {
       currentUser: "auth/currentUser",
       token: "auth/token",
       G_EVENT_TITLES_OPTIONS: "CrmEventStore/G_EVENT_TITLES",
-      G_OWNERS: "CrmGlobalStore/G_OWNERS"
+      G_OWNERS: "CrmGlobalStore/G_OWNERS",
     }),
     dateSp() {
       return new Date(this.event.date.replace(/-/g, "/")).toLocaleDateString(
@@ -329,7 +362,7 @@ export default {
         {
           weekday: "long",
           month: "long",
-          day: "numeric"
+          day: "numeric",
         }
       );
     },
@@ -339,7 +372,7 @@ export default {
         {
           weekday: "long",
           month: "long",
-          day: "numeric"
+          day: "numeric",
         }
       );
     },
@@ -347,19 +380,38 @@ export default {
       return this.$moment(`${this.event.date} ${this.event.from}`).format(
         "h:mm A"
       );
-    }
+    },
   },
   methods: {
     ...mapActions({
+      A_GET_OWNERS: "CrmGlobalStore/A_GET_OWNERS",
       A_SET_EVENT: "CrmEventStore/A_SET_EVENT",
       A_DELETE_EVENT: "CrmEventStore/A_DELETE_EVENT",
       A_GET_DATE_EVENTS_TASKS: "CrmEventStore/A_GET_DATE_EVENTS_TASKS",
-      A_UPDATE_EVENT: "CrmEventStore/A_UPDATE_EVENT"
+      A_UPDATE_EVENT: "CrmEventStore/A_UPDATE_EVENT",
     }),
+    async getOwners() {
+      try {
+        const roles = [2, 4].includes(this.modul) ? "[1,2,5]" : "[1,2,3,5]";
+        await this.A_GET_OWNERS({
+          modul: this.modul,
+          body: { roles, type: "1" },
+        });
+        this.sellers = this.G_OWNERS;
+      } catch (error) {
+        console.log("Something went wrong getOwners:", error);
+        this.showToast(
+          "danger",
+          "top-right",
+          "Oop!",
+          "AlertOctagonIcon",
+          this.getInternalErrors(error)
+        );
+      }
+    },
     setDataBlank(key) {
-      this[
-        `blank${key.charAt(0).toUpperCase()}${key.slice(1)}`
-      ] = Object.assign({}, this[key]);
+      this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`] =
+        Object.assign({}, this[key]);
     },
     resetData(key) {
       const object = this[`blank${key.charAt(0).toUpperCase()}${key.slice(1)}`];
@@ -379,14 +431,14 @@ export default {
         this.isLoading = true;
         const responseFirst = await this.A_GET_DATE_EVENTS_TASKS({
           idLead: this.event.lead_id,
-          id: this.event.id
+          id: this.event.id,
         });
         if (this.isResponseSuccess(responseFirst)) {
           const dateFormat = this.$moment(
             `${this.event.date} ${this.event.from}`
           ).format("YYYY-MM-DD HH:mm:ss");
           let repeat = 0;
-          responseFirst.data.forEach(el => {
+          responseFirst.data.forEach((el) => {
             if (el.dates == dateFormat) repeat++;
           });
           if (repeat === 0) {
@@ -403,7 +455,7 @@ export default {
               description: this.event.description,
               seller: this.event.user_id.label,
               userupdate: this.currentUser.user_id,
-              month: this.getCurrentMonth()
+              month: this.getCurrentMonth(),
             };
             const response = await this.A_UPDATE_EVENT(body);
             if (this.isResponseSuccess(response)) {
@@ -459,13 +511,13 @@ export default {
     },
     onDeleteEvent() {
       this.showConfirmSwal()
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
             this.isLoading = true;
             const month = this.getCurrentMonth();
             const response = await this.A_DELETE_EVENT({
               id: this.event.id,
-              month
+              month,
             });
             if (this.isResponseSuccess(response)) {
               this.showToast(
@@ -488,7 +540,7 @@ export default {
             this.isLoading = false;
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("Something went wrong deleteEvent", error);
           this.showToast(
             "danger",
@@ -507,10 +559,10 @@ export default {
         /* *INTEGRATE* resources\js\components\modal\ModaEventEdit.vue - method: attendOtheModule */
         /* *INTEGRATE* resources\js\components\lead\showlead\ShowLead.vue - method: attendOtherModule */
       }
-    }
+    },
   },
   directives: {
-    Ripple
-  }
+    Ripple,
+  },
 };
 </script>

@@ -13,7 +13,7 @@ class CrmGlobal {
 
   async getOwners({ modul, body }) {
     try {
-      const data = await amgApi.post(`/commons/user-module/${ modul }`, body)
+      const data = await amgApi.post(`/commons/user-module/${modul}`, body)
       return data
     } catch (error) {
       console.log("Something went wrong on getOwners:", error);
@@ -77,6 +77,18 @@ class CrmGlobal {
       return data
     } catch (error) {
       console.log("Something went wrong on postUniqueMobile:", error);
+      throw error;
+    }
+  }
+
+  async getCreatesSale(id) {
+    try {
+      const { data, status } = await amgApi.post('/sale/get-creates-sale', {
+        sale_id: id
+      })
+      return { data, status }
+    } catch (error) {
+      console.log("Something went wrong on getCreatesSale", error)
       throw error;
     }
   }

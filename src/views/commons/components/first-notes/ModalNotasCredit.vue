@@ -49,7 +49,218 @@ export default {
   },
   data() {
     return {
-      creates: "",
+      audioCall: null,
+      noteNull: false,
+      modalUp: false,
+      note: {
+        recomendations: {
+          value: "",
+          options: [
+            {
+              text: "AVOID INQUIRES",
+              value: {
+                id: "reco-1",
+              },
+            },
+            {
+              text: "ADVISOR'S RECOMMENDATIONS",
+              value: {
+                id: "reco-2",
+              },
+            },
+            {
+              text: "CREDIT CARDS BALANCE",
+              value: {
+                id: "reco-3",
+              },
+            },
+            {
+              text: "COLLECTION LETTERS",
+              value: {
+                id: "reco-5",
+              },
+            },
+            {
+              text: "OTHERS",
+              value: {
+                id: "reco-4",
+              },
+            },
+          ],
+          selectedsOptions: [],
+          disabled: false,
+        },
+        suggestion: {
+          value: "",
+          disabled: false,
+        },
+        information: {
+          value: "",
+          disabled: false,
+        },
+        pending: {
+          value: [],
+          options: [
+            {
+              text: "ID",
+              value: {
+                id: "pen-1",
+              },
+            },
+            {
+              text: "UB",
+              value: {
+                id: "pen-2",
+              },
+            },
+            {
+              text: "SSN",
+              value: {
+                id: "pen-3",
+              },
+            },
+            {
+              text: "NONE",
+              value: {
+                id: "pen-4",
+              },
+            },
+          ],
+        },
+        goals: {
+          value: [],
+          options: [
+            {
+              text: "CASA",
+              value: { id: "goal-1" },
+            },
+            {
+              text: "AUTO",
+              value: { id: "goal-2" },
+            },
+            {
+              text: "REFINANCIAR CASA",
+              value: { id: "goal-3" },
+            },
+            {
+              text: "REFINANCIAR AUTO",
+              value: { id: "goal-4" },
+            },
+            {
+              text: "EXCELENTE CREDITO",
+              value: { id: "goal-5" },
+            },
+          ],
+        },
+        country: {
+          value: null,
+          disabled: false,
+          options: [],
+        },
+        emergencyContact: {
+          value: "",
+        },
+        maritalStatus: {
+          value: "",
+          options: [
+            {
+              text: "SINGLE",
+              value: "1",
+            },
+            {
+              text: "MARRIED",
+              value: "2",
+            },
+            {
+              text: "DIVORCED",
+              value: "3",
+            },
+            {
+              text: "WIDOWER - WIDOW",
+              value: "4",
+            },
+          ],
+        },
+        contactSchedule: {
+          value: "",
+        },
+        identificationNumber: {
+          value: "",
+          options: [
+            {
+              text: "CPN",
+              value: 1,
+            },
+            {
+              text: "ITIN",
+              value: 2,
+            },
+            {
+              text: "SSN",
+              value: 3,
+            },
+          ],
+        },
+        typeOfAgreement: {
+          value: "",
+          options: [
+            {
+              text: "Email",
+              value: "Email",
+            },
+            {
+              text: "Usps",
+              value: "Usps",
+            },
+            {
+              text: "Voice",
+              value: "Voice",
+            },
+          ],
+        },
+        workStatus: {
+          options: [
+            {
+              label: "EMPLOYED",
+              value: "1",
+            },
+            {
+              label: "SELF EMPLOYED",
+              value: "2",
+            },
+            {
+              label: "RETIRED",
+              value: "3",
+            },
+            {
+              label: "STUDENT",
+              value: "4",
+            },
+            {
+              label: "DISABILITY",
+              value: "5",
+            },
+            {
+              label: "UNEMPLOYED",
+              value: "6",
+            },
+          ],
+        },
+        incoveniences: {
+          value: "",
+          mid1: [],
+          mid2: [],
+        },
+        fileAudio: "",
+        fileName: "",
+        file: null,
+      },
+      noCredit: [],
+      showSave: false,
+      showUpdate: false,
+      editorOption: {
+        modules: { toolbar: false },
+      },
     };
   },
   computed: {

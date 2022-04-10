@@ -89,10 +89,13 @@ export default {
   actions: {
     async getSellers({ commit }, payload = { module: 2, body: DEFAULT_BODY_GET_SELLERS_CRM }) {
       const sellers = await CrmServices.getSellersCrm(payload.module, payload.body)
+
       const formatedSellers = sellers.map(seller => ({
         id: seller.id,
         label: seller.user_name,
       }))
+
+      console.log(formatedSellers)
       commit('SET_SELLERS_CRM', [{
         id: 0,
         label: 'All',

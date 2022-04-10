@@ -8,6 +8,7 @@
       :start-page="startPage"
       :to-page="toPage"
       @reload="$refs['new-client-done-table'].refresh()"
+      @onSelectChange="getSellers()"
     >
       <template #buttons>
         <b-button
@@ -28,7 +29,7 @@
           small
           no-provider-filtering
           :busy.sync="isBusy"
-          :items="search"
+          :items="statusEmit ? removeFromTable : search"
           :fields="filteredFields"
           :per-page="paginate.perPage"
           :current-page="paginate.currentPage"
@@ -80,10 +81,9 @@
               class="font-weight-bolder"
               @click="openModalProgram(data.item, data.index)"
             >
-              <span
-                v-b-tooltip.bottom="data.item.program"
-                >{{data.item.program_initials}}</span
-              >
+              <span v-b-tooltip.bottom="data.item.program">{{
+                data.item.program_initials
+              }}</span>
               <feather-icon
                 v-if="data.item.haveRates !== 1"
                 icon="AlertTriangleIcon"
@@ -125,7 +125,9 @@
 
               <div
                 v-if="
-                  (data.item.status == 1 || data.item.status == 3) &&
+                  (data.item.status == 1 ||
+                    data.item.status == 3 ||
+                    data.item.status == 5) &&
                   (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator)
                 "
                 class="mt-07 text-right mr-1"
@@ -207,7 +209,9 @@
 
               <div
                 v-if="
-                  (data.item.status == 1 || data.item.status == 3) &&
+                  (data.item.status == 1 ||
+                    data.item.status == 3 ||
+                    data.item.status == 5) &&
                   (G_IS_CEO || G_IS_SUPERVISOR || isCoordinator)
                 "
                 class="mt-07 text-right mr-1"
@@ -328,6 +332,27 @@
                   "
                 />
               </div>
+              <template
+                v-if="
+                  (data.item.status === 1 || data.item.status === 3) &&
+                  G_IS_SELLER
+                "
+              >
+                <br />
+                <b-icon
+                  v-if="!data.item.editFee"
+                  icon="list-ul"
+                  class="cursor-pointer ml-07"
+                  @click="
+                    openTrackingCapturedByModal(
+                      data.item.program,
+                      data.item.client,
+                      data.item.id,
+                      3
+                    )
+                  "
+                />
+              </template>
             </span>
           </template>
           <template v-slot:cell(initial_amount)="data">
@@ -519,7 +544,13 @@
           <template v-slot:cell(actions)="data">
             <b-row
               v-if="data.item.creates > '2021-05-16 00:00:00'"
-              class="d-flex align-items-center justify-content-center flex-column px-1"
+              class="
+                d-flex
+                align-items-center
+                justify-content-center
+                flex-column
+                px-1
+              "
               :class="{
                 'not-pointer':
                   data.item.user_id != currentUser.user_id &&
@@ -542,8 +573,9 @@
                 class="m-10px w-100"
                 size="sm"
                 @click="revisionSale(5, data.item, data.index)"
-                >Revission</b-button
               >
+                Revission
+              </b-button>
 
               <!-- Revission to Administration for Supervisor or Ceo -->
               <b-button
@@ -565,8 +597,9 @@
                 class="m-10px w-100"
                 size="sm"
                 @click="revisionSale(2, data.item, data.index)"
-                >Revission</b-button
               >
+                Revission
+              </b-button>
 
               <!-- IN SUPERVISOR REVISSION  -->
               <b-button
@@ -635,7 +668,13 @@
                   G_IS_SELLER &&
                   !isCoordinator,
               }"
-              class="d-flex align-items-center justify-content-center flex-column px-1"
+              class="
+                d-flex
+                align-items-center
+                justify-content-center
+                flex-column
+                px-1
+              "
             >
               <!-- Just for Seller after finish all requirements -->
               <b-button
@@ -926,6 +965,7 @@
         updateRow();
         modal.revission = false;
       "
+      @removeFromTable="removeFromTable"
     />
 
     <!-- NOTES -->
@@ -958,6 +998,7 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import CrmServices from "@/views/crm/services/crm.service";
 
 import vSelect from "vue-select";
 import FilterSlot from "@/views/crm/views/sales-made/components/slots/FilterSlot.vue";
@@ -1163,11 +1204,13 @@ export default {
       selectAll: false,
       selectedIndex: null,
       newRowFromSelectedIndex: null,
+      sellers: [],
+      statusEmit: false,
     };
   },
   computed: {
     ...mapState({
-      sellers: (state) => state["crm-store"].sellersCrm,
+      //sellers: (state) => state["crm-store"].sellersCrm,
       captured: (state) => state["crm-store"].capturedCrm,
       // TODO HACERLO GLOBAL
       programs: (state) => state["crm-store"].programs,
@@ -1231,13 +1274,7 @@ export default {
   async created() {
     try {
       await Promise.all([
-        this.$store.dispatch("crm-store/getSellers", {
-          module: 2,
-          body: {
-            roles: "[1,5,2,3]",
-            type: "1",
-          },
-        }),
+        this.getSellers(),
         this.$store.dispatch("crm-store/getCaptured", {
           module: 2,
           body: {
@@ -1249,13 +1286,20 @@ export default {
         this.$store.dispatch("crm-store/getSources"),
         this.$store.dispatch("crm-store/getStates"),
       ]);
+
       this.filter[2].options = this.captured;
-      this.filter[3].options = this.sellers;
-      this.filter[4].options = this.sources;
-      this.filter[5].options = this.statusFilter;
-      this.filter[6].options = this.programs;
-      this.filter[7].options = this.stip;
-      this.filter[8].options = this.sts;
+      //this.filter[3].options = this.sellers;
+
+      this.filter[4].options = [
+        { label: "Active", value: "1" },
+        { label: "Inactive", value: "0" },
+      ];
+
+      this.filter[5].options = this.sources;
+      this.filter[6].options = this.statusFilter;
+      this.filter[7].options = this.programs;
+      this.filter[8].options = this.stip;
+      this.filter[9].options = this.sts;
     } catch (error) {
       console.error(error);
     }
@@ -1263,6 +1307,36 @@ export default {
     this.addPaddingTd();
   },
   methods: {
+    removeFromTable(saleId) {
+      this.statusEmit = true;
+      if (this.done == 0) {
+        const index = this.items.map((el) => el.id).indexOf(saleId);
+
+        if (index !== -1) {
+          this.items.splice(index, 1);
+        }
+      }
+      return this.items;
+    },
+    async getSellers() {
+      let type = this.filter[4].model == null ? "1" : this.filter[4].model;
+
+      const tempSellers = await CrmServices.getSellersCrm(2, {
+        roles: "[1,5,2,3]",
+        type: type,
+      });
+
+      const formatedSellers = tempSellers.map((seller) => ({
+        id: seller.id,
+        label: seller.user_name,
+      }));
+
+      this.sellers = [{ id: 0, label: "All" }];
+      this.sellers.push(...formatedSellers);
+
+      this.filter[3].options = this.sellers;
+      this.filter[3].model = null;
+    },
     async hideInitialPaymentModal(val) {
       this.modal.initial_payment = false;
       if (val) {
@@ -1340,22 +1414,31 @@ export default {
           if (ctx.sortDesc) sortDirection = "desc";
           else sortDirection = "asc";
         }
+
+        let filterPrograms =
+          this.filter[7].model != null ? this.filter[7].model.toString() : "";
+        let filterSourceName =
+          this.filter[5].model != null ? this.filter[5].model.toString() : "";
+        let filterStatusSeller =
+          this.filter[4].model != null ? this.filter[4].model : 1;
+
         const data = await CrmService.getSaleMade(
           {
             text: this.filterPrincipal.model,
-            status: this.filter[5].model,
-            program: this.filter[6].model,
-            state_h: this.filter[8].model,
+            status: this.filter[6].model,
+            program: filterPrograms,
+            state_h: this.filter[9].model,
             from: this.filter[0].model,
             to: this.filter[1].model,
             orderby: sortBy,
             order: sortDirection,
             captured: this.filter[2].model,
             seller: this.filter[3].model,
+            status_seller: filterStatusSeller,
             salemade: 0,
             rolsession: this.currentUser.role_id,
-            statusip: this.filter[7].model,
-            sourcesname_id: this.filter[4].model,
+            statusip: this.filter[8].model,
+            sourcesname_id: filterSourceName,
             done: this.done,
             per_page: ctx.perPage,
           },
@@ -1378,7 +1461,7 @@ export default {
         this.items = data.data;
         return this.items;
       } catch (e) {
-        this.showToast("danger", "top-right", "Error", "XIcon", e);
+        //this.showToast("danger", "top-right", "Error", "XIcon", e);
         return [];
       }
     },
@@ -1441,24 +1524,31 @@ export default {
       this.selectedIndex = index;
       switch (true) {
         case created >= "2020-05-28" && program == 1:
+          console.log("1");
           this.modalData.notes.programSelected = "ModalNotesFirst"; // ready
           break;
         case created >= "2020-10-29" && program == 2:
+          console.log("2");
           this.modalData.notes.programSelected = "ModalNotesBoost"; // ready
           break;
         case created >= "2021-03-04" && program == 3:
+          console.log("3");
           this.modalData.notes.programSelected = "ModalNotesCredit"; // ready
           break;
         case created >= "2020-09-24" && program == 5:
+          console.log("4");
           this.modalData.notes.programSelected = "ModalNotesTax"; // ready
           break;
         case created >= "2020-10-23" && program == 7:
+          console.log("5");
           this.modalData.notes.programSelected = "ModalNotesSpecialist"; // ready
           break;
         case program == 9:
+          console.log("6");
           this.modalData.notes.programSelected = "ModalNotesParagon"; // ready
           break;
         default:
+          console.log("7");
           this.modalData.notes.programSelected = "ModalNotesAll"; // next
           break;
       }

@@ -69,6 +69,7 @@ const actions = {
   async A_GET_EVENT({ commit }, body) {
     try {
       const response = await eventService.getEvent(body);
+      console.log(response)
       /* console.log('A_GET_EVENT response', response) */
       return response;
     } catch (error) {

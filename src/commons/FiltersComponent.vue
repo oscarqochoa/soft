@@ -1,7 +1,6 @@
 <template>
   <b-row class="d-flex justify-content-end">
-    <b-col cols="12" md="2" class="mb-md-0 mb-2"
-    v-if="fromToFilter">
+    <b-col cols="12" md="2" class="mb-md-0 mb-2" v-if="fromToFilter">
       <b-form-group label="From" label-for="from">
         <b-form-datepicker
           id="from"
@@ -16,8 +15,7 @@
       </b-form-group>
       <!-- <label>{{filter.label}}</label> -->
     </b-col>
-    <b-col cols="12" md="2" class="mb-md-0 mb-2"
-    v-if="fromToFilter">
+    <b-col cols="12" md="2" class="mb-md-0 mb-2" v-if="fromToFilter">
       <b-form-group label="To" label-for="to">
         <b-form-datepicker
           id="to"
@@ -46,6 +44,7 @@
             v-model="filter.model"
             :options="filter.options"
             :label="filter.labelSelect"
+            :multiple="filter.multiple ? true : false"
             class="w-100"
             :reduce="(val) => val[filter.primaryKey]"
             @input="onChange"
@@ -73,7 +72,7 @@ export default {
       this.$emit("onChangeFilter", null);
     },
   },
-}
+};
 </script>
 <style >
 .b-calendar-grid-caption {

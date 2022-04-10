@@ -1,9 +1,6 @@
 <template>
   <div>
-    <validation-observer
-      #default="{ handleSubmit }"
-      ref="refFormObserver"
-    >
+    <validation-observer #default="{ handleSubmit }" ref="refFormObserver">
       <!-- Form -->
       <b-form
         class="pt-2"
@@ -11,17 +8,9 @@
         @reset.prevent="resetForm"
       >
         <b-row>
-          <b-col
-            cols="12"
-            class="text-center"
-          >
-            <b-img-lazy
-              class="mb-1"
-              src="/assets/images/icons/sale.png"
-            />
-            <p class="font-weight-bolder text-primary">
-              Was the sale made?
-            </p>
+          <b-col cols="12" class="text-center">
+            <b-img-lazy class="mb-1" src="/assets/images/icons/sale.png" />
+            <p class="font-weight-bolder text-primary">Was the sale made?</p>
           </b-col>
           <b-col cols="12">
             <validation-provider
@@ -40,12 +29,15 @@
                   label="label"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   :options="G_PROGRAMS"
-                  :reduce="val => val.id"
+                  :multiple="true"
+                  :reduce="(val) => val.id"
                   placeholder="Select Program"
                 />
                 <b-form-invalid-feedback
                   :state="getValidationState(validationContext)"
-                >{{ validationContext.errors[0] }}</b-form-invalid-feedback>
+                >
+                  {{ validationContext.errors[0] }}
+                </b-form-invalid-feedback>
               </b-form-group>
             </validation-provider>
           </b-col>
@@ -65,10 +57,7 @@
               <span>Loading...</span>
             </template>
             <template v-else>
-              <feather-icon
-                icon="CheckIcon"
-                class="mr-50"
-              />
+              <feather-icon icon="CheckIcon" class="mr-50" />
               <span>Yes</span>
             </template>
           </b-button>
@@ -84,10 +73,7 @@
               <span>Loading...</span>
             </template>
             <template v-else>
-              <feather-icon
-                icon="WatchIcon"
-                class="mr-50"
-              />
+              <feather-icon icon="WatchIcon" class="mr-50" />
               <span>Pending</span>
             </template>
           </b-button>
@@ -98,11 +84,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from "vuex";
 
-import formValidation from '@core/comp-functions/forms/form-validation'
-import Ripple from 'vue-ripple-directive'
-import vSelect from 'vue-select'
+import formValidation from "@core/comp-functions/forms/form-validation";
+import Ripple from "vue-ripple-directive";
+import vSelect from "vue-select";
 
 export default {
   components: {
@@ -123,12 +109,12 @@ export default {
     },
   },
   setup() {
-    const { refFormObserver, getValidationState } = formValidation(() => {})
+    const { refFormObserver, getValidationState } = formValidation(() => {});
 
     return {
       refFormObserver,
       getValidationState,
-    }
+    };
   },
   data() {
     return {
@@ -137,58 +123,64 @@ export default {
         program: null,
         done: null,
       },
-    }
+    };
   },
   mounted() {},
   created() {},
   computed: {
     ...mapGetters({
-      currentUser: 'auth/currentUser',
-      token: 'auth/token',
-      G_PROGRAMS: 'CrmGlobalStore/G_PROGRAMS',
+      currentUser: "auth/currentUser",
+      token: "auth/token",
+      G_PROGRAMS: "CrmGlobalStore/G_PROGRAMS",
     }),
   },
   methods: {
     ...mapActions({
-      A_ATTEND_EVENT: 'CrmEventStore/A_ATTEND_EVENT',
+      A_ATTEND_EVENT: "CrmEventStore/A_ATTEND_EVENT",
     }),
     onSubmit() {
-      this.isLoading = true
+      this.isLoading = true;
       this.showConfirmSwal(
-        'Attending appointment?',
-        "You won't be able to revert this!",
+        "Attending appointment?",
+        "You won't be able to revert this!"
       )
-        .then(async result => {
+        .then(async (result) => {
           if (result.value) {
-            const response = await this.A_ATTEND_EVENT({
-              id: this.event.id,
-              ...this.data,
-              module: this.modul,
-            })
-            if (this.isResponseSuccess(response)) {
-              /* *INTEGRATE* resources\js\components\modal\ModaEventEdit.vue - method: doneAttend */
-              this.$router.push({
-                name: 'sales-made-crm-new-client',
-                query: { done: this.data.done === 1 ? 1 : 2 },
-              })
-            }
+            this.data.program.map(async (item) => {
+              const response = await this.A_ATTEND_EVENT({
+                id: this.event.id,
+                program: item,
+                done: this.data.done,
+                module: this.modul,
+              });
+
+              if (this.isResponseSuccess(response)) {
+                /* *INTEGRATE* resources\js\components\modal\ModaEventEdit.vue - method: doneAttend */
+              }
+            });
+
+            this.$router.push({
+              name: "sales-made-crm-new-client",
+              query: { done: this.data.done === 1 ? 1 : 2 },
+            });
           }
-          this.isLoading = false
+
+          this.isLoading = false;
         })
-        .catch(error => {
-          console.log('Something went wrong onSubmit', error)
+        .catch((error) => {
+          console.log("Something went wrong onSubmit", error);
           this.showToast(
-            'danger',
-            'top-right',
-            'Oop!',
-            'AlertOctagonIcon',
-            this.getInternalErrors(error),
-          )
-        })
+            "danger",
+            "top-right",
+            "Oop!",
+            "AlertOctagonIcon",
+            this.getInternalErrors(error)
+          );
+        });
     },
   },
   directives: {
     Ripple,
   },
-}
+};
 </script>

@@ -227,19 +227,19 @@
           </b-form-group>
         </b-col>
         <b-col cols="12">
-          <b-form-group label="Pending">
-            <validation-provider
-              v-slot="{ errors }"
-              name="pending"
-              rules="required"
-            >
-              <b-form-radio-group
-                :class="{ 'border-danger rounded': errors[0] }"
+          <validation-provider
+            v-slot="{ errors }"
+            name="pending"
+            rules="required"
+          >
+            <b-form-group label="Pending">
+              <b-form-checkbox-group
+                v-model="note.pendingValue"
                 :options="note.pending.options"
-                v-model="note.pending.value"
+                :class="{ 'border-danger rounded': errors[0] }"
               />
-            </validation-provider>
-          </b-form-group>
+            </b-form-group>
+          </validation-provider>
         </b-col>
       </b-row>
     </validation-observer>
@@ -255,6 +255,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { quillEditor } from "vue-quill-editor";
 import vSelect from "vue-select";
 import HeaderModalNotes from "@/views/commons/components/first-notes/HeaderModalNotes.vue";
@@ -269,14 +270,6 @@ import ButtonUpdate from "@/views/commons/utilities/ButtonUpdate";
 
 export default {
   name: "ModalNotesFirstNew",
-  components: {
-    ButtonUpdate,
-    ButtonSaveAndComplete,
-    ButtonSave,
-    HeaderModalNotes,
-    vSelect,
-    quillEditor,
-  },
   props: {
     noteInfo: {
       type: Object,
@@ -306,6 +299,15 @@ export default {
       }),
     },
   },
+  components: {
+    ButtonUpdate,
+    ButtonSaveAndComplete,
+    ButtonSave,
+    HeaderModalNotes,
+    vSelect,
+    quillEditor,
+  },
+
   data() {
     return {
       showSave: false,
@@ -383,11 +385,12 @@ export default {
         isAnyIndicator: {
           value: "",
         },
+        pendingValue: [],
         pending: {
-          value: "",
           options: ["ID", "UB"],
         },
       },
+      salesCreated: null,
     };
   },
   computed: {
@@ -408,6 +411,12 @@ export default {
     },
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller;
+    },
+    deployMoment() {
+      return this.$moment("2022-03-14");
+    },
+    isAfterLastDeploy() {
+      return this.$moment(this.salesCreated).isAfter(this.deployMoment);
     },
   },
   watch: {
@@ -445,12 +454,20 @@ export default {
       deep: true,
     },
   },
-  async created() {
-    this.addPreloader();
-    await this.getFirstNote();
-    this.removePreloader();
-  },
   methods: {
+    ...mapActions({
+      A_GET_CREATES_SALE: "CrmGlobalStore/A_GET_CREATES_SALE",
+    }),
+    async validateCreatesSale() {
+      try {
+        const response = await this.A_GET_CREATES_SALE(this.noteInfo.saleId);
+        if (response.status == 200) {
+          this.salesCreated = response.data.creates;
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
     async saveNotesIncomplete() {
       if (this.emptyNote) {
         await this.saveUpdate("insert");
@@ -513,7 +530,7 @@ export default {
         { number: 2010, value: this.note.whatDoesTheClientNeed.value },
         { number: 2011, value: this.note.whatDidYouSuggest.value },
         { number: 2012, value: this.note.isAnyIndicator.value },
-        { number: 2013, value: this.note.pending.value },
+        { number: 2013, value: JSON.stringify(this.note.pendingValue) },
       ];
     },
     hideModal(status) {
@@ -563,8 +580,12 @@ export default {
             this.note.whatDidYouSuggest.value = answer.answer;
           if (answer.question_id === 2012)
             this.note.isAnyIndicator.value = answer.answer;
-          if (answer.question_id === 2013)
-            this.note.pending.value = answer.answer;
+          if (answer.question_id === 2013) {
+            answer.answer = answer.answer.replace(/\\\\n/g, "<br>");
+            this.note.pendingValue = JSON.parse(
+              answer.answer.replace(/\\/g, '"')
+            );
+          }
         } else this.noteNull = true;
       });
     },
@@ -592,6 +613,11 @@ export default {
         this.removePreloader();
       }
     },
+  },
+  async created() {
+    this.addPreloader();
+    await this.getFirstNote();
+    this.removePreloader();
   },
 };
 </script>

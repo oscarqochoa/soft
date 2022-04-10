@@ -183,6 +183,14 @@
             </b-form-group>
           </validation-provider>
         </b-col>
+        <b-col cols="12" v-if="isAfterLastDeploy">
+          <b-form-group label="Pending" label-class="font-weight-bolder">
+            <b-form-checkbox-group
+              v-model="note.pending.value"
+              :options="note.pending.options"
+            />
+          </b-form-group>
+        </b-col>
       </b-row>
       <b-row>
         <b-col>
@@ -251,6 +259,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { quillEditor } from "vue-quill-editor";
 import vSelect from "vue-select";
 import HeaderModalNotes from "@/views/commons/components/first-notes/HeaderModalNotes.vue";
@@ -411,7 +420,25 @@ export default {
           value: "",
           disabled: false,
         },
+        pending: {
+          value: [],
+          options: [
+            {
+              text: "ID",
+              value: {
+                id: "pen-1",
+              },
+            },
+            {
+              text: "UB",
+              value: {
+                id: "pen-2",
+              },
+            },
+          ],
+        },
       },
+      salesCreated: null,
     };
   },
   computed: {
@@ -435,6 +462,12 @@ export default {
     },
     showButtonUpdate() {
       return this.showUpdate && !this.noteInfo.notSeller;
+    },
+    deployMoment() {
+      return this.$moment("2022-03-14");
+    },
+    isAfterLastDeploy() {
+      return this.$moment(this.salesCreated).isAfter(this.deployMoment);
     },
   },
   watch: {
@@ -465,15 +498,27 @@ export default {
     },
   },
   async created() {
+    await this.validateCreatesSale();
     this.addPreloader();
     await this.getFirstNote();
     await this.getCountries();
-    this.note.country.value = this.noteInfo.originCountry
-      ? this.noteInfo.originCountry
-      : 146;
+    this.note.country.value = this.noteInfo.originCountry;
     this.removePreloader();
   },
   methods: {
+    ...mapActions({
+      A_GET_CREATES_SALE: "CrmGlobalStore/A_GET_CREATES_SALE",
+    }),
+    async validateCreatesSale() {
+      try {
+        const response = await this.A_GET_CREATES_SALE(this.noteInfo.saleId);
+        if (response.status == 200) {
+          this.salesCreated = response.data.creates;
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
     async saveNotesIncomplete() {
       if (this.emptyNote) {
         await this.saveUpdate("insert");
@@ -535,6 +580,7 @@ export default {
         { number: 1028, value: this.note.indications.value },
         { number: 1029, value: this.note.information.value },
         { number: 1030, value: this.note.suggestion.value },
+        { number: 2015, value: JSON.stringify(this.note.pending.value) },
         {
           number: 1063,
           value: this.dateTypeAgreement ? this.note.typeOfAgreement.value : 1,
@@ -578,6 +624,12 @@ export default {
             this.note.suggestion.value = answer.answer;
           if (answer.question_id === 1063)
             this.note.typeOfAgreement.value = answer.answer;
+          if (answer.question_id === 2015) {
+            answer.answer = answer.answer.replace(/\\\\n/g, "<br>");
+            this.note.pending.value = JSON.parse(
+              answer.answer.replace(/\\/g, '"')
+            );
+          }
         } else this.noteNull = true;
       });
     },

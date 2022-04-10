@@ -104,6 +104,9 @@ const actions = {
   async A_GET_OWNERS({ commit }, { modul, body }) {
     try {
       const response = await crmGlobal.getOwners({ modul, body })
+
+      console.log(response)
+
       commit('SET_DATA', {
         destination: 'S_OWNERS',
         data: response.data,
@@ -214,6 +217,15 @@ const actions = {
       throw error
     }
   },
+  async A_GET_CREATES_SALE({ commit }, id) {
+    try {
+      const response = await crmGlobal.getCreatesSale(id)
+      return response
+    } catch (error) {
+      console.log('ERROR_GET_CREATES_SALE [ACTION]', error)
+      throw error
+    }
+  }
 }
 export default {
   namespaced: true,

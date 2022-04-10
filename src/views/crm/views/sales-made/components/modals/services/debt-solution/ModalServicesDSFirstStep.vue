@@ -45,7 +45,7 @@
             <div>Total</div>
           </td>
           <td>
-            <div >
+            <div>
               {{ "$ " + total_balance }}
             </div>
           </td>
@@ -58,7 +58,7 @@
           <td>
             <div>{{ total_interest + " %" }}</div>
           </td>
-          <td colspan="3"/>
+          <td colspan="3" />
         </template>
       </b-table>
     </b-row>
@@ -123,7 +123,7 @@
           <b-button
             variant="primary"
             class="rounded"
-            style="border-width: 1px"
+            style="border-width: 1px; margin-right: 7px"
             @click="ok()"
             >{{ statemodal == 1 ? "Add" : "Update" }}</b-button
           >
@@ -247,7 +247,7 @@ export default {
       this.statemodal = 1;
     },
     needsValidatePassword() {
-      return this.creditors.filter(element => element.state1 == 1).length > 0
+      return this.creditors.filter((element) => element.state1 == 1).length > 0;
     },
     async allDebtSolution() {
       try {
@@ -525,7 +525,7 @@ export default {
       }, 10000);
     },
     getCreditorsLength() {
-      return this.creditors.length
+      return this.creditors.length;
     },
   },
 };
